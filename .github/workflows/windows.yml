@@ -27,7 +27,7 @@ jobs:
       - name: Canonicalize Windows temporary directory
         shell: pwsh
         run: |
-          node --input-type=module -e "import {realpathSync,appendFileSync} from 'node:fs'; import {tmpdir} from 'node:os'; const p=realpathSync(tmpdir()); console.log('Canonical temporary directory:',p); appendFileSync(process.env.GITHUB_ENV,'TEMP='+p+'\nTMP='+p+'\n');"
+          node --input-type=module -e "import {realpathSync,appendFileSync} from 'node:fs'; import {tmpdir} from 'node:os'; const p=realpathSync.native(tmpdir()); console.log('Canonical temporary directory:',p); appendFileSync(process.env.GITHUB_ENV,'TEMP='+p+'\nTMP='+p+'\n');"
       - run: pnpm test
       - run: pnpm build
       - run: pnpm test:sites
