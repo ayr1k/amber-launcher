@@ -1,0 +1,35 @@
+/* SPDX-License-Identifier: MPL-2.0 */
+.app{color-scheme:light}.app.dark{color-scheme:dark}
+.app select,.app input,.app textarea{color:var(--text);background-color:var(--surface)}
+.app option,.app optgroup{color:var(--text);background-color:var(--surface)}
+.app option:disabled{color:var(--muted)}
+.app.dark .error,.app.dark .danger{color:#f0a49a}
+.desktop-app.dark[data-accent=amber]{--green:#dfbb83;--green-hover:#ecd2a9;--accent:#dfbb83}
+.desktop-app.dark[data-accent=slate]{--green:#b8c7d2;--green-hover:#d3dfe7;--accent:#b8c7d2}
+.desktop-app.dark[data-accent] .button:not(.secondary){background:var(--green);color:var(--surface)}
+.desktop-app.dark[data-accent] .button:not(.secondary):hover:not(:disabled){background:var(--green-hover)}
+.app[data-ui-style=rounded] :is(button,.button,input:not([type=checkbox]),select,textarea){border-radius:8px}
+.app[data-ui-style=rounded] :is(dialog,.instance-icon,.home-shortcuts button){border-radius:12px}
+.instance-icon{width:44px;height:44px;flex:0 0 44px;display:inline-flex;align-items:center;justify-content:center;background:var(--soft);color:var(--text);overflow:hidden}
+.instance-icon img{width:40px;height:40px;object-fit:contain}
+.instance-icon .icon-glyph{display:block;width:30px;height:30px;background:currentColor;mask-size:contain;mask-position:center;mask-repeat:no-repeat}
+.icon-dirt{color:#795033;background:#eee2cf}.icon-anvil{color:#46535a;background:#e3e8e9}.icon-pickaxe{color:#66552f;background:#eee8d7}
+.dark .icon-dirt{color:#dac1a4;background:#463c31}.dark .icon-anvil{color:#cad3d6;background:#354146}.dark .icon-pickaxe{color:#e4d3a8;background:#484331}
+.instance-title{display:flex;align-items:center;gap:14px;overflow-wrap:anywhere}
+.instance-title span{min-width:0}.instance-row{gap:10px!important}.instance-row .instance-icon{width:34px;height:34px;flex-basis:34px}.instance-row .instance-icon img{width:32px;height:32px}.instance-row .icon-glyph{width:24px;height:24px}
+.setup-identity{display:flex;align-items:end;gap:12px}.setup-identity .field{flex:1;min-width:0}.setup-identity .text-button{margin-bottom:10px;white-space:nowrap}
+.icon-picker{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 20px}.icon-picker button{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 5px;background:var(--surface);color:var(--text);border:1px solid var(--line)}
+.icon-picker button[aria-pressed=true]{border-color:var(--green);outline:2px solid var(--green);outline-offset:1px}
+.setup-complete{padding:12px 0}.setup-complete .dialog-actions{margin-top:28px}
+.content-toolbar{display:flex;gap:12px;align-items:end;margin:20px 0}.content-toolbar label{display:flex;flex-direction:column;gap:6px}.content-toolbar .content-filter{flex:1;min-width:140px}
+.content-toolbar input,.content-toolbar select{width:100%}.content-toolbar small{padding-bottom:10px;white-space:nowrap}
+.content-installed-row{display:flex;align-items:center;gap:16px;padding:12px 0;border-bottom:1px solid var(--line)}
+.content-installed-row .content-description{flex:1;min-width:0}.content-installed-row h3{margin:0 0 4px;font-size:1em}.content-installed-row small{display:block;color:var(--muted);overflow-wrap:anywhere}
+.content-installed-row .content-toggle{flex:0 0 auto;display:flex;align-items:center;gap:7px;min-height:38px;cursor:pointer}.content-toggle input{width:18px;height:18px;accent-color:var(--green)}
+.content-installed-row.disabled-content h3{color:var(--muted)}.content-installed-row button{white-space:nowrap}
+.store-plan-row{gap:12px}.store-plan-row small{display:inline-block;margin-left:8px;color:var(--muted)}
+.content-feedback{border-left:3px solid var(--green);background:var(--soft);padding:12px 16px;margin:16px 0}.content-feedback p{margin:0 0 8px}
+.content-context{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.content-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.content-store .store-results h3{overflow-wrap:anywhere}.content-store .store-results article{min-width:0}.content-store .store-results article>div{min-width:0}
+@media(max-width:850px){.content-toolbar{flex-wrap:wrap}.content-installed-row{flex-wrap:wrap}.content-installed-row .content-description{flex-basis:65%}.setup-identity{align-items:stretch;flex-direction:column;gap:0}}

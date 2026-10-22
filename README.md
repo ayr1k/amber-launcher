@@ -1,57 +1,60 @@
 # AMBER Launcher
 
-An independent Minecraft: Java Edition desktop launcher, built around isolated game instances and user choice.
+An independent Minecraft: Java Edition desktop launcher with isolated instances, compatible content discovery and user-controlled appearance.
 
-AMBER 是一款正在开发中的独立 Minecraft Java 版桌面启动器，提供版本隔离、游戏安装、Java 管理与账号管理。当前验证平台为 Windows x64。
+AMBER 是一款 Windows x64 桌面启动器。当前版本为 **beta 1.0（1.0.0-beta.1）**。这是预发布测试版本；微软真实授权等验收边界见下文。
 
-## Development status
+下载 Windows 程序包、完整源码包及 SHA-256 校验文件：[AMBER beta 1.0](https://github.com/ayr1k/amber-launcher/releases/tag/v1.0.0-beta.1)。Windows 程序包解压后运行 `AMBER.exe`，请保留同目录的全部文件。
 
-**Alpha — under active development.** This repository describes a working development project, not a feature-complete public release.
+## 当前功能
 
-Implemented in the current development build:
+- 官方版本目录、完整游戏下载与校验、并发下载、失败重试、取消与缓存修复；Java 检测及自动安装。
+- 实例隔离、图标、重命名、回收与恢复；输入完整名称后可彻底删除回收实例。
+- 原版、Fabric、Forge、NeoForge、LiteLoader、OptiFine 安装路径；支持的历史组合显式校验，不承诺任意版本组合。
+- Modrinth 分类、排序与兼容版本搜索；依赖预览、一键安装、内容启停、MRPACK 和本地地图 ZIP 导入。
+- 跨版本模组清单迁移：重新匹配兼容发行版，跳过无法匹配的项目并生成报告。
+- 背景、面板透明度、主题、圆角、字号及布局设置；任务中心、错误解决入口、本地精简诊断导出。
+- 安装计划跨重启继续、必需依赖默认勾选、可选依赖默认不勾选，均可调整、实例备份与恢复为新实例、首次引导及校验后迁移数据位置。
 
-- Official Minecraft version catalogue, client, libraries and assets downloads, with integrity verification.
-- Concurrent file downloads, cancellation, retries and repair using verified cached files.
-- Isolated game instances with separate saves, configuration and logs.
-- Local Java discovery and managed Eclipse Temurin runtime installation.
-- Vanilla and Fabric installation and launch.
-- Local offline profiles, configurable Microsoft device-code authentication, and third-party Yggdrasil authentication flows.
-- Windows OS-backed encryption of stored authentication tokens; account passwords are not persisted.
+## 账号与验证边界
 
-Minecraft 1.21.1 with Fabric Loader 0.19.5 and Java 21 has been launched in a Windows x64 test environment, with renderer and audio initialization confirmed. Other versions have not all been individually verified.
+微软登录内置项目公开 Client ID，用户无需注册 Azure 应用；设备码在微软网站完成授权，不收集微软密码。Windows 系统加密保存令牌，账号密码不持久保存。微软 API 审核及真实账号登录、刷新和启动仍待验收；第三方 Yggdrasil 账号也需要真实服务验收。登录失败不会自动切换离线身份。
 
-Microsoft authentication is implemented but **Minecraft Services application approval and live end-to-end validation are still pending**. Third-party authentication also requires live account testing. Mocked protocol tests do not establish successful production authentication.
+离线账号与第三方账号是独立模式，不提供微软认证服务。若模组作者没有声明冲突，启动器无法保证提前发现；未知崩溃会保留日志和解决入口。历史组件实测范围见 [验证记录](prototype/VALIDATION.md)。3D 场景导航按计划延后。
 
-## Microsoft sign-in
+## 从源码运行
 
-AMBER requests access to Minecraft Services to authenticate users through Microsoft, check Java Edition entitlements, retrieve Minecraft profiles and start authenticated game sessions.
+需要 Windows x64、Node.js 24 和 pnpm 11.25.0。命令在 `prototype` 目录执行：
 
-- Users sign in on Microsoft's website using a device authorization code.
-- AMBER does not collect Microsoft account passwords.
-- Official AMBER builds are intended to include the project's own approved public application ID, so users will not need to register Azure applications.
-- Offline profiles and third-party authentication are separate modes. They do not provide Microsoft authentication or access to Microsoft-authenticated multiplayer services.
-- Failed Microsoft authentication is not silently replaced with an offline identity.
+```sh
+pnpm install --frozen-lockfile
+pnpm test
+pnpm build
+pnpm test:sites
+pnpm desktop
+```
 
-AMBER is not affiliated with, endorsed by or an official product of Mojang or Microsoft. Minecraft names and trademarks belong to their respective owners.
+`pnpm dev` 仅启动浏览器设计预览；真实安装与启动使用 Electron 桌面版。
 
-## Planned work
+```sh
+pnpm desktop:smoke
+pnpm package:desktop
+pnpm release:check
+pnpm release:source
+```
 
-- Forge, NeoForge, LiteLoader and OptiFine installation paths, with explicit compatibility restrictions.
-- Modrinth content browsing, compatible version selection, dependencies and mod enable/disable management.
-- Content support for mods, shaders, resource packs, modpacks and worlds where supported by the provider or through explicit imports.
-- Cross-version mod manifest migration, skipping unavailable compatible versions and producing a final report.
-- Appearance and layout customization, portable project data and progressively open extension interfaces.
+桌面目录包位于 `prototype/releases`，运行时保留整个目录。源码导出采用明确的文件清单，排除本地账号、游戏库、缓存、QA 图片、node_modules 和构建产物；同时生成 ZIP、SHA-256 与逐文件清单。脚本不会推送代码或创建 GitHub Release。
 
-These are planned capabilities, not claims of completed functionality. Interactive 3D scene navigation is deferred until a suitable user-created scene is available.
+## 测试与反馈
 
-## Source publication and releases
+Windows CI 会测试和构建工作流产物，执行结果见仓库 Actions。当前 Windows 程序包未签名；干净机器、真实账号及标识分发许可等验收状态见 [beta 发布清单](prototype/BETA-RELEASE-CHECKLIST.md)。请先备份重要实例，再参与测试。
 
-This initial public repository provides the project overview and license for application review. The development source is currently maintained locally and has not yet been uploaded here. There is no public binary release in this repository yet.
+贡献说明：[CONTRIBUTING.md](CONTRIBUTING.md)；安全问题：[SECURITY.md](SECURITY.md)。问题反馈请勿附带密码、令牌或私人账号资料。
 
 ## License
 
-Project-owned source code is licensed under the **Mozilla Public License 2.0**; see [LICENSE](LICENSE). Third-party software, fonts and artwork retain their respective licenses. Minecraft game files are obtained from their official sources rather than included in this repository.
+项目自有源码采用 **Mozilla Public License 2.0**，见 [LICENSE](LICENSE)。第三方软件、字体与图像保留其各自许可，见 [第三方声明](prototype/THIRD_PARTY_NOTICES.md)。游戏文件从其官方来源下载，不随源码分发。
 
-## Contact
+AMBER 与 Mojang、Microsoft 没有隶属、认可或官方产品关系。Minecraft 名称和商标属于各自权利人。
 
-For public project questions, open a GitHub issue in this repository. Do not include passwords, authentication tokens, payment information or private account details in issues. The project maintainer supplies a private contact email separately to the application review team.
+统一更新日志与 GitHub Release 正文：[CHANGELOG.md](CHANGELOG.md)。

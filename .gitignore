@@ -1,0 +1,17 @@
+node_modules/
+dist/
+tmp/
+*.log
+prototype/design/*.bmp
+prototype/.smoke-data/
+prototype/releases/
+prototype/.test-tools/
+
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+prototype/design/qa/
+prototype/public/fonts/*.ttf
+prototype/package-lock.json

@@ -1,0 +1,5 @@
+allowBuilds:
+  esbuild: true
+  electron: true
+minimumReleaseAgeExclude:
+  - electron@45.0.0

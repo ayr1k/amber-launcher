@@ -1,0 +1,12 @@
+/* SPDX-License-Identifier: MPL-2.0 */
+.problem-notice{border-left:3px solid #bd873b;padding:14px 18px;background:var(--surface-soft,#f0f2eb);color:var(--ink);margin:14px 0;min-width:0}
+.problem-notice p{margin:6px 0;line-height:1.6}.problem-notice pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;font-size:.86em;max-height:200px;overflow:auto}.problem-notice details{margin-top:8px}.problem-notice summary{cursor:pointer;font-size:.86em}.dark .problem-notice{background:#29322b;color:#e5e9e2}
+.launch-home-hero{position:relative}.launch-home-hero.with-background{padding:0!important;border:0;min-height:540px;display:flex;align-items:flex-end;isolation:isolate;overflow:hidden}
+.launch-background{position:absolute;inset:0;z-index:-1;background-size:cover;background-position:center;background-color:#59745b}
+.launch-home-hero:not(.with-background) .launch-background{display:none}
+.launch-dock{width:100%;min-width:0}.with-background .launch-dock{background:#fafbf8;color:#153d30;margin:160px 22px 22px;padding:24px;width:calc(100% - 44px);box-sizing:border-box;border-left:4px solid #47876c}
+.dark .with-background .launch-dock{background:#202622;color:#e5e9e2}.with-background .launch-dock h1{font-size:clamp(24px,2.6vw,38px);margin:8px 0}.with-background .launch-dock>small{font-size:10px;letter-spacing:.14em}.with-background .launch-identity{margin-top:18px}.with-background .launch-action-row{justify-content:space-between}.with-background .main-launch{order:2;margin-left:auto}.with-background .launch-options{margin-bottom:0}
+.background-edit{position:absolute;right:22px;top:18px;background:#fafbf8;color:#153d30;border:0;padding:8px 12px;cursor:pointer}.dark .background-edit{background:#202622;color:#e5e9e2}.background-settings small{display:block;margin-top:12px}
+.store-search{display:flex!important;flex-wrap:wrap;align-items:end;gap:14px}.store-search label{flex:1 1 140px;min-width:120px}.store-search label:has(input){flex:2 1 220px}.store-search select{width:100%}.store-search button{margin:0}
+.task-line .problem-notice{font-size:.92em}.task-line>div{min-width:0}
+@media(max-width:1000px){.with-background .launch-dock{margin:120px 12px 12px;padding:18px;width:calc(100% - 24px)}.launch-home-hero.with-background{min-height:500px}.launch-identity{flex-wrap:wrap}.with-background .launch-identity label{min-width:150px;flex:1}}
