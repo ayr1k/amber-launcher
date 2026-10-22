@@ -24,6 +24,10 @@ jobs:
           version: 11.25.0
           package_json_file: prototype/package.json
       - run: pnpm install --frozen-lockfile
+      - name: Canonicalize Windows temporary directory
+        shell: pwsh
+        run: |
+          node --input-type=module -e "import {realpathSync,appendFileSync} from 'node:fs'; import {tmpdir} from 'node:os'; const p=realpathSync(tmpdir()); console.log('Canonical temporary directory:',p); appendFileSync(process.env.GITHUB_ENV,'TEMP='+p+'\nTMP='+p+'\n');"
       - run: pnpm test
       - run: pnpm build
       - run: pnpm test:sites
