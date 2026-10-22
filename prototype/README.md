@@ -1,6 +1,10 @@
-# AMBER · 1.0.0-beta.2
+# AMBER · 1.0.0-beta.3
 
 Windows x64 桌面开发版，第三次更新后的兼容性与交互完善版。项目自有源码采用 MPL-2.0。统一更新日志及 Release 正文见仓库根目录 CHANGELOG.md。
+
+## beta 1.2
+
+安装包：`releases/beta1.2/AMBER-1.0.0-beta.3-Setup-x64.exe`。修复版本列表、完成弹窗、首次引导、首页与背景设置的布局，增加搜索状态保留、版本提示和安装摘要。以 GitHub 预发布方式提供，见 [BETA12-TESTING.md](BETA12-TESTING.md)。微软真实授权验收继续延后。
 
 ## beta 1.1
 

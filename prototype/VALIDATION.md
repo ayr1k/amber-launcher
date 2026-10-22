@@ -186,3 +186,15 @@ Packaged AMBER-0.1.0-alpha.5-win-x64/AMBER.exe smoke test also exited 0 with sys
 
 
 Alpha.8 packaged verification: releases/AMBER-0.1.0-alpha.8-win-x64/AMBER.exe exited 0 with AMBER_BACKGROUND_OK, AMBER_SYSTEM_ENCRYPTION_OK and AMBER_DESKTOP_AND_IPC_OK. Previous releases preserved. No Microsoft real login was attempted.
+
+## Beta 1.2 (1.0.0-beta.3) validation — 2026-10-21
+
+- `pnpm test`: 120 passed; `pnpm test:sites`: 4 passed. Final production build and source/license checks passed.
+- Browser UI checks used development-only fixtures (921 versions, clearly labelled simulated completion), not actual Minecraft installation. Checked 1280×720, minimum desktop 860×640, and a 480×640 narrow-layout stress case, with light/dark and square/rounded variants.
+- Expanded version group contains all rendered rows and ends before the next group (DOM rectangle check); loading 40 then 104 release rows no longer overlaps. Search and footer remain visible. Verified empty search, clear, back-step keyword retention, Fabric default name and incompatible component disabling.
+- Completion dialog has 30px horizontal padding on desktop / 20px narrow; buttons fit inside the panel. Checked heading focus, Esc closing, content-download and home navigation with simulated completion.
+- Checked all onboarding steps, invalid/valid offline-name enabling, skip/back, and final create-instance entry. At 860×640 the footer stays inside the panel and outside the scrolling content. Checked empty-home action spacing and background select layout, including switching background to none.
+- Final packaged Windows application exited its isolated smoke test with code 0: AMBER_BACKGROUND_OK, AMBER_SYSTEM_ENCRYPTION_OK, AMBER_DESKTOP_AND_IPC_OK. Package metadata is 1.0.0-beta.3. No Beta 1.2 fixture markers are present in the production JavaScript bundle.
+- The normal installer build completed after excluding release artifacts and smoke caches from Vite's development watcher. This avoids development-only EBUSY crashes and extraction-directory contention during packaging.
+- The existing beta 1.1 installer implementation is retained; this iteration did not overwrite the user's installed program or rerun interactive install/uninstall against their profile. Installer is unsigned. Real Minecraft/account/loader acceptance remains as documented; Microsoft live authentication is deferred pending approval.
+- Screenshots are local under `design/qa/beta12-*.png` in the project workspace; they are not user gameplay evidence.

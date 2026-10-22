@@ -11,7 +11,7 @@ AMBER project-owned source is licensed under MPL-2.0. This grant does not relice
 - POP Initiative image: supplied by the project initiator for display in About Project. Original file retained without changing the artwork; CSS selects the monochrome half. No trademark assignment or certification is asserted, and this asset is excluded from the source-code MPL grant. Obtain/document the initiative's redistribution terms before public distribution.
 - AMBER brand paths: traced from the user-approved generated brand study. Forest banner and instance grass icon are generated concept assets, not actual Minecraft screenshots.
 
-This beta 1.1 package is a prerelease test distribution. Public release preparation must include a complete runtime dependency notice inventory, source availability and review of third-party asset redistribution rights.
+This beta 1.2 package is a prerelease test distribution. Public release preparation must include a complete runtime dependency notice inventory, source availability and review of third-party asset redistribution rights.
 
 Alpha.2 additions:
 - fflate 0.8.3 (upgraded from 0.8.2 for the ZIP64 parsing fix), MIT, Arjun Barrett: vendored unmodified Node distribution in `desktop/vendor/fflate.cjs`; full license in `desktop/vendor/LICENSE-fflate`. Source: https://github.com/101arrowz/fflate .
