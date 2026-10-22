@@ -198,3 +198,17 @@ Alpha.8 packaged verification: releases/AMBER-0.1.0-alpha.8-win-x64/AMBER.exe ex
 - The normal installer build completed after excluding release artifacts and smoke caches from Vite's development watcher. This avoids development-only EBUSY crashes and extraction-directory contention during packaging.
 - The existing beta 1.1 installer implementation is retained; this iteration did not overwrite the user's installed program or rerun interactive install/uninstall against their profile. Installer is unsigned. Real Minecraft/account/loader acceptance remains as documented; Microsoft live authentication is deferred pending approval.
 - Screenshots are local under `design/qa/beta12-*.png` in the project workspace; they are not user gameplay evidence.
+
+
+## Beta 1.3 local validation (2026-10-21)
+
+- 129 backend/model regression cases: existing installation, authentication fixture, download, migration, backup and update coverage plus 9 bulk-content / launch-preference tests. Temporary fixtures only; no real Microsoft acceptance.
+- Bulk tests cover dependency+consumer aggregate changes, required exceptions, conflicts, stale manifests, changed files, no-op rows, same-name protection, failure/cancellation rollback, recoverable removal, manual-only initialization, running games/tasks, separate instance persistence and global inheritance.
+- Browser QA: custom choice lists in light/square and dark/rounded themes; 1280×720, 860×640 with 18px text, and 480×720 stress layout. Keyboard search/Enter/Esc/Tab, selected item visibility, popup top-layer inside setup dialog, no horizontal overflow after narrow navigation fix.
+- Store QA retained keyword `fabric`, page 2 and scroll position after project back navigation and leaving/re-entering the page. Different instance compatibility identities use distinct cache keys.
+- Launch QA: instance A kept 8 GB while instance B inherited global memory changed from 4 to 12 GB. Source-level checks ensure compatibility-key changes invalidate store results and a removed account cannot silently become offline.
+- Task QA: one incomplete setup plus two stage jobs renders one primary card and one continuation entry; completed filter shows its completed stage. Bulk selection/preview UI inspected using explicitly labelled samples.
+- Four Sites routing/build checks passed. Windows NSIS packaging uses `--publish never`; packaged app smoke runs against isolated local smoke-data and verifies background, system encryption, frontend and IPC.
+- No GitHub uploads. No real-account Microsoft login, no clean-machine installer execution and no fresh all-loader game-launch acceptance claimed.
+
+Screenshots: ../design/qa/beta13/unified-select.png.

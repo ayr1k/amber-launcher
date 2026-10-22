@@ -1,3 +1,5 @@
+import {BulkContent} from './bulk-content.mjs';
+import {LaunchPreferences} from './launch-preferences.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import { app, BrowserWindow, ipcMain, protocol, net, shell, session, dialog, safeStorage, nativeImage, clipboard } from 'electron';
 import {spawn} from 'node:child_process';
@@ -89,6 +91,7 @@ const packs=new Modpacks(core,content);
 const workflows=new Workflows(core,content),settings=new Settings(core.root),selections=new Map();
 const management=new InstanceManagement(core,workflows),backups=new Backups(core,workflows);
 const modUpdates=new ModUpdates(core,content);
+const bulkContent=new BulkContent(core,content,modUpdates),launchPreferences=new LaunchPreferences(core);
 async function readyForModUpdate(id){if((await workflows.pending()).some(p=>p.instanceId===id))throw Error('此实例安装尚未完成，请先到任务中心继续安装。');}
 handle('amber:mod-update-scan',(id,pre)=>modUpdates.scan(id,pre===true));
 handle('amber:mod-update-lock',async(id,p,value)=>{await readyForModUpdate(id);return modUpdates.lock(id,p,value);});
@@ -158,6 +161,10 @@ handle('amber:content-dismiss',id=>workflows.dismissContent(id));
 handle('amber:content-install',(id,p)=>{const plan=content.plans.get(p);if(!plan||plan.instanceId!==id||plan.expiresAt<Date.now())throw Error('预览已过期，请重新检查');return workflows.startContent(id,plan);});
 handle('amber:content-list',id=>content.list(id));
 handle('amber:content-remove',(id,p)=>content.remove(id,p));
+handle('amber:bulk-preview',(id,paths,action)=>bulkContent.preview(id,paths,action));
+handle('amber:bulk-apply',(id,key)=>bulkContent.apply(id,key));
+handle('amber:launch-preferences',id=>launchPreferences.get(id));
+handle('amber:launch-preferences-save',(id,value)=>launchPreferences.save(id,value));
 handle('amber:content-toggle',(id,p)=>content.toggle(id,p));
 handle('amber:world-import',async id=>{const result=await dialog.showOpenDialog(window,{title:'导入地图 ZIP（保留原文件，创建独立存档）',properties:['openFile'],filters:[{name:'Minecraft world ZIP',extensions:['zip']}]});return result.canceled?null:importWorld(core,id,result.filePaths[0]);});
 handle('amber:optifine-import',async id=>{const result=await dialog.showOpenDialog(window,{title:'选择与当前 Minecraft 和 Forge 兼容的 OptiFine 官方 JAR',properties:['openFile'],filters:[{name:'OptiFine',extensions:['jar']}]});return result.canceled?null:importOptifine(core,id,result.filePaths[0]);});
@@ -179,7 +186,7 @@ handle('amber:ms-poll',()=>accounts.pollMicrosoft());
 handle('amber:ms-cancel',()=>accounts.cancelMicrosoft());
 handle('amber:ms-open',()=>shell.openExternal(pendingCode(accounts).url));
 let launching=false;
-handle('amber:launch',async(id,options)=>{if(launching)throw Error('正在准备启动。');launching=true;try{core.workflowGuard?.();if(core.jobs.some(j=>j.state==='running'))throw Error('请等待安装或更新结束后启动游戏。');await recoverModUpdate(await core.instancePath(id));if((await workflows.pending()).some(p=>p.instanceId===id))throw Error('实例安装尚未完成，请先在任务中心继续安装。');await content.validateLaunch(id);const identity=options.accountId?await accounts.identity(options.accountId):null;const extraJvm=identity?.server?[`-javaagent:${await authAgent(core.root)}=${identity.server}`]:[];return await core.launch(id,{username:options.username,memory:options.memory,identity,extraJvm});}finally{launching=false;}});
+handle('amber:launch',async(id,options)=>{if(launching)throw Error('正在准备启动。');launching=true;try{core.workflowGuard?.();if(core.jobs.some(j=>j.state==='running'))throw Error('请等待安装或更新结束后启动游戏。');await recoverModUpdate(await core.instancePath(id));if((await workflows.pending()).some(p=>p.instanceId===id))throw Error('实例安装尚未完成，请先在任务中心继续安装。');await content.validateLaunch(id);const launchPrefs=await launchPreferences.get(id);options={...options,accountId:launchPrefs.accountId??options.accountId,memory:launchPrefs.memory??options.memory};const identity=options.accountId?await accounts.identity(options.accountId):null;const extraJvm=identity?.server?[`-javaagent:${await authAgent(core.root)}=${identity.server}`]:[];return await core.launch(id,{username:options.username,memory:options.memory,identity,extraJvm});}finally{launching=false;}});
 handle('amber:open-instance', async id=>{ const error = await shell.openPath(await core.instancePath(id)); if(error) throw new Error(error); });
 function createWindow() {
   window = new BrowserWindow({ title: 'AMBER', width: 1440, height: 1000, minWidth: 860, minHeight: 640, show: !smoke, autoHideMenuBar: true, backgroundColor: '#fafbf8', webPreferences: { preload: join(base,'preload.cjs'), nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true } });

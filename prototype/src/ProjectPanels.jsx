@@ -9,7 +9,7 @@ export function AboutProject() {
   useEffect(()=>{ fetch('/licenses/MPL-2.0.txt').then(r=>{if(!r.ok)throw Error();return r.text();}).then(setLicense).catch(()=>setLicense('许可证读取失败；完整文件随项目 LICENSE 提供。')); },[]);
   return <section className="about-project">
     <img className="about-wordmark" src="/brand/amber-lockup.svg" alt="AMBER"/>
-    <p className="about-version">1.0.0-beta.3 · 预发布测试版</p>
+    <p className="about-version">1.0.0-beta.4 · 预发布测试版</p>
     <p>为每一次冒险，保留自由选择的空间。</p>
     <dl className="detail-list"><div><dt>项目许可</dt><dd>Mozilla Public License 2.0</dd></div><div><dt>开发阶段</dt><dd>多加载器 · Modrinth 内容商城 · 账号与 Java 管理</dd></div></dl>
     {window.amberDesktop&&<section className="native-section"><h2>帮助与诊断</h2><p>遇到问题时可导出诊断摘要。不包含账号、令牌、实例名称、本机路径或原始日志；不会自动上传。</p><button className="button secondary" disabled={exporting} onClick={async()=>{setExporting(true);try{if(await window.amberDesktop.exportDiagnostics())setDiagnosticMessage('诊断摘要已保存。你可以检查内容后自行附在反馈中。');}catch(e){setDiagnosticMessage(e.message);}finally{setExporting(false);}}}>导出诊断摘要</button>{diagnosticMessage&&<p role="status">{diagnosticMessage}</p>}</section>}

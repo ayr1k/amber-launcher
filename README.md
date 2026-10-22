@@ -2,11 +2,13 @@
 
 An independent Minecraft: Java Edition desktop launcher with isolated instances, compatible content discovery and user-controlled appearance.
 
-AMBER 是一款 Windows x64 桌面启动器。当前版本为 **beta 1.2（1.0.0-beta.3）**，操作说明见 [Beta 1.2 测试说明](prototype/BETA12-TESTING.md)。这是预发布测试版本；微软真实授权等验收边界见下文。
+AMBER 是一款 Windows x64 桌面启动器。当前预发布版本为 **beta 1.3（1.0.0-beta.4）**，操作说明见 [Beta 1.3 测试说明](prototype/BETA13-TESTING.md)。这是预发布测试版本；微软真实授权等验收边界见下文。
 
-下载 Windows 安装包、完整源码包及 SHA-256 校验文件：[AMBER beta 1.2](https://github.com/ayr1k/amber-launcher/releases/tag/v1.0.0-beta.3)。运行 Setup 安装程序；旧便携版用户请安装到新的程序目录，保留原游戏数据位置。
+beta 1.3 Windows 安装包、完整源码包及 SHA-256 校验文件：[AMBER beta 1.3](https://github.com/ayr1k/amber-launcher/releases/tag/v1.0.0-beta.4)。运行 Setup 安装程序；旧便携版用户请安装到新的程序目录，保留原游戏数据位置。
 
 beta 1.1 安装和新增功能见 [测试说明](prototype/BETA11-TESTING.md)。
+
+Beta 1.3 新增统一选择列表、实例独立账号与内存、商城浏览状态保留、设置 / 任务整理和可恢复的模组批量操作。
 
 ## 当前功能
 

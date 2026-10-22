@@ -46,7 +46,7 @@ export class ModUpdates{
   constructor(core,content){this.core=core;this.content=content;this.plans=new Map();}
   async scan(instanceId,prerelease=false){
     const {dir}=await this.core.metadata(instanceId),manifest=await this.content.manifest(dir),rows=[];
-    for(const f of manifest.files.filter(f=>f.type==='mod')){
+    for(const f of manifest.files.filter(f=>f.type==='mod'&&f.projectId&&f.versionId)){
       const row={projectId:f.projectId,title:f.title,current:f.version,locked:!!f.updateLocked,enabled:f.enabled!==false};
       try{await checked(dir,f);const current=await this.content.api('version/'+f.versionId);const versions=await this.content.versions(instanceId,f.projectId);
         const candidate=versions.filter(v=>v.id!==f.versionId&&(prerelease||v.version_type==='release')&&Date.parse(v.date_published)>Date.parse(current.date_published)).sort((a,b)=>Date.parse(b.date_published)-Date.parse(a.date_published))[0];
@@ -95,6 +95,7 @@ export class ModUpdates{
     });
   }
   async replace(dir,before,after,old,next,source,signal,job){
+    if(!await exists(join(dir,'content.json')))await atomicJson(join(dir,'content.json'),before);
     for(const f of [...old,...next])validFile(f);
     for(const f of old)await checked(dir,f);
     for(const f of next){const path=safePath(dir,actual(f));await ensureParents(dir,path);if(await exists(path)&&!old.some(x=>actual(x).toLowerCase()===actual(f).toLowerCase()))throw Error('已有同名文件，未覆盖：'+actual(f));if(!await verified({...f,path:source(f)}))throw Error('更新来源文件校验失败。');}
@@ -108,7 +109,7 @@ export class ModUpdates{
     await recoverModUpdate(dir);
   }
   async history(instanceId){const {dir}=await this.core.metadata(instanceId);let names;try{names=await readdir(join(dir,'content-updates'));}catch(e){if(e.code==='ENOENT')return [];throw e;}const list=[];
-    for(const name of names.filter(n=>/^[a-f0-9-]{36}$/.test(n))){try{const r=JSON.parse(await readFile(join(dir,'content-updates',name,'record.json'),'utf8'));if(r.state==='done')list.push({id:name,createdAt:r.createdAt,titles:r.next.map(f=>f.title),restorable:contentStamp(await this.content.manifest(dir))===contentStamp(r.after)});}catch{}}
+    for(const name of names.filter(n=>/^[a-f0-9-]{36}$/.test(n))){try{const r=JSON.parse(await readFile(join(dir,'content-updates',name,'record.json'),'utf8'));if(r.state==='done')list.push({id:name,createdAt:r.createdAt,titles:(r.next.length?r.next:r.old).map(f=>f.title),restorable:contentStamp(await this.content.manifest(dir))===contentStamp(r.after)});}catch{}}
     return list.sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
   }
   async restore(instanceId,id){if(!/^[a-f0-9-]{36}$/.test(id))throw Error('无效更新记录。');const {dir}=await this.core.metadata(instanceId);await this.core.requireStopped(dir);

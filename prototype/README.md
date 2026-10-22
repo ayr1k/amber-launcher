@@ -1,6 +1,10 @@
-# AMBER · 1.0.0-beta.3
+# AMBER · 1.0.0-beta.4
 
 Windows x64 桌面开发版，第三次更新后的兼容性与交互完善版。项目自有源码采用 MPL-2.0。统一更新日志及 Release 正文见仓库根目录 CHANGELOG.md。
+
+## beta 1.3
+
+本地安装包：`releases/beta1.3/AMBER-1.0.0-beta.4-Setup-x64.exe`。统一主题选择列表、实例独立启动设置、商城浏览状态保留、设置与任务整理，以及可预览和恢复的模组批量管理。以 GitHub 预发布方式提供，详见 [BETA13-TESTING.md](BETA13-TESTING.md)。微软真实认证继续等待审核。
 
 ## beta 1.2
 
@@ -27,7 +31,7 @@ Windows x64 桌面开发版，第三次更新后的兼容性与交互完善版�
 
 ## 运行与创建
 
-运行本地 beta 1.1 安装包后，从 AMBER 快捷方式启动。默认数据位置为 `%APPDATA%/AMBER/library`（可在设置中迁移），沿用既有实例、Java、缓存和加密账号库。便携测试包未签名；本地交付包已准备，尚未执行公开上传。
+运行本地 beta 1.3 安装包后，从 AMBER 快捷方式启动。默认数据位置为 `%APPDATA%/AMBER/library`（可在设置中迁移），沿用既有实例、Java、缓存和加密账号库。便携测试包未签名；本地交付包已准备，尚未执行公开上传。
 
 点击“实例 → 创建实例” → 选择 Minecraft 版本 → 下一步逐项配置组件 → “创建并安装”。AMBER 自动准备匹配的 Java、安装加载器并下载完整游戏；完成后选择账号启动。游戏版本输入即筛选；加载器目录自动按游戏版本查询，不支持的组合禁用。Forge 可附加官方 OptiFine JAR，需按 OptiFine 官网声明匹配 Forge 版本。历史 LaunchWrapper 版本可组合 Forge + LiteLoader、OptiFine + LiteLoader，以及三组件组合；根据实际官方发行版选择，不能保证任意 Forge / OptiFine 版本彼此兼容。独立 OptiFine 亦可选择，不分发其二进制文件。
 
