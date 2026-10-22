@@ -1,6 +1,12 @@
-# AMBER · 1.0.0-beta.1
+# AMBER · 1.0.0-beta.2
 
 Windows x64 桌面开发版，第三次更新后的兼容性与交互完善版。项目自有源码采用 MPL-2.0。统一更新日志及 Release 正文见仓库根目录 CHANGELOG.md。
+
+## beta 1.1
+
+本地安装包：`releases/beta1.1/AMBER-1.0.0-beta.2-Setup-x64.exe`。新增验证码自动复制、程序更新入口与保护、模组兼容更新/锁定/恢复。安装与测试说明见 [BETA11-TESTING.md](BETA11-TESTING.md)。beta 1.1 以 GitHub 预发布版本提供；微软真实授权继续延后。
+
+构建安装包：`pnpm package:installer`（Windows x64，使用 NSIS；不会发布）。
 
 ## beta 1.0
 
@@ -13,11 +19,11 @@ Windows x64 桌面开发版，第三次更新后的兼容性与交互完善版�
 
 备份保存在所选数据目录的 `backups/` 中；同盘备份不防磁盘损坏。备份/迁移取消或校验失败的临时副本不会列为成功备份，也不会自动删除原始数据。重要备份可另行复制到另一块磁盘。
 
-微软真实授权仍等待审核；本轮未上传 GitHub。
+微软真实授权仍等待审核。
 
 ## 运行与创建
 
-打开 `releases/AMBER-1.0.0-beta.1-win-x64/AMBER.exe`，保留整个目录。默认数据位置为 `%APPDATA%/AMBER/library`（可在设置中迁移），沿用既有实例、Java、缓存和加密账号库。便携测试包未签名；本地交付包已准备，尚未执行公开上传。
+运行本地 beta 1.1 安装包后，从 AMBER 快捷方式启动。默认数据位置为 `%APPDATA%/AMBER/library`（可在设置中迁移），沿用既有实例、Java、缓存和加密账号库。便携测试包未签名；本地交付包已准备，尚未执行公开上传。
 
 点击“实例 → 创建实例” → 选择 Minecraft 版本 → 下一步逐项配置组件 → “创建并安装”。AMBER 自动准备匹配的 Java、安装加载器并下载完整游戏；完成后选择账号启动。游戏版本输入即筛选；加载器目录自动按游戏版本查询，不支持的组合禁用。Forge 可附加官方 OptiFine JAR，需按 OptiFine 官网声明匹配 Forge 版本。历史 LaunchWrapper 版本可组合 Forge + LiteLoader、OptiFine + LiteLoader，以及三组件组合；根据实际官方发行版选择，不能保证任意 Forge / OptiFine 版本彼此兼容。独立 OptiFine 亦可选择，不分发其二进制文件。
 

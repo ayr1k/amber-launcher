@@ -1,0 +1,2 @@
+/* SPDX-License-Identifier: MPL-2.0 */
+.selectable,.release-notes{user-select:text;overflow-wrap:anywhere}.release-notes{white-space:pre-wrap;max-height:360px;overflow:auto;font:inherit}.update-dependency{display:flex;gap:10px;align-items:center;margin:10px 0}.mod-updates .store-plan-row label{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.mod-updates small{display:block;color:var(--muted)}.mod-updates input[type=checkbox]{accent-color:var(--accent);flex-shrink:0}.mod-updates .store-plan-row{gap:16px}.native-section progress{max-width:100%}

@@ -1,6 +1,18 @@
 // SPDX-License-Identifier: MPL-2.0
 const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
+  appUpdateState:()=>ipcRenderer.invoke('amber:app-update-state'),
+  checkAppUpdate:()=>ipcRenderer.invoke('amber:app-update-check'),
+  downloadAppUpdate:()=>ipcRenderer.invoke('amber:app-update-download'),
+  cancelAppUpdate:()=>ipcRenderer.invoke('amber:app-update-cancel'),
+  installAppUpdate:()=>ipcRenderer.invoke('amber:app-update-install'),
+  copyMicrosoft:()=>ipcRenderer.invoke('amber:ms-copy'),
+  modUpdateScan:(id,pre)=>ipcRenderer.invoke('amber:mod-update-scan',id,pre),
+  modUpdateLock:(id,p,v)=>ipcRenderer.invoke('amber:mod-update-lock',id,p,v),
+  modUpdatePreview:(id,choices,optional,excluded)=>ipcRenderer.invoke('amber:mod-update-preview',id,choices,optional,excluded),
+  modUpdateInstall:(id,p)=>ipcRenderer.invoke('amber:mod-update-install',id,p),
+  modUpdateHistory:id=>ipcRenderer.invoke('amber:mod-update-history',id),
+  modUpdateRestore:(id,r)=>ipcRenderer.invoke('amber:mod-update-restore',id,r),
   backups:id=>ipcRenderer.invoke('amber:backups',id),
   createBackup:(id,mode)=>ipcRenderer.invoke('amber:backup-create',id,mode),
   restoreBackup:id=>ipcRenderer.invoke('amber:backup-restore',id),

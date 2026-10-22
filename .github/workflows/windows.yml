@@ -33,10 +33,10 @@ jobs:
       - run: pnpm test:sites
       - run: pnpm release:check
       - run: pnpm desktop:smoke
-      - run: pnpm package:desktop
+      - run: pnpm package:installer
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: amber-windows-development
-          path: prototype/releases/AMBER-*-win-x64
+          path: prototype/releases/beta1.1/AMBER-*-Setup-x64.exe
           retention-days: 7
           if-no-files-found: error

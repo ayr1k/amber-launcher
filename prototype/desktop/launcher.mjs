@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 import {explainProblem} from './problems.mjs';
+import {sessionAlive} from './process-session.mjs';
 import { mkdir, readFile, writeFile, copyFile, statfs, rm, open } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { randomUUID } from 'node:crypto';
@@ -12,8 +13,7 @@ import { liteVersions, liteProfile } from './liteloader.mjs';
 import { loaderVersions, installLoader, withLoader } from './loaders.mjs';
 import { discoverJava, inspectJava, installJava } from './java.mjs';
 
-function alive(pid){try{if(!Number.isInteger(pid)||pid<=0)return false;process.kill(pid,0);return true;}catch(e){return e.code==='EPERM';}}
-async function readSession(dir){try{const session=JSON.parse(await readFile(join(dir,'.amber-session.json'),'utf8'));return alive(session.pid)?session:null;}catch{return null;}}
+async function readSession(dir){try{const session=JSON.parse(await readFile(join(dir,'.amber-session.json'),'utf8'));return await sessionAlive(session)?session:null;}catch{return null;}}
 async function logTail(path){try{const file=await open(path,'r');try{const stat=await file.stat();const buffer=Buffer.alloc(Math.min(stat.size,24000));await file.read(buffer,0,buffer.length,Math.max(0,stat.size-buffer.length));return buffer.toString().replaceAll('<![CDATA[','').replaceAll(']]>','').replace(/<\/?log4j:[^>]*>/g,'').replace(/^\s*\n/gm,'');}finally{await file.close();}}catch{return '';}}
 
 export class VanillaLauncher extends LauncherCore {

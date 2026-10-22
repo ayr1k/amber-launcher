@@ -1,0 +1,49 @@
+appId: io.github.ayr1k.amber
+productName: AMBER
+asar: false
+npmRebuild: false
+directories:
+  output: releases/beta1.1
+  buildResources: build
+files:
+  - desktop/**/*
+  - dist/client/**/*
+  - package.json
+  - LICENSE
+  - THIRD_PARTY_NOTICES.md
+  - '!node_modules/**'
+  - '!**/.smoke-data/**'
+  - '!**/*.ttf'
+  - '!dist/client/assets/sodium.png'
+  - '!dist/client/assets/lithium.png'
+  - '!dist/client/assets/iris.png'
+  - '!dist/client/assets/modmenu.png'
+  - '!dist/client/assets/fabric-api.png'
+extraFiles:
+  - from: ../CHANGELOG.md
+    to: CHANGELOG.md
+  - from: BETA11-TESTING.md
+    to: BETA11-TESTING.md
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  executableName: AMBER
+  icon: build/icon.ico
+  signAndEditExecutable: true
+nsis:
+  oneClick: false
+  perMachine: false
+  allowElevation: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: AMBER
+  deleteAppDataOnUninstall: false
+  runAfterFinish: false
+  installerLanguages: [zh_CN, en_US]
+  displayLanguageSelector: false
+  include: build/installer.nsh
+  installerIcon: build/icon.ico
+  uninstallerIcon: build/icon.ico
+  artifactName: AMBER-${version}-Setup-${arch}.exe

@@ -1,3 +1,14 @@
+## Beta 1.1 local verification — 2026-10-21
+
+- Package/display: 1.0.0-beta.2 / beta 1.1. No GitHub push, release, asset upload or CI dispatch performed.
+- Full local automated suite: 120 tests passed; Sites contract suite: 4 passed. Tests cover one-time public device-code copy/open with fallbacks, expiration, version ordering, installer origin/digest checks, cancellation/retry, encrypted configuration byte preservation, compatible mod updates, locking, required-dependency opt-out, fixed dependency conflicts, disabled state, stale plans, transaction interruption/rollback, modified-file protection and reused Windows process IDs.
+- Native installer: first installation and same-directory upgrade in `prototype/releases/beta11-install-test/AMBER` succeeded. Old program backup hash compared successfully. Installed application exited 0 with AMBER_BACKGROUND_OK, AMBER_SYSTEM_ENCRYPTION_OK and AMBER_DESKTOP_AND_IPC_OK. Simultaneous launches with one isolated user-data directory produced exactly one booted application and both processes exited 0.
+- Test installation uninstalled successfully. Existing account/preferences/location files that were present retained identical SHA-256 hashes (2 files); all 23 existing instance directories remained; old program backup remained. No real account or game files were written by these checks. Smoke app data was isolated inside releases/.
+- Preflight synthetic cases passed: empty Chinese-path directory, data overlap rejection, non-app folder rejection, old-program copy/hash verification, live game identity rejection and stale PID acceptance. Updated hashing uses .NET SHA256 directly to work in the installer’s PowerShell environment without relying on module auto-loading.
+- Real read-only GitHub release check returned current/no eligible newer installer, correctly excluding beta 1.0’s ZIP. Future installer download and hash failures use controlled response tests; no newer release was uploaded for testing.
+- Browser UI fixture verified updates are opt-in, locked rows disabled and required dependency selectable/default-on with explicit opt-out warning. Screenshot: `design/qa/beta11-mod-updates.png`. The browser fixture is not a live Modrinth update or Microsoft authentication acceptance test.
+- Windows installer is unsigned (Authenticode NotSigned). Clean-machine testing, user approval of the visible installation wizard, all mod combinations and real power-loss scenarios remain outside this run. Microsoft authorization, refresh and authenticated launch remain deferred pending allow-list approval.
+
 # beta 1.0 · 1.0.0-beta.1 — 依赖选择调整
 
 - 版本按项目发起人要求统一为 1.0.0-beta.1。所有发布功能和本次调整合并到根目录 CHANGELOG.md 的同一个 beta 1.0 条目，不创建补丁版本或第二份更新日志。

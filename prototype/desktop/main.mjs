@@ -1,5 +1,9 @@
 // SPDX-License-Identifier: MPL-2.0
-import { app, BrowserWindow, ipcMain, protocol, net, shell, session, dialog, safeStorage, nativeImage } from 'electron';
+import { app, BrowserWindow, ipcMain, protocol, net, shell, session, dialog, safeStorage, nativeImage, clipboard } from 'electron';
+import {spawn} from 'node:child_process';
+import {beginMicrosoftLogin,copyMicrosoftCode,pendingCode} from './login-actions.mjs';
+import {AppUpdates,backupUpgradeConfig} from './app-updates.mjs';
+import {ModUpdates,recoverModUpdate} from './mod-updates.mjs';
 import { dirname, join, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import {Storage} from './storage.mjs';
@@ -26,15 +30,15 @@ const base = dirname(fileURLToPath(import.meta.url));
 const assets = resolve(base, '../dist/client');
 const smoke = process.argv.includes('--smoke-test');
 app.setPath('userData', join(app.getPath('appData'), 'AMBER'));
-if (smoke) app.setPath('userData', resolve(base, '../.smoke-data'));
+if (smoke) app.setPath('userData', process.env.AMBER_SMOKE_ROOT ? resolve(process.env.AMBER_SMOKE_ROOT) : resolve(base, '../.smoke-data'));
 app.setName('AMBER');
 if(!app.requestSingleInstanceLock()) app.exit(0);
 protocol.registerSchemesAsPrivileged([{ scheme: 'amber', privileges: { standard: true, secure: true, supportFetchAPI: true } }]);
-let window;
+let window,activatePending=false;
 let loaded=false;
 const smokeChannels=new Set();
 function finishSmoke(){if(smoke&&loaded&&['amber:info','amber:instances','amber:status','amber:settings'].every(c=>smokeChannels.has(c))){console.log('AMBER_DESKTOP_AND_IPC_OK');setTimeout(()=>app.quit(),250);}}
-app.on('second-instance',()=>{if(window){if(window.isMinimized())window.restore();window.focus();}});
+app.on('second-instance',()=>{activatePending=true;if(window){if(window.isMinimized())window.restore();window.show();window.focus();}});
 if(smoke) setTimeout(()=>{ console.error('AMBER_SMOKE_TIMEOUT'); app.exit(2); },20000).unref();
 app.whenReady().then(async () => {
 protocol.handle('amber', async request => {
@@ -59,11 +63,13 @@ const recovery=await recoverTransactions(core);
 if(smoke){const name=await importBackground(core.root,join(assets,'assets/forest-banner.png'),bytes=>nativeImage.createFromBuffer(bytes));const response=await net.fetch('amber://app/user-background/'+name);if(response.status!==200||response.headers.get('Content-Type')!=='image/png'||(await response.arrayBuffer()).byteLength===0)throw Error('Background round-trip failed');console.log('AMBER_BACKGROUND_OK');}
 if(smoke){const sample="amber-credential-codec-check";if(!safeStorage.isEncryptionAvailable()||safeStorage.decryptString(safeStorage.encryptString(sample))!==sample)throw Error("Credential encryption unavailable");console.log("AMBER_SYSTEM_ENCRYPTION_OK");}
 const accounts=new Accounts(core.root,{codec:safeStorage});await accounts.init();
+const appUpdates=new AppUpdates(app.getPath('userData'),app.getVersion());let upgradeBusy=false;
 function handle(channel, fn) {
   ipcMain.handle(channel, async (event,...args) => {
     const source = new URL(event.senderFrame.url);
     if (event.sender !== window?.webContents || event.senderFrame !== window.webContents.mainFrame || source.protocol !== 'amber:' || source.host !== 'app') throw new Error('请求来源不受信任。');
     if(storageBusy&&!['amber:info','amber:status','amber:setup-cancel'].includes(channel))throw Error('数据目录正在迁移，请等待完成。');
+    if(upgradeBusy&&!['amber:info','amber:status','amber:app-update-state'].includes(channel))throw Error('正在准备升级，请稍候。');
     const result=await fn(...args);if(smoke){smokeChannels.add(channel);finishSmoke();}return result;
   });
 }
@@ -82,6 +88,29 @@ const content=new Modrinth(core);
 const packs=new Modpacks(core,content);
 const workflows=new Workflows(core,content),settings=new Settings(core.root),selections=new Map();
 const management=new InstanceManagement(core,workflows),backups=new Backups(core,workflows);
+const modUpdates=new ModUpdates(core,content);
+async function readyForModUpdate(id){if((await workflows.pending()).some(p=>p.instanceId===id))throw Error('此实例安装尚未完成，请先到任务中心继续安装。');}
+handle('amber:mod-update-scan',(id,pre)=>modUpdates.scan(id,pre===true));
+handle('amber:mod-update-lock',async(id,p,value)=>{await readyForModUpdate(id);return modUpdates.lock(id,p,value);});
+handle('amber:mod-update-preview',(id,choices,optional,excluded)=>modUpdates.preview(id,choices,optional,excluded));
+handle('amber:mod-update-install',async(id,plan)=>{await readyForModUpdate(id);return modUpdates.install(id,plan);});
+handle('amber:mod-update-history',id=>modUpdates.history(id));
+handle('amber:mod-update-restore',async(id,record)=>{await readyForModUpdate(id);return modUpdates.restore(id,record);});
+handle('amber:app-update-state',()=>appUpdates.state);
+handle('amber:app-update-check',()=>appUpdates.check());
+handle('amber:app-update-download',()=>appUpdates.download());
+handle('amber:app-update-cancel',()=>appUpdates.cancel());
+handle('amber:app-update-install',async()=>{
+  if(launching||storageBusy||workflows.active||core.jobs.some(j=>j.state==='running'))throw Error('请等待游戏准备、安装或数据迁移结束后再升级。');
+  upgradeBusy=true;
+  try{for(const item of await core.listInstances())await core.requireStopped(await core.instancePath(item.id));
+    if(launching||storageBusy||workflows.active||core.jobs.some(j=>j.state==='running'))throw Error('有新任务开始，请等待结束后再升级。');
+    const file=await appUpdates.installer();const answer=await dialog.showMessageBox(window,{type:'question',title:'安装 AMBER 更新',message:'安装包已校验，是否退出 AMBER 并打开安装程序？',detail:'将保留游戏数据，并先备份账号和设置。请在安装向导中确认安装位置。',buttons:['取消','退出并安装'],defaultId:0,cancelId:0,noLink:true});if(answer.response!==1)return false;
+    await backupUpgradeConfig(app.getPath('userData'),core.root,app.getVersion());
+    await new Promise((resolve,reject)=>{const child=spawn(file,[],{detached:true,stdio:'ignore',windowsHide:false});child.once('error',reject);child.once('spawn',()=>{child.unref();resolve();});});
+    app.quit();return true;
+  }finally{upgradeBusy=false;}
+});
 workflows.installPack=async(id,version)=>{try{const r=JSON.parse(await readFile(join(await core.instancePath(id),'modpack.json'),'utf8'));if(r.versionId===version)return;}catch(e){if(e.code!=='ENOENT')throw e;}const p=await packs.preview(id,version);return workflows.wait(await packs.install(id,p.id));};
 handle('amber:backups',id=>backups.list(id));
 handle('amber:backup-create',(id,mode)=>backups.create(id,mode));
@@ -144,22 +173,23 @@ handle('amber:account-offline',name=>accounts.addOffline(name));
 handle('amber:account-server',input=>accounts.addServer(input));
 handle('amber:account-remove',id=>accounts.remove(id));
 handle('amber:account-profile',(id,p)=>accounts.selectProfile(id,p));
-handle('amber:ms-start',()=>accounts.startMicrosoft());
+handle('amber:ms-start',()=>beginMicrosoftLogin(accounts,clipboard,url=>shell.openExternal(url)));
+handle('amber:ms-copy',()=>copyMicrosoftCode(accounts,clipboard));
 handle('amber:ms-poll',()=>accounts.pollMicrosoft());
 handle('amber:ms-cancel',()=>accounts.cancelMicrosoft());
-handle('amber:ms-open',()=>{const d=accounts.list().device;if(d?.state!=='pending')throw Error('请先获取登录代码。');return shell.openExternal(d.url);});
+handle('amber:ms-open',()=>shell.openExternal(pendingCode(accounts).url));
 let launching=false;
-handle('amber:launch',async(id,options)=>{if(launching)throw Error('正在准备启动。');launching=true;try{core.workflowGuard?.();if((await workflows.pending()).some(p=>p.instanceId===id))throw Error('实例安装尚未完成，请先在任务中心继续安装。');await content.validateLaunch(id);const identity=options.accountId?await accounts.identity(options.accountId):null;const extraJvm=identity?.server?[`-javaagent:${await authAgent(core.root)}=${identity.server}`]:[];return await core.launch(id,{username:options.username,memory:options.memory,identity,extraJvm});}finally{launching=false;}});
+handle('amber:launch',async(id,options)=>{if(launching)throw Error('正在准备启动。');launching=true;try{core.workflowGuard?.();if(core.jobs.some(j=>j.state==='running'))throw Error('请等待安装或更新结束后启动游戏。');await recoverModUpdate(await core.instancePath(id));if((await workflows.pending()).some(p=>p.instanceId===id))throw Error('实例安装尚未完成，请先在任务中心继续安装。');await content.validateLaunch(id);const identity=options.accountId?await accounts.identity(options.accountId):null;const extraJvm=identity?.server?[`-javaagent:${await authAgent(core.root)}=${identity.server}`]:[];return await core.launch(id,{username:options.username,memory:options.memory,identity,extraJvm});}finally{launching=false;}});
 handle('amber:open-instance', async id=>{ const error = await shell.openPath(await core.instancePath(id)); if(error) throw new Error(error); });
 function createWindow() {
   window = new BrowserWindow({ title: 'AMBER', width: 1440, height: 1000, minWidth: 860, minHeight: 640, show: !smoke, autoHideMenuBar: true, backgroundColor: '#fafbf8', webPreferences: { preload: join(base,'preload.cjs'), nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true } });
   let closeAllowed=false,closePrompt=false;
-  window.on('close',async event=>{if(smoke||closeAllowed||(!workflows.active&&!core.jobs.some(j=>j.state==='running')))return;event.preventDefault();if(closePrompt)return;closePrompt=true;try{const r=await dialog.showMessageBox(window,{type:'warning',title:'安装还未结束',message:'退出会中断当前下载或实例配置。',detail:'已完成的文件会保留，建议等待任务结束。退出后可在实例管理继续。',buttons:['继续等待','取消任务并退出'],defaultId:0,cancelId:0,noLink:true});if(r.response===1){workflows.cancel();for(const j of core.jobs.filter(j=>j.state==='running'))core.controllers.get(j.id)?.abort(Error('用户取消任务并退出。'));while(workflows.active||core.jobs.some(j=>j.state==='running'))await new Promise(r=>setTimeout(r,150));closeAllowed=true;window.close();}}finally{closePrompt=false;}});
+  window.on('close',async event=>{if(smoke||closeAllowed||(!workflows.active&&!core.jobs.some(j=>j.state==='running')&&appUpdates.state.phase!=='downloading'))return;event.preventDefault();if(closePrompt)return;closePrompt=true;try{const r=await dialog.showMessageBox(window,{type:'warning',title:'安装还未结束',message:'退出会中断当前下载或实例配置。',detail:'已完成的文件会保留，建议等待任务结束。实例安装可在任务中心继续；程序更新可在关于页重新下载。',buttons:['继续等待','取消任务并退出'],defaultId:0,cancelId:0,noLink:true});if(r.response===1){appUpdates.cancel();workflows.cancel();for(const j of core.jobs.filter(j=>j.state==='running'))core.controllers.get(j.id)?.abort(Error('用户取消任务并退出。'));while(workflows.active||core.jobs.some(j=>j.state==='running')||appUpdates.state.phase==='downloading')await new Promise(r=>setTimeout(r,150));closeAllowed=true;window.close();}}finally{closePrompt=false;}});
   window.webContents.setWindowOpenHandler(()=>({action:'deny'}));
   window.webContents.on('will-navigate',(event,url)=>{ if(url!=='amber://app/') event.preventDefault(); });
   window.webContents.on('will-attach-webview',event=>event.preventDefault());
   window.webContents.on('did-fail-load',(_event,code,description)=>{ console.error('LOAD_FAILED',code,description); if(smoke) app.exit(1); });
-  window.webContents.on('did-finish-load',()=>{ loaded=true;finishSmoke(); });
+  window.webContents.on('did-finish-load',()=>{ loaded=true;if(activatePending&&!smoke){window.show();window.focus();activatePending=false;}finishSmoke(); });
   window.loadURL('amber://app/');
 }
 createWindow();

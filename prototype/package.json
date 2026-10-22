@@ -1,6 +1,6 @@
 {
   "name": "amber-launcher",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "license": "MPL-2.0",
   "main": "desktop/main.mjs",
   "private": true,
@@ -11,11 +11,12 @@
     "preview": "vite preview",
     "desktop": "electron .",
     "desktop:smoke": "electron . --smoke-test",
-    "test": "node --test tests/model.test.mjs tests/desktop-core.test.mjs tests/vanilla.test.mjs tests/accounts-fabric.test.mjs tests/update2.test.mjs tests/update3.test.mjs tests/update6.test.mjs tests/update8.test.mjs tests/update9.test.mjs tests/update10.test.mjs",
+    "test": "node --test tests/model.test.mjs tests/desktop-core.test.mjs tests/vanilla.test.mjs tests/accounts-fabric.test.mjs tests/update2.test.mjs tests/update3.test.mjs tests/update6.test.mjs tests/update8.test.mjs tests/update9.test.mjs tests/update10.test.mjs tests/beta11.test.mjs",
     "test:sites": "node --test tests/sites-worker.test.mjs",
     "package:desktop": "node scripts/package-desktop.mjs",
     "release:check": "node scripts/release-check.mjs",
-    "release:source": "node scripts/release-check.mjs && node scripts/prepare-github.mjs"
+    "release:source": "node scripts/release-check.mjs && node scripts/prepare-github.mjs",
+    "package:installer": "pnpm build && electron-builder --win nsis --x64 --publish never"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
@@ -25,11 +26,14 @@
   "devDependencies": {
     "@vitejs/plugin-react": "5.0.4",
     "electron": "45.0.0",
+    "electron-builder": "26.15.3",
     "fflate": "0.8.3",
     "vite": "6.4.4"
   },
   "packageManager": "pnpm@11.25.0",
   "engines": {
     "node": ">=24 <25"
-  }
+  },
+  "description": "AMBER Minecraft Java launcher",
+  "author": "AMBER contributors"
 }
