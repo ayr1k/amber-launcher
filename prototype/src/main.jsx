@@ -16,6 +16,7 @@ import "./beta13.css";
 import "./beta14.css";
 import "./beta15.css";
 import "./beta16.css";
+import "./beta17.css";
 
 if (import.meta.env.DEV && new URLSearchParams(location.search).has('desktop-preview')) {
   const instance={id:'layout-only',name:'界面样例 · Fabric',game:'1.21.1',loader:'fabric',loaderVersion:'0.19.5',status:'installed',javaMajor:21,javaPath:'AMBER / runtimes / Temurin 21 / bin / java.exe'};
@@ -74,7 +75,10 @@ if (import.meta.env.DEV && new URLSearchParams(location.search).has('desktop-pre
 }
 
 if(import.meta.env.DEV&&window.amberDesktop?.preview){
- const api=window.amberDesktop;let prefs={...defaultPreviewPreferences};prefs={...prefs,language:localStorage.getItem('amber.preview-language')||'zh-CN',copyLoginCode:true};
+ const api=window.amberDesktop;
+ api.graphicsInfo=async()=>({supported:true,adapters:['示例 GPU · 布局预览'],javaPath:'C:/AMBER/runtimes/Java 21/bin/java.exe',sharedNames:['界面样例 · Fabric']});api.openGraphicsSettings=async()=>true;api.copyGameJava=async()=>true;api.restoreGraphics=async()=>{prefs.graphicsMode='system';return true;};
+ let prefs={...defaultPreviewPreferences};prefs={...prefs,language:new URLSearchParams(location.search).get('lang')||localStorage.getItem('amber.preview-language')||'zh-CN',copyLoginCode:true,theme:new URLSearchParams(location.search).get('theme')||'dark',panelOpacity:70};
+ if(new URLSearchParams(location.search).has('qa-beta17')){const examples=['grass','dirt','anvil','pickaxe'].map((icon,n)=>({id:'layout-'+n,name:n?'界面样例 '+n+' · '+icon:'1.21.4-fabric',game:'1.21.4',loader:'fabric',loaderVersion:'0.19.5',icon,status:'installed',javaMajor:21}));api.listInstances=async()=>examples;} 
  api.settings=async()=>prefs;api.saveSettings=async value=>{prefs={...prefs,...value};localStorage.setItem('amber.preview-language',prefs.language);return prefs;};
  api.languageState=async()=>({language:prefs.language,pack:null});api.importLanguage=async()=>false;api.exportLanguage=async()=>false;
  api.copyPrivacyPath=async()=>true;

@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: MPL-2.0
 const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
+  graphicsInfo:id=>ipcRenderer.invoke('amber:graphics-info',id),
+  openGraphicsSettings:()=>ipcRenderer.invoke('amber:graphics-open'),
+  copyGameJava:id=>ipcRenderer.invoke('amber:graphics-copy-java',id),
+  restoreGraphics:()=>ipcRenderer.invoke('amber:graphics-restore'),
   windowState:()=>ipcRenderer.invoke('amber:window-state'),
   windowAction:action=>ipcRenderer.invoke('amber:window-action',action),
   onWindowState:callback=>{const listener=(_event,state)=>callback(state);ipcRenderer.on('amber:window-state-changed',listener);return()=>ipcRenderer.removeListener('amber:window-state-changed',listener);},

@@ -1,3 +1,4 @@
+import {GraphicsPreferences,graphicsAdapters} from './graphics.mjs';
 import {WindowStateStore,fitWindow,supportsWindowCorners,runWindowAction,editingCommand} from './window-state.mjs';
 import {release as osRelease} from 'node:os';
 import {cleanupPrivateCopies} from './privacy-cleanup.mjs';
@@ -28,7 +29,7 @@ import { validateLayout } from './layout-schema.mjs';
 import { readFile, writeFile, stat } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 import { recoverTransactions } from './recovery.mjs';
-import { Workflows, Settings, validateManifest } from './workflows.mjs';
+import { Workflows, Settings, validateSettings, validateManifest } from './workflows.mjs';
 import { installOptifine } from './optifine.mjs';
 import { importOptifine, importWorld } from './local-content.mjs';
 import { Modpacks } from './modpacks.mjs';
@@ -100,6 +101,13 @@ app.whenReady().then(async () => {
   const content = new Modrinth(core);
   const packs = new Modpacks(core, content);
   const workflows = new Workflows(core, content),settings = new Settings(core.root),selections = new Map();
+  const graphics=new GraphicsPreferences(app.getPath('userData'));
+  core.beforeJavaLaunch=async path=>{const mode=(await settings.get()).graphicsMode;try{return await graphics.apply(path,mode);}catch{return {state:'failed',mode};}};
+  let adapterCache=null;
+  handle('amber:graphics-info',async id=>{const info={supported:graphics.supported,adapters:[],javaPath:null,sharedNames:[]};try{adapterCache??=await graphicsAdapters();info.adapters=adapterCache;}catch(e){info.adapterError=e.message;}if(id){try{info.javaPath=(await core.resolveGameJava(id)).path;info.sharedNames=(await core.listInstances()).filter(i=>i.id!==id&&i.javaPath?.toLowerCase()===info.javaPath.toLowerCase()).map(i=>i.name);}catch(e){info.javaError=e.message;}}return info;});
+  handle('amber:graphics-open',()=>shell.openExternal('ms-settings:display-advancedgraphics'));
+  handle('amber:graphics-copy-java',async id=>{clipboard.writeText((await core.resolveGameJava(id)).path);return true;});
+  handle('amber:graphics-restore',async()=>{if(launching)throw Error('正在准备启动。');await graphics.restoreAll();await settings.save({...await settings.get(),graphicsMode:'system'});return true;});
   const languages = new LanguagePacks(app.getPath('userData'));
   async function refreshLocale() {const value = await settings.get(),pack = await languages.get();setLocale(value.language, pack, app.getLocale());return { language: value.language, pack };}
   await refreshLocale();
@@ -169,7 +177,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   core.downloadThreads = (await settings.get()).threads;
   handle('amber:background-pick', async () => {const r = await dialog.showOpenDialog(window, { title: translateMessage('选择启动背景（20 MB 以内）'), properties: ['openFile'], filters: [{ name: '图片', extensions: ['png', 'jpg', 'jpeg', 'webp'] }] });if (r.canceled) return null;const background = await importBackground(core.root, r.filePaths[0], (bytes) => nativeImage.createFromBuffer(bytes));return settings.save({ ...(await settings.get()), background });});
   handle('amber:settings', () => settings.get());
-  handle('amber:settings-save', async (v) => {const saved = await settings.save(v);core.downloadThreads = saved.threads;await refreshLocale();return saved;});
+  handle('amber:settings-save', async (v) => {v=validateSettings(v);if(launching&&v.graphicsMode!==(await settings.get()).graphicsMode)throw Error('正在准备启动。');if(v.graphicsMode==='system'&&(await settings.get()).graphicsMode!=='system')await graphics.restoreAll();const saved = await settings.save(v);core.downloadThreads = saved.threads;await refreshLocale();return saved;});
   handle('amber:setup-state', () => workflows.state());
   handle('amber:setup-cancel', () => workflows.cancel());
   handle('amber:setup-repair', (id) => workflows.repairSetup(id));

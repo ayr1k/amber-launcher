@@ -5490,5 +5490,133 @@
   "m4108a4d106f2": {
     "zh": "数据位置",
     "en": "Data locations"
+  },
+  "m68d4a575b4ab": {
+    "zh": "内存 账号 默认 Java 显卡 GPU",
+    "en": "Memory accounts defaults Java graphics GPU"
+  },
+  "mfd8afa4fb352": {
+    "zh": "游戏显卡偏好",
+    "en": "Game graphics preference"
+  },
+  "m7ac47f6c9cf1": {
+    "zh": "优先高性能显卡",
+    "en": "Prefer high-performance GPU"
+  },
+  "mfc0a85c29632": {
+    "zh": "优先节能显卡",
+    "en": "Prefer power-saving GPU"
+  },
+  "mb2b8b67d7ead": {
+    "zh": "显卡偏好已保存，下次启动游戏时应用。",
+    "en": "Graphics preference saved. It will apply on the next game launch."
+  },
+  "m50f6ada3c910": {
+    "zh": "已恢复 AMBER 修改的显卡偏好；你在系统中另作的修改会保留。",
+    "en": "Graphics preferences changed by AMBER have been restored. Separate changes made in Windows are preserved."
+  },
+  "mda767666bc6b": {
+    "zh": "此项为全局偏好，作用于游戏使用的 Java。共用 Java 的实例会共用这项系统设置。",
+    "en": "This global preference applies to the game’s Java runtime. Instances sharing Java also share this Windows setting."
+  },
+  "m720c263e2baf": {
+    "zh": "正在检查显卡与 Java…",
+    "en": "Checking graphics adapters and Java…"
+  },
+  "m61ab59155d9e": {
+    "zh": "Windows 和驱动最终决定使用哪张显卡。修改后需重新启动游戏；不会改变正在运行的游戏。",
+    "en": "Windows and the driver determine the GPU used. Restart the game after changes; running games are not changed."
+  },
+  "ma4b9bd208e83": {
+    "zh": "当前系统不支持自动应用显卡偏好，请使用系统图形设置。",
+    "en": "Automatic graphics preferences are unavailable on this system. Use Windows graphics settings."
+  },
+  "m596370102a29": {
+    "zh": "检测到的显卡：",
+    "en": "Detected graphics adapters: "
+  },
+  "m156219aa0cfe": {
+    "zh": "未检测到",
+    "en": "Not detected"
+  },
+  "md66cde5cd658": {
+    "zh": "尚未准备 Java",
+    "en": "Java is not ready"
+  },
+  "mef8f4688d910": {
+    "zh": "共用此 Java",
+    "en": "Other instances using this Java"
+  },
+  "m484d55613910": {
+    "zh": "无",
+    "en": "None"
+  },
+  "m8f25f60422f4": {
+    "zh": "打开 Windows 图形设置 ↗",
+    "en": "Open Windows graphics settings ↗"
+  },
+  "mcf874107341f": {
+    "zh": "Java 路径已复制，可在系统图形设置中添加。",
+    "en": "Java path copied. You can add it in Windows graphics settings."
+  },
+  "me5cd7194e057": {
+    "zh": "复制游戏 Java 路径",
+    "en": "Copy game Java path"
+  },
+  "mb63ae9b47761": {
+    "zh": "恢复 AMBER 修改的显卡偏好",
+    "en": "Restore graphics preferences changed by AMBER"
+  },
+  "m8dd0655d5325": {
+    "zh": "启动选项",
+    "en": "Launch options"
+  },
+  "mf33e113ab2c6": {
+    "zh": "游戏实际渲染设备",
+    "en": "Game renderer reported in logs"
+  },
+  "m34320c0f00dd": {
+    "zh": "未检测到；启动游戏后根据日志识别。",
+    "en": "Not detected. Identified from logs after launch."
+  },
+  "m2fd47bf10dfc": {
+    "zh": "上次启动的显卡偏好：",
+    "en": "Graphics preference at last launch: "
+  },
+  "m4502309f2d35": {
+    "zh": "偏好已应用，实际显卡以游戏为准。",
+    "en": "Preference applied; the game’s actual renderer may differ."
+  },
+  "mc2593a864059": {
+    "zh": "自动应用未完成，可打开 Windows 图形设置。",
+    "en": "Could not apply automatically. Open Windows graphics settings."
+  },
+  "m2152aea59d2a": {
+    "zh": "系统设置已被其他程序修改，AMBER 已保留该设置。",
+    "en": "The setting was changed externally. AMBER preserved that setting."
+  },
+  "mc3c3126d1081": {
+    "zh": "使用系统设置。",
+    "en": "Using Windows settings."
+  },
+  "m332777f4709d": {
+    "zh": "显卡偏好无效。",
+    "en": "Invalid graphics preference."
+  },
+  "mae7dcbef3e9f": {
+    "zh": "无法为此 Java 路径设置显卡偏好。",
+    "en": "Cannot configure graphics for this Java path."
+  },
+  "maaf0b191c213": {
+    "zh": "无法读取或应用 Windows 显卡偏好，请打开系统图形设置。",
+    "en": "Cannot read or apply Windows graphics preferences. Open Windows graphics settings."
+  },
+  "m9a32525a29ce": {
+    "zh": "显卡偏好恢复记录无法读取，请打开系统图形设置。",
+    "en": "Cannot read the graphics recovery record. Open Windows graphics settings."
+  },
+  "m4adb99f64b03": {
+    "zh": "显卡偏好记录已满，请先恢复系统设置。",
+    "en": "The graphics recovery record is full. Restore Windows preferences first."
   }
 }

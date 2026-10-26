@@ -1,0 +1,30 @@
+/* SPDX-License-Identifier: MPL-2.0 */
+.desktop-app .topbar{min-height:72px;padding:0 0 0 30px;gap:24px;align-items:center}
+.desktop-app .topbar .header-instance{flex:0 1 340px;gap:14px;align-items:center;margin-block:0;line-height:1.4}
+.desktop-app .topbar .header-instance .select-trigger{height:44px;min-height:44px;padding:0 13px;line-height:1.4;align-items:center}
+.desktop-app .topbar .header-instance .select-trigger>span{display:flex;align-items:center;margin:0;line-height:1.4}
+.desktop-app .topbar .window-controls{align-self:center;align-items:center;height:44px;margin:0 4px 0 0;padding-left:16px;border-left:1px solid var(--line)}
+.desktop-app .topbar .window-controls>button{width:48px;height:44px;border:0;box-shadow:none;border-radius:0!important;background:transparent}
+.desktop-app .topbar .window-controls>button:hover{background:var(--selected)}
+.desktop-app .topbar .window-controls>.window-close:hover{background:#c42b1c;color:#fff}
+.select-trigger img,.select-option img,.select-trigger .instance-icon,.select-option .instance-icon{flex:none}
+.select-trigger .instance-icon,.select-option .instance-icon{width:24px;height:24px;margin:0;background:none}
+.select-trigger .instance-icon .icon-glyph,.select-option .instance-icon .icon-glyph{width:22px;height:22px}
+.launch-section{min-width:0}.launch-section>.launch-options{margin:0;border-bottom:1px solid var(--line);color:var(--text)}
+.launch-section>.launch-options>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 0;list-style:none;color:var(--muted)}
+.launch-options>summary::-webkit-details-marker{display:none}.launch-options>summary strong{color:var(--text);font-weight:600}.launch-options>summary svg{flex:none;width:18px;height:18px;transition:transform .18s ease}.launch-options[open]>summary svg{transform:rotate(180deg)}
+.launch-section .instance-preferences{display:block;margin:0;padding:4px 0 24px;border:0;animation:launch-options-in .18s ease-out}
+.launch-section .instance-preferences>label{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin:0 0 18px;max-width:360px;width:100%}
+.launch-section .instance-preferences>p{line-height:1.8;margin:18px 0}.launch-section .instance-preferences>.inline-actions{gap:18px;margin-block:20px}
+.launch-environment{margin:18px 0;display:grid;gap:12px}.launch-environment>div{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px}.launch-environment dt{color:var(--muted)}.launch-environment dd{margin:0;min-width:0;overflow-wrap:anywhere;line-height:1.7}.launch-environment code{user-select:text;font-size:.9em}
+.graphics-settings{margin-block:20px}.graphics-settings .setting-row{padding-top:12px}.graphics-settings .inline-actions{margin-top:18px;gap:14px}.graphics-settings p{line-height:1.8}
+.content-empty{padding:12px 0 28px;max-width:65ch}.content-empty h1{margin:0 0 16px}.content-empty p{margin:0 0 20px;line-height:1.8}.content-empty .button{margin:0}
+.desktop-empty+.button,.empty-state p+.button{margin-top:16px}
+@keyframes launch-options-in{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.no-motion .instance-preferences,.no-motion .launch-options>summary svg{animation:none;transition:none}
+@media(prefers-reduced-motion:reduce){.launch-section .instance-preferences,.launch-options>summary svg{animation:none;transition:none}}
+@media(max-width:1100px){.desktop-app .topbar{gap:16px;padding-left:20px}.desktop-app .topbar .header-instance{flex-basis:300px}}
+@media(max-width:700px){.desktop-app .topbar{min-height:64px;gap:8px;padding:8px 0 8px 14px;flex-wrap:nowrap}.desktop-app .topbar .header-instance{flex:1 1 120px}.desktop-app .topbar .window-controls{padding-left:8px}.desktop-app .topbar .window-controls>button{width:40px}.launch-options>summary{flex-wrap:wrap}.launch-environment>div{grid-template-columns:minmax(0,1fr);gap:4px}.graphics-settings .inline-actions{align-items:flex-start;flex-direction:column}}
+.desktop-app.nav-top .topbar{flex-wrap:wrap}.desktop-app.nav-top .topbar>.primary-nav{order:4;flex-basis:100%;justify-content:center}.desktop-app.nav-top{grid-template-rows:auto minmax(0,1fr)}
+.desktop-app .header-instance .select-trigger{font-size:14px}
+.desktop-app .topbar .header-instance>.amber-select{display:inline-block}

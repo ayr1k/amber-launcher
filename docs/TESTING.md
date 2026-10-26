@@ -2,6 +2,12 @@
 
 [简体中文](zh-CN/TESTING.md)
 
+## Beta 1.7 checks
+
+177 core regression tests and 4 Sites compatibility tests pass; 1405 bilingual messages validate. The packaged Windows application passes startup, IPC, background and system-encryption smoke checks. Browser checks cover the aligned icon-bearing picker, borderless controls, stable scenery during launch-option expansion, keyboard switching, Chinese/English, dark/light themes and narrow windows.
+
+Graphics-preference tests cover preserving other Windows flags, restoring original values, external changes, interrupted mode switches and writes with an unknown outcome. A Windows integration check writes and restores only a new synthetic Java-path value. Actual multi-GPU game selection must still be checked in Minecraft’s F3 screen; detected adapters or an applied preference are not proof of the renderer used. Microsoft live authentication remains deferred.
+
 Run the commands in CONTRIBUTING.md. Automated checks cover downloads and integrity, cancellation/retry, path traversal, archive extraction, transaction recovery, dependency-aware content operations, backup/restore, instance lifecycle, language packs, redaction and bounded reads. Use temporary data for tests.
 
 For each language, verify first-run setup, version selection, loader compatibility, content search/dependency preview, instance settings, task errors and diagnostics. Change language with unfinished form input and confirm state survives. Check a small window, large text, dark/light themes and keyboard-only selection. Imported project names must remain unchanged.

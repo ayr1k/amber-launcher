@@ -2,6 +2,16 @@
 
 [简体中文](docs/zh-CN/CHANGELOG.md)
 
+## Beta 1.7 — 1.0.0-beta.8 (prerelease)
+
+- Align the comfortable 72px header, 44px instance picker and borderless window controls. Show each instance’s existing icon in the picker and its menu. Keep the picker visible in narrow windows.
+- Move launch options into a separate panel below the scenery. Expanding memory and graphics settings no longer stretches the translucent launch dock or rescales the background. Add saved feedback and improve empty-download spacing.
+- Add opt-in Windows graphics preferences for the actual game Java executable: system default, high performance or power saving. Preserve other graphics flags, journal the original value before changes, and provide restoration. External changes are preserved.
+- Show the Java path, shared configured runtimes, requested graphics preference and renderer identified from game logs. Provide Windows graphics settings and Java-path copying when automatic application is unavailable.
+- Extend Chinese/English translations and preserve older preferences and custom language-pack fallbacks.
+
+Windows x64 prerelease. Installer, source archive and SHA-256 checksums are attached to the Release. Windows x64 installer: `AMBER-1.0.0-beta.8-Setup-x64.exe`. Graphics preferences require Windows 10 2004 or newer and are shared by instances using the same Java executable. Changes apply to later launches, not running games. Windows and the driver decide the GPU actually used; a saved preference is not proof of switching. Missing renderer log lines remain “not detected.” The installer is unsigned. Microsoft live authentication remains deferred pending approval.
+
 ## Beta 1.6 — 1.0.0-beta.7
 
 - Replace the separate system title bar with integrated AMBER window controls. Remove the default application menu so Alt no longer reveals it; retain explicit editing shortcuts and normal close protection.

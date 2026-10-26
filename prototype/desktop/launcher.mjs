@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import {rendererFromLog} from './graphics.mjs';
 import {explainProblem} from './problems.mjs';
 import {sessionAlive} from './process-session.mjs';
 import { mkdir, readFile, writeFile, copyFile, statfs, rm, open } from 'node:fs/promises';
@@ -19,7 +20,7 @@ async function logTail(path){try{const file=await open(path,'r');try{const stat=
 export class VanillaLauncher extends LauncherCore {
  constructor(root,options){super(root,options);this.jobs=[];this.controllers=new Map();this.processes=new Map();this.javaCandidates=new Map();}
  status(){return {jobs:this.jobs.map(({controller,...j})=>({...j})),processes:[...this.processes.values()].map(({child,...p})=>p)};}
- async runtimeStatus(){const status=this.status();for(const instance of await this.listInstances()){if(status.processes.some(p=>p.instanceId===instance.id&&p.state==='running'))continue;const dir=await this.instancePath(instance.id),session=await readSession(dir);if(session?.game&&typeof session.logFile==='string'){const logPath=safePath(dir,'logs/'+session.logFile);status.processes.push({id:session.id,instanceId:instance.id,pid:session.pid,state:'running',startedAt:session.startedAt,logPath,tail:await logTail(logPath)});}else if(!status.processes.some(p=>p.instanceId===instance.id)){try{const last=JSON.parse(await readFile(join(dir,'last-run.json'),'utf8'));if(last.state==='failed'&&/^amber-[0-9]+\.log$/.test(last.logFile)){const logPath=safePath(dir,'logs/'+last.logFile);status.processes.push({...last,instanceId:instance.id,logPath,tail:await logTail(logPath)});}}catch{}}}return status;}
+ async runtimeStatus(){const status=this.status();for(const instance of await this.listInstances()){if(status.processes.some(p=>p.instanceId===instance.id&&p.state==='running'))continue;const dir=await this.instancePath(instance.id),session=await readSession(dir);if(session?.game&&typeof session.logFile==='string'){const logPath=safePath(dir,'logs/'+session.logFile);status.processes.push({id:session.id,instanceId:instance.id,pid:session.pid,state:'running',startedAt:session.startedAt,javaPath:session.javaPath,javaVersion:session.javaVersion,memory:session.memory,graphics:session.graphics,logPath,tail:await logTail(logPath),renderer:rendererFromLog(await logTail(logPath))});}else if(!status.processes.some(p=>p.instanceId===instance.id)){try{const last=JSON.parse(await readFile(join(dir,'last-run.json'),'utf8'));if(['failed','exited'].includes(last.state)&&/^amber-[0-9]+\.log$/.test(last.logFile)){const logPath=safePath(dir,'logs/'+last.logFile);status.processes.push({...last,instanceId:instance.id,logPath,tail:await logTail(logPath)});}}catch{}}}return status;}
  async requireStopped(dir){this.workflowGuard?.();if(await readSession(dir))throw new Error('此实例已有运行中的游戏或启动任务，请先退出游戏。');}
  async scanJava(){const list=await discoverJava(this.root);for(const java of list)this.javaCandidates.set(java.path,java);return list;}
  async addJava(path){const java=await inspectJava(path);this.javaCandidates.set(java.path,java);return java;}
@@ -70,26 +71,28 @@ export class VanillaLauncher extends LauncherCore {
  }
  async prepareJava(id){const {dir,item,meta}=await this.metadata(id);await this.requireStopped(dir);return this.startJob(id,'java',async(job,signal)=>{const major=requiredJava(meta);const existing=(await this.scanJava()).find(j=>j.major===major);const java=existing||await installJava(this.root,major,job,signal);item.javaPath=java.path;item.javaMajor=major;this.javaCandidates.set(java.path,java);await atomicJson(join(dir,'instance.json'),item);job.phase=`Java ${java.version} 已就绪`;});}
  async selectJava(id,path){if(!this.javaCandidates.has(path))throw new Error('请先检测 Java 或通过文件选择器添加。');const {dir,item,meta}=await this.metadata(id);await this.requireStopped(dir);const java=await inspectJava(path);if(java.major!==requiredJava(meta))throw new Error(`此版本需要 Java ${requiredJava(meta)}。`);item.javaPath=java.path;await atomicJson(join(dir,'instance.json'),item);return java;}
+ async resolveGameJava(id){const {item,meta}=await this.runtimeMetadata(id);const java=item.javaPath?await inspectJava(item.javaPath):(await this.scanJava()).find(j=>j.major===requiredJava(meta));if(!java||java.major!==requiredJava(meta))throw new Error(`请先准备 Java ${requiredJava(meta)}。`);return java;}
  async launch(id,{username='Player',memory=4,identity=null,extraJvm=[]}={}){
   if(this.jobs.some(j=>j.state==='running'))throw new Error('请等待安装任务完成。');
   if([...this.processes.values()].some(p=>p.instanceId===id&&p.state==='running'))throw new Error('此实例已经在运行。');
   const {dir,item,meta}=await this.runtimeMetadata(id);await this.requireStopped(dir);if(item.status!=='installed')throw new Error('请先完成游戏安装。');
   const receipt=JSON.parse(await readFile(join(dir,'installation.json'),'utf8'));if((receipt.loaderSha1||null)!==(item.loaderSha1||null))throw Error('加载器配置已变更，请重新安装。');if(receipt.metadataSha1!==await digest(join(dir,'version.json')))throw new Error('版本元数据校验失败。');
   for(const f of receipt.files)if(!await verified({...f,path:safePath(this.root,f.relative)}))throw new Error('游戏文件缺失或损坏，请点击“校验 / 修复”：'+f.label);
-  const java=item.javaPath?await inspectJava(item.javaPath):(await this.scanJava()).find(j=>j.major===requiredJava(meta));if(!java||java.major!==requiredJava(meta))throw new Error(`请先准备 Java ${requiredJava(meta)}。`);
+  const java=await this.resolveGameJava(id);
   const plan=planFiles(meta,this.root);for(const archive of plan.natives)await extractZip(archive.path,join(dir,'natives'),{exclude:archive.exclude,onlyNative:true});const args=launchArguments(meta,plan,{dir,root:this.root,natives:join(dir,'natives'),username,memory,identity,extraJvm});
   await mkdir(join(dir,'logs'),{recursive:true});const logPath=join(dir,'logs',`amber-${Date.now()}.log`);
   // Keep arguments as an array: names and filesystem paths never enter a shell.
   const lockPath=join(dir,'.amber-session.json'),sessionId=randomUUID();
   try{await writeFile(lockPath,JSON.stringify({id:sessionId,pid:process.pid,game:false}),{flag:'wx'});}catch(e){if(e.code!=='EEXIST')throw e;await this.requireStopped(dir);await rm(lockPath,{force:true});await writeFile(lockPath,JSON.stringify({id:sessionId,pid:process.pid,game:false}),{flag:'wx'});}
+  let graphics={state:'system',mode:'system'};try{graphics=await this.beforeJavaLaunch?.(java.path)||graphics;}catch{graphics={state:'failed',mode:'unknown'};}
   const logFile=await open(logPath,'wx');
   const child=spawn(java.path,args,{cwd:dir,shell:false,windowsHide:true,detached:true,stdio:['ignore',logFile.fd,logFile.fd],env:{...process.env,JAVA_TOOL_OPTIONS:'',_JAVA_OPTIONS:'',JDK_JAVA_OPTIONS:''}});
-  const record={id:randomUUID(),instanceId:id,child,pid:child.pid,state:'running',startedAt:new Date().toISOString(),logPath,tail:'',username};this.processes.set(record.id,record);
-  const logTimer=setInterval(async()=>{record.tail=await logTail(logPath);},1200);logTimer.unref();
+  const record={id:randomUUID(),instanceId:id,child,pid:child.pid,state:'running',startedAt:new Date().toISOString(),logPath,tail:'',username,javaPath:java.path,javaVersion:java.version,memory,graphics,renderer:null};this.processes.set(record.id,record);
+  const logTimer=setInterval(async()=>{record.tail=await logTail(logPath);record.renderer=rendererFromLog(record.tail)||record.renderer;},1200);logTimer.unref();
   child.on('error',error=>{record.state='failed';record.error=error.message;});
   const releaseLock=async()=>{try{const current=JSON.parse(await readFile(lockPath,'utf8'));if(current.id===sessionId)await rm(lockPath,{force:true});}catch{}};
-  child.on('close',async(code,signal)=>{clearInterval(logTimer);record.state=code===0?'exited':'failed';record.exitCode=code;record.signal=signal;record.finishedAt=new Date().toISOString();record.tail=await logTail(logPath);if(record.state==='failed')record.problem=explainProblem(record.tail||record.error||`退出码 ${code}`,{crash:true});await atomicJson(join(dir,'last-run.json'),{id:record.id,state:record.state,exitCode:code,finishedAt:record.finishedAt,logFile:logPath.split(/[\\/]/).at(-1)}).catch(()=>{});releaseLock();});
-  try{await new Promise((resolve,reject)=>{child.once('spawn',resolve);child.once('error',reject);});await atomicJson(lockPath,{id:sessionId,pid:child.pid,game:true,startedAt:record.startedAt,logFile:logPath.split(/[\\/]/).at(-1)});}catch(e){await releaseLock();throw e;}finally{await logFile.close();}child.unref();
+  child.on('close',async(code,signal)=>{clearInterval(logTimer);record.state=code===0?'exited':'failed';record.exitCode=code;record.signal=signal;record.finishedAt=new Date().toISOString();record.tail=await logTail(logPath);record.renderer=rendererFromLog(record.tail)||record.renderer;if(record.state==='failed')record.problem=explainProblem(record.tail||record.error||`退出码 ${code}`,{crash:true});await atomicJson(join(dir,'last-run.json'),{id:record.id,state:record.state,exitCode:code,finishedAt:record.finishedAt,logFile:logPath.split(/[\\/]/).at(-1),javaPath:record.javaPath,javaVersion:record.javaVersion,memory,graphics,renderer:record.renderer}).catch(()=>{});releaseLock();});
+  try{await new Promise((resolve,reject)=>{child.once('spawn',resolve);child.once('error',reject);});await atomicJson(lockPath,{id:sessionId,pid:child.pid,game:true,startedAt:record.startedAt,javaPath:record.javaPath,javaVersion:record.javaVersion,memory,graphics,logFile:logPath.split(/[\\/]/).at(-1)});}catch(e){await releaseLock();throw e;}finally{await logFile.close();}child.unref();
   item.lastPlayed=new Date().toISOString();await atomicJson(join(dir,'instance.json'),item);return {id:record.id,pid:record.pid,logPath};
  }
 }

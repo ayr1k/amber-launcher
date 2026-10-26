@@ -58,7 +58,7 @@ FunctionEnd
     Delete "$newDesktopLink"
   ${EndIf}
   FileOpen $R0 "$INSTDIR\AMBER-INSTALL.txt" w
-  FileWrite $R0 "AMBER beta 1.5. Game data remains under APPDATA/AMBER or your configured location.$\r$\nPrevious program backup: LOCALAPPDATA/AMBER/previous-program.txt$\r$\n"
+  FileWrite $R0 "AMBER beta 1.7. Game data remains under APPDATA/AMBER or your configured location.$\r$\nPrevious program backup: LOCALAPPDATA/AMBER/previous-program.txt$\r$\n"
   FileClose $R0
 !macroend
 !ifndef BUILD_UNINSTALLER

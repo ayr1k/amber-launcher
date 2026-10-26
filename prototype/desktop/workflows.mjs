@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import {validateGraphicsMode} from './graphics.mjs';
 import {recoverInstance} from './recovery.mjs';
 import {validateBackground} from './backgrounds.mjs';
 import {validateLayout,defaultLayout} from './layout-schema.mjs';
@@ -15,9 +16,10 @@ import { loaderVersions } from './loaders.mjs';
 import { importOptifine, optifineGame } from './local-content.mjs';
 import { installOptifine } from './optifine.mjs';
 
-export const defaults={windowCorners:'system',titlebarColor:'theme',language:"system",copyLoginCode:true,defaultAccountId:null,panelOpacity:100,background:'forest',theme:'system',uiStyle:'square',accent:'forest',density:'comfortable',motion:true,fontSize:14,threads:8,memory:4,layout:defaultLayout};
+export const defaults={graphicsMode:'system',windowCorners:'system',titlebarColor:'theme',language:"system",copyLoginCode:true,defaultAccountId:null,panelOpacity:100,background:'forest',theme:'system',uiStyle:'square',accent:'forest',density:'comfortable',motion:true,fontSize:14,threads:8,memory:4,layout:defaultLayout};
 export function validateSettings(input){
  const s={...defaults,...input};
+ validateGraphicsMode(s.graphicsMode);
  if(!['square','system'].includes(s.windowCorners)||!['theme','accent'].includes(s.titlebarColor))throw Error('窗口设置无效。');
  if(typeof s.language!=="string"||!(/^(system|zh-CN|en-US|x-[a-z0-9-]{2,32})$/.test(s.language))||typeof s.copyLoginCode!=="boolean")throw Error("语言或剪贴板设置无效。");
  if(!Number.isInteger(s.panelOpacity)||s.panelOpacity<60||s.panelOpacity>100)throw Error('面板不透明度应为 60–100%。');

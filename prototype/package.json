@@ -1,6 +1,6 @@
 {
   "name": "amber-launcher",
-  "version": "1.0.0-beta.7",
+  "version": "1.0.0-beta.8",
   "license": "MPL-2.0",
   "main": "desktop/main.mjs",
   "private": true,
@@ -11,7 +11,7 @@
     "preview": "vite preview",
     "desktop": "electron .",
     "desktop:smoke": "electron . --smoke-test",
-    "test": "node --test tests/model.test.mjs tests/desktop-core.test.mjs tests/vanilla.test.mjs tests/accounts-fabric.test.mjs tests/update2.test.mjs tests/update3.test.mjs tests/update6.test.mjs tests/update8.test.mjs tests/update9.test.mjs tests/update10.test.mjs tests/beta11.test.mjs tests/beta13.test.mjs tests/beta14.test.mjs tests/beta15.test.mjs tests/beta16.test.mjs",
+    "test": "node --test tests/model.test.mjs tests/desktop-core.test.mjs tests/vanilla.test.mjs tests/accounts-fabric.test.mjs tests/update2.test.mjs tests/update3.test.mjs tests/update6.test.mjs tests/update8.test.mjs tests/update9.test.mjs tests/update10.test.mjs tests/beta11.test.mjs tests/beta13.test.mjs tests/beta14.test.mjs tests/beta15.test.mjs tests/beta16.test.mjs tests/beta17.test.mjs",
     "test:sites": "node --test tests/sites-worker.test.mjs",
     "package:desktop": "node scripts/package-desktop.mjs",
     "release:check": "node scripts/check-locales.mjs && node scripts/release-check.mjs",
