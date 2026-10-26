@@ -1,6 +1,8 @@
+import {defaultPreferences as defaultPreviewPreferences} from './Preferences';
 import './beta11.css';
 // SPDX-License-Identifier: MPL-2.0
 import React from "react";
+import {LocaleProvider} from "./Locale";
 import {defaultLayout} from "../desktop/layout-schema.mjs";
 import { createRoot } from "react-dom/client";
 import { App } from "./App.jsx";
@@ -11,11 +13,31 @@ import "./alpha9.css";
 import "./alpha10.css";
 import "./beta12.css";
 import "./beta13.css";
+import "./beta14.css";
+import "./beta15.css";
 
 if (import.meta.env.DEV && new URLSearchParams(location.search).has('desktop-preview')) {
   const instance={id:'layout-only',name:'界面样例 · Fabric',game:'1.21.1',loader:'fabric',loaderVersion:'0.19.5',status:'installed',javaMajor:21,javaPath:'AMBER / runtimes / Temurin 21 / bin / java.exe'};
   const unavailable=async()=>{throw new Error('此浏览器页面仅用于桌面界面布局检查，请在 AMBER.exe 中使用真实功能。');};
-  window.amberDesktop={preview:true,backups:async()=>[],createBackup:unavailable,restoreBackup:unavailable,storageInfo:async()=>({path:'UI 样例 / AMBER / library',freeBytes:120*1073741824,onboarded:!new URLSearchParams(location.search).has('qa-welcome')}),pickStorage:unavailable,moveStorage:unavailable,completeOnboarding:async()=>true,trashDetails:unavailable,purgeInstance:unavailable,exportDiagnostics:unavailable,pickBackground:unavailable,contentCategories:async()=>[{name:'adventure',project_type:'mod'},{name:'technology',project_type:'mod'},{name:'optimization',project_type:'mod'}],setupState:async()=>({}),cancelSetup:unavailable,retrySetup:unavailable,trashInstances:async()=>[],setInstanceIcon:unavailable,renameInstance:unavailable,removeInstance:unavailable,restoreInstance:unavailable,configureLite:unavailable,exportLayout:unavailable,importLayout:unavailable,settings:async()=>({background:'forest',theme:'light',accent:'forest',density:'comfortable',motion:true,fontSize:14,threads:8,memory:4,layout:defaultLayout}),saveSettings:async v=>v,setupChoices:async(game,type)=>type==='liteloader'?(game==='1.12.2'?[{version:'1.12.2-SNAPSHOT-r4CC2BB0-b4-4',stable:false}]:[]):[{version:type==='fabric'?'0.19.5':type==='forge'?'1.21.1-52.1.20':'21.1.264',stable:true},...(type==='fabric'?[{version:'0.18.4',stable:true}]:[])],setup:unavailable,setupFile:unavailable,migrationReport:async()=>null,migrationExport:unavailable,migrationRun:unavailable,openProject:unavailable,packCreate:unavailable,loaderVersions:async()=>[{version:'0.19.5',stable:true}],configureLoader:unavailable,installOptifine:unavailable,importOptifine:unavailable,openOptifine:unavailable,importWorld:unavailable,contentSearch:async()=>({total:1,hits:[{id:'sample-modmenu',icon:'/icons/box.svg',title:'Mod Menu · 布局样例',description:'为游戏提供已安装模组的菜单与配置入口。此结果仅用于布局检查。',author:'Prospector',downloads:1000000}]}),contentVersions:async()=>[{id:'sample-version',version_number:'11.0.3',version_type:'release'}],contentPreview:async()=>({id:'sample-plan',files:[{projectId:'sample-modmenu',title:'Mod Menu',version:'11.0.3',relative:'mods/modmenu.jar',size:1000000},{projectId:'sample-fabricapi',title:'Fabric API',version:'0.116.7',relative:'mods/fabric-api.jar',size:2200000},{projectId:'sample-placeholder',title:'Text Placeholder API',version:'2.4.2',relative:'mods/placeholder-api.jar',size:220000}],warnings:['此为界面布局样例；安装操作在浏览器中不可用。']}),contentInstall:unavailable,contentRemove:unavailable,contentToggle:unavailable,contentList:async()=>[{relative:'mods/modmenu.jar',title:'Mod Menu · 布局样例',version:'13.0.4',type:'mod',enabled:true,managed:true,projectId:'sample-modmenu'},{relative:'mods/fabric-api.jar',title:'Fabric API · 布局样例',version:'0.119.4',type:'mod',enabled:true,managed:true,projectId:'sample-fabricapi'},{relative:'mods/example.jar.disabled',title:'已停用模组 · 布局样例',type:'mod',enabled:false,managed:false}],packPreview:unavailable,packInstall:unavailable,accounts:async()=>({accounts:[],clientId:'ab7cf49a-fea7-432d-8ce8-beb922eb554e'}),pollMicrosoft:async()=>({accounts:[],clientId:'ab7cf49a-fea7-432d-8ce8-beb922eb554e'}),fabricVersions:unavailable,configureFabric:unavailable,addOffline:unavailable,configureAccount:unavailable,startMicrosoft:unavailable,addServer:unavailable,info:async()=>({dataPath:'桌面界面布局预览（示例状态）',version:'1.0.0-beta.4'}),listInstances:async()=>[instance],status:async()=>({jobs:[],processes:[]}),scanJava:async()=>[],versions:async()=>({latest:{release:'1.21.1'},versions:[{id:'1.21.1',type:'release'},{id:'1.20.1',type:'release'},{id:'1.12.2',type:'release'},{id:'24w33a',type:'snapshot'},{id:'b1.7.3',type:'old_beta'},{id:'a1.2.6',type:'old_alpha'}]}),createInstance:unavailable,install:unavailable,cancel:unavailable,prepareJava:unavailable,selectJava:unavailable,browseJava:unavailable,launch:unavailable,openInstance:unavailable};
+  window.amberDesktop={preview:true,backups:async()=>[],createBackup:unavailable,restoreBackup:unavailable,storageInfo:async()=>({path:'UI 样例 / AMBER / library',freeBytes:120*1073741824,onboarded:!new URLSearchParams(location.search).has('qa-welcome')}),pickStorage:unavailable,moveStorage:unavailable,completeOnboarding:async()=>true,trashDetails:unavailable,purgeInstance:unavailable,exportDiagnostics:unavailable,pickBackground:unavailable,contentCategories:async()=>[{name:'adventure',project_type:'mod'},{name:'technology',project_type:'mod'},{name:'optimization',project_type:'mod'}],setupState:async()=>({}),cancelSetup:unavailable,retrySetup:unavailable,trashInstances:async()=>[],setInstanceIcon:unavailable,renameInstance:unavailable,removeInstance:unavailable,restoreInstance:unavailable,configureLite:unavailable,exportLayout:unavailable,importLayout:unavailable,settings:async()=>({background:'forest',theme:'light',accent:'forest',density:'comfortable',motion:true,fontSize:14,threads:8,memory:4,layout:defaultLayout}),saveSettings:async v=>v,setupChoices:async(game,type)=>type==='liteloader'?(game==='1.12.2'?[{version:'1.12.2-SNAPSHOT-r4CC2BB0-b4-4',stable:false}]:[]):[{version:type==='fabric'?'0.19.5':type==='forge'?'1.21.1-52.1.20':'21.1.264',stable:true},...(type==='fabric'?[{version:'0.18.4',stable:true}]:[])],setup:unavailable,setupFile:unavailable,migrationReport:async()=>null,migrationExport:unavailable,migrationRun:unavailable,openProject:unavailable,packCreate:unavailable,loaderVersions:async()=>[{version:'0.19.5',stable:true}],configureLoader:unavailable,installOptifine:unavailable,importOptifine:unavailable,openOptifine:unavailable,importWorld:unavailable,contentSearch:async()=>({total:1,hits:[{id:'sample-modmenu',icon:'/icons/box.svg',title:'Mod Menu · 布局样例',description:'为游戏提供已安装模组的菜单与配置入口。此结果仅用于布局检查。',author:'Prospector',downloads:1000000}]}),contentVersions:async()=>[{id:'sample-version',version_number:'11.0.3',version_type:'release'}],contentPreview:async()=>({id:'sample-plan',files:[{projectId:'sample-modmenu',title:'Mod Menu',version:'11.0.3',relative:'mods/modmenu.jar',size:1000000},{projectId:'sample-fabricapi',title:'Fabric API',version:'0.116.7',relative:'mods/fabric-api.jar',size:2200000},{projectId:'sample-placeholder',title:'Text Placeholder API',version:'2.4.2',relative:'mods/placeholder-api.jar',size:220000}],warnings:['此为界面布局样例；安装操作在浏览器中不可用。']}),contentInstall:unavailable,contentRemove:unavailable,contentToggle:unavailable,contentList:async()=>[{relative:'mods/modmenu.jar',title:'Mod Menu · 布局样例',version:'13.0.4',type:'mod',enabled:true,managed:true,projectId:'sample-modmenu'},{relative:'mods/fabric-api.jar',title:'Fabric API · 布局样例',version:'0.119.4',type:'mod',enabled:true,managed:true,projectId:'sample-fabricapi'},{relative:'mods/example.jar.disabled',title:'已停用模组 · 布局样例',type:'mod',enabled:false,managed:false}],packPreview:unavailable,packInstall:unavailable,accounts:async()=>({accounts:[],clientId:'ab7cf49a-fea7-432d-8ce8-beb922eb554e'}),pollMicrosoft:async()=>({accounts:[],clientId:'ab7cf49a-fea7-432d-8ce8-beb922eb554e'}),fabricVersions:unavailable,configureFabric:unavailable,addOffline:unavailable,configureAccount:unavailable,startMicrosoft:unavailable,addServer:unavailable,info:async()=>({dataPath:'桌面界面布局预览（示例状态）',version:'1.0.0-beta.5'}),listInstances:async()=>[instance],status:async()=>({jobs:[],processes:[]}),scanJava:async()=>[],versions:async()=>({latest:{release:'1.21.1'},versions:[{id:'1.21.1',type:'release'},{id:'1.20.1',type:'release'},{id:'1.12.2',type:'release'},{id:'24w33a',type:'snapshot'},{id:'b1.7.3',type:'old_beta'},{id:'a1.2.6',type:'old_alpha'}]}),createInstance:unavailable,install:unavailable,cancel:unavailable,prepareJava:unavailable,selectJava:unavailable,browseJava:unavailable,launch:unavailable,openInstance:unavailable};
+
+  const previewLibrary={schema:1,favorites:[],sort:'created',history:[]};
+  window.amberDesktop.libraryState=async()=>({...previewLibrary});
+  window.amberDesktop.setFavorite=async(id,value)=>{previewLibrary.favorites=previewLibrary.favorites.filter(x=>x!==id);if(value)previewLibrary.favorites.push(id);return {...previewLibrary};};
+  window.amberDesktop.setLibrarySort=async sort=>{previewLibrary.sort=sort;return {...previewLibrary};};
+  window.amberDesktop.instanceHealth=unavailable;window.amberDesktop.pickMods=unavailable;window.amberDesktop.validateModImport=unavailable;window.amberDesktop.applyModImport=unavailable;
+  window.amberDesktop.modUpdateHistory=async()=>[];
+
+  if(new URLSearchParams(location.search).has('qa-beta14')){
+    previewLibrary.history=[{instanceId:instance.id,runId:'ui-history',startedAt:new Date().toISOString()}];
+    window.amberDesktop.accounts=async()=>({accounts:Array.from({length:12},(_,i)=>({id:'ui-account-'+i,name:'测试身份 '+(i+1)+' · 布局样例',type:'offline'}))});
+    window.amberDesktop.instanceHealth=async()=>({checkedAt:new Date().toISOString(),rows:[{key:'files',title:'游戏文件 · 布局样例',state:'error',detail:'示例：2 个文件缺失，可校验修复。此预览不会检查真实文件。',action:'repair'},{key:'java',title:'Java 运行时 · 布局样例',state:'ok',detail:'示例：Java 21 可用。'},{key:'account',title:'启动账号 · 布局样例',state:'warning',detail:'API 申请未获批准，真实登录验收延期。',action:'accounts'}]});
+    window.amberDesktop.pickMods=async()=>({id:'ui-import',rows:[{key:'a',filename:'example.jar',title:'识别成功 · 布局样例',version:'1.2',loaders:['fabric'],warnings:[],blockers:[]},{key:'b',filename:'manual.jar',title:'手动模组 · 布局样例',version:'',loaders:[],warnings:['此为布局样例：未识别来源，依赖需自行检查。'],blockers:[]},{key:'c',filename:'forge.jar',title:'不兼容 · 布局样例',loaders:['forge'],warnings:[],blockers:['示例：加载器不兼容，不能选择。']}]});
+    window.amberDesktop.validateModImport=async(_id,_key,keys)=>({blockers:keys.length?[]:['请选择文件。']});
+    window.amberDesktop.modUpdateHistory=async()=>[{id:'ui-record',operation:'import',createdAt:new Date().toISOString(),titles:['示例内容 · 布局样例'],restorable:true,state:'done'},{id:'ui-old',operation:'disable',createdAt:new Date().toISOString(),titles:['旧内容 · 布局样例'],restorable:false,state:'done'}];
+    let categoryAttempt=0;
+    if(new URLSearchParams(location.search).has('qa-category-error'))window.amberDesktop.contentCategories=async()=>{if(categoryAttempt++===0)throw Error('布局测试：分类服务暂不可用');return [{name:'adventure',project_type:'mod'}];};
+  }
   if(new URLSearchParams(location.search).has('qa-beta12')){
     window.amberDesktop.versions=async()=>({latest:{release:'1.21.4'},versions:[{id:'1.21.4',type:'release',releaseTime:'2024-12-03'},...Array.from({length:103},(_,i)=>({id:'layout-release-'+i,type:'release',releaseTime:'2024-01-01'})),...Array.from({length:756},(_,i)=>({id:'layout-snapshot-'+i,type:'snapshot'})),...Array.from({length:61},(_,i)=>({id:'layout-legacy-'+i,type:'old_beta'}))]});
     const originalSettings=window.amberDesktop.settings;
@@ -27,7 +49,7 @@ if (import.meta.env.DEV && new URLSearchParams(location.search).has('desktop-pre
   window.amberDesktop.saveLaunchPreferences=async(id,v)=>{previewLaunchPrefs.set(id,v);return v;};
   window.amberDesktop.bulkPreview=async(id,paths,action)=>({id:'ui-bulk',action,rows:paths.map(relative=>({relative,title:relative+' · 布局样例'})),blockers:[],warnings:['此为布局预览，不能操作真实文件。']});
   window.amberDesktop.bulkApply=unavailable;
-  window.amberDesktop.modUpdateHistory=async()=>[];
+  window.amberDesktop.modUpdateRestore=unavailable;
   if(new URLSearchParams(location.search).has('qa-empty'))window.amberDesktop.listInstances=async()=>[];
   if(new URLSearchParams(location.search).has('qa-beta11')){
     window.amberDesktop.beta11QA=true;
@@ -50,8 +72,16 @@ if (import.meta.env.DEV && new URLSearchParams(location.search).has('desktop-pre
   if(qaProblem==='download')window.amberDesktop.status=async()=>({jobs:[{id:'ui-download',instanceId:instance.id,kind:'install',state:'failed',phase:'游戏文件下载未完成',error:'界面样例：下载请求失败 (503)',completed:40,total:100,transferred:10485760}],processes:[]});
 }
 
+if(import.meta.env.DEV&&window.amberDesktop?.preview){
+ const api=window.amberDesktop;let prefs={...defaultPreviewPreferences};prefs={...prefs,language:localStorage.getItem('amber.preview-language')||'zh-CN',copyLoginCode:true};
+ api.settings=async()=>prefs;api.saveSettings=async value=>{prefs={...prefs,...value};localStorage.setItem('amber.preview-language',prefs.language);return prefs;};
+ api.languageState=async()=>({language:prefs.language,pack:null});api.importLanguage=async()=>false;api.exportLanguage=async()=>false;
+ api.privacyInfo=async()=>({accounts:'UI example / accounts.json',data:'UI example / library',upgrades:'UI example / backups'});
+ api.previewDiagnostics=async()=>({format:'amber-diagnostics',schema:1,app:{version:'1.0.0-beta.6'},privacy:'UI example only'});
+}
+
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+    <LocaleProvider><App /></LocaleProvider>
   </React.StrictMode>,
 );

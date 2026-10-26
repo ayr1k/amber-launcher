@@ -2,6 +2,7 @@
 import {mkdir,readFile,writeFile,copyFile,lstat} from 'node:fs/promises';
 import {join} from 'node:path';
 import {createHash} from 'node:crypto';
+import {responseText} from './bounded-io.mjs';
 import {download,verified,ensureParents} from './download.mjs';
 import {requireSpace} from './safe-copy.mjs';
 const repository='https://github.com/ayr1k/amber-launcher';
@@ -27,7 +28,7 @@ export class AppUpdates{
     this.candidate=null;this.state={phase:'checking'};
     try{const r=await this.fetcher('https://api.github.com/repos/ayr1k/amber-launcher/releases?per_page=30',{redirect:'error',signal:AbortSignal.timeout(20000),headers:{Accept:'application/vnd.github+json','User-Agent':'AMBER/'+this.current}});
       if(!r.ok)throw Error(r.status===403||r.status===429?'更新服务暂时限流，请稍后再试。':'无法读取更新目录，请检查网络后重试。');
-      const text=await r.text();if(text.length>2_000_000)throw Error('更新目录过大。');const data=JSON.parse(text);if(!Array.isArray(data))throw Error('更新目录格式无效。');
+      const text=await responseText(r,2_000_000);if(text.length>2_000_000)throw Error('更新目录过大。');const data=JSON.parse(text);if(!Array.isArray(data))throw Error('更新目录格式无效。');
       this.candidate=releaseCandidate(data,this.current);this.state={phase:this.candidate?'available':'current',release:this.candidate};return this.state;
     }catch(e){this.state={phase:'failed',error:e.message};throw e;}
   }
@@ -46,7 +47,7 @@ export class AppUpdates{
 export async function backupUpgradeConfig(userData,library,version){
   const dir=join(userData,'upgrade-backups',version+'-'+Date.now());await mkdir(dir,{recursive:true});
   const records=[];
-  for(const [root,names,prefix] of [[userData,['storage.json'],'bootstrap'],[library,['accounts.json','preferences.json'],'library']])for(const name of names){
+  for(const [root,names,prefix] of [[userData,['storage.json'],'bootstrap'],[library,['accounts.json','preferences.json','library-state.json'],'library']])for(const name of names){
     const from=join(root,name);try{const st=await lstat(from);if(!st.isFile()||st.isSymbolicLink()||st.size>8_000_000)throw Error('设置文件异常，已停止升级：'+name);
       const bytes=await readFile(from),to=join(dir,prefix,name);await ensureParents(dir,to);await copyFile(from,to);if(!bytes.equals(await readFile(to)))throw Error('升级备份校验失败。');records.push({name:prefix+'/'+name,sha256:createHash('sha256').update(bytes).digest('hex')});
     }catch(e){if(e.code!=='ENOENT')throw e;}}

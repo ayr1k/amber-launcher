@@ -1,6 +1,21 @@
 // SPDX-License-Identifier: MPL-2.0
 const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
+  languageState:()=>ipcRenderer.invoke('amber:language-state'),
+  importLanguage:()=>ipcRenderer.invoke('amber:language-import'),
+  exportLanguage:()=>ipcRenderer.invoke('amber:language-export'),
+  removeLanguage:()=>ipcRenderer.invoke('amber:language-remove'),
+  previewDiagnostics:()=>ipcRenderer.invoke('amber:diagnostics-preview'),
+  cleanupPrivateCopies:kind=>ipcRenderer.invoke('amber:privacy-cleanup',kind),
+  privacyInfo:()=>ipcRenderer.invoke('amber:privacy-info'),
+  copyErrorDetail:text=>ipcRenderer.invoke('amber:copy-error',text),
+  libraryState:()=>ipcRenderer.invoke('amber:library-state'),
+  setFavorite:(id,value)=>ipcRenderer.invoke('amber:library-favorite',id,value),
+  setLibrarySort:value=>ipcRenderer.invoke('amber:library-sort',value),
+  instanceHealth:id=>ipcRenderer.invoke('amber:instance-health',id),
+  pickMods:(id,lookup)=>ipcRenderer.invoke('amber:mod-import-pick',id,lookup),
+  validateModImport:(id,key,keys,enabled)=>ipcRenderer.invoke('amber:mod-import-validate',id,key,keys,enabled),
+  applyModImport:(id,key,keys,enabled)=>ipcRenderer.invoke('amber:mod-import-apply',id,key,keys,enabled),
   appUpdateState:()=>ipcRenderer.invoke('amber:app-update-state'),
   checkAppUpdate:()=>ipcRenderer.invoke('amber:app-update-check'),
   downloadAppUpdate:()=>ipcRenderer.invoke('amber:app-update-download'),

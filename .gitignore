@@ -15,3 +15,5 @@ prototype/.test-tools/
 prototype/design/qa/
 prototype/public/fonts/*.ttf
 prototype/package-lock.json
+
+prototype/.qa/

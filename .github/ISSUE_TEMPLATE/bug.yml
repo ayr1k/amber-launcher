@@ -1,27 +1,27 @@
-name: 问题反馈
-description: 报告启动、下载或界面问题
+name: Bug report / 问题反馈
+description: Launch, download or interface issue / 启动、下载或界面问题
 body:
   - type: markdown
     attributes:
-      value: 请不要提交账号、令牌或完整的私人文件路径。可在“关于 AMBER”导出不含账号和日志的诊断摘要，并先检查文件内容。
+      value: Do not submit credentials or raw private logs. Review the diagnostic preview first. / 请勿提交凭据或私人原始日志，请先检查诊断预览。 Security issues / 安全问题：SECURITY.md
   - type: input
     id: version
     attributes:
-      label: AMBER 版本与 Windows 版本
+      label: AMBER and Windows versions / AMBER 与 Windows 版本
     validations:
       required: true
   - type: textarea
     id: reproduce
     attributes:
-      label: 如何重现
-      description: 游戏版本、加载器、操作步骤，以及实际发生了什么。
+      label: Reproduction steps / 复现步骤
+      description: Game version, loader, language, steps and actual result / 游戏版本、加载器、语言、步骤与实际结果。
     validations:
       required: true
   - type: textarea
     id: expected
     attributes:
-      label: 期望的结果
+      label: Expected result / 期望结果
   - type: textarea
     id: diagnostics
     attributes:
-      label: 诊断摘要或已脱敏的错误信息
+      label: Reviewed diagnostic summary or redacted error / 已检查的诊断摘要或脱敏错误

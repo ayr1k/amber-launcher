@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MPL-2.0
+import {redact} from './privacy.mjs';
 // Suggestions are evidence-based hints, never an assertion that all crashes have been diagnosed.
 export function explainProblem(value,{crash=false}={}) {
- const detail=String(value||'').replace(/^Error invoking remote method '[^']+': Error: /,'');
+ const detail=redact(value||'').replace(/^Error invoking remote method '[^']+': Error: /,'');
  const rules=[
   [/取消|AbortError/i,'已取消安装','已完成的校验文件会保留；重试会复用这些文件。','retry'],
   [/ENOSPC|空间不足|磁盘空间/i,'磁盘空间不足','清理实例所在磁盘后，再继续安装。','folder'],

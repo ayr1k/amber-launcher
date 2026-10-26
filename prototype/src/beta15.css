@@ -1,0 +1,12 @@
+/* SPDX-License-Identifier: MPL-2.0 */
+.language-control {display:grid;gap:12px;margin:0 0 24px;max-width:100%;}
+.language-control>label {display:grid;gap:8px;max-width:420px;}
+.language-control small {line-height:1.6;}
+.diagnostic-preview {max-height:280px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;user-select:text;}
+.detail-list dd {min-width:0;overflow-wrap:anywhere;}
+.inline-actions {flex-wrap:wrap;row-gap:10px;}
+html[lang^="en"] .header-instance {min-width:260px;}
+html[lang^="en"] .setup-footer {gap:16px;}
+html[lang^="en"] button {overflow-wrap:normal;}
+.settings-nav {flex-wrap:wrap;}
+@media(max-width:1000px){html[lang^="en"] .prototype-badge {display:none;}.welcome-actions{flex-wrap:wrap;}}

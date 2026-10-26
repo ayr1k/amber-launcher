@@ -6,13 +6,18 @@ export function pendingCode(accounts, now = Date.now()) {
   return device;
 }
 export async function copyMicrosoftCode(accounts, clipboard) {
-  await clipboard.writeText(pendingCode(accounts).code);
+  const device=pendingCode(accounts);
+  await clipboard.writeText(device.code);
+  protectCopiedCode(accounts,clipboard,device);
   return true;
 }
-export async function beginMicrosoftLogin(accounts, clipboard, openExternal) {
+const leases=new WeakMap();
+export function clearCopiedCode(accounts){const lease=leases.get(accounts);if(!lease)return;clearTimeout(lease.timer);leases.delete(accounts);try{if(lease.clipboard.readText?.()===lease.code)lease.clipboard.clear();}catch{}}
+export function protectCopiedCode(accounts,clipboard,device,{schedule=setTimeout,now=Date.now()}={}){const previous=leases.get(accounts);if(previous)clearTimeout(previous.timer);const lease={clipboard,code:device.code};leases.set(accounts,lease);lease.timer=schedule(()=>{if(leases.get(accounts)===lease)clearCopiedCode(accounts);},Math.max(0,device.expiresAt-now));lease.timer?.unref?.();}
+export async function beginMicrosoftLogin(accounts, clipboard, openExternal,{copy=true}={}) {
   const result = await accounts.startMicrosoft();
   const feedback = [];
-  try { await copyMicrosoftCode(accounts, clipboard); feedback.push('验证码已复制，请在微软页面粘贴。'); }
+  try { if(copy){await copyMicrosoftCode(accounts, clipboard); feedback.push('验证码已复制，请在微软页面粘贴。');}else feedback.push('自动复制已关闭，请手动复制验证码。'); }
   catch { feedback.push('自动复制失败，请手动选中并复制下方验证码。'); }
   try { await openExternal(pendingCode(accounts).url); }
   catch { feedback.push('未能打开浏览器，请点击“重新打开验证网页”，或手动打开下方微软地址。'); }

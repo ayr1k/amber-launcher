@@ -1,0 +1,3 @@
+import { getLocale } from '../desktop/localization.mjs';
+// SPDX-License-Identifier: MPL-2.0
+export function orderInstances(items, sort = 'created', favorites = []) {return [...items].sort((a, b) => Number(favorites.includes(b.id)) - Number(favorites.includes(a.id)) || (sort === 'name' ? a.name.localeCompare(b.name, getLocale(), { numeric: true }) : sort === 'game' ? b.game.localeCompare(a.game, undefined, { numeric: true }) : String(sort === 'recent' ? b.lastPlayed || '' : b.createdAt || '').localeCompare(String(sort === 'recent' ? a.lastPlayed || '' : a.createdAt || ''))) || a.name.localeCompare(b.name, getLocale()) || a.id.localeCompare(b.id));}

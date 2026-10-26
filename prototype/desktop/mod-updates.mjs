@@ -39,6 +39,7 @@ export async function recoverModUpdate(dir){
     }}
     for(const f of tx.old){const target=safePath(dir,actual(f));await ensureParents(dir,target);if(await exists(target)){if(!await verified({...f,path:target}))throw Error('无法覆盖更新期间被修改的文件：'+actual(f));}else await copyFile(safePath(join(dir,'content-updates',tx.id,'files'),actual(f)),target,constants.COPYFILE_EXCL);}
   }
+  await ensureParents(dir,join(dir,'content-updates',tx.id,'record.json'));
   await atomicJson(join(dir,'content-updates',tx.id,'record.json'),{...tx,state:committed?'done':'recovered'});
   await unlink(path);return {id:tx.id,committed};
 }
@@ -76,7 +77,7 @@ export class ModUpdates{
     if(!touched.length)blockers.push('没有需要替换的文件，请重新检查更新。');
     const plan={id:randomUUID(),instanceId,stamp:contentStamp(before),game:item.game,loader:item.loader,loaderVersion:item.loaderVersion,liteVersion:item.liteVersion,loaderSha1:item.loaderSha1,liteBaseSha1:item.liteBaseSha1,before,after,files:touched,required:[...required.values()],optional:[...optionals.values()],warnings:[...warnings],blockers:[...new Set(blockers)],expiresAt:Date.now()+600000};
     this.plans.set(plan.id,plan);for(const [id,p]of this.plans)if(p.expiresAt<Date.now())this.plans.delete(id);
-    return {...plan,before:undefined,after:undefined};
+    return {...plan,files:plan.files.map(f=>({...f,previous:before.files.find(x=>x.projectId===f.projectId)?.version||null})),before:undefined,after:undefined};
   }
   async install(instanceId,planId){
     const p=this.plans.get(planId);if(!p||p.instanceId!==instanceId||p.expiresAt<Date.now())throw Error('更新预览过期，请重新检查。');if(p.blockers.length)throw Error('请先解决更新依赖冲突。');
@@ -99,8 +100,8 @@ export class ModUpdates{
     for(const f of [...old,...next])validFile(f);
     for(const f of old)await checked(dir,f);
     for(const f of next){const path=safePath(dir,actual(f));await ensureParents(dir,path);if(await exists(path)&&!old.some(x=>actual(x).toLowerCase()===actual(f).toLowerCase()))throw Error('已有同名文件，未覆盖：'+actual(f));if(!await verified({...f,path:source(f)}))throw Error('更新来源文件校验失败。');}
-    const tx={schema:1,id:randomUUID(),createdAt:new Date().toISOString(),before,after,old,next};
-    const backup=join(dir,'content-updates',tx.id,'files');await mkdir(backup,{recursive:true});
+    const tx={schema:1,id:randomUUID(),createdAt:new Date().toISOString(),operation:job.operation||'update',before,after,old,next};
+    const backup=join(dir,'content-updates',tx.id,'files');await ensureParents(dir,backup);await mkdir(backup,{recursive:true});
     for(const f of old){const from=await checked(dir,f),to=safePath(backup,actual(f));await ensureParents(backup,to);await copyFile(from,to,constants.COPYFILE_EXCL);await checked(backup,f);}
     signal?.throwIfAborted();await writeFile(join(dir,'content-update.json'),JSON.stringify(tx),{flag:'wx'});
     try{job.phase='替换文件并保留可恢复副本';for(const f of old){signal?.throwIfAborted();await unlink(await checked(dir,f));}for(const f of next){signal?.throwIfAborted();const to=safePath(dir,actual(f));await ensureParents(dir,to);await copyFile(source(f),to,constants.COPYFILE_EXCL);await checked(dir,f);}
@@ -109,13 +110,13 @@ export class ModUpdates{
     await recoverModUpdate(dir);
   }
   async history(instanceId){const {dir}=await this.core.metadata(instanceId);let names;try{names=await readdir(join(dir,'content-updates'));}catch(e){if(e.code==='ENOENT')return [];throw e;}const list=[];
-    for(const name of names.filter(n=>/^[a-f0-9-]{36}$/.test(n))){try{const r=JSON.parse(await readFile(join(dir,'content-updates',name,'record.json'),'utf8'));if(r.state==='done')list.push({id:name,createdAt:r.createdAt,titles:(r.next.length?r.next:r.old).map(f=>f.title),restorable:contentStamp(await this.content.manifest(dir))===contentStamp(r.after)});}catch{}}
+    for(const name of names.filter(n=>/^[a-f0-9-]{36}$/.test(n))){try{const record=join(dir,'content-updates',name,'record.json');await ensureParents(dir,record);const r=JSON.parse(await readFile(record,'utf8'));if(['done','recovered'].includes(r.state))list.push({id:name,operation:r.operation||'update',state:r.state,createdAt:r.createdAt,titles:(r.next.length?r.next:r.old.length?r.old:r.before.files.filter(f=>!r.after.files.some(n=>n.relative===f.relative))).map(f=>f.title),changes:r.next.map(f=>({title:f.title,from:r.old.find(o=>o.relative===f.relative||o.projectId&&o.projectId===f.projectId)?.version||'',to:f.version||'',enabled:f.enabled!==false})),restorable:r.state==='done'&&contentStamp(await this.content.manifest(dir))===contentStamp(r.after)});}catch{}}
     return list.sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
   }
   async restore(instanceId,id){if(!/^[a-f0-9-]{36}$/.test(id))throw Error('无效更新记录。');const {dir}=await this.core.metadata(instanceId);await this.core.requireStopped(dir);
     return this.core.startJob(instanceId,'content-update',async(job,signal)=>{await recoverModUpdate(dir);const recordPath=join(dir,'content-updates',id,'record.json');await ensureParents(dir,recordPath);const r=JSON.parse(await readFile(recordPath,'utf8')),current=await this.content.manifest(dir);
       if(r.id!==id||r.state!=='done'||contentStamp(current)!==contentStamp(r.after))throw Error('更新后内容已改变，不能直接恢复。请先备份实例并手动处理。');validateUpdateGraph(r.before.files);
-      await this.replace(dir,current,r.before,r.next,r.old,f=>safePath(join(dir,'content-updates',id,'files'),actual(f)),signal,job);
+      job.operation='restore';await this.replace(dir,current,r.before,r.next,r.old,f=>safePath(join(dir,'content-updates',id,'files'),actual(f)),signal,job);
     });
   }
 }

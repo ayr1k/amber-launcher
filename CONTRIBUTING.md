@@ -1,20 +1,23 @@
-# Contributing to AMBER
+# Contributing
 
-Use Node.js 24 and pnpm 11.25.0. The desktop app lives in `prototype/`.
+[简体中文](docs/zh-CN/CONTRIBUTING.md)
 
-```powershell
-cd prototype
+Use Windows x64, Node.js 24 and pnpm 11.25.0. Run from `prototype`:
+
+```sh
 pnpm install --frozen-lockfile
 pnpm test
 pnpm build
 pnpm test:sites
+pnpm release:check
 pnpm desktop:smoke
+pnpm desktop
 ```
 
-`pnpm dev` opens the browser prototype; only Electron (`pnpm desktop`, after building) has real filesystem, download and launch access. UI fixtures are explicitly labeled and must not be presented as successful installations.
+`pnpm dev` is a browser preview; real file operations and launches require the desktop app. `pnpm package:installer` builds the x64 NSIS installer. Never test destructive actions against personal instances; use temporary fixtures.
 
-Keep source changes under MPL-2.0, preserve dependency notices, and do not bundle Minecraft, Java, OptiFine or downloaded mods. The Java bridges include their source; `node scripts/build-java-bridge.mjs <java17-or-newer>` recompiles them using the pinned ECJ compiler. Compiler download is verified and excluded from distribution.
+Keep English and Chinese documentation synchronized. Add translation entries for new application text, retain stable keys and preserve placeholders. See the language-pack guide. Do not translate user names, filenames, project descriptions or executable arguments.
 
-Test filesystem operations in temporary directories. Do not delete real user instances for automated verification. Permanent deletion must verify containment, reject links, and require the exact recycled instance name. Microsoft live authentication is a separate acceptance gate; no borrowed application IDs or embedded secrets.
+Preserve transaction rollback, path checks, trusted download origins, checksums, isolated renderer permissions and secret redaction. Add regression coverage for behavioral changes. Do not include account stores, raw personal logs, credentials, local caches or generated installers in source commits. Report sensitive vulnerabilities through the security policy.
 
-Use a small focused PR with the concrete behavior change and validation performed. Do not commit `.env`, logs, credentials, app data, local QA screenshots, `node_modules`, `dist` or release directories. GitHub Actions builds an artifact for review; it does not publish a GitHub Release.
+Project-owned changes use MPL-2.0. Preserve all dependency and asset notices. Pull requests should explain the user-visible change, validation and remaining limitations. Do not label simulated UI checks as successful real-game tests.

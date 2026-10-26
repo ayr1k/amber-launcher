@@ -1,0 +1,5334 @@
+{
+  "m311bb313fdec": {
+    "zh": "账号",
+    "en": "Accounts"
+  },
+  "m383065e7b5c0": {
+    "zh": "身份与实例分开管理。启动时检查登录状态，认证失败时保留错误信息。",
+    "en": "Manage accounts separately from instances. Login is checked at launch; authentication failures keep their error details."
+  },
+  "mdcfc55311f74": {
+    "zh": "离线账号",
+    "en": "Offline account"
+  },
+  "m18f002a2f7df": {
+    "zh": "微软账号",
+    "en": "Microsoft account"
+  },
+  "m66ca0b88a2a1": {
+    "zh": "第三方 · {0}",
+    "en": "Third-party · {0}"
+  },
+  "mc47b54e84e79": {
+    "zh": "角色",
+    "en": "Profile"
+  },
+  "m8768cc7b1d60": {
+    "zh": "移除此设备上的账号",
+    "en": "Remove account from this device"
+  },
+  "m91af6e57e745": {
+    "zh": "添加账号",
+    "en": "Add account"
+  },
+  "mbe1b4f3c6c1c": {
+    "zh": "离线",
+    "en": "Offline"
+  },
+  "m12b0c8b376b8": {
+    "zh": "微软",
+    "en": "Microsoft"
+  },
+  "m60b39d7a2a04": {
+    "zh": "第三方皮肤站",
+    "en": "Third-party account"
+  },
+  "m7fef852a42d4": {
+    "zh": "玩家名称",
+    "en": "Player name"
+  },
+  "me0641af2c8a9": {
+    "zh": "保存离线账号",
+    "en": "Save offline account"
+  },
+  "mfd0f3ae70400": {
+    "zh": "使用微软账号登录 Minecraft Java 版，无需配置应用。",
+    "en": "Sign in to Minecraft Java Edition with Microsoft. No app configuration is needed."
+  },
+  "m439d0867b96b": {
+    "zh": "微软登录",
+    "en": "Sign in with Microsoft"
+  },
+  "m99e7702a6178": {
+    "zh": "高级设置 · 开发者应用",
+    "en": "Advanced · Developer application"
+  },
+  "m598ebe84f6e1": {
+    "zh": "默认使用 AMBER 内置应用。只有开发或自行构建时才需要修改。更换应用不改变已保存账号的刷新配置。",
+    "en": "AMBER uses its built-in application by default. Change this only for development or custom builds. Existing accounts retain their refresh configuration."
+  },
+  "mb9433816b384": {
+    "zh": "微软应用 Client ID",
+    "en": "Microsoft application Client ID"
+  },
+  "m3419e0cec710": {
+    "zh": "保存自定义应用",
+    "en": "Save custom application"
+  },
+  "m04ebb4407d12": {
+    "zh": "恢复 AMBER 默认应用",
+    "en": "Restore AMBER application"
+  },
+  "mf1c93cfda384": {
+    "zh": "登录代码：{0}",
+    "en": "Login code: {0}"
+  },
+  "m7c5993cf78ca": {
+    "zh": "账号已添加",
+    "en": "Account added"
+  },
+  "m924d90ff8c08": {
+    "zh": "登录代码已过期",
+    "en": "Login code expired"
+  },
+  "me4343921c928": {
+    "zh": "登录失败",
+    "en": "Sign-in failed"
+  },
+  "mffb1ed17e61f": {
+    "zh": "仅在微软页面输入代码。完成授权后，此页面会自动更新。",
+    "en": "Enter this code only on Microsoft's website. This page updates when authorization finishes."
+  },
+  "ma469d7a8ec37": {
+    "zh": "验证码：",
+    "en": "Code: "
+  },
+  "m8d43c7751461": {
+    "zh": "· 剩余",
+    "en": " · Time remaining: "
+  },
+  "m9dcdc2b289b9": {
+    "zh": "秒",
+    "en": " seconds"
+  },
+  "m0f299c2f8f5c": {
+    "zh": "验证码已再次复制。",
+    "en": "Verification code copied again."
+  },
+  "m57b856262d52": {
+    "zh": "再次复制验证码",
+    "en": "Copy code again"
+  },
+  "m4160d2aa6252": {
+    "zh": "重新打开验证网页",
+    "en": "Reopen verification page"
+  },
+  "m531c764f9b4e": {
+    "zh": "取消登录",
+    "en": "Cancel sign-in"
+  },
+  "m5b7b702b326d": {
+    "zh": "认证 API 根地址",
+    "en": "Authentication API base URL"
+  },
+  "m0c210fb9c586": {
+    "zh": "填写皮肤站提供的完整 HTTPS API 地址。账号密码将发送到此地址，密码不会保存；首次启动会下载并校验 authlib-injector。",
+    "en": "Enter the full HTTPS API URL supplied by your account provider. Credentials are sent to this address; the password is not saved. The first launch downloads and verifies authlib-injector."
+  },
+  "mffbbc72e4dd0": {
+    "zh": "皮肤站账号",
+    "en": "Provider account"
+  },
+  "ma621ab606db2": {
+    "zh": "密码",
+    "en": "Password"
+  },
+  "m560e36ec76f4": {
+    "zh": "登录并保存角色",
+    "en": "Sign in and save profile"
+  },
+  "me8350921d2ff": {
+    "zh": "登录令牌使用当前 Windows 用户的系统加密保护。移除账号会删除本地记录，不会删除服务端账号。",
+    "en": "Login tokens are encrypted for the current Windows user. Removing an account deletes its local record, not the account on the server."
+  },
+  "m1e6eb28da115": {
+    "zh": "AMBER 更新",
+    "en": "AMBER updates"
+  },
+  "md06f03350538": {
+    "zh": "从 AMBER 官方 GitHub 仓库检查安装包，包括公开测试版。下载完成并校验后，由你确认安装；安装前需要先结束游戏和任务。",
+    "en": "Check the official AMBER GitHub repository for installers, including prereleases. Installation requires your confirmation after verification. Stop games and tasks before upgrading."
+  },
+  "m7f68ebad19ba": {
+    "zh": "检查更新",
+    "en": "Check for updates"
+  },
+  "m4673a2306165": {
+    "zh": "下载",
+    "en": "Download"
+  },
+  "m14d1e349b140": {
+    "zh": "取消下载",
+    "en": "Cancel download"
+  },
+  "me3156aa4d6f2": {
+    "zh": "退出并安装更新",
+    "en": "Quit and install update"
+  },
+  "mcdbc0434f568": {
+    "zh": "尚未检查",
+    "en": "Not checked yet"
+  },
+  "m6b72c3d6855c": {
+    "zh": "正在检查…",
+    "en": "Checking…"
+  },
+  "m7718cb8d4444": {
+    "zh": "当前没有更新的可用 Windows 安装包。",
+    "en": "No newer Windows installer is available."
+  },
+  "m0fab0b3c3674": {
+    "zh": "发现可用更新",
+    "en": "Update available"
+  },
+  "mcc822c9ef4ca": {
+    "zh": "已下载 {0} MB",
+    "en": "Downloaded {0} MB"
+  },
+  "m2ec979eea01d": {
+    "zh": "安装包已校验，可安装。",
+    "en": "Installer verified and ready."
+  },
+  "mcc7b3ff2872e": {
+    "zh": "下载已取消，当前版本不受影响。",
+    "en": "Download cancelled. Your current version is unchanged."
+  },
+  "m21fde08d583d": {
+    "zh": "检查或下载失败，可重试。",
+    "en": "Check or download failed. You can retry."
+  },
+  "m0ff983ee831d": {
+    "zh": "更新说明",
+    "en": "Release notes"
+  },
+  "mfbfaddb501c3": {
+    "zh": "实例备份与恢复",
+    "en": "Instance backup and restore"
+  },
+  "m2e6c68c4762c": {
+    "zh": "当前备份对象：",
+    "en": "Backing up: "
+  },
+  "mde5ca865cb32": {
+    "zh": "恢复会创建一个新实例，当前实例保持不变。备份保存在游戏数据目录中；同一磁盘损坏仍可能丢失，请另行复制重要备份到其他磁盘。",
+    "en": "Restoring creates a new instance without changing the current one. Backups are stored alongside game data and can be lost if that disk fails. Copy important backups to another disk."
+  },
+  "me7bdd2b255e0": {
+    "zh": "备份范围",
+    "en": "Backup scope"
+  },
+  "m6fd76c0d83e5": {
+    "zh": "完整实例内容",
+    "en": "Full instance"
+  },
+  "mbdcecfd5aa98": {
+    "zh": "存档与配置",
+    "en": "Worlds and configuration"
+  },
+  "m43afb14320ab": {
+    "zh": "备份已完成并校验。",
+    "en": "Backup completed and verified."
+  },
+  "m9b51a7d0c94f": {
+    "zh": "处理中，请勿退出…",
+    "en": "Working. Please keep AMBER open…"
+  },
+  "me5c63ce7ffb9": {
+    "zh": "立即备份",
+    "en": "Back up now"
+  },
+  "mb4751859b89a": {
+    "zh": "完整备份包含实例内的模组、资源和存档；不重复保存共享 Java、下载缓存、日志与回收文件。恢复后需准备 Java 并校验游戏。",
+    "en": "Full backups include instance mods, resources and worlds. Shared Java, download caches, logs and recycled files are excluded. Prepare Java and verify game files after restoring."
+  },
+  "m83b7ea859514": {
+    "zh": "完整内容",
+    "en": "Full content"
+  },
+  "me6dab0b27e20": {
+    "zh": "确认恢复为新实例",
+    "en": "Restore as a new instance"
+  },
+  "m2cd0f3be8738": {
+    "zh": "取消",
+    "en": "Cancel"
+  },
+  "m61fbe05306f9": {
+    "zh": "恢复…",
+    "en": "Restore…"
+  },
+  "m94dbdd61e13e": {
+    "zh": "还没有备份。首次迁移或批量更改模组前，建议保留一份。",
+    "en": "No backups yet. Create one before migrating or making bulk mod changes."
+  },
+  "mf4f0ead1116b": {
+    "zh": "启用",
+    "en": "Enable"
+  },
+  "m4e6fd0e28c55": {
+    "zh": "停用",
+    "en": "Disable"
+  },
+  "m6135d4159e89": {
+    "zh": "移除",
+    "en": "Remove"
+  },
+  "m11510756ce6f": {
+    "zh": "选择当前筛选结果",
+    "en": "Select filtered results"
+  },
+  "m7ecf1cde6486": {
+    "zh": "已选",
+    "en": "Selected: "
+  },
+  "m49ccde43a154": {
+    "zh": "项",
+    "en": " items"
+  },
+  "m5c5d07416743": {
+    "zh": " 项不在当前筛选中）",
+    "en": " items outside this filter)"
+  },
+  "mcb7707463c16": {
+    "zh": "批量",
+    "en": "Bulk "
+  },
+  "m5288519d856d": {
+    "zh": "清除选择",
+    "en": "Clear selection"
+  },
+  "mf6d488c54660": {
+    "zh": "每批最多 200 项，请减少选择。",
+    "en": "Select no more than 200 items per batch."
+  },
+  "m4ad7748ee8ed": {
+    "zh": "正在检查文件与依赖，请稍候…",
+    "en": "Checking files and dependencies…"
+  },
+  "m36f33adaf094": {
+    "zh": "确认",
+    "en": "Confirm"
+  },
+  "mf384c472501e": {
+    "zh": "」的内容",
+    "en": "” content"
+  },
+  "mb9d62e719f14": {
+    "zh": "跳过，未更改",
+    "en": "Skipped; unchanged"
+  },
+  "m480b1ea9b223": {
+    "zh": "执行前保存恢复副本，之后可到“操作记录与恢复”查看。",
+    "en": "A recovery copy is saved before changes. Find it in Content history and recovery."
+  },
+  "me68b94ddbc8e": {
+    "zh": "所选内容",
+    "en": "Selected content"
+  },
+  "m33fa806266c0": {
+    "zh": "返回调整",
+    "en": "Back to selection"
+  },
+  "mfbb556f89c4f": {
+    "zh": "本次批量操作结果 ·",
+    "en": "Batch results · "
+  },
+  "mdc9591e56d50": {
+    "zh": "进行中",
+    "en": "In progress"
+  },
+  "mf28461bb49c8": {
+    "zh": "已完成",
+    "en": "Completed"
+  },
+  "m8d4a9fee1566": {
+    "zh": "未完成，可查看原因",
+    "en": "Incomplete; see details"
+  },
+  "m999a459c3f3f": {
+    "zh": "待处理",
+    "en": "Pending"
+  },
+  "m5417cc60f0bc": {
+    "zh": "未更改",
+    "en": "Unchanged"
+  },
+  "m1c5ce43357cd": {
+    "zh": "未完成，请查看任务错误",
+    "en": "Incomplete; check the task error"
+  },
+  "m1d45521cb075": {
+    "zh": "未完成项目已保留选择。请查看错误并重新预览；不要手动覆盖文件。",
+    "en": "Failed items remain selected. Review the error and preview again; do not overwrite files manually."
+  },
+  "mbbe5dff3f756": {
+    "zh": "查看操作记录与恢复 →",
+    "en": "Content history and recovery →"
+  },
+  "m16d2af283489": {
+    "zh": "请核对目标实例与以下变化，确认后才会修改文件。",
+    "en": "Review the target instance and changes below before modifying files."
+  },
+  "ma3b703154298": {
+    "zh": "安装内容",
+    "en": "Install content"
+  },
+  "mde8e27716d66": {
+    "zh": "导入模组",
+    "en": "Import mods"
+  },
+  "m6c89d3260903": {
+    "zh": "更新内容",
+    "en": "Update content"
+  },
+  "mdc672acc670b": {
+    "zh": "启用内容",
+    "en": "Enable content"
+  },
+  "m0e7cae95a23f": {
+    "zh": "停用内容",
+    "en": "Disable content"
+  },
+  "m465ff8fdc84b": {
+    "zh": "移除内容",
+    "en": "Remove content"
+  },
+  "mbd5caae727e4": {
+    "zh": "恢复内容",
+    "en": "Restore content"
+  },
+  "mb4a7d6d4c4f0": {
+    "zh": "内容操作记录与恢复",
+    "en": "Content history and recovery"
+  },
+  "m621e17c543bc": {
+    "zh": "刷新记录",
+    "en": "Refresh history"
+  },
+  "mb7a664d84235": {
+    "zh": "Beta 1.4 的安装、导入、更新和启停移除共用此入口。恢复只处理内容文件，不还原存档或配置。较早版本未记录的操作不会补造历史。",
+    "en": "Install, import, update, enable, disable and remove operations share this history from Beta 1.4 onward. Recovery affects content files, not worlds or configuration. Earlier unrecorded operations are not reconstructed."
+  },
+  "mba3e42c4e618": {
+    "zh": "正在处理，请稍候…",
+    "en": "Working, please wait…"
+  },
+  "m30a814ec8ea5": {
+    "zh": "还没有内容操作记录。",
+    "en": "No content history yet."
+  },
+  "m7220876546c9": {
+    "zh": "内容变更",
+    "en": "Content change"
+  },
+  "md52f5a38a99f": {
+    "zh": "中断后已回滚，现有文件已保留",
+    "en": "Interrupted operation rolled back; existing files preserved"
+  },
+  "md62abdf44bf2": {
+    "zh": "清单与此记录一致，可预览恢复",
+    "en": "Manifest matches this record; recovery preview available"
+  },
+  "m8a63b0e66282": {
+    "zh": "后续内容已变化，不能直接恢复此记录",
+    "en": "Content changed later; this record cannot be restored directly"
+  },
+  "m3f408477a07f": {
+    "zh": "请使用最新可恢复记录，或先备份实例后手动处理",
+    "en": "Use the latest restorable record, or back up the instance before making manual changes"
+  },
+  "ma54bf6d13cc2": {
+    "zh": "预览恢复…",
+    "en": "Preview recovery…"
+  },
+  "mc341d4d81470": {
+    "zh": "恢复「",
+    "en": "Restore “"
+  },
+  "mfec6da673eec": {
+    "zh": "还原此操作前的内容",
+    "en": "Restore content from before this operation"
+  },
+  "m962505abea8d": {
+    "zh": "执行时会重新检查文件和清单；不会覆盖外部修改。恢复本身也会生成记录。",
+    "en": "Files and manifests are rechecked before recovery. External changes are never overwritten. Recovery also creates a history record."
+  },
+  "m51e44d56ec90": {
+    "zh": "确认恢复",
+    "en": "Confirm recovery"
+  },
+  "m572cf45ba436": {
+    "zh": "返回",
+    "en": "Back"
+  },
+  "m9ea6b4816b0c": {
+    "zh": "模组",
+    "en": "Mods"
+  },
+  "m6518cf1fcb30": {
+    "zh": "资源包",
+    "en": "Resource packs"
+  },
+  "ma191b203c99e": {
+    "zh": "光影",
+    "en": "Shaders"
+  },
+  "m46d9b2a66821": {
+    "zh": "整合包",
+    "en": "Modpacks"
+  },
+  "mc79e8435b942": {
+    "zh": "冒险",
+    "en": "Adventure"
+  },
+  "m6edb77679bbe": {
+    "zh": "科技",
+    "en": "Technology"
+  },
+  "me1d83f877f7f": {
+    "zh": "优化",
+    "en": "Optimization"
+  },
+  "me3acd17ea04e": {
+    "zh": "实用",
+    "en": "Utility"
+  },
+  "mac40db6607b7": {
+    "zh": "装饰",
+    "en": "Decoration"
+  },
+  "m942021079c7d": {
+    "zh": "世界生成",
+    "en": "World generation"
+  },
+  "mf92fd0c0b8c9": {
+    "zh": "魔法",
+    "en": "Magic"
+  },
+  "ma3434acddb75": {
+    "zh": "存储",
+    "en": "Storage"
+  },
+  "m144a327039fe": {
+    "zh": "装备",
+    "en": "Equipment"
+  },
+  "mab2775f0d353": {
+    "zh": "食物",
+    "en": "Food"
+  },
+  "m57f78ba1f93f": {
+    "zh": "交通",
+    "en": "Transportation"
+  },
+  "mb0271af81e06": {
+    "zh": "前置库",
+    "en": "Libraries"
+  },
+  "mbb6d995724f4": {
+    "zh": "管理",
+    "en": "Management"
+  },
+  "m61aacd674a2c": {
+    "zh": "生物",
+    "en": "Mobs"
+  },
+  "mfa2242835e62": {
+    "zh": "社交",
+    "en": "Social"
+  },
+  "m6ccc7bdbacf9": {
+    "zh": "经济",
+    "en": "Economy"
+  },
+  "m681804a18cf8": {
+    "zh": "趣味",
+    "en": "Cursed"
+  },
+  "m847c5f681ce9": {
+    "zh": "游戏",
+    "en": "Game"
+  },
+  "ma642a31e1182": {
+    "zh": "战斗",
+    "en": "Combat"
+  },
+  "m5253040db864": {
+    "zh": "任务",
+    "en": "Tasks"
+  },
+  "m4a0d4edef9c7": {
+    "zh": "综合",
+    "en": "Kitchen sink"
+  },
+  "m2b81dc69db79": {
+    "zh": "轻量",
+    "en": "Lightweight"
+  },
+  "m4eed57b5a12b": {
+    "zh": "挑战",
+    "en": "Challenging"
+  },
+  "m93294b654c40": {
+    "zh": "写实",
+    "en": "Realistic"
+  },
+  "m8ee09f5f1f38": {
+    "zh": "简约",
+    "en": "Simplistic"
+  },
+  "m788db1cfec2a": {
+    "zh": "主题",
+    "en": "Theme"
+  },
+  "macc833ec8f49": {
+    "zh": "原版风格",
+    "en": "Vanilla-like"
+  },
+  "m904dd029c768": {
+    "zh": "环境",
+    "en": "Environment"
+  },
+  "mf65c42a2540b": {
+    "zh": "调整",
+    "en": "Tweaks"
+  },
+  "m5e9d80d0e3c3": {
+    "zh": "音效",
+    "en": "Audio"
+  },
+  "m785d65c70fde": {
+    "zh": "界面",
+    "en": "Interface"
+  },
+  "m543ef4744634": {
+    "zh": "分类目录暂时无法读取，仍可搜索全部分类。",
+    "en": "Categories are unavailable. You can still search all categories."
+  },
+  "m458bc6fed43c": {
+    "zh": "配置实例",
+    "en": "Configure instance"
+  },
+  "mc1fe683a6fef": {
+    "zh": "内容下载",
+    "en": "Downloads"
+  },
+  "mad459c704af7": {
+    "zh": "先创建实例，再按游戏版本和加载器寻找内容。",
+    "en": "Create an instance to find content compatible with its game version and loader."
+  },
+  "m45a91e7c6e77": {
+    "zh": "＋ 创建实例",
+    "en": "＋ Create instance"
+  },
+  "m7c9a6a31f727": {
+    "zh": "模组与内容管理",
+    "en": "Mods and content"
+  },
+  "meccee6e72948": {
+    "zh": "＋ 安装新游戏",
+    "en": "＋ Install new game"
+  },
+  "m77173886e3b1": {
+    "zh": "返回启动 →",
+    "en": "Back to launch →"
+  },
+  "m8679d55226c7": {
+    "zh": "Modrinth 商城",
+    "en": "Modrinth store"
+  },
+  "m8d375347c03f": {
+    "zh": "已安装内容 ·",
+    "en": "Installed content · "
+  },
+  "m0a744c0186ac": {
+    "zh": "← 返回实例内容管理",
+    "en": "← Back to instance content"
+  },
+  "mf8032ed23aa5": {
+    "zh": "此实例的游戏正在运行。可浏览内容；退出游戏后可安装、启停或移除。",
+    "en": "This instance is running. You can browse content; stop the game before installing, toggling or removing it."
+  },
+  "m90556d409929": {
+    "zh": "正在执行「",
+    "en": "Running “"
+  },
+  "m2a7b8b131528": {
+    "zh": "」，完成后可更改内容。",
+    "en": "”. Content can be changed after it finishes."
+  },
+  "m5006ad061bfd": {
+    "zh": "此实例有尚未完成的安装。",
+    "en": "This instance has an unfinished installation."
+  },
+  "mbe2cca07aca8": {
+    "zh": "前往任务中心继续或处理 →",
+    "en": "Continue or resolve in Tasks →"
+  },
+  "m7f00c92383fd": {
+    "zh": "安装完成。内容已保存到「",
+    "en": "Installation complete. Content saved to “"
+  },
+  "m70ef2ace790c": {
+    "zh": "查看已安装内容",
+    "en": "View installed content"
+  },
+  "ma8fb42544238": {
+    "zh": "前往启动游戏 →",
+    "en": "Launch game →"
+  },
+  "mba40014ff496": {
+    "zh": "类型",
+    "en": "Type"
+  },
+  "m515559957fd3": {
+    "zh": "分类",
+    "en": "Category"
+  },
+  "ma1054434857f": {
+    "zh": "全部分类",
+    "en": "All categories"
+  },
+  "ma96c9a854190": {
+    "zh": "排序",
+    "en": "Sort by"
+  },
+  "m1fdd25b9cfaa": {
+    "zh": "相关程度",
+    "en": "Relevance"
+  },
+  "mee70b3bcf624": {
+    "zh": "最多下载",
+    "en": "Most downloads"
+  },
+  "mb33f2e6617ec": {
+    "zh": "最新发布",
+    "en": "Newest"
+  },
+  "mb067526e73e5": {
+    "zh": "最近更新",
+    "en": "Recently updated"
+  },
+  "mcc6933ef7764": {
+    "zh": "最多关注",
+    "en": "Most followers"
+  },
+  "m44ce7ae909bb": {
+    "zh": "搜索",
+    "en": "Search"
+  },
+  "m4b7770060ee9": {
+    "zh": "输入即查找兼容内容",
+    "en": "Type to find compatible content"
+  },
+  "m926d65c1d16f": {
+    "zh": "自动查找中…",
+    "en": "Searching…"
+  },
+  "mac53eab03f55": {
+    "zh": "刷新结果",
+    "en": "Refresh results"
+  },
+  "m76f470e20f3c": {
+    "zh": "重新读取分类",
+    "en": "Reload categories"
+  },
+  "m1d8a8cebf65a": {
+    "zh": "按 Minecraft 版本查找整合包。加载器不同也可以创建独立实例安装。",
+    "en": "Find modpacks by Minecraft version. A different loader can be installed in a separate instance."
+  },
+  "m45b9309ba314": {
+    "zh": "已按 Minecraft 版本筛选；模组同时匹配加载器，优先推荐正式发布。",
+    "en": "Filtered by Minecraft version and, for mods, loader. Stable releases are recommended first."
+  },
+  "m40dce9e7fa66": {
+    "zh": "原版实例无法直接加载模组。请先在实例设置中安装 Fabric、Forge 等加载器；资源包可直接使用。",
+    "en": "Vanilla instances cannot load mods directly. Install a loader such as Fabric or Forge in instance settings. Resource packs work without a loader."
+  },
+  "m822feb7cd0d2": {
+    "zh": "个项目 · 第",
+    "en": " projects · "
+  },
+  "md24d3c99460c": {
+    "zh": "页",
+    "en": " pages"
+  },
+  "m2ddd0ded2be1": {
+    "zh": "导入本地地图 ZIP",
+    "en": "Import world ZIP"
+  },
+  "medb34925425c": {
+    "zh": "在 Modrinth 打开项目",
+    "en": "Open project on Modrinth"
+  },
+  "m1f4f8cd7aa20": {
+    "zh": "在 Modrinth 打开 ",
+    "en": "Open on Modrinth: "
+  },
+  "mae9dcc885ea0": {
+    "zh": "次下载",
+    "en": " downloads"
+  },
+  "m276e3ca042b9": {
+    "zh": " · 已安装",
+    "en": " · Installed"
+  },
+  "m6d67228db0b7": {
+    "zh": "查看兼容版本",
+    "en": "Compatible versions"
+  },
+  "m6de66c9cd6cc": {
+    "zh": "没有匹配的兼容内容",
+    "en": "No compatible content found"
+  },
+  "m313f2f2f3713": {
+    "zh": "试试英文项目名、缩短关键词或清除分类，兼容条件仍会保留。",
+    "en": "Try the English project name, a shorter query or clearing the category. Compatibility filters stay enabled."
+  },
+  "mc9b9ae7a6144": {
+    "zh": "上一页",
+    "en": "Previous"
+  },
+  "m8a8542f69648": {
+    "zh": "下一页",
+    "en": "Next"
+  },
+  "m22cc9cbd8dc0": {
+    "zh": "← 返回搜索结果",
+    "en": "← Back to results"
+  },
+  "m69c76cf3b2a2": {
+    "zh": "兼容版本",
+    "en": "Compatible versions"
+  },
+  "m93a48223a516": {
+    "zh": "正式版",
+    "en": "Release"
+  },
+  "m065d4b037ce5": {
+    "zh": "测试版",
+    "en": "Beta"
+  },
+  "mf8ba3e6e5825": {
+    "zh": "预览版",
+    "en": "Alpha"
+  },
+  "m37e1ec891972": {
+    "zh": " · 推荐",
+    "en": " · Recommended"
+  },
+  "m84dc8b1e7123": {
+    "zh": "重新检查依赖",
+    "en": "Recheck dependencies"
+  },
+  "m25389c677948": {
+    "zh": "正在自动检查兼容性与必需依赖…",
+    "en": "Checking compatibility and required dependencies…"
+  },
+  "m9a1dea3a1530": {
+    "zh": "没有兼容此实例的客户端版本。",
+    "en": "No client version supports this instance."
+  },
+  "m50b303b8ec81": {
+    "zh": "作者声明的必需依赖",
+    "en": "Author-declared required dependencies"
+  },
+  "m509646782782": {
+    "zh": "默认勾选。取消可能导致游戏无法启动；不会删除已安装文件。相同项目仍被其他勾选项需要时，会保留在清单中。",
+    "en": "Selected by default. Deselecting may prevent the game from starting; existing files are not removed. A project remains listed if another selected item needs it."
+  },
+  "m5f5a123788c8": {
+    "zh": "声明必需",
+    "en": "Declared required"
+  },
+  "mb6f0a5ac9b2e": {
+    "zh": "可选依赖",
+    "en": "Optional dependencies"
+  },
+  "m2317199a6d0d": {
+    "zh": "可选项默认不勾选；选中后可以继续调整它的依赖。",
+    "en": "Optional items start unchecked. Select one to adjust its dependencies."
+  },
+  "me71a156b7a70": {
+    "zh": "的可选依赖",
+    "en": " optional dependencies"
+  },
+  "m1eea3dd12651": {
+    "zh": "安装到「",
+    "en": "Install to “"
+  },
+  "m7ac8ff0543a7": {
+    "zh": "校验已有文件",
+    "en": "Verify existing files"
+  },
+  "mdced8ae46345": {
+    "zh": "重新启用",
+    "en": "Enable again"
+  },
+  "m0006d696d8e1": {
+    "zh": "新增",
+    "en": "Add"
+  },
+  "mbca8acccd20d": {
+    "zh": "安装所选内容与依赖",
+    "en": "Install selected content and dependencies"
+  },
+  "m93026792c6d3": {
+    "zh": "创建独立实例并安装整合包",
+    "en": "Create instance and install modpack"
+  },
+  "m991ad7a03dea": {
+    "zh": "已安装文件",
+    "en": "Installed files"
+  },
+  "m423b2deba130": {
+    "zh": "操作记录与恢复",
+    "en": "History and recovery"
+  },
+  "m30da91cc91ac": {
+    "zh": "筛选已安装内容",
+    "en": "Filter installed content"
+  },
+  "me5546629ea55": {
+    "zh": "名称、版本或文件名",
+    "en": "Name, version or filename"
+  },
+  "mea8671368cce": {
+    "zh": "内容类型",
+    "en": "Content type"
+  },
+  "m267c4a7a86dd": {
+    "zh": "全部类型",
+    "en": "All types"
+  },
+  "md334c402ead1": {
+    "zh": "启用状态",
+    "en": "Enabled state"
+  },
+  "m0a379c1e7398": {
+    "zh": "全部状态",
+    "en": "All states"
+  },
+  "mdfb802238b38": {
+    "zh": "已启用",
+    "en": "Enabled"
+  },
+  "ma8c3698b5b8c": {
+    "zh": "已停用",
+    "en": "Disabled"
+  },
+  "m0f9bf71dc073": {
+    "zh": "文件缺失",
+    "en": "Missing file"
+  },
+  "m6e3c51c5d065": {
+    "zh": "停用会保留文件。已识别的必需依赖受保护；手动导入的模组需自行核对依赖。",
+    "en": "Disabling keeps files. Known required dependencies are protected. Check dependencies yourself for manually imported mods."
+  },
+  "m9f000c1cf055": {
+    "zh": "＋ 添加内容",
+    "en": "＋ Add content"
+  },
+  "mb806aa809944": {
+    "zh": "打开实例目录 ↗",
+    "en": "Open instance folder ↗"
+  },
+  "mbeb4816bf802": {
+    "zh": "选择 ",
+    "en": "Select "
+  },
+  "m99d63ea41429": {
+    "zh": "启用 ",
+    "en": "Enable "
+  },
+  "m65364e6fd8c7": {
+    "zh": "缺失",
+    "en": "Missing"
+  },
+  "mddfe2c796c7e": {
+    "zh": "手动添加",
+    "en": "Manually added"
+  },
+  "mebec4407a1cf": {
+    "zh": "此版本已手动跳过",
+    "en": "Manually skipped for this version: "
+  },
+  "m5411c5a3254e": {
+    "zh": "项必需依赖；可在商城重新选择此版本恢复默认勾选。",
+    "en": " required dependencies. Select this version again in the store to restore the default selection."
+  },
+  "m0731bbf6a19c": {
+    "zh": "移除…",
+    "en": "Remove…"
+  },
+  "m127c64b3f50f": {
+    "zh": "没有符合筛选的内容",
+    "en": "No content matches this filter"
+  },
+  "mc99df4405b3d": {
+    "zh": "还没有安装内容",
+    "en": "No content installed yet"
+  },
+  "m657d9cbf45ec": {
+    "zh": "清除筛选",
+    "en": "Clear filters"
+  },
+  "mf670ce3cad79": {
+    "zh": "前往商城添加内容 →",
+    "en": "Browse the store →"
+  },
+  "me8e08b0f61dd": {
+    "zh": "正在取消…",
+    "en": "Cancelling…"
+  },
+  "ma7084fcb218d": {
+    "zh": "取消操作",
+    "en": "Cancel operation"
+  },
+  "m85de4bbdea80": {
+    "zh": "返回模组更新列表",
+    "en": "Back to mod updates"
+  },
+  "m1553f87f8002": {
+    "zh": "重新检查后重试",
+    "en": "Recheck and retry"
+  },
+  "m56410fc65314": {
+    "zh": "启动",
+    "en": "Launch"
+  },
+  "mcc43dc69ae08": {
+    "zh": "实例",
+    "en": "Instances"
+  },
+  "mdf3d58c7d84b": {
+    "zh": "设置",
+    "en": "Settings"
+  },
+  "m968608e4ff51": {
+    "zh": "主要导航",
+    "en": "Main navigation"
+  },
+  "md5db912f1174": {
+    "zh": "UI 样例 · 无真实安装",
+    "en": "UI example · No real installation"
+  },
+  "m575676ed9506": {
+    "zh": " · 本地测试版",
+    "en": " · Prerelease"
+  },
+  "m5e96c8ea4820": {
+    "zh": "当前实例",
+    "en": "Current instance"
+  },
+  "m570e99640c04": {
+    "zh": "尚未创建",
+    "en": "No instances"
+  },
+  "me4f1d2269712": {
+    "zh": "快速切换",
+    "en": "Quick switch"
+  },
+  "m2fefe9ddffe7": {
+    "zh": "＋ 创建",
+    "en": "＋ Create"
+  },
+  "m90127fd35e81": {
+    "zh": "实例快捷列表",
+    "en": "Instance shortcuts"
+  },
+  "m3e975bf2dfc1": {
+    "zh": "创建第一个实例，开始冒险。",
+    "en": "Create your first instance and start exploring."
+  },
+  "mac8cb23505de": {
+    "zh": "关于 AMBER",
+    "en": "About AMBER"
+  },
+  "m828c5dd6af4b": {
+    "zh": "← 全部实例",
+    "en": "← All instances"
+  },
+  "m7db1b3229df3": {
+    "zh": "实例管理",
+    "en": "Instance management"
+  },
+  "m311bafb5e5e3": {
+    "zh": "请先创建或选择实例",
+    "en": "Create or select an instance first"
+  },
+  "m14901b0bef09": {
+    "zh": "返回启动",
+    "en": "Back to launch"
+  },
+  "mc61c784e6df9": {
+    "zh": "概览与检查",
+    "en": "Overview and checks"
+  },
+  "m7a688306423b": {
+    "zh": "内容",
+    "en": "Content"
+  },
+  "mac753eba14ed": {
+    "zh": "启动设置",
+    "en": "Launch settings"
+  },
+  "m6beda481d19d": {
+    "zh": "备份与恢复",
+    "en": "Backup and restore"
+  },
+  "m01e169bb9e92": {
+    "zh": "请先选择一个实例。",
+    "en": "Select an instance first."
+  },
+  "m8f349a148b09": {
+    "zh": "准备 Java",
+    "en": "Prepare Java"
+  },
+  "mb36076f9d3af": {
+    "zh": "安装加载器",
+    "en": "Install loader"
+  },
+  "m0bdf648848a5": {
+    "zh": "安装 LiteLoader",
+    "en": "Install LiteLoader"
+  },
+  "me97d27cc4621": {
+    "zh": "下载与校验游戏",
+    "en": "Download and verify game"
+  },
+  "m71086c92777e": {
+    "zh": "配置 OptiFine",
+    "en": "Configure OptiFine"
+  },
+  "me765bd8c78f7": {
+    "zh": "迁移模组",
+    "en": "Migrate mods"
+  },
+  "mf4ca5845225a": {
+    "zh": "安装模组或整合包",
+    "en": "Install mods or modpack"
+  },
+  "mc0b3fbff51cc": {
+    "zh": "完成",
+    "en": "Done"
+  },
+  "m9c466317f0fb": {
+    "zh": "游戏运行中",
+    "en": "Game running"
+  },
+  "mafa17e72aea8": {
+    "zh": "正在安装",
+    "en": "Installing"
+  },
+  "m982a641b8297": {
+    "zh": "安装需要处理",
+    "en": "Installation needs attention"
+  },
+  "m66be95dd89ca": {
+    "zh": "等待继续安装",
+    "en": "Waiting to continue"
+  },
+  "m938848dcc9ae": {
+    "zh": "可以启动",
+    "en": "Ready to launch"
+  },
+  "m45818d0f8fb6": {
+    "zh": "尚未完成安装",
+    "en": "Installation incomplete"
+  },
+  "mb6dafde3be05": {
+    "zh": "草方块",
+    "en": "Grass block"
+  },
+  "mf7b196d05eba": {
+    "zh": "土方块",
+    "en": "Dirt block"
+  },
+  "mb094339479ac": {
+    "zh": "铁砧",
+    "en": "Anvil"
+  },
+  "m607907d36232": {
+    "zh": "铁镐",
+    "en": "Iron pickaxe"
+  },
+  "mbe34b326816e": {
+    "zh": "实例图标",
+    "en": "Instance icon"
+  },
+  "m8dffc4d2c5ba": {
+    "zh": "已保存，仅对当前实例生效。",
+    "en": "Saved for this instance only."
+  },
+  "m658774d58f6a": {
+    "zh": "此实例的启动设置",
+    "en": "Instance launch settings"
+  },
+  "me973e3098165": {
+    "zh": "重新读取启动设置",
+    "en": "Reload launch settings"
+  },
+  "m8c74e6f0ddbb": {
+    "zh": "正在读取启动设置…",
+    "en": "Loading launch settings…"
+  },
+  "m32fd09ce23f1": {
+    "zh": "启动账号",
+    "en": "Launch account"
+  },
+  "m5c4cf722e9d4": {
+    "zh": "默认与离线",
+    "en": "Default and offline"
+  },
+  "m28c605bf0a09": {
+    "zh": "使用全局默认",
+    "en": "Use global default"
+  },
+  "me84ed022d486": {
+    "zh": "临时离线身份",
+    "en": "Temporary offline identity"
+  },
+  "mbaf8847ccd78": {
+    "zh": "已保存账号",
+    "en": "Saved accounts"
+  },
+  "mbf6c2caad4c9": {
+    "zh": "请重新选择账号",
+    "en": "Choose an account again"
+  },
+  "m46baacfd60d9": {
+    "zh": "原账号已移除",
+    "en": "Previous account removed"
+  },
+  "me66e860e8a4c": {
+    "zh": "最大内存",
+    "en": "Maximum memory"
+  },
+  "m0f58ba963f1b": {
+    "zh": "使用全局默认 ·",
+    "en": "Use global default · "
+  },
+  "me22d5f8400c8": {
+    "zh": "恢复为全局默认",
+    "en": "Restore global defaults"
+  },
+  "m0b7926ab78d2": {
+    "zh": "备份库",
+    "en": "Backup library"
+  },
+  "mddb43fe0feea": {
+    "zh": "全部实例 ·",
+    "en": "All instances · "
+  },
+  "m77308e398a11": {
+    "zh": "回收站 ·",
+    "en": "Recycle bin · "
+  },
+  "mee34c74d32e7": {
+    "zh": "最近创建",
+    "en": "Recently created"
+  },
+  "mdbd67e367a67": {
+    "zh": "最近启动",
+    "en": "Recently launched"
+  },
+  "m0db718df3d49": {
+    "zh": "实例名称",
+    "en": "Instance name"
+  },
+  "m8be216be7a84": {
+    "zh": "游戏版本",
+    "en": "Game version"
+  },
+  "mbff836d78d5a": {
+    "zh": "只看收藏",
+    "en": "Favorites only"
+  },
+  "m3e0798baa5d6": {
+    "zh": "收藏始终置顶，同样作用于侧栏和顶部切换列表。",
+    "en": "Favorites stay at the top, including in the sidebar and top selector."
+  },
+  "ma2a817cd059d": {
+    "zh": "搜索实例",
+    "en": "Search instances"
+  },
+  "md962e663c072": {
+    "zh": "搜索名称、游戏版本或加载器",
+    "en": "Name, game version or loader"
+  },
+  "m467bc1ce2626": {
+    "zh": "这里保留实例的存档、模组和配置。恢复后可继续使用。彻底删除不可撤销，且不会删除共享 Java 与游戏缓存。",
+    "en": "Worlds, mods and settings remain here until restored or permanently deleted. Permanent deletion cannot be undone; shared Java and game caches are kept."
+  },
+  "m357e3aca3503": {
+    "zh": "上次启动：",
+    "en": "Last launched: "
+  },
+  "m66009c547bed": {
+    "zh": "尚未启动",
+    "en": "Never launched"
+  },
+  "meadeaaa14fff": {
+    "zh": "移除于",
+    "en": "Removed on "
+  },
+  "mb5e04dd41a46": {
+    "zh": "恢复实例",
+    "en": "Restore instance"
+  },
+  "m4ee7d3299549": {
+    "zh": "彻底删除…",
+    "en": "Delete permanently…"
+  },
+  "mb80b97d6351b": {
+    "zh": "继续安装",
+    "en": "Continue installation"
+  },
+  "md505339b3422": {
+    "zh": "完成安装",
+    "en": "Finish installation"
+  },
+  "m0cc87fea2199": {
+    "zh": "前往启动",
+    "en": "Go to launch"
+  },
+  "mdca60869e7d2": {
+    "zh": "取消收藏",
+    "en": "Unfavorite"
+  },
+  "m60a53514eb92": {
+    "zh": "收藏",
+    "en": "Favorite"
+  },
+  "m52daa71ebc31": {
+    "zh": "目录",
+    "en": "Folder"
+  },
+  "m0d0cbac2eee5": {
+    "zh": "重命名",
+    "en": "Rename"
+  },
+  "m0d720eeea264": {
+    "zh": "图标",
+    "en": "Icon"
+  },
+  "m2f9daa828907": {
+    "zh": "删除",
+    "en": "Delete"
+  },
+  "m4c59d50fb91b": {
+    "zh": "没有匹配的实例",
+    "en": "No matching instances"
+  },
+  "m351cbe0862c6": {
+    "zh": "回收站为空",
+    "en": "Recycle bin is empty"
+  },
+  "m88bf8f37b7a9": {
+    "zh": "还没有实例",
+    "en": "No instances yet"
+  },
+  "m7d4cfccb59c6": {
+    "zh": "删除的实例会出现在这里。",
+    "en": "Removed instances appear here."
+  },
+  "mabd54e711f32": {
+    "zh": "创建一个实例，或调整搜索条件。",
+    "en": "Create an instance or adjust your search."
+  },
+  "m097a2e25c58f": {
+    "zh": "最近启动记录 · 最近 20 次",
+    "en": "Recent launches · Last 20"
+  },
+  "mbe28b8ed4fa4": {
+    "zh": "仅表示游戏进程已创建，不代表已进入游戏或正常退出。移除的实例不提供启动入口。",
+    "en": "A record means the game process started, not that the game loaded or exited normally. Removed instances cannot be launched here."
+  },
+  "mcaee4b31fe10": {
+    "zh": "实例已移除",
+    "en": "Instance removed"
+  },
+  "m2ffa1a458f9d": {
+    "zh": "还没有记录。旧版本的上次启动时间仍显示在实例卡片中。",
+    "en": "No records yet. Instance cards still show launch times saved by earlier versions."
+  },
+  "m44156c46629e": {
+    "zh": "已彻底删除「",
+    "en": "Permanently deleted “"
+  },
+  "mf3770107a9e4": {
+    "zh": "」。共享 Java 与游戏缓存保留。",
+    "en": "”. Shared Java and game caches were kept."
+  },
+  "m06c509fdf8d6": {
+    "zh": "重命名实例",
+    "en": "Rename instance"
+  },
+  "mc8affae65c98": {
+    "zh": "更换实例图标",
+    "en": "Change instance icon"
+  },
+  "mf8f2185a12d0": {
+    "zh": "彻底删除实例",
+    "en": "Permanently delete instance"
+  },
+  "m0e1c46c0a4d3": {
+    "zh": "删除实例",
+    "en": "Delete instance"
+  },
+  "m92ddb51db6c4": {
+    "zh": "新名称",
+    "en": "New name"
+  },
+  "m30beeb1b87eb": {
+    "zh": "存档、模组、截图和配置将从磁盘永久删除，不会进入 Windows 回收站。此操作无法撤销。",
+    "en": "Worlds, mods, screenshots and configuration will be permanently deleted from disk without entering the Windows Recycle Bin. This cannot be undone."
+  },
+  "m5890c084b931": {
+    "zh": "约",
+    "en": "About "
+  },
+  "mcafa7261fef5": {
+    "zh": "个文件。需要保留存档时，请先恢复实例并备份。",
+    "en": " files. Restore and back up the instance first if you need to keep its worlds."
+  },
+  "m2b6a984ce0ea": {
+    "zh": "输入完整名称“",
+    "en": "Type the full name “"
+  },
+  "m896241829610": {
+    "zh": "”确认",
+    "en": "” to confirm"
+  },
+  "mda97976ace1d": {
+    "zh": "将整个实例移入 AMBER 回收站，包括存档、模组和配置。之后可以在“实例管理 → 回收站”恢复。",
+    "en": "Move the whole instance, including worlds, mods and configuration, to AMBER's recycle bin. Restore it later under Instances → Recycle bin."
+  },
+  "mbdc29e69e510": {
+    "zh": "运行中的游戏或安装任务会阻止此操作。",
+    "en": "Running games or installation tasks block this operation."
+  },
+  "md3d21191f32e": {
+    "zh": "处理中…",
+    "en": "Working…"
+  },
+  "m361bdf3f36e3": {
+    "zh": "移入回收站",
+    "en": "Move to recycle bin"
+  },
+  "m9d3b133dfcbe": {
+    "zh": "永久删除，无法恢复",
+    "en": "Delete permanently"
+  },
+  "ma3030bf8f16d": {
+    "zh": "保存",
+    "en": "Save"
+  },
+  "m333e75cf2bad": {
+    "zh": "打开内容管理",
+    "en": "Open content management"
+  },
+  "m41045da029f6": {
+    "zh": "选择或管理账号",
+    "en": "Select or manage accounts"
+  },
+  "maa110a744e0e": {
+    "zh": "打开实例目录",
+    "en": "Open instance folder"
+  },
+  "m56e0e391a224": {
+    "zh": "自动准备 Java",
+    "en": "Prepare Java automatically"
+  },
+  "m24b7fc78f661": {
+    "zh": "校验并修复游戏",
+    "en": "Verify and repair game"
+  },
+  "me879f449ba35": {
+    "zh": "上次启动进程：",
+    "en": "Last process launch: "
+  },
+  "m36700837e84a": {
+    "zh": "继续安装 →",
+    "en": "Continue installation →"
+  },
+  "m95774f493d69": {
+    "zh": "前往启动 →",
+    "en": "Go to launch →"
+  },
+  "mf423ed51867c": {
+    "zh": "完成安装 →",
+    "en": "Finish installation →"
+  },
+  "mbd3bc18435af": {
+    "zh": "正在检查，请稍候…",
+    "en": "Checking, please wait…"
+  },
+  "me62c7553fd6b": {
+    "zh": "检查实例",
+    "en": "Check instance"
+  },
+  "m986d39226944": {
+    "zh": "Java、加载器与启动设置",
+    "en": "Java, loader and launch settings"
+  },
+  "m423e98e2fd40": {
+    "zh": "迁移到其他版本",
+    "en": "Migrate to another version"
+  },
+  "m81a5ce231cf7": {
+    "zh": "检查游戏文件、Java、已知依赖及账号选择，不尝试微软在线登录，也不会修改存档。修复按钮只处理对应问题。",
+    "en": "Check game files, Java, known dependencies and account selection. This does not attempt Microsoft sign-in or change worlds. Repair buttons address individual findings."
+  },
+  "ma79f7b01b000": {
+    "zh": "检查完成 ·",
+    "en": "Check complete · "
+  },
+  "mab71b0f0dc1d": {
+    "zh": "项需要处理",
+    "en": " items need attention"
+  },
+  "m9acff2e99dcd": {
+    "zh": "提示 · ",
+    "en": "Note · "
+  },
+  "mbb267db3500b": {
+    "zh": "需要处理 · ",
+    "en": "Needs attention · "
+  },
+  "m224d5dc10b8d": {
+    "zh": "失败，需要处理",
+    "en": "Failed; needs attention"
+  },
+  "ma37778f17c5f": {
+    "zh": "已取消",
+    "en": "Cancelled"
+  },
+  "m5b16e08d5408": {
+    "zh": "取消中，正在整理文件",
+    "en": "Cancelling and tidying files"
+  },
+  "mb60057b0c1e7": {
+    "zh": "排队准备",
+    "en": "Queued"
+  },
+  "meb873cdbec7f": {
+    "zh": "下载与校验",
+    "en": "Downloading and verifying"
+  },
+  "m784f9b54ae2b": {
+    "zh": "校验中",
+    "en": "Verifying"
+  },
+  "mf9d5b2b63e5a": {
+    "zh": "安装中",
+    "en": "Installing"
+  },
+  "mb53be09930f4": {
+    "zh": "准备中",
+    "en": "Preparing"
+  },
+  "m8e14a29cd5a4": {
+    "zh": "更换背景 ↗",
+    "en": "Change background ↗"
+  },
+  "mb0333bdde5ac": {
+    "zh": "你的下一次冒险",
+    "en": "Your next adventure"
+  },
+  "ma2b32e94b9e1": {
+    "zh": "先创建一个独立实例，AMBER 会自动准备游戏和 Java。",
+    "en": "Create a separate instance. AMBER will prepare the game and Java automatically."
+  },
+  "ma158bdb9d5c1": {
+    "zh": "使用账号",
+    "en": "Account"
+  },
+  "m590cca3e0e57": {
+    "zh": "临时离线账号",
+    "en": "Temporary offline account"
+  },
+  "m74828135a029": {
+    "zh": "请重新选择账号或前往账号页登录",
+    "en": "Choose another account or sign in on the Accounts page"
+  },
+  "m376cbd8cfc85": {
+    "zh": "第三方",
+    "en": "Third-party"
+  },
+  "m41cdc86a77ad": {
+    "zh": "管理账号",
+    "en": "Manage accounts"
+  },
+  "m9b517a0e9b10": {
+    "zh": "此实例保存的账号已移除，请重新选择。不会自动切换为离线模式。",
+    "en": "The account saved for this instance was removed. Choose another account. AMBER will not switch to offline mode automatically."
+  },
+  "m53bbf176a047": {
+    "zh": "玩家名称需要 1–16 位英文字母、数字或下划线。",
+    "en": "Player names must contain 1–16 English letters, digits or underscores."
+  },
+  "m7ce2ce922884": {
+    "zh": "，请等待完成。",
+    "en": ". Please wait for completion."
+  },
+  "m644cc2d295f2": {
+    "zh": "」，完成后可启动游戏。",
+    "en": "”. Launch is available when it finishes."
+  },
+  "m613697ed4b38": {
+    "zh": "退出码 {0}",
+    "en": "Exit code {0}"
+  },
+  "m4d8c1c5b4283": {
+    "zh": "未知",
+    "en": "Unknown"
+  },
+  "ma39e449adbf2": {
+    "zh": "准备启动…",
+    "en": "Preparing launch…"
+  },
+  "ma6b9a961b985": {
+    "zh": "游戏正在运行",
+    "en": "Game is running"
+  },
+  "m332200254a54": {
+    "zh": "启动 Minecraft →",
+    "en": "Launch Minecraft →"
+  },
+  "m673d3c01d7b1": {
+    "zh": "切换实例",
+    "en": "Switch instance"
+  },
+  "m6330a3a912f4": {
+    "zh": "启动选项 ·",
+    "en": "Launch options · "
+  },
+  "m59c745a442ec": {
+    "zh": "GB 内存",
+    "en": " GB memory"
+  },
+  "mbdd61a2d36dd": {
+    "zh": "此实例的最大内存",
+    "en": "Maximum memory for this instance"
+  },
+  "m0613f0f3ca6b": {
+    "zh": "账号和内存选择仅作用于此实例，重启后保留。选择“使用全局默认”后跟随设置页变化。",
+    "en": "Account and memory choices apply only to this instance and persist across restarts. Choose global defaults to follow Settings."
+  },
+  "m63bbd191e14d": {
+    "zh": "Java、加载器与修复",
+    "en": "Java, loader and repair"
+  },
+  "mff28a8313141": {
+    "zh": "＋ 创建第一个实例",
+    "en": "＋ Create your first instance"
+  },
+  "m5f2cfbfecf9f": {
+    "zh": "快捷入口",
+    "en": "Shortcuts"
+  },
+  "m9e1202049f69": {
+    "zh": "获取内容 ↗",
+    "en": "Get content ↗"
+  },
+  "m901a13c49451": {
+    "zh": "模组、资源包、光影和整合包",
+    "en": "Mods, resource packs, shaders and modpacks"
+  },
+  "m600f75c5836e": {
+    "zh": "管理模组 →",
+    "en": "Manage mods →"
+  },
+  "mc9c41bbc8566": {
+    "zh": "启用、关闭与移除",
+    "en": "Enable, disable and remove"
+  },
+  "mcaa7c4b3bd77": {
+    "zh": "迁移到新版本 →",
+    "en": "Migrate to a new version →"
+  },
+  "ma41065b3b38f": {
+    "zh": "带上熟悉的模组清单",
+    "en": "Take your mod list with you"
+  },
+  "md8a16b0239ca": {
+    "zh": "任务与运行状态",
+    "en": "Tasks and running games"
+  },
+  "m81750184e6bc": {
+    "zh": "全部任务与继续安装 →",
+    "en": "All tasks and unfinished installations →"
+  },
+  "m659875587949": {
+    "zh": "查看日志",
+    "en": "View logs"
+  },
+  "m639dfb38f9f4": {
+    "zh": "此实例的完整安装尚未结束，",
+    "en": "This instance is not fully installed. "
+  },
+  "md4ce0a47aa87": {
+    "zh": "前往任务中心继续 →",
+    "en": "Continue in Tasks →"
+  },
+  "m1f8dd837a7ae": {
+    "zh": "当前没有下载任务。",
+    "en": "No download tasks."
+  },
+  "mffe94d4b9c6a": {
+    "zh": "游戏正在运行，可在实例管理中查看日志。",
+    "en": "The game is running. View logs in instance management."
+  },
+  "m92b742d80072": {
+    "zh": "实例信息",
+    "en": "Instance information"
+  },
+  "m783d638053ea": {
+    "zh": "组件",
+    "en": "Components"
+  },
+  "mdb9773faa309": {
+    "zh": "自动选择",
+    "en": "Automatic"
+  },
+  "m6320b4a8722a": {
+    "zh": "状态",
+    "en": "Status"
+  },
+  "mebd3a2d78ca5": {
+    "zh": "启动与账号",
+    "en": "Launch and account"
+  },
+  "m6351f9b4f6b1": {
+    "zh": "布局已保存并即时应用",
+    "en": "Layout saved and applied"
+  },
+  "mebd58bb64a87": {
+    "zh": "我的布局",
+    "en": "My layout"
+  },
+  "m4ca165c894e8": {
+    "zh": "调整导航位置、页面宽度和首页模块。拖动排序，也可使用上下移动按钮。",
+    "en": "Adjust navigation, page width and home modules. Drag to reorder, or use the move buttons."
+  },
+  "m01b71e447420": {
+    "zh": "默认工作台",
+    "en": "Default workspace"
+  },
+  "m1366cb2116f1": {
+    "zh": "顶部导航",
+    "en": "Top navigation"
+  },
+  "mc49f539787e4": {
+    "zh": "专注启动",
+    "en": "Focus on launch"
+  },
+  "me45ee0df4312": {
+    "zh": "右侧导航",
+    "en": "Right navigation"
+  },
+  "m50152f894795": {
+    "zh": "导航位置",
+    "en": "Navigation position"
+  },
+  "m6a24b14f33c7": {
+    "zh": "左侧",
+    "en": "Left"
+  },
+  "m1cf1d4d0b24b": {
+    "zh": "右侧",
+    "en": "Right"
+  },
+  "m6f2a4a02e60e": {
+    "zh": "顶部",
+    "en": "Top"
+  },
+  "ma3c4559c36e9": {
+    "zh": "侧栏宽度 ·",
+    "en": "Sidebar width · "
+  },
+  "mca0c3f3dc685": {
+    "zh": "内容宽度",
+    "en": "Content width"
+  },
+  "m810e93aa8949": {
+    "zh": "充分利用窗口",
+    "en": "Use full window"
+  },
+  "me71b1e986334": {
+    "zh": "居中阅读",
+    "en": "Centered reading"
+  },
+  "me01008541563": {
+    "zh": "实例列表",
+    "en": "Instance list"
+  },
+  "maedd6814ff8c": {
+    "zh": "列表",
+    "en": "List"
+  },
+  "me41ecc67ca28": {
+    "zh": "网格",
+    "en": "Grid"
+  },
+  "mf8e4b25a250d": {
+    "zh": "首页模块",
+    "en": "Home modules"
+  },
+  "m4e1449e7d5e5": {
+    "zh": "显示",
+    "en": "Show"
+  },
+  "me7eb9d4dfc9f": {
+    "zh": "始终显示",
+    "en": "Always visible"
+  },
+  "mf853a70b1204": {
+    "zh": "上移",
+    "en": "Move up"
+  },
+  "me75e8b4e5c97": {
+    "zh": "下移",
+    "en": "Move down"
+  },
+  "m6ce062808ac2": {
+    "zh": "布局已导出",
+    "en": "Layout exported"
+  },
+  "m295d976f56c8": {
+    "zh": "导出布局",
+    "en": "Export layout"
+  },
+  "mf535358de46d": {
+    "zh": "导入布局",
+    "en": "Import layout"
+  },
+  "m127527c89c51": {
+    "zh": "语言 / Language",
+    "en": "Language / 语言"
+  },
+  "m6047395b3412": {
+    "zh": "跟随系统语言",
+    "en": "System language"
+  },
+  "m9937e365aaf3": {
+    "zh": "简体中文",
+    "en": "简体中文"
+  },
+  "m24543d0d0998": {
+    "zh": "导入语言包…",
+    "en": "Import language pack…"
+  },
+  "me480fe18fd58": {
+    "zh": "导出语言包模板",
+    "en": "Export language template"
+  },
+  "m2a7e84ee65ac": {
+    "zh": "移除自定义语言包",
+    "en": "Remove custom language pack"
+  },
+  "mae9c5530ddd0": {
+    "zh": "语言包只包含文本，不执行代码。缺失条目使用英文。请仅导入可信来源的语言包。",
+    "en": "Language packs contain text only and cannot execute code. Missing entries fall back to English. Only import packs from trusted sources."
+  },
+  "m517ea9820aed": {
+    "zh": "先选择一个实例。",
+    "en": "Select an instance first."
+  },
+  "m620667bfe5cb": {
+    "zh": "跨版本模组迁移",
+    "en": "Cross-version mod migration"
+  },
+  "m3d9ded7fde12": {
+    "zh": "当前实例：",
+    "en": "Current instance: "
+  },
+  "m27ca41a74a37": {
+    "zh": "从这里出发",
+    "en": "Start here"
+  },
+  "m7fddf6d3ff0d": {
+    "zh": "导出项目身份与启用状态。手动添加的模组通过文件哈希识别；不会上传文件，也不会复制旧版本 JAR。",
+    "en": "Export project identities and enabled states. Manually added mods are identified by file hash. Files are not uploaded and old JARs are not copied."
+  },
+  "m6572144dc27e": {
+    "zh": "已导出 {0} 项，识别到 {1} 个 Modrinth 项目。",
+    "en": "Exported {0} items; identified {1} Modrinth projects."
+  },
+  "m6e261a66df21": {
+    "zh": "导出模组清单",
+    "en": "Export mod list"
+  },
+  "m6deb3ea9c343": {
+    "zh": "迁入当前实例",
+    "en": "Migrate into this instance"
+  },
+  "mcf667358157b": {
+    "zh": "自动下载兼容版本和必需依赖，保留源实例。未识别、无兼容版本和依赖冲突会跳过；结果保存在实例的 migration-report.json。",
+    "en": "Download compatible versions and required dependencies while preserving the source instance. Unrecognized projects, unavailable versions and conflicts are skipped. Results are saved as migration-report.json."
+  },
+  "m6a017a46452e": {
+    "zh": "选择迁移清单",
+    "en": "Choose migration list"
+  },
+  "maf26e7ade361": {
+    "zh": "匹配并迁移 →",
+    "en": "Match and migrate →"
+  },
+  "m2ecee2550e38": {
+    "zh": "正在匹配兼容项目…",
+    "en": "Matching compatible projects…"
+  },
+  "md0356fd00208": {
+    "zh": "取消当前任务",
+    "en": "Cancel current task"
+  },
+  "m6f746319aabf": {
+    "zh": "迁移报告",
+    "en": "Migration report"
+  },
+  "m053461ce86d2": {
+    "zh": "成功",
+    "en": "Succeeded"
+  },
+  "md79b1d0e5c61": {
+    "zh": "已结束",
+    "en": "Finished"
+  },
+  "md4ffc5692339": {
+    "zh": "已安装 {0}",
+    "en": "Installed {0}"
+  },
+  "m71e95b289aad": {
+    "zh": "已跳过",
+    "en": "Skipped"
+  },
+  "m2eaa3042b4ea": {
+    "zh": "读取并识别文件…",
+    "en": "Reading and identifying files…"
+  },
+  "mc0f62d032e80": {
+    "zh": "导入本地模组…",
+    "en": "Import local mods…"
+  },
+  "mb4b983a63096": {
+    "zh": "通过文件哈希匹配 Modrinth 来源（不上传文件）",
+    "en": "Match Modrinth projects using file hashes (no file uploads)"
+  },
+  "ma283e9ef78d4": {
+    "zh": "导入到「",
+    "en": "Import to “"
+  },
+  "m4cacba0d8a0d": {
+    "zh": "版本未识别",
+    "en": "Version not identified"
+  },
+  "m0b5e388815af": {
+    "zh": "加载器未识别",
+    "en": "Loader not identified"
+  },
+  "ma15794ac6834": {
+    "zh": "导入后启用（取消勾选可先停用保存，补齐依赖后再启用）",
+    "en": "Enable after import (uncheck to keep disabled until dependencies are ready)"
+  },
+  "m5fa5f974d63d": {
+    "zh": "确认导入到「",
+    "en": "Confirm import to “"
+  },
+  "m827c136302f2": {
+    "zh": "新增并启用",
+    "en": "Add and enable"
+  },
+  "mf596d89084ba": {
+    "zh": "新增并停用",
+    "en": "Add disabled"
+  },
+  "m7f3cc89b2fd9": {
+    "zh": "原始文件保留。导入后可在“内容操作记录与恢复”中恢复到导入前；存档和配置不受影响。",
+    "en": "Original files are kept. Use Content history and recovery to undo the import. Worlds and configuration are unaffected."
+  },
+  "mc770953200bc": {
+    "zh": "正在检查所选依赖…",
+    "en": "Checking selected dependencies…"
+  },
+  "m4a8d6841b402": {
+    "zh": "确认导入",
+    "en": "Confirm import"
+  },
+  "m26bff7125c63": {
+    "zh": "取消导入",
+    "en": "Cancel import"
+  },
+  "m11910d1ed7c4": {
+    "zh": "检查完成。请逐项勾选需要更新的模组；锁定项不会自动更新。",
+    "en": "Check complete. Select the mods you want to update. Locked versions are not updated automatically."
+  },
+  "m77f3a778b9c3": {
+    "zh": "模组更新与恢复",
+    "en": "Mod updates and recovery"
+  },
+  "mbd2edcaffe24": {
+    "zh": "按当前游戏与加载器查找兼容版本。更新会保留启停状态，并备份被替换文件。手动导入、未识别来源的模组需自行更新。",
+    "en": "Find versions compatible with this game and loader. Updates preserve enabled states and back up replaced files. Unidentified manual imports need manual updates."
+  },
+  "m3b83ff6a70ab": {
+    "zh": "检查模组更新",
+    "en": "Check mod updates"
+  },
+  "m4ff9a3f67bde": {
+    "zh": "包含测试版和预览版",
+    "en": "Include beta and alpha versions"
+  },
+  "me537b2c882d6": {
+    "zh": "刷新恢复记录",
+    "en": "Refresh recovery records"
+  },
+  "m60a4edf3f544": {
+    "zh": "此实例没有可识别的 Modrinth 模组。",
+    "en": "No identifiable Modrinth mods in this instance."
+  },
+  "md5f527cb73f9": {
+    "zh": "更新 ",
+    "en": "Update "
+  },
+  "m7891215d8d1a": {
+    "zh": "暂无更新",
+    "en": "No update"
+  },
+  "m99cab93cc138": {
+    "zh": " · 保持停用",
+    "en": " · Keep disabled"
+  },
+  "mc934144576af": {
+    "zh": "版本锁定设置已提交，请重新检查更新。",
+    "en": "Version lock saved. Check for updates again."
+  },
+  "mafbec5cb07d8": {
+    "zh": "锁定版本",
+    "en": "Lock version"
+  },
+  "mc15bc169f5de": {
+    "zh": "更新「",
+    "en": "Update “"
+  },
+  "m156219e305f6": {
+    "zh": "未安装",
+    "en": "Not installed"
+  },
+  "m238d96c18db9": {
+    "zh": "替换版本",
+    "en": "Replace version"
+  },
+  "mbb460158555d": {
+    "zh": "新增依赖",
+    "en": "Add dependency"
+  },
+  "m118ad423bc02": {
+    "zh": "新版本的必需依赖默认勾选；上一版本的跳过记录不会自动沿用到新版本。",
+    "en": "Required dependencies for a new version start selected. Exceptions from the old version are not carried forward automatically."
+  },
+  "m7eba30e7de48": {
+    "zh": "· 可选依赖",
+    "en": " · Optional dependencies"
+  },
+  "m9935f9adb09d": {
+    "zh": "已手动跳过必需依赖，可能导致加载失败。",
+    "en": "Required dependencies were manually skipped. Loading may fail."
+  },
+  "mcf9de43581c9": {
+    "zh": "更新任务已开始，可在下方或任务中心查看进度。完成后到“操作记录与恢复”查看。",
+    "en": "Update started. View progress below or in Tasks, then review Content history and recovery."
+  },
+  "md76bf4c3fe00": {
+    "zh": "备份并更新所选模组",
+    "en": "Back up and update selected mods"
+  },
+  "m06f715b17b31": {
+    "zh": "恢复内容操作之前 ·",
+    "en": "Restore before content change · "
+  },
+  "m6016bf63b0ff": {
+    "zh": "条记录",
+    "en": " records"
+  },
+  "me31c27fd86ee": {
+    "zh": "只有模组清单仍与该次更新或批量操作完成时一致，才能直接恢复。存档和配置不会被还原。",
+    "en": "Direct recovery requires the mod manifest to match the state after that update or batch operation. Worlds and configuration are not restored."
+  },
+  "m077b67ec9c85": {
+    "zh": "恢复任务已开始，请查看任务进度。",
+    "en": "Recovery started. Check task progress."
+  },
+  "m50a71e2d4407": {
+    "zh": "恢复此更新之前的文件",
+    "en": "Restore files from before this update"
+  },
+  "mdf3530821f55": {
+    "zh": "清单已变化",
+    "en": "Manifest changed"
+  },
+  "ma8b6c39dcabf": {
+    "zh": "已安装",
+    "en": "Installed"
+  },
+  "ma56bece55b48": {
+    "zh": "未完成，可继续安装",
+    "en": "Incomplete; can continue"
+  },
+  "m649b60c95309": {
+    "zh": "等待安装",
+    "en": "Waiting for installation"
+  },
+  "m694b71bc8013": {
+    "zh": "处理中",
+    "en": "Working"
+  },
+  "m28384d7afd2e": {
+    "zh": "失败",
+    "en": "Failed"
+  },
+  "mf3b36064e866": {
+    "zh": "新的冒险",
+    "en": "New adventure"
+  },
+  "m1644a8fab150": {
+    "zh": "已读取 {0} 个官方版本。",
+    "en": "Loaded {0} official versions."
+  },
+  "ma89eec16cc17": {
+    "zh": "“{0}”已创建。下一步下载游戏文件并准备 Java。",
+    "en": "“{0}” created. Next, download game files and prepare Java."
+  },
+  "m96163058cd1c": {
+    "zh": "请在 AMBER 桌面版中运行",
+    "en": "Use the AMBER desktop app"
+  },
+  "m91ef478af2f0": {
+    "zh": "桌面版提供完整原版下载、Java 检测与自动安装、离线账号启动和游戏日志。浏览器预览无法启动本机进程。",
+    "en": "The desktop app downloads game files, finds and installs Java, launches offline accounts and displays game logs. Browser previews cannot start local processes."
+  },
+  "m5893b779120d": {
+    "zh": "运行最新开发包中的 AMBER.exe，即可进入真实实例库。",
+    "en": "Run AMBER.exe from the latest desktop package to access your instances."
+  },
+  "mcb8524f99fca": {
+    "zh": "Windows x64 · 多加载器 · 独立存档与配置",
+    "en": "Windows x64 · Multiple loaders · Separate worlds and configuration"
+  },
+  "me4c138e3fe3b": {
+    "zh": "检测到上次中断的任务",
+    "en": "Interrupted task detected"
+  },
+  "mc5e7a6abb86b": {
+    "zh": "配置未完成，请继续安装",
+    "en": "Configuration incomplete; continue installation"
+  },
+  "mfe4d42eb71b7": {
+    "zh": "已将 {0} 个未提交文件保留至 content-recovery，保留 {1} 个已变化文件供检查",
+    "en": "Preserved {0} uncommitted files in content-recovery and {1} changed files for inspection"
+  },
+  "md3ed06cfa422": {
+    "zh": "创建新实例",
+    "en": "Create new instance"
+  },
+  "m5ca6ecfa4e1f": {
+    "zh": "读取官方版本目录",
+    "en": "Load official versions"
+  },
+  "m02784d9ae7ae": {
+    "zh": "{0} 个版本",
+    "en": "{0} versions"
+  },
+  "m31356ef2dfbd": {
+    "zh": "按需连接 Mojang 官方服务",
+    "en": "Connects to Mojang services when needed"
+  },
+  "m2d67efff70ff": {
+    "zh": "版本类型",
+    "en": "Version type"
+  },
+  "m699ea2523018": {
+    "zh": "快照",
+    "en": "Snapshot"
+  },
+  "mbe58a95877a7": {
+    "zh": "全部（含历史版本）",
+    "en": "All, including historical versions"
+  },
+  "mc3a07ee19477": {
+    "zh": "筛选版本",
+    "en": "Filter versions"
+  },
+  "m36023baf2833": {
+    "zh": "例如 1.21.1",
+    "en": "For example, 1.21.1"
+  },
+  "m07b0e6eadae1": {
+    "zh": "目标版本",
+    "en": "Target version"
+  },
+  "m06ad304222eb": {
+    "zh": "选择版本",
+    "en": "Choose version"
+  },
+  "m46354d1cb7df": {
+    "zh": "创建本地实例",
+    "en": "Create local instance"
+  },
+  "md7b9ddcb9e12": {
+    "zh": "目录与日志",
+    "en": "Folder and logs"
+  },
+  "m53606088632e": {
+    "zh": "加载器 ·",
+    "en": "Loader · "
+  },
+  "m567c27faa1ba": {
+    "zh": "先准备 Java，再安装加载器，最后点击“安装 / 继续下载”。更改加载器会使旧安装状态失效；模组不会自动转换。",
+    "en": "Prepare Java, install the loader, then select Install / continue download. Changing loaders invalidates the old installation state; mods are not converted automatically."
+  },
+  "m7a2bd8b6cb0e": {
+    "zh": "加载器",
+    "en": "Loader"
+  },
+  "md8297e3b1e31": {
+    "zh": "自动匹配兼容版本",
+    "en": "Match compatible versions automatically"
+  },
+  "m5f76b2bf82dd": {
+    "zh": "版本",
+    "en": "Version"
+  },
+  "mbff59779d524": {
+    "zh": " · 稳定",
+    "en": " · Stable"
+  },
+  "mec1a014d5bad": {
+    "zh": " · 测试",
+    "en": " · Beta"
+  },
+  "m2c000bd5c0e3": {
+    "zh": "替换为此加载器",
+    "en": "Replace with this loader"
+  },
+  "m7f1ef711ee20": {
+    "zh": "附加 LiteLoader",
+    "en": "Add LiteLoader"
+  },
+  "mea52726970c0": {
+    "zh": "移除附加的 LiteLoader",
+    "en": "Remove additional LiteLoader"
+  },
+  "m5059e1432207": {
+    "zh": "切回原版",
+    "en": "Switch to vanilla"
+  },
+  "m36a81c895e7c": {
+    "zh": "OptiFine：在官网下载与当前 Minecraft 对应的 JAR，可独立安装（替换当前加载器），或按官网兼容表导入为 Forge 模组。独立安装后需重新安装游戏文件；AMBER 不分发 OptiFine 文件。",
+    "en": "Download the matching OptiFine JAR from its official website. Install it independently to replace the loader, or import it as a Forge mod according to its compatibility table. Independent installation requires game files to be installed again. AMBER does not distribute OptiFine."
+  },
+  "m47b50b889b2b": {
+    "zh": "OptiFine 官网",
+    "en": "OptiFine website"
+  },
+  "m2a9010137d7b": {
+    "zh": "已导入 ",
+    "en": "Imported "
+  },
+  "md18e5f435633": {
+    "zh": "；可在内容管理中启用或关闭。",
+    "en": "; enable or disable it in content management."
+  },
+  "m986fa8507be4": {
+    "zh": "作为 Forge 模组导入",
+    "en": "Import as a Forge mod"
+  },
+  "m2c268d837280": {
+    "zh": "独立安装 OptiFine",
+    "en": "Install OptiFine independently"
+  },
+  "m21b92f935759": {
+    "zh": "并发下载",
+    "en": "Concurrent downloads"
+  },
+  "m2d4a2ac123bd": {
+    "zh": "个文件",
+    "en": " files"
+  },
+  "m9b18b1dd94e1": {
+    "zh": "校验 / 修复",
+    "en": "Verify / repair"
+  },
+  "mb23f45e22670": {
+    "zh": "安装 / 继续下载",
+    "en": "Install / continue download"
+  },
+  "m34e370ff54df": {
+    "zh": "个文件通过校验 · 本次传输",
+    "en": " files verified · Transferred this time: "
+  },
+  "m4c27f8e25008": {
+    "zh": "本次传输",
+    "en": "Transferred this time: "
+  },
+  "m537d17f1c531": {
+    "zh": "取消任务",
+    "en": "Cancel task"
+  },
+  "m7ab2a77d57a6": {
+    "zh": "启动游戏",
+    "en": "Launch game"
+  },
+  "mc44d1f3b0a65": {
+    "zh": "启动身份",
+    "en": "Launch identity"
+  },
+  "mc50c494f55bc": {
+    "zh": "离线玩家名称",
+    "en": "Offline player name"
+  },
+  "m6578ff4a6490": {
+    "zh": "游戏进程已启动（PID {0}）。",
+    "en": "Game process started (PID {0})."
+  },
+  "m29e250efb883": {
+    "zh": "正在校验并启动…",
+    "en": "Verifying and launching…"
+  },
+  "m2d185615b116": {
+    "zh": "启动 Minecraft",
+    "en": "Launch Minecraft"
+  },
+  "m370c1721adba": {
+    "zh": "可在“账号”页添加并管理身份。微软及第三方账号在启动前刷新认证；临时离线身份仅用于本地单人游戏与允许离线身份的服务器。",
+    "en": "Manage identities on the Accounts page. Microsoft and third-party authentication is refreshed before launch. Temporary offline identities are for local single-player and servers that allow them."
+  },
+  "m3589fdd7a636": {
+    "zh": "Java 运行时",
+    "en": "Java runtime"
+  },
+  "m9d6fb119f4a4": {
+    "zh": "此版本需要 Java",
+    "en": "This version requires Java "
+  },
+  "ma8d0b984a033": {
+    "zh": "8（旧版）",
+    "en": "8 (legacy)"
+  },
+  "mf1162e46072c": {
+    "zh": "尚未选择；自动准备会优先使用兼容的本机 Java。",
+    "en": "Not selected. Automatic preparation prefers compatible local Java."
+  },
+  "ma13550662fea": {
+    "zh": "重新检测",
+    "en": "Scan again"
+  },
+  "m98a52a80bb96": {
+    "zh": "手动选择 java.exe",
+    "en": "Choose java.exe"
+  },
+  "m3377d3235c9d": {
+    "zh": "检测到的 Java",
+    "en": "Detected Java"
+  },
+  "m5dce1fe15d47": {
+    "zh": "选择兼容运行时",
+    "en": "Choose compatible runtime"
+  },
+  "mb872f43d3b9d": {
+    "zh": "缺少运行时将从 Eclipse Adoptium 下载，使用 SHA-256 校验；不更改系统 Java。",
+    "en": "Missing runtimes are downloaded from Eclipse Adoptium and verified with SHA-256. System Java is not changed."
+  },
+  "m7ef62fbd0bbb": {
+    "zh": "当前实例还没有运行日志。启动游戏后，这里会显示输出。",
+    "en": "No logs yet for this instance. Launch the game to see output here."
+  },
+  "m8ca9e35035d0": {
+    "zh": "游戏日志 ·",
+    "en": "Game log · "
+  },
+  "m1f0eb99b7ed0": {
+    "zh": "运行中",
+    "en": "Running"
+  },
+  "m899df7e24472": {
+    "zh": "已退出",
+    "en": "Exited"
+  },
+  "m206aef655681": {
+    "zh": "异常退出",
+    "en": "Crashed"
+  },
+  "mbbc6e5ffc5fb": {
+    "zh": " · 退出码 {0}",
+    "en": " · Exit code {0}"
+  },
+  "m5b2db72fc58c": {
+    "zh": "等待游戏输出…",
+    "en": "Waiting for game output…"
+  },
+  "mdbd97964f2e8": {
+    "zh": "数据位置：",
+    "en": "Data location: "
+  },
+  "m346ff60e6c7c": {
+    "zh": "读取中…",
+    "en": "Loading…"
+  },
+  "m11e60150fd80": {
+    "zh": "语言与隐私",
+    "en": "Language and privacy"
+  },
+  "m08bb6d730bc9": {
+    "zh": "Language English 中文 隐私 privacy 剪贴板 诊断",
+    "en": "Language English Chinese privacy clipboard diagnostics"
+  },
+  "m8e14d59b28cd": {
+    "zh": "外观与背景",
+    "en": "Appearance and background"
+  },
+  "m5e25eeac284a": {
+    "zh": "主题 浅色 深色 系统 圆角 直角 字体 文字 大小 动画 透明 密度 强调色 图片",
+    "en": "Theme light dark system rounded square font text size animation transparency density accent image"
+  },
+  "mabf2de8d323e": {
+    "zh": "游戏启动",
+    "en": "Game launch"
+  },
+  "mb1230b0eb113": {
+    "zh": "内存 账号 默认 Java",
+    "en": "Memory account default Java"
+  },
+  "m4e15dba2908f": {
+    "zh": "并发 速度 线程",
+    "en": "Concurrent speed threads"
+  },
+  "mbeaaad428de7": {
+    "zh": "自定义布局",
+    "en": "Custom layout"
+  },
+  "m114c955bd2b4": {
+    "zh": "导航 宽度 排序 模块 隐藏",
+    "en": "Navigation width sort modules hide"
+  },
+  "mb7e9179cf05e": {
+    "zh": "数据与引导",
+    "en": "Storage and welcome"
+  },
+  "mce118160b001": {
+    "zh": "位置 文件夹 空间 迁移 首次 新手",
+    "en": "Location folder space migrate first welcome"
+  },
+  "m68724176705e": {
+    "zh": "恢复此组默认值",
+    "en": "Reset this group"
+  },
+  "me0a644e29c4f": {
+    "zh": "设置保存在本机。外观即时生效；下载与内存默认值用于下一次打开的操作界面。",
+    "en": "Settings are saved locally. Appearance changes apply immediately; download and memory defaults apply when you next open the relevant screen."
+  },
+  "m9df5bee316ee": {
+    "zh": "查找设置",
+    "en": "Find settings"
+  },
+  "m44f370d27f87": {
+    "zh": "例如：圆角、内存、数据位置",
+    "en": "For example: rounded, memory, storage"
+  },
+  "m4a48d745e350": {
+    "zh": "设置分组",
+    "en": "Settings groups"
+  },
+  "m08014d5d2a4a": {
+    "zh": "没有匹配设置，请换个关键词。",
+    "en": "No matching settings. Try another keyword."
+  },
+  "m015989e17ebc": {
+    "zh": "微软登录时自动复制验证码",
+    "en": "Automatically copy the Microsoft sign-in code"
+  },
+  "m217cfe7db1e3": {
+    "zh": "跟随系统",
+    "en": "Follow system"
+  },
+  "maa0819dfc4d8": {
+    "zh": "浅色",
+    "en": "Light"
+  },
+  "ma6b75d068032": {
+    "zh": "深色",
+    "en": "Dark"
+  },
+  "m8896ff635500": {
+    "zh": "UI 风格",
+    "en": "Interface style"
+  },
+  "m4e9ab3845935": {
+    "zh": "经典直角",
+    "en": "Classic square"
+  },
+  "mbec7897a0854": {
+    "zh": "柔和圆角",
+    "en": "Soft rounded"
+  },
+  "mf84e05423960": {
+    "zh": "强调色",
+    "en": "Accent color"
+  },
+  "m8aabd7b54bd1": {
+    "zh": "森林绿",
+    "en": "Forest green"
+  },
+  "m089f621992ac": {
+    "zh": "琥珀",
+    "en": "Amber"
+  },
+  "m439d13c0a27f": {
+    "zh": "石板灰",
+    "en": "Slate"
+  },
+  "m78687cb4dd2e": {
+    "zh": "信息密度",
+    "en": "Density"
+  },
+  "m521479cd0b2a": {
+    "zh": "舒适",
+    "en": "Comfortable"
+  },
+  "m5d63d587b0b0": {
+    "zh": "紧凑",
+    "en": "Compact"
+  },
+  "m52826b6a046f": {
+    "zh": "文字大小",
+    "en": "Text size"
+  },
+  "mbf6dbf6fa36e": {
+    "zh": "启用过渡动画（尊重系统减少动态效果设置）",
+    "en": "Enable transitions (respects the system's reduced-motion preference)"
+  },
+  "mfebb67fa8cf7": {
+    "zh": "启动页背景",
+    "en": "Launch background"
+  },
+  "m421e03ad2701": {
+    "zh": "背景只显示在启动区，可调整启动面板和背景按钮的不透明度。导入图片会保存一份本地副本。",
+    "en": "The background appears only in the launch area. Adjust the opacity of its panel and background button. Imported images are copied locally."
+  },
+  "mf4b669c55756": {
+    "zh": "背景",
+    "en": "Background"
+  },
+  "ma02fc578b3ea": {
+    "zh": "预设 · 森林",
+    "en": "Preset · Forest"
+  },
+  "m8680191c002c": {
+    "zh": "纯色 · 无背景",
+    "en": "Solid · No image"
+  },
+  "m0dc111847321": {
+    "zh": "自定义图片",
+    "en": "Custom image"
+  },
+  "m3b69a4214568": {
+    "zh": "选择本地图片…",
+    "en": "Choose local image…"
+  },
+  "mafb939a7ac43": {
+    "zh": "启动面板不透明度 ·",
+    "en": "Launch panel opacity · "
+  },
+  "m57cb1dc19355": {
+    "zh": "100% 为实色，降低后背景会透出；输入框保持清晰。支持 PNG、JPEG、WebP，最大 20 MB。不上传图片。",
+    "en": "100% is opaque. Lower values reveal the background while inputs stay clear. PNG, JPEG and WebP up to 20 MB. Images are not uploaded."
+  },
+  "md1f63f6aed4e": {
+    "zh": "选择“使用全局默认”的实例会跟随这里的设置；独立设置的实例不受影响。",
+    "en": "Instances using global defaults follow these settings. Instance-specific overrides are unchanged."
+  },
+  "m227e032d9142": {
+    "zh": "默认游戏内存（GB）",
+    "en": "Default game memory (GB)"
+  },
+  "m7eec651a740e": {
+    "zh": "默认账号",
+    "en": "Default account"
+  },
+  "m71cbea21e191": {
+    "zh": "Java 在各实例的“版本设置与修复”中管理。",
+    "en": "Manage Java under each instance's version settings and repair page."
+  },
+  "m61bad91f1e8a": {
+    "zh": "同时下载的文件数",
+    "en": "Simultaneous file downloads"
+  },
+  "m3a116815bc9d": {
+    "zh": "个",
+    "en": " items"
+  },
+  "m5c4e00cd2f4c": {
+    "zh": " · 默认",
+    "en": " · Default"
+  },
+  "m3be0774675f3": {
+    "zh": "网络不稳定时可降低并发数，下次下载时生效。",
+    "en": "Reduce concurrency if your network is unstable. Applies to the next download."
+  },
+  "m3608453a4415": {
+    "zh": "重新查看入门引导",
+    "en": "Show welcome guide again"
+  },
+  "mf3b53dd6247c": {
+    "zh": "开放接口与场景交互",
+    "en": "Extension interfaces and scenes"
+  },
+  "md2d6caa2ddc3": {
+    "zh": "当前提供完整的传统操作界面。场景适配接口已预留，3D 场景渲染与第三方插件系统尚未启用；不会将未实现的接口呈现为可用功能。",
+    "en": "The standard interface is available. Scene integration points are reserved; 3D scenes and third-party script plugins are not enabled."
+  },
+  "md51db0e60727": {
+    "zh": "隐私与数据",
+    "en": "Privacy and data"
+  },
+  "m4d1e489709ba": {
+    "zh": "账号令牌由当前 Windows 用户的系统加密保护。微软密码不经过 AMBER；第三方账号密码只发送至你填写的认证地址。",
+    "en": "Account tokens are encrypted for the current Windows user. Microsoft passwords never pass through AMBER. Third-party passwords are sent only to the authentication address you enter."
+  },
+  "m8b0124d91112": {
+    "zh": "账号库",
+    "en": "Account store"
+  },
+  "m08a856f8dad6": {
+    "zh": "实例、日志与缓存",
+    "en": "Instances, logs and caches"
+  },
+  "m9dd212425ccb": {
+    "zh": "升级前配置备份",
+    "en": "Pre-upgrade configuration backups"
+  },
+  "m2964d23b29d3": {
+    "zh": "在“账号”页移除此设备的账号。旧升级备份可能仍含加密账号库，必要时也应清理；本地移除不会撤销服务端授权。",
+    "en": "Remove device accounts on the Accounts page. Older upgrade backups may retain an encrypted account store; clean those if necessary. Local removal does not revoke server authorization."
+  },
+  "m6197a80cfe1e": {
+    "zh": "游戏和模组可能在原始日志中写入个人信息。AMBER 不自动上传日志；复制错误时会尽量脱敏，分享前仍请自行检查。不要公开原始账号库或完整日志。",
+    "en": "Games and mods may write personal information to raw logs. AMBER does not upload logs automatically. Copied errors are redacted on a best-effort basis; review before sharing. Do not publish account stores or full raw logs."
+  },
+  "ma2688247e58a": {
+    "zh": "预览诊断摘要",
+    "en": "Preview diagnostic summary"
+  },
+  "m8158ce4ace78": {
+    "zh": "以下是将导出的全部字段。不含账号、令牌、实例名称、个人路径或原始日志。",
+    "en": "All exported fields are shown below. Accounts, tokens, instance names, personal paths and raw logs are excluded."
+  },
+  "m10f98535ae54": {
+    "zh": "选择位置并导出",
+    "en": "Choose location and export"
+  },
+  "m1eb05d311508": {
+    "zh": "关闭预览",
+    "en": "Close preview"
+  },
+  "mdb17297b8c41": {
+    "zh": "诊断摘要已保存，不会自动上传。",
+    "en": "Diagnostic summary saved. It will not be uploaded automatically."
+  },
+  "mb8784c8dd563": {
+    "zh": "重试",
+    "en": "Retry"
+  },
+  "m88e2dfb35ac8": {
+    "zh": "前往模组管理",
+    "en": "Manage mods"
+  },
+  "m0cab348a9191": {
+    "zh": "Java 与版本修复",
+    "en": "Java and version repair"
+  },
+  "mf406f8bb1698": {
+    "zh": "调整启动内存",
+    "en": "Adjust launch memory"
+  },
+  "mf89c1ac122d2": {
+    "zh": "查看运行日志",
+    "en": "View game logs"
+  },
+  "m1932da4d4dba": {
+    "zh": "详细信息",
+    "en": "Details"
+  },
+  "m8f6f8d979c98": {
+    "zh": "已复制",
+    "en": "Copied"
+  },
+  "m3ee33987e7d0": {
+    "zh": "复制不可用，请选中上方文字手动复制",
+    "en": "Copy unavailable. Select and copy the text above manually."
+  },
+  "m092894a3fee6": {
+    "zh": "复制详细信息",
+    "en": "Copy details"
+  },
+  "me01fa0ce6349": {
+    "zh": "正在读取许可证…",
+    "en": "Loading license…"
+  },
+  "m68d2afd5b188": {
+    "zh": "许可证读取失败；完整文件随项目 LICENSE 提供。",
+    "en": "Could not load the license. The complete text is in LICENSE."
+  },
+  "m13b8f33dc4ff": {
+    "zh": "· 本地测试版",
+    "en": " · Prerelease"
+  },
+  "mf965fa8afae5": {
+    "zh": "为每一次冒险，保留自由选择的空间。",
+    "en": "Keep the freedom to choose your next adventure."
+  },
+  "m9cdac416e9b4": {
+    "zh": "项目许可",
+    "en": "Project license"
+  },
+  "m72d9e7880094": {
+    "zh": "开发阶段",
+    "en": "Development stage"
+  },
+  "mb12a31dd6a32": {
+    "zh": "多加载器 · Modrinth 内容商城 · 账号与 Java 管理",
+    "en": "Multiple loaders · Modrinth content · Accounts and Java management"
+  },
+  "mbcb3eed21365": {
+    "zh": "帮助与诊断",
+    "en": "Help and diagnostics"
+  },
+  "m7dea61cab146": {
+    "zh": "遇到问题时可导出诊断摘要。不包含账号、令牌、实例名称、本机路径或原始日志；不会自动上传。",
+    "en": "Export a diagnostic summary when reporting a problem. It excludes accounts, tokens, instance names, local paths and raw logs, and is never uploaded automatically."
+  },
+  "mfff190ae5981": {
+    "zh": "诊断摘要已保存。你可以检查内容后自行附在反馈中。",
+    "en": "Diagnostic summary saved. Review it before attaching it to a report."
+  },
+  "mbe9be02e4c6f": {
+    "zh": "导出诊断摘要",
+    "en": "Export diagnostic summary"
+  },
+  "mcf402756cc7a": {
+    "zh": "支持 POP 倡议",
+    "en": "Supporting the POP initiative"
+  },
+  "mfde130df0e0f": {
+    "zh": "渐进开放，保留选择。以完整的默认体验为起点，逐步开放扩展接口、数据迁移和可替换的服务。",
+    "en": "Progressively open, with room to choose. Start with a complete default experience, then expand interfaces, data migration and replaceable services."
+  },
+  "mc628238e08a6": {
+    "zh": "倡议标识由项目发起者提供。此标识表达项目方向，不表示已完成全部原则的实现或通过第三方认证。",
+    "en": "The initiative mark was provided by the project founder. It expresses direction, not full implementation or third-party certification."
+  },
+  "md534b4970310": {
+    "zh": "阅读 MPL-2.0 许可证",
+    "en": "Read the MPL-2.0 license"
+  },
+  "m9df80d18bfd4": {
+    "zh": "第三方素材与许可",
+    "en": "Third-party assets and licenses"
+  },
+  "m3e1ecc58ee2d": {
+    "zh": "项目自有源码采用 MPL-2.0。更纱黑体使用 SIL Open Font License 1.1；React、Phosphor 与 Electron 等依赖保留各自许可。POP 标识、模组图标及其他第三方标识不因随项目分发而自动转为 MPL-2.0。完整说明见 THIRD_PARTY_NOTICES.md。",
+    "en": "Project-owned code uses MPL-2.0. Sarasa uses SIL Open Font License 1.1; React, Phosphor, Electron and other dependencies retain their licenses. POP, mod icons and other third-party marks do not become MPL-2.0 simply through distribution. See THIRD_PARTY_NOTICES.md."
+  },
+  "m60b12c09f924": {
+    "zh": "：实例管理与检查、本地模组导入、统一内容操作记录、收藏与最近启动。",
+    "en": ": Instance checks, local mod imports, shared content history, favorites and recent launches."
+  },
+  "m558f727c56df": {
+    "zh": "选择选项",
+    "en": "Choose an option"
+  },
+  "m86b6d0d63062": {
+    "zh": "正在读取…",
+    "en": "Loading…"
+  },
+  "mdb092fa9115c": {
+    "zh": "读取失败，点击重试",
+    "en": "Failed to load; retry"
+  },
+  "mda590a8fe3ce": {
+    "zh": "请选择",
+    "en": "Choose…"
+  },
+  "mbb7486f4410f": {
+    "zh": "选项",
+    "en": "Options"
+  },
+  "me8e730c6f5eb": {
+    "zh": "输入关键词筛选…",
+    "en": "Type to filter…"
+  },
+  "m9bd45302728c": {
+    "zh": "清空选项搜索",
+    "en": "Clear option search"
+  },
+  "m1ef3de06b32e": {
+    "zh": "清空",
+    "en": "Clear"
+  },
+  "m4360b2d01556": {
+    "zh": "正在获取兼容选项…",
+    "en": "Loading compatible options…"
+  },
+  "mdf7392cc96be": {
+    "zh": "重新读取",
+    "en": "Reload"
+  },
+  "m392652b93288": {
+    "zh": "没有匹配项，请换个关键词",
+    "en": "No matches. Try another keyword."
+  },
+  "md62e64a05006": {
+    "zh": "清空筛选",
+    "en": "Clear filter"
+  },
+  "m2b7ea5f48264": {
+    "zh": "↑ ↓ 选择 · Enter 确认 · Esc 关闭",
+    "en": "↑ ↓ Select · Enter Confirm · Esc Close"
+  },
+  "mec7758c3fd3b": {
+    "zh": "快照 / 预览版可能不稳定，建议使用独立存档。",
+    "en": "Snapshots may be unstable. Use separate worlds."
+  },
+  "mf77fa65fe03e": {
+    "zh": "远古版本的 Java 与加载器兼容性有限。",
+    "en": "Ancient versions have limited Java and loader compatibility."
+  },
+  "mb58ca6d47a1d": {
+    "zh": "正式版 · 适合日常游玩",
+    "en": "Release · Suitable for regular play"
+  },
+  "m3fd47edce45b": {
+    "zh": "关闭",
+    "en": "Close"
+  },
+  "m1a50c7c98a7a": {
+    "zh": "实例已安装完成",
+    "en": "Instance installed"
+  },
+  "m86b2db40130b": {
+    "zh": "游戏与 Java 已就绪。接下来可以添加内容，或选择账号启动游戏。",
+    "en": "Game files and Java are ready. Add content or choose an account and launch."
+  },
+  "m8bc651eea6b0": {
+    "zh": "添加模组与内容",
+    "en": "Add mods and content"
+  },
+  "m47f0d207c9b0": {
+    "zh": "选择 Minecraft 版本",
+    "en": "Choose Minecraft version"
+  },
+  "md5ff1a50a56c": {
+    "zh": "配置 ",
+    "en": "Configure "
+  },
+  "mc20938baac5e": {
+    "zh": "先选择游戏版本，再配置加载器和可选组件。",
+    "en": "Choose a game version, then its loader and optional components."
+  },
+  "me67d424c4689": {
+    "zh": "逐项选择组件；不可组合的选项会说明原因并禁用。",
+    "en": "Choose components individually. Incompatible options are disabled with an explanation."
+  },
+  "me7317522d3d1": {
+    "zh": "恢复默认名称",
+    "en": "Restore default name"
+  },
+  "mcff88e9fc212": {
+    "zh": "更换版本",
+    "en": "Change version"
+  },
+  "m204dc291041b": {
+    "zh": "与已选组件不兼容",
+    "en": "Incompatible with selected components"
+  },
+  "m8596ac721b8b": {
+    "zh": "读取兼容发行版…",
+    "en": "Loading compatible releases…"
+  },
+  "m29b3a1b57e5b": {
+    "zh": "获取失败",
+    "en": "Could not load"
+  },
+  "m0ee65faf62fa": {
+    "zh": "此游戏版本没有可用发行版",
+    "en": "No releases for this game version"
+  },
+  "m3f4ebc4aad97": {
+    "zh": "已选择",
+    "en": "Selected"
+  },
+  "m1a8551fba342": {
+    "zh": "不安装",
+    "en": "Do not install"
+  },
+  "m8ee7ca29c1fb": {
+    "zh": "官网下载 ↗",
+    "en": "Official download ↗"
+  },
+  "m29a7ef652c9b": {
+    "zh": "选择官方 JAR",
+    "en": "Choose official JAR"
+  },
+  "m0bd9aa7c9cb4": {
+    "zh": "与 Forge 组合时，请匹配官网注明的 Forge 版本。",
+    "en": "For Forge combinations, match the Forge version listed on the official website."
+  },
+  "me0e704b3e860": {
+    "zh": "发行版",
+    "en": "Release"
+  },
+  "ma5eee62d85a9": {
+    "zh": " 发行版",
+    "en": " releases"
+  },
+  "me242b08a9ed5": {
+    "zh": "稳定发行版",
+    "en": "Stable releases"
+  },
+  "ma3324d8b17f8": {
+    "zh": "其他发行版",
+    "en": "Other releases"
+  },
+  "m97c213f9ba07": {
+    "zh": "可选：迁移已有模组",
+    "en": "Optional: migrate existing mods"
+  },
+  "m5269ce21c7b0": {
+    "zh": "自动寻找新版本对应的模组，跳过项保留在报告中。",
+    "en": "Find mods for the new version automatically. Skipped items are recorded in the report."
+  },
+  "m87ffc6b4a55a": {
+    "zh": "选择模组清单",
+    "en": "Choose mod list"
+  },
+  "m92bc52d9714b": {
+    "zh": "安装摘要",
+    "en": "Installation summary"
+  },
+  "m229d9dfd5fbc": {
+    "zh": "即将安装",
+    "en": "To be installed"
+  },
+  "m337483280e7d": {
+    "zh": "原版 · 无加载器",
+    "en": "Vanilla · No loader"
+  },
+  "m286240073f61": {
+    "zh": "游戏文件与所需 Java 将自动准备。",
+    "en": "Game files and the required Java runtime will be prepared automatically."
+  },
+  "m613d0f81d670": {
+    "zh": "在原实例上重试",
+    "en": "Retry on the existing instance"
+  },
+  "mc48d885490a5": {
+    "zh": "打开保留的实例 →",
+    "en": "Open preserved instance →"
+  },
+  "m3e09e19107b5": {
+    "zh": "本次重试会跳过已完成步骤。关闭 AMBER 后可在版本设置中继续安装。",
+    "en": "Retry skips completed steps. After restarting AMBER, continue installation from instance settings."
+  },
+  "m08f47816c18b": {
+    "zh": "正在停止安装，请等待当前操作安全结束…",
+    "en": "Stopping installation. Waiting for the current operation to finish safely…"
+  },
+  "mad8c6826d8c4": {
+    "zh": "正在准备配置…",
+    "en": "Preparing configuration…"
+  },
+  "m0233255f928e": {
+    "zh": "取消整个安装",
+    "en": "Cancel entire installation"
+  },
+  "mcabdb276b055": {
+    "zh": "← 上一步",
+    "en": "← Previous"
+  },
+  "md18ed1a02311": {
+    "zh": "已选：",
+    "en": "Selected: "
+  },
+  "m979d4fa0790b": {
+    "zh": "请选择版本",
+    "en": "Choose a version"
+  },
+  "mfc08f57a54c0": {
+    "zh": "正在安装…",
+    "en": "Installing…"
+  },
+  "m6c0c4fc01a7e": {
+    "zh": "下一步：配置组件 →",
+    "en": "Next: components →"
+  },
+  "m2479d24f575e": {
+    "zh": "创建并安装 →",
+    "en": "Create and install →"
+  },
+  "m0cea8a6623f9": {
+    "zh": "游戏数据位置",
+    "en": "Game data location"
+  },
+  "ma7a1a6df87c3": {
+    "zh": "实例、存档、Java、下载缓存和备份集中保存在这里。",
+    "en": "Instances, worlds, Java, download caches and backups are stored here."
+  },
+  "m686dc75c7330": {
+    "zh": "所在磁盘可用空间：",
+    "en": "Free disk space: "
+  },
+  "m357a2279856a": {
+    "zh": "选择新的空文件夹…",
+    "en": "Choose a new empty folder…"
+  },
+  "m28c951b84e5d": {
+    "zh": "新位置：",
+    "en": "New location: "
+  },
+  "md2a9c6ee36b9": {
+    "zh": "复制并校验成功后自动重启。旧目录保留，不覆盖目标文件。请先退出所有游戏；迁移期间请勿修改数据目录。",
+    "en": "AMBER restarts after copying and verification. The original folder is kept and destination files are not overwritten. Close all games and do not change the data directory during migration."
+  },
+  "mab28035b06ec": {
+    "zh": "正在复制并校验，请勿退出…",
+    "en": "Copying and verifying. Keep AMBER open…"
+  },
+  "mdbd39d207689": {
+    "zh": "迁移数据并重启 AMBER",
+    "en": "Move data and restart AMBER"
+  },
+  "m693ef34e067d": {
+    "zh": "先为游戏安个家",
+    "en": "Choose a home for your games"
+  },
+  "m09047393c604": {
+    "zh": "选择你的游戏身份",
+    "en": "Choose your player identity"
+  },
+  "m7a1f9a31d700": {
+    "zh": "准备好创建第一个实例",
+    "en": "Ready to create your first instance"
+  },
+  "mc5f8c88fc35e": {
+    "zh": "默认目录可以直接使用，也可以迁移到其他磁盘。",
+    "en": "Use the default folder or move game data to another disk."
+  },
+  "m08e5d06c39c0": {
+    "zh": "可以先创建离线账号体验单人游戏。微软与第三方账号在“账号”页面添加。",
+    "en": "Create an offline account for single-player, or add Microsoft and third-party accounts on the Accounts page."
+  },
+  "mcb0185062318": {
+    "zh": "例如 AmberPlayer",
+    "en": "For example, AmberPlayer"
+  },
+  "m57e2d8f6cb5a": {
+    "zh": "使用 3–16 位英文字母、数字或下划线。也可以稍后添加账号。",
+    "en": "Use 3–16 English letters, digits or underscores. You can also add an account later."
+  },
+  "mdaab50b65cb0": {
+    "zh": "选择 Minecraft 版本和加载器，AMBER 会准备 Java 并下载游戏。中途退出后可以在任务中心继续。",
+    "en": "Choose Minecraft and a loader. AMBER prepares Java and downloads the game. If interrupted, continue from Tasks."
+  },
+  "m4cf785af77b1": {
+    "zh": "使用当前位置，下一步 →",
+    "en": "Use this location, next →"
+  },
+  "md723bf1643d5": {
+    "zh": "前往添加其他账号",
+    "en": "Add another account type"
+  },
+  "m05e7f3a48087": {
+    "zh": "稍后添加账号",
+    "en": "Add an account later"
+  },
+  "m79fe88018137": {
+    "zh": "保存离线账号并继续",
+    "en": "Save offline account and continue"
+  },
+  "m94fac7f5d0f1": {
+    "zh": "先进入启动器",
+    "en": "Open launcher first"
+  },
+  "mc576a72843c6": {
+    "zh": "创建实例 →",
+    "en": "Create instance →"
+  },
+  "m00b514c36a6c": {
+    "zh": "任务中心",
+    "en": "Task center"
+  },
+  "mdf3a3b64f6b3": {
+    "zh": "查看本次运行中的安装与下载。任务按顺序处理，已有任务时暂不可开始新的安装。取消中会等待文件整理完成，取消后保留已校验文件；关闭 AMBER 后，完整安装计划会保留，可在这里继续。",
+    "en": "View installation and download tasks. Installations run sequentially. Cancellation waits for file cleanup and keeps verified files. Complete installation plans survive restarts and can be continued here."
+  },
+  "m5c55a67935af": {
+    "zh": "全部",
+    "en": "All"
+  },
+  "mb7e3e715f18b": {
+    "zh": "需要处理",
+    "en": "Needs attention"
+  },
+  "m71073216d52f": {
+    "zh": "有操作正在执行，完成或取消整理结束后可继续其他安装。",
+    "en": "An operation is running. Other installations can continue after it finishes or cancellation cleanup completes."
+  },
+  "m3416a0a459e9": {
+    "zh": "正在取消并整理文件",
+    "en": "Cancelling and cleaning up"
+  },
+  "m9e83d0f4628d": {
+    "zh": "正在配置",
+    "en": "Configuring"
+  },
+  "m5e7371bf904b": {
+    "zh": "安装尚未完成",
+    "en": "Installation incomplete"
+  },
+  "madf67c505c0e": {
+    "zh": "准备安装",
+    "en": "Preparing installation"
+  },
+  "m72dcc7e4e5d9": {
+    "zh": "· 已完成",
+    "en": " · Completed "
+  },
+  "m5a9bb7d9d2d7": {
+    "zh": "个阶段",
+    "en": " stages"
+  },
+  "mf11527f1720d": {
+    "zh": "查看此实例的任务阶段与记录",
+    "en": "View this instance's stages and history"
+  },
+  "m9ecf2773d667": {
+    "zh": "{0} / {1} 个文件",
+    "en": "{0} / {1} files"
+  },
+  "m9e519c8f8253": {
+    "zh": "继续完整安装 →",
+    "en": "Continue full installation →"
+  },
+  "m77ab0f954eb6": {
+    "zh": "按当前配置修复游戏 →",
+    "en": "Repair using current configuration →"
+  },
+  "m3bb9cb84250b": {
+    "zh": "查看实例",
+    "en": "View instance"
+  },
+  "m0fe972fa7f49": {
+    "zh": "保留已安装文件，结束此内容任务？",
+    "en": "Keep installed files and end this content task?"
+  },
+  "m65a1e36a1baf": {
+    "zh": "确认结束",
+    "en": "Confirm end"
+  },
+  "m3b9e0b08149c": {
+    "zh": "不再继续此内容任务…",
+    "en": "Stop continuing this content task…"
+  },
+  "m12063e91be24": {
+    "zh": "原安装计划不完整：修复只准备当前组件与游戏，原计划中的模组或整合包需要重新选择。",
+    "en": "The original plan is incomplete. Repair prepares current components and game files only; select the original mods or modpack again."
+  },
+  "md72cd60ee624": {
+    "zh": "当前没有需要处理的任务",
+    "en": "No tasks need attention"
+  },
+  "m8551c20008b7": {
+    "zh": "当前没有任务",
+    "en": "No tasks"
+  },
+  "m9c917bea414c": {
+    "zh": "创建实例或安装内容后，会在这里显示进度。",
+    "en": "Progress appears here after creating an instance or installing content."
+  },
+  "m1f2a74aebf9f": {
+    "zh": "个文件 ·",
+    "en": " files · "
+  },
+  "me6a4cb498852": {
+    "zh": "继续完整安装",
+    "en": "Continue full installation"
+  },
+  "ma6d7a1c530f3": {
+    "zh": "重试此任务",
+    "en": "Retry this task"
+  },
+  "m735aee7ceeb5": {
+    "zh": "前往实例继续处理",
+    "en": "Continue in instance settings"
+  },
+  "m4b2947c3aff3": {
+    "zh": "打开实例 →",
+    "en": "Open instance →"
+  },
+  "mdb8db0530432": {
+    "zh": "查看",
+    "en": "View "
+  },
+  "m291bac1acd02": {
+    "zh": "项处理结果",
+    "en": " results"
+  },
+  "m6707de42c29d": {
+    "zh": "未完成",
+    "en": "Incomplete"
+  },
+  "me47bfe7e4b6d": {
+    "zh": "快照 / 预览版",
+    "en": "Snapshots / previews"
+  },
+  "mb7d92919ff65": {
+    "zh": "远古版本",
+    "en": "Ancient versions"
+  },
+  "md2f5277505a4": {
+    "zh": "✓ 已选择",
+    "en": "✓ Selected"
+  },
+  "m991d0a371ca9": {
+    "zh": "选择 →",
+    "en": "Choose →"
+  },
+  "m50d607cd4058": {
+    "zh": "再显示",
+    "en": "Show another "
+  },
+  "m70dc0131a608": {
+    "zh": "个版本",
+    "en": " versions"
+  },
+  "m3f8a90ca2ba6": {
+    "zh": "搜索 Minecraft 版本",
+    "en": "Search Minecraft versions"
+  },
+  "m732d7f0b87f0": {
+    "zh": "例如 1.21.4 或 1.12.2",
+    "en": "For example, 1.21.4 or 1.12.2"
+  },
+  "mb6f00afa6537": {
+    "zh": "清空搜索",
+    "en": "Clear search"
+  },
+  "me92b3e3bed14": {
+    "zh": "正在读取版本目录…",
+    "en": "Loading version catalog…"
+  },
+  "mf4e711beeeca": {
+    "zh": "找到 {0} 个版本",
+    "en": "Found {0} versions"
+  },
+  "m292d925c257e": {
+    "zh": "共 {0} 个版本",
+    "en": "{0} versions in total"
+  },
+  "m7b954e66849c": {
+    "zh": "Minecraft 版本列表",
+    "en": "Minecraft version list"
+  },
+  "m825f27026631": {
+    "zh": "快速选择",
+    "en": "Quick picks"
+  },
+  "m870241d98eb8": {
+    "zh": "最新正式版",
+    "en": "Latest release"
+  },
+  "me45a9d77ff72": {
+    "zh": "最新快照",
+    "en": "Latest snapshot"
+  },
+  "m0ecec2cb727d": {
+    "zh": "正在读取 Mojang 官方版本目录…",
+    "en": "Loading Mojang's official version catalog…"
+  },
+  "mc4a2b19ef12b": {
+    "zh": "版本目录暂时无法读取。",
+    "en": "Version catalog temporarily unavailable."
+  },
+  "m0aa4f7301dee": {
+    "zh": "没有匹配的版本，请缩短关键词。",
+    "en": "No matching versions. Try a shorter query."
+  },
+  "mebdb11c96d38": {
+    "zh": "目录中暂时没有版本。",
+    "en": "No versions in the catalog."
+  },
+  "ma06ad0e0b197": {
+    "zh": "重新读取版本目录",
+    "en": "Reload version catalog"
+  },
+  "md85aad3cdc30": {
+    "zh": "请输入皮肤站提供的 HTTPS API 根地址（不含查询参数）。",
+    "en": "Enter the provider's HTTPS API base URL without query parameters."
+  },
+  "m1ad57be7c4be": {
+    "zh": "认证服务没有返回有效角色。",
+    "en": "The authentication service did not return a valid profile."
+  },
+  "mc4c218f3ff1a": {
+    "zh": "认证服务没有返回有效令牌。",
+    "en": "The authentication service did not return a valid token."
+  },
+  "maeea324ba9cd": {
+    "zh": "无法解密账号库；请使用创建账号库的 Windows 用户。",
+    "en": "Cannot decrypt the account store. Use the Windows account that created it."
+  },
+  "m0d8a8a9a12bf": {
+    "zh": "系统凭据加密不可用，无法保存账号。",
+    "en": "System credential encryption is unavailable. Accounts cannot be saved."
+  },
+  "md7fa667960b3": {
+    "zh": "账号操作正在处理中。",
+    "en": "An account operation is in progress."
+  },
+  "m2526f8562648": {
+    "zh": "连接失败，请检查网络与服务器地址。",
+    "en": " connection failed. Check the network and server address."
+  },
+  "mfac9eac03d44": {
+    "zh": "返回了无效响应（HTTP ",
+    "en": " returned an invalid response (HTTP "
+  },
+  "m55c5b5b8b456": {
+    "zh": "请输入应用注册页的 Client ID。",
+    "en": "Enter the Client ID from your application registration."
+  },
+  "mbf218ed9e0e7": {
+    "zh": "离线名称应为 3–16 个字母、数字或下划线。",
+    "en": "Offline names must contain 3–16 letters, digits or underscores."
+  },
+  "m45636c3558bc": {
+    "zh": "请先配置 AMBER 的微软 Client ID。",
+    "en": "Configure AMBER's Microsoft Client ID first."
+  },
+  "m62980b85127b": {
+    "zh": "微软验证地址无效。",
+    "en": "Invalid Microsoft verification URL."
+  },
+  "m72b584b3450f": {
+    "zh": "Xbox 账号尚未就绪，请检查 Xbox 个人资料或家庭设置。",
+    "en": "Xbox account is not ready. Check the Xbox profile or family settings."
+  },
+  "mb3d15b46bce3": {
+    "zh": "此账号未返回 Minecraft Java 版所有权。",
+    "en": "Minecraft Java Edition ownership was not returned for this account."
+  },
+  "m0552562e8e91": {
+    "zh": "请输入皮肤站账号和密码。",
+    "en": "Enter your provider account and password."
+  },
+  "m3025ed4daca4": {
+    "zh": "请先在皮肤站创建角色。",
+    "en": "Create a profile with the account provider first."
+  },
+  "m32dd54aceec3": {
+    "zh": "找不到角色。",
+    "en": "Profile not found."
+  },
+  "m1a35f7581724": {
+    "zh": "请先选择账号。",
+    "en": "Choose an account first."
+  },
+  "me84a336fd68c": {
+    "zh": "刷新后的账号身份不一致，请重新登录。",
+    "en": "Account identity changed after refresh. Sign in again."
+  },
+  "mb9f0c1f378b2": {
+    "zh": "服务器返回了不同角色，请重新登录。",
+    "en": "The server returned a different profile. Sign in again."
+  },
+  "mf27534387c23": {
+    "zh": "不支持的版本号。",
+    "en": "Unsupported version number."
+  },
+  "m7b3ed861c4a0": {
+    "zh": "正在检查或下载安装包，请稍候。",
+    "en": "Checking or downloading the installer. Please wait."
+  },
+  "m47e4fa460503": {
+    "zh": "更新服务暂时限流，请稍后再试。",
+    "en": "The update service is rate-limited. Try again later."
+  },
+  "m2994c52e5b79": {
+    "zh": "无法读取更新目录，请检查网络后重试。",
+    "en": "Cannot read the update catalog. Check your network and retry."
+  },
+  "mb22ef502ebfd": {
+    "zh": "更新目录过大。",
+    "en": "Update catalog exceeds the size limit."
+  },
+  "m9e0dd0c4a7ef": {
+    "zh": "更新目录格式无效。",
+    "en": "Invalid update catalog format."
+  },
+  "m2dec12837760": {
+    "zh": "请先检查更新，或等待当前下载结束。",
+    "en": "Check for updates first, or wait for the current download."
+  },
+  "ma7f6f93ee714": {
+    "zh": "已取消更新下载，当前版本不受影响。",
+    "en": "Update download cancelled. The current version is unchanged."
+  },
+  "ma7ead24ca0fb": {
+    "zh": "安装包尚未准备好或校验失败，请重新下载。",
+    "en": "Installer is not ready or failed verification. Download it again."
+  },
+  "m04cece8252e0": {
+    "zh": "设置文件异常，已停止升级：",
+    "en": "Unexpected configuration file. Upgrade stopped: "
+  },
+  "m4faf3ae34fbb": {
+    "zh": "升级备份校验失败。",
+    "en": "Upgrade backup verification failed."
+  },
+  "me2393f350e11": {
+    "zh": "请选择内置的实例图标。",
+    "en": "Choose a built-in instance icon."
+  },
+  "m49c854f0dd9c": {
+    "zh": "authlib-injector 发布信息校验失败。",
+    "en": "authlib-injector release information failed verification."
+  },
+  "m45b3e13dbf07": {
+    "zh": "微软设备授权",
+    "en": "Microsoft device authorization"
+  },
+  "mfc19103ac94b": {
+    "zh": "微软令牌交换",
+    "en": "Microsoft token exchange"
+  },
+  "mb59becd1425f": {
+    "zh": "Xbox 账号认证",
+    "en": "Xbox account authentication"
+  },
+  "m2093a5083b97": {
+    "zh": "Xbox XSTS 授权",
+    "en": "Xbox XSTS authorization"
+  },
+  "m909c2ea04c9f": {
+    "zh": "Minecraft 所有权检查",
+    "en": "Minecraft ownership check"
+  },
+  "m536359ca2945": {
+    "zh": "Minecraft 角色读取",
+    "en": "Minecraft profile lookup"
+  },
+  "mba993f368feb": {
+    "zh": "Minecraft 服务登录",
+    "en": "Minecraft service sign-in"
+  },
+  "m7d17f16273b9": {
+    "zh": "第三方皮肤站认证",
+    "en": "Third-party authentication"
+  },
+  "mc03d7ec760bd": {
+    "zh": "此微软账号尚未创建 Xbox 个人资料，请先在 Xbox 官网完成注册。",
+    "en": "This Microsoft account has no Xbox profile. Create one on the Xbox website."
+  },
+  "m4319c6d04bea": {
+    "zh": "Xbox Live 在此账号所在地区不可用。",
+    "en": "Xbox Live is unavailable in this account's region."
+  },
+  "me38841fa74a1": {
+    "zh": "此账号需要完成 Xbox 年龄验证。",
+    "en": "This account needs Xbox age verification."
+  },
+  "m46839dff2357": {
+    "zh": "此儿童账号需要加入微软家庭，并由监护人检查 Xbox 权限。",
+    "en": "This child account must join a Microsoft family. Ask a guardian to review Xbox permissions."
+  },
+  "mc07c1db30048": {
+    "zh": "授权已过期或被撤销，请重新登录。",
+    "en": "Authorization expired or was revoked. Sign in again."
+  },
+  "mf51d8d2c24ce": {
+    "zh": "用户拒绝了授权，请重新登录并同意授权。",
+    "en": "Authorization was declined. Sign in again and grant permission."
+  },
+  "mbf086f16b56f": {
+    "zh": "登录代码已过期，请获取新代码。",
+    "en": "Login code expired. Request a new code."
+  },
+  "mceca82ad4110": {
+    "zh": "请检查应用 Client ID、公共客户端设置和授权范围。",
+    "en": "Check the application Client ID, public-client settings and permission scope."
+  },
+  "mb77709f0862d": {
+    "zh": "请求过于频繁，请稍后重试。",
+    "en": "Too many requests. Try again later."
+  },
+  "m9b975432f8a8": {
+    "zh": "服务暂时不可用，请稍后重试。",
+    "en": "Service temporarily unavailable. Try again later."
+  },
+  "m8076b54df474": {
+    "zh": "Minecraft 服务拒绝了此应用或账号的访问。AMBER 的 API 申请再次被拒，尚未获批；403 本身不能确认具体拒绝原因。",
+    "en": "Minecraft denied this application or account access. AMBER's API application was rejected again and is not approved. HTTP 403 alone does not identify the exact reason."
+  },
+  "mbae7f265a597": {
+    "zh": "未找到 Java 版角色，请在 Minecraft 官网检查游戏所有权并创建角色。",
+    "en": "No Java Edition profile was found. Check ownership and create a profile on the Minecraft website."
+  },
+  "mbe896c9ce6e5": {
+    "zh": "凭据无效或过期，请重新登录。",
+    "en": "Credentials are invalid or expired. Sign in again."
+  },
+  "m4b14ef94ae88": {
+    "zh": "请检查账号权限及服务状态。",
+    "en": "Check account permissions and service status."
+  },
+  "mfddbd44f811a": {
+    "zh": "{0}失败（HTTP {1}{2}{3}）。{4}",
+    "en": "{0} failed (HTTP {1}{2}{3}). {4}"
+  },
+  "m4361eeb1f43a": {
+    "zh": "请选择预设背景或通过文件选择器导入图片。",
+    "en": "Choose a preset or import an image using the file picker."
+  },
+  "mad43c3e2dcdb": {
+    "zh": "请选择 20 MB 以内的 PNG、JPEG 或 WebP 图片。",
+    "en": "Choose a PNG, JPEG or WebP image no larger than 20 MB."
+  },
+  "m84ebfc82691d": {
+    "zh": "无法读取这张图片，请换用 PNG、JPEG 或 WebP。",
+    "en": "Cannot read this image. Try PNG, JPEG or WebP."
+  },
+  "m64f3746fda53": {
+    "zh": "图片分辨率过大，请缩小到 4000 万像素以内。",
+    "en": "Image resolution is too large. Resize it below 40 million pixels."
+  },
+  "m1c7bc85814a0": {
+    "zh": "不支持的备份类型",
+    "en": "Unsupported backup type"
+  },
+  "m7db51fd5d963": {
+    "zh": "备份实例并校验",
+    "en": "Back up and verify instance"
+  },
+  "m80760239301a": {
+    "zh": "备份不存在",
+    "en": "Backup not found"
+  },
+  "m53239769bc9d": {
+    "zh": "备份清单无效",
+    "en": "Invalid backup manifest"
+  },
+  "m9db7ac21acdc": {
+    "zh": "恢复实例并校验",
+    "en": "Restore and verify instance"
+  },
+  "m898a7d4c98e9": {
+    "zh": " · 恢复",
+    "en": " · Restored"
+  },
+  "m2b6757bcfef3": {
+    "zh": "请选择 1–200 个不同的内容文件。",
+    "en": "Select 1–200 distinct content files."
+  },
+  "m0392a3900657": {
+    "zh": "所选文件已变化或缺失，请刷新列表后重试。",
+    "en": "Selected files changed or are missing. Refresh the list and retry."
+  },
+  "mad9c8a0ae02e": {
+    "zh": "缺失文件记录已变化。",
+    "en": "The missing-file record changed."
+  },
+  "mffc54134df31": {
+    "zh": "不能批量修改链接或非普通文件。",
+    "en": "Links and non-regular files cannot be modified in bulk."
+  },
+  "m883f83f6d939": {
+    "zh": "「{0}」的文件被外部修改，请先检查，未覆盖原文件。",
+    "en": "The file for “{0}” was changed externally. Check it first; the original was not overwritten."
+  },
+  "m98d6e430c2de": {
+    "zh": "指定依赖",
+    "en": "specified dependency"
+  },
+  "m2ca940689db0": {
+    "zh": "操作后，「{0}」将缺少依赖「{1}」。请保留并启用该依赖，或把使用它的模组一起停用 / 移除。",
+    "en": "This operation would leave “{0}” without “{1}”. Keep that dependency enabled, or disable/remove its dependents too."
+  },
+  "mac3ac490584b": {
+    "zh": "「{0}」声明与「{1}」不兼容，请不要同时启用。",
+    "en": "“{0}” declares incompatibility with “{1}”. Do not enable both."
+  },
+  "mfa9cbaf3f8ad": {
+    "zh": "更新后的",
+    "en": "Updated "
+  },
+  "m0a374d4cbb91": {
+    "zh": "操作后的",
+    "en": "Resulting "
+  },
+  "mff9a21d25edd": {
+    "zh": "「{0}」的文件缺失或不可用，请先修复或一起停用。",
+    "en": "The file for “{0}” is missing or unavailable. Repair it or disable it too."
+  },
+  "m2df37126ffaa": {
+    "zh": "手动导入的内容缺少依赖信息，AMBER 无法检查其全部兼容性。",
+    "en": "Manually imported content has incomplete dependency information. AMBER cannot check all compatibility."
+  },
+  "m3df064db786f": {
+    "zh": "批量操作预览已过期，请重新选择。",
+    "en": "Batch preview expired. Make your selection again."
+  },
+  "m13662cf36f1a": {
+    "zh": "内容已变化，请重新预览后再操作。",
+    "en": "Content changed. Preview again before proceeding."
+  },
+  "m985b480921d9": {
+    "zh": "校验并备份所选内容",
+    "en": "Verify and back up selected content"
+  },
+  "m24308e2f6efc": {
+    "zh": "原版",
+    "en": "Vanilla"
+  },
+  "m1d5258efa437": {
+    "zh": "实例目录不可使用链接。",
+    "en": "Instance directories cannot be links."
+  },
+  "m1e9f13089243": {
+    "zh": "官方版本目录请求失败 ({0})",
+    "en": "Official version catalog request failed ({0})"
+  },
+  "m223d91a4204d": {
+    "zh": "版本目录超出允许大小。",
+    "en": "Version catalog exceeds the size limit."
+  },
+  "mee4372613f8e": {
+    "zh": "官方版本目录格式不正确。",
+    "en": "Invalid official version catalog format."
+  },
+  "m05e97e9e985b": {
+    "zh": "版本元数据来源或校验值不正确。",
+    "en": "Invalid version metadata source or checksum."
+  },
+  "m0328ac21d5eb": {
+    "zh": "实例名称需要 1–60 个字符。",
+    "en": "Instance names must contain 1–60 characters."
+  },
+  "m4432724930ec": {
+    "zh": "请先从官方目录选择游戏版本。",
+    "en": "Select a game version from the official catalog first."
+  },
+  "m41184813c3df": {
+    "zh": "版本元数据下载失败 ({0})",
+    "en": "Version metadata download failed ({0})"
+  },
+  "m64036ce966e6": {
+    "zh": "版本元数据校验失败，未创建实例。",
+    "en": "Version metadata verification failed. No instance was created."
+  },
+  "m01af9f98e72a": {
+    "zh": "版本元数据与选择不一致。",
+    "en": "Version metadata does not match your selection."
+  },
+  "m60a25dd99bcd": {
+    "zh": "无效的实例标识。",
+    "en": "Invalid instance identifier."
+  },
+  "m3a3e514ca8da": {
+    "zh": "实例不存在。",
+    "en": "Instance not found."
+  },
+  "mb164a95c9da0": {
+    "zh": "不包含账号、令牌、实例名称、文件路径或原始日志。此报告只保存到你选择的位置，不自动上传。",
+    "en": "Excludes accounts, tokens, instance names, paths and raw logs. Saved only where you choose; never uploaded automatically."
+  },
+  "m4bf4dd322c55": {
+    "zh": "下载地址不在官方来源列表中。",
+    "en": "Download URL is not on the trusted source list."
+  },
+  "m68f6de1133e8": {
+    "zh": "不安全的文件路径。",
+    "en": "Unsafe file path."
+  },
+  "m51ae0b2bb120": {
+    "zh": "文件路径越界。",
+    "en": "File path escapes its permitted directory."
+  },
+  "mc4641756591e": {
+    "zh": "安装目录不可使用链接。",
+    "en": "Installation directories cannot use links."
+  },
+  "ma00df33a0707": {
+    "zh": "目标文件不可使用链接。",
+    "en": "Target files cannot be links."
+  },
+  "m2326dee41d83": {
+    "zh": "下载重定向缺少地址。",
+    "en": "Download redirect has no destination."
+  },
+  "m08d4d7430231": {
+    "zh": "下载请求失败 ({0})",
+    "en": "Download request failed ({0})"
+  },
+  "mc6bde6f0e745": {
+    "zh": "下载重定向次数过多。",
+    "en": "Too many download redirects."
+  },
+  "mfd2b159794bf": {
+    "zh": "下载缺少完整性校验值。",
+    "en": "Download has no integrity checksum."
+  },
+  "ma08e74eca37b": {
+    "zh": "加载器补丁缓存损坏，请重新安装加载器。",
+    "en": "Loader patch cache is damaged. Reinstall the loader."
+  },
+  "m7fe81ab30a63": {
+    "zh": "文件大小超过声明值。",
+    "en": "File exceeds its declared size."
+  },
+  "ma2789843604e": {
+    "zh": "下载文件校验失败。",
+    "en": "Downloaded file failed verification."
+  },
+  "m39932f24fe11": {
+    "zh": "文件",
+    "en": "File"
+  },
+  "mfa2159a6d576": {
+    "zh": "此 Fabric 版本不支持所选游戏。",
+    "en": "This Fabric version does not support the selected game."
+  },
+  "mf5c04298cd70": {
+    "zh": "Fabric 配置不受支持。",
+    "en": "Unsupported Fabric configuration."
+  },
+  "mf2e0cbb6fe6a": {
+    "zh": "Fabric 依赖地址不受支持。",
+    "en": "Unsupported Fabric dependency URL."
+  },
+  "m5d47c56d8bc2": {
+    "zh": "Fabric 依赖缺少有效校验值。",
+    "en": "Fabric dependency lacks a valid checksum."
+  },
+  "md70e68ce5cfc": {
+    "zh": "实例检查已取消，未修改游戏文件。",
+    "en": "Instance check cancelled. Game files were not changed."
+  },
+  "m20342ae49f6a": {
+    "zh": "版本与加载器配置",
+    "en": "Version and loader configuration"
+  },
+  "mcbd53e220329": {
+    "zh": "检查实例（不会修改游戏文件）",
+    "en": "Check instance (read-only)"
+  },
+  "mc8df6dc55fcf": {
+    "zh": "安装计划",
+    "en": "Installation plan"
+  },
+  "m251000b43961": {
+    "zh": "有未完成的安装，请在任务中心继续。",
+    "en": "An installation is unfinished. Continue it in Tasks."
+  },
+  "mab26b0a9bc5d": {
+    "zh": "没有未完成的安装计划。",
+    "en": "No unfinished installation plans."
+  },
+  "m2b79c72d6586": {
+    "zh": "安装记录与当前配置不一致，请校验并修复游戏。",
+    "en": "Installation record differs from current configuration. Verify and repair the game."
+  },
+  "m33b6d9d8fa7b": {
+    "zh": "游戏文件",
+    "en": "Game files"
+  },
+  "maaa209703f23": {
+    "zh": "{0} 个文件缺失或校验不通过。修复会复用已验证的文件。",
+    "en": "{0} files are missing or failed verification. Repair reuses verified files."
+  },
+  "m306ae553d330": {
+    "zh": "已核对安装记录中的 {0} 个文件。",
+    "en": "Checked {0} files from the installation record."
+  },
+  "ma9e8c98b8893": {
+    "zh": "需要 Java {0}，请自动准备或手动选择兼容版本。",
+    "en": "Java {0} is required. Prepare it automatically or choose a compatible runtime."
+  },
+  "m492777a1aa07": {
+    "zh": "Java {0} 可用。",
+    "en": "Java {0} is available."
+  },
+  "m1ac604168af7": {
+    "zh": "{0} 个启用的内容文件缺失，请检查内容管理。",
+    "en": "{0} enabled content files are missing. Check content management."
+  },
+  "m8b72ad2e1c6d": {
+    "zh": "已知模组依赖",
+    "en": "Known mod dependencies"
+  },
+  "mbac5be88a498": {
+    "zh": "{0} 个模组未识别来源，无法完整检查依赖。其余已知声明检查通过。",
+    "en": "{0} mods have unknown sources, so dependencies cannot be checked fully. Other known declarations passed."
+  },
+  "m1968062c0a12": {
+    "zh": "已知依赖与冲突声明检查通过；不保证所有运行时组合兼容。",
+    "en": "Known dependency and conflict checks passed. This does not guarantee runtime compatibility."
+  },
+  "m3396ce3caeda": {
+    "zh": "此实例选择的账号已移除，请重新选择。",
+    "en": "This instance's account was removed. Choose another account."
+  },
+  "m64f74b867d0a": {
+    "zh": "AMBER 的 API 申请再次被拒，尚未获得批准；此检查不验证在线授权。",
+    "en": "AMBER's API application was rejected again and is not approved. This check does not verify online authorization."
+  },
+  "me0c4b9cc02bd": {
+    "zh": "已找到选择的账号，在线授权仅在启动时检查。",
+    "en": "Selected account found. Online authorization is checked only at launch."
+  },
+  "m541e1629cd96": {
+    "zh": "使用临时离线身份，玩家名称会在启动页检查。",
+    "en": "Using a temporary offline identity. The player name is checked on the launch page."
+  },
+  "m47ad6a7fb5ec": {
+    "zh": "名称应为 1–60 个字符",
+    "en": "Names must contain 1–60 characters"
+  },
+  "m135d9cc896d3": {
+    "zh": "回收站存在同名实例标识，已停止操作",
+    "en": "A recycled instance already has this identifier. Operation stopped."
+  },
+  "m70c82b8481ca": {
+    "zh": "无效实例标识",
+    "en": "Invalid instance identifier"
+  },
+  "mbf1c0a591e9f": {
+    "zh": "回收实例不存在",
+    "en": "Recycled instance not found"
+  },
+  "m80874e2de06b": {
+    "zh": "请输入完整实例名称以确认彻底删除。",
+    "en": "Type the full instance name to confirm permanent deletion."
+  },
+  "m266f94306b51": {
+    "zh": "实例的游戏仍在运行。",
+    "en": "The instance's game is still running."
+  },
+  "mfac041f5707e": {
+    "zh": "部分文件无法删除。请关闭占用文件的程序后，在回收站重试。已删除的文件无法恢复。",
+    "en": "Some files could not be deleted. Close programs using them and retry in the recycle bin. Already deleted files cannot be recovered."
+  },
+  "mc58ccf475178": {
+    "zh": "同标识实例已存在，不能覆盖",
+    "en": "An instance with this identifier already exists and cannot be overwritten"
+  },
+  "m4a29e320167a": {
+    "zh": "无法识别 Java 运行时。",
+    "en": "Cannot identify the Java runtime."
+  },
+  "m71cd2cde3e16": {
+    "zh": "需要 Windows x64 Java。",
+    "en": "Windows x64 Java is required."
+  },
+  "m74bd28328b18": {
+    "zh": "自动安装暂不支持 Java {0}，请手动选择兼容的 Java。",
+    "en": "Automatic installation does not support Java {0}. Choose a compatible runtime manually."
+  },
+  "m96f26a4a9405": {
+    "zh": "获取 Java {0} 官方运行时",
+    "en": "Get official Java {0} runtime"
+  },
+  "m1d8a6fd8cbd4": {
+    "zh": "Adoptium 未返回可校验的 Java ZIP 包。",
+    "en": "Adoptium did not return a verifiable Java ZIP."
+  },
+  "mb5048c41e0fd": {
+    "zh": "下载 Java {0}",
+    "en": "Download Java {0}"
+  },
+  "m2d7e9355d97d": {
+    "zh": "展开 Java {0}",
+    "en": "Extract Java {0}"
+  },
+  "m8c5bfa4946da": {
+    "zh": "下载的 Java 与游戏版本要求不匹配。",
+    "en": "Downloaded Java does not match the game's requirements."
+  },
+  "m379a4b0d8368": {
+    "zh": "账号设置无效，请重新选择。",
+    "en": "Invalid account setting. Choose again."
+  },
+  "mf9bab52373ee": {
+    "zh": "内存应为 1–32 GB，或使用全局默认值。",
+    "en": "Memory must be 1–32 GB, or use the global default."
+  },
+  "mc37de0a6f718": {
+    "zh": "此实例已有运行中的游戏或启动任务，请先退出游戏。",
+    "en": "This instance has a running game or launch task. Stop the game first."
+  },
+  "m10daefd45f59": {
+    "zh": "任务已经结束。",
+    "en": "Task already finished."
+  },
+  "mfbd159a26e8f": {
+    "zh": "正在取消并整理文件，请稍候",
+    "en": "Cancelling and tidying files. Please wait."
+  },
+  "mf466fbc72bdb": {
+    "zh": "用户取消了下载。",
+    "en": "Download cancelled by the user."
+  },
+  "m9fdb8d406d5f": {
+    "zh": "请先完成或取消当前安装任务。",
+    "en": "Finish or cancel the current installation first."
+  },
+  "m9b4cbddc5bcf": {
+    "zh": "请先退出此实例的游戏。",
+    "en": "Stop this instance's game first."
+  },
+  "m6c9966bcb584": {
+    "zh": "排队准备中",
+    "en": "Queued for preparation"
+  },
+  "medf595a6cb1c": {
+    "zh": "版本元数据被更改，请重新创建实例。",
+    "en": "Version metadata changed. Create the instance again."
+  },
+  "m7b0b627ac9a2": {
+    "zh": "实例版本元数据不匹配。",
+    "en": "Instance version metadata mismatch."
+  },
+  "maa0ebfb68e92": {
+    "zh": "读取 LiteLoader 官方配置",
+    "en": "Read official LiteLoader configuration"
+  },
+  "m2c8cc6d08610": {
+    "zh": "读取 Fabric 配置与依赖校验值",
+    "en": "Read Fabric configuration and dependency checksums"
+  },
+  "mf47c6bc25ed4": {
+    "zh": "加载器配置校验失败。",
+    "en": "Loader configuration failed verification."
+  },
+  "m770595410c96": {
+    "zh": "此开发版安装器目前支持 Windows x64。",
+    "en": "This installer supports Windows x64."
+  },
+  "mdf324056b431": {
+    "zh": "并发数应为 1–16。",
+    "en": "Concurrency must be between 1 and 16."
+  },
+  "m8b499792eee6": {
+    "zh": "可用磁盘空间不足 2 GB。",
+    "en": "Less than 2 GB of free disk space."
+  },
+  "m627351265dab": {
+    "zh": "下载资源索引",
+    "en": "Download asset index"
+  },
+  "m153c0b0f57d7": {
+    "zh": "下载并校验游戏文件 · {0} 并发",
+    "en": "Download and verify game files · {0} concurrent"
+  },
+  "m3dc8beedb9a9": {
+    "zh": "准备本地库",
+    "en": "Prepare native libraries"
+  },
+  "m9c3a099e4161": {
+    "zh": "准备旧版资源目录",
+    "en": "Prepare legacy resource directory"
+  },
+  "m4cf22f2bae40": {
+    "zh": "Java {0} 已就绪",
+    "en": "Java {0} is ready"
+  },
+  "mf720f97d2137": {
+    "zh": "请先检测 Java 或通过文件选择器添加。",
+    "en": "Scan for Java or add it using the file picker first."
+  },
+  "md11b9684d42e": {
+    "zh": "此版本需要 Java {0}。",
+    "en": "This version requires Java {0}."
+  },
+  "m0f6030f1025d": {
+    "zh": "请等待安装任务完成。",
+    "en": "Wait for the installation to finish."
+  },
+  "m9120bd303ce1": {
+    "zh": "此实例已经在运行。",
+    "en": "This instance is already running."
+  },
+  "m4d8b2b358446": {
+    "zh": "请先完成游戏安装。",
+    "en": "Complete the game installation first."
+  },
+  "m727b96329df9": {
+    "zh": "加载器配置已变更，请重新安装。",
+    "en": "Loader configuration changed. Reinstall game files."
+  },
+  "mc10f1e43c0de": {
+    "zh": "版本元数据校验失败。",
+    "en": "Version metadata verification failed."
+  },
+  "mb1a640e65f26": {
+    "zh": "游戏文件缺失或损坏，请点击“校验 / 修复”：",
+    "en": "Game files are missing or damaged. Select Verify / repair: "
+  },
+  "mb402fc7e7a23": {
+    "zh": "请先准备 Java {0}。",
+    "en": "Prepare Java {0} first."
+  },
+  "m97d30c65257f": {
+    "zh": "布局配置无效",
+    "en": "Invalid layout configuration"
+  },
+  "md30bdf4573e9": {
+    "zh": "此加载器不使用历史 LaunchWrapper，不能组合 LiteLoader",
+    "en": "This loader does not use legacy LaunchWrapper and cannot be combined with LiteLoader"
+  },
+  "m030c8a1657af": {
+    "zh": "LiteLoader 组合需要受支持的 1.7.10–1.12.2 Forge / OptiFine 实例",
+    "en": "LiteLoader combinations require a supported Forge / OptiFine instance for 1.7.10–1.12.2"
+  },
+  "mb59f6638a4a7": {
+    "zh": "配置历史加载器组合",
+    "en": "Configure legacy loader combination"
+  },
+  "m8fae046fb889": {
+    "zh": "移除 LiteLoader 组合",
+    "en": "Remove LiteLoader combination"
+  },
+  "m7aa8c38e7b89": {
+    "zh": "加载器配置校验失败",
+    "en": "Loader configuration verification failed"
+  },
+  "mfa626e7d8d3d": {
+    "zh": "基础加载器备份校验失败",
+    "en": "Base loader backup verification failed"
+  },
+  "m85b303415af4": {
+    "zh": "实例排序记录无法读取，请保留数据并检查文件。",
+    "en": "Cannot read instance ordering. Keep the data and inspect the file."
+  },
+  "m8e1410292c7b": {
+    "zh": "收藏选项无效。",
+    "en": "Invalid favorite option."
+  },
+  "mc1525140ba53": {
+    "zh": "排序选项无效。",
+    "en": "Invalid sort option."
+  },
+  "m1413bfe94a86": {
+    "zh": "LiteLoader 依赖缺少 SHA-1 校验。",
+    "en": "LiteLoader dependency lacks a SHA-1 checksum."
+  },
+  "md02643c2b949": {
+    "zh": "没有适配此游戏版本的 LiteLoader。",
+    "en": "No LiteLoader release supports this game version."
+  },
+  "m415f1662bef8": {
+    "zh": "此历史 LiteLoader 发行版暂不支持自动安装",
+    "en": "Automatic installation is unavailable for this legacy LiteLoader release"
+  },
+  "m3435c60d7895": {
+    "zh": "LiteLoader 安装器过大",
+    "en": "LiteLoader installer exceeds the size limit"
+  },
+  "m2d508b892d1f": {
+    "zh": "LiteLoader 历史发行文件校验失败",
+    "en": "Legacy LiteLoader release failed verification"
+  },
+  "mfbdb686d1039": {
+    "zh": "不支持的加载器。",
+    "en": "Unsupported loader."
+  },
+  "mcac6e67de2b6": {
+    "zh": "无法识别的 Maven 坐标：",
+    "en": "Unrecognized Maven coordinates: "
+  },
+  "m5bf36950e3ca": {
+    "zh": "官方安装器{0}；日志：{1}",
+    "en": "Official installer {0}; log: {1}"
+  },
+  "me512cf016f96": {
+    "zh": "超时",
+    "en": "timed out"
+  },
+  "m4bb5be8356b9": {
+    "zh": "退出码 ",
+    "en": "exit code "
+  },
+  "m2a6b0972d47b": {
+    "zh": "所选加载器不适配此游戏版本。",
+    "en": "Selected loader does not support this game version."
+  },
+  "m597fd8c7fe6d": {
+    "zh": "请先自动准备 Java，再安装加载器。",
+    "en": "Prepare Java automatically before installing the loader."
+  },
+  "m06590dfe17cc": {
+    "zh": "下载官方加载器安装器",
+    "en": "Download official loader installer"
+  },
+  "m24304015dcc3": {
+    "zh": " 安装器",
+    "en": " installer"
+  },
+  "m475adb67f319": {
+    "zh": "Minecraft 客户端",
+    "en": "Minecraft client"
+  },
+  "mfd4a41d72e17": {
+    "zh": "运行官方安装器与客户端补丁处理器",
+    "en": "Run official installer and client patch processors"
+  },
+  "m317aece92151": {
+    "zh": "安装器未生成唯一的客户端版本配置。",
+    "en": "Installer did not generate one unique client version profile."
+  },
+  "m9d1a1b15b7cb": {
+    "zh": "官方安装器返回的版本与实例不一致。",
+    "en": "Installer returned a version different from the instance."
+  },
+  "m6ed8d4d076b2": {
+    "zh": "安装器输出不可包含符号链接。",
+    "en": "Installer output cannot contain symbolic links."
+  },
+  "m7732fa0a07e4": {
+    "zh": "安装器依赖文件缺失：",
+    "en": "Installer dependency file is missing: "
+  },
+  "m8d6af9acb8f2": {
+    "zh": "OptiFine 元数据过大",
+    "en": "OptiFine metadata exceeds the size limit"
+  },
+  "m8eeb11916592": {
+    "zh": "无法可靠识别 OptiFine 对应的 Minecraft 版本",
+    "en": "Cannot reliably identify OptiFine's Minecraft version"
+  },
+  "m8e41ec6b7c50": {
+    "zh": "此版本仅支持将 OptiFine 作为 Forge 模组导入；请先安装与 OptiFine 官方兼容列表一致的 Forge。",
+    "en": "Importing OptiFine as a mod requires Forge. Install a Forge version listed in OptiFine's official compatibility table first."
+  },
+  "m1ba6a48d05fe": {
+    "zh": "请先等待安装任务完成。",
+    "en": "Wait for the installation task to finish first."
+  },
+  "m68534e442561": {
+    "zh": "OptiFine 文件过大。",
+    "en": "OptiFine file exceeds the size limit."
+  },
+  "m5f5d62a4e81e": {
+    "zh": "未识别为支持 Forge 的 OptiFine 官方 JAR。",
+    "en": "Not recognized as an official Forge-compatible OptiFine JAR."
+  },
+  "me613a3bacf89": {
+    "zh": "OptiFine 与当前 Minecraft 版本不匹配。",
+    "en": "OptiFine does not match the current Minecraft version."
+  },
+  "ma914858519f9": {
+    "zh": "请选择 OptiFine JAR 文件。",
+    "en": "Choose an OptiFine JAR file."
+  },
+  "m9b209d9b5f9c": {
+    "zh": "地图解压大小超过限制。",
+    "en": "Extracted world exceeds the size limit."
+  },
+  "mafb84fefe4d3": {
+    "zh": "地图 ZIP 须包含一个根目录或一级文件夹内的 level.dat。",
+    "en": "World ZIP must contain level.dat at its root or in one top-level folder."
+  },
+  "m284621c73cfa": {
+    "zh": "地图 ZIP 超过 600 MB。",
+    "en": "World ZIP exceeds 600 MB."
+  },
+  "m4d9d735ddcc7": {
+    "zh": "导入地图-",
+    "en": "Imported-world-"
+  },
+  "mf9288d2623c8": {
+    "zh": "导入地图到独立存档目录",
+    "en": "Import world to a separate save directory"
+  },
+  "m7b47bd750c13": {
+    "zh": "Invalid language pack metadata. / 语言包信息无效。",
+    "en": "Invalid language pack metadata."
+  },
+  "m574e3dd58d00": {
+    "zh": "Invalid language pack size. / 语言包条目数量无效。",
+    "en": "Invalid language pack size."
+  },
+  "md23125d03ff7": {
+    "zh": "验证码已失效，请重新点击微软登录。",
+    "en": "Verification code expired. Start Microsoft sign-in again."
+  },
+  "m27a8b519db00": {
+    "zh": "微软返回的验证码格式无效，请重试。",
+    "en": "Microsoft returned an invalid verification code. Retry."
+  },
+  "mb189f127cb62": {
+    "zh": "验证码已复制，请在微软页面粘贴。",
+    "en": "Code copied. Paste it on Microsoft's page."
+  },
+  "m25769f4a7b5e": {
+    "zh": "自动复制已关闭，请手动复制验证码。",
+    "en": "Automatic copying is off. Copy the verification code manually."
+  },
+  "mc14ef72e59b7": {
+    "zh": "自动复制失败，请手动选中并复制下方验证码。",
+    "en": "Automatic copy failed. Select and copy the code below."
+  },
+  "m06abfdb3083d": {
+    "zh": "未能打开浏览器，请点击“重新打开验证网页”，或手动打开下方微软地址。",
+    "en": "Could not open the browser. Reopen the verification page or open the Microsoft URL below manually."
+  },
+  "m522bf060bfc1": {
+    "zh": "请求来源不受信任。",
+    "en": "Untrusted request origin."
+  },
+  "m7013e8823aa6": {
+    "zh": "数据目录正在迁移，请等待完成。",
+    "en": "Data migration is in progress. Wait for completion."
+  },
+  "m71d7ba603905": {
+    "zh": "正在准备升级，请稍候。",
+    "en": "Preparing the upgrade. Please wait."
+  },
+  "m1744d728d393": {
+    "zh": "选择 Java 可执行文件",
+    "en": "Choose Java executable"
+  },
+  "m559c050b81f2": {
+    "zh": "导入语言包",
+    "en": "Import language pack"
+  },
+  "m8a6b4e67aa7c": {
+    "zh": "将替换当前自定义语言包。只导入可信来源；文字可能改变提示的含义。",
+    "en": "This replaces the current custom language pack. Import trusted packs only; translated text can change the meaning of prompts."
+  },
+  "m576d81bb0631": {
+    "zh": "导入",
+    "en": "Import"
+  },
+  "mf4e9fb0f59e1": {
+    "zh": "错误详情过长，请手动选择文字复制。",
+    "en": "Error details are too long. Select and copy the text manually."
+  },
+  "m653e9448b25c": {
+    "zh": "选择本地模组（每批最多 50 个）",
+    "en": "Choose local mods (up to 50 per batch)"
+  },
+  "me2aeb772bb42": {
+    "zh": "Minecraft 模组",
+    "en": "Minecraft mods"
+  },
+  "m03e574b4c72b": {
+    "zh": "此实例安装尚未完成，请先到任务中心继续安装。",
+    "en": "This instance is not fully installed. Continue installation in Tasks first."
+  },
+  "mcc0abf1d170b": {
+    "zh": "请等待游戏准备、安装或数据迁移结束后再升级。",
+    "en": "Wait for game preparation, installation or migration to finish before upgrading."
+  },
+  "mce1fef730c2a": {
+    "zh": "有新任务开始，请等待结束后再升级。",
+    "en": "A new task started. Wait for it to finish before upgrading."
+  },
+  "m129365ee36c3": {
+    "zh": "安装 AMBER 更新",
+    "en": "Install AMBER update"
+  },
+  "ma0348850abcd": {
+    "zh": "安装包已校验，是否退出 AMBER 并打开安装程序？",
+    "en": "Installer verified. Quit AMBER and open the installer?"
+  },
+  "mc353e902ce45": {
+    "zh": "将保留游戏数据，并先备份账号和设置。请在安装向导中确认安装位置。",
+    "en": "Game data is preserved; accounts and settings are backed up first. Confirm the installation location in the wizard."
+  },
+  "mfbaaddb8ebea": {
+    "zh": "退出并安装",
+    "en": "Quit and install"
+  },
+  "mb3aba65d6854": {
+    "zh": "选择新的空数据文件夹",
+    "en": "Choose a new empty data folder"
+  },
+  "mee3abe0633ae": {
+    "zh": "请先选择目标目录",
+    "en": "Choose a destination first"
+  },
+  "mf58cbb9a5095": {
+    "zh": "复制并校验数据目录",
+    "en": "Copy and verify data directory"
+  },
+  "m2d2ed5f137ab": {
+    "zh": "保存不含账号和日志的诊断摘要",
+    "en": "Save diagnostic summary without accounts or logs"
+  },
+  "meca7bc7bc9f3": {
+    "zh": "布局文件过大",
+    "en": "Layout file exceeds the size limit"
+  },
+  "mb625c442623d": {
+    "zh": "不是 AMBER 布局文件",
+    "en": "Not an AMBER layout file"
+  },
+  "m16613b798233": {
+    "zh": "选择启动背景（20 MB 以内）",
+    "en": "Choose launch background (up to 20 MB)"
+  },
+  "md24c10d37db0": {
+    "zh": "图片",
+    "en": "Images"
+  },
+  "m8da0d0fbc326": {
+    "zh": "无效文件类型",
+    "en": "Invalid file type"
+  },
+  "mad31e8bffeaa": {
+    "zh": "选择 AMBER 模组迁移清单",
+    "en": "Choose AMBER mod migration list"
+  },
+  "mfd518d6b3316": {
+    "zh": "选择 OptiFine 官方 JAR",
+    "en": "Choose official OptiFine JAR"
+  },
+  "m5bfcab76a601": {
+    "zh": "文件过大",
+    "en": "File exceeds the size limit"
+  },
+  "m6c9e0d971017": {
+    "zh": "请选择文件",
+    "en": "Choose a file"
+  },
+  "m49222ec7dc84": {
+    "zh": "AMBER 模组清单",
+    "en": "AMBER mod list"
+  },
+  "m1f3d033ca42c": {
+    "zh": "无效项目",
+    "en": "Invalid project"
+  },
+  "m2907b2b61de5": {
+    "zh": "未知项目类型",
+    "en": "Unknown project type"
+  },
+  "m10ab29e29c1f": {
+    "zh": "整合包预览已过期",
+    "en": "Modpack preview expired"
+  },
+  "m44c155a772b9": {
+    "zh": "预览已过期，请重新检查",
+    "en": "Preview expired. Check again."
+  },
+  "m4ff81e6f0e57": {
+    "zh": "导入地图 ZIP（保留原文件，创建独立存档）",
+    "en": "Import world ZIP (keep original and create separate save)"
+  },
+  "m576fafd3cce6": {
+    "zh": "选择与当前 Minecraft 和 Forge 兼容的 OptiFine 官方 JAR",
+    "en": "Choose an official OptiFine JAR compatible with this Minecraft and Forge"
+  },
+  "m546a112f7f1a": {
+    "zh": "选择 OptiFine 官方安装器 JAR（独立安装，替换当前加载器）",
+    "en": "Choose official OptiFine installer JAR (replaces current loader)"
+  },
+  "m0c2e1d93c289": {
+    "zh": "正在准备启动。",
+    "en": "Preparing launch."
+  },
+  "md6441f5d81db": {
+    "zh": "请等待安装或更新结束后启动游戏。",
+    "en": "Wait for installation or updates to finish before launching."
+  },
+  "m4bb058b910da": {
+    "zh": "实例安装尚未完成，请先在任务中心继续安装。",
+    "en": "Instance installation is incomplete. Continue it in Tasks first."
+  },
+  "ma6769a552e64": {
+    "zh": "安装还未结束",
+    "en": "Installation is unfinished"
+  },
+  "m6eeb16d4b57d": {
+    "zh": "退出会中断当前下载或实例配置。",
+    "en": "Quitting interrupts the download or instance configuration."
+  },
+  "md1d740e56acd": {
+    "zh": "已完成的文件会保留，建议等待任务结束。实例安装可在任务中心继续；程序更新可在关于页重新下载。",
+    "en": "Completed files are kept, but waiting is recommended. Continue instance installation in Tasks; restart app update downloads from About."
+  },
+  "m68d85f140499": {
+    "zh": "继续等待",
+    "en": "Keep waiting"
+  },
+  "md3c0d40f84d4": {
+    "zh": "取消任务并退出",
+    "en": "Cancel tasks and quit"
+  },
+  "m5aa08004c0f4": {
+    "zh": "用户取消任务并退出。",
+    "en": "User cancelled tasks and quit."
+  },
+  "mfd3d6fbce8f3": {
+    "zh": "模组元数据过大，未导入。",
+    "en": "Mod metadata exceeds the size limit. Not imported."
+  },
+  "mc67f97418f67": {
+    "zh": "模组元数据损坏，未导入。",
+    "en": "Mod metadata is damaged. Not imported."
+  },
+  "m0be760d7a472": {
+    "zh": "模组目录含链接或非普通文件，请先检查。",
+    "en": "The mods directory contains links or non-regular files. Inspect it first."
+  },
+  "mc990c207ea74": {
+    "zh": "现有模组过大，无法安全预检。",
+    "en": "An existing mod is too large for safe preflight checks."
+  },
+  "m5774dcfaa046": {
+    "zh": "每次请选择 1–50 个 JAR 或 LiteMod 文件。",
+    "en": "Choose 1–50 JAR or LiteMod files per batch."
+  },
+  "m232dac07dcc8": {
+    "zh": "请选择 150 MB 以内的普通 JAR 或 LiteMod 文件。",
+    "en": "Choose regular JAR or LiteMod files no larger than 150 MB each."
+  },
+  "madb802b1f269": {
+    "zh": "本批文件总大小超过 500 MB，请分批导入。",
+    "en": "This batch exceeds 500 MB. Import in smaller batches."
+  },
+  "m784d0ddc1345": {
+    "zh": "文件声明的加载器与此实例不兼容。",
+    "en": "The file's declared loader is incompatible with this instance."
+  },
+  "m67179c40e1ce": {
+    "zh": "此实例已有相同内容的文件（可能已停用）。",
+    "en": "This instance already contains identical content, possibly disabled."
+  },
+  "m841196681eab": {
+    "zh": "已有同名文件或记录，不会覆盖。",
+    "en": "A file or record with this name exists and will not be overwritten."
+  },
+  "m349758343775": {
+    "zh": "已存在相同模组标识，请先停用并移出旧文件，或使用更新管理。",
+    "en": "This mod ID already exists. Disable and move out the old file, or use update management."
+  },
+  "m00d23e1aeeb8": {
+    "zh": "文件声明的 Minecraft 版本与实例不同。",
+    "en": "The file declares a different Minecraft version."
+  },
+  "m82d87a041480": {
+    "zh": "来源返回的文件校验不一致。",
+    "en": "The source returned a different file checksum."
+  },
+  "m92957d05005b": {
+    "zh": "Modrinth 声明此文件不适配当前游戏或加载器。",
+    "en": "Modrinth declares this file incompatible with the current game or loader."
+  },
+  "m0f0b0f459bf3": {
+    "zh": "同一项目已有安装记录，请使用更新管理。",
+    "en": "This project already has an installation record. Use update management."
+  },
+  "m78e133a56c13": {
+    "zh": "Modrinth 未识别此文件，将按手动模组管理。",
+    "en": "Modrinth did not identify this file. It will be managed as a manual mod."
+  },
+  "m842b9b260b0a": {
+    "zh": "来源识别暂不可用，将按手动模组管理。",
+    "en": "Source lookup is unavailable. This will be managed as a manual mod."
+  },
+  "m744f39f9c474": {
+    "zh": "仅从文件读取基本信息，无法确认完整版本范围、依赖和冲突；不会猜测更新来源。",
+    "en": "Only basic file metadata was read. Complete version ranges, dependencies and conflicts cannot be confirmed. Update sources will not be guessed."
+  },
+  "m321bf56f50cd": {
+    "zh": "导入预览已过期，请重新选择文件。",
+    "en": "Import preview expired. Choose files again."
+  },
+  "m2a469ae45280": {
+    "zh": "请选择需要导入的文件。",
+    "en": "Select files to import."
+  },
+  "m9dbcd7fdbb60": {
+    "zh": "所选文件存在阻止导入的问题。",
+    "en": "Selected files have issues that prevent importing."
+  },
+  "mc52c772941f2": {
+    "zh": "实例或模组文件已变化，请重新导入预览。",
+    "en": "The instance or mod files changed. Preview the import again."
+  },
+  "m6d85a9933ba2": {
+    "zh": "所选文件中存在重复模组或文件，请只保留一个版本。",
+    "en": "Selected files contain duplicate mods or filenames. Keep only one version."
+  },
+  "m7b43653ba160": {
+    "zh": "校验并导入本地模组",
+    "en": "Verify and import local mods"
+  },
+  "m38debec015ce": {
+    "zh": "选中的源文件已变化，请重新选择。",
+    "en": "A selected source file changed. Choose it again."
+  },
+  "m939af8c633eb": {
+    "zh": "「{0}」需要指定依赖版本，请同时选择对应依赖更新，或调整依赖勾选。",
+    "en": "“{0}” requires a specific dependency version. Select that dependency update too, or adjust dependency choices."
+  },
+  "m434fa134619a": {
+    "zh": "「{0}」与更新后的其他内容声明不兼容。",
+    "en": "“{0}” declares a conflict with other updated content."
+  },
+  "m1e1b64db7ffb": {
+    "zh": "更新后的内容文件名冲突。",
+    "en": "Updated content has conflicting filenames."
+  },
+  "mc7c86c4631b1": {
+    "zh": "模组恢复记录格式无效。",
+    "en": "Invalid mod recovery record format."
+  },
+  "me266ad16459d": {
+    "zh": "「{0}」的文件已被修改或缺失，请先修复内容，未覆盖现有文件。",
+    "en": "The file for “{0}” changed or is missing. Repair content first. Existing files were not overwritten."
+  },
+  "me8d49cbfc880": {
+    "zh": "模组更新日志不可使用链接。",
+    "en": "Mod update journals cannot be links."
+  },
+  "mfec133a9c288": {
+    "zh": "模组更新恢复记录无效。",
+    "en": "Invalid mod update recovery record."
+  },
+  "m1a009f85da1e": {
+    "zh": "更新恢复发现外部修改，请保留文件并打开实例目录检查：",
+    "en": "Recovery detected external changes. Keep the files and inspect the instance folder: "
+  },
+  "m2639001ea1b9": {
+    "zh": "无法覆盖更新期间被修改的文件：",
+    "en": "Cannot overwrite a file changed during the update: "
+  },
+  "m9230d48debbd": {
+    "zh": "锁定选项无效。",
+    "en": "Invalid lock option."
+  },
+  "m589c708851d8": {
+    "zh": "模组记录不存在。",
+    "en": "Mod record not found."
+  },
+  "m40e20518365b": {
+    "zh": "请选择 1–100 个不同模组。",
+    "en": "Select 1–100 distinct mods."
+  },
+  "ma76357ab5007": {
+    "zh": "所选模组标识无效，请刷新列表。",
+    "en": "Invalid selected mod identifier. Refresh the list."
+  },
+  "m92c03aefb423": {
+    "zh": "所选模组不存在或已锁定，请刷新列表。",
+    "en": "Selected mod is missing or locked. Refresh the list."
+  },
+  "m913db680b08a": {
+    "zh": "所选更新不兼容当前实例。",
+    "en": "Selected update is incompatible with this instance."
+  },
+  "m81360f47f9ba": {
+    "zh": "所选更新要求不同的依赖版本：",
+    "en": "Selected updates require different dependency versions: "
+  },
+  "m5528bee38261": {
+    "zh": "依赖解析与所选更新不一致，请调整选择。",
+    "en": "Resolved dependencies differ from the selected updates. Adjust your selection."
+  },
+  "m7384c07e6945": {
+    "zh": "没有需要替换的文件，请重新检查更新。",
+    "en": "No files need replacing. Check for updates again."
+  },
+  "m5bad32095aae": {
+    "zh": "更新预览过期，请重新检查。",
+    "en": "Update preview expired. Check again."
+  },
+  "m36fcd0fa38c2": {
+    "zh": "请先解决更新依赖冲突。",
+    "en": "Resolve update dependency conflicts first."
+  },
+  "me2be1c986814": {
+    "zh": "实例配置已改变，请重新检查更新。",
+    "en": "Instance configuration changed. Check updates again."
+  },
+  "m37bdfb2ebaf7": {
+    "zh": "模组列表已改变，请重新检查更新。",
+    "en": "Mod list changed. Check updates again."
+  },
+  "ma768f292f003": {
+    "zh": "模组已锁定。",
+    "en": "Mod version is locked."
+  },
+  "md0990fadf463": {
+    "zh": "下载并校验所选模组更新",
+    "en": "Download and verify selected mod updates"
+  },
+  "m303732f77bec": {
+    "zh": "已有同名文件，未覆盖：",
+    "en": "A file with this name exists and was not overwritten: "
+  },
+  "m660fbc5507f4": {
+    "zh": "更新来源文件校验失败。",
+    "en": "Update source file failed verification."
+  },
+  "m334e202eceb5": {
+    "zh": "替换文件并保留可恢复副本",
+    "en": "Replace files and keep recovery copies"
+  },
+  "m3087cac306b1": {
+    "zh": "无效更新记录。",
+    "en": "Invalid update record."
+  },
+  "m0cb4a9e173c0": {
+    "zh": "更新后内容已改变，不能直接恢复。请先备份实例并手动处理。",
+    "en": "Content changed after the update and cannot be restored directly. Back up the instance before resolving it manually."
+  },
+  "m7791e66e03b5": {
+    "zh": "整合包包含暂不支持的安装路径：",
+    "en": "Modpack contains an unsupported installation path: "
+  },
+  "md505146cc9f8": {
+    "zh": "整合包展开大小超过限制。",
+    "en": "Extracted modpack exceeds the size limit."
+  },
+  "med4e2883237a": {
+    "zh": "缺少 modrinth.index.json。",
+    "en": "Missing modrinth.index.json."
+  },
+  "m62bdcfcf0ae4": {
+    "zh": "不支持的 MRPACK 格式。",
+    "en": "Unsupported MRPACK format."
+  },
+  "m5b8b9c2a6dfe": {
+    "zh": "已跳过可选客户端文件：",
+    "en": "Skipped optional client file: "
+  },
+  "m5e6f11da64fd": {
+    "zh": "整合包文件缺少校验或大小信息。",
+    "en": "Modpack file lacks checksum or size information."
+  },
+  "m8e98b78fbcfc": {
+    "zh": "没有可用的受信任下载地址：",
+    "en": "No trusted download URL available: "
+  },
+  "mdd52ad157c11": {
+    "zh": "整合包包含重复路径。",
+    "en": "Modpack contains duplicate paths."
+  },
+  "m23408bc5a348": {
+    "zh": "请选择 Modrinth 整合包。",
+    "en": "Choose a Modrinth modpack."
+  },
+  "m9bfc35e32981": {
+    "zh": "此版本没有 MRPACK 文件。",
+    "en": "This version has no MRPACK file."
+  },
+  "m4b18d9c90fda": {
+    "zh": "此整合包加载器组合暂不支持：",
+    "en": "Unsupported modpack loader combination: "
+  },
+  "m4fc9041caa1d": {
+    "zh": "需要 Minecraft {0} / {1} {2}。请在独立实例准备对应版本；安装不会覆盖已有文件。",
+    "en": "Requires Minecraft {0} / {1} {2}. Prepare matching versions in a separate instance. Existing files will not be overwritten."
+  },
+  "m73d4ee4ec369": {
+    "zh": "预览已过期，请重新读取整合包。",
+    "en": "Preview expired. Load the modpack again."
+  },
+  "m1f6a7ce7d37b": {
+    "zh": "请先按整合包清单准备一致的游戏及加载器版本。",
+    "en": "Prepare game and loader versions matching the modpack manifest first."
+  },
+  "m30937ae56eaa": {
+    "zh": "目标实例已有文件，请使用空白实例：",
+    "en": "The target instance already contains files. Use an empty instance: "
+  },
+  "mfa6e5bbc386b": {
+    "zh": "下载整合包客户端文件",
+    "en": "Download modpack client files"
+  },
+  "m1957c0bc6233": {
+    "zh": "无效项目或版本 ID。",
+    "en": "Invalid project or version ID."
+  },
+  "m78661105c902": {
+    "zh": "Modrinth 响应过大。",
+    "en": "Modrinth response exceeds the size limit."
+  },
+  "mce9f7833acee": {
+    "zh": "分类目录暂时不可用，请重试。",
+    "en": "Category catalog unavailable. Retry."
+  },
+  "mb88725db614d": {
+    "zh": "不支持的排序方式。",
+    "en": "Unsupported sort order."
+  },
+  "m809d3ae116cb": {
+    "zh": "此分类不适用于当前内容类型，请重新选择。",
+    "en": "This category does not apply to the content type. Choose another category."
+  },
+  "m489de94914f8": {
+    "zh": "不支持的内容类型。",
+    "en": "Unsupported content type."
+  },
+  "m7ed9095d5991": {
+    "zh": "此内容类型暂不支持直接安装。",
+    "en": "Direct installation is unavailable for this content type."
+  },
+  "me7a3f3963bb1": {
+    "zh": "可选依赖选择无效",
+    "en": "Invalid optional dependency selection"
+  },
+  "m69cb247d0414": {
+    "zh": "必需依赖选择无效",
+    "en": "Invalid required dependency selection"
+  },
+  "m3f5dc96dabde": {
+    "zh": "依赖项目与版本不匹配。",
+    "en": "Dependency project and version do not match."
+  },
+  "ma4af2fc7a4c9": {
+    "zh": "依赖要求冲突：同一项目需要两个不同版本。",
+    "en": "Dependency conflict: one project requires two different versions."
+  },
+  "m7fe6913c006b": {
+    "zh": "依赖超过 100 项，请分批安装。",
+    "en": "More than 100 dependencies. Install in smaller batches."
+  },
+  "m06bead23216c": {
+    "zh": "{0} 没有适配 {1} / {2} 的客户端版本。",
+    "en": "{0} has no client version for {1} / {2}."
+  },
+  "m099c923c4129": {
+    "zh": "内容缺少有效的文件校验信息。",
+    "en": "Content lacks valid file verification information."
+  },
+  "mb51464e6e0ea": {
+    "zh": "不支持的内容文件名。",
+    "en": "Unsupported content filename."
+  },
+  "m73b1d3799c73": {
+    "zh": "{0} 已安装其他版本；请在“已安装内容”中将旧版本移至回收目录，再安装新版本。",
+    "en": "Another version of {0} is installed. Move the old version to the content recycle directory before installing this one."
+  },
+  "m57c5917148dc": {
+    "zh": "可选依赖过多，请分批安装。",
+    "en": "Too many optional dependencies. Install in smaller batches."
+  },
+  "m98286f032c68": {
+    "zh": "外部依赖",
+    "en": "External dependency"
+  },
+  "md10a6328c74a": {
+    "zh": "没有兼容发行版或需要手动获取",
+    "en": "No compatible release, or manual download required"
+  },
+  "m0248e6fc5643": {
+    "zh": "没有兼容当前实例的版本",
+    "en": "No version compatible with this instance"
+  },
+  "m0e10ea03679f": {
+    "zh": "可选依赖 ",
+    "en": "Optional dependency "
+  },
+  "m2f8fb32a1cfe": {
+    "zh": "依赖选项超过 100 项",
+    "en": "More than 100 dependency options"
+  },
+  "m6c6ee390bb9c": {
+    "zh": "已跳过「{0}」声明的必需依赖：{1}。游戏可能无法启动；已安装的文件不会因此删除。",
+    "en": "Skipped required dependency declared by “{0}”: {1}. The game may fail to start. Existing files are not deleted."
+  },
+  "m0f9ea7f0e9d0": {
+    "zh": "{0} 的必需依赖找不到兼容版本：{1}",
+    "en": "No compatible required dependency found for {0}: {1}"
+  },
+  "me9c886739429": {
+    "zh": "「{0}」与「{1}」声明不兼容。请到已安装内容停用其中一个，再重新检查依赖。",
+    "en": "“{0}” and “{1}” declare incompatibility. Disable one in installed content, then recheck dependencies."
+  },
+  "mfcfd064df6ae": {
+    "zh": "依赖文件名冲突。",
+    "en": "Dependency filename conflict."
+  },
+  "mfab0e2c3fdbe": {
+    "zh": "兼容性来自作者声明；无法保证所有模组组合均可运行。光影需要 Iris 或 OptiFine 等对应支持。",
+    "en": "Compatibility comes from author declarations; not every combination is guaranteed to work. Shaders require support such as Iris or OptiFine."
+  },
+  "meea107ad06cf": {
+    "zh": "安装预览已过期，请重新预览。",
+    "en": "Installation preview expired. Preview again."
+  },
+  "mb0bbc218582a": {
+    "zh": "依赖检查尚未通过，请调整勾选项目：",
+    "en": "Dependency checks have not passed. Adjust your selection: "
+  },
+  "m98c5686381e7": {
+    "zh": "实例加载器已更改，请重新预览。",
+    "en": "Instance loader changed. Preview again."
+  },
+  "m30201c92cb82": {
+    "zh": "已安装内容发生变化，请重新检查依赖后安装。",
+    "en": "Installed content changed. Recheck dependencies before installing."
+  },
+  "m31ea923648fe": {
+    "zh": "{0} 的现有文件已更改或缺失，请先整理实例。",
+    "en": "Existing file for {0} changed or is missing. Check the instance first."
+  },
+  "mb13f5f1d9bec": {
+    "zh": "已有同名文件：{0}，请先在实例目录处理。",
+    "en": "File already exists: {0}. Resolve it in the instance folder first."
+  },
+  "m55bd28758a48": {
+    "zh": "下载 Modrinth 内容及所选依赖",
+    "en": "Download Modrinth content and selected dependencies"
+  },
+  "m35165c107b33": {
+    "zh": "模组「{0}」的文件缺失，请在模组管理中移除记录并重新安装。",
+    "en": "The file for mod “{0}” is missing. Remove its record and reinstall it in mod management."
+  },
+  "me01569aab38a": {
+    "zh": "内容记录不存在。",
+    "en": "Content record not found."
+  },
+  "mb90eecd96c78": {
+    "zh": "「{0}」被 {1} 必需依赖；请先停用或移除这些模组。",
+    "en": "“{0}” is required by {1}. Disable or remove those mods first."
+  },
+  "m754fbe6772e9": {
+    "zh": "「{0}」与「{1}」不兼容，请先停用冲突模组。",
+    "en": "“{0}” conflicts with “{1}”. Disable the conflicting mod first."
+  },
+  "mdfb62c345e6b": {
+    "zh": "启用「{0}」前，请先安装并启用必需依赖：{1}。",
+    "en": "Before enabling “{0}”, install and enable required dependencies: {1}."
+  },
+  "m6e1255da2332": {
+    "zh": "未知依赖",
+    "en": "Unknown dependency"
+  },
+  "mc2ee489ac65d": {
+    "zh": "必需依赖「{0}」的文件缺失，请重新安装。",
+    "en": "The file for required dependency “{0}” is missing. Reinstall it."
+  },
+  "m39a7a6e2eff3": {
+    "zh": "内容文件不存在。",
+    "en": "Content file not found."
+  },
+  "m51fd474355ea": {
+    "zh": "OptiFine JAR 超过大小限制。",
+    "en": "OptiFine JAR exceeds the size limit."
+  },
+  "md20e2258dc56": {
+    "zh": "请选择从 OptiFine 官网下载的安装器 JAR。",
+    "en": "Choose the installer JAR downloaded from the official OptiFine website."
+  },
+  "m06d4300ea124": {
+    "zh": "请先准备 Java。",
+    "en": "Prepare Java first."
+  },
+  "me4ed2d1acb46": {
+    "zh": "准备 OptiFine 独立安装",
+    "en": "Prepare standalone OptiFine installation"
+  },
+  "m9d3c52666972": {
+    "zh": "本地官方 JAR",
+    "en": "Local official JAR"
+  },
+  "m90d0601a95ea": {
+    "zh": "已取消安装",
+    "en": "Installation cancelled"
+  },
+  "m8707ab4f0c18": {
+    "zh": "已完成的校验文件会保留；重试会复用这些文件。",
+    "en": "Verified files are kept and reused on retry."
+  },
+  "ma53a70aab1eb": {
+    "zh": "磁盘空间不足",
+    "en": "Not enough disk space"
+  },
+  "m868b3e0fcdae": {
+    "zh": "清理实例所在磁盘后，再继续安装。",
+    "en": "Free space on the instance's disk, then continue installation."
+  },
+  "m88e9bae87432": {
+    "zh": "文件暂时无法写入",
+    "en": "Cannot write a file right now"
+  },
+  "mb938c2e56fd3": {
+    "zh": "先退出游戏及正在使用此目录的程序，再重试；也可检查目录权限。",
+    "en": "Close the game and other programs using this folder, then retry. Check folder permissions if needed."
+  },
+  "mb59175cc8838": {
+    "zh": "下载服务暂时无法连接",
+    "en": "Download service unavailable"
+  },
+  "m797021b4489d": {
+    "zh": "检查网络后重试。已通过校验的文件不会重复下载。",
+    "en": "Check your network and retry. Verified files are not downloaded again."
+  },
+  "m0b37383b93f2": {
+    "zh": "下载来源拒绝请求或文件已下架",
+    "en": "Source denied access or removed the file"
+  },
+  "m833e8db74b1a": {
+    "zh": "刷新版本列表后重新选择版本；反复失败时查看详细信息中的状态码。",
+    "en": "Refresh the version list and choose again. If this repeats, check the status code in Details."
+  },
+  "mdcafa7cca377": {
+    "zh": "下载的文件不完整",
+    "en": "Downloaded file is incomplete"
+  },
+  "m486955c24259": {
+    "zh": "已阻止使用损坏文件。重试会重新下载并校验。",
+    "en": "The damaged file was blocked. Retry to download and verify it again."
+  },
+  "me3e91cbc7d9d": {
+    "zh": "游戏可能没有足够内存",
+    "en": "The game may need more memory"
+  },
+  "m6807fdafdca3": {
+    "zh": "关闭其他程序；在启动选项调整内存。若提示无法预留内存，请降低分配值。",
+    "en": "Close other programs and adjust memory in launch options. If memory cannot be reserved, lower the allocation."
+  },
+  "m18a5691b992b": {
+    "zh": "Java 版本不匹配",
+    "en": "Java version mismatch"
+  },
+  "m12b7c2e1fd2b": {
+    "zh": "打开版本设置，点击“自动准备 Java”后重新启动。",
+    "en": "Open version settings, prepare Java automatically, then launch again."
+  },
+  "mb0b7cee2d316": {
+    "zh": "模组或依赖需要处理",
+    "en": "Mods or dependencies need attention"
+  },
+  "mcacb20a39297": {
+    "zh": "打开模组管理，根据详细信息停用冲突模组，或补齐必需依赖后重试。",
+    "en": "Open mod management. Use the details to disable conflicting mods or install missing dependencies, then retry."
+  },
+  "m4e5ed9811d72": {
+    "zh": "游戏图形环境初始化失败",
+    "en": "Game graphics initialization failed"
+  },
+  "m7943d0388cbe": {
+    "zh": "检查显卡驱动是否支持此游戏版本。可先停用光影及图形类模组再试。",
+    "en": "Check whether your graphics driver supports this game version. Try disabling shaders and graphics mods first."
+  },
+  "mef27fba95a84": {
+    "zh": "游戏异常退出",
+    "en": "Game exited unexpectedly"
+  },
+  "m79be13bdf0c5": {
+    "zh": "操作未完成",
+    "en": "Operation incomplete"
+  },
+  "m8b66aef42d1d": {
+    "zh": "暂时无法确定原因。可以检查最近添加的模组，并打开运行日志查看具体信息。",
+    "en": "The cause is unclear. Check recently added mods and view game logs for more information."
+  },
+  "m432301309c42": {
+    "zh": "查看详细信息后重试；如果问题持续，可打开实例目录检查文件。",
+    "en": "Review details and retry. If it persists, inspect the files in the instance folder."
+  },
+  "mc8d3ae7e29be": {
+    "zh": "AMBER 的 API 申请再次被拒，尚未获得批准。微软真实登录、刷新和正版启动暂未验收。",
+    "en": "AMBER's API application was rejected again and is not approved. Real Microsoft sign-in, refresh and authenticated launch remain unverified."
+  },
+  "mcdee27f01109": {
+    "zh": "恢复日志不可为链接",
+    "en": "Recovery journal cannot be a link"
+  },
+  "m3db18438250e": {
+    "zh": "恢复日志格式无效，请检查实例目录",
+    "en": "Invalid recovery journal. Inspect the instance folder."
+  },
+  "m6b71f8b41cc4": {
+    "zh": "恢复日志包含无效路径或校验值",
+    "en": "Recovery journal contains an invalid path or checksum"
+  },
+  "m423048f81e14": {
+    "zh": "上次配置被中断；请在任务中心继续安装。",
+    "en": "Previous configuration was interrupted. Continue installation in Tasks."
+  },
+  "m8c415984190b": {
+    "zh": "数据目录不能使用符号链接或目录联接。",
+    "en": "Data directories cannot use symbolic links or junctions."
+  },
+  "ma0987b19748c": {
+    "zh": "发现目录链接，请先检查：",
+    "en": "Directory link found. Inspect it first: "
+  },
+  "mfe2a19e9d2db": {
+    "zh": "不支持的特殊文件：",
+    "en": "Unsupported special file: "
+  },
+  "me34237b12717": {
+    "zh": "目标磁盘剩余空间不足，请选择更大的磁盘。",
+    "en": "Not enough space on the destination disk. Choose a larger disk."
+  },
+  "ma1fa32e23087": {
+    "zh": "文件大小发生变化：",
+    "en": "File size changed: "
+  },
+  "m79ee2dae379a": {
+    "zh": "源文件不再是普通文件。",
+    "en": "Source is no longer a regular file."
+  },
+  "m17c2698a04be": {
+    "zh": "备份文件校验失败：",
+    "en": "Backup file verification failed: "
+  },
+  "m407823f8f8b0": {
+    "zh": "复制期间文件发生变化，请关闭占用程序后重试。",
+    "en": "A file changed during copying. Close programs using it and retry."
+  },
+  "m9477d157db1c": {
+    "zh": "新旧数据目录不能相同或相互包含。",
+    "en": "Old and new data directories cannot be identical or contain one another."
+  },
+  "m857fc861b12d": {
+    "zh": "数据位置配置损坏",
+    "en": "Data location configuration is damaged"
+  },
+  "mdd71659aecf3": {
+    "zh": "请选择一个空文件夹，原有文件不会覆盖。",
+    "en": "Choose an empty folder. Existing files will not be overwritten."
+  },
+  "m46d50b556b5c": {
+    "zh": "迁移期间源目录发生变化，已保留原目录，请关闭占用程序后重试。",
+    "en": "The source directory changed during migration and was kept. Close programs using it and retry."
+  },
+  "m83463a0f8178": {
+    "zh": "源文件在迁移期间被修改，未切换目录。",
+    "en": "A source file changed during migration. The data location was not switched."
+  },
+  "m21936a5b1e3c": {
+    "zh": "目标目录出现新文件，已停止切换，请选择空文件夹重试。",
+    "en": "New files appeared at the destination. Switching stopped. Choose an empty folder and retry."
+  },
+  "m4e625ef02171": {
+    "zh": "回收站路径不匹配，已停止操作。",
+    "en": "Recycle bin path mismatch. Operation stopped."
+  },
+  "ma4c79ce91ebd": {
+    "zh": "回收站包含目录链接，无法安全彻底删除。",
+    "en": "Recycle bin contains a directory link and cannot be purged safely."
+  },
+  "m39135181f5ca": {
+    "zh": "删除路径越界。",
+    "en": "Deletion path escapes its permitted directory."
+  },
+  "mcdf7f726913d": {
+    "zh": "实例中包含链接，请先手动检查并移除链接后重试。",
+    "en": "The instance contains links. Inspect and remove the links manually before retrying."
+  },
+  "m0bdc934220ea": {
+    "zh": "实例文件路径越界。",
+    "en": "Instance file path escapes its permitted directory."
+  },
+  "m6b1cbd13333b": {
+    "zh": "实例中存在不支持的特殊文件。",
+    "en": "Instance contains an unsupported special file."
+  },
+  "me48ac5bc6f86": {
+    "zh": "该历史版本未声明 Java 要求。",
+    "en": "This historical version declares no Java requirement."
+  },
+  "m2f4cb5c6b9c1": {
+    "zh": "{0}缺少下载或校验信息，该版本暂不支持。",
+    "en": "{0} lacks download or verification information. This version is unsupported."
+  },
+  "m572de1ebf2ac": {
+    "zh": "当前仅支持具有完整官方元数据的原版客户端。",
+    "en": "Only vanilla clients with complete official metadata are supported."
+  },
+  "m5efa3fd186cc": {
+    "zh": "加载器补丁",
+    "en": "Loader patch"
+  },
+  "mbb17306ad743": {
+    "zh": "资源索引",
+    "en": "Asset index"
+  },
+  "m680c297cf0be": {
+    "zh": "日志配置",
+    "en": "Logging configuration"
+  },
+  "ma6400355c42e": {
+    "zh": "资源索引无效。",
+    "en": "Invalid asset index."
+  },
+  "mddf6fd6c5d37": {
+    "zh": "压缩包展开大小超过限制。",
+    "en": "Extracted archive exceeds the size limit."
+  },
+  "mcbf15df761ba": {
+    "zh": "未知启动参数：",
+    "en": "Unknown launch argument: "
+  },
+  "mfd798b00d6e2": {
+    "zh": "离线玩家名称需要 3–16 个英文字母、数字或下划线。",
+    "en": "Offline player names must contain 3–16 English letters, digits or underscores."
+  },
+  "m4f3951091567": {
+    "zh": "内存需要在 1–32 GB 范围内。",
+    "en": "Memory must be between 1 and 32 GB."
+  },
+  "mc0d9c33b5bd9": {
+    "zh": "账号角色信息无效。",
+    "en": "Invalid account profile information."
+  },
+  "m08b14ceea66c": {
+    "zh": "该历史版本没有可识别的启动参数。",
+    "en": "No recognized launch arguments for this historical version."
+  },
+  "m030268b6f618": {
+    "zh": "面板不透明度应为 60–100%。",
+    "en": "Panel opacity must be 60–100%."
+  },
+  "ma2675c023434": {
+    "zh": "设置值不在支持范围内。",
+    "en": "Setting value is outside the supported range."
+  },
+  "me4f582c98342": {
+    "zh": "默认账号无效。",
+    "en": "Invalid default account."
+  },
+  "m0b661df09852": {
+    "zh": "不支持的迁移清单（最多 500 个模组）。",
+    "en": "Unsupported migration list (maximum 500 mods)."
+  },
+  "m02cd9cf56bad": {
+    "zh": "导入的清单",
+    "en": "Imported list"
+  },
+  "m3da232c59d5c": {
+    "zh": "清单包含无效项目 ID。",
+    "en": "Manifest contains an invalid project ID."
+  },
+  "m94f03f86c68d": {
+    "zh": "未知模组",
+    "en": "Unknown mod"
+  },
+  "m4ac0476a5172": {
+    "zh": "不支持此清单的内容来源",
+    "en": "Unsupported content source in this manifest"
+  },
+  "m9841dc7ace2b": {
+    "zh": "正在配置实例或迁移内容，请等待任务结束。",
+    "en": "Instance configuration or content migration is running. Wait for completion."
+  },
+  "mdd6c387f6efa": {
+    "zh": "安装已取消，已完成的文件已保留。",
+    "en": "Installation cancelled. Completed files were kept."
+  },
+  "mecfdeea621b7": {
+    "zh": "请等待当前任务结束。",
+    "en": "Wait for the current task to finish."
+  },
+  "m7e4398b8ab87": {
+    "zh": "此旧版任务没有完整安装计划，请在版本设置中继续。",
+    "en": "This older task has no complete installation plan. Continue in version settings."
+  },
+  "m70f6c4939d66": {
+    "zh": "安装记录无法读取，请在实例设置检查。",
+    "en": "Cannot read the installation record. Check instance settings."
+  },
+  "mc0fc751ba60c": {
+    "zh": "此任务可以直接继续，请刷新任务中心。",
+    "en": "This task can be continued directly. Refresh Tasks."
+  },
+  "mdc7be59b6c5b": {
+    "zh": "原始记录已保留，按当前配置修复",
+    "en": "Original records kept; repairing current configuration"
+  },
+  "m6de07a96fcdc": {
+    "zh": "此实例还有未完成的安装，请先到任务中心继续。",
+    "en": "This instance has an unfinished installation. Continue it in Tasks first."
+  },
+  "m432f086819b9": {
+    "zh": "内容恢复计划与当前实例不匹配，请检查版本设置。",
+    "en": "Content recovery plan does not match this instance. Check version settings."
+  },
+  "ma6c00f98367c": {
+    "zh": "安装计划已损坏，请在版本设置中检查。",
+    "en": "Installation plan is damaged. Check version settings."
+  },
+  "mf65b76548ecf": {
+    "zh": "保留的 OptiFine 安装器缺失或被修改，请重新选择官方安装器。",
+    "en": "Saved OptiFine installer is missing or changed. Choose the official installer again."
+  },
+  "mc15176ece8a7": {
+    "zh": "实例“{0}”已保留，可在任务中心继续安装。{1}",
+    "en": "Instance “{0}” was kept. Continue installation in Tasks. {1}"
+  },
+  "mfed87e77af12": {
+    "zh": "任务记录丢失。",
+    "en": "Task record is missing."
+  },
+  "md7df27ca8d31": {
+    "zh": "任务已取消。",
+    "en": "Task cancelled."
+  },
+  "m98234653aad7": {
+    "zh": "未知 Minecraft 版本。",
+    "en": "Unknown Minecraft version."
+  },
+  "m48fe0b265587": {
+    "zh": "并发数应为 1–16",
+    "en": "Concurrency must be 1–16"
+  },
+  "m4f783f2a5557": {
+    "zh": "不支持的加载器组合。",
+    "en": "Unsupported loader combination."
+  },
+  "m5743f75583fb": {
+    "zh": "所选历史加载器组合不兼容",
+    "en": "Incompatible legacy loader combination"
+  },
+  "mdce3f35a1cbd": {
+    "zh": "请选择兼容的 LiteLoader 版本",
+    "en": "Choose a compatible LiteLoader version"
+  },
+  "ma7daefbd3cff": {
+    "zh": "OptiFine 组合目前仅支持 Forge",
+    "en": "OptiFine combinations currently require Forge"
+  },
+  "m8a6c5a814f91": {
+    "zh": "请选择官方 OptiFine 安装器。",
+    "en": "Choose an official OptiFine installer."
+  },
+  "me03462d18854": {
+    "zh": "请选择兼容的加载器版本。",
+    "en": "Choose a compatible loader version."
+  },
+  "mf2b858e58a29": {
+    "zh": "所选 OptiFine 不适配目标 Minecraft 版本",
+    "en": "Selected OptiFine does not support the target Minecraft version"
+  },
+  "m6101385b46db": {
+    "zh": "源文件缺失",
+    "en": "Source file missing"
+  },
+  "m23ba3db3dab0": {
+    "zh": "Modrinth 未识别此文件",
+    "en": "Modrinth did not identify this file"
+  },
+  "m774eb2b3cf97": {
+    "zh": "无法识别 Modrinth 项目",
+    "en": "Cannot identify the Modrinth project"
+  },
+  "mb0f94ac7358a": {
+    "zh": "目标 Minecraft / 加载器没有兼容版本",
+    "en": "No compatible version for the target Minecraft / loader"
+  },
+  "m60849271f284": {
+    "zh": "任务已取消，未执行",
+    "en": "Task cancelled; not executed"
+  },
+  "m2e55e25d0ae9": {
+    "zh": "被其他已启用模组依赖，保持启用",
+    "en": "Required by another enabled mod; kept enabled"
+  },
+  "ma5f0c93216ac": {
+    "zh": "循环依赖无法逐项停用，保持启用",
+    "en": "Circular dependencies prevent individual disabling; kept enabled"
+  },
+  "mf7d2bc4b683d": {
+    "zh": "清理本地副本",
+    "en": "Clean up local copies"
+  },
+  "m4f8feca078b5": {
+    "zh": "删除下载的程序更新包？",
+    "en": "Delete downloaded application update packages?"
+  },
+  "mcf3bd6a0e05a": {
+    "zh": "删除旧升级配置备份？",
+    "en": "Delete old upgrade configuration backups?"
+  },
+  "mc2aff546b499": {
+    "zh": "此操作不可撤销。不会删除活动账号、实例、存档或实例备份。旧配置备份可能包含加密的历史账号库。",
+    "en": "This cannot be undone. Active accounts, instances, worlds and instance backups are kept. Old configuration backups may contain encrypted historical account stores."
+  },
+  "m7ba2d6728fe2": {
+    "zh": "确认清理",
+    "en": "Confirm cleanup"
+  },
+  "m2ffbebe3b8cb": {
+    "zh": "清理程序更新下载",
+    "en": "Clear app update downloads"
+  },
+  "mc41af84a7c63": {
+    "zh": "清理旧配置备份",
+    "en": "Clear old configuration backups"
+  },
+  "m7b6bea1db349": {
+    "zh": "{0} 个项目（单数）",
+    "en": "{0} project"
+  },
+  "m90b234ceb9f7": {
+    "zh": "{0} 个项目",
+    "en": "{0} projects"
+  },
+  "m94289aa33f49": {
+    "zh": "第 {0} 页",
+    "en": "Page {0}"
+  },
+  "m4178e505f02f": {
+    "zh": "文件不是普通文件或超过大小限制。",
+    "en": "File is not a regular file or exceeds the size limit."
+  },
+  "m5c8922c13b7b": {
+    "zh": "文件超过读取大小限制。",
+    "en": "File exceeds the size limit."
+  },
+  "m823bf7b63cf0": {
+    "zh": "服务器响应超过读取大小限制。",
+    "en": "Server response exceeds the size limit."
+  },
+  "m1d85e80330e6": {
+    "zh": "语言包的日期格式区域无效。",
+    "en": "Invalid language-pack formatting locale."
+  },
+  "m979b953d2b18": {
+    "zh": "语言包条目无效：",
+    "en": "Invalid language entry: "
+  },
+  "m17e276a31152": {
+    "zh": "语言或剪贴板设置无效。",
+    "en": "Invalid language or clipboard preference."
+  },
+  "mb236986dfd1c": {
+    "zh": "不支持的清理目标。",
+    "en": "Unsupported cleanup target."
+  },
+  "m4dd87c1a9064": {
+    "zh": "清理路径无效。",
+    "en": "Invalid cleanup path."
+  }
+}

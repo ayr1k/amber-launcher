@@ -23,13 +23,13 @@ export class VanillaLauncher extends LauncherCore {
  async requireStopped(dir){this.workflowGuard?.();if(await readSession(dir))throw new Error('此实例已有运行中的游戏或启动任务，请先退出游戏。');}
  async scanJava(){const list=await discoverJava(this.root);for(const java of list)this.javaCandidates.set(java.path,java);return list;}
  async addJava(path){const java=await inspectJava(path);this.javaCandidates.set(java.path,java);return java;}
- cancel(id){const control=this.controllers.get(id);if(!control)throw new Error('任务已经结束。');control.abort(new Error('用户取消了下载。'));}
+ cancel(id){const control=this.controllers.get(id);if(!control)throw new Error('任务已经结束。');const job=this.jobs.find(j=>j.id===id);if(job){job.cancellationRequested=true;job.phase='正在取消并整理文件，请稍候';}control.abort(new Error('用户取消了下载。'));}
  startJob(instanceId,kind,fn){
   this.workflowGuard?.();
   if(this.jobs.some(j=>j.state==='running'))throw new Error('请先完成或取消当前安装任务。');
   if([...this.processes.values()].some(p=>p.instanceId===instanceId&&p.state==='running'))throw new Error('请先退出此实例的游戏。');
-  const controller=new AbortController();const job={id:randomUUID(),instanceId,kind,state:'running',phase:'准备中',completed:0,total:0,transferred:0,startedAt:new Date().toISOString()};this.jobs.push(job);this.controllers.set(job.id,controller);
-  Promise.resolve().then(()=>fn(job,controller.signal)).then(()=>{job.state='done';job.phase='已完成';}).catch(e=>{job.state=controller.signal.aborted?'cancelled':'failed';job.error=e.message;job.phase=job.state==='cancelled'?'已取消':'失败';}).finally(()=>{job.finishedAt=new Date().toISOString();this.controllers.delete(job.id);});return {...job};
+  const controller=new AbortController();const job={id:randomUUID(),instanceId,kind,state:'running',phase:'排队准备中',completed:0,total:0,transferred:0,startedAt:new Date().toISOString()};this.jobs.push(job);this.controllers.set(job.id,controller);
+  Promise.resolve().then(()=>{controller.signal.throwIfAborted();job.phase='准备中';return fn(job,controller.signal);}).then(()=>{job.state='done';job.phase='已完成';}).catch(e=>{job.state=controller.signal.aborted?'cancelled':'failed';job.error=e.message;job.phase=job.state==='cancelled'?'已取消':'失败';}).finally(()=>{job.finishedAt=new Date().toISOString();this.controllers.delete(job.id);});return {...job};
  }
  async metadata(id){const dir=await this.instancePath(id);const item=JSON.parse(await readFile(join(dir,'instance.json'),'utf8'));const meta=JSON.parse(await readFile(join(dir,'version.json'),'utf8'));if(item.metadataSha1&&await digest(join(dir,'version.json'))!==item.metadataSha1)throw new Error('版本元数据被更改，请重新创建实例。');if(meta.id!==item.game)throw new Error('实例版本元数据不匹配。');return {dir,item,meta};}
  async loaderVersions(id,type){const {meta}=await this.metadata(id);return type==='fabric'?fabricVersions(meta.id,this.fetcher):type==='liteloader'?liteVersions(meta.id,this.fetcher):loaderVersions(meta.id,type,this.fetcher);}

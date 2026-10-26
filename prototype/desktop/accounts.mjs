@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
-import { readFile } from 'node:fs/promises';
+import {readBoundedFile,responseText} from './bounded-io.mjs';
+import {ensureParents} from './download.mjs';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { atomicJson } from './core.mjs';
@@ -14,13 +15,14 @@ function profile(p){if(!p||! /^[a-f0-9]{32}$/i.test(p.id)||typeof p.name!=='stri
 function token(value){if(typeof value!=='string'||!value||value.length>32000)throw Error('认证服务没有返回有效令牌。');return value;}
 export class Accounts {
  constructor(root,{codec,fetcher=fetch,now=Date.now}={}){this.root=root;this.codec=codec;this.fetcher=fetcher;this.now=now;this.data={clientId:MICROSOFT_CLIENT_ID,accounts:[]};this.device=null;this.busy=false;}
- async init(){try{const encrypted=JSON.parse(await readFile(join(this.root,'accounts.json'),'utf8'));this.data=JSON.parse(this.codec.decryptString(Buffer.from(encrypted.sealed,'base64')));this.data.clientId ||= MICROSOFT_CLIENT_ID;}catch(e){if(e.code!=='ENOENT')throw Error('无法解密账号库；请使用创建账号库的 Windows 用户。');}}
- async save(){if(!this.codec.isEncryptionAvailable())throw Error('系统凭据加密不可用，无法保存账号。');await atomicJson(join(this.root,'accounts.json'),{schema:1,sealed:this.codec.encryptString(JSON.stringify(this.data)).toString('base64')});}
+ async init(){try{const encrypted=JSON.parse(await readBoundedFile(join(this.root,'accounts.json'),2_000_000));this.data=JSON.parse(await this.codec.decryptString(Buffer.from(encrypted.sealed,'base64')));this.data.clientId ||= MICROSOFT_CLIENT_ID;}catch(e){if(e.code!=='ENOENT')throw Error('无法解密账号库；请使用创建账号库的 Windows 用户。');}}
+ async save(){await ensureParents(this.root,join(this.root,'accounts.json'));if(!await this.codec.isEncryptionAvailable())throw Error('系统凭据加密不可用，无法保存账号。');await atomicJson(join(this.root,'accounts.json'),{schema:1,sealed:(await this.codec.encryptString(JSON.stringify(this.data))).toString('base64')});}
+ secrets(){return this.data.accounts.flatMap(a=>[a.accessToken,a.refreshToken,a.clientToken,a.uuid]).concat(this.device?.secret||[]);}
  list(){return {clientId:this.data.clientId,defaultClientId:MICROSOFT_CLIENT_ID,accounts:this.data.accounts.map(a=>({id:a.id,type:a.type,name:a.name,server:a.server,profiles:a.profiles})),device:this.device?{state:this.device.state,code:this.device.code,url:this.device.url,expiresAt:this.device.expiresAt,error:this.device.error}:null};}
  async exclusive(fn){if(this.busy)throw Error('账号操作正在处理中。');this.busy=true;try{return await fn();}finally{this.busy=false;}}
  async request(url,body,{form=false,bearer}={}){
   let r;try{r=await this.fetcher(url,{method:body?'POST':'GET',redirect:'error',signal:AbortSignal.timeout(30000),headers:{Accept:'application/json',...(body?{'Content-Type':form?'application/x-www-form-urlencoded':'application/json'}:{}),...(bearer?{Authorization:'Bearer '+bearer}:{}),...(url.includes('xboxlive.com')?{'x-xbl-contract-version':'1'}:{})},body:body?(form?new URLSearchParams(body).toString():JSON.stringify(body)):undefined});}catch{throw Error(authStage(url)+'连接失败，请检查网络与服务器地址。');}
-  let data;try{const text=await r.text();if(text.length>1_000_000)throw Error();data=JSON.parse(text);}catch{throw Error(authStage(url)+'返回了无效响应（HTTP '+r.status+'）。');}
+  let data;try{const text=await responseText(r,1_000_000);if(text.length>1_000_000)throw Error();data=JSON.parse(text);}catch{throw Error(authStage(url)+'返回了无效响应（HTTP '+r.status+'）。');}
   if(!r.ok)throw authFailure(url,r.status,data);return data;
  }
  async configure(clientId){return this.exclusive(async()=>{clientId=clientId?.trim()||MICROSOFT_CLIENT_ID;if(!/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(clientId))throw Error('请输入应用注册页的 Client ID。');this.device=null;this.data.clientId=clientId;await this.save();return this.list();});}

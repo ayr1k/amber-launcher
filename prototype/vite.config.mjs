@@ -11,7 +11,7 @@ export default defineConfig({
   server: {
     host: "0.0.0.0",
     // Packaged runtimes and smoke-test caches are not frontend source files.
-    watch: { ignored: ["**/releases/**", "**/.smoke-data/**", "**/.test-tools/**"] },
+    watch: { ignored: ["**/releases/**", "**/.smoke-data/**", "**/.test-tools/**", "**/.qa/**"] },
     allowedHosts: ["terminal.local"],
     warmup: {
       clientFiles: ["./src/main.jsx"],
