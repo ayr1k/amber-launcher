@@ -10,7 +10,7 @@ Include the affected AMBER version, platform, impact, reproducible steps with sy
 
 ## Supported scope
 
-The current Beta 1.5 Windows x64 prerelease is the active maintenance target. Older releases should be upgraded. This is not a security certification or guarantee of absence of vulnerabilities.
+The current Beta 1.6 Windows x64 prerelease is the active maintenance target. Older releases should be upgraded. This is not a security certification or guarantee of absence of vulnerabilities.
 
 The renderer is sandboxed with Node integration disabled, context isolation enabled, restrictive CSP and sender-validated IPC. Downloads use trusted HTTPS origins and integrity checks. Language packs are validated text-only JSON, never scripts. Credentials use Windows user encryption; the public Microsoft Client ID is intentionally distributed. Minecraft and mods run as the user and are outside an application sandbox. Install only trusted content.
 

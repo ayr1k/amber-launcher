@@ -1,3 +1,4 @@
+import {DialogWindowBar} from './WindowControls';
 import { useLocale } from "./Locale";import { t as translateText, translateMessage, getLocale } from "../desktop/localization.mjs"; // SPDX-License-Identifier: MPL-2.0
 import { useEffect, useState, useRef } from 'react';
 import { LanguageControl } from './Locale';
@@ -15,7 +16,7 @@ export function Onboarding({ onDone }) {useLocale();
   async function account() {setBusy(true);try {await window.amberDesktop.addOffline(name);localStorage.setItem('amber.offline-name', name);setStep(2);} catch (e) {setError(e.message);} finally {setBusy(false);}}
   useEffect(() => {modal.current?.querySelector('#welcome-title')?.focus();}, [step]);
   const validName = /^[A-Za-z0-9_]{3,16}$/.test(name);
-  return <dialog ref={modal} className="setup-overlay onboarding" aria-labelledby="welcome-title" onCancel={(e) => e.preventDefault()}><section className="setup-v6">
+  return <dialog ref={modal} className="setup-overlay onboarding" aria-labelledby="welcome-title" onCancel={(e) => e.preventDefault()}><DialogWindowBar/><section className="setup-v6">
   <header className="welcome-heading"><small>WELCOME TO AMBER · {step + 1} / 3</small><h1 id="welcome-title" tabIndex={-1}>{[translateText("先为游戏安个家"), translateText("选择你的游戏身份"), translateText("准备好创建第一个实例")][step]}</h1></header>
   <div className="welcome-body">
    {step === 0 ? <><LanguageControl /><StoragePanel onBusy={setBusy} /><p>{translateText("默认目录可以直接使用，也可以迁移到其他磁盘。")}</p></> : step === 1 ? <><p>{translateText("可以先创建离线账号体验单人游戏。微软与第三方账号在“账号”页面添加。")}</p><label className="welcome-name">{translateText("离线玩家名称")}<input maxLength={16} disabled={busy} value={name} onChange={(e) => setName(e.target.value)} placeholder={translateText("例如 AmberPlayer")} aria-describedby="welcome-name-help" aria-invalid={!!name && !validName} /></label><small id="welcome-name-help" className={name && !validName ? 'error' : 'muted'}>{translateText("使用 3–16 位英文字母、数字或下划线。也可以稍后添加账号。")}</small></> : <p>{translateText("选择 Minecraft 版本和加载器，AMBER 会准备 Java 并下载游戏。中途退出后可以在任务中心继续。")}</p>}

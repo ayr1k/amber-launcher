@@ -5330,5 +5330,165 @@
   "m4dd87c1a9064": {
     "zh": "清理路径无效。",
     "en": "Invalid cleanup path."
+  },
+  "m932ff2e9af1b": {
+    "zh": "窗口操作",
+    "en": "Window controls"
+  },
+  "mac29e57a46f4": {
+    "zh": "最小化",
+    "en": "Minimize"
+  },
+  "m7995087e5a3d": {
+    "zh": "还原窗口",
+    "en": "Restore window"
+  },
+  "m82c4aa13b7ca": {
+    "zh": "最大化",
+    "en": "Maximize"
+  },
+  "m1ae6b0a0f826": {
+    "zh": "关闭窗口",
+    "en": "Close window"
+  },
+  "md301bc125833": {
+    "zh": "关闭提示",
+    "en": "Dismiss"
+  },
+  "m9efe01f647d6": {
+    "zh": "窗口",
+    "en": "Window"
+  },
+  "m3c63a2b8d4b9": {
+    "zh": "窗口边框",
+    "en": "Window corners"
+  },
+  "m5bd09f21bb15": {
+    "zh": "与按钮和面板的圆角独立设置，下次启动 AMBER 时生效。",
+    "en": "Independent of button and panel corners. Applies the next time AMBER starts."
+  },
+  "m29df7ebea71e": {
+    "zh": "直角",
+    "en": "Square"
+  },
+  "mb95b7d6b5b28": {
+    "zh": "系统圆角",
+    "en": "System rounded corners"
+  },
+  "m99a142fbf2da": {
+    "zh": "当前系统不支持窗口圆角，将使用直角边框。Windows 11 可使用系统圆角。",
+    "en": "This system does not support rounded window corners; square corners will be used. Windows 11 supports system rounded corners."
+  },
+  "mdb2352e020d8": {
+    "zh": "窗口边框设置已保存，下次启动生效。",
+    "en": "Window corner preference saved. It will apply on the next start."
+  },
+  "mfc98e2ac5a45": {
+    "zh": "标题栏配色",
+    "en": "Title bar color"
+  },
+  "m404b68a79f54": {
+    "zh": "标题栏融入应用外观，颜色即时生效。",
+    "en": "The title bar shares the application appearance. Color changes apply immediately."
+  },
+  "md7fa90d22bb7": {
+    "zh": "跟随主题",
+    "en": "Follow theme"
+  },
+  "m92529d778106": {
+    "zh": "使用强调色",
+    "en": "Use accent color"
+  },
+  "m43829e8eea67": {
+    "zh": "拖动标题栏空白处移动窗口，双击可最大化或还原。支持 Win + 方向键分屏；窗口位置和大小会自动保存。",
+    "en": "Drag an empty area of the title bar to move the window; double-click to maximize or restore. Use Win + arrow keys to snap. Window position and size are saved automatically."
+  },
+  "m768c551efdb2": {
+    "zh": "不支持的窗口操作。",
+    "en": "Unsupported window action."
+  },
+  "mba0de30d27ed": {
+    "zh": "窗口设置无效。",
+    "en": "Invalid window preferences."
+  },
+  "m052a4778ae89": {
+    "zh": "不支持的数据位置。",
+    "en": "Unsupported data location."
+  },
+  "md4677061dd71": {
+    "zh": "仅在你主动登录时复制，验证码过期后仅清理仍属于本次登录的内容。",
+    "en": "Copied only when you start sign-in. After expiry, the clipboard is cleared only if it still contains that sign-in code."
+  },
+  "m6bdb4435095e": {
+    "zh": "正在保存…",
+    "en": "Saving…"
+  },
+  "m2717052f81ec": {
+    "zh": "设置已保存。",
+    "en": "Settings saved."
+  },
+  "mb4f95abb2519": {
+    "zh": "主题 浅色 深色 系统 圆角 直角 字体 文字 大小 动画 透明 密度 强调色 图片 窗口 标题栏",
+    "en": "Theme light dark system rounded square font text size motion opacity density accent image window title bar"
+  },
+  "md000e792ccb2": {
+    "zh": "复制路径：{0}",
+    "en": "Copy path: {0}"
+  },
+  "mb97c49acb930": {
+    "zh": "复制路径",
+    "en": "Copy path"
+  },
+  "m802266f340ab": {
+    "zh": "路径已复制。",
+    "en": "Path copied."
+  },
+  "mffa4d7b4c48b": {
+    "zh": "正在读取数据位置…",
+    "en": "Loading data locations…"
+  },
+  "m58bf9c347328": {
+    "zh": "诊断与分享",
+    "en": "Diagnostics and sharing"
+  },
+  "medb4372652fb": {
+    "zh": "清理与维护",
+    "en": "Cleanup and maintenance"
+  },
+  "meeef0dcae118": {
+    "zh": "程序更新下载",
+    "en": "App update downloads"
+  },
+  "mc275eb081326": {
+    "zh": "删除已下载的 AMBER 更新包，需要时可重新下载；不影响游戏内容。",
+    "en": "Remove downloaded AMBER installers. They can be downloaded again; game content is unaffected."
+  },
+  "mc929b29b2ea4": {
+    "zh": "旧配置备份",
+    "en": "Old configuration backups"
+  },
+  "mac5969fa5d1e": {
+    "zh": "删除升级前保留的配置副本，可能包含加密的历史账号库。不会删除实例备份或游戏存档。",
+    "en": "Remove pre-upgrade configuration copies, which may include encrypted historical accounts. Instance backups and worlds are kept."
+  },
+  "m1b525838ed24": {
+    "zh": "程序更新下载已清理。",
+    "en": "App update downloads cleared."
+  },
+  "m6fbe03556624": {
+    "zh": "旧配置备份已清理。",
+    "en": "Old configuration backups cleared."
+  },
+  "md51fdbeb98ad": {
+    "zh": "已取消清理。",
+    "en": "Cleanup cancelled."
+  },
+  "m84880323c334": {
+    "zh": "已取消导出。",
+    "en": "Export cancelled."
+  },
+  "m4108a4d106f2": {
+    "zh": "数据位置",
+    "en": "Data locations"
   }
 }

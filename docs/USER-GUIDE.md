@@ -17,3 +17,9 @@
 **Language and appearance:** Settings provides instant language switching, language-pack import, themes, rounded controls, local backgrounds, opacity, layout and reduced-motion support. User/project names remain unchanged. Search settings by localized keywords.
 
 **Updates:** About checks the official GitHub release feed. AMBER verifies the installer before offering a confirmed handoff. Close games and tasks first. No automatic background installation is performed.
+
+## Window appearance and privacy tools
+
+Settings → Appearance and background → Window offers square/system-rounded outer corners and title-bar colors. Corner changes apply on the next start; control corner style is independent. Windows 11 supports rounded outer corners; earlier Windows uses square corners. Drag empty title-bar space to move the window, double-click to maximize/restore, and use Win + arrow keys to snap. The custom maximize button does not show the native hover Snap Layouts menu. Size, normal position and maximized state are remembered; a missing monitor triggers recovery to a visible display. Alt no longer reveals an application menu. Ctrl+A/C/X/V/Z/Y and Ctrl+Shift+Z/V remain available for editing.
+
+Settings → Language and privacy groups data locations, diagnostic previews and maintenance. Copy a path with its adjacent button. Preview a diagnostic summary before exporting. Cleanup prompts name the affected copies and leave active accounts, instances, worlds and instance backups intact. A cancelled action is reported without claiming completion.

@@ -1,3 +1,5 @@
+import {WindowStateStore,fitWindow,supportsWindowCorners,runWindowAction,editingCommand} from './window-state.mjs';
+import {release as osRelease} from 'node:os';
 import {cleanupPrivateCopies} from './privacy-cleanup.mjs';
 import {credentialCodec} from './credential-codec.mjs';
 import { redact, redactFields } from './privacy.mjs';
@@ -9,7 +11,7 @@ import { ModImport } from './mod-import.mjs';
 import { BulkContent } from './bulk-content.mjs';
 import { LaunchPreferences } from './launch-preferences.mjs';
 // SPDX-License-Identifier: MPL-2.0
-import { app, BrowserWindow, ipcMain, protocol, net, shell, session, dialog, safeStorage, nativeImage, clipboard } from 'electron';
+import { app, Menu, screen, BrowserWindow, ipcMain, protocol, net, shell, session, dialog, safeStorage, nativeImage, clipboard } from 'electron';
 import { spawn } from 'node:child_process';
 import { beginMicrosoftLogin, copyMicrosoftCode, pendingCode, clearCopiedCode } from './login-actions.mjs';
 import { AppUpdates, backupUpgradeConfig } from './app-updates.mjs';
@@ -47,10 +49,11 @@ protocol.registerSchemesAsPrivileged([{ scheme: 'amber', privileges: { standard:
 let window,activatePending = false;
 let loaded = false;
 const smokeChannels = new Set();
-function finishSmoke() {if (smoke && loaded && ['amber:info', 'amber:instances', 'amber:status', 'amber:settings'].every((c) => smokeChannels.has(c))) {console.log('AMBER_DESKTOP_AND_IPC_OK');setTimeout(() => app.quit(), 250);}}
+function finishSmoke() {if (smoke && loaded && ['amber:info', 'amber:instances', 'amber:status', 'amber:settings', 'amber:window-state'].every((c) => smokeChannels.has(c))) {console.log('AMBER_DESKTOP_AND_IPC_OK');setTimeout(() => app.quit(), 250);}}
 app.on('second-instance', () => {activatePending = true;if (window) {if (window.isMinimized()) window.restore();window.show();window.focus();}});
 if (smoke) setTimeout(() => {console.error('AMBER_SMOKE_TIMEOUT');app.exit(2);}, 20000).unref();
 app.whenReady().then(async () => {
+  Menu.setApplicationMenu(null);
   protocol.handle('amber', async (request) => {
     const url = new URL(request.url);
     if (url.hostname !== 'app') return new Response('Forbidden', { status: 403 });
@@ -78,8 +81,8 @@ app.whenReady().then(async () => {
     ipcMain.handle(channel, async (event, ...args) => {
       const source = new URL(event.senderFrame.url);
       if (event.sender !== window?.webContents || event.senderFrame !== window.webContents.mainFrame || source.protocol !== 'amber:' || source.host !== 'app') throw new Error('请求来源不受信任。');
-      if (storageBusy && !['amber:info', 'amber:status', 'amber:setup-cancel'].includes(channel)) throw Error('数据目录正在迁移，请等待完成。');
-      if (upgradeBusy && !['amber:info', 'amber:status', 'amber:app-update-state'].includes(channel)) throw Error('正在准备升级，请稍候。');
+      if (storageBusy && !['amber:info', 'amber:status', 'amber:setup-cancel', 'amber:window-action', 'amber:window-state'].includes(channel)) throw Error('数据目录正在迁移，请等待完成。');
+      if (upgradeBusy && !['amber:info', 'amber:status', 'amber:app-update-state', 'amber:window-action', 'amber:window-state'].includes(channel)) throw Error('正在准备升级，请稍候。');
       let result;try {result = await fn(...args);} catch (e) {const problem=errorDescriptor(redact(e.message,accounts.secrets()));throw Error('[AMBER '+problem.code+'] '+problem.text);}result = redactFields(result, accounts.secrets());if (smoke) {smokeChannels.add(channel);finishSmoke();}return result;
     });
   }
@@ -157,6 +160,7 @@ app.whenReady().then(async () => {
   handle('amber:diagnostics-preview', async()=>localizeFields(await summary()));
   handle('amber:privacy-cleanup',async kind=>{if(!['updates','upgrade-backups'].includes(kind))throw Error('不支持的清理目标。');if(upgradeBusy||storageBusy||launching||workflows.active||core.jobs.some(j=>j.state==='running')||['downloading','checking'].includes(appUpdates.state.phase))throw Error('请等待当前任务结束。');const answer=await dialog.showMessageBox(window,{type:'warning',title:translateMessage('清理本地副本'),message:translateMessage(kind==='updates'?'删除下载的程序更新包？':'删除旧升级配置备份？'),detail:translateMessage('此操作不可撤销。不会删除活动账号、实例、存档或实例备份。旧配置备份可能包含加密的历史账号库。'),buttons:[translateMessage('取消'),translateMessage('确认清理')],defaultId:0,cancelId:0,noLink:true});if(answer.response!==1)return false;if(upgradeBusy||storageBusy||launching||workflows.active||core.jobs.some(j=>j.state==='running')||['downloading','checking'].includes(appUpdates.state.phase))throw Error('请等待当前任务结束。');upgradeBusy=true;try{await cleanupPrivateCopies(app.getPath('userData'),kind);if(kind==='updates'){appUpdates.candidate=null;appUpdates.state={phase:'idle'};}return true;}finally{upgradeBusy=false;}});
 handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json'), data: core.root, upgrades: join(app.getPath('userData'), 'upgrade-backups') }));
+  handle('amber:privacy-copy-path',key=>{const paths={accounts:join(core.root,'accounts.json'),data:core.root,upgrades:join(app.getPath('userData'),'upgrade-backups')};if(!Object.hasOwn(paths,key))throw Error('不支持的数据位置。');clipboard.writeText(paths[key]);return true;});
   handle('amber:diagnostics-export', async () => {const result = await dialog.showSaveDialog(window, { title: translateMessage('保存不含账号和日志的诊断摘要'), defaultPath: 'amber-diagnostics.json', filters: [{ name: 'JSON', extensions: ['json'] }] });if (result.canceled) return false;const summary = diagnosticSummary({ version: app.getVersion(), platform: process.platform, arch: process.arch, instances: await core.listInstances(), status: await core.runtimeStatus() });await writeFile(result.filePath, JSON.stringify(localizeFields(summary), null, 2));return true;});
   handle('amber:instance-restore', (id) => management.restore(id));
   handle('amber:lite-overlay', (id, v) => configureLiteOverlay(core, id, v));
@@ -217,10 +221,41 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   let launching = false;
   handle('amber:launch', async (id, options) => {if (launching) throw Error('正在准备启动。');launching = true;try {core.workflowGuard?.();if (core.jobs.some((j) => j.state === 'running')) throw Error('请等待安装或更新结束后启动游戏。');await recoverModUpdate(await core.instancePath(id));if ((await workflows.pending()).some((p) => p.instanceId === id)) throw Error('实例安装尚未完成，请先在任务中心继续安装。');await content.validateLaunch(id);const launchPrefs = await launchPreferences.get(id);options = { ...options, accountId: launchPrefs.accountId ?? options.accountId, memory: launchPrefs.memory ?? options.memory };const identity = options.accountId ? await accounts.identity(options.accountId) : null;const extraJvm = identity?.server ? [`-javaagent:${await authAgent(core.root)}=${identity.server}`] : [];const run = await core.launch(id, { username: options.username, memory: options.memory, identity, extraJvm });await libraryState.launched(id, run).catch(() => {});return run;} finally {launching = false;}});
   handle('amber:open-instance', async (id) => {const error = await shell.openPath(await core.instancePath(id));if (error) throw new Error(error);});
-  function createWindow() {
-    window = new BrowserWindow({ title: 'AMBER', width: 1440, height: 1000, minWidth: 860, minHeight: 640, show: !smoke, autoHideMenuBar: true, backgroundColor: '#fafbf8', webPreferences: { preload: join(base, 'preload.cjs'), nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true } });
+  const placement=new WindowStateStore(app.getPath('userData'));
+  let initialCorners='system',placementTimer,placementMaximized=false;
+  const windowInfo=()=>({maximized:window?.isMaximized()||false,focused:window?.isFocused()||false,corners:initialCorners,cornersSupported:supportsWindowCorners(process.platform,osRelease())});
+  const sendWindowInfo=()=>{if(window&&!window.isDestroyed())window.webContents.send('amber:window-state-changed',windowInfo());};
+  handle('amber:window-state',windowInfo);
+  handle('amber:window-action',action=>{runWindowAction(window,action);return true;});
+  const savePlacement=()=>placement.save(window.getNormalBounds(),window.isMinimized()?placementMaximized:window.isMaximized()).catch(e=>console.error(redact(e.message)));
+  async function createWindow() {
+    const remembered=await placement.load(),prefs=await settings.get();initialCorners=prefs.windowCorners;placementMaximized=remembered?.maximized||false;
+    const bounds=fitWindow(remembered?.bounds,screen.getAllDisplays(),screen.getPrimaryDisplay().id);
+    window = new BrowserWindow({ title: 'AMBER', ...bounds, minWidth: Math.min(860,bounds.width), minHeight: Math.min(640,bounds.height), frame:false, roundedCorners:initialCorners==='system', thickFrame:true, show: false, backgroundColor: '#fafbf8', webPreferences: { preload: join(base, 'preload.cjs'), nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true } });
+    window.setMenu(null);
+    window.webContents.on('before-input-event',(event,input)=>{const method=editingCommand(input);if(method){event.preventDefault();window.webContents[method]();}});
+    if(remembered?.maximized)window.maximize();
+    window.on('maximize',()=>{placementMaximized=true;});window.on('unmaximize',()=>{placementMaximized=false;});
+    for(const event of ['maximize','unmaximize','focus','blur','restore'])window.on(event,sendWindowInfo);
+    for(const event of ['move','resize','maximize','unmaximize'])window.on(event,()=>{clearTimeout(placementTimer);placementTimer=setTimeout(()=>{if(window&&!window.isDestroyed()&&!window.isMinimized())savePlacement();},250);});
+    const recoverDisplay=()=>{if(!window||window.isDestroyed())return;const previous=window.getNormalBounds(),next=fitWindow(previous,screen.getAllDisplays(),screen.getPrimaryDisplay().id);if(['x','y','width','height'].some(k=>previous[k]!==next[k])){const maximized=window.isMaximized();if(maximized)window.unmaximize();window.setMinimumSize(Math.min(860,next.width),Math.min(640,next.height));window.setBounds(next);if(maximized)window.maximize();}};
+    for(const event of ['display-removed','display-metrics-changed','display-added'])screen.on(event,recoverDisplay);
+    window.on('closed',()=>{clearTimeout(placementTimer);for(const event of ['display-removed','display-metrics-changed','display-added'])screen.removeListener(event,recoverDisplay);window=null;});
+    window.once('ready-to-show',()=>{if(!smoke)window.show();});
     let closeAllowed = false,closePrompt = false;
-    window.on('close', async (event) => {if (smoke || closeAllowed || !workflows.active && !core.jobs.some((j) => j.state === 'running') && appUpdates.state.phase !== 'downloading') return;event.preventDefault();if (closePrompt) return;closePrompt = true;try {const r = await dialog.showMessageBox(window, { type: 'warning', title: translateMessage('安装还未结束'), message: translateMessage('退出会中断当前下载或实例配置。'), detail: translateMessage('已完成的文件会保留，建议等待任务结束。实例安装可在任务中心继续；程序更新可在关于页重新下载。'), buttons: [translateMessage('继续等待'), translateMessage('取消任务并退出')], defaultId: 0, cancelId: 0, noLink: true });if (r.response === 1) {appUpdates.cancel();workflows.cancel();for (const j of core.jobs.filter((j) => j.state === 'running')) core.controllers.get(j.id)?.abort(Error('用户取消任务并退出。'));while (workflows.active || core.jobs.some((j) => j.state === 'running') || appUpdates.state.phase === 'downloading') await new Promise((r) => setTimeout(r, 150));closeAllowed = true;window.close();}} finally {closePrompt = false;}});
+    window.on('close', async event => {
+      if(closeAllowed)return;event.preventDefault();if(closePrompt)return;closePrompt=true;
+      try {
+        if(storageBusy){await dialog.showMessageBox(window,{type:'info',message:translateMessage('数据目录正在迁移，请等待完成。'),buttons:[translateMessage('确定')]});return;}
+        if(!smoke&&(workflows.active||core.jobs.some(j=>j.state==='running')||appUpdates.state.phase==='downloading')){
+          const answer=await dialog.showMessageBox(window,{type:'warning',title:translateMessage('安装还未结束'),message:translateMessage('退出会中断当前下载或实例配置。'),detail:translateMessage('已完成的文件会保留，建议等待任务结束。实例安装可在任务中心继续；程序更新可在关于页重新下载。'),buttons:[translateMessage('继续等待'),translateMessage('取消任务并退出')],defaultId:0,cancelId:0,noLink:true});
+          if(answer.response!==1)return;
+          appUpdates.cancel();workflows.cancel();for(const j of core.jobs.filter(j=>j.state==='running'))core.controllers.get(j.id)?.abort(Error('用户取消任务并退出。'));
+          while(workflows.active||core.jobs.some(j=>j.state==='running')||appUpdates.state.phase==='downloading')await new Promise(resolve=>setTimeout(resolve,150));
+        }
+        clearTimeout(placementTimer);await savePlacement();closeAllowed=true;window.close();
+      }finally{closePrompt=false;}
+    });
     window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
     window.webContents.on('will-navigate', (event, url) => {if (url !== 'amber://app/') event.preventDefault();});
     window.webContents.on('will-attach-webview', (event) => event.preventDefault());
@@ -228,7 +263,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
     window.webContents.on('did-finish-load', () => {loaded = true;if (activatePending && !smoke) {window.show();window.focus();activatePending = false;}finishSmoke();});
     window.loadURL('amber://app/');
   }
-  createWindow();
+  await createWindow();
   app.on('window-all-closed', () => {if (process.platform !== 'darwin') app.quit();});
-  app.on('activate', () => {if (!BrowserWindow.getAllWindows().length) createWindow();});
+  app.on('activate', () => {if (!BrowserWindow.getAllWindows().length) createWindow().catch(e=>console.error(redact(e.message)));});
 }).catch((error) => {console.error(redact(error?.message || String(error)));app.exit(1);});

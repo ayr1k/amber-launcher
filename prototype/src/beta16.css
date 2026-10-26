@@ -1,0 +1,39 @@
+/* SPDX-License-Identifier: MPL-2.0 */
+.setting-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,auto);align-items:center;gap:16px 28px;padding:20px 0;border-bottom:1px solid var(--line)}
+.setting-copy{min-width:0}.setting-copy strong{font-weight:600}.setting-copy p{margin:7px 0 0;line-height:1.7;color:var(--muted);max-width:65ch;overflow-wrap:anywhere}
+.setting-control{min-width:0;display:flex;justify-content:flex-end}.setting-control>.amber-select{width:240px;max-width:100%}.setting-control>button{max-width:100%;white-space:normal;line-height:1.5}
+.check-setting,.app .check-label{display:flex;align-items:flex-start;gap:10px;line-height:1.6;cursor:pointer;min-width:0}
+.check-setting{padding:14px 0;margin:6px 0 20px;max-width:76ch}.check-setting>span{min-width:0}.check-title{display:block}.check-setting small{display:block;margin-top:6px;color:var(--muted);line-height:1.7}
+.app .check-setting>input[type=checkbox],.app .check-label>input[type=checkbox]{flex:0 0 16px;width:16px!important;height:16px;min-height:0;margin:calc((1.6em - 16px)/2) 0 0;padding:0;accent-color:var(--green)}
+.app .check-label{white-space:normal}.app .check-label>span{min-width:0}.app input[type=checkbox]{flex-shrink:0}
+.privacy-panel{padding-bottom:24px}.privacy-intro{line-height:1.8;max-width:90ch;margin:12px 0 24px}.privacy-group{padding:24px 0;border-top:1px solid var(--line)}
+.privacy-group h3{font-size:1.05em;margin:0 0 14px}.privacy-group>p{max-width:90ch;line-height:1.8;margin:0 0 20px}.privacy-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:20px 0 0}
+.privacy-locations{margin:0}.privacy-locations>div{display:grid;grid-template-columns:180px minmax(0,1fr);gap:16px;padding:16px 0;border-bottom:1px solid var(--line);align-items:center}
+.privacy-locations dt{color:var(--muted)}.privacy-locations dd{margin:0;min-width:0;display:flex;gap:16px;align-items:center;justify-content:space-between}.privacy-locations code{min-width:0;overflow-wrap:anywhere;white-space:normal;user-select:text;line-height:1.7}.privacy-locations button{flex-shrink:0}
+.diagnostic-box{margin-top:24px;padding:20px;border:1px solid var(--line);background:var(--soft)}.diagnostic-box p{line-height:1.7;margin:0 0 16px}.diagnostic-box .diagnostic-preview{margin:0}.setting-note{margin:14px 0;line-height:1.8;color:var(--muted)}
+.settings-feedback{margin:14px 0;line-height:1.6;color:var(--green)}.app button:focus-visible,.app input:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+.desktop-app .topbar{position:relative;-webkit-app-region:drag;app-region:drag;padding-right:0;min-width:0;gap:16px}
+.topbar a,.topbar button,.topbar label,.topbar nav,.topbar .amber-select,.window-controls{-webkit-app-region:no-drag;app-region:no-drag}
+.desktop-app .topbar .brand{flex-shrink:0}.desktop-app .topbar .prototype-badge{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;max-width:260px}
+.window-controls{display:flex;align-self:stretch;align-items:flex-start;flex:none;margin-left:4px;position:relative;padding-left:10px}
+.window-controls>button{height:44px;width:46px;border:0;border-radius:0!important;background:transparent;color:inherit;display:grid;place-items:center;padding:0;cursor:default}
+.window-controls svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.1}.window-controls>button:hover{background:var(--selected)}.window-controls>.window-close:hover{background:#c42b1c;color:#fff}.window-controls>button:focus-visible{outline-offset:-4px}.window-controls[data-focused=false]>button{opacity:.7}
+.window-error{position:absolute;right:12px;top:50px;width:280px;padding:16px;z-index:1000;background:var(--surface);color:var(--text);border:1px solid var(--line)}.window-error button{display:block;margin-top:8px}
+.desktop-app[data-titlebar-color=accent] .topbar{background:var(--green);color:var(--surface);--line:color-mix(in srgb,currentColor 30%,transparent)}
+.desktop-app[data-titlebar-color=accent] .topbar .brand img{filter:brightness(0) invert(1)}.desktop-app.dark[data-titlebar-color=accent] .topbar .brand img{filter:brightness(0)}
+.desktop-app[data-titlebar-color=accent] .topbar .prototype-badge{color:inherit}.desktop-app[data-titlebar-color=accent] .topbar .window-controls>button:not(.window-close):hover{background:color-mix(in srgb,currentColor 15%,transparent)}
+.desktop-app .topbar .header-instance{min-width:0;flex:0 1 310px}.desktop-app .topbar .header-instance .amber-select{min-width:0;flex:1}.desktop-app .topbar .header-instance>span{white-space:nowrap}
+.desktop-app .topbar>.primary-nav{min-width:0;flex:1;overflow-x:auto}.desktop-app .topbar>.primary-nav button{flex:none}
+@media(max-width:1200px){.desktop-app .topbar .prototype-badge{display:none}.desktop-app.nav-top .topbar{flex-wrap:wrap;padding-top:8px}.desktop-app.nav-top .topbar>.primary-nav{order:4;flex-basis:100%;justify-content:center}.desktop-app.nav-top{grid-template-rows:auto minmax(0,1fr)}.desktop-app.nav-top .topbar .window-controls{align-self:flex-start}}
+@media(max-width:900px){.setting-row{grid-template-columns:minmax(0,1fr);gap:14px}.setting-control{justify-content:flex-start}.privacy-locations>div{grid-template-columns:minmax(0,1fr);gap:8px}.privacy-locations dd{align-items:flex-start}.desktop-app .topbar .header-instance>span{display:none}.desktop-app .topbar .header-instance{flex-basis:210px}}
+@media(max-width:700px){.desktop-app .topbar{padding:8px 0 8px 16px;gap:8px;flex-wrap:wrap}.desktop-app .topbar .brand,.desktop-app .topbar .brand img{width:105px}.desktop-app .topbar .header-instance{flex:1 1 100px}.window-controls{padding-left:0;align-self:flex-start;margin:0}.window-controls>button{width:40px}.privacy-locations dd{flex-wrap:wrap}.privacy-actions>.button{width:100%}.setting-control>.amber-select{width:100%}}
+@media(prefers-reduced-motion:reduce){.window-controls button{transition:none}}
+.modal-windowbar{position:fixed;inset:0 0 auto;height:44px;display:flex;align-items:center;justify-content:space-between;padding-left:20px;background:var(--surface);color:var(--text);border-bottom:1px solid var(--line);-webkit-app-region:drag;app-region:drag;z-index:1}
+.modal-windowbar>span{font-size:14px;letter-spacing:.04em}.modal-windowbar .window-controls{height:44px}
+.desktop-app .setup-dialog.setup-v6,.desktop-app .dialog{max-height:calc(100dvh - 100px)}
+.desktop-app .setup-dialog.setup-v6 form{height:min(820px,calc(100dvh - 100px));max-height:calc(100dvh - 100px)}
+.desktop-app .setup-dialog .setup-complete{max-height:calc(100dvh - 100px)}
+.desktop-app .onboarding{padding-top:64px}.desktop-app .onboarding>section{max-height:calc(100dvh - 96px)}
+.app .form-grid .check-setting{grid-column:1/-1;flex-direction:row}
+@media(max-width:700px){.desktop-app .sidebar .primary-nav{min-width:0;overflow-x:auto;overscroll-behavior-x:contain}.desktop-app .topbar{position:sticky;top:0;z-index:30;background:var(--surface)}}
+@media(min-width:1201px) and (max-width:1600px){.desktop-app.nav-top .topbar{flex-wrap:wrap;padding-top:8px}.desktop-app.nav-top .topbar>.primary-nav{order:4;flex-basis:100%;justify-content:center}.desktop-app.nav-top{grid-template-rows:auto minmax(0,1fr)}.desktop-app.nav-top .topbar .window-controls{align-self:flex-start}}

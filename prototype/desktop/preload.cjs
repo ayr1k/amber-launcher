@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: MPL-2.0
 const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
+  windowState:()=>ipcRenderer.invoke('amber:window-state'),
+  windowAction:action=>ipcRenderer.invoke('amber:window-action',action),
+  onWindowState:callback=>{const listener=(_event,state)=>callback(state);ipcRenderer.on('amber:window-state-changed',listener);return()=>ipcRenderer.removeListener('amber:window-state-changed',listener);},
+  copyPrivacyPath:key=>ipcRenderer.invoke('amber:privacy-copy-path',key),
   languageState:()=>ipcRenderer.invoke('amber:language-state'),
   importLanguage:()=>ipcRenderer.invoke('amber:language-import'),
   exportLanguage:()=>ipcRenderer.invoke('amber:language-export'),
