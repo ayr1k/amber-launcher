@@ -1,6 +1,15 @@
 // SPDX-License-Identifier: MPL-2.0
 const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
+  guidedHardware:()=>ipcRenderer.invoke('amber:guided-hardware'),
+  guidedDraft:v=>ipcRenderer.invoke('amber:guided-draft',v),
+  guidedSearch:(q,type)=>ipcRenderer.invoke('amber:guided-search',q,type),
+  guidedPackVersions:id=>ipcRenderer.invoke('amber:guided-pack-versions',id),
+  guidedRecommend:v=>ipcRenderer.invoke('amber:guided-recommend',v),
+  guidedEdit:(id,v)=>ipcRenderer.invoke('amber:guided-edit',id,v),
+  guidedCreate:(id,v)=>ipcRenderer.invoke('amber:guided-create',id,v),
+  guidedReport:id=>ipcRenderer.invoke('amber:guided-report',id),
+  guidedSkip:id=>ipcRenderer.invoke('amber:guided-skip',id),
   verifyOwnership:id=>ipcRenderer.invoke('amber:ownership-verify',id),
   linkOwnership:(id,owner)=>ipcRenderer.invoke('amber:ownership-link',id,owner),
   openPurchase:()=>ipcRenderer.invoke('amber:purchase'),

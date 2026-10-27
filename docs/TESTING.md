@@ -2,6 +2,10 @@
 
 [简体中文](zh-CN/TESTING.md)
 
+## Beta 1.9 checks
+
+203 core regression tests and 4 Sites tests pass. Guided creation checks cover server constraints, fixed dependency versions, conflicts, draft persistence, resource budgets and restart recovery. Real content files were downloaded and hash-checked in an isolated test instance; no game process was launched by these checks. Both editions passed Chinese/English UI, keyboard, small-window and packaged-startup checks. The user accepted both local installers. Microsoft live acceptance remains deferred pending approval.
+
 ## Beta 1.8 checks
 
 188 core regression tests and 4 Sites tests pass, with 1,447 bilingual messages validated. Ownership, expiry, revocation, linked accounts, repository-specific update selection and packaged startup are covered. Microsoft responses in tests are simulated; live Microsoft authentication remains deferred pending allowlist approval. The user accepted the local Beta 1.8 test build. Installers remain unsigned.

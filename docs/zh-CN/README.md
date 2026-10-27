@@ -4,9 +4,9 @@
 
 AMBER 是独立的 Windows Minecraft Java 版启动器，将实例隔离、游戏安装、模组管理、恢复和启动设置集中在同一界面。项目自有源码采用 MPL-2.0。
 
-## Beta 1.8
+## Beta 1.9
 
-Beta 1.8 在实际游戏启动入口验证 Minecraft Java 版正版资格，增加账号关联、重新验证及主动创建已验证离线身份。原实例与存档保留。Windows 安装包、源码包和 SHA-256 校验文件见 [Beta 1.8 预发布](https://github.com/ayr1k/amber-launcher/releases/tag/v1.0.0-beta.9)。
+Beta 1.9 新增引导式创建实例，提供问卷草稿、本地硬件信息、推荐理由与整体兼容性检查，并保留手动创建。安装计划固定具体内容文件，取消或重启后仍按原清单继续。Windows 安装包、源码包和 SHA-256 校验文件见 [Beta 1.9 预发布](https://github.com/ayr1k/amber-launcher/releases/tag/v1.0.0-beta.10)。
 
 - 一体化标题栏、独立窗口边框设置、窗口位置恢复与重新组织的隐私设置。
 

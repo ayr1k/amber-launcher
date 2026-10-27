@@ -4,9 +4,9 @@
 
 AmberE 是面向 Minecraft Java 版的独立 Windows 发行项目，提供离线和第三方账号。基于 AMBER 共用代码维护，采用 MPL-2.0，并使用独立应用身份、数据目录和更新仓库。不提供微软登录，不内置微软应用 Client ID。
 
-## Beta 1.8
+## Beta 1.9
 
-这是 AmberE 的首个独立预发布，版本编号跟随共用核心的 Beta 1.8。下载 [Windows x64 安装包、源码包和校验文件](https://github.com/ayr1k/AmberE/releases/tag/v1.0.0-beta.9)。
+Beta 1.9 新增引导创建、本地硬件信息、可修改的推荐方案与整体兼容检查，保留手动创建。固定安装计划支持跨重启继续。下载 [Windows x64 安装包、源码包和校验文件](https://github.com/ayr1k/AmberE/releases/tag/v1.0.0-beta.10)。
 
 - 离线身份与 HTTPS 第三方认证，保存的凭据由 Windows 当前用户加密保护。
 - 独立游戏实例、Java 与加载器安装、模组搜索、依赖选择、更新和批量管理。
@@ -16,7 +16,7 @@ AmberE 是面向 Minecraft Java 版的独立 Windows 发行项目，提供离线
 
 ## 安装与更新
 
-校验 SHA-256 后运行 Setup 安装包。使用独立程序目录，升级前退出 AmberE 与 Minecraft。安装器可选中英文，目前未签名；卸载保留游戏数据。关于页检查本仓库的 Release，校验安装包后由用户确认安装。此前使用本地 Beta 1.8 测试包的用户，请手动安装本次发布包一次，以切换到新更新仓库。
+校验 SHA-256 后运行 Setup 安装包。使用独立程序目录，升级前退出 AmberE 与 Minecraft。安装器可选中英文，目前未签名；卸载保留游戏数据。关于页检查本仓库的 Release，校验安装包后由用户确认安装。
 
 离线和第三方身份不授予游戏所有权或官方在线服务权限，请合法取得游戏；第三方服务可能有自己的要求。AmberE 非 Mojang 或微软官方产品，不宣称已获微软 API 批准。
 

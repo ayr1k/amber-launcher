@@ -8,7 +8,7 @@ import {beginTransaction,finishTransaction,recoverInstance} from './recovery.mjs
 import {atomicJson} from './core.mjs';
 const {unzipSync}=createRequire(import.meta.url)('./vendor/fflate.cjs');
 const allowed=new Set(['mods','config','resourcepacks','shaderpacks','saves','defaultconfigs','kubejs','scripts']);
-function packPath(root,path){safePath(root,path);const reserved=new Set(['instance.json','loader-base.json','trash-record.json','version.json','loader.json','installation.json','content.json','modpack.json','setup-report.json','content-task.json','migration-report.json','content-transaction.json','recovery-report.json','.amber-session.json']);const rootData=/^[^/]+\.(json|txt|dat|cfg|properties|png)$/i.test(path)&&!reserved.has(path.toLowerCase());if(!rootData&&(!allowed.has(path.split('/')[0])||path.split('/').length<2))throw Error('整合包包含暂不支持的安装路径：'+path);return path;}
+function packPath(root,path){safePath(root,path);const reserved=new Set(['instance.json','loader-base.json','trash-record.json','version.json','loader.json','installation.json','content.json','modpack.json','setup-report.json','guided-plan.json','launch-preferences.json','content-task.json','migration-report.json','content-transaction.json','recovery-report.json','.amber-session.json']);const rootData=/^[^/]+\.(json|txt|dat|cfg|properties|png)$/i.test(path)&&!reserved.has(path.toLowerCase());if(!rootData&&(!allowed.has(path.split('/')[0])||path.split('/').length<2))throw Error('整合包包含暂不支持的安装路径：'+path);return path;}
 
 export function parsePack(bytes,root){
  let total=0;const entries=unzipSync(bytes,{filter:f=>{safePath(root,f.name.replace(/\/$/,''));if(f.name.endsWith('/'))return false;if(f.name!=='modrinth.index.json'&&!f.name.startsWith('overrides/')&&!f.name.startsWith('client-overrides/'))return false;total+=f.originalSize;if(total>600_000_000||f.originalSize>100_000_000)throw Error('整合包展开大小超过限制。');return true;}});
@@ -25,7 +25,7 @@ export class Modpacks{
   const v=await this.store.api('version/'+encodeURIComponent(version)),p=await this.store.api('project/'+encodeURIComponent(v.project_id));if(p.project_type!=='modpack')throw Error('请选择 Modrinth 整合包。');
   const f=v.files.find(f=>f.primary)||v.files[0];if(!f?.filename.endsWith('.mrpack'))throw Error('此版本没有 MRPACK 文件。');
   const path=safePath(this.core.root,'content-cache/'+f.hashes.sha1);await download({path,url:f.url,hash:f.hashes.sha1,size:f.size},{root:this.core.root,fetcher:this.core.fetcher});
-  const {dir,item}=await this.core.metadata(id),parsed=parsePack(await readFile(path),dir),deps=parsed.index.dependencies;
+  const {dir,item}=id?await this.core.metadata(id):{dir:join(this.core.root,'pack-preview'),item:{}},parsed=parsePack(await readFile(path),dir),deps=parsed.index.dependencies;
   const keys=Object.keys(deps).filter(k=>k!=='minecraft');if(keys.length>1||keys.some(k=>!['fabric-loader','forge','neoforge'].includes(k)))throw Error('此整合包加载器组合暂不支持：'+JSON.stringify(deps));
   const type=keys[0]==='fabric-loader'?'fabric':keys[0]||'vanilla',required=keys[0]?deps[keys[0]]:null,actual=item.loader==='forge'?item.loaderVersion?.replace(item.game+'-',''):item.loaderVersion;
   const compatible=item.game===deps.minecraft&&item.loader===type&&(!required||actual===required);

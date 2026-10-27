@@ -2,6 +2,16 @@
 
 [简体中文](docs/zh-CN/CHANGELOG.md)
 
+## Beta 1.9 — 1.0.0-beta.10 (prerelease)
+
+- Add guided creation with a saved questionnaire, local hardware information and explained, editable setup recommendations; preserve manual creation and add direct Modrinth modpack creation.
+- Apply server version/loader constraints, required projects, client environment, dependencies, declared incompatibilities, shader support and resource budgets before ranking whole setups.
+- Keep required dependencies selected by default with explicit opt-outs and risk acknowledgement; allow optional dependencies and root removal with a new combined check.
+- Pin file versions, hashes and sizes for resumable installation across restarts. Separate mod, resource-pack and shader stages; allow an explicit skip of remaining visual packs.
+- Retain the creation plan in instance management, suggest per-instance memory and support Chinese/English text, themes and keyboard navigation.
+
+Recommendations use curated rules and live metadata, not automated gameplay testing. Visual packs are downloaded only and must be enabled in game. Windows installers are unsigned. Windows installer, source archive and SHA-256 checksums accompany this prerelease. Microsoft live acceptance remains deferred pending approval.
+
 ## Beta 1.8 — 1.0.0-beta.9 (prerelease)
 
 - First independent AmberE publication, derived from the shared AMBER Beta 1.8 core. The version number follows the shared core; it does not imply earlier independent AmberE releases.

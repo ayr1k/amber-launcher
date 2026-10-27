@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import {g} from './guided-text.mjs';
 import {validateGraphicsMode} from './graphics.mjs';
 import {recoverInstance} from './recovery.mjs';
 import {validateBackground} from './backgrounds.mjs';
@@ -62,6 +63,7 @@ export class Workflows{
   const step=async(key,fn)=>{this.checkCancelled();if(completed.has(key))return;record.step=key;await save();await this.wait(await fn());this.checkCancelled();completed.add(key);record.completed=[...completed];await save();};
   record.state='running';delete record.error;await save();
   try{
+   if(record.guided){if(completed.has('loader')&&(item.loader!==input.loader||item.loaderVersion!==input.version))throw Error(g('changedTarget'));await this.guided.recheck(record.guided);if(record.guided.target.game!==input.game||record.guided.target.loader!==input.loader||record.guided.target.version!==input.version)throw Error(g('changedTarget'));}
    await step('java',()=>this.core.prepareJava(id));
    if(input.loader==='optifine')await step('loader',()=>installOptifine(this.core,id,optifinePath));
    else if(input.loader!=='vanilla')await step('loader',()=>this.core.configureLoader(id,input.loader,input.version));
@@ -70,6 +72,11 @@ export class Workflows{
    if(input.addOptifine)await step('optifine',()=>importOptifine(this.core,id,optifinePath));
    if(record.manifest)await step('migration',()=>this.migrateInner(id,record.manifest));
    if(record.packVersion)await step('content',()=>this.installPack(id,record.packVersion));
+   else if(record.guided){
+    await step('mods',()=>this.guided.installGroup(id,record.guided,'mod'));
+    await step('resources',()=>this.guided.installGroup(id,record.guided,'resourcepack'));
+    await step('shaders',()=>this.guided.installGroup(id,record.guided,'shader'));
+   }
    else if(afterSetup)await step('content',()=>afterSetup(item));
    this.checkCancelled();record.state='done';record.step='done';this.resumes.delete(id);
   }catch(e){record.state=this.cancelled?'cancelled':'failed';record.error=e.message;throw Error(`实例“${item.name}”已保留，可在任务中心继续安装。${e.message}`);}
@@ -78,7 +85,7 @@ export class Workflows{
  }
  async wait(result){if(!result?.id||!result.state)return result;while(true){const job=this.core.jobs.find(j=>j.id===result.id);if(!job)throw Error('任务记录丢失。');if(job.state==='done')return job;if(job.state!=='running')throw Error(job.error||'任务已取消。');await new Promise(r=>setTimeout(r,150));}}
  async choices(game,type){if(!this.core.catalog)await this.core.versions();if(!this.core.catalog.some(v=>v.id===game))throw Error('未知 Minecraft 版本。');return type==='vanilla'||type==='optifine'?[]:type==='fabric'?fabricVersions(game,this.core.fetcher):type==='liteloader'?liteVersions(game,this.core.fetcher):loaderVersions(game,type,this.core.fetcher);}
- async create(input,optifinePath,manifest,afterSetup){return this.exclusive(async()=>{this.lastSetup=null;
+ async create(input,optifinePath,manifest,afterSetup,guided){return this.exclusive(async()=>{this.lastSetup=null;
   if(!this.core.catalog)await this.core.versions();
   if(!Number.isInteger(input.threads)||input.threads<1||input.threads>16)throw Error('并发数应为 1–16');
   if(!['vanilla','fabric','forge','neoforge','liteloader','optifine'].includes(input.loader))throw Error('不支持的加载器组合。');
@@ -88,8 +95,10 @@ export class Workflows{
   if((input.loader==='optifine'||input.addOptifine)&&!optifinePath)throw Error('请选择官方 OptiFine 安装器。');
   if(!['vanilla','optifine'].includes(input.loader)&&!(await this.choices(input.game,input.loader)).some(v=>v.version===input.version))throw Error('请选择兼容的加载器版本。');
   if(optifinePath&&optifineGame(await readFile(optifinePath))!==input.game)throw Error('所选 OptiFine 不适配目标 Minecraft 版本');
+  if(guided)await this.guided.recheck(guided);
   this.checkCancelled();this.lastSetup=null;const item=await this.core.createInstance(input),dir=await this.core.instancePath(item.id);this.lastSetup=item.id;
   const record={schema:2,state:'running',input:Object.fromEntries(['game','loader','version','liteVersion','addOptifine','threads'].map(k=>[k,input[k]])),manifest:manifest?validateManifest(manifest):null,packVersion:input.packVersion||null,startedAt:new Date().toISOString(),completed:[]};
+  if(guided){record.guided=guided;record.kind='guided';await atomicJson(join(dir,'guided-plan.json'),guided);await atomicJson(join(dir,'launch-preferences.json'),{accountId:null,memory:guided.memory});}
   if(optifinePath){await mkdir(join(dir,'.amber-setup'),{recursive:true});const cached=join(dir,'.amber-setup','optifine.jar');await copyFile(optifinePath,cached);record.optifine=await digest(cached);}
   await atomicJson(join(dir,'setup-report.json'),record);
   const run=()=>this.runPlan(item.id,record,afterSetup);this.resumes.set(item.id,run);return run();

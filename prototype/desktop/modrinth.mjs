@@ -64,7 +64,9 @@ export class Modrinth {
 
    }
   };
-  try{await visit(versionId);}catch(e){if(!interactive)throw e;blockers.push(e.message);}
+  const roots=Array.isArray(versionId)?versionId:[versionId];
+  if(roots.length>32)throw Error('最多选择 32 个内容项目。');
+  for(const root of roots)try{await visit(root);}catch(e){if(!interactive)throw e;blockers.push(e.message);}
   const files=[...chosen.values()];
   for(const old of installed.files.filter(f=>f.enabled!==false))for(const d of old.dependencies||[])if(d.dependency_type==='incompatible')incompatible.push({...d,owner:old.title});
   for(const d of incompatible){const conflict=[...files,...installed.files.filter(f=>f.enabled!==false)].find(f=>d.version_id?f.versionId===d.version_id:f.projectId===d.project_id);if(conflict){const message=`「${d.owner}」与「${conflict.title}」声明不兼容。请到已安装内容停用其中一个，再重新检查依赖。`;if(!interactive)throw Error(message);blockers.push(message);}}

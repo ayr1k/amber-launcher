@@ -4,9 +4,9 @@
 
 AmberE is an independent Windows distribution for Minecraft: Java Edition, providing offline and third-party accounts. It is maintained from the shared AMBER codebase under MPL-2.0, with its own application identity, data directory and update repository. It does not offer Microsoft sign-in or include a Microsoft application Client ID.
 
-## Beta 1.8
+## Beta 1.9
 
-This is AmberE's first independent prerelease, following the shared core's Beta 1.8 version numbering. Download the [Windows x64 installer, source archive and checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.0.0-beta.9).
+Beta 1.9 adds guided creation, local hardware information, editable recommendations and combined compatibility checks alongside manual creation. Pinned installation plans resume across restarts. Download the [Windows x64 installer, source archive and checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.0.0-beta.10).
 
 - Offline identities and HTTPS third-party authentication, with Windows user encryption for saved credentials.
 - Isolated game instances; Java and loader installation; mod search, dependencies, updates and bulk management.
@@ -16,7 +16,7 @@ This is AmberE's first independent prerelease, following the shared core's Beta 
 
 ## Install and update
 
-Verify the SHA-256 checksum and run the Setup executable. Use a separate program folder and close AmberE and Minecraft before upgrading. The installer offers Chinese and English and is currently unsigned. Uninstalling preserves game data. About checks this repository's releases; installers are verified before the user confirms installation. Existing local Beta 1.8 testers should install this published build once to receive the new update repository.
+Verify the SHA-256 checksum and run the Setup executable. Use a separate program folder and close AmberE and Minecraft before upgrading. The installer offers Chinese and English and is currently unsigned. Uninstalling preserves game data. About checks this repository's releases; installers are verified before the user confirms installation.
 
 Offline and third-party identities do not grant Minecraft ownership or official online-service access. Obtain the game legitimately. Third-party providers may have their own requirements. AmberE is not an official Mojang or Microsoft product and does not claim Microsoft API approval.
 

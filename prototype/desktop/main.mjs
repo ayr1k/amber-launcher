@@ -1,4 +1,5 @@
 import {EDITION,IS_AMBERE,PRODUCT_NAME} from './edition.mjs';
+import {GuidedCreation} from './guided.mjs';
 import {GraphicsPreferences,graphicsAdapters} from './graphics.mjs';
 import {WindowStateStore,fitWindow,supportsWindowCorners,runWindowAction,editingCommand} from './window-state.mjs';
 import {release as osRelease} from 'node:os';
@@ -103,6 +104,16 @@ app.whenReady().then(async () => {
   const content = new Modrinth(core);
   const packs = new Modpacks(core, content);
   const workflows = new Workflows(core, content),settings = new Settings(core.root),selections = new Map();
+  const guided=new GuidedCreation(core,content,workflows);
+  handle('amber:guided-hardware',()=>guided.hardware());
+  handle('amber:guided-draft',v=>guided.draft(v));
+  handle('amber:guided-search',(query,type)=>guided.search(query,type));
+  handle('amber:guided-pack-versions',async id=>{if(typeof id!=='string'||!/^[-\w]{1,100}$/.test(id))throw Error('无效项目');const p=await content.api('project/'+id);if(p.project_type!=='modpack')throw Error('请选择 Modrinth 整合包。');return (await content.api('project/'+id+'/version?include_changelog=false')).map(v=>({id:v.id,title:v.name,version:v.version_number,type:v.version_type}));});
+  handle('amber:guided-recommend',v=>guided.recommend(v));
+  handle('amber:guided-edit',(id,v)=>guided.edit(id,v));
+  handle('amber:guided-create',(id,v)=>guided.create(id,v));
+  handle('amber:guided-report',id=>guided.report(id));
+  handle('amber:guided-skip',id=>guided.skipVisuals(id));
   const graphics=new GraphicsPreferences(app.getPath('userData'));
   core.beforeJavaLaunch=async path=>{const mode=(await settings.get()).graphicsMode;try{return await graphics.apply(path,mode);}catch{return {state:'failed',mode};}};
   let adapterCache=null;

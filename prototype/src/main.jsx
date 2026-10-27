@@ -18,6 +18,7 @@ import "./beta14.css";
 import "./beta15.css";
 import "./beta16.css";
 import "./beta17.css";
+import "./beta19.css";
 
 if (import.meta.env.DEV && new URLSearchParams(location.search).has('desktop-preview')) {
   const instance={id:'layout-only',name:'界面样例 · Fabric',game:'1.21.1',loader:'fabric',loaderVersion:'0.19.5',status:'installed',javaMajor:21,javaPath:'AMBER / runtimes / Temurin 21 / bin / java.exe'};

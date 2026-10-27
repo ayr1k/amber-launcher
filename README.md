@@ -4,9 +4,9 @@
 
 AMBER is an independent Windows launcher for Minecraft: Java Edition. It keeps game instances separate and brings installation, mod management, recovery and launch settings into one workspace. Project-owned source is licensed under MPL-2.0.
 
-## Beta 1.8
+## Beta 1.9
 
-Beta 1.8 adds Minecraft Java eligibility checks at the game-launch boundary, account linking and re-verification, and explicit verified offline identities. Existing instances and saves are preserved. Get the Windows installer, source archive and SHA-256 checksums from the [Beta 1.8 prerelease](https://github.com/ayr1k/amber-launcher/releases/tag/v1.0.0-beta.9).
+Beta 1.9 adds guided instance creation with a saved questionnaire, local hardware information, explained recommendations and combined compatibility checks. Manual creation remains available. Installation plans pin exact content files across cancellation and restart. Download the Windows installer, source archive and SHA-256 checksums from the [Beta 1.9 prerelease](https://github.com/ayr1k/amber-launcher/releases/tag/v1.0.0-beta.10).
 
 - Integrated title bar, independent window corners, remembered window placement and reorganized privacy settings.
 
