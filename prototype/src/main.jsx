@@ -3,6 +3,7 @@ import {VERSION} from '../desktop/product.mjs';
 import {MICROSOFT_CLIENT_ID} from '../desktop/microsoft-config.mjs';
 import {defaultPreferences as defaultPreviewPreferences} from './Preferences';
 import './beta11.css';
+
 // SPDX-License-Identifier: MPL-2.0
 import React from "react";
 import {LocaleProvider} from "./Locale";
@@ -88,6 +89,7 @@ if(import.meta.env.DEV&&window.amberDesktop?.preview){
  api.copyPrivacyPath=async()=>true;
  let previewWindow={maximized:false,focused:true,corners:'system',cornersSupported:true};const windowListeners=new Set();api.windowState=async()=>previewWindow;api.onWindowState=fn=>{windowListeners.add(fn);return()=>windowListeners.delete(fn);};api.windowAction=async action=>{if(action==='maximize'){previewWindow={...previewWindow,maximized:!previewWindow.maximized};windowListeners.forEach(fn=>fn(previewWindow));}};
  api.privacyInfo=async()=>({accounts:'UI example / accounts.json',data:'UI example / library',upgrades:'UI example / backups'});
+ api.workbench=async()=>({rows:[],trial:null,good:null,sinceGood:null});api.workbenchEvidence=async()=>({state:'none',evidence:[],recent:[]});for(const k of ['workbenchGood','workbenchRestore','trialPreview','trialCreate','trialReview','trialApply','trialKeep','importTemplate','exportTemplate'])api[k]=async()=>{throw Error('UI preview only / 仅界面样例');};
  api.previewDiagnostics=async()=>({format:'amber-diagnostics',schema:1,app:{version:VERSION},privacy:'UI example only'});
 }
 
@@ -100,3 +102,4 @@ createRoot(document.getElementById("root")).render(
 import './beta18.css';
 
 import './beta111.css';
+import './beta112.css';

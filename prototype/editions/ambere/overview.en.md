@@ -4,9 +4,9 @@
 
 AmberE is an independent Windows distribution for Minecraft: Java Edition, providing offline and third-party accounts. It is maintained from the shared AMBER codebase under MPL-2.0, with its own application identity, data directory and update repository. It does not offer Microsoft sign-in or include a Microsoft application Client ID.
 
-## Beta 1.11
+## Beta 1.12
 
-Beta 1.11 fixes accidental UI text selection, improves guided layouts and tier comparisons, and adds cancellable recommendation checks, autosaved drafts, expiry recovery, local preference templates and post-install guidance. Additions preserve installed versions, settings and worlds. Download the [Windows x64 installer, source archive and SHA-256 checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.0.0-beta.12).
+Beta 1.12 adds an instance workspace, independent trial copies, guarded promotion and recoverable change records. It improves local troubleshooting, guided and content layouts, global Ctrl+K search and preference-template import/export. Trial promotion never merges world progress or account selections. Download the [Windows x64 installer, source archive and SHA-256 checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.0.0-beta.13).
 
 
 - Offline identities and HTTPS third-party authentication, with Windows user encryption for saved credentials.
@@ -24,3 +24,5 @@ Offline and third-party identities do not grant Minecraft ownership or official 
 ## Documentation
 
 [User guide](docs/USER-GUIDE.md) · [Languages](docs/LANGUAGE-PACKS.md) · [Privacy](PRIVACY.md) · [Security](SECURITY.md) · [Changelog](CHANGELOG.md) · [Testing](docs/TESTING.md) · [Build and contribute](CONTRIBUTING.md)
+
+[Rollback guide](docs/ROLLBACK.md) / [回滚说明](docs/zh-CN/ROLLBACK.md)

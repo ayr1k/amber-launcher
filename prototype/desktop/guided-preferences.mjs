@@ -5,6 +5,13 @@ import {atomicJson} from './core.mjs';
 import {readBoundedFile} from './bounded-io.mjs';
 import {answers} from './guided-model.mjs';
 import {g} from './guided-text.mjs';
+import {message} from './localization.mjs';
+import {defaults} from './guided-model.mjs';
+export function templateDocument(value){
+ const allowed=['format','schema','name','answers'];
+ if(!value||value.format!=='amber-preference-template'||value.schema!==1||Object.keys(value).some(k=>!allowed.includes(k))||!plain(value.name,60)||!value.name.trim()||!value.answers||Object.keys(value.answers).some(k=>!Object.hasOwn(defaults,k)))throw Error(message('bench.templateFormat'));
+ return {format:value.format,schema:1,name:value.name.trim(),answers:answers(value.answers)};
+}
 const plain=(v,max=80)=>typeof v==='string'&&v.length<=max&&!/[\x00-\x1f\u202a-\u202e\u2066-\u2069]/.test(v);
 export function workspace(value){
  if(!value||typeof value!=='object')throw Error(g('invalidDraft'));
@@ -17,6 +24,9 @@ export function workspace(value){
 }
 export class GuidedPreferences{
  constructor(root){this.root=root;this.queue=Promise.resolve();}
+ async exportTemplate(id){const row=(await this.templates()).find(r=>r.id===id);if(!row)throw Error(g('invalidTemplate'));return templateDocument({format:'amber-preference-template',schema:1,name:row.name,answers:row.answers});}
+ async previewTemplate(path){return templateDocument(JSON.parse(await readBoundedFile(path,64000)));}
+ async importTemplate(value){const r=templateDocument(value);return this.templates('save',{name:r.name,answers:r.answers});}
  async read(file,fallback){try{return JSON.parse(await readBoundedFile(join(this.root,file),500000));}catch(e){if(e.code==='ENOENT')return fallback;throw Error(g('invalidDraft'));}}
  write(fn){const next=this.queue.then(fn);this.queue=next.catch(()=>{});return next;}
  async draft(scope,value){

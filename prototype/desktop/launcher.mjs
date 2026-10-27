@@ -31,7 +31,7 @@ export class VanillaLauncher extends LauncherCore {
   if(this.jobs.some(j=>j.state==='running'))throw new Error('请先完成或取消当前安装任务。');
   if([...this.processes.values()].some(p=>p.instanceId===instanceId&&p.state==='running'))throw new Error('请先退出此实例的游戏。');
   const controller=new AbortController();const job={id:randomUUID(),instanceId,kind,state:'running',phase:'排队准备中',completed:0,total:0,transferred:0,startedAt:new Date().toISOString()};this.jobs.push(job);this.controllers.set(job.id,controller);
-  Promise.resolve().then(()=>{controller.signal.throwIfAborted();job.phase='准备中';return fn(job,controller.signal);}).then(()=>{job.state='done';job.phase='已完成';}).catch(e=>{job.state=controller.signal.aborted?'cancelled':'failed';job.error=e.message;job.phase=job.state==='cancelled'?'已取消':'失败';}).finally(()=>{job.finishedAt=new Date().toISOString();this.controllers.delete(job.id);});return {...job};
+  Promise.resolve().then(()=>{controller.signal.throwIfAborted();job.phase='准备中';return this.workbench && (kind.startsWith('content')||kind==='modpack') ? this.workbench.record(instanceId,kind,()=>fn(job,controller.signal),controller.signal) : fn(job,controller.signal);}).then(()=>{job.state='done';job.phase='已完成';}).catch(e=>{job.state=controller.signal.aborted?'cancelled':'failed';job.error=e.message;job.phase=job.state==='cancelled'?'已取消':'失败';}).finally(()=>{job.finishedAt=new Date().toISOString();this.controllers.delete(job.id);});return {...job};
  }
  async metadata(id){const dir=await this.instancePath(id);const item=JSON.parse(await readFile(join(dir,'instance.json'),'utf8'));const meta=JSON.parse(await readFile(join(dir,'version.json'),'utf8'));if(item.metadataSha1&&await digest(join(dir,'version.json'))!==item.metadataSha1)throw new Error('版本元数据被更改，请重新创建实例。');if(meta.id!==item.game)throw new Error('实例版本元数据不匹配。');return {dir,item,meta};}
  async loaderVersions(id,type){const {meta}=await this.metadata(id);return type==='fabric'?fabricVersions(meta.id,this.fetcher):type==='liteloader'?liteVersions(meta.id,this.fetcher):loaderVersions(meta.id,type,this.fetcher);}
@@ -77,7 +77,7 @@ export class VanillaLauncher extends LauncherCore {
   requireLaunchGrant(identity);
   if(this.jobs.some(j=>j.state==='running'))throw new Error('请等待安装任务完成。');
   if([...this.processes.values()].some(p=>p.instanceId===id&&p.state==='running'))throw new Error('此实例已经在运行。');
-  const {dir,item,meta}=await this.runtimeMetadata(id);await this.requireStopped(dir);if(item.status!=='installed')throw new Error('请先完成游戏安装。');
+  const {dir,item,meta}=await this.runtimeMetadata(id);await this.requireStopped(dir);await this.workbench?.recover(dir);if(item.status!=='installed')throw new Error('请先完成游戏安装。');
   const receipt=JSON.parse(await readFile(join(dir,'installation.json'),'utf8'));if((receipt.loaderSha1||null)!==(item.loaderSha1||null))throw Error('加载器配置已变更，请重新安装。');if(receipt.metadataSha1!==await digest(join(dir,'version.json')))throw new Error('版本元数据校验失败。');
   for(const f of receipt.files)if(!await verified({...f,path:safePath(this.root,f.relative)}))throw new Error('游戏文件缺失或损坏，请点击“校验 / 修复”：'+f.label);
   const java=await this.resolveGameJava(id);

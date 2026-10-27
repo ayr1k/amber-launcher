@@ -2,6 +2,10 @@
 
 [简体中文](zh-CN/TESTING.md)
 
+## Beta 1.12 checks
+
+252 core tests and 4 build-compatibility tests passed, with 1,885 bilingual entries validated. Both editions passed isolated desktop trial creation, selected promotion, restore, template exchange and search workflows, plus packaged startup and installer-directory checks. The final UI correction passed Chinese/dark and English/light checks, 125% zoom, icon alignment, checkbox interaction and keyboard dismissal. Original Beta 1.11 checksums were verified and both older cores read new instance data. These checks use synthetic instances; they do not certify real gameplay, FPS or every mod combination. The user accepted both corrected installers and authorized publication. Microsoft live acceptance remains deferred.
+
 ## Beta 1.11 checks
 
 231 core tests, 4 build-compatibility tests and 1,786 bilingual entries passed validation. Both desktop editions passed selection/editing, template persistence, draft recovery, cancellation/retry, expiry recheck and addition grouping checks, plus packaged startup and installation-directory protection. The user accepted the local installers and authorized publication. Microsoft live acceptance remains deferred pending approval.

@@ -2,6 +2,18 @@
 
 [简体中文](docs/zh-CN/CHANGELOG.md)
 
+## Beta 1.12 — 1.0.0-beta.13 (prerelease)
+
+- Refine the mod-update toolbar and enlarge aligned quick-search and guided-dialog close icons.
+- Add an instance workspace with distinct installation, file-check and user-confirmed gameplay states, plus contextual repair and after-installation guidance.
+- Create independent trial copies with a disk-space preview and optional independent world copies. Review selected configuration changes before applying them to the original; content and its manifest move together. Changed originals block promotion, and world progress/account selection are never merged.
+- Record content operations and launch/visual configuration changes with verified recovery files. Detect external changes, mark a manually confirmed working state, and restore only when current files still match the recorded result.
+- Recover interrupted application transactions after checking each file; refuse to overwrite unexpected external changes. Correlate explicit local log evidence with recent changes without claiming every crash can be diagnosed.
+- Widen guided creation, use list/detail layouts for downloads and installed content, preserve browsing/navigation state, add a persistent task shortcut and Ctrl+K instance/action search.
+- Import and export validated, text-only local recommendation preference templates. Applying an imported template still requires fresh recommendation and compatibility checks.
+- Keep both editions synchronized and preserve separate authentication/data/update identities. Microsoft live acceptance remains deferred. The user accepted the local installers and authorized prerelease publication.
+- Preserve the tested Beta 1.11 installers, source and pre-change workspace snapshot with SHA-256 checksums for rollback. Program downgrade does not undo gameplay changes.
+
 ## Beta 1.11 — 1.0.0-beta.12 (prerelease)
 
 - Apply consistent non-selectable app chrome across dialogs, popovers and window controls while keeping inputs, logs, paths and errors copyable.

@@ -17,3 +17,5 @@ Automatic login-code copying can be disabled. When AMBER is still running, an ex
 Game data remains after uninstall. Use the app's recycle bin and backup tools before removing data manually. Logs and caches are local files; do not delete them while a game, installation or recovery is active.
 
 Settings offers confirmed cleanup of downloaded app updates and old pre-upgrade configuration backups. It never targets active accounts, worlds or instance backups.
+
+Trial copies and change-recovery snapshots stay in the selected local game library. Copies may include worlds when explicitly selected; configuration snapshots can contain personal data written by games or mods. They are not automatically uploaded or included in preference-template exports. Template JSON contains questionnaire preferences only; review it before sharing. Global quick search searches local instances/actions and sends no search query to a server.

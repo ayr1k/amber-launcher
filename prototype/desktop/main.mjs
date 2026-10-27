@@ -1,4 +1,6 @@
 import {EDITION,IS_AMBERE,PRODUCT_NAME} from './edition.mjs';
+import {BUILD_CHANNEL as awaitBuildChannel} from './build-channel.mjs';
+import {InstanceWorkbench} from './instance-workbench.mjs';
 import {GuidedCreation} from './guided.mjs';
 import {GraphicsPreferences,graphicsAdapters} from './graphics.mjs';
 import {WindowStateStore,fitWindow,supportsWindowCorners,runWindowAction,editingCommand} from './window-state.mjs';
@@ -90,7 +92,7 @@ app.whenReady().then(async () => {
       let result;try {if(IS_AMBERE&&(channel.startsWith('amber:ms-')||channel.startsWith('amber:ownership-')||channel==='amber:account-configure'))accounts.requireMicrosoft();result = await fn(...args);} catch (e) {const problem=errorDescriptor(redact(e.message,accounts.secrets()));throw Error('[AMBER '+problem.code+'] '+problem.text);}result = redactFields(result, accounts.secrets());if (smoke) {smokeChannels.add(channel);finishSmoke();}return result;
     });
   }
-  handle('amber:info', () => ({ version: app.getVersion(), edition:EDITION, productName:PRODUCT_NAME, dataPath: core.root, platform: process.platform, recovery }));
+  handle('amber:info', () => ({ version: app.getVersion(), buildChannel: (awaitBuildChannel), edition:EDITION, productName:PRODUCT_NAME, dataPath: core.root, platform: process.platform, recovery }));
   handle('amber:instances', async () => {const pending = await workflows.pending();return (await core.listInstances()).map((i) => ({ ...i, setup: pending.find((p) => p.instanceId === i.id) || null }));});
   handle('amber:versions', () => core.versions());
   handle('amber:create', (input) => {core.workflowGuard?.();return core.createInstance(input);});
@@ -105,8 +107,21 @@ app.whenReady().then(async () => {
   const packs = new Modpacks(core, content);
   const workflows = new Workflows(core, content),settings = new Settings(core.root),selections = new Map();
   const guided=new GuidedCreation(core,content,workflows);
+  const workbench=new InstanceWorkbench(core,workflows);core.workbench=workbench;
+  for(const i of await core.listInstances()){try{const dir=await core.instancePath(i.id);await core.requireStopped(dir);await workbench.recover(dir);}catch(e){recovery.push({name:i.name,error:e.message});}}
+  handle('amber:workbench',id=>workbench.inspect(id));
+  handle('amber:workbench-good',id=>workbench.markGood(id));
+  handle('amber:workbench-restore',(id,record)=>workbench.restore(id,record));
+  handle('amber:workbench-evidence',id=>workbench.evidence(id));
+  handle('amber:trial-preview',(id,saves)=>workbench.trialPreview(id,saves));
+  handle('amber:trial-create',(id,options)=>workbench.createTrial(id,options));
+  handle('amber:trial-review',id=>workbench.previewApply(id));
+  handle('amber:trial-apply',(key,selected)=>workbench.applyTrial(key,selected));
+  handle('amber:trial-keep',id=>workbench.keepTrial(id));
   handle('amber:guided-workspace',(scope,v)=>guided.preferences.draft(scope,v));
   handle('amber:guided-templates',(action,v)=>guided.preferences.templates(action,v));
+  handle('amber:template-export',async id=>{const value=await guided.preferences.exportTemplate(id);const r=await dialog.showSaveDialog(window,{title:translateMessage('导出所选模板…'),defaultPath:'recommendation-template.json',filters:[{name:'JSON',extensions:['json']}]});if(r.canceled)return false;await writeFile(r.filePath,JSON.stringify(value,null,2));return true;});
+  handle('amber:template-import',async()=>{const r=await dialog.showOpenDialog(window,{title:translateMessage('导入模板…'),properties:['openFile'],filters:[{name:'JSON',extensions:['json']}]});if(r.canceled)return null;const value=await guided.preferences.previewTemplate(r.filePaths[0]);const a=await dialog.showMessageBox(window,{type:'question',message:value.name,detail:translateMessage('仅导入问卷偏好。不会安装内容，应用后需要重新生成并检查方案。'),buttons:[translateMessage('取消'),translateMessage('导入模板…')],defaultId:0,cancelId:0,noLink:true});if(a.response!==1)return null;return guided.preferences.importTemplate(value);});
   handle('amber:guided-generation',()=>guided.generationStatus());
   handle('amber:guided-cancel-generation',()=>guided.cancelGeneration());
   handle('amber:guided-hardware',()=>guided.hardware());
@@ -224,7 +239,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   handle('amber:bulk-preview', (id, paths, action) => bulkContent.preview(id, paths, action));
   handle('amber:bulk-apply', (id, key) => bulkContent.apply(id, key));
   handle('amber:launch-preferences', (id) => launchPreferences.get(id));
-  handle('amber:launch-preferences-save', (id, value) => launchPreferences.save(id, value));
+  handle('amber:launch-preferences-save', (id, value) => workflows.exclusive(()=>workbench.record(id,'settings',()=>launchPreferences.save(id, value))));
   handle('amber:content-toggle', (id, p) => content.toggle(id, p));
   handle('amber:world-import', async (id) => {const result = await dialog.showOpenDialog(window, { title: translateMessage('导入地图 ZIP（保留原文件，创建独立存档）'), properties: ['openFile'], filters: [{ name: 'Minecraft world ZIP', extensions: ['zip'] }] });return result.canceled ? null : importWorld(core, id, result.filePaths[0]);});
   handle('amber:optifine-import', async (id) => {const result = await dialog.showOpenDialog(window, { title: translateMessage('选择与当前 Minecraft 和 Forge 兼容的 OptiFine 官方 JAR'), properties: ['openFile'], filters: [{ name: 'OptiFine', extensions: ['jar'] }] });return result.canceled ? null : importOptifine(core, id, result.filePaths[0]);});

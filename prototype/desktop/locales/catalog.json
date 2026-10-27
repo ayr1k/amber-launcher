@@ -7190,5 +7190,481 @@
   "guide.aftercareFolder": {
     "zh": "打开实例文件夹",
     "en": "Open instance folder"
+  },
+  "bench.trial": {
+    "zh": "试用副本",
+    "en": "Trial copy"
+  },
+  "bench.copying": {
+    "zh": "正在复制并校验试用副本",
+    "en": "Copying and verifying the trial"
+  },
+  "bench.pending": {
+    "zh": "请先完成安装，再进行试用或恢复。",
+    "en": "Finish installation before using trials or recovery."
+  },
+  "bench.tooMany": {
+    "zh": "文件数量超过限制，请先整理实例。",
+    "en": "Too many files. Please organize the instance first."
+  },
+  "bench.invalid": {
+    "zh": "记录或文件未通过校验，操作已停止。",
+    "en": "The record or file failed validation. The operation stopped."
+  },
+  "bench.externalBlock": {
+    "zh": "文件已发生变化。已停止覆盖，请刷新记录并检查文件。",
+    "en": "Files changed. Overwriting stopped. Refresh the records and inspect the files."
+  },
+  "bench.sourceChanged": {
+    "zh": "原实例已经改变，无法直接回写。请保留试用副本，或从原实例重新创建试用。",
+    "en": "The original instance changed. Keep this trial or create a new one from the original."
+  },
+  "bench.targetChanged": {
+    "zh": "游戏或加载器已经改变，不能直接回写。请保留为独立实例。",
+    "en": "The game or loader changed. Keep this as an independent instance."
+  },
+  "bench.expired": {
+    "zh": "预览已过期，请重新检查变化。",
+    "en": "The preview expired. Review the changes again."
+  },
+  "bench.contentTogether": {
+    "zh": "模组、资源包、光影及其清单需要作为一组应用。配置可以单独选择。",
+    "en": "Apply mods, resources, shaders and their manifest as a group. Configuration files can be selected separately."
+  },
+  "bench.title": {
+    "zh": "实例工作台",
+    "en": "Instance workspace"
+  },
+  "bench.history": {
+    "zh": "变更记录",
+    "en": "Change history"
+  },
+  "bench.check": {
+    "zh": "文件与依赖检查",
+    "en": "Files and dependencies"
+  },
+  "bench.refresh": {
+    "zh": "刷新记录",
+    "en": "Refresh records"
+  },
+  "bench.busy": {
+    "zh": "正在检查文件，请稍候…",
+    "en": "Checking files…"
+  },
+  "bench.restore": {
+    "zh": "预览恢复",
+    "en": "Review restoration"
+  },
+  "bench.confirmRestore": {
+    "zh": "确认恢复模组与配置",
+    "en": "Restore content and configuration"
+  },
+  "bench.restoreNote": {
+    "zh": "仅恢复记录中的模组、资源包、光影及配置。不修改存档。若文件发生变化将停止覆盖。",
+    "en": "Restore only recorded mods, resources, shaders and configuration. Worlds are untouched. Changed files block overwriting."
+  },
+  "bench.noRestore": {
+    "zh": "没有可直接恢复的备份，或文件已经改变",
+    "en": "No directly restorable backup, or files changed"
+  },
+  "bench.markGood": {
+    "zh": "我已游玩，确认运行正常",
+    "en": "I played and confirmed it works"
+  },
+  "bench.goodNote": {
+    "zh": "此标记由你确认，不代表启动器已完成游戏兼容性测试。",
+    "en": "This is your confirmation, not automated gameplay compatibility testing."
+  },
+  "bench.good": {
+    "zh": "最近一次用户确认",
+    "en": "Last user confirmation"
+  },
+  "bench.unconfirmed": {
+    "zh": "尚未确认游玩结果",
+    "en": "Gameplay not confirmed"
+  },
+  "bench.sinceGood": {
+    "zh": "确认之后的文件变化",
+    "en": "File changes since confirmation"
+  },
+  "bench.external": {
+    "zh": "检测到外部修改",
+    "en": "External changes detected"
+  },
+  "bench.content": {
+    "zh": "内容安装",
+    "en": "Content installation"
+  },
+  "bench.content-update": {
+    "zh": "内容更新或批量管理",
+    "en": "Content update or bulk management"
+  },
+  "bench.install": {
+    "zh": "游戏文件安装",
+    "en": "Game installation"
+  },
+  "bench.java": {
+    "zh": "Java 准备",
+    "en": "Java preparation"
+  },
+  "bench.loader": {
+    "zh": "加载器配置",
+    "en": "Loader configuration"
+  },
+  "bench.settings": {
+    "zh": "启动配置调整",
+    "en": "Launch preferences"
+  },
+  "bench.visual": {
+    "zh": "光影配置调整",
+    "en": "Visual configuration"
+  },
+  "bench.trialApply": {
+    "zh": "应用试用结果",
+    "en": "Apply trial changes"
+  },
+  "bench.done": {
+    "zh": "操作完成",
+    "en": "Completed"
+  },
+  "bench.interrupted": {
+    "zh": "操作中断，已保留记录",
+    "en": "Interrupted; record preserved"
+  },
+  "bench.recovered": {
+    "zh": "中断事务已恢复",
+    "en": "Interrupted transaction recovered"
+  },
+  "bench.recording": {
+    "zh": "记录未完成",
+    "en": "Incomplete record"
+  },
+  "bench.added": {
+    "zh": "新增",
+    "en": "Added"
+  },
+  "bench.removed": {
+    "zh": "移除",
+    "en": "Removed"
+  },
+  "bench.changed": {
+    "zh": "修改",
+    "en": "Changed"
+  },
+  "bench.emptyHistory": {
+    "zh": "尚无文件变化。下一次内容操作会在此留下记录。",
+    "en": "No file changes yet. Your next content operation will appear here."
+  },
+  "bench.try": {
+    "zh": "先在副本中试用",
+    "en": "Try in an independent copy"
+  },
+  "bench.trialNote": {
+    "zh": "试用副本使用独立文件，不共享可写存档。模组与配置的回写需要再次预览；不会合并世界进度。",
+    "en": "Trials use independent files and worlds. Applying content and configuration requires a fresh review; world progress is never merged."
+  },
+  "bench.trialName": {
+    "zh": "副本名称",
+    "en": "Copy name"
+  },
+  "bench.copySaves": {
+    "zh": "复制存档（独立副本）",
+    "en": "Copy worlds independently"
+  },
+  "bench.estimate": {
+    "zh": "检查空间",
+    "en": "Check space"
+  },
+  "bench.createTrial": {
+    "zh": "创建试用副本",
+    "en": "Create trial copy"
+  },
+  "bench.size": {
+    "zh": "预计占用",
+    "en": "Estimated space"
+  },
+  "bench.free": {
+    "zh": "磁盘剩余",
+    "en": "Free space"
+  },
+  "bench.cancel": {
+    "zh": "取消",
+    "en": "Cancel"
+  },
+  "bench.close": {
+    "zh": "关闭",
+    "en": "Close"
+  },
+  "bench.trialSource": {
+    "zh": "来源实例",
+    "en": "Original instance"
+  },
+  "bench.reviewApply": {
+    "zh": "预览应用回原实例",
+    "en": "Review applying to original"
+  },
+  "bench.keepTrial": {
+    "zh": "保留为独立实例",
+    "en": "Keep as independent instance"
+  },
+  "bench.apply": {
+    "zh": "备份并应用所选变化",
+    "en": "Back up and apply selected changes"
+  },
+  "bench.allContent": {
+    "zh": "全部内容文件与清单",
+    "en": "All content files and manifest"
+  },
+  "bench.configNote": {
+    "zh": "配置按整个文件替换，不自动合并。账号选择和存档不会回写。",
+    "en": "Configuration replaces whole files; no automatic merge. Account selection and worlds are excluded."
+  },
+  "bench.noChanges": {
+    "zh": "没有可应用的变化",
+    "en": "No changes to apply"
+  },
+  "bench.evidence": {
+    "zh": "问题与下一步",
+    "en": "Problems and next steps"
+  },
+  "bench.memoryEvidence": {
+    "zh": "日志出现内存不足的明确提示。检查分配内存及近期新增的内容。",
+    "en": "The log reports insufficient memory. Review memory allocation and recent additions."
+  },
+  "bench.javaEvidence": {
+    "zh": "日志出现 Java 字节码版本不匹配。请检查所选 Java。",
+    "en": "The log reports a Java bytecode mismatch. Check the selected Java runtime."
+  },
+  "bench.modEvidence": {
+    "zh": "日志报告模组解析或依赖问题。请查看完整错误及相关模组。",
+    "en": "The log reports mod resolution or dependency problems. Review the complete error and related mods."
+  },
+  "bench.graphicsEvidence": {
+    "zh": "日志报告图形上下文或 OpenGL 初始化问题。请检查驱动与渲染配置。",
+    "en": "The log reports graphics context or OpenGL initialization problems. Check drivers and renderer settings."
+  },
+  "bench.unknown": {
+    "zh": "暂未发现可明确归类的日志证据。最近修改仅是排查线索，不代表崩溃原因。",
+    "en": "No conclusive category found in the log. Recent changes are clues, not proven crash causes."
+  },
+  "bench.recent": {
+    "zh": "值得排查的最近修改",
+    "en": "Recent changes worth checking"
+  },
+  "bench.logs": {
+    "zh": "查看运行日志",
+    "en": "Open game logs"
+  },
+  "bench.mods": {
+    "zh": "管理相关内容",
+    "en": "Manage content"
+  },
+  "bench.guidance": {
+    "zh": "安装后的配置指引",
+    "en": "After-installation guidance"
+  },
+  "bench.savedPlan": {
+    "zh": "已保存的推荐方案",
+    "en": "Saved recommendation"
+  },
+  "bench.search": {
+    "zh": "搜索实例与操作",
+    "en": "Search instances and actions"
+  },
+  "bench.searchHint": {
+    "zh": "输入实例、内存、备份或光影…",
+    "en": "Search instances, memory, backups or shaders…"
+  },
+  "bench.noResults": {
+    "zh": "没有匹配的实例或操作",
+    "en": "No matching instances or actions"
+  },
+  "bench.commands": {
+    "zh": "操作",
+    "en": "Actions"
+  },
+  "bench.instances": {
+    "zh": "实例",
+    "en": "Instances"
+  },
+  "bench.create": {
+    "zh": "创建实例",
+    "en": "Create instance"
+  },
+  "bench.home": {
+    "zh": "前往启动",
+    "en": "Go to launch"
+  },
+  "bench.settingsPage": {
+    "zh": "打开设置",
+    "en": "Open settings"
+  },
+  "bench.tasks": {
+    "zh": "任务中心",
+    "en": "Task center"
+  },
+  "bench.backups": {
+    "zh": "备份与恢复",
+    "en": "Backups and recovery"
+  },
+  "bench.launchSettings": {
+    "zh": "内存与 Java 设置",
+    "en": "Memory and Java settings"
+  },
+  "bench.taskRunning": {
+    "zh": "后台任务进行中",
+    "en": "Background task in progress"
+  },
+  "bench.taskIssue": {
+    "zh": "任务需要处理",
+    "en": "Task needs attention"
+  },
+  "bench.openTasks": {
+    "zh": "查看任务",
+    "en": "View tasks"
+  },
+  "bench.importTemplate": {
+    "zh": "导入模板…",
+    "en": "Import template…"
+  },
+  "bench.exportTemplate": {
+    "zh": "导出所选模板…",
+    "en": "Export selected template…"
+  },
+  "bench.templateFormat": {
+    "zh": "模板格式无效或包含不支持的字段。",
+    "en": "The template format is invalid or contains unsupported fields."
+  },
+  "bench.templateImportNote": {
+    "zh": "仅导入问卷偏好。不会安装内容，应用后需要重新生成并检查方案。",
+    "en": "Import questionnaire preferences only. Nothing is installed; regenerate and review a plan after applying it."
+  },
+  "bench.templateImported": {
+    "zh": "模板已导入；请从列表选择后应用。",
+    "en": "Template imported. Select it from the list to apply."
+  },
+  "bench.templateExported": {
+    "zh": "模板已导出。",
+    "en": "Template exported."
+  },
+  "bench.publicBuild": {
+    "zh": "公开预发布版",
+    "en": "Public prerelease"
+  },
+  "bench.localBuild": {
+    "zh": "本地测试版",
+    "en": "Local test build"
+  },
+  "bench.overview": {
+    "zh": "概览",
+    "en": "Overview"
+  },
+  "bench.trialReady": {
+    "zh": "副本已创建。请在该副本重新生成推荐或检查更新，再开始安装。",
+    "en": "Trial created. Regenerate recommendations or check updates in this copy before installing."
+  },
+  "bench.openTrial": {
+    "zh": "打开试用副本",
+    "en": "Open trial copy"
+  },
+  "bench.needsAttention": {
+    "zh": "需要处理",
+    "en": "Needs attention"
+  },
+  "bench.noKnownIssues": {
+    "zh": "检查未发现已知问题；仍需实际游玩确认。",
+    "en": "No known problems found by the check; gameplay still needs confirmation."
+  },
+  "bench.content-bulk": {
+    "zh": "批量管理内容",
+    "en": "Bulk content management"
+  },
+  "bench.content-import": {
+    "zh": "导入本地模组",
+    "en": "Import local mods"
+  },
+  "bench.loader-combination": {
+    "zh": "加载器组合",
+    "en": "Loader combination"
+  },
+  "bench.world": {
+    "zh": "导入地图",
+    "en": "Import world"
+  },
+  "bench.optifine": {
+    "zh": "安装 OptiFine",
+    "en": "Install OptiFine"
+  },
+  "bench.legacyHistory": {
+    "zh": "早期版本的内容恢复记录",
+    "en": "Content recovery records from earlier versions"
+  },
+  "bench.fileVersion": {
+    "zh": "版本",
+    "en": "Version"
+  },
+  "bench.fileState": {
+    "zh": "状态",
+    "en": "State"
+  },
+  "bench.filePath": {
+    "zh": "文件",
+    "en": "File"
+  },
+  "bench.manualFile": {
+    "zh": "手动添加",
+    "en": "Manually added"
+  },
+  "bench.enabledFile": {
+    "zh": "已启用",
+    "en": "Enabled"
+  },
+  "bench.disabledFile": {
+    "zh": "已停用",
+    "en": "Disabled"
+  },
+  "bench.missingFile": {
+    "zh": "文件缺失",
+    "en": "File missing"
+  },
+  "bench.dependencies": {
+    "zh": "已知依赖信息",
+    "en": "Known dependency metadata"
+  },
+  "bench.unknownDependency": {
+    "zh": "没有可显示的依赖信息",
+    "en": "No dependency metadata available"
+  },
+  "bench.dependencyNote": {
+    "zh": "这里只显示已记录的依赖声明，不代表完整兼容性检测。",
+    "en": "Only recorded dependency declarations are shown, not a complete compatibility assessment."
+  },
+  "bench.ignoredDependencies": {
+    "zh": "手动跳过的必需依赖",
+    "en": "Explicitly skipped required dependencies"
+  },
+  "bench.dep_required": {
+    "zh": "必需",
+    "en": "Required"
+  },
+  "bench.dep_optional": {
+    "zh": "可选",
+    "en": "Optional"
+  },
+  "bench.dep_incompatible": {
+    "zh": "不兼容",
+    "en": "Incompatible"
+  },
+  "bench.dep_embedded": {
+    "zh": "已内嵌",
+    "en": "Embedded"
+  },
+  "bench.content-remove": {
+    "zh": "移除内容",
+    "en": "Remove content"
+  },
+  "bench.modpack": {
+    "zh": "安装整合包内容",
+    "en": "Install modpack content"
   }
 }

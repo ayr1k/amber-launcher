@@ -1,6 +1,17 @@
 // SPDX-License-Identifier: MPL-2.0
 const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
+  workbench:id=>ipcRenderer.invoke('amber:workbench',id),
+  workbenchGood:id=>ipcRenderer.invoke('amber:workbench-good',id),
+  workbenchRestore:(id,r)=>ipcRenderer.invoke('amber:workbench-restore',id,r),
+  workbenchEvidence:id=>ipcRenderer.invoke('amber:workbench-evidence',id),
+  trialPreview:(id,saves)=>ipcRenderer.invoke('amber:trial-preview',id,saves),
+  trialCreate:(id,options)=>ipcRenderer.invoke('amber:trial-create',id,options),
+  trialReview:id=>ipcRenderer.invoke('amber:trial-review',id),
+  trialApply:(key,selected)=>ipcRenderer.invoke('amber:trial-apply',key,selected),
+  trialKeep:id=>ipcRenderer.invoke('amber:trial-keep',id),
+  importTemplate:()=>ipcRenderer.invoke('amber:template-import'),
+  exportTemplate:id=>ipcRenderer.invoke('amber:template-export',id),
   guidedWorkspace:(scope,v)=>ipcRenderer.invoke('amber:guided-workspace',scope,v),
   guidedTemplates:(action,v)=>ipcRenderer.invoke('amber:guided-templates',action,v),
   guidedGeneration:()=>ipcRenderer.invoke('amber:guided-generation'),

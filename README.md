@@ -4,9 +4,9 @@
 
 AMBER is an independent Windows launcher for Minecraft: Java Edition. It keeps game instances separate and brings installation, mod management, recovery and launch settings into one workspace. Project-owned source is licensed under MPL-2.0.
 
-## Beta 1.11
+## Beta 1.12
 
-Beta 1.11 fixes accidental UI text selection, improves guided layouts and tier comparisons, and adds cancellable recommendation checks, autosaved drafts, expiry recovery, local preference templates and post-install guidance. Additions preserve installed versions, settings and worlds. Download the [Windows x64 installer, source archive and SHA-256 checksums](https://github.com/ayr1k/amber-launcher/releases/tag/v1.0.0-beta.12).
+Beta 1.12 adds an instance workspace, independent trial copies, guarded promotion and recoverable change records. It improves local troubleshooting, guided and content layouts, global Ctrl+K search and preference-template import/export. Trial promotion never merges world progress or account selections. Download the [Windows x64 installer, source archive and SHA-256 checksums](https://github.com/ayr1k/amber-launcher/releases/tag/v1.0.0-beta.13).
 
 
 - Integrated title bar, independent window corners, remembered window placement and reorganized privacy settings.
@@ -40,3 +40,5 @@ Third-party services require separate live validation. Offline mode does not gra
 - [Third-party notices](prototype/THIRD_PARTY_NOTICES.md) / [第三方声明](docs/zh-CN/THIRD-PARTY-NOTICES.md)
 
 AMBER is not an official Mojang or Microsoft product. Minecraft, downloaded components and third-party projects retain their respective rights and licenses.
+
+[Rollback guide](docs/ROLLBACK.md) / [回滚说明](docs/zh-CN/ROLLBACK.md)

@@ -86,7 +86,8 @@ export class GuidedCreation {
     if(lod&&lod.versionId!==c.lodId||c.lod!=='off'&&!lod)return ['visualUnverified'];
     return [];
   }
-  async configureVisuals(id,p){
+  async configureVisuals(id,p){return this.core.workbench?this.core.workbench.record(id,'visual',()=>this.configureVisualsInner(id,p)):this.configureVisualsInner(id,p);}
+  async configureVisualsInner(id,p){
     if(!p.visual||p.visual.profile==='off'||!p.files.some(f=>f.type==='shader'))return;
     if(this.visualIssues(p.files,p.visual).length)failure('visualUnverified');
     const {dir}=await this.core.metadata(id);await this.core.requireStopped(dir);
