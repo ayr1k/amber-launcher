@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
+import {IS_AMBERE} from './edition.mjs';
+const brand=text=>IS_AMBERE?text.replace(/\bAMBER\b/g,'AmberE'):text;
 import catalog from './locales/catalog.json' with {type:'json'};
 export const builtinLanguages=[{id:'zh-CN',name:'简体中文'},{id:'en-US',name:'English'}];
 let locale='zh-CN',custom=null;
@@ -6,8 +8,8 @@ const sourceIndex=new Map(Object.entries(catalog).map(([key,m])=>[m.zh,key]));
 export function getLocale(){return locale.startsWith('x-')?(custom?.formatLocale||'en-US'):locale;}
 export function resolveLocale(value,system='en-US'){return value==='system'||!value?(/^zh\b/i.test(system)?'zh-CN':'en-US'):value;}
 export function setLocale(value,pack=null,system='en-US'){custom=pack;const next=resolveLocale(value,system);locale=['zh-CN','en-US',pack?.locale].includes(next)?next:'en-US';return locale;}
-export function message(key,params={}){const entry=catalog[key];if(!entry)return key;const text=locale==='zh-CN'?entry.zh:custom?.locale===locale&&Object.hasOwn(custom.messages,key)?custom.messages[key]:entry.en;return text.replace(/\{(\d+)\}/g,(whole,index)=>Object.hasOwn(params,index)?String(params[index]):whole);}
-export function t(source,params={}){return message(sourceIndex.get(source)||source,params);}
+export function message(key,params={}){const entry=catalog[key];if(!entry)return key;const text=locale==='zh-CN'?entry.zh:custom?.locale===locale&&Object.hasOwn(custom.messages,key)?custom.messages[key]:entry.en;return brand(text).replace(/\{(\d+)\}/g,(whole,index)=>Object.hasOwn(params,index)?String(params[index]):whole);}
+export function t(source,params={}){const key=sourceIndex.get(source);return key?message(key,params):brand(source);}
 const escape=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
 const templates=Object.entries(catalog).filter(([,v])=>/\{\d+\}/.test(v.zh)).map(([key,v])=>({key,indices:[...v.zh.matchAll(/\{(\d+)\}/g)].map(m=>m[1]),pattern:new RegExp('^'+v.zh.split(/\{\d+\}/).map(escape).join('([\\s\\S]*?)')+'$')}));
 const fragments=[...sourceIndex.keys()].filter(s=>!s.includes('{')&&s.length>=12).sort((a,b)=>b.length-a.length);

@@ -2,6 +2,13 @@
 
 [简体中文](docs/zh-CN/CHANGELOG.md)
 
+## Beta 1.8 — 1.0.0-beta.9 (prerelease)
+
+- Enforce ownership at AMBER's actual game-launch boundary. Block anonymous and unverified legacy offline starts; verify official ownership and profile for Microsoft launches and the linked owner for third-party launches. Authentication failures never silently downgrade to offline play.
+- Add explicit verified offline identities retaining the official name and UUID, with encrypted eligibility cached for at most 7 days. Expiry, detected clock rollback, owner removal and subsequent definitive authorization/ownership denial invalidate eligibility. This is a product policy, not a Mojang-approved exception.
+- Add ownership status, linking/re-verification and purchase/recovery entry points. Update onboarding, settings, privacy text, bilingual messages and the game launcher version metadata. Existing instances and saves are preserved.
+- Windows installer, source archive and SHA-256 checksums accompany this prerelease. Microsoft allowlist approval and live sign-in/gameplay acceptance remain pending. Automated authentication tests use simulated responses.
+
 ## Beta 1.7 — 1.0.0-beta.8 (prerelease)
 
 - Align the comfortable 72px header, 44px instance picker and borderless window controls. Show each instance’s existing icon in the picker and its menu. Keep the picker visible in narrow windows.

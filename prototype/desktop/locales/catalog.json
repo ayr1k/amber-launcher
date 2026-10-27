@@ -5618,5 +5618,173 @@
   "m4adb99f64b03": {
     "zh": "显卡偏好记录已满，请先恢复系统设置。",
     "en": "The graphics recovery record is full. Restore Windows preferences first."
+  },
+  "mb67bffdf84db": {
+    "zh": "AmberE 保留离线和第三方账号，不提供微软登录；与 AMBER 共用功能核心。",
+    "en": "AmberE supports offline and third-party accounts without Microsoft sign-in, sharing the AMBER feature core."
+  },
+  "mb4db02c2b7ed": {
+    "zh": "AmberE 支持离线和第三方账号，不提供微软登录。离线账号不授予游戏所有权。",
+    "en": "AmberE supports offline and third-party accounts without Microsoft sign-in. Offline accounts do not grant ownership of the game."
+  },
+  "m80c91e27ae85": {
+    "zh": "账号令牌由当前 Windows 用户的系统加密保护。第三方账号密码只发送至你填写的认证地址，不会保存。",
+    "en": "Account tokens are protected by the current Windows user’s system encryption. Third-party passwords are sent only to your authentication address and are not saved."
+  },
+  "mb7ed59d57d74": {
+    "zh": "请选择已验证账号",
+    "en": "Select a verified account"
+  },
+  "m54ea6217699a": {
+    "zh": "玩家名称需要 3–16 位英文字母、数字或下划线。",
+    "en": "Player names must contain 3–16 English letters, digits or underscores."
+  },
+  "m9a87071b4a3a": {
+    "zh": "登录并验证正版资格 →",
+    "en": "Sign in and verify ownership →"
+  },
+  "m6e9c2fc77dc9": {
+    "zh": "完整游戏需要有效正版资格；离线身份保留原正版角色，资格最多缓存 7 天。",
+    "en": "The full game requires verified ownership. Offline identities retain your official profile; verification is cached for up to 7 days."
+  },
+  "mc382445a1c49": {
+    "zh": "查看与验证资格 →",
+    "en": "View and verify ownership →"
+  },
+  "me207722e755e": {
+    "zh": "AMBER 需要验证 Minecraft Java 版正版资格。可先管理实例，登录与验证在账号页完成。",
+    "en": "AMBER requires verified Minecraft Java Edition ownership. You can manage instances first, then sign in and verify on the Accounts page."
+  },
+  "m5c591face5d3": {
+    "zh": "前往登录与验证",
+    "en": "Go to sign-in and verification"
+  },
+  "m649879c08634": {
+    "zh": "前往账号页",
+    "en": "Go to Accounts"
+  },
+  "mb7c1716bbd11": {
+    "zh": "AMBER 将游戏资格与服务器身份分别验证。完整游戏启动前必须有有效正版资格。",
+    "en": "AMBER verifies game ownership separately from server identity. Valid ownership is required before launching the full game."
+  },
+  "m786ce545f566": {
+    "zh": "Minecraft Java 版正版资格",
+    "en": "Minecraft Java Edition ownership"
+  },
+  "m610db7a2798e": {
+    "zh": "微软与第三方账号启动时在线验证资格；已验证离线身份保留原角色，最多使用 7 天。到期后需要联网重新验证。",
+    "en": "Microsoft and third-party launches verify ownership online. Verified offline identities retain your original profile for up to 7 days, then require online verification again."
+  },
+  "me10e2e357b3b": {
+    "zh": "当前用于新账号的资格：",
+    "en": "Ownership account for new identities: "
+  },
+  "mc5768ca9726c": {
+    "zh": "尚未选择",
+    "en": "Not selected"
+  },
+  "m5e250ee04230": {
+    "zh": "重新验证资格",
+    "en": "Verify ownership again"
+  },
+  "m5cef857b49c9": {
+    "zh": "购买 Minecraft ↗",
+    "en": "Buy Minecraft ↗"
+  },
+  "mfa9ef9f31de9": {
+    "zh": "已验证 · 有效至 {0}",
+    "en": "Verified · Valid until {0}"
+  },
+  "m36d56dfc60cc": {
+    "zh": "尚未验证或资格已过期",
+    "en": "Not verified or verification expired"
+  },
+  "m40a2fa96a13b": {
+    "zh": "用于验证资格的微软账号",
+    "en": "Microsoft account used to verify ownership"
+  },
+  "mef51c75a147c": {
+    "zh": "选择并在线验证",
+    "en": "Select and verify online"
+  },
+  "mc48e3134e11a": {
+    "zh": "旧离线身份未绑定正版账号，主版不能直接启动。请添加已验证离线身份；原实例与存档不会改动。",
+    "en": "This older offline identity is not linked to an ownership account and cannot launch in AMBER. Add a verified offline identity; existing instances and saves are kept."
+  },
+  "mce71612e6ebd": {
+    "zh": "验证并设为资格账号",
+    "en": "Verify and use for ownership"
+  },
+  "m387501bd780e": {
+    "zh": "已验证离线身份",
+    "en": "Verified offline identity"
+  },
+  "ma1c672bfc1a8": {
+    "zh": "将为 {0} 创建离线身份，沿用同一角色 UUID。",
+    "en": "Create an offline identity for {0}, retaining the same profile UUID."
+  },
+  "m6abe4fc56006": {
+    "zh": "请先添加微软账号并验证资格，再创建离线身份。",
+    "en": "Add a Microsoft account and verify ownership before creating an offline identity."
+  },
+  "mfbaa8a821968": {
+    "zh": "创建已验证离线身份",
+    "en": "Create verified offline identity"
+  },
+  "m8193965a6242": {
+    "zh": "第三方登录只验证该服务器的身份，不证明游戏所有权。保存后请关联微软资格账号。",
+    "en": "Third-party sign-in verifies your server identity, not game ownership. After saving, link a Microsoft ownership account."
+  },
+  "m3d1eb77e0558": {
+    "zh": "启动授权无效或已过期，请重新点击启动。",
+    "en": "Launch authorization is invalid or expired. Click Launch again."
+  },
+  "m2be1c4225483": {
+    "zh": "AmberE 不提供微软登录，请使用离线或第三方账号。",
+    "en": "AmberE does not provide Microsoft sign-in. Use an offline or third-party account."
+  },
+  "m6e149fcf6086": {
+    "zh": "请先到账号页验证 Minecraft Java 版正版资格。离线资格有效期为 7 天。",
+    "en": "Verify Minecraft Java Edition ownership on the Accounts page first. Offline verification is valid for 7 days."
+  },
+  "m8d52bba3081a": {
+    "zh": "请先添加微软账号。",
+    "en": "Add a Microsoft account first."
+  },
+  "m46b187d34937": {
+    "zh": "请先选择第三方账号及用于验证资格的微软账号。",
+    "en": "Select a third-party account and a Microsoft ownership account first."
+  },
+  "m8a77a859e13b": {
+    "zh": "离线账号与正版身份不一致，请在账号页重新创建已验证离线身份。",
+    "en": "The offline and official profiles do not match. Create a new verified offline identity on the Accounts page."
+  },
+  "m475c487f388c": {
+    "zh": "账号类型不受支持。",
+    "en": "This account type is not supported."
+  },
+  "md613fb6fea2f": {
+    "zh": "第三方账号尚未关联正版资格，请前往账号页关联并验证。",
+    "en": "This third-party account has no linked ownership verification. Link and verify it on the Accounts page."
+  },
+  "m4d9919f41efc": {
+    "zh": "AMBER 启动完整游戏前必须验证正版资格，请前往账号页登录。",
+    "en": "AMBER requires verified ownership before launching the full game. Sign in on the Accounts page."
+  },
+  "m2fe406be75cc": {
+    "zh": "账号已移除或角色已改变，请重新选择账号。",
+    "en": "The account was removed or its profile changed. Select the account again."
+  },
+  "m184609728077": {
+    "zh": "正版资格已改变，请重新点击启动。",
+    "en": "Ownership verification changed. Click Launch again."
+  },
+  "mbd27862e0487": {
+    "zh": "账号或游戏资格需要处理",
+    "en": "Account or game ownership needs attention"
+  },
+  "m2e261550a24e": {
+    "zh": "前往账号页登录、重新验证或关联正版资格。认证失败不会自动切换为离线模式。",
+    "en": "Open Accounts to sign in, verify ownership again, or link an ownership account. Authentication failure never switches automatically to offline mode."
   }
 }

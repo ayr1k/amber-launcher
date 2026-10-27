@@ -1,3 +1,4 @@
+import {IS_AMBERE,PRODUCT_NAME} from '../desktop/edition.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import {useEffect,useState} from 'react';
 import {useLocale} from './Locale';
@@ -17,5 +18,5 @@ export function WindowControls() {
 }
 export function DialogWindowBar(){
   if(!window.amberDesktop?.windowAction)return null;
-  return <div className="modal-windowbar"><span>AMBER</span><WindowControls/></div>;
+  return <div className="modal-windowbar"><span>{PRODUCT_NAME}</span><WindowControls/></div>;
 }

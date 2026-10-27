@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import {grantLaunch} from '../desktop/launch-authorization.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, readFile, writeFile, rm, readdir } from 'node:fs/promises';
@@ -80,6 +81,6 @@ test('installer commits complete receipts, rejects corrupt launch files, and pro
  assert.equal(core.status().jobs[0].state,'done',core.status().jobs[0].error);
  assert.equal((await core.listInstances())[0].status,'installed');
  const dir=await core.instancePath(instance.id),receipt=JSON.parse(await readFile(join(dir,'installation.json'),'utf8'));assert.equal(receipt.files.length,3);
- await writeFile(safePath(root,receipt.files[0].relative),'corrupt');await assert.rejects(core.launch(instance.id),/缺失或损坏/);
+ await writeFile(safePath(root,receipt.files[0].relative),'corrupt');await assert.rejects(core.launch(instance.id,{identity:grantLaunch({name:'Fixture',uuid:'1'.repeat(32),accessToken:'0'},()=>{})}),/缺失或损坏/);
  await writeFile(join(dir,'.amber-session.json'),JSON.stringify({pid:process.pid,game:true}));await assert.rejects(core.install(instance.id),/运行中/);
 });

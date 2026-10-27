@@ -1,3 +1,4 @@
+import {verificationIdentity} from './verify-identity.mjs';
 // SPDX-License-Identifier: MPL-2.0
 // Uses a new dedicated instance and only terminates its own spawned game.
 import assert from 'node:assert/strict';
@@ -27,7 +28,7 @@ try{
  assert.ok(!(await store.list(target.id)).some(f=>f.projectId===project.id));await work.wait(await store.install(target.id,(await store.preview(target.id,versions[0].id)).id));
  await store.toggle(target.id,root.relative);await store.toggle(target.id,root.relative+'.disabled');proof.checks.push('search-recommend-preview-required-dependencies','protect-dependency','recoverable-remove-reinstall','toggle-retains-files');
  await manager.setIcon(target.id,'anvil');assert.equal((await core.metadata(target.id)).item.icon,'anvil');proof.checks.push('edit-icon-persistence');
- const p=await core.launch(target.id,{username:'AmberTest',memory:3});proof.logPath=p.logPath;console.log('LAUNCHED',p.pid);
+ const p=await core.launch(target.id,{identity:await verificationIdentity(),username:'AmberTest',memory:3});proof.logPath=p.logPath;console.log('LAUNCHED',p.pid);
  try{for(let i=0;i<100;i++){
   await new Promise(r=>setTimeout(r,1000));const log=await readFile(p.logPath,'utf8');
   if((log.includes('OpenAL initialized')||log.includes('Sound engine started'))&&log.includes('Created:')&&/modmenu/i.test(log)){

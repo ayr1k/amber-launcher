@@ -1,3 +1,4 @@
+import {verificationIdentity} from './verify-identity.mjs';
 // SPDX-License-Identifier: MPL-2.0
 // Explicit opt-in integration check: downloads official game files and Java.
 import { join } from 'node:path';
@@ -12,6 +13,6 @@ await wait(await core.install(instance.id,{threads:12}));
 await wait(await core.prepareJava(instance.id));
 console.log('INSTALL_AND_JAVA_OK');
 if(process.argv.includes('--launch')){
- const processInfo=await core.launch(instance.id,{username:'AmberPlayer',memory:3});console.log('LAUNCHED',JSON.stringify(processInfo));
+ const processInfo=await core.launch(instance.id,{identity:await verificationIdentity(),username:'AmberPlayer',memory:3});console.log('LAUNCHED',JSON.stringify(processInfo));
  const timer=setInterval(()=>{const p=core.status().processes.find(p=>p.id===processInfo.id);console.log('GAME_STATE',p.state,'\n'+p.tail.slice(-1800));if(p.state!=='running'){clearInterval(timer);process.exitCode=p.exitCode===0?0:1;}},10000);
 }

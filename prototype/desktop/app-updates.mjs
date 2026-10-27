@@ -1,20 +1,22 @@
 // SPDX-License-Identifier: MPL-2.0
+import {PRODUCT_NAME,REPOSITORY_NAME} from './edition.mjs';
 import {mkdir,readFile,writeFile,copyFile,lstat} from 'node:fs/promises';
 import {join} from 'node:path';
 import {createHash} from 'node:crypto';
 import {responseText} from './bounded-io.mjs';
 import {download,verified,ensureParents} from './download.mjs';
 import {requireSpace} from './safe-copy.mjs';
-const repository='https://github.com/ayr1k/amber-launcher';
+const repositories=Object.freeze({AMBER:'https://github.com/ayr1k/amber-launcher',AmberE:'https://github.com/ayr1k/AmberE'});
 export function compareVersions(a,b){
   const parse=v=>{const m=/^v?(\d+)\.(\d+)\.(\d+)(?:-(alpha|beta|rc)\.(\d+))?$/.exec(v);if(!m)throw Error('不支持的版本号。');return [+m[1],+m[2],+m[3],m[4]?{alpha:0,beta:1,rc:2}[m[4]]:3,+(m[5]||0)];};
   const x=parse(a),y=parse(b);for(let i=0;i<x.length;i++)if(x[i]!==y[i])return x[i]>y[i]?1:-1;return 0;
 }
-export function releaseCandidate(releases,current){
+export function releaseCandidate(releases,current,product=PRODUCT_NAME){
+  const repository=repositories[product];if(!repository)return null;
   return releases.filter(r=>!r.draft).filter(r=>{try{return compareVersions(r.tag_name,current)>0;}catch{return false;}})
     .sort((a,b)=>compareVersions(b.tag_name,a.tag_name)).map(r=>{
       const version=r.tag_name.replace(/^v/,'');
-      const name=`AMBER-${version}-Setup-x64.exe`;
+      const name=`${product}-${version}-Setup-x64.exe`;
       const asset=r.assets?.find(a=>a.name===name&&a.state==='uploaded');
       if(!asset||!Number.isSafeInteger(asset.size)||asset.size<1||asset.size>800_000_000||!/^sha256:[a-f0-9]{64}$/.test(asset.digest||''))return null;
       if(asset.browser_download_url!==`${repository}/releases/download/${r.tag_name}/${name}`)return null;
@@ -26,7 +28,7 @@ export class AppUpdates{
   async check(){
     if(['checking','downloading'].includes(this.state.phase))throw Error('正在检查或下载安装包，请稍候。');
     this.candidate=null;this.state={phase:'checking'};
-    try{const r=await this.fetcher('https://api.github.com/repos/ayr1k/amber-launcher/releases?per_page=30',{redirect:'error',signal:AbortSignal.timeout(20000),headers:{Accept:'application/vnd.github+json','User-Agent':'AMBER/'+this.current}});
+    try{const r=await this.fetcher(`https://api.github.com/repos/${REPOSITORY_NAME}/releases?per_page=30`,{redirect:'error',signal:AbortSignal.timeout(20000),headers:{Accept:'application/vnd.github+json','User-Agent':PRODUCT_NAME+'/'+this.current}});
       if(!r.ok)throw Error(r.status===403||r.status===429?'更新服务暂时限流，请稍后再试。':'无法读取更新目录，请检查网络后重试。');
       const text=await responseText(r,2_000_000);if(text.length>2_000_000)throw Error('更新目录过大。');const data=JSON.parse(text);if(!Array.isArray(data))throw Error('更新目录格式无效。');
       this.candidate=releaseCandidate(data,this.current);this.state={phase:this.candidate?'available':'current',release:this.candidate};return this.state;

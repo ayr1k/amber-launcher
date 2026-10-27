@@ -2,6 +2,10 @@
 
 [简体中文](zh-CN/TESTING.md)
 
+## Beta 1.8 checks
+
+188 core regression tests and 4 Sites tests pass, with 1,447 bilingual messages validated. Ownership, expiry, revocation, linked accounts, repository-specific update selection and packaged startup are covered. Microsoft responses in tests are simulated; live Microsoft authentication remains deferred pending allowlist approval. The user accepted the local Beta 1.8 test build. Installers remain unsigned.
+
 ## Beta 1.7 checks
 
 177 core regression tests and 4 Sites compatibility tests pass; 1405 bilingual messages validate. The packaged Windows application passes startup, IPC, background and system-encryption smoke checks. Browser checks cover the aligned icon-bearing picker, borderless controls, stable scenery during launch-option expansion, keyboard switching, Chinese/English, dark/light themes and narrow windows.

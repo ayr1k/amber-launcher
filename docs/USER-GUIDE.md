@@ -2,7 +2,9 @@
 
 [简体中文](zh-CN/USER-GUIDE.md)
 
-**First run:** choose a language and game-data location, then optionally create an offline identity. Add Microsoft or third-party accounts from Accounts. Microsoft access is not approved yet.
+**First run:** choose a language and game-data location. AMBER directs you to Accounts to verify official Minecraft Java eligibility; you can skip this step to manage instances but cannot launch without eligibility. AmberE can create an offline identity immediately and also supports third-party accounts. It has no Microsoft sign-in. The editions use separate data directories. Microsoft API access for AMBER is not approved yet.
+
+**AMBER account eligibility:** Microsoft and linked third-party launches verify the official account online. After successful verification you may explicitly create an offline identity with the official name and UUID. Its encrypted eligibility cache lasts at most seven days, does not renew offline, and is invalidated by a detected clock rollback or subsequent definitive authorization/ownership denial. Removing the linked owner blocks use. Legacy unverified offline accounts remain listed but cannot launch; existing instances and saves remain intact. This cache policy is not approval from Mojang. See [local testing notes](../prototype/BETA18-TESTING.md).
 
 **Install:** select Create, choose a Minecraft version, then compatible loader components and an instance name. Disabled choices explain incompatibility. AMBER prepares Java and verifies downloads. Keep the task center open if an installation fails; retry reuses verified files. Interrupted complete installation plans can be continued after restart.
 

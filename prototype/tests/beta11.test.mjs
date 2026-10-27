@@ -1,3 +1,4 @@
+import {PRODUCT_NAME,REPOSITORY_URL,REPOSITORY_NAME} from '../desktop/edition.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -28,7 +29,7 @@ test('login copies only user code once, then opens browser, retaining recoverabl
  const failed=await beginMicrosoftLogin(accounts,{writeText:async()=>{throw Error();}},async()=>{throw Error();});assert.equal(failed.device.state,'pending');assert.match(failed.feedback,/手动/);assert.match(failed.feedback,/浏览器/);
  device.expiresAt=0;await assert.rejects(copyMicrosoftCode(accounts,{writeText:()=>assert.fail()}),/失效/);
 });
-const release=(v='1.0.0-beta.3')=>({tag_name:'v'+v,draft:false,body:'notes',assets:[{name:`AMBER-${v}-Setup-x64.exe`,state:'uploaded',size:100,digest:'sha256:'+'a'.repeat(64),browser_download_url:`https://github.com/ayr1k/amber-launcher/releases/download/v${v}/AMBER-${v}-Setup-x64.exe`}]});
+const release=(v='1.0.0-beta.3')=>({tag_name:'v'+v,draft:false,body:'notes',assets:[{name:`${PRODUCT_NAME}-${v}-Setup-x64.exe`,state:'uploaded',size:100,digest:'sha256:'+'a'.repeat(64),browser_download_url:`${REPOSITORY_URL}/releases/download/v${v}/${PRODUCT_NAME}-${v}-Setup-x64.exe`}]});
 test('app updates handle beta ordering and reject wrong repository, missing digest and old releases',()=>{
  assert.equal(compareVersions('1.0.0-beta.10','1.0.0-beta.2'),1);assert.equal(compareVersions('1.0.0','1.0.0-rc.2'),1);
  assert.equal(releaseCandidate([release()],'1.0.0-beta.2').version,'1.0.0-beta.3');assert.equal(releaseCandidate([release('1.0.0-beta.1')],'1.0.0-beta.2'),null);
@@ -36,7 +37,7 @@ test('app updates handle beta ordering and reject wrong repository, missing dige
 });
 test('downloaded app updates require matching hash and can be retried after cancellation',async t=>{
  const root=await temporary(t),bytes=Buffer.from('installer'),r=release();r.assets[0].size=bytes.length;r.assets[0].digest='sha256:'+createHash('sha256').update(bytes).digest('hex');
- const updates=new AppUpdates(root,'1.0.0-beta.2',{fetcher:async url=>new Response(String(url).includes('api.github.com')?JSON.stringify([r]):bytes)});
+ const updates=new AppUpdates(root,'1.0.0-beta.2',{fetcher:async url=>{if(String(url).includes('api.github.com'))assert.equal(url,`https://api.github.com/repos/${REPOSITORY_NAME}/releases?per_page=30`);return new Response(String(url).includes('api.github.com')?JSON.stringify([r]):bytes);}});
  await updates.check();await updates.download();const path=await updates.installer();assert.deepEqual(await readFile(path),bytes);await writeFile(path,'corrupt');await assert.rejects(updates.installer(),/校验/);
  updates.fetcher=async()=>{updates.cancel();return new Response(bytes);};await assert.rejects(updates.download());assert.equal(updates.state.phase,'cancelled');updates.fetcher=async()=>new Response(bytes);await updates.download();assert.equal(updates.state.phase,'ready');
 });

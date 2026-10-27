@@ -1,3 +1,4 @@
+import {IS_AMBERE,PRODUCT_NAME} from '../desktop/edition.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import { createContext, useContext, useEffect, useState } from 'react';
 import { setLocale, getLocale, t as translateText, translateMessage } from '../desktop/localization.mjs';
@@ -8,7 +9,7 @@ export function LocaleProvider({ children }) {
   useEffect(() => {if (window.amberDesktop?.languageState) reload().catch(() => {setLocale('system', null, navigator.language);document.documentElement.lang = getLocale();}).finally(() => setReady(true));else {setLocale('system', null, navigator.language);document.documentElement.lang = getLocale();}}, []);
   useEffect(() => {const update = () => reload().catch(() => {});window.addEventListener('amber-settings-changed', update);return () => window.removeEventListener('amber-settings-changed', update);}, []);
   async function choose(language) {const saved = await window.amberDesktop.settings();await window.amberDesktop.saveSettings({ ...saved, language });await reload();window.dispatchEvent(new Event('amber-settings-changed'));}
-  return <Context.Provider value={{ ...state, locale: getLocale(), choose, reload }}>{ready ? children : <p>AMBER…</p>}</Context.Provider>;
+  return <Context.Provider value={{ ...state, locale: getLocale(), choose, reload }}>{ready ? children : <p>{PRODUCT_NAME}…</p>}</Context.Provider>;
 }
 export function useLocale() {return useContext(Context);}
 export function LanguageControl() {const state = useLocale(),[error, setError] = useState(''),[busy, setBusy] = useState(false);if (!state) return null;async function action(fn) {setBusy(true);setError('');try {await fn();} catch (e) {setError(e.message);} finally {setBusy(false);}}

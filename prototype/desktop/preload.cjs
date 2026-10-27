@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MPL-2.0
 const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
+  verifyOwnership:id=>ipcRenderer.invoke('amber:ownership-verify',id),
+  linkOwnership:(id,owner)=>ipcRenderer.invoke('amber:ownership-link',id,owner),
+  openPurchase:()=>ipcRenderer.invoke('amber:purchase'),
   graphicsInfo:id=>ipcRenderer.invoke('amber:graphics-info',id),
   openGraphicsSettings:()=>ipcRenderer.invoke('amber:graphics-open'),
   copyGameJava:id=>ipcRenderer.invoke('amber:graphics-copy-java',id),

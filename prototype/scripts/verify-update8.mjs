@@ -1,3 +1,4 @@
+import {verificationIdentity} from './verify-identity.mjs';
 // SPDX-License-Identifier: MPL-2.0
 // Uses a new dedicated instance and only terminates its own spawned game.
 import assert from 'node:assert/strict';
@@ -30,12 +31,12 @@ try{
  await manager.setIcon(target.id,'anvil');assert.equal((await core.metadata(target.id)).item.icon,'anvil');proof.checks.push('edit-icon-persistence');
  await store.validateLaunch(target.id);
  // Deliberately invalid JVM option in this dedicated test instance, to verify process-failure recovery.
- const failed=await core.launch(target.id,{username:'AmberTest',memory:3,extraJvm:['-XX:AmberIntentionalInvalidOption']});
+ const failed=await core.launch(target.id,{identity:await verificationIdentity(),username:'AmberTest',memory:3,extraJvm:['-XX:AmberIntentionalInvalidOption']});
  for(let i=0;i<30&&core.processes.get(failed.id).state==='running';i++)await new Promise(r=>setTimeout(r,200));
  assert.equal(core.processes.get(failed.id).state,'failed');
  for(let i=0;i<20;i++){try{await readFile(join(await core.instancePath(target.id),'last-run.json'));break;}catch{await new Promise(r=>setTimeout(r,100));}}
  const restored=await new VanillaLauncher(core.root).runtimeStatus();assert.equal(restored.processes.find(p=>p.instanceId===target.id)?.state,'failed');proof.failureLog=failed.logPath;proof.checks.push('real-jvm-failure-persisted-after-core-restart');
- const p=await core.launch(target.id,{username:'AmberTest',memory:3});proof.logPath=p.logPath;console.log('LAUNCHED',p.pid);
+ const p=await core.launch(target.id,{identity:await verificationIdentity(),username:'AmberTest',memory:3});proof.logPath=p.logPath;console.log('LAUNCHED',p.pid);
  try{for(let i=0;i<100;i++){
   await new Promise(r=>setTimeout(r,1000));const log=await readFile(p.logPath,'utf8');
   if((log.includes('OpenAL initialized')||log.includes('Sound engine started'))&&log.includes('Created:')&&/modmenu/i.test(log)){

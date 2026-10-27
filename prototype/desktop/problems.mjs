@@ -4,6 +4,7 @@ import {redact} from './privacy.mjs';
 export function explainProblem(value,{crash=false}={}) {
  const detail=redact(value||'').replace(/^Error invoking remote method '[^']+': Error: /,'');
  const rules=[
+  [/正版|所有权|资格|账号|账户|微软|Xbox|认证|授权|Minecraft.*(?:ownership|license)|Microsoft|authentication|entitlement/i,'账号或游戏资格需要处理','前往账号页登录、重新验证或关联正版资格。认证失败不会自动切换为离线模式。','accounts'],
   [/取消|AbortError/i,'已取消安装','已完成的校验文件会保留；重试会复用这些文件。','retry'],
   [/ENOSPC|空间不足|磁盘空间/i,'磁盘空间不足','清理实例所在磁盘后，再继续安装。','folder'],
   [/EACCES|EPERM|EBUSY|占用|access.denied/i,'文件暂时无法写入','先退出游戏及正在使用此目录的程序，再重试；也可检查目录权限。','folder'],

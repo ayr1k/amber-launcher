@@ -1,3 +1,4 @@
+import {EDITION,IS_AMBERE,PRODUCT_NAME} from './edition.mjs';
 import {GraphicsPreferences,graphicsAdapters} from './graphics.mjs';
 import {WindowStateStore,fitWindow,supportsWindowCorners,runWindowAction,editingCommand} from './window-state.mjs';
 import {release as osRelease} from 'node:os';
@@ -42,9 +43,10 @@ import { importBackground, backgroundPattern } from './backgrounds.mjs';
 const base = dirname(fileURLToPath(import.meta.url));
 const assets = resolve(base, '../dist/client');
 const smoke = process.argv.includes('--smoke-test');
-app.setPath('userData', join(app.getPath('appData'), 'AMBER'));
-if (smoke) app.setPath('userData', process.env.AMBER_SMOKE_ROOT ? resolve(process.env.AMBER_SMOKE_ROOT) : resolve(base, '../.smoke-data'));
-app.setName('AMBER');
+const qaUI = !app.isPackaged && process.argv.includes('--qa-ui');
+app.setPath('userData', join(app.getPath('appData'), PRODUCT_NAME));
+if (smoke || qaUI) app.setPath('userData', process.env.AMBER_SMOKE_ROOT ? resolve(process.env.AMBER_SMOKE_ROOT) : resolve(base, '../.smoke-data'));
+app.setName(PRODUCT_NAME);
 if (!app.requestSingleInstanceLock()) app.exit(0);
 protocol.registerSchemesAsPrivileged([{ scheme: 'amber', privileges: { standard: true, secure: true, supportFetchAPI: true } }]);
 let window,activatePending = false;
@@ -84,10 +86,10 @@ app.whenReady().then(async () => {
       if (event.sender !== window?.webContents || event.senderFrame !== window.webContents.mainFrame || source.protocol !== 'amber:' || source.host !== 'app') throw new Error('请求来源不受信任。');
       if (storageBusy && !['amber:info', 'amber:status', 'amber:setup-cancel', 'amber:window-action', 'amber:window-state'].includes(channel)) throw Error('数据目录正在迁移，请等待完成。');
       if (upgradeBusy && !['amber:info', 'amber:status', 'amber:app-update-state', 'amber:window-action', 'amber:window-state'].includes(channel)) throw Error('正在准备升级，请稍候。');
-      let result;try {result = await fn(...args);} catch (e) {const problem=errorDescriptor(redact(e.message,accounts.secrets()));throw Error('[AMBER '+problem.code+'] '+problem.text);}result = redactFields(result, accounts.secrets());if (smoke) {smokeChannels.add(channel);finishSmoke();}return result;
+      let result;try {if(IS_AMBERE&&(channel.startsWith('amber:ms-')||channel.startsWith('amber:ownership-')||channel==='amber:account-configure'))accounts.requireMicrosoft();result = await fn(...args);} catch (e) {const problem=errorDescriptor(redact(e.message,accounts.secrets()));throw Error('[AMBER '+problem.code+'] '+problem.text);}result = redactFields(result, accounts.secrets());if (smoke) {smokeChannels.add(channel);finishSmoke();}return result;
     });
   }
-  handle('amber:info', () => ({ version: app.getVersion(), dataPath: core.root, platform: process.platform, recovery }));
+  handle('amber:info', () => ({ version: app.getVersion(), edition:EDITION, productName:PRODUCT_NAME, dataPath: core.root, platform: process.platform, recovery }));
   handle('amber:instances', async () => {const pending = await workflows.pending();return (await core.listInstances()).map((i) => ({ ...i, setup: pending.find((p) => p.instanceId === i.id) || null }));});
   handle('amber:versions', () => core.versions());
   handle('amber:create', (input) => {core.workflowGuard?.();return core.createInstance(input);});
@@ -216,6 +218,9 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   handle('amber:fabric-versions', (id) => core.fabricVersions(id));
   handle('amber:fabric-configure', (id, version) => core.configureFabric(id, version));
   handle('amber:accounts', () => accounts.list());
+  handle('amber:ownership-verify',id=>accounts.verifyOwnership(id));
+  handle('amber:ownership-link',(id,ownerId)=>accounts.linkOwnership(id,ownerId));
+  handle('amber:purchase',()=>shell.openExternal('https://www.minecraft.net/store/minecraft-java-bedrock-edition-pc'));
   handle('amber:account-configure', (id) => accounts.configure(id));
   handle('amber:account-offline', (name) => accounts.addOffline(name));
   handle('amber:account-server', (input) => accounts.addServer(input));
@@ -227,7 +232,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   handle('amber:ms-cancel', () => {clearCopiedCode(accounts);return accounts.cancelMicrosoft();});
   handle('amber:ms-open', () => shell.openExternal(pendingCode(accounts).url));
   let launching = false;
-  handle('amber:launch', async (id, options) => {if (launching) throw Error('正在准备启动。');launching = true;try {core.workflowGuard?.();if (core.jobs.some((j) => j.state === 'running')) throw Error('请等待安装或更新结束后启动游戏。');await recoverModUpdate(await core.instancePath(id));if ((await workflows.pending()).some((p) => p.instanceId === id)) throw Error('实例安装尚未完成，请先在任务中心继续安装。');await content.validateLaunch(id);const launchPrefs = await launchPreferences.get(id);options = { ...options, accountId: launchPrefs.accountId ?? options.accountId, memory: launchPrefs.memory ?? options.memory };const identity = options.accountId ? await accounts.identity(options.accountId) : null;const extraJvm = identity?.server ? [`-javaagent:${await authAgent(core.root)}=${identity.server}`] : [];const run = await core.launch(id, { username: options.username, memory: options.memory, identity, extraJvm });await libraryState.launched(id, run).catch(() => {});return run;} finally {launching = false;}});
+  handle('amber:launch', async (id, options) => {if (launching) throw Error('正在准备启动。');launching = true;try {core.workflowGuard?.();if (core.jobs.some((j) => j.state === 'running')) throw Error('请等待安装或更新结束后启动游戏。');await recoverModUpdate(await core.instancePath(id));if ((await workflows.pending()).some((p) => p.instanceId === id)) throw Error('实例安装尚未完成，请先在任务中心继续安装。');await content.validateLaunch(id);const launchPrefs = await launchPreferences.get(id);options = { ...options, accountId: launchPrefs.accountId ?? options.accountId, memory: launchPrefs.memory ?? options.memory };const identity = await accounts.authorizeLaunch(options.accountId,options.username);const extraJvm = identity?.server ? [`-javaagent:${await authAgent(core.root)}=${identity.server}`] : [];const run = await core.launch(id, { username: options.username, memory: options.memory, identity, extraJvm });await libraryState.launched(id, run).catch(() => {});return run;} finally {launching = false;}});
   handle('amber:open-instance', async (id) => {const error = await shell.openPath(await core.instancePath(id));if (error) throw new Error(error);});
   const placement=new WindowStateStore(app.getPath('userData'));
   let initialCorners='system',placementTimer,placementMaximized=false;
@@ -239,7 +244,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   async function createWindow() {
     const remembered=await placement.load(),prefs=await settings.get();initialCorners=prefs.windowCorners;placementMaximized=remembered?.maximized||false;
     const bounds=fitWindow(remembered?.bounds,screen.getAllDisplays(),screen.getPrimaryDisplay().id);
-    window = new BrowserWindow({ title: 'AMBER', ...bounds, minWidth: Math.min(860,bounds.width), minHeight: Math.min(640,bounds.height), frame:false, roundedCorners:initialCorners==='system', thickFrame:true, show: false, backgroundColor: '#fafbf8', webPreferences: { preload: join(base, 'preload.cjs'), nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true } });
+    window = new BrowserWindow({ title: PRODUCT_NAME, icon:join(assets,'brand/app-icon.png'), ...bounds, minWidth: Math.min(860,bounds.width), minHeight: Math.min(640,bounds.height), frame:false, roundedCorners:initialCorners==='system', thickFrame:true, show: false, backgroundColor: '#fafbf8', webPreferences: { preload: join(base, 'preload.cjs'), nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true } });
     window.setMenu(null);
     window.webContents.on('before-input-event',(event,input)=>{const method=editingCommand(input);if(method){event.preventDefault();window.webContents[method]();}});
     if(remembered?.maximized)window.maximize();
@@ -249,7 +254,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
     const recoverDisplay=()=>{if(!window||window.isDestroyed())return;const previous=window.getNormalBounds(),next=fitWindow(previous,screen.getAllDisplays(),screen.getPrimaryDisplay().id);if(['x','y','width','height'].some(k=>previous[k]!==next[k])){const maximized=window.isMaximized();if(maximized)window.unmaximize();window.setMinimumSize(Math.min(860,next.width),Math.min(640,next.height));window.setBounds(next);if(maximized)window.maximize();}};
     for(const event of ['display-removed','display-metrics-changed','display-added'])screen.on(event,recoverDisplay);
     window.on('closed',()=>{clearTimeout(placementTimer);for(const event of ['display-removed','display-metrics-changed','display-added'])screen.removeListener(event,recoverDisplay);window=null;});
-    window.once('ready-to-show',()=>{if(!smoke)window.show();});
+    window.once('ready-to-show',()=>{if(!smoke&&!qaUI)window.show();});
     let closeAllowed = false,closePrompt = false;
     window.on('close', async event => {
       if(closeAllowed)return;event.preventDefault();if(closePrompt)return;closePrompt=true;

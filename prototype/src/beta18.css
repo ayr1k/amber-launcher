@@ -1,0 +1,15 @@
+/* SPDX-License-Identifier: MPL-2.0 */
+.desktop-app[data-edition=ambere] .topbar .brand img{filter:none;}
+.desktop-app.dark[data-edition=ambere][data-titlebar-color=accent] .topbar .brand img{filter:none;}
+.account-entry{align-items:start;gap:24px;padding-block:20px;}
+.account-details{min-width:0;flex:1;}.account-details small{overflow-wrap:anywhere;}
+.account-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:flex-end;}
+.account-form{display:grid;justify-items:start;gap:18px;margin-top:22px;}
+.account-form .field,.account-form .form-grid,.account-form details{width:min(100%,720px);}
+.account-form p{margin:0;}.account-form .button{margin-top:2px;}
+.ownership-link{display:grid;gap:8px;max-width:440px;margin-top:12px;}
+.ownership-status{font-size:.9em;margin:8px 0;}.ownership-summary{padding-block:20px;}
+.ownership-summary p{max-width:80ch;line-height:1.7;}
+.ownership-hint{font-size:.9em;line-height:1.65;margin:16px 0;max-width:80ch;}
+.ownership-hint button{margin-inline-start:12px;}
+@media(max-width:850px){.account-entry{flex-wrap:wrap;}.account-actions{justify-content:flex-start;}}

@@ -1,3 +1,4 @@
+import {verificationIdentity} from './verify-identity.mjs';
 // SPDX-License-Identifier: MPL-2.0
 // Creates dedicated test instances; only terminates the game spawned by this test.
 import {join} from 'node:path';
@@ -17,7 +18,7 @@ try{
  const target=await work.create({name:`更新六验证 ${game} ${mode}`,game,loader:forge?'forge':'optifine',version:forge?.version,liteVersion:lite.version,addOptifine:mode==='triple',threads:12},path);
  console.log('TARGET',target.id,forge?.version,lite.version);
  if(process.argv.includes('--launch')){
-  const p=await core.launch(target.id,{username:'AmberTest',memory:3});console.log('LAUNCHED',p.pid,p.logPath);
+  const p=await core.launch(target.id,{identity:await verificationIdentity(),username:'AmberTest',memory:3});console.log('LAUNCHED',p.pid,p.logPath);
   try{for(let i=0;i<100;i++){
    await new Promise(r=>setTimeout(r,1000));const log=await readFile(p.logPath,'utf8');
    if(log.includes('Error during LiteLoader'))throw Error(log.slice(-6000));

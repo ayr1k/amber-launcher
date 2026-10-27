@@ -1,3 +1,5 @@
+import {PRODUCT_NAME} from './edition.mjs';
+import {VERSION} from './product.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
@@ -41,7 +43,7 @@ export function launchArguments(meta,plan,{dir,root,natives,username,memory=4,id
  if(!identity&&!/^[A-Za-z0-9_]{3,16}$/.test(username))throw new Error('离线玩家名称需要 3–16 个英文字母、数字或下划线。');
  if(!Number.isInteger(memory)||memory<1||memory>32)throw new Error('内存需要在 1–32 GB 范围内。');
  if(identity&&(!/^[a-f0-9]{32}$/i.test(identity.uuid)||typeof identity.name!=='string'||!identity.name||/[\x00-\x1f]/.test(identity.name)))throw Error('账号角色信息无效。');
- const vars={auth_player_name:identity?.name||username,auth_uuid:identity?.uuid||offlineUUID(username),auth_access_token:identity?.accessToken||'0',auth_session:identity?`token:${identity.accessToken}:${identity.uuid}`:'0',user_type:identity?.type||'legacy',user_properties:'{}',clientid:identity?.clientId||'',auth_xuid:identity?.xuid||'',version_name:meta.id,version_type:meta.type||'release',game_directory:dir,assets_root:join(root,'assets'),assets_index_name:meta.assetIndex.id,game_assets:join(root,'assets/virtual',meta.assetIndex.id),natives_directory:natives,library_directory:join(root,'libraries'),classpath:plan.classpath.join(';'),classpath_separator:';',launcher_name:'AMBER',launcher_version:'0.1.0-alpha.4',resolution_width:'1100',resolution_height:'720'};
+ const vars={auth_player_name:identity?.name||username,auth_uuid:identity?.uuid||offlineUUID(username),auth_access_token:identity?.accessToken||'0',auth_session:identity?`token:${identity.accessToken}:${identity.uuid}`:'0',user_type:identity?.type||'legacy',user_properties:'{}',clientid:identity?.clientId||'',auth_xuid:identity?.xuid||'',version_name:meta.id,version_type:meta.type||'release',game_directory:dir,assets_root:join(root,'assets'),assets_index_name:meta.assetIndex.id,game_assets:join(root,'assets/virtual',meta.assetIndex.id),natives_directory:natives,library_directory:join(root,'libraries'),classpath:plan.classpath.join(';'),classpath_separator:';',launcher_name:PRODUCT_NAME,launcher_version:VERSION,resolution_width:'1100',resolution_height:'720'};
  const jvm=meta.arguments?.jvm||['-Djava.library.path=${natives_directory}','-cp','${classpath}'];
  const game=meta.arguments?.game||meta.minecraftArguments?.match(/(?:[^\s"]+|"[^"]*")+/g)?.map(x=>x.replace(/^"|"$/g,''));if(!game)throw new Error('该历史版本没有可识别的启动参数。');
  const logging=plan.logging?[meta.logging.client.argument.replace('${path}',plan.logging.path)]:[];
