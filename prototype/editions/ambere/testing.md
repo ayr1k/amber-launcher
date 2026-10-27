@@ -1,25 +1,21 @@
-# Beta 1.9 / 验证说明
+# Beta 1.10 / 验证说明
 
-Version / 版本：1.0.0-beta.10. Windows x64 prerelease. Installer unsigned. The user accepted the local test build.
+版本：1.0.0-beta.11。AmberE Windows x64 预发布版，已获用户测试验收与发布授权。安装包未签名。
 
-## 中文
+- 引导创建提供激进、综合、保守三档，默认综合。问卷最多 19 个主题问题，按上下文显示。保留手动与整合包创建。
+- 功能目录包含配方查询、信息提示、地图、鼠标操作、性能、省电与显示增强。JEI / EMI / REI 等候选同时核验根文件和依赖；明确必装项目不被替换。
+- 玩法主题仅在单人且明确选择拓展玩法后加入。保守档不自动增加玩法；综合档一个主题，激进档在用户允许范围内扩展。
+- 光影组合绑定具体文件版本，并按内存、实际游戏 GPU 确认、分辨率与目标流畅度选择作者预设。Voxy 需要额外图形能力确认，测试文件需要用户允许测试版本。
+- 光影核验基于作者集成代码和平台版本声明，不是实际游戏或显卡认证。远景无合适组合时有明确降级提示。只对新实例写入经过核对的光影预设与 Iris 设置，已有不同配置保留；资源包需在游戏内启用。
+- 实例概览可补装推荐的客户端功能。版本、加载器与已安装文件锁定；不替换已有模组、不启用已停用项目、不改配置或存档。未知启用模组需先在内容管理识别或停用。复用事务备份与恢复，失败后可从任务中心继续或结束。
+- 两个版本保持独立账号规则、应用数据和更新仓库。微软真实登录、刷新及正版启动仍待审核通过后验收。
 
-- 创建入口新增引导创建与 Modrinth 整合包入口；保留原手动创建。
-- 问卷最多 14 项，按单人／多人显示；电脑信息仅在本地读取和保存，可手动修正内存和显卡档位。
-- 推荐先校验版本、加载器、客户端环境、依赖、已知冲突、下载预算和磁盘预留，再按偏好排序。维护目录与实时平台元数据结合，不声称已经实测所有组合或保证帧率。
-- 可以移除推荐内容、重新勾选必要依赖和选择可选依赖。必要依赖仍默认勾选，取消需明确确认风险，不显示为全部依赖已满足。
-- 固定具体文件版本、大小、校验值和依赖选择。下载中断或重启后从任务中心继续，不静默升级文件。可在视觉资源阶段明确跳过剩余材质和光影。
-- 创建方案与理由保留在实例概览；问卷草稿保留。光影和材质只下载，需在游戏内启用。
-- AMBER 与 AmberE 同步功能，各自保留账号规则、数据目录和更新地址。微软 API 申请已重新提交，尚未获得批准；真实微软登录与正版游戏启动不在本次验收范围内。
-
-建议测试：默认问卷；指定服务器版本和 Fabric 版本；必装模组无共同版本；取消／恢复必要依赖；在问卷和推荐页切换中英语言与明暗主题；小窗口滚动；创建后取消、关闭并重开继续；文件下架和空间不足；手动创建和整合包创建；两个版本独立安装与数据隔离。
+已通过 224 项核心回归、4 项构建兼容测试和 1,726 条双语文本检查。两版桌面 UI 已检查中英切换、小窗口、键盘选择、自动重检和补装入口。真实目录核对包含 1.21.1 Fabric 的同类替代与 DH 光影、26.3 Fabric 的 Voxy 光影；隔离实例实际下载并校验了 17 项内容，随后补装 4 项，保留测试存档和配置。未启动游戏或进行真实微软登录。性能、模组游戏运行和硬件效果需在实际电脑上确认，不承诺帧率。
 
 ## English
 
-Guided creation now sits beside manual creation and Modrinth modpack creation. Up to 14 conditional questions collect play preferences and optional local hardware corrections. Hard compatibility constraints precede weighted ranking. The curated directory and live platform metadata are not gameplay certification or an FPS prediction.
+Beta 1.10 (1.0.0-beta.11) is a Windows x64 prerelease for AmberE. The user accepted both local installers and authorized publication. Installers are unsigned.
 
-Review roots and dependencies before installation. Required dependencies remain selected by default but may be explicitly skipped after acknowledging the risk. Plans pin file versions, hashes and sizes across cancellation and restart. The task center can explicitly skip remaining visual packs. Saved reasons describe creation-time choices rather than later manual edits. Shaders and resource packs must be enabled in game.
+Guided creation offers aggressive, balanced and conservative tiers, with feature-based compatible equivalents and immutable required-project choices. Explicit single-player gameplay consent bounds all tiers. Shader / LOD combinations pin inspected author files and choose bounded author presets from hardware preferences. Evidence is metadata and integration-source inspection, not gameplay or GPU certification. New-instance settings never overwrite different existing files. Resource packs still require in-game selection.
 
-Both editions share creation features while retaining separate account rules, app data and update feeds. Microsoft live authentication acceptance remains deferred pending allowlist approval. The user accepted both local builds and authorized publication.
-
-AmberE exposes no Microsoft sign-in. Offline identities do not grant Minecraft ownership.
+Existing-instance recommendations add client features while preserving game/loader versions, installed and disabled content, settings and worlds. Unidentified enabled mods must first be identified or disabled. Additions use existing transaction history and resume through the task center. Microsoft live authentication acceptance remains deferred pending allowlist approval.

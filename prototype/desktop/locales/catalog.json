@@ -5904,12 +5904,12 @@
     "en": "Selected"
   },
   "guide.balanced": {
-    "zh": "按偏好推荐",
-    "en": "Matched to your preferences"
+    "zh": "综合",
+    "en": "Balanced"
   },
   "guide.light": {
-    "zh": "轻量配置",
-    "en": "Lightweight setup"
+    "zh": "适度增强",
+    "en": "Light enhancements"
   },
   "guide.vanilla": {
     "zh": "纯原版",
@@ -6024,8 +6024,8 @@
     "en": "Local hardware information"
   },
   "guide.hardwareNote": {
-    "zh": "配置和问卷保存在本地。未知显卡按保守配置推荐；独显也不代表一定能流畅运行光影。",
-    "en": "Hardware and answers stay local. Unknown GPUs receive conservative suggestions; a dedicated GPU does not guarantee smooth shaders."
+    "zh": "配置仅在本地处理。请按实际运行游戏的显卡填写；检测到独显不代表游戏一定使用它。未知硬件采用保守建议，不保证帧率。",
+    "en": "Hardware stays local. Select the GPU actually used by the game; detecting a dedicated GPU does not prove the game uses it. Unknown hardware receives conservative suggestions, with no FPS guarantee."
   },
   "guide.unknown": {
     "zh": "不确定",
@@ -6084,48 +6084,48 @@
     "en": "Ask the server owner if unsure. This does not scan servers or guarantee client mods are allowed."
   },
   "guide.questionPlay": {
-    "zh": "1. 主要怎么玩？",
-    "en": "1. How will you play?"
+    "zh": "主要怎么玩？",
+    "en": "How will you play?"
   },
   "guide.questionContent": {
-    "zh": "4. 最想体验什么？（最多三项）",
-    "en": "4. What interests you? (up to three)"
+    "zh": "最想体验什么？（最多三项）",
+    "en": "What interests you? (up to three)"
   },
   "guide.questionChange": {
-    "zh": "5. 希望改变多少原版体验？",
-    "en": "5. How much should vanilla change?"
+    "zh": "希望改变多少原版体验？",
+    "en": "How much should vanilla change?"
   },
   "guide.questionPriority": {
-    "zh": "7. 更在意什么？",
-    "en": "7. What matters most?"
+    "zh": "更在意什么？",
+    "en": "What matters most?"
   },
   "guide.questionShaders": {
-    "zh": "8. 是否使用光影？",
-    "en": "8. Would you like shaders?"
+    "zh": "是否使用光影？",
+    "en": "Would you like shaders?"
   },
   "guide.questionTexture": {
-    "zh": "9. 喜欢什么材质风格？",
-    "en": "9. Preferred texture style?"
+    "zh": "喜欢什么材质风格？",
+    "en": "Preferred texture style?"
   },
   "guide.questionHud": {
-    "zh": "10. 游戏界面偏好？",
-    "en": "10. Preferred in-game interface?"
+    "zh": "游戏界面偏好？",
+    "en": "Preferred in-game interface?"
   },
   "guide.questionExperience": {
-    "zh": "11. 对模组有多熟悉？",
-    "en": "11. How familiar are you with mods?"
+    "zh": "对模组有多熟悉？",
+    "en": "How familiar are you with mods?"
   },
   "guide.questionFreshness": {
-    "zh": "12. 是否偏好最新内容？",
-    "en": "12. How important is new content?"
+    "zh": "是否允许测试版本？",
+    "en": "Allow preview versions?"
   },
   "guide.questionHardware": {
-    "zh": "13. 检查电脑配置",
-    "en": "13. Check hardware information"
+    "zh": "检查电脑配置",
+    "en": "Check hardware information"
   },
   "guide.questionLimits": {
-    "zh": "14. 可选资源限制",
-    "en": "14. Optional resource limits"
+    "zh": "可选资源限制",
+    "en": "Optional resource limits"
   },
   "guide.single": {
     "zh": "单人",
@@ -6472,12 +6472,12 @@
     "en": "Some checks could not finish. Retry; unchecked files will not be installed."
   },
   "guide.weights": {
-    "zh": "排序考虑玩法、性能、稳定性、画面和上手成本；服务器与依赖要求优先。",
-    "en": "Ranking considers gameplay, performance, stability, visuals and learning effort. Server and dependency requirements take priority."
+    "zh": "先满足版本与必装要求，再按功能覆盖选择组合。三档均遵守玩法边界与测试版本偏好。",
+    "en": "Version and required-project constraints come first, then functional coverage. All tiers respect gameplay boundaries and preview preferences."
   },
   "guide.fewer": {
-    "zh": "移除内容后请重新检查",
-    "en": "Recheck after removing content"
+    "zh": "重新检查",
+    "en": "Recheck"
   },
   "guide.fresh": {
     "zh": "重新生成",
@@ -6530,5 +6530,421 @@
   "guide.duplicateRenderer": {
     "zh": "多个渲染或光影实现功能重叠，请只保留一种。",
     "en": "Multiple rendering or shader implementations overlap. Keep only one."
+  },
+  "guide.aggressive": {
+    "zh": "激进",
+    "en": "Aggressive"
+  },
+  "guide.conservative": {
+    "zh": "保守",
+    "en": "Conservative"
+  },
+  "guide.featureQuestion": {
+    "zh": "功能偏好 · 按需选择，可使用同类替代",
+    "en": "Features · choose what you need; equivalents are allowed"
+  },
+  "guide.gameplayQuestion": {
+    "zh": "拓展主题 · 仅明确选择后加入",
+    "en": "Gameplay themes · explicit opt-in only"
+  },
+  "guide.recipePreference": {
+    "zh": "合成查询偏好（允许兼容替代）",
+    "en": "Recipe viewer preference (compatible alternatives allowed)"
+  },
+  "guide.recipes": {
+    "zh": "合成查询",
+    "en": "Recipe browsing"
+  },
+  "guide.identify": {
+    "zh": "方块与实体信息",
+    "en": "Block and entity information"
+  },
+  "guide.food": {
+    "zh": "食物信息",
+    "en": "Food information"
+  },
+  "guide.inventory": {
+    "zh": "背包鼠标操作",
+    "en": "Inventory mouse controls"
+  },
+  "guide.minimap": {
+    "zh": "小地图",
+    "en": "Minimap"
+  },
+  "guide.worldmap": {
+    "zh": "世界地图",
+    "en": "World map"
+  },
+  "guide.connected": {
+    "zh": "连接材质",
+    "en": "Connected textures"
+  },
+  "guide.skins": {
+    "zh": "立体皮肤外层",
+    "en": "3D skin layers"
+  },
+  "guide.farming": {
+    "zh": "田园烹饪",
+    "en": "Farming and cooking"
+  },
+  "guide.decoration": {
+    "zh": "建筑生活",
+    "en": "Building and decoration"
+  },
+  "guide.terrain": {
+    "zh": "新世界地形",
+    "en": "New-world terrain"
+  },
+  "guide.machinery": {
+    "zh": "机械自动化",
+    "en": "Mechanical automation"
+  },
+  "guide.renderer": {
+    "zh": "渲染优化",
+    "en": "Renderer"
+  },
+  "guide.logic": {
+    "zh": "逻辑优化",
+    "en": "Logic optimization"
+  },
+  "guide.culling": {
+    "zh": "遮挡剔除",
+    "en": "Entity culling"
+  },
+  "guide.immediate": {
+    "zh": "即时渲染优化",
+    "en": "Immediate rendering"
+  },
+  "guide.background": {
+    "zh": "后台节能",
+    "en": "Background efficiency"
+  },
+  "guide.menu": {
+    "zh": "模组配置入口",
+    "en": "Mod settings"
+  },
+  "guide.texture": {
+    "zh": "材质风格",
+    "en": "Texture style"
+  },
+  "guide.custom": {
+    "zh": "指定项目",
+    "en": "Required project"
+  },
+  "guide.utility": {
+    "zh": "功能便利",
+    "en": "Convenience"
+  },
+  "guide.gameplay": {
+    "zh": "玩法拓展",
+    "en": "Gameplay additions"
+  },
+  "guide.visualGroup": {
+    "zh": "画面显示",
+    "en": "Visuals"
+  },
+  "guide.performanceGroup": {
+    "zh": "性能与省电",
+    "en": "Performance and power"
+  },
+  "guide.memoryHelp": {
+    "zh": "降低内存占用，实际效果随模组和场景变化。",
+    "en": "Reduces memory usage; results vary with mods and scenes."
+  },
+  "guide.cullingHelp": {
+    "zh": "减少被遮挡实体的渲染开销。",
+    "en": "Reduces rendering of hidden entities."
+  },
+  "guide.immediateHelp": {
+    "zh": "优化实体、界面等即时渲染路径。",
+    "en": "Optimizes immediate rendering such as entities and UI."
+  },
+  "guide.backgroundHelp": {
+    "zh": "降低后台、闲置时的资源消耗，不代表前台帧率提升。",
+    "en": "Reduces background and idle usage, not a promise of higher foreground FPS."
+  },
+  "guide.identifyHelp": {
+    "zh": "显示所看方块与实体的信息；部分数据需要服务端支持。",
+    "en": "Shows targeted block/entity information; some data needs server support."
+  },
+  "guide.foodHelp": {
+    "zh": "显示食物信息；准确饱和度等需要服务端支持。",
+    "en": "Displays food information; exact saturation needs server support."
+  },
+  "guide.inventoryHelp": {
+    "zh": "增加拖动、滚轮等背包操作。",
+    "en": "Adds inventory drag and scroll controls."
+  },
+  "guide.minimapHelp": {
+    "zh": "提供小地图和路径点；多人使用前请确认服务器规则。",
+    "en": "Provides a minimap and waypoints; confirm server rules."
+  },
+  "guide.worldmapHelp": {
+    "zh": "记录探索过的世界；与小地图分开选择。",
+    "en": "Maps explored terrain; selected separately from the minimap."
+  },
+  "guide.connectedHelp": {
+    "zh": "提供连接材质支持。进游戏后启用自带资源包。",
+    "en": "Provides connected textures. Enable the included resource packs in game."
+  },
+  "guide.skinsHelp": {
+    "zh": "将皮肤外层显示为立体效果，不改变账号认证。",
+    "en": "Renders outer skin layers in 3D; does not change authentication."
+  },
+  "guide.farmingHelp": {
+    "zh": "增加烹饪、作物和物品；只在选择拓展主题时加入。",
+    "en": "Adds cooking, crops and items only when this theme is selected."
+  },
+  "guide.decorationHelp": {
+    "zh": "增加装饰和功能方块，会改变原版内容。",
+    "en": "Adds decorative and functional blocks, changing vanilla content."
+  },
+  "guide.machineryHelp": {
+    "zh": "增加机械自动化，学习和资源成本较高。",
+    "en": "Adds mechanical automation with greater learning and resource costs."
+  },
+  "guide.lodHelp": {
+    "zh": "远距离地形显示；需要额外显卡、内存和缓存空间。",
+    "en": "Distant terrain rendering needs additional GPU, memory and cache resources."
+  },
+  "guide.lodQuestion": {
+    "zh": "远景显示",
+    "en": "Distant terrain"
+  },
+  "guide.dh": {
+    "zh": "Distant Horizons",
+    "en": "Distant Horizons"
+  },
+  "guide.voxy": {
+    "zh": "Voxy",
+    "en": "Voxy"
+  },
+  "guide.resolutionQuestion": {
+    "zh": "游戏分辨率与流畅度目标",
+    "en": "Game resolution and smoothness target"
+  },
+  "guide.resolution": {
+    "zh": "游戏分辨率",
+    "en": "Game resolution"
+  },
+  "guide.fps": {
+    "zh": "流畅度目标（非保证帧率）",
+    "en": "Smoothness target (not a guarantee)"
+  },
+  "guide.opengl46": {
+    "zh": "确认游戏使用的显卡与驱动支持 OpenGL 4.6（Voxy）",
+    "en": "I confirmed the game GPU and driver support OpenGL 4.6 (Voxy)"
+  },
+  "guide.low": {
+    "zh": "较低",
+    "en": "Lower"
+  },
+  "guide.medium": {
+    "zh": "中等",
+    "en": "Moderate"
+  },
+  "guide.high": {
+    "zh": "较高",
+    "en": "Higher"
+  },
+  "guide.VERYLOW": {
+    "zh": "极低",
+    "en": "Very low"
+  },
+  "guide.LOW": {
+    "zh": "低",
+    "en": "Low"
+  },
+  "guide.MEDIUM": {
+    "zh": "中",
+    "en": "Medium"
+  },
+  "guide.HIGH": {
+    "zh": "高",
+    "en": "High"
+  },
+  "guide.impact": {
+    "zh": "原版改动",
+    "en": "Vanilla changes"
+  },
+  "guide.load": {
+    "zh": "预计额外负担",
+    "en": "Estimated additional load"
+  },
+  "guide.expanded": {
+    "zh": "拓展玩法",
+    "en": "Expanded gameplay"
+  },
+  "guide.noCompatibleFeature": {
+    "zh": "文件、依赖或已选内容未能组成兼容方案。",
+    "en": "Files, dependencies or existing choices could not form a compatible combination."
+  },
+  "guide.disabledKept": {
+    "zh": "已有同类内容被停用，保留你的选择。",
+    "en": "Existing equivalent content is disabled; your choice is preserved."
+  },
+  "guide.substitutionReason": {
+    "zh": "优先项的文件或依赖不适配此组合，改用同类功能。",
+    "en": "The preferred file or its dependencies do not fit this setup; an equivalent was selected."
+  },
+  "guide.substitutions": {
+    "zh": "同类功能替代",
+    "en": "Equivalent features"
+  },
+  "guide.partialServer": {
+    "zh": "Jade / AppleSkin 的部分信息需要服务端支持；仅客户端安装不保证全部功能。",
+    "en": "Some Jade / AppleSkin information needs server support; client installation does not enable every feature."
+  },
+  "guide.lodUnavailable": {
+    "zh": "当前版本、测试版本偏好或显卡信息未满足远景组合要求，已保留无远景方案。可调整远景或测试版本选项后重试。",
+    "en": "The version, preview preference or GPU information does not meet the distant-terrain requirements. This setup omits LOD. Adjust those options and try again."
+  },
+  "guide.shaderUnavailable": {
+    "zh": "未找到经过文件级核验的光影组合，已保留无光影方案。",
+    "en": "No file-verified shader combination was found; shaders are omitted."
+  },
+  "guide.visualUnverified": {
+    "zh": "光影、Iris 与远景的具体文件组合不在核验目录内。请恢复推荐组合或移除光影。",
+    "en": "The exact shader, Iris and LOD files are not in the verified directory. Restore the recommended combination or remove shaders."
+  },
+  "guide.visualSettingsExist": {
+    "zh": "已有不同的光影配置，未覆盖。请在实例目录检查配置，或从任务中心跳过视觉配置。",
+    "en": "Different shader settings already exist and were preserved. Inspect the instance folder or skip visual configuration in the task center."
+  },
+  "guide.visualSummary": {
+    "zh": "画面配置",
+    "en": "Visual configuration"
+  },
+  "guide.visualEvidence": {
+    "zh": "作者集成代码与文件版本已核对；未实测该电脑的游戏表现。",
+    "en": "Author integration code and file versions checked; gameplay on this computer has not been tested."
+  },
+  "guide.visualConfigured": {
+    "zh": "已为新实例写入光影预设和 Iris 启用设置。资源包仍需在游戏内选择。",
+    "en": "Shader preset and Iris enable settings written for this new instance. Select resource packs in game."
+  },
+  "guide.visualPending": {
+    "zh": "新实例安装后会写入所示光影预设。若已有不同配置，将保留并提示处理。",
+    "en": "The shown shader preset will be written after installation. Different existing settings will be preserved for review."
+  },
+  "guide.visualSettings": {
+    "zh": "配置新实例光影",
+    "en": "Configure new-instance shaders"
+  },
+  "guide.addonTitle": {
+    "zh": "为现有实例补装推荐功能",
+    "en": "Add recommended features"
+  },
+  "guide.addonIntro": {
+    "zh": "固定当前游戏和加载器，仅补充客户端功能。保留现有版本、停用状态、配置与存档；不自动替换或移除内容。",
+    "en": "Keep this game and loader and add client features. Existing versions, disabled states, settings and worlds are preserved; no automatic replacements or removals."
+  },
+  "guide.addonInstall": {
+    "zh": "确认补装",
+    "en": "Install additions"
+  },
+  "guide.addonDone": {
+    "zh": "补装完成",
+    "en": "Additions installed"
+  },
+  "guide.addonChanged": {
+    "zh": "实例内容已变化、被停用或缺失。请到内容管理检查，再重新生成方案；未覆盖文件。",
+    "en": "Content changed, is disabled or missing. Review content management and generate again; no files were overwritten."
+  },
+  "guide.addonNotReady": {
+    "zh": "请先完成此实例的安装任务并关闭游戏，再补装功能。",
+    "en": "Finish this instance’s pending tasks and close the game before adding features."
+  },
+  "guide.addonUnmanaged": {
+    "zh": "发现启用的未识别本地模组。请在内容管理识别这些文件或先停用，再生成推荐，以免重复安装同类功能。",
+    "en": "Enabled unidentified local mods were found. Identify or disable them in content management before generating recommendations to avoid duplicate features."
+  },
+  "guide.addonVisualManual": {
+    "zh": "补装仅增加客户端功能，不改动现有光影配置或加入玩法内容。远景和光影请在内容管理中单独配置。",
+    "en": "Additions only add client features. Existing shaders and gameplay are preserved; configure LOD and shaders separately in content management."
+  },
+  "guide.nothingToAdd": {
+    "zh": "所选功能已经满足，没有需要补装的文件。",
+    "en": "Selected features are already present; no files need adding."
+  },
+  "guide.additions": {
+    "zh": "将新增",
+    "en": "To add"
+  },
+  "guide.kept": {
+    "zh": "保留现有项目",
+    "en": "Existing items preserved"
+  },
+  "guide.rollbackHelp": {
+    "zh": "补装可在模组管理的变更历史中恢复；恢复只涉及内容文件，不回退存档。",
+    "en": "Undo additions in content-management history. Recovery concerns content files, not worlds."
+  },
+  "guide.manageContent": {
+    "zh": "打开内容管理",
+    "en": "Open content management"
+  },
+  "guide.tierSame": {
+    "zh": "这些档位内容相同：当前偏好或兼容范围不需要额外内容。",
+    "en": "These tiers contain the same content; your preferences or compatibility limits do not require extra items."
+  },
+  "guide.tierDifferent": {
+    "zh": "此档位使用不同的游戏版本或加载器，请核对后选择。",
+    "en": "This tier uses a different game version or loader. Review before selecting."
+  },
+  "guide.useTips": {
+    "zh": "安装后如何使用",
+    "en": "After installation"
+  },
+  "guide.tipsRecipes": {
+    "zh": "合成查询：通常在物品上按 R 查看配方、U 查看用途；以模组实际按键设置为准。",
+    "en": "Recipe viewer: usually R for recipes and U for uses over an item; check the mod’s key bindings."
+  },
+  "guide.tipsMap": {
+    "zh": "地图：请在游戏按键设置中查看地图入口，服务器是否允许由服主决定。",
+    "en": "Maps: check game key bindings for map controls; server permission is determined by the owner."
+  },
+  "guide.tipsConfig": {
+    "zh": "模组配置：可使用 Mod Menu（若已安装），或游戏内对应设置入口。",
+    "en": "Mod settings: use Mod Menu if installed, or the mod’s own settings entry."
+  },
+  "guide.tipsVisual": {
+    "zh": "若画面不流畅，可在光影选项降低预设或关闭光影；远景缓存会额外占用磁盘。",
+    "en": "If performance is poor, lower the shader preset or disable shaders. LOD caches use additional disk space."
+  },
+  "guide.autoChecking": {
+    "zh": "选择改变后自动重新检查；完成前不能安装。",
+    "en": "Changes are rechecked automatically. Installation waits for the check."
+  },
+  "guide.gpuBudget": {
+    "zh": "实际游戏显卡的性能档位（不确定时保守配置）",
+    "en": "Actual game GPU capability (conservative when unknown)"
+  },
+  "guide.gpuBudget_unknown": {
+    "zh": "不确定 · 极低光影预设",
+    "en": "Unknown · very low shader preset"
+  },
+  "guide.gpuBudget_entry": {
+    "zh": "入门独显",
+    "en": "Entry-level dedicated GPU"
+  },
+  "guide.gpuBudget_balanced": {
+    "zh": "中端独显",
+    "en": "Mid-range dedicated GPU"
+  },
+  "guide.gpuBudget_high": {
+    "zh": "高性能独显（由我确认）",
+    "en": "High-performance dedicated GPU (confirmed by me)"
+  },
+  "guide.restoreSuggestions": {
+    "zh": "恢复已移除的推荐功能",
+    "en": "Restore removed suggestions"
+  },
+  "guide.addonEstimate": {
+    "zh": "下载和空间仅计算新增文件；不修改此实例的内存、光影或其他游戏配置。",
+    "en": "Download and space estimates cover new files only. Instance memory, shaders and game settings are preserved."
+  },
+  "guide.addonVersion": {
+    "zh": "游戏版本与加载器由当前实例锁定。",
+    "en": "Game and loader versions are locked to this instance."
   }
 }

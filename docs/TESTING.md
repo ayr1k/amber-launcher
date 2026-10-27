@@ -2,6 +2,10 @@
 
 [简体中文](zh-CN/TESTING.md)
 
+## Beta 1.10 checks
+
+224 core tests, 4 build-compatibility tests and 1,726 bilingual messages passed validation. Both editions passed desktop UI, packaged-startup and installation-directory protection checks. The user accepted the local installers and authorized publication. Mod and shader checks do not certify gameplay on every hardware configuration; Microsoft live acceptance remains deferred pending approval.
+
 ## Beta 1.9 checks
 
 203 core regression tests and 4 Sites tests pass. Guided creation checks cover server constraints, fixed dependency versions, conflicts, draft persistence, resource budgets and restart recovery. Real content files were downloaded and hash-checked in an isolated test instance; no game process was launched by these checks. Both editions passed Chinese/English UI, keyboard, small-window and packaged-startup checks. The user accepted both local installers. Microsoft live acceptance remains deferred pending approval.

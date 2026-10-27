@@ -18,3 +18,7 @@
 @media(max-width:720px){.guide-header,.guide-body,.guide-footer{padding:18px}.guide-grid,.guide-plans{grid-template-columns:1fr}.guide-dialog{width:calc(100vw - 20px);max-height:calc(100dvh - 20px)}.guide-footer{justify-content:flex-start}.guide-progress{gap:12px}.guide-hardware dl{grid-template-columns:1fr}}
 
 .desktop-app .guide-dialog{max-height:calc(100dvh - 110px)}
+
+.guide-file img{width:32px;height:32px;object-fit:contain;flex:none}.guide-category>h3{padding-top:16px;border-top:1px solid var(--line)}.guide-explanation small{color:var(--muted)}.guide-tips li{margin:12px 0;line-height:1.6}.guide-footer:has(.button){background:var(--surface)}
+
+.guide-footer-count{margin-right:auto;color:var(--muted)}

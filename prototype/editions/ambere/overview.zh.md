@@ -4,9 +4,10 @@
 
 AmberE 是面向 Minecraft Java 版的独立 Windows 发行项目，提供离线和第三方账号。基于 AMBER 共用代码维护，采用 MPL-2.0，并使用独立应用身份、数据目录和更新仓库。不提供微软登录，不内置微软应用 Client ID。
 
-## Beta 1.9
+## Beta 1.10
 
-Beta 1.9 新增引导创建、本地硬件信息、可修改的推荐方案与整体兼容检查，保留手动创建。固定安装计划支持跨重启继续。下载 [Windows x64 安装包、源码包和校验文件](https://github.com/ayr1k/AmberE/releases/tag/v1.0.0-beta.10)。
+Beta 1.10 深化引导创建，提供激进、综合、保守三档推荐，按版本与依赖选择同类模组，并核验具体光影和远景组合。现有实例可以补装推荐功能，保留原有版本、配置与存档。手动创建继续保留。下载 [Windows x64 安装包、源码包和 SHA-256 校验文件](https://github.com/ayr1k/AmberE/releases/tag/v1.0.0-beta.11)。
+
 
 - 离线身份与 HTTPS 第三方认证，保存的凭据由 Windows 当前用户加密保护。
 - 独立游戏实例、Java 与加载器安装、模组搜索、依赖选择、更新和批量管理。

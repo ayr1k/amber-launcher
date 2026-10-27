@@ -1,0 +1,273 @@
+{
+  "schema": 1,
+  "checked": "2026-10-27",
+  "evidence": [
+    "https://modrinth.com/shader/complementary-reimagined/version/Bqen1mJX",
+    "https://modrinth.com/mod/voxy",
+    "https://modrinth.com/mod/distanthorizons"
+  ],
+  "basis": "Published game/loader metadata and author shader integration sources; not gameplay certification. Exact file identifiers only.",
+  "shader": {
+    "projectId": "HVnmMxH1",
+    "versionId": "Bqen1mJX",
+    "hash": "838139b54cddb56b2e83cd260d8efd960ac536d6",
+    "name": "r5.9.3"
+  },
+  "profiles": {
+    "VERYLOW": {
+      "SHADOW_QUALITY": "0",
+      "shadowDistance": "64.0",
+      "WATER_REFLECT_QUALITY": "1",
+      "BLOCK_REFLECT_QUALITY": "0",
+      "LIGHTSHAFT_QUALI_DEFINE": "0",
+      "SSAO_QUALI_DEFINE": "2",
+      "FXAA_DEFINE": "-1",
+      "DETAIL_QUALITY": "0",
+      "CLOUD_QUALITY": "1",
+      "ANISOTROPIC_FILTER": "0",
+      "COLORED_LIGHTING": "0",
+      "WORLD_SPACE_REFLECTIONS": "-1",
+      "ENTITY_SHADOW": "-1",
+      "RAIN_PUDDLES": "0"
+    },
+    "LOW": {
+      "SHADOW_QUALITY": "0",
+      "shadowDistance": "96.0",
+      "WATER_REFLECT_QUALITY": "2",
+      "BLOCK_REFLECT_QUALITY": "1",
+      "LIGHTSHAFT_QUALI_DEFINE": "0",
+      "SSAO_QUALI_DEFINE": "2",
+      "FXAA_DEFINE": "-1",
+      "DETAIL_QUALITY": "2",
+      "CLOUD_QUALITY": "2",
+      "ANISOTROPIC_FILTER": "0",
+      "COLORED_LIGHTING": "0",
+      "WORLD_SPACE_REFLECTIONS": "-1",
+      "ENTITY_SHADOW": "-1",
+      "RAIN_PUDDLES": "0"
+    },
+    "MEDIUM": {
+      "SHADOW_QUALITY": "2",
+      "shadowDistance": "128.0",
+      "WATER_REFLECT_QUALITY": "2",
+      "BLOCK_REFLECT_QUALITY": "1",
+      "LIGHTSHAFT_QUALI_DEFINE": "1",
+      "SSAO_QUALI_DEFINE": "2",
+      "FXAA_DEFINE": "1",
+      "DETAIL_QUALITY": "2",
+      "CLOUD_QUALITY": "2",
+      "ANISOTROPIC_FILTER": "0",
+      "COLORED_LIGHTING": "0",
+      "WORLD_SPACE_REFLECTIONS": "-1",
+      "ENTITY_SHADOW": "-1",
+      "RAIN_PUDDLES": "0"
+    },
+    "HIGH": {
+      "SHADOW_QUALITY": "2",
+      "shadowDistance": "192.0",
+      "WATER_REFLECT_QUALITY": "2",
+      "BLOCK_REFLECT_QUALITY": "3",
+      "LIGHTSHAFT_QUALI_DEFINE": "2",
+      "SSAO_QUALI_DEFINE": "2",
+      "FXAA_DEFINE": "1",
+      "DETAIL_QUALITY": "2",
+      "CLOUD_QUALITY": "2",
+      "ANISOTROPIC_FILTER": "0",
+      "COLORED_LIGHTING": "0",
+      "WORLD_SPACE_REFLECTIONS": "-1",
+      "ENTITY_SHADOW": "1",
+      "RAIN_PUDDLES": "0"
+    }
+  },
+  "combinations": [
+    {
+      "game": "1.20.1",
+      "loader": "fabric",
+      "lod": "off",
+      "iris": "s5eFLITc",
+      "irisName": "1.7.6+1.20.1",
+      "lodId": null,
+      "lodName": null
+    },
+    {
+      "game": "1.20.1",
+      "loader": "fabric",
+      "lod": "dh",
+      "iris": "s5eFLITc",
+      "irisName": "1.7.6+1.20.1",
+      "lodId": "6UnEfsRQ",
+      "lodName": "3.3.3-1.20.1"
+    },
+    {
+      "game": "1.21.1",
+      "loader": "fabric",
+      "lod": "off",
+      "iris": "zsoi0dso",
+      "irisName": "1.8.8+1.21.1-fabric",
+      "lodId": null,
+      "lodName": null
+    },
+    {
+      "game": "1.21.1",
+      "loader": "fabric",
+      "lod": "dh",
+      "iris": "zsoi0dso",
+      "irisName": "1.8.8+1.21.1-fabric",
+      "lodId": "9w34y8ai",
+      "lodName": "3.3.3-1.21.1"
+    },
+    {
+      "game": "1.21.1",
+      "loader": "neoforge",
+      "lod": "off",
+      "iris": "KduFYu4t",
+      "irisName": "1.8.14-beta.1+1.21.1-neoforge",
+      "lodId": null,
+      "lodName": null
+    },
+    {
+      "game": "1.21.1",
+      "loader": "neoforge",
+      "lod": "dh",
+      "iris": "KduFYu4t",
+      "irisName": "1.8.14-beta.1+1.21.1-neoforge",
+      "lodId": "9w34y8ai",
+      "lodName": "3.3.3-1.21.1"
+    },
+    {
+      "game": "1.21.11",
+      "loader": "fabric",
+      "lod": "off",
+      "iris": "ka9PDlsN",
+      "irisName": "1.10.8+1.21.11-fabric",
+      "lodId": null,
+      "lodName": null
+    },
+    {
+      "game": "1.21.11",
+      "loader": "fabric",
+      "lod": "dh",
+      "iris": "ka9PDlsN",
+      "irisName": "1.10.8+1.21.11-fabric",
+      "lodId": "oNqCUHFk",
+      "lodName": "3.3.3-1.21.11"
+    },
+    {
+      "game": "1.21.11",
+      "loader": "fabric",
+      "lod": "voxy",
+      "iris": "ka9PDlsN",
+      "irisName": "1.10.8+1.21.11-fabric",
+      "lodId": "H3w2nVdU",
+      "lodName": "0.2.16-beta"
+    },
+    {
+      "game": "1.21.11",
+      "loader": "neoforge",
+      "lod": "off",
+      "iris": "6zJsI0eO",
+      "irisName": "1.10.8+1.21.11-neoforge",
+      "lodId": null,
+      "lodName": null
+    },
+    {
+      "game": "1.21.11",
+      "loader": "neoforge",
+      "lod": "dh",
+      "iris": "6zJsI0eO",
+      "irisName": "1.10.8+1.21.11-neoforge",
+      "lodId": "oNqCUHFk",
+      "lodName": "3.3.3-1.21.11"
+    },
+    {
+      "game": "26.2",
+      "loader": "fabric",
+      "lod": "off",
+      "iris": "gxZWWnKH",
+      "irisName": "1.11.4+26.2-fabric",
+      "lodId": null,
+      "lodName": null
+    },
+    {
+      "game": "26.2",
+      "loader": "fabric",
+      "lod": "dh",
+      "iris": "gxZWWnKH",
+      "irisName": "1.11.4+26.2-fabric",
+      "lodId": "aAow4a9f",
+      "lodName": "3.3.3-26.2"
+    },
+    {
+      "game": "26.2",
+      "loader": "fabric",
+      "lod": "voxy",
+      "iris": "gxZWWnKH",
+      "irisName": "1.11.4+26.2-fabric",
+      "lodId": "LzyXnE51",
+      "lodName": "0.2.19-beta"
+    },
+    {
+      "game": "26.2",
+      "loader": "neoforge",
+      "lod": "off",
+      "iris": "k55HdONq",
+      "irisName": "1.11.4+26.2-neoforge",
+      "lodId": null,
+      "lodName": null
+    },
+    {
+      "game": "26.2",
+      "loader": "neoforge",
+      "lod": "dh",
+      "iris": "k55HdONq",
+      "irisName": "1.11.4+26.2-neoforge",
+      "lodId": "aAow4a9f",
+      "lodName": "3.3.3-26.2"
+    },
+    {
+      "game": "26.3",
+      "loader": "fabric",
+      "lod": "off",
+      "iris": "vTN4NRGW",
+      "irisName": "1.11.7+26.3-fabric",
+      "lodId": null,
+      "lodName": null
+    },
+    {
+      "game": "26.3",
+      "loader": "fabric",
+      "lod": "dh",
+      "iris": "vTN4NRGW",
+      "irisName": "1.11.7+26.3-fabric",
+      "lodId": "TGgEbP9A",
+      "lodName": "3.3.4-26.3"
+    },
+    {
+      "game": "26.3",
+      "loader": "fabric",
+      "lod": "voxy",
+      "iris": "vTN4NRGW",
+      "irisName": "1.11.7+26.3-fabric",
+      "lodId": "iIrM8ZKQ",
+      "lodName": "0.2.20-beta"
+    },
+    {
+      "game": "26.3",
+      "loader": "neoforge",
+      "lod": "off",
+      "iris": "Ag5S66CF",
+      "irisName": "1.11.7+26.3-neoforge",
+      "lodId": null,
+      "lodName": null
+    },
+    {
+      "game": "26.3",
+      "loader": "neoforge",
+      "lod": "dh",
+      "iris": "Ag5S66CF",
+      "irisName": "1.11.7+26.3-neoforge",
+      "lodId": "TGgEbP9A",
+      "lodName": "3.3.4-26.3"
+    }
+  ]
+}

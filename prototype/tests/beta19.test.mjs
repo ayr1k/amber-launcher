@@ -27,7 +27,8 @@ async function fixture(t){
   prepareJava:async()=>({}),configureLoader:async(id,loader,v)=>{Object.assign(items.get(id),{loader,loaderVersion:v});return {};},install:async id=>{items.get(id).status='installed';return {};},
   startJob:async(id,kind,fn)=>{core.workflowGuard?.();const job={id:randomUUID(),instanceId:id,kind,state:'running',completed:0,transferred:0};jobs.push(job);try{await fn(job,new AbortController().signal);job.state='done';}catch(e){job.state='failed';job.error=e.message;}return job;},cancel:()=>{}};
  const content=new Modrinth(core);content.api=api;const workflows=new Workflows(core,content);workflows.choices=async(_game,loader)=>loader==='fabric'?[{version:'0.16',stable:true}]:[];
- const guided=new GuidedCreation(core,content,workflows,{hardware:async()=>({memoryGB:16,cpu:'Test CPU',adapters:['Test GPU']}),space:async()=>100*GB});return {root,core,content,workflows,guided,ps,vs,items};
+ const visuals={shader:{projectId:'complementary-reimagined',versionId:'complementary-reimagined-v1',hash:vs.get('complementary-reimagined-v1').files[0].hashes.sha1},profiles:{VERYLOW:{TEST:'0'},LOW:{TEST:'1'},MEDIUM:{TEST:'2'},HIGH:{TEST:'3'}},combinations:['1.21.1','1.20.1'].map(game=>({game,loader:'fabric',lod:'off',iris:'iris-v1',lodId:null}))};
+ const guided=new GuidedCreation(core,content,workflows,{visuals,hardware:async()=>({memoryGB:16,cpu:'Test CPU',adapters:['Test GPU']}),space:async()=>100*GB});return {root,core,content,workflows,guided,ps,vs,items,visuals};
 }
 test('questionnaire bounds, hard server constraints and conservative hardware defaults',()=>{
  assert.throws(()=>answers({content:['building','magic','technology','combat']}));assert.throws(()=>answers({must:['../../evil']}));assert.throws(()=>answers({memoryGB:Infinity}));
@@ -96,7 +97,7 @@ test('failed visual stage resumes across restart with pinned versions, or can be
  const f=await fixture(t);const p=(await f.guided.recommend({texture:'simple',gpu:'dedicated',shaders:'on',priority:'visual'})).find(p=>p.files.some(x=>x.type==='shader'));assert.ok(p);
  const original=f.guided.installGroup.bind(f.guided);f.guided.installGroup=async(id,p,type)=>{if(type==='resourcepack')throw Error('test interrupted');return original(id,p,type);};
  await assert.rejects(()=>f.guided.create(p.id,{name:'Visual',threads:2}),/interrupted/);const id=f.workflows.lastSetup;assert.equal((await f.workflows.pending())[0].step,'resources');
- const workflows=new Workflows(f.core,f.content),guided=new GuidedCreation(f.core,f.content,workflows,{space:async()=>100*GB});
+ const workflows=new Workflows(f.core,f.content),guided=new GuidedCreation(f.core,f.content,workflows,{visuals:f.visuals,space:async()=>100*GB});
  // An added newer release must never replace the pinned plan on restart.
  f.vs.set('sodium-v2',{...f.vs.get('sodium-v1'),id:'sodium-v2',date_published:'2030-01-01'});
  await workflows.retry(id);const saved=await guided.report(id);assert.ok(saved.files.some(x=>x.versionId==='sodium-v1'));assert.ok(!saved.files.some(x=>x.versionId==='sodium-v2'));

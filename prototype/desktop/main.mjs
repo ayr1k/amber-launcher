@@ -109,6 +109,8 @@ app.whenReady().then(async () => {
   handle('amber:guided-draft',v=>guided.draft(v));
   handle('amber:guided-search',(query,type)=>guided.search(query,type));
   handle('amber:guided-pack-versions',async id=>{if(typeof id!=='string'||!/^[-\w]{1,100}$/.test(id))throw Error('无效项目');const p=await content.api('project/'+id);if(p.project_type!=='modpack')throw Error('请选择 Modrinth 整合包。');return (await content.api('project/'+id+'/version?include_changelog=false')).map(v=>({id:v.id,title:v.name,version:v.version_number,type:v.version_type}));});
+  handle('amber:guided-addon-recommend',(id,v)=>guided.recommendAddon(id,v));
+  handle('amber:guided-addon-install',(id,ack)=>guided.installAddon(id,ack));
   handle('amber:guided-recommend',v=>guided.recommend(v));
   handle('amber:guided-edit',(id,v)=>guided.edit(id,v));
   handle('amber:guided-create',(id,v)=>guided.create(id,v));

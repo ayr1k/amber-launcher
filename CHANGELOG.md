@@ -2,6 +2,16 @@
 
 [简体中文](docs/zh-CN/CHANGELOG.md)
 
+## Beta 1.10 — 1.0.0-beta.11 (prerelease)
+
+- Expand guided creation with functional equivalents and dependency-aware version matching, preserving exact required projects and server constraints.
+- Add aggressive, balanced and conservative tiers with separate vanilla-change and resource-load indicators; balanced is selected by default.
+- Expand convenience, performance, visual and explicitly selected gameplay themes, with substitution reasons and usage guidance.
+- Pin inspected shader / distant-terrain combinations and author presets; unknown hardware stays conservative and existing settings are preserved.
+- Add recommendations for existing instances without replacing installed versions, disabled choices, settings or worlds; retain transaction recovery and resumable tasks.
+- Group content details, automatically recheck edits, retain instance names, and update both languages and custom-language templates.
+- Microsoft live authentication acceptance remains deferred pending approval. Metadata and source inspection are not gameplay or GPU certification.
+
 ## Beta 1.9 — 1.0.0-beta.10 (prerelease)
 
 - Add guided creation with a saved questionnaire, local hardware information and explained, editable setup recommendations; preserve manual creation and add direct Modrinth modpack creation.

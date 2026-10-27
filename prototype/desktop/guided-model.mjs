@@ -1,9 +1,10 @@
+import {utilityChoices,gameplayChoices,features} from './guided-catalog.mjs';
 import {g} from './guided-text.mjs';
 // SPDX-License-Identifier: MPL-2.0
 // Only text/IDs and deterministic rules. No hardware data is sent to a service.
-export const RULE_VERSION = 'beta1.9-r1';
-export const defaults = {play:'single',serverVersion:'',serverLoader:'unknown',serverLoaderVersion:'',content:['survival'],change:'light',must:[],priority:'balanced',shaders:'auto',texture:'vanilla',hud:'balanced',experience:'new',freshness:'stable',memoryGB:0,gpu:'unknown',downloadGB:0,diskGB:0,power:false};
-export const dimensions = {play:['single','server','both'],serverLoader:['unknown','vanilla','fabric','forge','neoforge'],content:['survival','building','exploration','technology','magic','combat'],change:['vanilla','light','expanded'],priority:['performance','balanced','visual'],shaders:['off','auto','on'],texture:['vanilla','simple','faithful'],hud:['simple','balanced','rich'],experience:['new','some','expert'],freshness:['stable','recent','preview'],gpu:['unknown','integrated','dedicated']};
+export const RULE_VERSION = 'beta1.10-r1';
+export const defaults = {play:'single',serverVersion:'',serverLoader:'unknown',serverLoaderVersion:'',content:['survival'],change:'light',must:[],priority:'balanced',shaders:'auto',texture:'vanilla',hud:'balanced',experience:'new',freshness:'stable',memoryGB:0,gpu:'unknown',downloadGB:0,diskGB:0,power:false,features:['food','inventory'],gameplay:[],recipePreference:'auto',lod:'off',resolution:'unknown',fps:'60',opengl46:false,excludedFeatures:[],gpuBudget:'unknown'};
+export const dimensions = {play:['single','server','both'],serverLoader:['unknown','vanilla','fabric','forge','neoforge'],content:['survival','building','exploration','technology','magic','combat'],change:['vanilla','light','expanded'],priority:['performance','balanced','visual'],shaders:['off','auto','on'],texture:['vanilla','simple','faithful'],hud:['simple','balanced','rich'],experience:['new','some','expert'],freshness:['stable','recent','preview'],gpuBudget:['unknown','entry','balanced','high'],recipePreference:['auto','jei','emi','rei'],lod:['off','auto','dh','voxy'],resolution:['unknown','1080','1440','4k'],fps:['60','120'],gpu:['unknown','integrated','dedicated']};
 export function answers(value={}) {
   if(!value||typeof value!=='object'||Array.isArray(value))throw Error(g('invalidAnswers'));
   const a={...defaults,...Object.fromEntries(Object.keys(defaults).filter(k=>Object.hasOwn(value,k)).map(k=>[k,value[k]]))};
@@ -11,6 +12,7 @@ export function answers(value={}) {
   for(const k of ['serverVersion','serverLoaderVersion'])if(typeof a[k]!=='string'||a[k].length>80||!/^[\w.+-]*$/.test(a[k]))throw Error(g('invalidAnswers'));
   for(const k of ['memoryGB','downloadGB','diskGB'])if(!Number.isFinite(a[k])||a[k]<0||a[k]>(k==='memoryGB'?1024:100000))throw Error(g('invalidAnswers'));
   if(typeof a.power!=='boolean'||!Array.isArray(a.must)||a.must.length>12||a.must.some(x=>typeof x!=='string'||!/^[-\w]{1,100}$/.test(x)))throw Error(g('invalidAnswers'));
+  for(const [key,allowed] of [['features',utilityChoices],['gameplay',gameplayChoices],['excludedFeatures',Object.keys(features)]]){if(!Array.isArray(a[key])||a[key].length>allowed.length||a[key].some(x=>!allowed.includes(x)))throw Error(g('invalidAnswers'));a[key]=[...new Set(a[key])];}if(typeof a.opengl46!=='boolean')throw Error(g('invalidAnswers'));
   a.must=[...new Set(a.must)];if(a.play==='single'){a.serverVersion='';a.serverLoader='unknown';a.serverLoaderVersion='';}return a;
 }
 export const directory = [
@@ -62,7 +64,7 @@ export function planIssues(files,target,a){
     if(d.dependency_type==='incompatible'&&match)errors.push('declaredConflict');
     if(d.dependency_type==='required'&&!match){if(f.ignoredRequired?.includes(f.versionId+':'+i))warnings.push('missingDependency');else errors.push('missingDependency');}
   }
-  for(const family of [['sodium','embeddium','rubidium'],['iris','oculus']])if(files.filter(f=>family.includes(f.slug)).length>1)errors.push('duplicateRenderer');
+  for(const family of [['sodium','embeddium','rubidium'],['iris','oculus'],['voxy','distanthorizons']])if(files.filter(f=>family.includes(f.slug)).length>1)errors.push('duplicateRenderer');
   if(files.some(x=>x.type==='shader')&&!files.some(x=>x.slug==='iris'))errors.push('shaderSupportMissing');
   const size=files.reduce((n,x)=>n+x.size,0),reserve=4*1073741824;
   if(a.downloadGB&&size>a.downloadGB*1073741824)errors.push('downloadLimit');

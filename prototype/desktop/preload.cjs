@@ -5,6 +5,8 @@ contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
   guidedDraft:v=>ipcRenderer.invoke('amber:guided-draft',v),
   guidedSearch:(q,type)=>ipcRenderer.invoke('amber:guided-search',q,type),
   guidedPackVersions:id=>ipcRenderer.invoke('amber:guided-pack-versions',id),
+  guidedAddonRecommend:(id,v)=>ipcRenderer.invoke('amber:guided-addon-recommend',id,v),
+  guidedAddonInstall:(id,ack)=>ipcRenderer.invoke('amber:guided-addon-install',id,ack),
   guidedRecommend:v=>ipcRenderer.invoke('amber:guided-recommend',v),
   guidedEdit:(id,v)=>ipcRenderer.invoke('amber:guided-edit',id,v),
   guidedCreate:(id,v)=>ipcRenderer.invoke('amber:guided-create',id,v),
