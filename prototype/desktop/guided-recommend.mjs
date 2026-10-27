@@ -13,7 +13,8 @@ export async function recommend(guide,input,existing=null){
  if(a.serverVersion&&!catalog.some(v=>v.id===a.serverVersion))fail('unknownServerVersion');
  if(a.serverLoaderVersion&&a.serverLoader==='unknown')fail('loaderRequired');
  const projectCache=new Map();
- async function project(slug){if(!projectCache.has(slug))projectCache.set(slug,api('project/'+slug).catch(()=>null));return projectCache.get(slug);}
+ async function project(slug){if(!projectCache.has(slug))projectCache.set(slug,api('project/'+slug).catch(e=>{guide.propagate(e);return null;}));return projectCache.get(slug);}
+ guide.phase('matching');
  const wanted=[...new Set(tiers.flatMap(t=>requestedFeatures(a,t)))];
  const ids=[...new Set([...wanted.flatMap(k=>features[k].slugs),...a.must])];
  // Bounded batches keep latency down without an unbounded request fan-out.
@@ -32,7 +33,7 @@ export async function recommend(guide,input,existing=null){
   if(required.some(p=>p.project_type==='mod'&&!p.loaders?.includes(loader)))continue;
   let version=existing?.item.loaderVersion||null;
   if(!existing&&loader!=='vanilla'){
-   try{const rows=await guide.workflows.choices(game.id,loader);version=rows.find(v=>a.serverLoaderVersion?v.version===a.serverLoaderVersion||(loader==='forge'&&v.version===game.id+'-'+a.serverLoaderVersion):v.stable)?.version;if(!version&&a.freshness==='preview'&&!a.serverLoaderVersion)version=rows[0]?.version;if(!version)continue;}catch{continue;}
+   try{const rows=await guide.workflows.choices(game.id,loader);version=rows.find(v=>a.serverLoaderVersion?v.version===a.serverLoaderVersion||(loader==='forge'&&v.version===game.id+'-'+a.serverLoaderVersion):v.stable)?.version;if(!version&&a.freshness==='preview'&&!a.serverLoaderVersion)version=rows[0]?.version;if(!version)continue;}catch(e){guide.propagate(e);continue;}
   }
   const target={game:game.id,loader,version};
   async function root(slug,{exact,feature,must=false,index=0}={}){
@@ -45,9 +46,10 @@ export async function recommend(guide,input,existing=null){
     if(!v||saved?.enabled===false)return null;
     const f=feature||featureFor(p.slug),def=features[f];
     return {projectId:p.id,versionId:v.id,title:p.title,slug:p.slug,type:p.project_type,feature:f||'custom',group:def?.group||'visual',reason:def?.reason||'reasonRequired',must,icon:p.icon_url||null,installed:!!saved};
-   }catch{return null;}
+   }catch(e){guide.propagate(e);return null;}
   }
   for(const tier of tiers){
+   guide.phase('dependencies');
    const roots=[],omitted=[],substitutions=[],warnings=[];
    let invalid=false;
    for(const p of required){const r=await root(p.id,{must:true});if(!r){invalid=true;break;}roots.push(r);}
@@ -62,12 +64,13 @@ export async function recommend(guide,input,existing=null){
     let r=null;for(const slug of order){for(let index=0;index<3;index++){
       const candidate=await root(slug,{feature:key,index});if(!candidate)break;
       // A matching root file is insufficient: its dependencies and earlier choices must fit too.
-      try{const check=await guide.resolve(target,a,[...roots,candidate],[],[],api,installedPins);if(check.blockers.length||check.issues.errors.length)continue;}catch{continue;}
+      try{const check=await guide.resolve(target,a,[...roots,candidate],[],[],api,installedPins);if(check.blockers.length||check.issues.errors.length)continue;}catch(e){guide.propagate(e);continue;}
       r=candidate;break;
     }if(r)break;}
     if(!r){omitted.push({feature:key,reason:'noCompatibleFeature'});continue;}
     roots.push(r);if(r.slug!==order[0])substitutions.push({feature:key,from:order[0],to:r.title,reason:'substitutionReason'});
    }
+   guide.phase('visuals');
    const budget=visualBudget(a,tier,hardware.memoryGB);
    let visual={profile:'off',lod:'off',configured:false};
    if(loader!=='vanilla'&&(budget.shaders||budget.lod)&&!existing){
@@ -81,7 +84,7 @@ export async function recommend(guide,input,existing=null){
      if(!rows.length||rows.some(r=>!r))continue;
      // User-required projects are never replaced to fit a visual profile.
      if(rows.some(r=>roots.some(old=>old.projectId===r.projectId&&old.versionId!==r.versionId)))continue;
-     try{const combined=await guide.resolve(target,a,[...roots.filter(r=>!rows.some(x=>x.projectId===r.projectId)),...rows],[],[],api,installedPins);if(combined.blockers.length||combined.issues.errors.length)continue;}catch{continue;}
+     try{const combined=await guide.resolve(target,a,[...roots.filter(r=>!rows.some(x=>x.projectId===r.projectId)),...rows],[],[],api,installedPins);if(combined.blockers.length||combined.issues.errors.length)continue;}catch(e){guide.propagate(e);continue;}
      chosen={rows,combo};break;
     }
     if(chosen){for(const r of chosen.rows)if(!roots.some(x=>x.projectId===r.projectId))roots.push({...r,reason:r.type==='shader'?'reasonShader':r.slug==='iris'?'reasonShaderSupport':'lodHelp',group:'visual'});visual={profile:budget.shaders?budget.profile:'off',lod:chosen.combo.lod,combo:chosen.combo,configured:false};}
@@ -93,7 +96,7 @@ export async function recommend(guide,input,existing=null){
     if(slug){const r=await root(slug);if(r)roots.push({...r,reason:a.texture==='simple'?'reasonSimpleTexture':'reasonFaithfulTexture',group:'visual'});else omitted.push({feature:'texture',reason:'noCompatibleFeature'});}
    }
    if(loader!=='vanilla'&&!roots.length)continue;
-   let resolved;try{resolved=await guide.resolve(target,a,roots,[],[],api,installedPins);}catch{continue;}
+   let resolved;try{resolved=await guide.resolve(target,a,roots,[],[],api,installedPins);}catch(e){guide.propagate(e);continue;}
    if(resolved.blockers.length||resolved.issues.errors.length)continue;
    const visualErrors=guide.visualIssues(resolved.files,visual);if(visualErrors.length)continue;
    if(a.play!=='single')warnings.push('serverRules');
@@ -104,7 +107,7 @@ export async function recommend(guide,input,existing=null){
    candidates.push({schema:1,ruleVersion:RULE_VERSION,answers:a,target,kind:tier,roots,...resolved,omitted,substitutions,visual,metrics,warnings,score:coverage+(visual.profile!=='off'?12:0)+(visual.lod!=='off'?10:0)-catalog.findIndex(v=>v.id===game.id)*(a.freshness==='stable'?2:5),memory:memoryBudget(a,hardware.memoryGB),createdAt:new Date().toISOString(),tested:false,existing:existing?{id:existing.item.id,stamp:existing.stamp}:null});
   }
  }
- if(!candidates.length)fail('noPlan');
+ guide.checkGeneration();if(!candidates.length)fail('noPlan');
  const sorted=candidates.sort((x,y)=>y.score-x.score);
  const anchor=sorted.find(p=>p.kind==='balanced')||sorted[0];
  const selected=tiers.map(t=>{const best=sorted.find(p=>p.kind===t),same=sorted.find(p=>p.kind===t&&p.target.game===anchor.target.game&&p.target.loader===anchor.target.loader);return same&&same.score>=best.score-15?same:best;}).filter(Boolean);

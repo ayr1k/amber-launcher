@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 import {g} from './guided-text.mjs';
+import {GuidedPreferences} from './guided-preferences.mjs';
 import {cpus,totalmem} from 'node:os';
 import {join} from 'node:path';
 import {statfs,writeFile,readFile} from 'node:fs/promises';
@@ -21,7 +22,7 @@ const failure=code=>{throw Error(g(code));};
 const fileIdentity=f=>[f.projectId,f.versionId,f.relative,f.hash,f.size,f.url];
 export class GuidedCreation {
   constructor(core,content,workflows,{hardware,space,visuals=visualRules}={}){
-    this.visualRules=visuals;this.core=core;this.content=content;this.workflows=workflows;this.plans=new Map();
+    this.preferences=new GuidedPreferences(core.root);this.generation=null;this.lastGeneration={phase:'idle',running:false};this.visualRules=visuals;this.core=core;this.content=content;this.workflows=workflows;this.plans=new Map();
     this.readHardware=hardware|| (async()=>({cpu:cpus()[0]?.model||'',memoryGB:Math.round(totalmem()/GB),adapters:await graphicsAdapters().catch(()=>[])}));
     this.space=space|| (async()=>{const f=await statfs(core.root);return f.bavail*f.bsize;});
     workflows.guided=this;
@@ -33,7 +34,27 @@ export class GuidedCreation {
     const result=await this.content.api('search?'+new URLSearchParams({query:query.trim(),limit:'12',facets:JSON.stringify([[`project_type:${type}`]]),index:'relevance'}));
     return (result.hits||[]).map(x=>({id:x.project_id,title:x.title,description:x.description}));
   }
-  session(){const cache=new Map();return async path=>{if(!cache.has(path)){if(cache.size>1000)failure('tooMany');cache.set(path,this.content.api(path));}return cache.get(path);};}
+  generationStatus(){return {...this.lastGeneration};}
+  cancelGeneration(){this.generation?.controller.abort();return true;}
+  phase(phase){if(this.generation){this.checkGeneration();this.lastGeneration={running:true,phase};}}
+  checkGeneration(){const job=this.generation;if(job?.controller.signal.aborted){const e=Error(g('generationCancelled'));e.guideFatal=true;throw e;}if(job?.error)throw job.error;}
+  propagate(error){this.checkGeneration();if(error?.guideFatal)throw error;if(error?.status===429||error?.status>=500||error?.name==='TimeoutError'||/fetch failed|network|ECONN|ENOTFOUND|timed out/i.test(error?.message||'')){const e=Error(g(error.status===429?'generationLimited':'generationNetwork'));e.guideFatal=true;throw e;}}
+  async generate(fn){
+    if(this.generation)throw Error(g('generationBusy'));
+    const job={controller:new AbortController()};this.generation=job;this.phase('versions');
+    const work=fn();let listener;const cancelled=new Promise((_,reject)=>{listener=()=>{const e=Error(g('generationCancelled'));e.guideFatal=true;reject(e);};job.controller.signal.addEventListener('abort',listener,{once:true});});
+    try{const result=await Promise.race([work,cancelled]);this.checkGeneration();this.lastGeneration={phase:'done',running:false};return result;}
+    catch(e){this.lastGeneration={phase:job.controller.signal.aborted?'cancelled':'failed',running:false};this.propagate(e);throw e;}
+    finally{job.controller.signal.removeEventListener('abort',listener);if(job.controller.signal.aborted){this.lastGeneration={phase:'cancelled',running:true};work.catch(()=>{}).finally(()=>{if(this.generation===job){this.generation=null;this.lastGeneration={phase:'cancelled',running:false};}});}else if(this.generation===job)this.generation=null;}
+  }
+  session(){const cache=new Map(),job=this.generation;return async path=>{
+    if(job?.controller.signal.aborted){const e=Error(g('generationCancelled'));e.guideFatal=true;throw e;}
+    if(job?.error)throw job.error;
+    if(!cache.has(path)){if(cache.size>1000)failure('tooMany');cache.set(path,this.content.api(path,{signal:job?.controller.signal}).catch(error=>{
+      if(error.status===404||/HTTP 404/.test(error.message))throw error;
+      const e=Error(g(job?.controller.signal.aborted?'generationCancelled':error.status===429?'generationLimited':'generationNetwork'));e.guideFatal=true;if(job)job.error=e;throw e;
+    }));}return cache.get(path);
+  };}
   remember(plan){for(const [key,p] of this.plans)if(p.expiresAt<Date.now())this.plans.delete(key);while(this.plans.size>=30)this.plans.delete(this.plans.keys().next().value);plan.availableRoots??=structuredClone(plan.roots);plan.availableVisual??=structuredClone(plan.visual);plan.id=randomUUID();plan.expiresAt=Date.now()+30*60000;this.plans.set(plan.id,structuredClone(plan));return plan;}
   get(id){const p=this.plans.get(id);if(!p||p.expiresAt<Date.now())failure('expired');return structuredClone(p);}
   async resolve(target,a,roots,optional=[],excluded=[],api=this.session(),existingPins=new Map()){
@@ -55,7 +76,7 @@ export class GuidedCreation {
     const issues=planIssues(plan.files,target,existingPins.size?{...a,downloadGB:0,diskGB:0}:a);
     return {roots,files:plan.files,required:plan.required,optional:plan.optional,excludedRequired:excluded,selectedOptional:optional,blockers:plan.blockers,issues};
   }
-  async recommend(input){return recommend(this,input);}
+  async recommend(input){return this.generate(()=>recommend(this,input));}
   visualIssues(files,visual){
     const shader=files.find(f=>f.type==='shader'),lod=files.find(f=>['voxy','distanthorizons'].includes(f.slug));
     if(!visual)return []; // Existing Beta 1.9 plans retain their original behavior.
@@ -87,7 +108,8 @@ export class GuidedCreation {
     for(const f of manifest.files){const project=await api('project/'+f.projectId);files.push({...f,slug:project.slug});}
     return {item,files,stamp:stamp(manifest.files)};
   }
-  async recommendAddon(id,input){
+  async recommendAddon(id,input){return this.generate(()=>this.recommendAddonCore(id,input));}
+  async recommendAddonCore(id,input){
     if((await this.workflows.pending()).some(p=>p.instanceId===id))failure('addonNotReady');
     const existing=await this.addonSnapshot(id),plans=await recommend(this,input,existing);
     const checked=[];for(const p of plans){const reviewed=await this.reviewAddon(p,existing);this.plans.set(p.id,structuredClone(reviewed));checked.push(reviewed);}return checked;
@@ -106,7 +128,7 @@ export class GuidedCreation {
     if(p.answers.diskGB&&p.issues.reserve>p.answers.diskGB*GB||await this.space()<p.issues.reserve)p.issues.errors.push('diskLimit');
     try{validateUpdateGraph([...existing.files,...additions]);}catch(e){p.blockers.push(e.message);}
     p.issues.errors=[...new Set(p.issues.errors)];p.issues.warnings=[...new Set(p.issues.warnings)];
-    p.additions=additions.map(f=>({title:f.title,relative:f.relative}));p.kept=existing.files.length;
+    p.additions=additions.map(f=>({title:f.title,relative:f.relative}));p.kept=existing.files.length;p.satisfied=existing.files.filter(f=>f.enabled!==false).map(f=>({title:f.title,version:f.version}));p.disabled=existing.files.filter(f=>f.enabled===false).map(f=>({title:f.title,version:f.version}));
     p.warnings=p.warnings.filter(w=>w!=='nothingToAdd');if(!additions.length)p.warnings.push('nothingToAdd');
     return p;
   }
@@ -173,6 +195,6 @@ export class GuidedCreation {
     const manifest=await this.content.manifest(dir);const plan={id:randomUUID(),instanceId:id,game:item.game,loader:item.loader,loaderVersion:item.loaderVersion,loaderSha1:item.loaderSha1,manifestStamp:stamp(manifest.files),files,compatible:true,expiresAt:Date.now()+600000};
     this.content.plans.set(plan.id,plan);return this.content.install(id,plan.id);
   }
-  async report(id){try{const data=JSON.parse(await readBoundedFile(join(await this.core.instancePath(id),'guided-plan.json'),2000000));return this.validateSaved(data);}catch(e){if(e.code==='ENOENT')return null;throw e;}}
+  async report(id){const dir=await this.core.instancePath(id);for(const file of ['guided-addon.json','guided-plan.json']){try{return this.validateSaved(JSON.parse(await readBoundedFile(join(dir,file),2000000)));}catch(e){if(e.code!=='ENOENT')throw e;}}return null;}
   async skipVisuals(id){return this.workflows.exclusive(async()=>{const {dir}=await this.core.metadata(id);await this.core.requireStopped(dir);const record=JSON.parse(await readBoundedFile(join(dir,'setup-report.json'),3000000));if(!record.guided||record.state==='done'||!['resources','shaders','visualSettings'].includes(record.step))failure('cannotSkip');const p=this.validateSaved(record.guided);const removed=p.files.filter(f=>f.type!=='mod').map(f=>f.versionId);const remaining=p.files.filter(f=>f.type==='mod');if(planIssues(remaining,p.target,p.answers).errors.length)failure('cannotSkip');p.files=remaining;p.roots=p.roots.filter(r=>!removed.includes(r.versionId));p.skippedVisuals=true;if(p.visual)p.visual={...p.visual,profile:'off'};p.issues=planIssues(p.files,p.target,p.answers);record.guided=p;await atomicJson(join(dir,'guided-plan.json'),p);await atomicJson(join(dir,'setup-report.json'),record);this.workflows.resumes.delete(id);this.workflows.lastSetup=id;return this.workflows.runPlan(id,record);});}
 }

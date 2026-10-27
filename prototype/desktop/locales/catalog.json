@@ -6496,8 +6496,8 @@
     "en": "The modpack could not be checked. Choose another release or retry."
   },
   "guide.omitted": {
-    "zh": "未加入（该版本／环境未找到兼容文件，或平台信息不可用）：",
-    "en": "Not included (no compatible file for this version/environment, or metadata unavailable):"
+    "zh": "未加入（无兼容文件、停用或受偏好限制）：",
+    "en": "Not included (no compatible file, disabled or excluded by preferences):"
   },
   "guide.items": {
     "zh": "项内容",
@@ -6946,5 +6946,249 @@
   "guide.addonVersion": {
     "zh": "游戏版本与加载器由当前实例锁定。",
     "en": "Game and loader versions are locked to this instance."
+  },
+  "guide.invalidDraft": {
+    "zh": "草稿格式无效，当前输入已保留。请重试保存。",
+    "en": "The draft is invalid. Your current input is retained. Retry saving."
+  },
+  "guide.invalidTemplate": {
+    "zh": "模板内容或名称无效。",
+    "en": "Invalid template data or name."
+  },
+  "guide.templateLimit": {
+    "zh": "最多保存 20 份本地模板，请先删除不需要的模板。",
+    "en": "Up to 20 local templates are supported. Remove an unused template first."
+  },
+  "guide.templateDuplicate": {
+    "zh": "已有同名模板，请使用其他名称。",
+    "en": "A template with this name already exists. Choose another name."
+  },
+  "guide.generationBusy": {
+    "zh": "上一轮检查尚在结束，请稍候重试。",
+    "en": "The previous check is still finishing. Retry shortly."
+  },
+  "guide.generationCancelled": {
+    "zh": "已取消生成，填写内容已保留。",
+    "en": "Generation cancelled. Your answers are retained."
+  },
+  "guide.generationLimited": {
+    "zh": "内容服务暂时限流。填写内容已保留，请稍后重新生成。",
+    "en": "The content service is rate-limited. Your answers are retained. Retry later."
+  },
+  "guide.generationNetwork": {
+    "zh": "未能完整读取兼容信息，不能据此判断模组不兼容。请检查网络后重试。",
+    "en": "Compatibility information could not be fully retrieved. This does not mean the mods are incompatible. Check the connection and retry."
+  },
+  "guide.phase_versions": {
+    "zh": "正在读取游戏版本与环境…",
+    "en": "Reading game versions and environment…"
+  },
+  "guide.phase_matching": {
+    "zh": "正在匹配功能与模组版本…",
+    "en": "Matching features and mod releases…"
+  },
+  "guide.phase_dependencies": {
+    "zh": "正在核对依赖与冲突…",
+    "en": "Checking dependencies and conflicts…"
+  },
+  "guide.phase_visuals": {
+    "zh": "正在核对光影与远景组合…",
+    "en": "Checking shader and distant-terrain combinations…"
+  },
+  "guide.phase_cancelled": {
+    "zh": "正在结束取消的检查…",
+    "en": "Finishing the cancelled check…"
+  },
+  "guide.cancelGeneration": {
+    "zh": "取消生成",
+    "en": "Cancel generation"
+  },
+  "guide.advancedServer": {
+    "zh": "高级：指定加载器版本",
+    "en": "Advanced: exact loader version"
+  },
+  "guide.advancedContent": {
+    "zh": "高级：指定必装模组",
+    "en": "Advanced: required projects"
+  },
+  "guide.advancedBudget": {
+    "zh": "高级：下载与磁盘预算",
+    "en": "Advanced: download and disk budgets"
+  },
+  "guide.advancedHardware": {
+    "zh": "高级：画面与远景选项",
+    "en": "Advanced: visuals and distant terrain"
+  },
+  "guide.editFullList": {
+    "zh": "编辑完整清单与依赖",
+    "en": "Edit the full list and dependencies"
+  },
+  "guide.autosaved": {
+    "zh": "草稿已自动保存",
+    "en": "Draft saved automatically"
+  },
+  "guide.savingDraft": {
+    "zh": "正在保存草稿…",
+    "en": "Saving draft…"
+  },
+  "guide.restoreDraft": {
+    "zh": "已恢复上次选择。生成方案后会重新核验兼容性。",
+    "en": "Previous choices restored. Generating a setup will recheck compatibility."
+  },
+  "guide.refreshPlan": {
+    "zh": "保留选择，重新核验方案",
+    "en": "Keep choices and recheck setup"
+  },
+  "guide.expiredPlan": {
+    "zh": "方案已过期。已保留填写内容，请重新核验后确认变化。",
+    "en": "This setup expired. Your input is retained. Recheck it and review the changes."
+  },
+  "guide.refreshChoices": {
+    "zh": "已尝试保留依赖选择；不同文件版本的依赖需要重新确认。",
+    "en": "Dependency choices were retained where possible. Dependencies of different file versions need a new review."
+  },
+  "guide.profileChanged": {
+    "zh": "游戏版本或加载器与刚才不同，请检查后再安装。",
+    "en": "The game version or loader differs from your previous choice. Review before installing."
+  },
+  "guide.templates": {
+    "zh": "本地推荐模板",
+    "en": "Local recommendation templates"
+  },
+  "guide.templateNote": {
+    "zh": "仅保存需求与偏好，不保存账号、路径或旧安装文件。使用时重新匹配兼容版本；补装仍受当前实例限制。",
+    "en": "Stores preferences only, without accounts, paths or old installation files. Compatibility is checked again on use; additions remain constrained by the current instance."
+  },
+  "guide.templateSaved": {
+    "zh": "已保存模板",
+    "en": "Saved templates"
+  },
+  "guide.templateChoose": {
+    "zh": "选择模板",
+    "en": "Choose a template"
+  },
+  "guide.templateApply": {
+    "zh": "应用模板",
+    "en": "Apply template"
+  },
+  "guide.templateDelete": {
+    "zh": "删除模板",
+    "en": "Delete template"
+  },
+  "guide.templateDeleteQuestion": {
+    "zh": "删除这份本地模板？不会删除实例或存档。",
+    "en": "Delete this local template? Instances and worlds are unaffected."
+  },
+  "guide.templateDeleteConfirm": {
+    "zh": "确认删除模板",
+    "en": "Confirm template deletion"
+  },
+  "guide.templateKeep": {
+    "zh": "保留模板",
+    "en": "Keep template"
+  },
+  "guide.templateName": {
+    "zh": "新模板名称",
+    "en": "New template name"
+  },
+  "guide.templateSave": {
+    "zh": "将当前偏好保存为模板",
+    "en": "Save current preferences as template"
+  },
+  "guide.templateSavedNotice": {
+    "zh": "模板已保存到本机。",
+    "en": "Template saved locally."
+  },
+  "guide.templateApplied": {
+    "zh": "已应用模板。请检查偏好，再生成推荐。",
+    "en": "Template applied. Review preferences before generating a setup."
+  },
+  "guide.tierDifferences": {
+    "zh": "当前档位与其他档位的差异",
+    "en": "How this tier differs"
+  },
+  "guide.tierCommon": {
+    "zh": "三档共同内容",
+    "en": "Content shared by all tiers"
+  },
+  "guide.noUniqueFeatures": {
+    "zh": "此档位没有额外的独有内容；请结合玩法改动和资源负担选择。",
+    "en": "This tier has no additional unique content. Compare gameplay changes and resource load."
+  },
+  "guide.refreshChanges": {
+    "zh": "与上次清单相比",
+    "en": "Changes from the previous list"
+  },
+  "guide.refreshSame": {
+    "zh": "文件清单没有变化。",
+    "en": "The file list is unchanged."
+  },
+  "guide.refreshReview": {
+    "zh": "以下内容已变化，请重新确认。不会自动安装。",
+    "en": "The following content changed. Review it again; installation is not automatic."
+  },
+  "guide.refreshRemoved": {
+    "zh": "本次未加入",
+    "en": "Not included this time"
+  },
+  "guide.satisfied": {
+    "zh": "已满足／保留原版本",
+    "en": "Already present / keep current versions"
+  },
+  "guide.disabledContent": {
+    "zh": "保持停用",
+    "en": "Keep disabled"
+  },
+  "guide.conflictGroup": {
+    "zh": "冲突与需要处理的问题",
+    "en": "Conflicts and issues to resolve"
+  },
+  "guide.noConflicts": {
+    "zh": "未发现已声明的冲突；仍需实际游戏验证。",
+    "en": "No declared conflicts found; actual gameplay still needs validation."
+  },
+  "guide.aftercare": {
+    "zh": "安装后的配置指引",
+    "en": "Post-install setup guide"
+  },
+  "guide.aftercareNote": {
+    "zh": "这是配置说明，不代表已实测游戏运行。修改画面设置后请在游戏中确认效果。",
+    "en": "This is configuration guidance, not gameplay verification. Confirm visual changes in game."
+  },
+  "guide.aftercareMods": {
+    "zh": "在内容管理中查看本次安装的模组；有模组菜单时，可在游戏内查找配置入口。",
+    "en": "Review installed mods in content management. If a mod menu is present, look for configuration entries in game."
+  },
+  "guide.aftercareVisualExisting": {
+    "zh": "保留原有光影配置，请在游戏内确认启用状态",
+    "en": "Existing shader settings are preserved. Check their enabled state in game"
+  },
+  "guide.aftercareVisualCheck": {
+    "zh": "在游戏的视频／光影设置中确认所选光影与预设",
+    "en": "Confirm the selected shader and preset in the game video/shader settings"
+  },
+  "guide.aftercareResources": {
+    "zh": "资源包需要在游戏的“资源包”设置中启用，下载完成不等于已经启用。",
+    "en": "Enable resource packs in the game Resource Packs settings; a download does not enable them."
+  },
+  "guide.aftercareDH": {
+    "zh": "Distant Horizons：在模组设置中检查远景距离。首次生成远景可能占用较多处理器和磁盘资源，可先从较低距离开始。",
+    "en": "Distant Horizons: check distant-terrain distance in its settings. Initial generation can use substantial CPU and disk resources; start with a shorter distance."
+  },
+  "guide.aftercareVoxy": {
+    "zh": "Voxy：在模组设置中检查远景与光影状态。若出现异常，先停用远景进行排查，保留存档与原有配置。",
+    "en": "Voxy: check distant-terrain and shader settings. If problems appear, disable distant terrain first for diagnosis, preserving worlds and configuration."
+  },
+  "guide.aftercareContent": {
+    "zh": "查看已安装内容",
+    "en": "View installed content"
+  },
+  "guide.aftercareHistory": {
+    "zh": "查看恢复记录",
+    "en": "View recovery history"
+  },
+  "guide.aftercareFolder": {
+    "zh": "打开实例文件夹",
+    "en": "Open instance folder"
   }
 }

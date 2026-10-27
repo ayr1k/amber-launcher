@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: MPL-2.0
 const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
+  guidedWorkspace:(scope,v)=>ipcRenderer.invoke('amber:guided-workspace',scope,v),
+  guidedTemplates:(action,v)=>ipcRenderer.invoke('amber:guided-templates',action,v),
+  guidedGeneration:()=>ipcRenderer.invoke('amber:guided-generation'),
+  guidedCancelGeneration:()=>ipcRenderer.invoke('amber:guided-cancel-generation'),
   guidedHardware:()=>ipcRenderer.invoke('amber:guided-hardware'),
   guidedDraft:v=>ipcRenderer.invoke('amber:guided-draft',v),
   guidedSearch:(q,type)=>ipcRenderer.invoke('amber:guided-search',q,type),

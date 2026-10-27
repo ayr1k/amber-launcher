@@ -2,6 +2,10 @@
 
 [简体中文](zh-CN/TESTING.md)
 
+## Beta 1.11 checks
+
+231 core tests, 4 build-compatibility tests and 1,786 bilingual entries passed validation. Both desktop editions passed selection/editing, template persistence, draft recovery, cancellation/retry, expiry recheck and addition grouping checks, plus packaged startup and installation-directory protection. The user accepted the local installers and authorized publication. Microsoft live acceptance remains deferred pending approval.
+
 ## Beta 1.10 checks
 
 224 core tests, 4 build-compatibility tests and 1,726 bilingual messages passed validation. Both editions passed desktop UI, packaged-startup and installation-directory protection checks. The user accepted the local installers and authorized publication. Mod and shader checks do not certify gameplay on every hardware configuration; Microsoft live acceptance remains deferred pending approval.

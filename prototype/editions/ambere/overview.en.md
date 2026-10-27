@@ -4,9 +4,9 @@
 
 AmberE is an independent Windows distribution for Minecraft: Java Edition, providing offline and third-party accounts. It is maintained from the shared AMBER codebase under MPL-2.0, with its own application identity, data directory and update repository. It does not offer Microsoft sign-in or include a Microsoft application Client ID.
 
-## Beta 1.10
+## Beta 1.11
 
-Beta 1.10 expands guided creation with aggressive, balanced and conservative recommendations, version-aware equivalents, dependency checks and pinned shader/LOD combinations. Existing instances can add recommended features while preserving installed versions, settings and worlds. Manual creation remains available. Download the [Windows x64 installer, source archive and SHA-256 checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.0.0-beta.11).
+Beta 1.11 fixes accidental UI text selection, improves guided layouts and tier comparisons, and adds cancellable recommendation checks, autosaved drafts, expiry recovery, local preference templates and post-install guidance. Additions preserve installed versions, settings and worlds. Download the [Windows x64 installer, source archive and SHA-256 checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.0.0-beta.12).
 
 
 - Offline identities and HTTPS third-party authentication, with Windows user encryption for saved credentials.

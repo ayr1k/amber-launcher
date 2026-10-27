@@ -105,6 +105,10 @@ app.whenReady().then(async () => {
   const packs = new Modpacks(core, content);
   const workflows = new Workflows(core, content),settings = new Settings(core.root),selections = new Map();
   const guided=new GuidedCreation(core,content,workflows);
+  handle('amber:guided-workspace',(scope,v)=>guided.preferences.draft(scope,v));
+  handle('amber:guided-templates',(action,v)=>guided.preferences.templates(action,v));
+  handle('amber:guided-generation',()=>guided.generationStatus());
+  handle('amber:guided-cancel-generation',()=>guided.cancelGeneration());
   handle('amber:guided-hardware',()=>guided.hardware());
   handle('amber:guided-draft',v=>guided.draft(v));
   handle('amber:guided-search',(query,type)=>guided.search(query,type));

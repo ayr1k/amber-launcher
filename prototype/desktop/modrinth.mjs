@@ -13,7 +13,7 @@ const folders={mod:'mods',resourcepack:'resourcepacks',shader:'shaderpacks'};
 const id=v=>{if(typeof v!=='string'||!/^[-\w]{1,100}$/.test(v))throw Error('无效项目或版本 ID。');return v;};
 export class Modrinth {
  constructor(core){this.core=core;this.plans=new Map();}
- async api(path){const r=await officialFetch('https://api.modrinth.com/v2/'+path,{fetcher:this.core.fetcher,signal:AbortSignal.timeout(30000)});const text=await r.text();if(text.length>12_000_000)throw Error('Modrinth 响应过大。');return JSON.parse(text);}
+ async api(path,{signal}={}){const r=await officialFetch('https://api.modrinth.com/v2/'+path,{fetcher:this.core.fetcher,signal:signal?AbortSignal.any([signal,AbortSignal.timeout(30000)]):AbortSignal.timeout(30000)});const text=await r.text();if(text.length>12_000_000)throw Error('Modrinth 响应过大。');return JSON.parse(text);}
  async categories(){if(!this.categoryCache){const rows=await this.api('tag/category');if(!Array.isArray(rows))throw Error('分类目录暂时不可用，请重试。');this.categoryCache=rows.filter(c=>typeof c.name==='string'&&/^[a-z0-9-]+$/.test(c.name)&&['mod','modpack','resourcepack','shader'].includes(c.project_type)).map(({name,project_type,header})=>({name,project_type,header}));}return this.categoryCache;}
  async search(instanceId,{query='',type='mod',offset=0,category='',sort='relevance'}={}){
   if(!['relevance','downloads','follows','newest','updated'].includes(sort))throw Error('不支持的排序方式。');

@@ -2,6 +2,16 @@
 
 [简体中文](docs/zh-CN/CHANGELOG.md)
 
+## Beta 1.11 — 1.0.0-beta.12 (prerelease)
+
+- Apply consistent non-selectable app chrome across dialogs, popovers and window controls while keeping inputs, logs, paths and errors copyable.
+- Group guided questions and advanced choices, compare tier differences first and collapse shared content and the full editable list.
+- Add cancellable recommendation stages and distinguish network/rate-limit failures from compatibility results.
+- Autosave separate creation and addition drafts; retain preferences and review file changes when refreshing expired recommendations.
+- Add local preference templates with fresh compatibility checks on use and explicit deletion.
+- Group addition previews into new, existing, disabled and conflicting content; recheck changes before installing.
+- Add post-install configuration guidance, content and recovery entry points for both editions. Microsoft live acceptance remains deferred.
+
 ## Beta 1.10 — 1.0.0-beta.11 (prerelease)
 
 - Expand guided creation with functional equivalents and dependency-aware version matching, preserving exact required projects and server constraints.
