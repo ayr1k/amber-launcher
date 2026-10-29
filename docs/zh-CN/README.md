@@ -4,9 +4,9 @@
 
 AMBER 是独立的 Windows Minecraft Java 版启动器，将实例隔离、游戏安装、模组管理、恢复和启动设置集中在同一界面。项目自有源码采用 MPL-2.0。
 
-## Beta 1.12
+## Beta 1.13
 
-Beta 1.12 新增实例工作台、独立试用副本、受保护的回写与变更恢复，优化本地异常排查、引导和内容布局，支持 Ctrl+K 全局搜索及推荐偏好模板导入导出。试用回写不合并存档进度或账号选择。下载 [Windows x64 安装包、源码包和 SHA-256 校验文件](https://github.com/ayr1k/amber-launcher/releases/tag/v1.0.0-beta.13)。
+Beta 1.13 完善账号生命周期、认证异常恢复、启动前检查与账号界面。 下载 [Windows 安装包、源码包和校验文件](https://github.com/ayr1k/amber-launcher/releases/tag/v1.0.0-beta.14).
 
 
 - 一体化标题栏、独立窗口边框设置、窗口位置恢复与重新组织的隐私设置。
@@ -24,7 +24,7 @@ Beta 1.12 新增实例工作台、独立试用副本、受保护的回写与变�
 
 ## 账号状态
 
-AMBER 内置项目公开 Microsoft Client ID，但微软 API 访问尚未获批。真实微软登录、刷新和正版启动仍待验收，失败时不会静默切换离线身份。微软及关联的第三方账号在启动时在线验证官方资格；主动创建的已验证离线身份沿用官方角色名称和 UUID，资格加密保存，最多缓存七天。这是产品策略，不代表 Mojang 已批准的例外。旧的未验证离线账号不能在主版启动；原有实例和存档仍保留。
+AMBER 已获准访问 Minecraft API，用户已实测微软正版登录正常。启动时继续验证游戏资格；这不代表 Mojang 或 Microsoft 官方背书。 AMBER 内置公开 Microsoft Client ID，认证失败不会静默切换离线身份。微软及关联的第三方账号在启动时在线验证官方资格；主动创建的已验证离线身份沿用官方角色名称和 UUID，资格加密保存，最多缓存七天。这是产品策略，不代表 Mojang 已批准的例外。旧的未验证离线账号不能在主版启动；原有实例和存档仍保留。
 
 第三方账号需单独进行真实服务验收。离线模式不授予游戏所有权或在线服务权限。
 
@@ -35,3 +35,13 @@ AMBER 内置项目公开 Microsoft Client ID，但微软 API 访问尚未获批�
 AMBER 非 Mojang 或微软官方产品。Minecraft、下载组件及第三方项目保留各自权利与许可。
 
 [回滚说明](ROLLBACK.md)
+
+## 产品系列
+
+| 项目 | 定位 |
+| --- | --- |
+| [AMBER](https://github.com/ayr1k/amber-launcher) | 日常使用，Microsoft 登录与正版资格验证 |
+| [AmberE](https://github.com/ayr1k/AmberE) | 离线和第三方认证；不授予游戏所有权或正版服务器权限 |
+| [AmberX](https://github.com/ayr1k/AmberX) | 目标式操作、方案比较与试用体验的实验项目 |
+
+三个项目的数据目录和更新渠道独立。

@@ -1,3 +1,9 @@
+# Current status
+
+Minecraft API access for AMBER has been approved. The user has successfully tested Microsoft licensed sign-in. Launch continues to verify eligibility. Approval is not an endorsement by Mojang or Microsoft.
+
+The following historical test records describe approval status at the time.
+
 # Testing and release acceptance
 
 [简体中文](zh-CN/TESTING.md)

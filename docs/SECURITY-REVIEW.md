@@ -17,6 +17,6 @@ The dependency audit of the locked dependency tree reported no known advisories 
 
 ## Remaining boundaries
 
-Minecraft, third-party loaders and mods execute as the user. Raw logs, command-line arguments and user-supplied content can expose information outside AMBER's controlled export path. Redaction is best-effort and must not replace reviewing a report. Windows user encryption does not protect against same-user malware. Removing an active account does not revoke provider authorization or delete historical backups automatically. The installer is unsigned. Microsoft real-account acceptance remains deferred because API access is not approved.
+Minecraft, third-party loaders and mods execute as the user. Raw logs, command-line arguments and user-supplied content can expose information outside AMBER's controlled export path. Redaction is best-effort and must not replace reviewing a report. Windows user encryption does not protect against same-user malware. Removing an active account does not revoke provider authorization or delete historical backups automatically. The installer is unsigned. Minecraft API access for AMBER has been approved. The user has successfully tested Microsoft licensed sign-in. Launch continues to verify eligibility. Approval is not an endorsement by Mojang or Microsoft.
 
 References: [Electron security checklist](https://www.electronjs.org/docs/latest/tutorial/security/) and [safeStorage API](https://www.electronjs.org/docs/latest/api/safe-storage). Apply changes against the installed Electron version and rerun compatibility tests.

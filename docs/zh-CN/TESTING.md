@@ -1,3 +1,9 @@
+# 当前状态
+
+AMBER 已获准访问 Minecraft API，用户已实测微软正版登录正常。启动时继续验证游戏资格；这不代表 Mojang 或 Microsoft 官方背书。
+
+以下为历史测试记录，审批状态反映当时情况。
+
 # 测试与发布验收
 
 [English](../TESTING.md)

@@ -57,7 +57,7 @@ test('independent update channels reject cross-repository and wrong-product asse
  offline.assets[0]=asset(`AmberE-${version}-Setup-x64.exe`,'amber-launcher');assert.equal(releaseCandidate([offline],'1.0.0-beta.9','AmberE'),null);
 });
 
-test('authentication failures point to account recovery rather than a content-download error',()=>{for(const text of ['Minecraft 所有权检查失败（HTTP 403）','微软令牌交换连接失败','第三方账号尚未关联正版资格'])assert.equal(explainProblem(text).action,'accounts');});
+test('authentication failures point to account recovery rather than a content-download error',()=>{for(const text of ['Minecraft 所有权检查失败（HTTP 403）','第三方账号尚未关联正版资格'])assert.equal(explainProblem(text).action,'accounts');});
 
 test('re-authenticating the same official profile preserves account links and repairs a renamed offline identity',async t=>{
  const {a,login}=await fixture(t);const owner=await login();await a.addOffline();const offline=a.data.accounts.find(x=>x.type==='offline');const offlineId=offline.id;

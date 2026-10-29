@@ -2,4 +2,4 @@
 import pkg from '../package.json' with {type:'json'};
 export const VERSION=pkg.version;
 export const DISPLAY_VERSION='Beta 1.'+(Number(VERSION.split('beta.')[1])-1);
-export const MICROSOFT_REVIEW='AMBER 的 API 申请已重新提交，尚未获得批准。微软真实登录、刷新和正版启动暂未验收。';
+export const MICROSOFT_REVIEW='AMBER 已获准访问 Minecraft API，微软正版登录已由用户实测通过。启动时仍会验证游戏资格；这不代表 Mojang 或 Microsoft 官方背书。';

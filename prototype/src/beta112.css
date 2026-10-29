@@ -49,3 +49,6 @@
 .guide-header>.dialog-close-button:disabled{opacity:.45;cursor:default}
 .dialog-close-button:focus-visible,.topbar .quick-trigger:focus-visible{outline:2px solid var(--green);outline-offset:3px}
 @media(max-width:720px){.mod-updates-heading{align-items:flex-start;gap:16px}.mod-updates-toolbar{align-items:flex-start;gap:12px 20px}.mod-updates-toolbar>.mod-updates-refresh{margin-left:0}.mod-updates-toolbar .mod-updates-prerelease{flex-basis:100%}}
+
+/* Beta 1.13: readable identity states and resilient account actions. */
+.launch-account-state{margin:12px 0;line-height:1.6}.account-entry{gap:24px;align-items:center}.account-details{min-width:0;overflow-wrap:anywhere}.account-actions{display:flex;flex-wrap:wrap;gap:12px;flex-shrink:0}.account-panel .inline-actions{gap:12px;flex-wrap:wrap}.account-panel .native-job{overflow-wrap:anywhere}.account-panel button{min-height:44px}@media(max-width:800px){.account-entry{flex-direction:column;align-items:stretch}.account-actions{justify-content:flex-start}}

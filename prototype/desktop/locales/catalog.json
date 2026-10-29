@@ -3488,8 +3488,8 @@
     "en": "Service temporarily unavailable. Try again later."
   },
   "m8076b54df474": {
-    "zh": "Minecraft 服务拒绝了此应用或账号的访问。AMBER 的 API 申请再次被拒，尚未获批；403 本身不能确认具体拒绝原因。",
-    "en": "Minecraft denied this application or account access. AMBER's API application was rejected again and is not approved. HTTP 403 alone does not identify the exact reason."
+    "zh": "Minecraft 服务拒绝访问。请检查账号权限并稍后重试；403 本身不能证明未购买游戏。",
+    "en": "Minecraft services denied access. Check account permissions and retry later; HTTP 403 alone does not establish that you do not own the game."
   },
   "mbae7f265a597": {
     "zh": "未找到 Java 版角色，请在 Minecraft 官网检查游戏所有权并创建角色。",
@@ -3800,8 +3800,8 @@
     "en": "This instance's account was removed. Choose another account."
   },
   "m64f74b867d0a": {
-    "zh": "AMBER 的 API 申请再次被拒，尚未获得批准；此检查不验证在线授权。",
-    "en": "AMBER's API application was rejected again and is not approved. This check does not verify online authorization."
+    "zh": "Minecraft 服务拒绝访问。请检查账号权限并稍后重试；403 本身不能证明未购买游戏。",
+    "en": "Minecraft services denied access. Check account permissions and retry later; HTTP 403 alone does not establish that you do not own the game."
   },
   "me0c4b9cc02bd": {
     "zh": "已找到选择的账号，在线授权仅在启动时检查。",
@@ -4956,8 +4956,8 @@
     "en": "Review details and retry. If it persists, inspect the files in the instance folder."
   },
   "mc8d3ae7e29be": {
-    "zh": "AMBER 的 API 申请已重新提交，尚未获得批准。微软真实登录、刷新和正版启动暂未验收。",
-    "en": "AMBER has resubmitted its API application and has not received approval. Live Microsoft sign-in, refresh and licensed gameplay have not been accepted."
+    "zh": "AMBER 已获准访问 Minecraft API，微软正版登录已由用户实测通过。启动时仍会验证游戏资格；这不代表 Mojang 或 Microsoft 官方背书。",
+    "en": "AMBER has been granted Minecraft API access, and Microsoft licensed sign-in has been tested successfully by the user. Launch still verifies eligibility; this is not endorsement by Mojang or Microsoft."
   },
   "mcdee27f01109": {
     "zh": "恢复日志不可为链接",
@@ -7666,5 +7666,45 @@
   "bench.modpack": {
     "zh": "安装整合包内容",
     "en": "Install modpack content"
+  },
+  "mc84ec169707a": {
+    "zh": "所选账号已移除，请重新选择或登录。不会自动切换账号。",
+    "en": "The selected account was removed. Select an account or sign in again. No other account will be selected automatically."
+  },
+  "mc4cf2be1dbfb": {
+    "zh": "认证服务暂时不可用",
+    "en": "Authentication service temporarily unavailable"
+  },
+  "m3ba86427b3a9": {
+    "zh": "检查网络或稍后重试。此次失败不代表未购买游戏，也不会自动切换账号。",
+    "en": "Check your connection or retry later. This failure does not mean you do not own the game; your account will not be switched."
+  },
+  "mef14be82bd47": {
+    "zh": "正在检查账号、游戏文件与运行环境…",
+    "en": "Checking account, game files and runtime…"
+  },
+  "m4444f212ca32": {
+    "zh": "需要重新选择账号",
+    "en": "Select an account again"
+  },
+  "mc8ccd9dcdb64": {
+    "zh": "启动时自动检查账号与游戏资格",
+    "en": "Account and eligibility are checked at launch"
+  },
+  "m3a7511bf3b55": {
+    "zh": "请选择账号后启动",
+    "en": "Select an account to launch"
+  },
+  "m908f05fe700a": {
+    "zh": "移除后，绑定此账号的实例需要重新选择账号。此操作不会删除实例，也不会撤销服务端授权。",
+    "en": "Instances using this account will need another account selected. This does not delete instances or revoke authorization with the provider."
+  },
+  "beta113health": {
+    "zh": "已找到微软账号，启动时将在线刷新登录并验证游戏资格。",
+    "en": "Microsoft account found. Sign-in will refresh and eligibility will be verified online at launch."
+  },
+  "beta113runtime": {
+    "zh": "启动时检查账号与运行环境",
+    "en": "Account and runtime are checked at launch"
   }
 }

@@ -1,3 +1,13 @@
+## Beta 1.13 — prerelease (1.0.0-beta.14)
+
+- Microsoft API access approved; user-confirmed licensed login acceptance. Eligibility enforcement remains in place; no official endorsement claimed.
+- Repeated login clicks reuse the active request. Cancellation, expiry, success and failure clear temporary device credentials.
+- Authentication service/network failures are distinguished from ownership problems, with direct retry and account-management actions.
+- Launch checks running instances before authentication, including games recovered after launcher restart. Removed account bindings never silently fall back.
+- Account removal confirmation, readable account state, responsive actions and bilingual recovery messages.
+- Bilingual READMEs link AMBER, AmberE and AmberX. AmberE shares applicable fixes and retains its own offline/third-party identity and updater. AmberX is unchanged.
+- The user accepted both installers and authorized prerelease publication. Existing instances, saves, account bindings and eligibility policy are preserved.
+
 # Changelog
 
 [简体中文](docs/zh-CN/CHANGELOG.md)

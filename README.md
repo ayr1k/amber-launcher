@@ -4,9 +4,9 @@
 
 AMBER is an independent Windows launcher for Minecraft: Java Edition. It keeps game instances separate and brings installation, mod management, recovery and launch settings into one workspace. Project-owned source is licensed under MPL-2.0.
 
-## Beta 1.12
+## Beta 1.13
 
-Beta 1.12 adds an instance workspace, independent trial copies, guarded promotion and recoverable change records. It improves local troubleshooting, guided and content layouts, global Ctrl+K search and preference-template import/export. Trial promotion never merges world progress or account selections. Download the [Windows x64 installer, source archive and SHA-256 checksums](https://github.com/ayr1k/amber-launcher/releases/tag/v1.0.0-beta.13).
+Beta 1.13 improves account lifecycle, authentication recovery, launch checks and account interface. Download the [Windows installer, source and checksums](https://github.com/ayr1k/amber-launcher/releases/tag/v1.0.0-beta.14).
 
 
 - Integrated title bar, independent window corners, remembered window placement and reorganized privacy settings.
@@ -24,7 +24,7 @@ Download the Windows x64 Setup executable from [Releases](https://github.com/ayr
 
 ## Account status
 
-AMBER includes its own public Microsoft Client ID. Microsoft API allow-list approval has not been granted. Real Microsoft sign-in, token refresh and authenticated launch remain unverified; a login failure never silently switches to offline mode. AMBER requires online official eligibility verification for Microsoft and linked third-party launches. Explicitly created verified offline identities retain the official name and UUID with a maximum seven-day encrypted eligibility cache; this is a product policy, not a Mojang-approved exception. Legacy unverified offline accounts cannot launch in AMBER. Existing game instances and saves are preserved.
+Minecraft API access for AMBER has been approved. The user has successfully tested Microsoft licensed sign-in. Launch continues to verify eligibility. Approval is not an endorsement by Mojang or Microsoft. AMBER includes its public Microsoft Client ID. Login failure never silently switches to offline mode. AMBER requires online official eligibility verification for Microsoft and linked third-party launches. Explicitly created verified offline identities retain the official name and UUID with a maximum seven-day encrypted eligibility cache; this is a product policy, not a Mojang-approved exception. Legacy unverified offline accounts cannot launch in AMBER. Existing game instances and saves are preserved.
 
 Third-party services require separate live validation. Offline mode does not grant Minecraft ownership or online-service access.
 
@@ -42,3 +42,13 @@ Third-party services require separate live validation. Offline mode does not gra
 AMBER is not an official Mojang or Microsoft product. Minecraft, downloaded components and third-party projects retain their respective rights and licenses.
 
 [Rollback guide](docs/ROLLBACK.md) / [回滚说明](docs/zh-CN/ROLLBACK.md)
+
+## Product family
+
+| Project | Purpose |
+| --- | --- |
+| [AMBER](https://github.com/ayr1k/amber-launcher) | Everyday use with Microsoft sign-in and eligibility verification |
+| [AmberE](https://github.com/ayr1k/AmberE) | Offline and third-party identities; does not grant game ownership or authenticated server access |
+| [AmberX](https://github.com/ayr1k/AmberX) | Experimental goal-based workflows, comparison and trials |
+
+Each project uses separate data and update channels.
