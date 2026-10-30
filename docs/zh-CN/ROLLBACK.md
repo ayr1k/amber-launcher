@@ -1,10 +1,5 @@
-# 从 Beta 1.12 回滚
+# 从 1.0 回退
 
-[English](../ROLLBACK.md)
+先备份重要实例和存档，关闭启动器与 Minecraft。下载对应产品的 [Beta 1.14 安装包和校验文件](https://github.com/ayr1k/amber-launcher/releases/tag/v1.0.0-beta.15)，核对哈希后安装到原程序目录，保留用户数据。不要混用 AMBER 和 AmberE 的安装或数据目录。
 
-1. 备份重要实例与存档。需要撤销模组/配置变化时，先在 Beta 1.12 预览并恢复适用记录；不要强制用过期记录覆盖外部修改。
-2. 退出启动器和游戏，从对应产品的 [Beta 1.11 Release](https://github.com/ayr1k/amber-launcher/releases/tag/v1.0.0-beta.12) 下载原版安装包和校验文件。
-3. 安装到原程序位置，不清除用户数据，不混用不同产品的安装和数据目录。
-4. 降级程序不会撤销世界进度、模组更新或配置变化。Beta 1.11 忽略新增的 `.amber-history` 与 `trial.json` 记录，试用副本仍是独立实例，但旧版没有试用回写功能。以后再次升级时，会重新核对降级期间修改的文件。
-
-开发回滚可使用已发布的 Beta 1.11 标签和源码包，解压到独立目录，不覆盖有未提交工作的开发目录。安装前检查也会在适用时保留旧程序，位置记录在 `%LOCALAPPDATA%/AMBER/previous-program.txt`，它不等于存档备份。
+回退程序不会撤销模组、配置或存档变化；需要时将实例备份恢复到独立实例。1.0 不更改数据格式。安装前检查会在适用时保留旧程序，位置记录在 `%LOCALAPPDATA%/AMBER/previous-program.txt`；这不是存档备份。账号加密需要原 Windows 用户。

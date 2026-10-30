@@ -4,10 +4,9 @@
 
 AmberE is an independent Windows distribution for Minecraft: Java Edition, providing offline and third-party accounts. It is maintained from the shared AMBER codebase under MPL-2.0, with its own application identity, data directory and update repository. It does not offer Microsoft sign-in or include a Microsoft application Client ID.
 
-## Beta 1.14
+## 1.0.0
 
-Beta 1.14 adds stable/preview update channels, library recovery, storage maintenance and backup verification, with recovery and interface alignment improvements. Download the [Windows installer, source and checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.0.0-beta.15).
-
+Stable release for Windows x64. [Download the installer, source and checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.0.0). Includes instance management, content recommendations, mod updates, backups and recovery.
 
 - Offline identities and HTTPS third-party authentication, with Windows user encryption for saved credentials.
 - Isolated game instances; Java and loader installation; mod search, dependencies, updates and bulk management.
@@ -17,7 +16,7 @@ Beta 1.14 adds stable/preview update channels, library recovery, storage mainten
 
 ## Install and update
 
-Verify the SHA-256 checksum and run the Setup executable. Use a separate program folder and close AmberE and Minecraft before upgrading. The installer offers Chinese and English and is currently unsigned. Uninstalling preserves game data. About checks this repository's releases; installers are verified before the user confirms installation.
+Verify the SHA-256 checksum and run the Setup executable. Use a separate program folder and close AmberE and Minecraft before upgrading. The installer offers Chinese and English and is currently unsigned. Uninstalling preserves game data.
 
 Offline and third-party identities do not grant Minecraft ownership or official online-service access. Obtain the game legitimately. Third-party providers may have their own requirements. AmberE is not an official Mojang or Microsoft product and does not claim Microsoft API approval.
 

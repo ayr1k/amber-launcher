@@ -1,16 +1,9 @@
-# Beta 1.14 / 1.0 release acceptance
+# Release verification
 
-Local-only package 1.0.0-beta.15. AmberX is unchanged. Retain the adjacent beta1.13 installers; hashes are recorded in ROLLBACK-BASELINE.json. Close games, back up worlds and keep the data directory when reinstalling a prior program version. No data schema migration is introduced.
+Run `pnpm test`, `pnpm build`, `pnpm test:sites`, `pnpm release:check` and `pnpm desktop:smoke` from prototype. Automated coverage includes update selection, checked downloads, backups, interrupted transactions, account boundaries, recommendation compatibility and local data recovery. Synthetic instances do not certify every game/mod/GPU combination.
 
-## Automated scope
-Update channel filtering, upgrade ordering, cancellation/retry, configured-library disconnection/reconnection, bounded linked-directory scans, backup integrity, credential redaction, and existing install/transaction recovery use isolated fixtures. Synthetic tests do not establish real gameplay, service availability or GPU compatibility.
+Production dependencies are checked for known advisories. Credentials use Windows user encryption; this does not protect against malicious software running as the same user. Installers are unsigned. Back up worlds before upgrades or content changes. Uninstalling the program preserves game data.
 
-## Required human acceptance before 1.0
-Clean install → create → install content → sign in → launch; beta1.13 upgrade preserving worlds/settings/bindings; Microsoft refresh after restart; offline/third-party login in AmberE; disconnected data disk; Windows display scaling and multi-monitor moves; recovery after interrupted install/update; backups restored to a different instance. Exercise vanilla/Fabric and separately Forge/NeoForge/legacy combinations actually intended for support. Record exact versions and observed results rather than claiming all versions work.
+# 版本验证
 
-Installers remain unsigned. Code signing and hardware/live-account acceptance are not completed by automated packaging. A remaining critical data-loss, credential-exposure, authentication-bypass or launch-blocking issue blocks 1.0. Use another beta if needed.
-
-## 本地验收
-重点检查稳定/测试通道切换、升级不丢数据、断开原数据盘后重试或定位原库、备份校验与独立恢复、诊断预览和导出一致。AMBER 真实账号和 AmberE 第三方服务由用户分别验收。模拟测试不代表所有游戏/加载器/显卡组合通过。安装包尚未签名；正式版前仍需完成人工验收与功能冻结观察。
-
-Automated results: 268 core regressions, 4 build checks, bilingual catalog and both isolated desktop workflows. Desktop workflows cover persisted channel, cleanup cancel/confirm, backup verification, diagnostic snapshot export and 100–200% zoom. Hardware and live Microsoft/third-party acceptance remain user checks.
+自动检查覆盖更新、下载校验、备份、事务恢复、账号边界、推荐兼容和本地数据恢复。模拟实例不代表所有游戏、模组和显卡组合均已验证。Windows 用户加密无法抵御同一用户下的恶意软件。安装包未签名；升级或更改内容前请备份存档。卸载程序保留游戏数据。

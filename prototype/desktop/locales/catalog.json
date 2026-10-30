@@ -2704,8 +2704,8 @@
     "en": "Project license"
   },
   "m72d9e7880094": {
-    "zh": "开发阶段",
-    "en": "Development stage"
+    "zh": "主要功能",
+    "en": "Features"
   },
   "mb12a31dd6a32": {
     "zh": "多加载器 · Modrinth 内容商城 · 账号与 Java 管理",
@@ -4956,8 +4956,8 @@
     "en": "Review details and retry. If it persists, inspect the files in the instance folder."
   },
   "mc8d3ae7e29be": {
-    "zh": "AMBER 已获准访问 Minecraft API，微软正版登录已由用户实测通过。启动时仍会验证游戏资格；这不代表 Mojang 或 Microsoft 官方背书。",
-    "en": "AMBER has been granted Minecraft API access, and Microsoft licensed sign-in has been tested successfully by the user. Launch still verifies eligibility; this is not endorsement by Mojang or Microsoft."
+    "zh": "AMBER 支持微软账号登录，启动时验证 Minecraft 游戏资格。AMBER 是独立项目，不代表 Mojang 或 Microsoft 官方。",
+    "en": "AMBER supports Microsoft sign-in and verifies Minecraft eligibility at launch. AMBER is an independent project and does not represent Mojang or Microsoft."
   },
   "mcdee27f01109": {
     "zh": "恢复日志不可为链接",
@@ -7548,8 +7548,8 @@
     "en": "Template exported."
   },
   "bench.publicBuild": {
-    "zh": "公开预发布版",
-    "en": "Public prerelease"
+    "zh": "正式版",
+    "en": "Stable release"
   },
   "bench.localBuild": {
     "zh": "本地测试版",
@@ -7826,5 +7826,9 @@
   "beta114trash": {
     "zh": "回收站",
     "en": "Recycle bin"
+  },
+  "release100.features": {
+    "zh": "主要功能",
+    "en": "Features"
   }
 }

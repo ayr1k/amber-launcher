@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
-import {readFile,mkdir,readdir,lstat,rename,rmdir} from 'node:fs/promises';
+import {readFile,mkdir,readdir,lstat,rename,rmdir,realpath} from 'node:fs/promises';
 import {join,resolve,sep,basename} from 'node:path';
 import {randomUUID} from 'node:crypto';
 import {digest} from './download.mjs';
@@ -8,8 +8,8 @@ import {treeFiles,copyVerified,requireSpace,separateDirectories} from './safe-co
 export class Storage{
  constructor(userData){this.userData=userData;this.config=join(userData,'storage.json');}
  async get(){try{const r=JSON.parse(await readFile(this.config,'utf8'));if(r.schema!==1||typeof r.path!=='string')throw Error('数据位置配置损坏');return r;}catch(e){if(e.code==='ENOENT')return {schema:1,path:join(this.userData,'library'),onboarded:false};throw e;}}
- async validateExisting(){const config=await this.get();try{await lstat(this.config);}catch(e){if(e.code==='ENOENT')return config;throw e;}const s=await lstat(config.path);if(!s.isDirectory()||s.isSymbolicLink())throw Error('数据目录不可用或包含链接。');await readdir(config.path);return config;}
- async reconnect(path){const target=resolve(path),s=await lstat(target);if(!s.isDirectory()||s.isSymbolicLink())throw Error('请选择原有游戏数据目录。');const items=await lstat(join(target,'instances'));if(!items.isDirectory()||items.isSymbolicLink())throw Error('请选择包含 instances 的原有游戏数据目录。');await readdir(target);await atomicJson(this.config,{schema:1,path:target,onboarded:true});return this.get();}
+ async validateExisting(){const config=await this.get();try{await lstat(this.config);}catch(e){if(e.code==='ENOENT')return config;throw e;}const s=await lstat(config.path);if(!s.isDirectory()||s.isSymbolicLink()||resolve(await realpath(config.path)).toLowerCase()!==resolve(config.path).toLowerCase())throw Error('数据目录不可用或包含链接。');await readdir(config.path);return config;}
+ async reconnect(path){const target=resolve(path),s=await lstat(target);if(!s.isDirectory()||s.isSymbolicLink()||resolve(await realpath(target)).toLowerCase()!==target.toLowerCase())throw Error('请选择原有游戏数据目录。');const items=await lstat(join(target,'instances'));if(!items.isDirectory()||items.isSymbolicLink())throw Error('请选择包含 instances 的原有游戏数据目录。');await readdir(target);await atomicJson(this.config,{schema:1,path:target,onboarded:true});return this.get();}
  async complete(){const r=await this.get();r.onboarded=true;await atomicJson(this.config,r);return r;}
  async migrate(core,destination){const source=core.root,target=resolve(destination);separateDirectories(source,target);await mkdir(target,{recursive:true});if((await lstat(target)).isSymbolicLink()||(await readdir(target)).length)throw Error('请选择一个空文件夹，原有文件不会覆盖。');await treeFiles(target);const files=await treeFiles(source);await requireSpace(target,files.reduce((n,f)=>n+f.size,0));const stage=join(target,'.amber-copy-'+randomUUID());const entries=await copyVerified(source,stage,files,(completed,total)=>{core.operation={title:'复制并校验数据目录',state:'running',completed,total};core.workflowGuard?.();});const current=await treeFiles(source);if(JSON.stringify(current)!==JSON.stringify(files))throw Error('迁移期间源目录发生变化，已保留原目录，请关闭占用程序后重试。'); // Never switch to an incomplete copy.
  for(const f of entries){core.workflowGuard?.();if(await digest(join(source,...f.relative.split('/')),'sha256')!==f.hash)throw Error('源文件在迁移期间被修改，未切换目录。');}

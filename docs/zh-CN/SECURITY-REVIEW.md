@@ -17,6 +17,6 @@
 
 ## 边界
 
-Minecraft、第三方加载器及模组以用户权限运行。原始日志、命令行参数和用户内容可能在受控导出之外暴露信息。脱敏是尽力而为，不能替代分享前检查。Windows 用户加密不抵御同用户恶意软件。移除活动账号不自动撤销服务端授权或清除历史备份。安装器未签名。因微软 API 未获批，真实账号验收继续延期。
+Minecraft、第三方加载器及模组以用户权限运行。原始日志、命令行参数和用户内容可能在受控导出之外暴露信息。脱敏是尽力而为，不能替代分享前检查。Windows 用户加密不抵御同用户恶意软件。移除活动账号不自动撤销服务端授权或清除历史备份。安装器未签名。
 
 参考：[Electron 安全清单](https://www.electronjs.org/docs/latest/tutorial/security/)与 [safeStorage API](https://www.electronjs.org/docs/latest/api/safe-storage)。按实际 Electron 版本应用并复测兼容性。

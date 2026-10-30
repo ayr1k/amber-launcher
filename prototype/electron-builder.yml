@@ -3,7 +3,7 @@ productName: AMBER
 asar: false
 npmRebuild: false
 directories:
-  output: releases/beta1.14/AMBER
+  output: releases/1.0/AMBER
   buildResources: build
 files:
   - desktop/**/*
@@ -22,8 +22,8 @@ files:
 extraFiles:
   - from: ../CHANGELOG.md
     to: CHANGELOG.md
-  - from: BETA114-TESTING.md
-    to: BETA114-TESTING.md
+  - from: RELEASE-ACCEPTANCE.md
+    to: RELEASE-ACCEPTANCE.md
 win:
   target:
     - target: nsis

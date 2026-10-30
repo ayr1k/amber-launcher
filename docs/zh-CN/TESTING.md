@@ -1,70 +1,9 @@
-# 当前状态
+# Release verification
 
-AMBER 已获准访问 Minecraft API，用户已实测微软正版登录正常。启动时继续验证游戏资格；这不代表 Mojang 或 Microsoft 官方背书。
+Run `pnpm test`, `pnpm build`, `pnpm test:sites`, `pnpm release:check` and `pnpm desktop:smoke` from prototype. Automated coverage includes update selection, checked downloads, backups, interrupted transactions, account boundaries, recommendation compatibility and local data recovery. Synthetic instances do not certify every game/mod/GPU combination.
 
-以下为历史测试记录，审批状态反映当时情况。
+Production dependencies are checked for known advisories. Credentials use Windows user encryption; this does not protect against malicious software running as the same user. Installers are unsigned. Back up worlds before upgrades or content changes. Uninstalling the program preserves game data.
 
-# 测试与发布验收
+# 版本验证
 
-[English](../TESTING.md)
-
-## Beta 1.12 验证
-
-252 项核心测试和 4 项构建兼容测试通过，校验 1,885 条双语消息。两版在隔离实例中通过试用创建、选择性回写、恢复、模板交换和搜索流程，并通过打包启动与安装目录检查。最终 UI 修正通过中文深色、英文浅色、125% 缩放、图标对齐、复选框交互和键盘关闭检查。已核对原始 Beta 1.11 文件校验值，并验证旧版核心可读取新版实例。测试使用合成实例，不代表真实游玩、FPS 或所有模组组合验证。用户接受修正后的两份安装包并授权发布；微软真实验收仍待审核。
-
-## Beta 1.11 验证
-
-231 项核心测试、4 项构建兼容测试与 1,786 条双语文本检查通过。两版桌面回归覆盖文本选择、模板保存、草稿恢复、取消后重试、过期重检和补装分组；打包程序启动及安装目录保护检查通过。用户已验收本地安装包并授权发布。微软真实认证仍待批准后验收。
-
-## Beta 1.10 验证
-
-224 项核心测试、4 项构建兼容测试与 1,726 条双语文本检查通过；两版通过桌面界面、打包启动及安装目录保护检查。用户已验收本地安装包并授权发布。模组与光影核验不代表所有硬件上的实际游戏认证；微软真实认证仍待批准后验收。
-
-## Beta 1.9 检查
-
-203 项核心回归及 4 项 Sites 测试通过，覆盖服务器约束、固定依赖版本、冲突、草稿、资源预算与跨重启恢复。在独立测试实例中下载并校验真实内容文件，未启动游戏进程。双版本中英文界面、键盘、小窗口与打包启动检查通过，用户已确认两个本地安装包测试正常。微软真实验收仍等待审批。
-
-## Beta 1.8 检查
-
-188 项核心回归、4 项 Sites 测试及 1,447 条双语文案检查通过，覆盖正版资格、到期、撤销、关联账号、指定仓库的更新选择及打包启动。认证响应为模拟数据，微软真实验收仍等待白名单批准。用户已确认 Beta 1.8 本地测试通过；安装器仍未签名。
-
-## Beta 1.7 检查
-
-177 项核心回归及 4 项 Sites 兼容测试通过，1405 条双语文案校验通过。打包后的 Windows 程序通过启动、IPC、背景读取与系统加密冒烟检查。浏览器检查覆盖带图标的实例选择器、无边框窗口按键、展开启动选项时背景稳定、键盘切换、中英文、深浅主题及窄窗口。
-
-显卡偏好测试覆盖保留其他 Windows 标志、恢复原值、外部修改、切换中断和写入结果未知的情况。Windows 集成检查仅写入并恢复新建的模拟 Java 路径值。真实多显卡游戏效果仍需通过 Minecraft F3 画面核对；检测到显卡或偏好已应用不代表实际使用了该显卡。微软在线认证继续延期验收。
-
-执行贡献指南中的检查命令。自动测试覆盖下载校验、取消重试、路径穿越、压缩包展开、事务恢复、依赖感知内容操作、备份恢复、实例生命周期、语言包、脱敏及读取大小限制，使用临时数据。
-
-两种语言分别走通首次引导、版本选择、加载器兼容、内容搜索与依赖预览、实例设置、任务异常和诊断。未完成表单时切换语言，确认内容保留；检查小窗口、大字号、深浅主题和纯键盘选择。导入的项目名称不应变化。
-
-验证正常、缺项、损坏、超大、占位符错误的语言包；移除自定义包后重启。使用模拟认证响应验证关闭自动复制、代码到期及不覆盖后来剪贴板内容。
-
-桌面包冒烟验证启动、IPC、本地背景与系统加密兼容性。浏览器样例仅证明界面行为，不能当作真实安装结果。既往游戏/模组测试不代表任意加载器组合可用。微软真实登录、刷新和正版启动延期，第三方服务需单独验收；不宣称穷尽安全覆盖。
-
-## Beta 1.6 窗口检查
-
-回归测试覆盖多屏坐标、断开显示器、100–200% 等效工作区域、损坏／超大／链接状态文件、顺序保存、设置迁移、窗口动作白名单及编辑快捷键。本地 Electron 集成检查覆盖 Alt 菜单移除、最大化／还原、关闭事件拦截及位置保存；桌面冒烟增加窗口状态 IPC。
-
-检查中英、深浅主题、100%／125%／150%／200% 系统缩放、最小窗口及长路径；重启验证边框，检查拖动、边缘缩放、双击、Win+方向键、最小化恢复、断开显示器、弹窗和安装中的取消。浏览器响应式预览验证布局，不能代替真实多屏与 DPI 硬件验收。微软在线验收仍延期。
-
-## Beta 1.13
-
-257 core tests, 4 build tests and both GitHub Windows pipelines passed. User accepted both installers and Microsoft licensed sign-in. / 257 项核心测试、4 项构建测试及两版 Windows CI 通过，用户已验收安装包及微软正版登录。
-
-## Beta 1.14
-
-# Beta 1.14 / 1.0 release acceptance
-
-Local-only package 1.0.0-beta.15. AmberX is unchanged. Retain the adjacent beta1.13 installers; hashes are recorded in ROLLBACK-BASELINE.json. Close games, back up worlds and keep the data directory when reinstalling a prior program version. No data schema migration is introduced.
-
-## Automated scope
-Update channel filtering, upgrade ordering, cancellation/retry, configured-library disconnection/reconnection, bounded linked-directory scans, backup integrity, credential redaction, and existing install/transaction recovery use isolated fixtures. Synthetic tests do not establish real gameplay, service availability or GPU compatibility.
-
-## Required human acceptance before 1.0
-Clean install → create → install content → sign in → launch; beta1.13 upgrade preserving worlds/settings/bindings; Microsoft refresh after restart; offline/third-party login in AmberE; disconnected data disk; Windows display scaling and multi-monitor moves; recovery after interrupted install/update; backups restored to a different instance. Exercise vanilla/Fabric and separately Forge/NeoForge/legacy combinations actually intended for support. Record exact versions and observed results rather than claiming all versions work.
-
-Installers remain unsigned. Code signing and hardware/live-account acceptance are not completed by automated packaging. A remaining critical data-loss, credential-exposure, authentication-bypass or launch-blocking issue blocks 1.0. Use another beta if needed.
-
-## 本地验收
-重点检查稳定/测试通道切换、升级不丢数据、断开原数据盘后重试或定位原库、备份校验与独立恢复、诊断预览和导出一致。AMBER 真实账号和 AmberE 第三方服务由用户分别验收。模拟测试不代表所有游戏/加载器/显卡组合通过。安装包尚未签名；正式版前仍需完成人工验收与功能冻结观察。
+自动检查覆盖更新、下载校验、备份、事务恢复、账号边界、推荐兼容和本地数据恢复。模拟实例不代表所有游戏、模组和显卡组合均已验证。Windows 用户加密无法抵御同一用户下的恶意软件。安装包未签名；升级或更改内容前请备份存档。卸载程序保留游戏数据。

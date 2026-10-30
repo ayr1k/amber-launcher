@@ -55,7 +55,7 @@ export class AppUpdates{
 export async function backupUpgradeConfig(userData,library,version){
   const dir=join(userData,'upgrade-backups',version+'-'+Date.now());await mkdir(dir,{recursive:true});
   const records=[];
-  for(const [root,names,prefix] of [[userData,['storage.json'],'bootstrap'],[library,['accounts.json','preferences.json','library-state.json'],'library']])for(const name of names){
+  for(const [root,names,prefix] of [[userData,['storage.json','update-channel.json','window-state.json'],'bootstrap'],[library,['accounts.json','preferences.json','library-state.json'],'library']])for(const name of names){
     const from=join(root,name);try{const st=await lstat(from);if(!st.isFile()||st.isSymbolicLink()||st.size>8_000_000)throw Error('设置文件异常，已停止升级：'+name);
       const bytes=await readFile(from),to=join(dir,prefix,name);await ensureParents(dir,to);await copyFile(from,to);if(!bytes.equals(await readFile(to)))throw Error('升级备份校验失败。');records.push({name:prefix+'/'+name,sha256:createHash('sha256').update(bytes).digest('hex')});
     }catch(e){if(e.code!=='ENOENT')throw e;}}

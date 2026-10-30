@@ -12,9 +12,9 @@ export function AboutProject() {useLocale();
   useEffect(() => {fetch('/licenses/MPL-2.0.txt').then((r) => {if (!r.ok) throw Error();return r.text();}).then(setLicense).catch(() => setLicense(translateText("许可证读取失败；完整文件随项目 LICENSE 提供。")));}, []);
   return <section className="about-project">
     <img className="about-wordmark" src="/brand/amber-lockup.svg" alt={PRODUCT_NAME} />
-    <p className="about-version">{DISPLAY_VERSION} · {VERSION}{translateText("· 本地测试版")}</p>
+    <p className="about-version">{VERSION}</p>
     <p>{translateText("为每一次冒险，保留自由选择的空间。")}</p>
-    <dl className="detail-list"><div><dt>{translateText("项目许可")}</dt><dd>Mozilla Public License 2.0</dd></div><div><dt>{translateText("开发阶段")}</dt><dd>{translateText("多加载器 · Modrinth 内容商城 · 账号与 Java 管理")}</dd></div></dl>
+    <dl className="detail-list"><div><dt>{translateText("项目许可")}</dt><dd>Mozilla Public License 2.0</dd></div><div><dt>{translateText("主要功能")}</dt><dd>{translateText("多加载器 · Modrinth 内容商城 · 账号与 Java 管理")}</dd></div></dl>
     {window.amberDesktop && <PrivacyPanel />}
     <AppUpdatePanel /><div className="pop-initiative"><div className="pop-art"><img src="/brand/pop-initiative.png" alt="POP — Progressively Open Platform" /></div><div><h3>{translateText("支持 POP 倡议")}</h3><p>{translateText("渐进开放，保留选择。以完整的默认体验为起点，逐步开放扩展接口、数据迁移和可替换的服务。")}</p><p className="muted">{translateText("倡议标识由项目发起者提供。此标识表达项目方向，不表示已完成全部原则的实现或通过第三方认证。")}</p></div></div>
     <details className="license-details"><summary>{translateText("阅读 MPL-2.0 许可证")}</summary><pre>{translateMessage(license)}</pre></details>

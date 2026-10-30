@@ -1,3 +1,13 @@
+## 1.0.0
+
+- Stable release for Windows x64, with separate AMBER and AmberE installations and update repositories.
+- Stable and preview update channels; preserve explicit channel preferences when upgrading from Beta.
+- Verified configuration backups include update-channel and window preferences. Library reconnection rejects linked parent directories and preserves the previous location on failure.
+- Instance backups, trial copies, change history and recovery help protect existing worlds and configurations.
+- Unified version display and feature information, with Simplified Chinese and English interfaces.
+
+Upgrading: close the launcher and Minecraft, back up important instances, then install over the matching product. Game data is retained. Installers are unsigned.
+
 ## Beta 1.14 — prerelease (1.0.0-beta.15)
 
 - Separate stable and preview update channels, persisted across restarts; no automatic downgrade, and stable 1.0 remains eligible from beta versions.
@@ -6,17 +16,17 @@
 - Verify backup files without restoring; restoration still creates an independent instance. Export exactly the previewed diagnostic snapshot; redact device user codes in shared errors.
 - Let online accounts refresh at launch instead of treating expired offline eligibility as a permanent launch failure. Task errors link back to retry or the relevant instance/account controls.
 - Improve keyboard selection focus, responsive maintenance/backup actions, release-note wrapping and focus visibility.
-- AMBER and AmberE share applicable changes, retain independent update and identity rules. AmberX is unchanged. The user accepted both installers and authorized prerelease publication.
+- AMBER and AmberE share applicable changes, retain independent update and identity rules. AmberX is unchanged.
 
 ## Beta 1.13 — prerelease (1.0.0-beta.14)
 
-- Microsoft API access approved; user-confirmed licensed login acceptance. Eligibility enforcement remains in place; no official endorsement claimed.
+ Eligibility enforcement remains in place; no official endorsement claimed.
 - Repeated login clicks reuse the active request. Cancellation, expiry, success and failure clear temporary device credentials.
 - Authentication service/network failures are distinguished from ownership problems, with direct retry and account-management actions.
 - Launch checks running instances before authentication, including games recovered after launcher restart. Removed account bindings never silently fall back.
 - Account removal confirmation, readable account state, responsive actions and bilingual recovery messages.
 - Bilingual READMEs link AMBER, AmberE and AmberX. AmberE shares applicable fixes and retains its own offline/third-party identity and updater. AmberX is unchanged.
-- The user accepted both installers and authorized prerelease publication. Existing instances, saves, account bindings and eligibility policy are preserved.
+ Existing instances, saves, account bindings and eligibility policy are preserved.
 
 # Changelog
 
@@ -25,13 +35,13 @@
 ## Beta 1.12 — 1.0.0-beta.13 (prerelease)
 
 - Refine the mod-update toolbar and enlarge aligned quick-search and guided-dialog close icons.
-- Add an instance workspace with distinct installation, file-check and user-confirmed gameplay states, plus contextual repair and after-installation guidance.
+
 - Create independent trial copies with a disk-space preview and optional independent world copies. Review selected configuration changes before applying them to the original; content and its manifest move together. Changed originals block promotion, and world progress/account selection are never merged.
 - Record content operations and launch/visual configuration changes with verified recovery files. Detect external changes, mark a manually confirmed working state, and restore only when current files still match the recorded result.
 - Recover interrupted application transactions after checking each file; refuse to overwrite unexpected external changes. Correlate explicit local log evidence with recent changes without claiming every crash can be diagnosed.
 - Widen guided creation, use list/detail layouts for downloads and installed content, preserve browsing/navigation state, add a persistent task shortcut and Ctrl+K instance/action search.
 - Import and export validated, text-only local recommendation preference templates. Applying an imported template still requires fresh recommendation and compatibility checks.
-- Keep both editions synchronized and preserve separate authentication/data/update identities. Microsoft live acceptance remains deferred. The user accepted the local installers and authorized prerelease publication.
+- Keep both editions synchronized and preserve separate authentication/data/update identities.
 - Preserve the tested Beta 1.11 installers, source and pre-change workspace snapshot with SHA-256 checksums for rollback. Program downgrade does not undo gameplay changes.
 
 ## Beta 1.11 — 1.0.0-beta.12 (prerelease)
@@ -42,7 +52,7 @@
 - Autosave separate creation and addition drafts; retain preferences and review file changes when refreshing expired recommendations.
 - Add local preference templates with fresh compatibility checks on use and explicit deletion.
 - Group addition previews into new, existing, disabled and conflicting content; recheck changes before installing.
-- Add post-install configuration guidance, content and recovery entry points for both editions. Microsoft live acceptance remains deferred.
+- Add post-install configuration guidance, content and recovery entry points for both editions.
 
 ## Beta 1.10 — 1.0.0-beta.11 (prerelease)
 
@@ -52,7 +62,7 @@
 - Pin inspected shader / distant-terrain combinations and author presets; unknown hardware stays conservative and existing settings are preserved.
 - Add recommendations for existing instances without replacing installed versions, disabled choices, settings or worlds; retain transaction recovery and resumable tasks.
 - Group content details, automatically recheck edits, retain instance names, and update both languages and custom-language templates.
-- Microsoft live authentication acceptance remains deferred pending approval. Metadata and source inspection are not gameplay or GPU certification.
+ Metadata and source inspection are not gameplay or GPU certification.
 
 ## Beta 1.9 — 1.0.0-beta.10 (prerelease)
 
@@ -62,7 +72,7 @@
 - Pin file versions, hashes and sizes for resumable installation across restarts. Separate mod, resource-pack and shader stages; allow an explicit skip of remaining visual packs.
 - Retain the creation plan in instance management, suggest per-instance memory and support Chinese/English text, themes and keyboard navigation.
 
-Recommendations use curated rules and live metadata, not automated gameplay testing. Visual packs are downloaded only and must be enabled in game. Windows installers are unsigned. Windows installer, source archive and SHA-256 checksums accompany this prerelease. Microsoft live acceptance remains deferred pending approval.
+Recommendations use curated rules and live metadata, not automated gameplay testing. Visual packs are downloaded only and must be enabled in game. Windows installers are unsigned. Windows installer, source archive and SHA-256 checksums accompany this prerelease.
 
 ## Beta 1.8 — 1.0.0-beta.9 (prerelease)
 
