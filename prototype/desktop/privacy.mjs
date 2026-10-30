@@ -3,7 +3,7 @@
 export function redact(value,secrets=[]){let text=String(value??'');for(const secret of secrets.filter(s=>typeof s==='string'&&s.length>=4).sort((a,b)=>b.length-a.length))text=text.split(secret).join('[redacted]');return text
  .replace(/\bBearer\s+[^\s"'<>]+/gi,'Bearer [redacted]')
  .replace(/(XBL3\.0\s+x=)[^\s"'<>]+/gi,'$1[redacted]')
- .replace(/((?:access[_-]?token|refresh[_-]?token|client[_-]?token|device[_-]?code|password|authorization)\s*["']?\s*[:=]\s*["']?)[^\s,"'<>}]+/gi,'$1[redacted]')
+ .replace(/((?:access[_-]?token|refresh[_-]?token|client[_-]?token|device[_-]?code|user[_-]?code|password|authorization)\s*["']?\s*[:=]\s*["']?)[^\s,"'<>}]+/gi,'$1[redacted]')
  .replace(/(--(?:accessToken|username|uuid|xuid|userProperties)\s+)(?:"[^"]*"|[^\s]+)/gi,'$1[redacted]')
  .replace(/\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\b/g,'[redacted token]')
  .replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,'[redacted email]')

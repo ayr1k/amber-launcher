@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: MPL-2.0
 const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
+  setUpdateChannel:channel=>ipcRenderer.invoke('amber:app-update-channel',channel),
+  storageUsage:()=>ipcRenderer.invoke('amber:storage-usage'),
+  openUpgradeBackups:()=>ipcRenderer.invoke('amber:upgrade-backups-open'),
+  verifyBackup:id=>ipcRenderer.invoke('amber:backup-verify',id),
   workbench:id=>ipcRenderer.invoke('amber:workbench',id),
   workbenchGood:id=>ipcRenderer.invoke('amber:workbench-good',id),
   workbenchRestore:(id,r)=>ipcRenderer.invoke('amber:workbench-restore',id,r),

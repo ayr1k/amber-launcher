@@ -7706,5 +7706,125 @@
   "beta113runtime": {
     "zh": "启动时检查账号与运行环境",
     "en": "Account and runtime are checked at launch"
+  },
+  "mb4701cb62ce1": {
+    "zh": "实例与存档",
+    "en": "Instances and worlds"
+  },
+  "m4f1b0550f9ff": {
+    "zh": "实例备份",
+    "en": "Instance backups"
+  },
+  "meec7142270fc": {
+    "zh": "共享游戏依赖",
+    "en": "Shared game libraries"
+  },
+  "m9b4eaaa18cae": {
+    "zh": "游戏资源",
+    "en": "Game assets"
+  },
+  "mc266538adc08": {
+    "zh": "存储与维护",
+    "en": "Storage and maintenance"
+  },
+  "mb85565bef61e": {
+    "zh": "按需统计主要目录的文件大小，不会自动清理。运行中的文件可能变化，统计值不等于实际可释放空间。",
+    "en": "Scan major folders on demand; nothing is cleaned automatically. Files may change while running. File sizes are not guaranteed reclaimable disk space."
+  },
+  "m816d3ea3456e": {
+    "zh": "正在统计…",
+    "en": "Scanning…"
+  },
+  "m0c2a07153105": {
+    "zh": "扫描存储占用",
+    "en": "Scan storage usage"
+  },
+  "m059874f98eac": {
+    "zh": "打开升级前备份",
+    "en": "Open upgrade backups"
+  },
+  "m239bdc178c26": {
+    "zh": "统计时间：",
+    "en": "Scanned at: "
+  },
+  "m9364f2865468": {
+    "zh": "统计不完整",
+    "en": "Incomplete scan"
+  },
+  "mb98cf735a7ad": {
+    "zh": "检查并清理…",
+    "en": "Review and clean…"
+  },
+  "mb5260335fcac": {
+    "zh": "更新通道",
+    "en": "Update channel"
+  },
+  "m320e85714d07": {
+    "zh": "稳定版",
+    "en": "Stable releases"
+  },
+  "mc8cfd76ce858": {
+    "zh": "测试版与稳定版",
+    "en": "Preview and stable releases"
+  },
+  "m9c31a39338c6": {
+    "zh": "从本产品的 GitHub 仓库检查更新。稳定版通道不接收测试版；切换通道不会自动降级。下载校验后由你确认安装。",
+    "en": "Check this product’s GitHub repository. The stable channel excludes prereleases. Switching channels never downgrades automatically. Installation requires confirmation after verification."
+  },
+  "mead1dd9f61fe": {
+    "zh": "更新通道无效。",
+    "en": "Invalid update channel."
+  },
+  "m5e118b26be1d": {
+    "zh": "请先等待检查或取消下载。",
+    "en": "Wait for the check or cancel the download first."
+  },
+  "mfff75b2480dc": {
+    "zh": "备份校验通过，共 {0} 个文件。",
+    "en": "Backup verified: {0} files."
+  },
+  "m09df977d5e15": {
+    "zh": "校验备份",
+    "en": "Verify backup"
+  },
+  "m5ece665bc74e": {
+    "zh": "校验备份文件",
+    "en": "Verifying backup files"
+  },
+  "macf5c26f1bb1": {
+    "zh": "目录包含链接，未统计。",
+    "en": "Directory contains links; scan is incomplete."
+  },
+  "m4ca4986bda87": {
+    "zh": "目录层级过深，统计未完成。",
+    "en": "Directory nesting is too deep; scan is incomplete."
+  },
+  "mf4dac61a42ea": {
+    "zh": "文件数量超过统计限制。",
+    "en": "File count exceeds the scan limit."
+  },
+  "md19b2e87e5b6": {
+    "zh": "数据目录不可用或包含链接。",
+    "en": "Data directory is unavailable or contains links."
+  },
+  "m2c2d4cac15e6": {
+    "zh": "请选择原有游戏数据目录。",
+    "en": "Select your existing game library."
+  },
+  "me748fc143499": {
+    "zh": "请选择包含 instances 的原有游戏数据目录。",
+    "en": "Select the existing game library containing an instances folder."
+  },
+  "mae44b150c9cc": {
+    "zh": "清理预览不完整，请检查目录权限或链接。",
+    "en": "Cleanup preview is incomplete. Check directory permissions or links."
+  },
+  "m20e6a42217d3": {
+    "zh": "请先预览诊断摘要。",
+    "en": "Preview the diagnostic summary first."
+  },
+  "beta114trash": {
+    "zh": "回收站",
+    "en": "Recycle bin"
   }
 }

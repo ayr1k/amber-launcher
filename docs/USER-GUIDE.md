@@ -49,3 +49,14 @@ Press **Ctrl+K** or the title-bar search icon to find instances and actions. Use
 In guided creation or recommendation additions, expand **Local recommendation templates** to save, import or export a preference JSON file. Only questionnaire preferences are exchanged, not installed mods, accounts or worlds. Import validates the file before confirmation; applying a template still requires generating a fresh compatible plan. Invalid, oversized or duplicate templates are rejected.
 
 See [rollback instructions](ROLLBACK.md) before reinstalling an older version. The published installer is the unchanged user-tested build and may still display “Local test build”; that label does not select a different update repository.
+
+## Updates and maintenance (Beta 1.14)
+In Settings → Download, choose Stable releases or Preview and stable releases. A beta defaults to preview unless you explicitly saved another channel; a fresh final release defaults to stable. Changing channels never downgrades or installs anything. Download, verify and confirm installation separately; finish games and active tasks first.
+
+Settings → Storage and welcome → Storage and maintenance scans major folders only when requested. Counts are estimates, not guaranteed reclaimable disk space. Cleanup is restricted to downloaded app updates or upgrade configuration backups and requires a second confirmation. Shared libraries and active instances are not cleaned here. Use instance backups and recycle-bin controls for those operations.
+
+In instance Backups, Verify backup checks retained file hashes without creating an instance. Restore creates a new instance and leaves the original intact. Keep important world backups on another disk as well.
+
+If the configured game disk disappears, the startup recovery dialog offers Retry, Locate library and Quit. Reconnect the disk or select the original library containing instances. It does not silently replace the missing library. After an interrupted migration, reconnect the original directory; the original is retained until copying and verification complete.
+
+Diagnostics export writes the exact last preview, without automatically attaching raw logs or account data. Review third-party logs manually before sharing.

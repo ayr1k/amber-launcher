@@ -52,3 +52,12 @@
 
 /* Beta 1.13: readable identity states and resilient account actions. */
 .launch-account-state{margin:12px 0;line-height:1.6}.account-entry{gap:24px;align-items:center}.account-details{min-width:0;overflow-wrap:anywhere}.account-actions{display:flex;flex-wrap:wrap;gap:12px;flex-shrink:0}.account-panel .inline-actions{gap:12px;flex-wrap:wrap}.account-panel .native-job{overflow-wrap:anywhere}.account-panel button{min-height:44px}@media(max-width:800px){.account-entry{flex-direction:column;align-items:stretch}.account-actions{justify-content:flex-start}}
+
+/* Beta 1.14 release polish */
+.update-channel{display:flex;align-items:center;gap:16px;max-width:540px;margin:20px 0}.update-channel .amber-select{flex:1;min-width:0}.maintenance-rows>div{display:flex;align-items:center;gap:20px;padding:16px 0;border-bottom:1px solid var(--line)}.maintenance-rows>div>span{flex:1}.maintenance-rows small{display:block}.maintenance-panel .inline-actions{margin:18px 0;gap:12px;flex-wrap:wrap}.backup-row{gap:14px;flex-wrap:wrap}.release-notes{white-space:pre-wrap;overflow-wrap:anywhere}.task-entry,.account-details{overflow-wrap:anywhere}button:focus-visible,summary:focus-visible,input:focus-visible{outline:2px solid currentColor;outline-offset:3px}@media(max-width:760px){.maintenance-rows>div{align-items:flex-start;flex-wrap:wrap}.update-channel{align-items:stretch;flex-direction:column}}
+
+.maintenance-rows>div{display:grid;grid-template-columns:minmax(130px,180px) minmax(0,1fr) auto}.maintenance-rows>div>span{overflow-wrap:anywhere}@media(max-width:760px){.maintenance-rows>div{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.maintenance-rows button{grid-column:1/-1;justify-self:start}}
+/* Align the overview and trial actions on the same baseline. */
+.workbench-overview,.workbench-trial{align-self:stretch}
+.workbench-overview>.button,.workbench-trial>.inline-actions{margin:0;margin-top:auto}
+.workbench-trial>.inline-actions{align-items:center}

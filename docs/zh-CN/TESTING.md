@@ -47,3 +47,24 @@ AMBER 已获准访问 Minecraft API，用户已实测微软正版登录正常。
 回归测试覆盖多屏坐标、断开显示器、100–200% 等效工作区域、损坏／超大／链接状态文件、顺序保存、设置迁移、窗口动作白名单及编辑快捷键。本地 Electron 集成检查覆盖 Alt 菜单移除、最大化／还原、关闭事件拦截及位置保存；桌面冒烟增加窗口状态 IPC。
 
 检查中英、深浅主题、100%／125%／150%／200% 系统缩放、最小窗口及长路径；重启验证边框，检查拖动、边缘缩放、双击、Win+方向键、最小化恢复、断开显示器、弹窗和安装中的取消。浏览器响应式预览验证布局，不能代替真实多屏与 DPI 硬件验收。微软在线验收仍延期。
+
+## Beta 1.13
+
+257 core tests, 4 build tests and both GitHub Windows pipelines passed. User accepted both installers and Microsoft licensed sign-in. / 257 项核心测试、4 项构建测试及两版 Windows CI 通过，用户已验收安装包及微软正版登录。
+
+## Beta 1.14
+
+# Beta 1.14 / 1.0 release acceptance
+
+Local-only package 1.0.0-beta.15. AmberX is unchanged. Retain the adjacent beta1.13 installers; hashes are recorded in ROLLBACK-BASELINE.json. Close games, back up worlds and keep the data directory when reinstalling a prior program version. No data schema migration is introduced.
+
+## Automated scope
+Update channel filtering, upgrade ordering, cancellation/retry, configured-library disconnection/reconnection, bounded linked-directory scans, backup integrity, credential redaction, and existing install/transaction recovery use isolated fixtures. Synthetic tests do not establish real gameplay, service availability or GPU compatibility.
+
+## Required human acceptance before 1.0
+Clean install → create → install content → sign in → launch; beta1.13 upgrade preserving worlds/settings/bindings; Microsoft refresh after restart; offline/third-party login in AmberE; disconnected data disk; Windows display scaling and multi-monitor moves; recovery after interrupted install/update; backups restored to a different instance. Exercise vanilla/Fabric and separately Forge/NeoForge/legacy combinations actually intended for support. Record exact versions and observed results rather than claiming all versions work.
+
+Installers remain unsigned. Code signing and hardware/live-account acceptance are not completed by automated packaging. A remaining critical data-loss, credential-exposure, authentication-bypass or launch-blocking issue blocks 1.0. Use another beta if needed.
+
+## 本地验收
+重点检查稳定/测试通道切换、升级不丢数据、断开原数据盘后重试或定位原库、备份校验与独立恢复、诊断预览和导出一致。AMBER 真实账号和 AmberE 第三方服务由用户分别验收。模拟测试不代表所有游戏/加载器/显卡组合通过。安装包尚未签名；正式版前仍需完成人工验收与功能冻结观察。

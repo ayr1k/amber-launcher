@@ -47,3 +47,24 @@ The packaged desktop smoke test checks application startup, IPC, local backgroun
 Regression tests cover multi-monitor geometry, disconnected displays, 100–200% equivalent work areas, corrupt/oversized/linked placement files, queued persistence, settings migration, explicit window actions and editing shortcuts. A local Electron integration check covers Alt-menu removal, maximize/restore, close-event cancellation and persisted geometry. The desktop smoke also exercises the new window-state IPC.
 
 Verify Chinese/English in light/dark themes at 100%, 125%, 150% and 200% display scaling, with minimum-size windows and long paths. Test the outer-corner preference after restarting, dragging, edge resizing, double-click, Win+arrow snapping, minimize/restore, a disconnected display, dialogs and cancellation during installation. Browser responsive previews exercise layout but do not replace real multi-monitor/DPI hardware acceptance. Microsoft live acceptance remains deferred.
+
+## Beta 1.13
+
+257 core tests, 4 build tests and both GitHub Windows pipelines passed. User accepted both installers and Microsoft licensed sign-in. / 257 项核心测试、4 项构建测试及两版 Windows CI 通过，用户已验收安装包及微软正版登录。
+
+## Beta 1.14
+
+# Beta 1.14 / 1.0 release acceptance
+
+Local-only package 1.0.0-beta.15. AmberX is unchanged. Retain the adjacent beta1.13 installers; hashes are recorded in ROLLBACK-BASELINE.json. Close games, back up worlds and keep the data directory when reinstalling a prior program version. No data schema migration is introduced.
+
+## Automated scope
+Update channel filtering, upgrade ordering, cancellation/retry, configured-library disconnection/reconnection, bounded linked-directory scans, backup integrity, credential redaction, and existing install/transaction recovery use isolated fixtures. Synthetic tests do not establish real gameplay, service availability or GPU compatibility.
+
+## Required human acceptance before 1.0
+Clean install → create → install content → sign in → launch; beta1.13 upgrade preserving worlds/settings/bindings; Microsoft refresh after restart; offline/third-party login in AmberE; disconnected data disk; Windows display scaling and multi-monitor moves; recovery after interrupted install/update; backups restored to a different instance. Exercise vanilla/Fabric and separately Forge/NeoForge/legacy combinations actually intended for support. Record exact versions and observed results rather than claiming all versions work.
+
+Installers remain unsigned. Code signing and hardware/live-account acceptance are not completed by automated packaging. A remaining critical data-loss, credential-exposure, authentication-bypass or launch-blocking issue blocks 1.0. Use another beta if needed.
+
+## 本地验收
+重点检查稳定/测试通道切换、升级不丢数据、断开原数据盘后重试或定位原库、备份校验与独立恢复、诊断预览和导出一致。AMBER 真实账号和 AmberE 第三方服务由用户分别验收。模拟测试不代表所有游戏/加载器/显卡组合通过。安装包尚未签名；正式版前仍需完成人工验收与功能冻结观察。

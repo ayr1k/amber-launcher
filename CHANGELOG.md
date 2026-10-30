@@ -1,3 +1,13 @@
+## Beta 1.14 — prerelease (1.0.0-beta.15)
+
+- Separate stable and preview update channels, persisted across restarts; no automatic downgrade, and stable 1.0 remains eligible from beta versions.
+- Check configured library availability before initialization. Reconnect an existing library or retry after reconnecting a drive; never silently create a replacement empty library.
+- On-demand bounded storage estimates, link-safe scan failures, cleanup preview with target and size, and a shortcut to upgrade backups. No automatic cleanup of instances or shared game files.
+- Verify backup files without restoring; restoration still creates an independent instance. Export exactly the previewed diagnostic snapshot; redact device user codes in shared errors.
+- Let online accounts refresh at launch instead of treating expired offline eligibility as a permanent launch failure. Task errors link back to retry or the relevant instance/account controls.
+- Improve keyboard selection focus, responsive maintenance/backup actions, release-note wrapping and focus visibility.
+- AMBER and AmberE share applicable changes, retain independent update and identity rules. AmberX is unchanged. The user accepted both installers and authorized prerelease publication.
+
 ## Beta 1.13 — prerelease (1.0.0-beta.14)
 
 - Microsoft API access approved; user-confirmed licensed login acceptance. Eligibility enforcement remains in place; no official endorsement claimed.

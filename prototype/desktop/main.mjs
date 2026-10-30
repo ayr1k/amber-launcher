@@ -5,6 +5,8 @@ import {GuidedCreation} from './guided.mjs';
 import {GraphicsPreferences,graphicsAdapters} from './graphics.mjs';
 import {WindowStateStore,fitWindow,supportsWindowCorners,runWindowAction,editingCommand} from './window-state.mjs';
 import {release as osRelease} from 'node:os';
+import {ensureParents} from './download.mjs';
+import {storageUsage,measureDirectory} from './maintenance.mjs';
 import {cleanupPrivateCopies} from './privacy-cleanup.mjs';
 import {credentialCodec} from './credential-codec.mjs';
 import { redact, redactFields } from './privacy.mjs';
@@ -75,14 +77,16 @@ app.whenReady().then(async () => {
   });
   session.defaultSession.setPermissionRequestHandler((_contents, _permission, callback) => callback(false));
   session.defaultSession.setPermissionCheckHandler(() => false);
-  const storage = new Storage(app.getPath('userData'));const storageConfig = await storage.get();let storageBusy = false;
+  const storage = new Storage(app.getPath('userData'));let storageConfig;let storageBusy=false;
+  while(!storageConfig){try{storageConfig=await storage.validateExisting();}catch(e){if(smoke||qaUI)throw e;const answer=await dialog.showMessageBox({type:'error',title:'游戏数据位置不可用 / Game data unavailable',message:'原数据位置无法读取，未创建空库。请连接原磁盘后重试，或重新选择原数据目录。 / Reconnect the original drive or locate your existing library. No empty library was created.',detail:redact(e.message),buttons:['重试 / Retry','选择原目录 / Locate library','退出 / Quit'],defaultId:0,cancelId:2});if(answer.response===2){app.quit();return;}if(answer.response===1){const pick=await dialog.showOpenDialog({properties:['openDirectory']});if(!pick.canceled)try{await storage.reconnect(pick.filePaths[0]);}catch(err){await dialog.showMessageBox({type:'error',message:redact(err.message)});}}}}
+
   const core = new VanillaLauncher(storageConfig.path);
   await core.init();
   const recovery = await recoverTransactions(core);
   if (smoke) {const name = await importBackground(core.root, join(assets, 'assets/forest-banner.png'), (bytes) => nativeImage.createFromBuffer(bytes));const response = await net.fetch('amber://app/user-background/' + name);if (response.status !== 200 || response.headers.get('Content-Type') !== 'image/png' || (await response.arrayBuffer()).byteLength === 0) throw Error('Background round-trip failed');console.log('AMBER_BACKGROUND_OK');}
   if (smoke) {const sample = "amber-credential-codec-check";if (!safeStorage.isEncryptionAvailable() || (await safeStorage.decryptStringAsync(safeStorage.encryptString(sample))).result !== sample || (await safeStorage.decryptStringAsync(await safeStorage.encryptStringAsync(sample))).result !== sample) throw Error("Credential encryption unavailable");console.log("AMBER_SYSTEM_ENCRYPTION_OK");}
   const accounts = new Accounts(core.root, { codec: credentialCodec(safeStorage) });await accounts.init();
-  const appUpdates = new AppUpdates(app.getPath('userData'), app.getVersion());let upgradeBusy = false;
+  const appUpdates = await new AppUpdates(app.getPath('userData'), app.getVersion()).init();let upgradeBusy = false;
   function handle(channel, fn) {
     ipcMain.handle(channel, async (event, ...args) => {
       const source = new URL(event.senderFrame.url);
@@ -169,7 +173,8 @@ app.whenReady().then(async () => {
   handle('amber:mod-update-install', async (id, plan) => {await readyForModUpdate(id);return modUpdates.install(id, plan);});
   handle('amber:mod-update-history', (id) => modUpdates.history(id));
   handle('amber:mod-update-restore', async (id, record) => {await readyForModUpdate(id);return modUpdates.restore(id, record);});
-  handle('amber:app-update-state', () => appUpdates.state);
+  handle('amber:app-update-state', () => appUpdates.snapshot());
+  handle('amber:app-update-channel',channel=>appUpdates.setChannel(channel));
   handle('amber:app-update-check', () => appUpdates.check());
   handle('amber:app-update-download', () => appUpdates.download());
   handle('amber:app-update-cancel', () => appUpdates.cancel());
@@ -188,6 +193,9 @@ app.whenReady().then(async () => {
   handle('amber:backups', (id) => backups.list(id));
   handle('amber:backup-create', (id, mode) => backups.create(id, mode));
   handle('amber:backup-restore', (id) => backups.restore(id));
+  handle('amber:storage-usage',()=>workflows.exclusive(()=>storageUsage(core.root,app.getPath('userData'))));
+  handle('amber:upgrade-backups-open',async()=>{const path=join(app.getPath('userData'),'upgrade-backups');await ensureParents(app.getPath('userData'),join(path,'probe'));const error=await shell.openPath(path);if(error)throw Error(error);return true;});
+  handle('amber:backup-verify',id=>backups.verify(id));
   handle('amber:storage-info', async () => {const r = await storage.get(),disk = await statfs(core.root);return { path: core.root, freeBytes: disk.bavail * disk.bsize, onboarded: r.onboarded || !smoke && (await core.listInstances()).length > 0 };});
   handle('amber:onboarding-complete', () => storage.complete());
   handle('amber:storage-pick', async () => {const r = await dialog.showOpenDialog(window, { title: translateMessage('选择新的空数据文件夹'), properties: ['openDirectory', 'createDirectory'] });if (r.canceled) return null;const token = randomUUID();selections.set(token, { kind: 'storage', value: r.filePaths[0] });return { token, path: r.filePaths[0] };});
@@ -198,12 +206,13 @@ app.whenReady().then(async () => {
   handle('amber:instance-trash', () => management.list());
   handle('amber:trash-details', (id) => management.trashDetails(id));
   handle('amber:trash-purge', (id, confirmation) => management.purge(id, confirmation));
+  let diagnosticPreview=null;
   const summary = async () => diagnosticSummary({ version: app.getVersion(), platform: process.platform, arch: process.arch, instances: await core.listInstances(), status: await core.runtimeStatus() });
-  handle('amber:diagnostics-preview', async()=>localizeFields(await summary()));
-  handle('amber:privacy-cleanup',async kind=>{if(!['updates','upgrade-backups'].includes(kind))throw Error('不支持的清理目标。');if(upgradeBusy||storageBusy||launching||workflows.active||core.jobs.some(j=>j.state==='running')||['downloading','checking'].includes(appUpdates.state.phase))throw Error('请等待当前任务结束。');const answer=await dialog.showMessageBox(window,{type:'warning',title:translateMessage('清理本地副本'),message:translateMessage(kind==='updates'?'删除下载的程序更新包？':'删除旧升级配置备份？'),detail:translateMessage('此操作不可撤销。不会删除活动账号、实例、存档或实例备份。旧配置备份可能包含加密的历史账号库。'),buttons:[translateMessage('取消'),translateMessage('确认清理')],defaultId:0,cancelId:0,noLink:true});if(answer.response!==1)return false;if(upgradeBusy||storageBusy||launching||workflows.active||core.jobs.some(j=>j.state==='running')||['downloading','checking'].includes(appUpdates.state.phase))throw Error('请等待当前任务结束。');upgradeBusy=true;try{await cleanupPrivateCopies(app.getPath('userData'),kind);if(kind==='updates'){appUpdates.candidate=null;appUpdates.state={phase:'idle'};}return true;}finally{upgradeBusy=false;}});
+  handle('amber:diagnostics-preview', async()=>{diagnosticPreview=localizeFields(await summary());return diagnosticPreview;});
+  handle('amber:privacy-cleanup',async kind=>{if(!['updates','upgrade-backups'].includes(kind))throw Error('不支持的清理目标。');if(upgradeBusy||storageBusy||launching||workflows.active||core.jobs.some(j=>j.state==='running')||['downloading','checking'].includes(appUpdates.state.phase))throw Error('请等待当前任务结束。');const usage=await measureDirectory(join(app.getPath('userData'),kind));if(!usage.complete)throw Error('清理预览不完整，请检查目录权限或链接。');const answer=await dialog.showMessageBox(window,{type:'warning',title:translateMessage('清理本地副本'),message:translateMessage(kind==='updates'?'删除下载的程序更新包？':'删除旧升级配置备份？'),detail:translateMessage('此操作不可撤销。不会删除活动账号、实例、存档或实例备份。旧配置备份可能包含加密的历史账号库。')+'\n'+join(app.getPath('userData'),kind)+'\n'+usage.files+' files · '+(usage.bytes/1048576).toFixed(1)+' MB',buttons:[translateMessage('取消'),translateMessage('确认清理')],defaultId:0,cancelId:0,noLink:true});if(answer.response!==1)return false;if(upgradeBusy||storageBusy||launching||workflows.active||core.jobs.some(j=>j.state==='running')||['downloading','checking'].includes(appUpdates.state.phase))throw Error('请等待当前任务结束。');upgradeBusy=true;try{await cleanupPrivateCopies(app.getPath('userData'),kind);if(kind==='updates'){appUpdates.candidate=null;appUpdates.state={phase:'idle'};}return true;}finally{upgradeBusy=false;}});
 handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json'), data: core.root, upgrades: join(app.getPath('userData'), 'upgrade-backups') }));
   handle('amber:privacy-copy-path',key=>{const paths={accounts:join(core.root,'accounts.json'),data:core.root,upgrades:join(app.getPath('userData'),'upgrade-backups')};if(!Object.hasOwn(paths,key))throw Error('不支持的数据位置。');clipboard.writeText(paths[key]);return true;});
-  handle('amber:diagnostics-export', async () => {const result = await dialog.showSaveDialog(window, { title: translateMessage('保存不含账号和日志的诊断摘要'), defaultPath: 'amber-diagnostics.json', filters: [{ name: 'JSON', extensions: ['json'] }] });if (result.canceled) return false;const summary = diagnosticSummary({ version: app.getVersion(), platform: process.platform, arch: process.arch, instances: await core.listInstances(), status: await core.runtimeStatus() });await writeFile(result.filePath, JSON.stringify(localizeFields(summary), null, 2));return true;});
+  handle('amber:diagnostics-export', async () => {if(!diagnosticPreview)throw Error('请先预览诊断摘要。');const snapshot=diagnosticPreview;const result = await dialog.showSaveDialog(window, { title: translateMessage('保存不含账号和日志的诊断摘要'), defaultPath: 'amber-diagnostics.json', filters: [{ name: 'JSON', extensions: ['json'] }] });if (result.canceled) return false;await writeFile(result.filePath, JSON.stringify(snapshot, null, 2));return true;});
   handle('amber:instance-restore', (id) => management.restore(id));
   handle('amber:lite-overlay', (id, v) => configureLiteOverlay(core, id, v));
   handle('amber:layout-export', async () => {const value = { format: 'amber-layout', schema: 1, layout: (await settings.get()).layout };const result = await dialog.showSaveDialog(window, { title: translateMessage('导出布局'), defaultPath: 'amber-layout.json', filters: [{ name: 'AMBER layout', extensions: ['json'] }] });if (result.canceled) return false;await writeFile(result.filePath, JSON.stringify(value, null, 2));return true;});

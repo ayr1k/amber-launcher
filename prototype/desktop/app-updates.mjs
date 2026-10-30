@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import {atomicJson} from './core.mjs';
 import {PRODUCT_NAME,REPOSITORY_NAME} from './edition.mjs';
 import {mkdir,readFile,writeFile,copyFile,lstat} from 'node:fs/promises';
 import {join} from 'node:path';
@@ -11,9 +12,10 @@ export function compareVersions(a,b){
   const parse=v=>{const m=/^v?(\d+)\.(\d+)\.(\d+)(?:-(alpha|beta|rc)\.(\d+))?$/.exec(v);if(!m)throw Error('不支持的版本号。');return [+m[1],+m[2],+m[3],m[4]?{alpha:0,beta:1,rc:2}[m[4]]:3,+(m[5]||0)];};
   const x=parse(a),y=parse(b);for(let i=0;i<x.length;i++)if(x[i]!==y[i])return x[i]>y[i]?1:-1;return 0;
 }
-export function releaseCandidate(releases,current,product=PRODUCT_NAME){
+export function releaseCandidate(releases,current,product=PRODUCT_NAME,channel=current.includes('-')?'preview':'stable'){
   const repository=repositories[product];if(!repository)return null;
-  return releases.filter(r=>!r.draft).filter(r=>{try{return compareVersions(r.tag_name,current)>0;}catch{return false;}})
+  if(!['stable','preview'].includes(channel))throw Error('更新通道无效。');
+  return releases.filter(r=>!r.draft&&(channel==='preview'||!r.prerelease&&/^v?\d+\.\d+\.\d+$/.test(r.tag_name))).filter(r=>{try{return compareVersions(r.tag_name,current)>0;}catch{return false;}})
     .sort((a,b)=>compareVersions(b.tag_name,a.tag_name)).map(r=>{
       const version=r.tag_name.replace(/^v/,'');
       const name=`${product}-${version}-Setup-x64.exe`;
@@ -24,14 +26,18 @@ export function releaseCandidate(releases,current,product=PRODUCT_NAME){
     }).find(Boolean)||null;
 }
 export class AppUpdates{
-  constructor(userData,current,{fetcher=fetch}={}){this.root=join(userData,'updates');this.current=current;this.fetcher=fetcher;this.state={phase:'idle'};this.candidate=null;}
+  constructor(userData,current,{fetcher=fetch}={}){this.root=join(userData,'updates');this.channelFile=join(userData,'update-channel.json');this.channel=current.includes('-')?'preview':'stable';this.current=current;this.fetcher=fetcher;this.state={phase:'idle'};this.candidate=null;}
+  async init(){try{const v=JSON.parse(await readFile(this.channelFile,'utf8'));if(!['stable','preview'].includes(v.channel))throw Error('更新通道无效。');this.channel=v.channel;}catch(e){if(e.code!=='ENOENT')this.state={phase:'failed',error:'更新通道无效。'};}return this;}
+  snapshot(){return {...this.state,channel:this.channel};}
+  async setChannel(channel){if(!['stable','preview'].includes(channel))throw Error('更新通道无效。');if(['checking','downloading'].includes(this.state.phase))throw Error('请先等待检查或取消下载。');await atomicJson(this.channelFile,{schema:1,channel});this.channel=channel;this.candidate=null;this.state={phase:'idle'};return this.snapshot();}
   async check(){
     if(['checking','downloading'].includes(this.state.phase))throw Error('正在检查或下载安装包，请稍候。');
     this.candidate=null;this.state={phase:'checking'};
     try{const r=await this.fetcher(`https://api.github.com/repos/${REPOSITORY_NAME}/releases?per_page=30`,{redirect:'error',signal:AbortSignal.timeout(20000),headers:{Accept:'application/vnd.github+json','User-Agent':PRODUCT_NAME+'/'+this.current}});
       if(!r.ok)throw Error(r.status===403||r.status===429?'更新服务暂时限流，请稍后再试。':'无法读取更新目录，请检查网络后重试。');
       const text=await responseText(r,2_000_000);if(text.length>2_000_000)throw Error('更新目录过大。');const data=JSON.parse(text);if(!Array.isArray(data))throw Error('更新目录格式无效。');
-      this.candidate=releaseCandidate(data,this.current);this.state={phase:this.candidate?'available':'current',release:this.candidate};return this.state;
+      if(this.channel==='stable'&&!releaseCandidate(data,this.current,PRODUCT_NAME,this.channel)){const latest=await this.fetcher(`https://api.github.com/repos/${REPOSITORY_NAME}/releases/latest`,{redirect:'error',signal:AbortSignal.timeout(20000),headers:{Accept:'application/vnd.github+json'}});if(latest.ok)data.push(JSON.parse(await responseText(latest,2_000_000)));else if(latest.status!==404)throw Error('无法读取更新目录，请检查网络后重试。');}
+      this.candidate=releaseCandidate(data,this.current,PRODUCT_NAME,this.channel);this.state={phase:this.candidate?'available':'current',release:this.candidate};return this.state;
     }catch(e){this.state={phase:'failed',error:e.message};throw e;}
   }
   async download(){
