@@ -1,3 +1,13 @@
+## 1.1.1
+
+- Refine header logo sizing and keep instance icons square; provide the AMBER Alloy theme as a separate download.
+- Compose the launch area vertically, with adjustable control width, heading size, button height, top spacing and surface opacity.
+- Customize section backgrounds, image placement, padding, separators and gaps. Continuous viewport backgrounds keep their size when launch settings expand.
+- Configure title-bar height, navigation icon size and sidebar extras; choose compact quick actions. Hidden About remains available through global search.
+- Edit these options in Appearance & themes → Layout with draft preview, undo/redo and existing trial recovery.
+- Import existing 1.1.0 themes without conversion. New composition themes declare a required capability so unsupported clients reject them clearly.
+- Keep account validation, instance data and edition-specific update sources unchanged.
+
 ## 1.1.0
 
 - Refine rounded menu options, accent title-bar search contrast, 72px icon sidebars and consolidated layout settings.

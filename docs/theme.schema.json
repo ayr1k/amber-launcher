@@ -25,7 +25,8 @@
       "items": {
         "enum": [
           "appearance-v1",
-          "layout-v1"
+          "layout-v1",
+          "composition-v1"
         ]
       }
     },
@@ -209,6 +210,77 @@
               "$ref": "#/$defs/node"
             }
           ]
+        },
+        "composition": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "workspacePadding": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 64
+            },
+            "gap": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 64
+            },
+            "headerHeight": {
+              "type": "number",
+              "minimum": 64,
+              "maximum": 96
+            },
+            "navigationSize": {
+              "type": "number",
+              "minimum": 20,
+              "maximum": 32
+            },
+            "launchWidth": {
+              "type": "number",
+              "minimum": 280,
+              "maximum": 760
+            },
+            "titleSize": {
+              "type": "number",
+              "minimum": 28,
+              "maximum": 72
+            },
+            "launchTopSpace": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 320
+            },
+            "buttonHeight": {
+              "type": "number",
+              "minimum": 44,
+              "maximum": 88
+            },
+            "dockOpacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "sidebarExtras": {
+              "type": "boolean"
+            },
+            "eyebrow": {
+              "type": "boolean"
+            },
+            "launchLayout": {
+              "enum": [
+                "classic",
+                "stacked"
+              ]
+            },
+            "shortcuts": {
+              "enum": [
+                "classic",
+                "compact"
+              ]
+            }
+          }
         }
       },
       "additionalProperties": true
@@ -339,6 +411,75 @@
           "maxItems": 8,
           "items": {
             "$ref": "#/$defs/node"
+          }
+        },
+        "style": {
+          "type": "object",
+          "properties": {
+            "padding": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 80
+            },
+            "paddingTop": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 80
+            },
+            "paddingRight": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 80
+            },
+            "paddingBottom": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 80
+            },
+            "paddingLeft": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 80
+            },
+            "gap": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 64
+            },
+            "surfaceOpacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "position": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "background": {
+              "enum": [
+                "none",
+                "global",
+                "hero",
+                "artwork"
+              ]
+            },
+            "fit": {
+              "enum": [
+                "cover",
+                "contain"
+              ]
+            },
+            "separator": {
+              "enum": [
+                "none",
+                "left",
+                "top"
+              ]
+            },
+            "viewport": {
+              "type": "boolean"
+            }
           }
         }
       },

@@ -1,3 +1,7 @@
+# Rolling back from 1.1.1
+
+Export your current theme and restore classic before returning to 1.1.0. Keep the export separately: 1.1.0 does not understand composition-v1 or section styles. Re-import it after upgrading again. Game-data rollback still requires its own backups.
+
 # Rolling back from 1.1.0
 
 Before changing versions, export your current appearance from Settings → Appearance & themes and keep the `.ambtheme` file separately. Restore classic with Ctrl+Shift+F12. The 1.0.0 release does not understand the 1.1.0 theme system.

@@ -12,7 +12,7 @@
 .app[data-ui-style=rounded] :is(dialog,.instance-icon,.home-shortcuts button){border-radius:12px}
 .instance-icon{width:44px;height:44px;flex:0 0 44px;display:inline-flex;align-items:center;justify-content:center;background:var(--soft);color:var(--text);overflow:hidden}
 .instance-icon img{width:40px;height:40px;object-fit:contain}
-.instance-icon .icon-glyph{display:block;width:30px;height:30px;background:currentColor;mask-size:contain;mask-position:center;mask-repeat:no-repeat}
+.instance-icon .icon-glyph{display:block;flex:none;width:30px;height:30px;background:currentColor;mask-size:contain;mask-position:center;mask-repeat:no-repeat}
 .icon-dirt{color:#795033;background:#eee2cf}.icon-anvil{color:#46535a;background:#e3e8e9}.icon-pickaxe{color:#66552f;background:#eee8d7}
 .dark .icon-dirt{color:#dac1a4;background:#463c31}.dark .icon-anvil{color:#cad3d6;background:#354146}.dark .icon-pickaxe{color:#e4d3a8;background:#484331}
 .instance-title{display:flex;align-items:center;gap:14px;overflow-wrap:anywhere}

@@ -2,7 +2,7 @@
 
 [简体中文](zh-CN/AMBTHEME-FORMAT.md) · [Using themes](THEMES.md) · [Example JSON](theme-example.json) · [Download starter](AMBER-Theme-Starter.ambtheme)
 
-For AMBER and AmberE 1.1.0. Both products read the same format; a theme cannot change the product, account rules, update repository or game data. The separate starter demonstrates colors, rounded controls and a two-column home. It is not preinstalled. This document and the starter are licensed under MPL-2.0.
+For AMBER and AmberE 1.1.0–1.1.1. Both products read the same format; a theme cannot change the product, account rules, update repository or game data. The separate starter demonstrates colors, rounded controls and a two-column home. It is not preinstalled. This document and the starter are licensed under MPL-2.0.
 
 ## Import, edit and recover
 
@@ -26,7 +26,7 @@ assets/<64 lowercase hex>.png       images referenced by theme.json
 
 Only these entries are accepted. Keep this help document outside the `.ambtheme`; extra README files inside the theme will be rejected. The downloadable guide ZIP is a documentation archive and must not be imported as a theme: extract it and select its `.ambtheme` example.
 
-Top-level keys: `format` must be `ambtheme`, `schema` must be `1`, and `appearance` contains the visual configuration. `compatibleVersions` is an optional array such as `["1.1.0"]`. `requiredCapabilities` may list `appearance-v1` and `layout-v1`; use both for layout themes. Unknown required capabilities/schema versions are rejected. A missing version match warns but permits preview. Unknown optional appearance fields warn and are ignored.
+Top-level keys: `format` must be `ambtheme`, `schema` must be `1`, and `appearance` contains the visual configuration. `compatibleVersions` is an optional array such as `["1.1.0"]`. `requiredCapabilities` may list `appearance-v1`, `layout-v1` and `composition-v1`; use the first two for layout trees and add the third for 1.1.1 composition or node styles. Unknown required capabilities/schema versions are rejected. A missing version match warns but permits preview. Unknown optional appearance fields warn and are ignored.
 
 ## Appearance fields
 
@@ -94,3 +94,27 @@ Maximum archive size: 32 MiB compressed; 64 entries; 64 MiB total unpacked; 20 M
 | Unreadable appearance | Wait for the trial timeout or press Ctrl+Shift+F12. |
 
 [JSON Schema](theme.schema.json) provides editor assistance. The runtime validators in `prototype/desktop/theme-schema.mjs`, `layout-schema.mjs` and `themes.mjs` also enforce bounds, archive paths, hashes and cross-field rules. Passing validation is not certification of an author's trustworthiness. Keep unknown required capabilities explicit as the format evolves.
+
+## 1.1.1 — composition-v1
+
+Existing 1.1.0 themes import directly; missing `composition` keeps legacy defaults. Archive `schema` remains 1. Themes using composition or node styles must require `composition-v1` and declare `compatibleVersions: ["1.1.1"]`. Older clients reject unknown required capabilities. Do not remove this declaration to bypass compatibility checks.
+
+`appearance.composition` is optional (default `null`). `launchLayout`: `classic` or `stacked`; `shortcuts`: `classic` or `compact`; `sidebarExtras` and `eyebrow`: booleans. Numeric ranges:
+
+| Field | Range |
+|---|---|
+| `workspacePadding` | 0–64 px |
+| `gap` | 0–64 px |
+| `headerHeight` | 64–96 px |
+| `navigationSize` | 20–32 px |
+| `launchWidth` | 280–760 px |
+| `titleSize` | 28–72 px |
+| `launchTopSpace` | 0–320 px |
+| `buttonHeight` | 44–88 px |
+| `dockOpacity` | 0–100 % |
+
+Each layout node may have `style`: `padding` and `paddingTop/Right/Bottom/Left` (0–80px), `gap` (0–64px), `surfaceOpacity` (0–100%), `position` (0–100%), `background` (`none/global/hero/artwork`), `fit` (`cover/contain`), `separator` (`none/left/top`) and boolean `viewport`. Edge-specific padding overrides uniform padding. Backgrounds reference the existing validated image slots, never paths or URLs. `viewport` sets a minimum home height and keeps the image layer at viewport height while expanded content remains scrollable.
+
+All options are declarative. They cannot inject CSS or code, hide launch errors or change account policy. Narrow windows stack columns. Section styles can be reset independently; classic recovery, the 30-second confirmation and interrupted-trial recovery remain available.
+
+[AMBER Alloy — composition example](AMBER-Alloy-1.1.1.ambtheme). Open its ZIP to inspect the manifest and hashed PNG; it requires 1.1.1 and is separate from the legacy-compatible starter.

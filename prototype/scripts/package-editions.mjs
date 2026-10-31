@@ -8,7 +8,7 @@ import {createHash} from 'node:crypto';
 import {build} from 'electron-builder';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const pkg=JSON.parse(await readFile(join(root,'package.json'),'utf8'));
-const base=join(root,'releases','1.1.0');
+const base=join(root,'releases',pkg.version);
 const requested=process.argv.slice(2).filter(x=>!x.startsWith('--'));
 const editions=requested.length?requested:['amber','ambere'];
 if(editions.some(x=>!['amber','ambere'].includes(x)))throw Error('Expected amber or ambere');
@@ -17,7 +17,7 @@ for(const edition of editions){
  const name=edition==='ambere'?'AmberE':'AMBER',stage=join(base,'stages',name),out=join(base,name);
  // Only remove this product's generated staging directory, never a source or linked directory.
  const stageRoot=join(base,'stages');await mkdir(stageRoot,{recursive:true});
- if((await realpath(stageRoot)).toLowerCase()!==join(await realpath(root),'releases','1.1.0','stages').toLowerCase())throw Error('Staging must stay inside this workspace');
+ if((await realpath(stageRoot)).toLowerCase()!==join(await realpath(root),'releases',pkg.version,'stages').toLowerCase())throw Error('Staging must stay inside this workspace');
  try{const entry=await lstat(stage);const canonicalRoot=await realpath(stageRoot),canonicalStage=await realpath(stage);
   if(entry.isSymbolicLink()||!entry.isDirectory()||canonicalStage.toLowerCase()!==join(canonicalRoot,name).toLowerCase())throw Error('Unsafe build staging directory');
   await rm(stage,{recursive:true});

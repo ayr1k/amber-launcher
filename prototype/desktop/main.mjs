@@ -114,6 +114,8 @@ app.whenReady().then(async () => {
   const packs = new Modpacks(core, content);
   const workflows = new Workflows(core, content),settings = new Settings(core.root),selections = new Map();
   const themes=await new Themes(core.root,settings).init();
+  if(smoke){const a=(await settings.get()).appearance;for(const key of ['backgroundAsset','heroAsset','artworkAsset'])if(a[key]){const response=await net.fetch('amber://app/theme-assets/'+a[key]);const bytes=Buffer.from(await response.arrayBuffer());if(response.status!==200||response.headers.get('Content-Type')!=='image/png'||nativeImage.createFromBuffer(bytes).isEmpty())throw Error('Theme image protocol failed');}console.log('AMBER_THEME_ASSETS_OK');}
+
   function applyAppearance(v){if(window&&!window.isDestroyed()){window.setOpacity(v.appearance?.enabled?(v.appearance.windowOpacity/100):1);window.webContents.setZoomFactor(v.appearance?.enabled?v.appearance.scale/100:1);window.webContents.send('amber:theme-changed');}}
   themes.onChanged=applyAppearance;
 

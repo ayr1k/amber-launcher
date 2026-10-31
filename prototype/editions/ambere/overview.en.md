@@ -1,14 +1,14 @@
 # AmberE
 
-Appearance Studio and portable themes are available in 1.1.0. See [theme authoring](docs/THEMES.md).
+1.1.1 adds fine-grained launch composition and section styling while retaining support for 1.1.0 themes. See [theme authoring](docs/THEMES.md).
 
 [简体中文](docs/zh-CN/README.md) · [Releases](https://github.com/ayr1k/AmberE/releases) · [User guide](docs/USER-GUIDE.md)
 
 AmberE is an independent Windows distribution for Minecraft: Java Edition, providing offline and third-party accounts. It is maintained from the shared AMBER codebase under MPL-2.0, with its own application identity, data directory and update repository. It does not offer Microsoft sign-in or include a Microsoft application Client ID.
 
-## 1.1.0
+## 1.1.1
 
-Stable release for Windows x64. [Download the installer, source and checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.1.0). Includes instance management, content recommendations, mod updates, backups and recovery.
+Stable release for Windows x64. [Download the installer, source and checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.1.1). Includes instance management, content recommendations, mod updates, backups and recovery.
 
 - Offline identities and HTTPS third-party authentication, with Windows user encryption for saved credentials.
 - Isolated game instances; Java and loader installation; mod search, dependencies, updates and bulk management.
@@ -29,3 +29,5 @@ Offline and third-party identities do not grant Minecraft ownership or official 
 [Rollback guide](docs/ROLLBACK.md) / [回滚说明](docs/zh-CN/ROLLBACK.md)
 
 [Appearance & theme help](docs/THEMES.md) · [Package format reference](docs/AMBTHEME-FORMAT.md) · [Importable starter theme](docs/AMBER-Theme-Starter.ambtheme) · [Themes on the website](https://ayr1k.github.io/#/themes)
+
+[AMBER Alloy theme (1.1.1+)](docs/AMBER-Alloy-1.1.1.ambtheme) — graphite, forest green and amber triangles; a separate download, not preinstalled.

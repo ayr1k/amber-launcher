@@ -8378,5 +8378,169 @@
   "mcde2cd071d25": {
     "zh": "创建",
     "en": "Create"
+  },
+  "m51d400618caf": {
+    "zh": "精细布局",
+    "en": "Composition"
+  },
+  "m0aec23572cbd": {
+    "zh": "启用精细布局选项",
+    "en": "Enable composition controls"
+  },
+  "md430e1ad9cef": {
+    "zh": "关闭时保留 1.1.0 的排列方式。新增选项只影响外观，不影响启动验证。",
+    "en": "When disabled, retain the 1.1.0 layout. These options affect presentation, never launch validation."
+  },
+  "m052e43cd65c4": {
+    "zh": "启动区域排列",
+    "en": "Launch arrangement"
+  },
+  "me38b9b4dc60a": {
+    "zh": "快捷入口排列",
+    "en": "Quick action arrangement"
+  },
+  "mdfd436c2991e": {
+    "zh": "显示侧栏实例与关于入口",
+    "en": "Show sidebar instances and About"
+  },
+  "mc95adea21b6d": {
+    "zh": "隐藏后仍可从顶部选择实例，通过全局搜索访问关于页面。",
+    "en": "When hidden, use the header instance picker and global search to reach About."
+  },
+  "m584911a5f2c8": {
+    "zh": "显示启动区引导标语",
+    "en": "Show launch introduction"
+  },
+  "m677e71806d09": {
+    "zh": "分区背景与留白",
+    "en": "Section background and spacing"
+  },
+  "me723b65a1cba": {
+    "zh": "分区背景图片",
+    "en": "Section background image"
+  },
+  "m2f826ac1869b": {
+    "zh": "图片填充",
+    "en": "Image fitting"
+  },
+  "m9723e982edd9": {
+    "zh": "分区分隔线",
+    "en": "Section divider"
+  },
+  "md18b7c6f1af0": {
+    "zh": "继承默认",
+    "en": "Inherit default"
+  },
+  "mc85e426db472": {
+    "zh": "至少填满首页高度",
+    "en": "Fill home height"
+  },
+  "md3360d00ef35": {
+    "zh": "恢复分区默认样式",
+    "en": "Reset section style"
+  },
+  "m53cb4ba63de6": {
+    "zh": "首页外边距",
+    "en": "Home padding"
+  },
+  "m213a7f83736b": {
+    "zh": "分区默认间距",
+    "en": "Default section gap"
+  },
+  "m5329fbee5a22": {
+    "zh": "标题栏高度",
+    "en": "Title bar height"
+  },
+  "m3d3b5fffd6ad": {
+    "zh": "导航图标尺寸",
+    "en": "Navigation icon size"
+  },
+  "me68e6ebfd0ed": {
+    "zh": "启动控件最大宽度",
+    "en": "Launch control width"
+  },
+  "m08a844555932": {
+    "zh": "实例标题字号",
+    "en": "Instance heading size"
+  },
+  "m0f178c732e00": {
+    "zh": "启动区域上方留白",
+    "en": "Space above launch"
+  },
+  "m0218ebfdb511": {
+    "zh": "启动按钮高度",
+    "en": "Launch button height"
+  },
+  "m1f3cc5ebd176": {
+    "zh": "启动面板不透明度",
+    "en": "Launch surface opacity"
+  },
+  "mb3291d791838": {
+    "zh": "分区内边距",
+    "en": "Section padding"
+  },
+  "md5d1645826e9": {
+    "zh": "子模块间距",
+    "en": "Child gap"
+  },
+  "mb6fbed3b1f12": {
+    "zh": "分区底色不透明度",
+    "en": "Section surface opacity"
+  },
+  "m58b6d254867e": {
+    "zh": "图片水平位置",
+    "en": "Image horizontal position"
+  },
+  "mfbb1c12bb360": {
+    "zh": "经典排列",
+    "en": "Classic"
+  },
+  "m5c31a8388b41": {
+    "zh": "说明列表",
+    "en": "Descriptions"
+  },
+  "m80aa141f4144": {
+    "zh": "紧凑图标与文字",
+    "en": "Compact icons and labels"
+  },
+  "mccbd9e6dcb7e": {
+    "zh": "不单独设置",
+    "en": "Inherit"
+  },
+  "mf890ead5ed17": {
+    "zh": "全局背景图片",
+    "en": "App background image"
+  },
+  "ma63d85d8a9d9": {
+    "zh": "启动页背景图片",
+    "en": "Launch background image"
+  },
+  "m3e9f8413bca1": {
+    "zh": "上方",
+    "en": "Top"
+  },
+  "m79630a8157a9": {
+    "zh": "账号与资格说明",
+    "en": "Account and ownership"
+  },
+  "bench.about": {
+    "zh": "关于 AMBER",
+    "en": "About AMBER"
+  },
+  "m83c31e744935": {
+    "zh": "上侧留白",
+    "en": "Top padding"
+  },
+  "mf1333917345f": {
+    "zh": "下侧留白",
+    "en": "Bottom padding"
+  },
+  "m6f5c61ae5177": {
+    "zh": "左侧留白",
+    "en": "Left padding"
+  },
+  "ma9986f62d4ce": {
+    "zh": "右侧留白",
+    "en": "Right padding"
   }
 }

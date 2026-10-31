@@ -2,7 +2,7 @@
 
 [English](../AMBTHEME-FORMAT.md) · [主题使用帮助](THEMES.md) · [示例 JSON](../theme-example.json) · [下载基础示例](../AMBER-Theme-Starter.ambtheme)
 
-适用于 AMBER 与 AmberE 1.1.0，两款产品读取同一格式。主题不能更改产品身份、账号规则、更新仓库或游戏数据。基础示例展示配色、圆角和双栏首页，单独提供下载，不预置在软件内。本说明及基础示例采用 MPL-2.0 许可。
+适用于 AMBER 与 AmberE 1.1.0–1.1.1，两款产品读取同一格式。主题不能更改产品身份、账号规则、更新仓库或游戏数据。基础示例展示配色、圆角和双栏首页，单独提供下载，不预置在软件内。本说明及基础示例采用 MPL-2.0 许可。
 
 ## 导入、编辑与恢复
 
@@ -24,9 +24,9 @@ preview.png                        可选，目前主题库不展示这张图
 assets/<64 位小写十六进制>.png       theme.json 引用的图片
 ```
 
-只允许以上文件。说明文档应放在主题包外；在包内添加 README 等文件会被拒绝。`AMBTHEME-Guide-1.1.0.zip` 是帮助资料压缩包，不能作为主题导入；请先解压，再导入其中的 `.ambtheme` 示例。
+只允许以上文件。说明文档应放在主题包外；在包内添加 README 等文件会被拒绝。`AMBTHEME-Guide-1.1.1.zip` 是帮助资料压缩包，不能作为主题导入；请先解压，再导入其中的 `.ambtheme` 示例。
 
-顶层 `format` 必须为 `ambtheme`，`schema` 必须为 `1`，`appearance` 保存外观配置。可选 `compatibleVersions` 为版本数组，例如 `["1.1.0"]`。`requiredCapabilities` 可包含 `appearance-v1`、`layout-v1`，包含布局的主题应声明两者。未知必需能力或格式版本会被拒绝；未匹配当前软件版本会提示但允许预览；未知可选外观字段会提示并忽略。
+顶层 `format` 必须为 `ambtheme`，`schema` 必须为 `1`，`appearance` 保存外观配置。可选 `compatibleVersions` 为版本数组，例如 `["1.1.0"]`。`requiredCapabilities` 可包含 `appearance-v1`、`layout-v1`、`composition-v1`。布局树应声明前两者；使用 1.1.1 编排或分区样式时还需声明第三项。未知必需能力或格式版本会被拒绝；未匹配当前软件版本会提示但允许预览；未知可选外观字段会提示并忽略。
 
 ## appearance 字段
 
@@ -94,3 +94,27 @@ assets/<64 位小写十六进制>.png       theme.json 引用的图片
 | 应用后难以阅读 | 等待试用超时或按 Ctrl+Shift+F12。 |
 
 [JSON Schema](../theme.schema.json) 可用于编辑器辅助。运行时 theme-schema.mjs、layout-schema.mjs 与 themes.mjs 还会检查大小、路径、哈希和跨字段约束。通过校验不等于作者可信认证。未来扩展应显式声明能力和版本，保留可恢复性。
+
+## 1.1.1 — composition-v1
+
+1.1.0 主题可直接导入，缺少 `composition` 时使用旧布局默认值。归档 `schema` 仍为 1。启用新布局时将 `composition-v1` 加入 `requiredCapabilities`，并将 `compatibleVersions` 设为 `["1.1.1"]`。旧客户端会拒绝所需能力未知的主题；不要删掉此声明来绕过版本检查。
+
+`appearance.composition` 是可选对象（默认 `null`）：`launchLayout` 为 `classic` 或 `stacked`；`shortcuts` 为 `classic` 或 `compact`；`sidebarExtras`、`eyebrow` 为布尔值。数值范围见下表。
+
+| Field | Range |
+|---|---|
+| `workspacePadding` | 0–64 px |
+| `gap` | 0–64 px |
+| `headerHeight` | 64–96 px |
+| `navigationSize` | 20–32 px |
+| `launchWidth` | 280–760 px |
+| `titleSize` | 28–72 px |
+| `launchTopSpace` | 0–320 px |
+| `buttonHeight` | 44–88 px |
+| `dockOpacity` | 0–100 % |
+
+每个布局节点可附带 `style`：`padding` 以及四个 `paddingTop/Right/Bottom/Left`（0–80px）、`gap`（0–64px）、`surfaceOpacity`（0–100%）、`position`（0–100%）、`background`（`none/global/hero/artwork`）、`fit`（`cover/contain`）、`separator`（`none/left/top`）、`viewport`（布尔值）。单边留白覆盖统一留白。背景引用已有的三种已验证图片，不接受路径或 URL。`viewport` 设置最小页面高度，并保持背景层为窗口高度，内容展开仍可滚动。
+
+所有新增选项均为声明式样式，不能注入 CSS 或代码、隐藏启动错误或改变账号规则。窄窗口自动纵排。设置中的分区样式可单独重置；恢复经典、30 秒确认与中断恢复继续生效。
+
+[AMBER Alloy 精细布局示例](../AMBER-Alloy-1.1.1.ambtheme)：可按 ZIP 打开查看配置和哈希命名的 PNG，需要 1.1.1，与兼容旧版的基础示例分别提供。

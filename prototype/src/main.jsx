@@ -105,6 +105,20 @@ if(import.meta.env.DEV&&window.amberDesktop?.preview){
  api.previewDiagnostics=async()=>({format:'amber-diagnostics',schema:1,app:{version:VERSION},privacy:'UI example only'});
 }
 
+if(import.meta.env.DEV&&window.amberDesktop?.preview&&new URLSearchParams(location.search).has('qa-alloy')){
+ const api=window.amberDesktop,doc=await (await fetch('/qa-alloy/theme.json')).json(),original=await api.settings();
+ let settings={...original,...doc.chrome,appearance:doc.appearance,layout:doc.layout};
+ api.settings=async()=>settings;api.saveSettings=async v=>(settings=v);
+ const samples=[{id:'alloy-forest',name:'森林漫游',game:'1.21.1',loader:'fabric',loaderVersion:'0.16.10',status:'installed',icon:'grass',javaMajor:21},{id:'alloy-vanilla',name:'原版生存',game:'1.21.1',loader:'vanilla',status:'installed',icon:'dirt',javaMajor:21}];
+ api.listInstances=async()=>new URLSearchParams(location.search).has('qa-empty')?[]:samples;
+ api.libraryState=async()=>({favorites:[],sort:'created',history:samples.map(i=>({instanceId:i.id}))});
+ api.accounts=async()=>({accounts:[{id:'ui-only',name:'已验证账号 · UI样例',type:'microsoft'}]});
+ api.launchPreferences=async()=>({accountId:'ui-only',memory:4});
+ api.launch=async()=>{throw Error('UI preview only / 此为界面样例，不会启动游戏。');};
+ api.themeTrial=async v=>{settings=v;return settings;};
+ api.themeReset=async()=>{settings={...original};return settings;};
+}
+
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <LocaleProvider><App /></LocaleProvider>
@@ -117,3 +131,4 @@ import './beta111.css';
 import './beta112.css';
 
 import "./themes.css";
+import "./composition.css";
