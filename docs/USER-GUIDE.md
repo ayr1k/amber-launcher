@@ -60,3 +60,7 @@ In instance Backups, Verify backup checks retained file hashes without creating 
 If the configured game disk disappears, the startup recovery dialog offers Retry, Locate library and Quit. Reconnect the disk or select the original library containing instances. It does not silently replace the missing library. After an interrupted migration, reconnect the original directory; the original is retained until copying and verification complete.
 
 Diagnostics export writes the exact last preview, without automatically attaching raw logs or account data. Review third-party logs manually before sharing.
+
+## Appearance and themes
+
+Use Settings → Appearance & themes to edit colors, controls, backgrounds and home layouts. Import portable `.ambtheme` files from Theme library in either AMBER or AmberE. Preview and try before keeping; an unconfirmed trial reverts after 30 seconds. Ctrl+Shift+F12 restores classic. See [theme help](THEMES.md) and [format reference](AMBTHEME-FORMAT.md).

@@ -7830,5 +7830,553 @@
   "release100.features": {
     "zh": "主要功能",
     "en": "Features"
+  },
+  "m6d2b296c1cd0": {
+    "zh": "背景色",
+    "en": "Background"
+  },
+  "m277487b4ff39": {
+    "zh": "面板色",
+    "en": "Surface"
+  },
+  "ma12ecd7f9691": {
+    "zh": "文字色",
+    "en": "Text"
+  },
+  "m1ac73eddc8e4": {
+    "zh": "次要文字",
+    "en": "Secondary text"
+  },
+  "m99d153389c35": {
+    "zh": "边框色",
+    "en": "Borders"
+  },
+  "m3a5598b557ce": {
+    "zh": "已载入编辑草稿；试用后才会应用到软件。",
+    "en": "Loaded into your draft. Use Try to apply to the app."
+  },
+  "m0d54ac475d02": {
+    "zh": "账号已准备 · 4 GB 内存",
+    "en": "Account ready · 4 GB memory"
+  },
+  "m100dafe52748": {
+    "zh": "内容与说明文字",
+    "en": "Content and secondary text"
+  },
+  "m1a9240053faa": {
+    "zh": "外观与主题",
+    "en": "Appearance & themes"
+  },
+  "m9dc91c9578ed": {
+    "zh": "个人修改尚未应用",
+    "en": "Personal changes not applied"
+  },
+  "m602199135b33": {
+    "zh": "恢复经典",
+    "en": "Restore classic"
+  },
+  "m49dc4c83d7a0": {
+    "zh": "恢复上个外观",
+    "en": "Restore previous"
+  },
+  "m6257e2cceb37": {
+    "zh": "修改先在右侧预览。试用后有 30 秒确认，未确认自动恢复。Ctrl + Shift + F12 可直接恢复经典外观。",
+    "en": "Changes appear in the preview first. Try for 30 seconds, then keep or revert. Ctrl + Shift + F12 restores the classic appearance."
+  },
+  "m926a50b98ece": {
+    "zh": "撤销",
+    "en": "Undo"
+  },
+  "m03717b6f1070": {
+    "zh": "重做",
+    "en": "Redo"
+  },
+  "mdb4d22318558": {
+    "zh": "试用这个外观",
+    "en": "Try this appearance"
+  },
+  "m9edef1c750c2": {
+    "zh": "主题已导出，不包含账号或实例数据。",
+    "en": "Theme exported without account or instance data."
+  },
+  "me35d42bf4590": {
+    "zh": "导出 .ambtheme",
+    "en": "Export .ambtheme"
+  },
+  "m90448fa40656": {
+    "zh": "外观编辑分类",
+    "en": "Appearance categories"
+  },
+  "m2ae75e168123": {
+    "zh": "配色",
+    "en": "Colors"
+  },
+  "m43abfa51e5aa": {
+    "zh": "控件与文字",
+    "en": "Controls & type"
+  },
+  "m76677420a05f": {
+    "zh": "背景与窗口",
+    "en": "Background & window"
+  },
+  "mfaa2f2ed6735": {
+    "zh": "布局",
+    "en": "Layout"
+  },
+  "m362496cdf339": {
+    "zh": "主题库",
+    "en": "Theme library"
+  },
+  "m65260b6a40e2": {
+    "zh": "明暗模式",
+    "en": "Color mode"
+  },
+  "m2797d807b444": {
+    "zh": "完全自定义",
+    "en": "Custom palette"
+  },
+  "m687d7c39a262": {
+    "zh": "浅色、深色和系统模式自动配置背景与文字。选择完全自定义可逐项修改。",
+    "en": "Light, dark and system modes choose surface and text colors. Custom palette lets you edit each color."
+  },
+  "mcb5d682bac3d": {
+    "zh": "重置",
+    "en": "Reset"
+  },
+  "mdac1a8d226f5": {
+    "zh": "文字与面板对比度偏低。",
+    "en": "Text contrast is low."
+  },
+  "m9a793311ca65": {
+    "zh": "修正文字颜色",
+    "en": "Improve text contrast"
+  },
+  "m75d9c4a52128": {
+    "zh": "个人主题名称",
+    "en": "Personal theme name"
+  },
+  "m46dbabb4cf12": {
+    "zh": "菜单选中样式",
+    "en": "Menu selection style"
+  },
+  "mc665c53f5d88": {
+    "zh": "填色",
+    "en": "Filled"
+  },
+  "madcb8080365d": {
+    "zh": "描边",
+    "en": "Outline"
+  },
+  "ma91f2504c135": {
+    "zh": "简洁标记",
+    "en": "Minimal"
+  },
+  "mb712f51faa1d": {
+    "zh": "列表样式",
+    "en": "List style"
+  },
+  "mc64dd5eb2135": {
+    "zh": "分隔线",
+    "en": "Lines"
+  },
+  "ma9779addc722": {
+    "zh": "交替底色",
+    "en": "Striped"
+  },
+  "mdb55995d748e": {
+    "zh": "留白",
+    "en": "Spacious"
+  },
+  "mdaf4b50eb49e": {
+    "zh": "显示导航文字",
+    "en": "Show navigation labels"
+  },
+  "m9b476487defb": {
+    "zh": "控件圆角",
+    "en": "Control corners"
+  },
+  "m047cbd9c4984": {
+    "zh": "边框粗细",
+    "en": "Border width"
+  },
+  "mdb82cbd15383": {
+    "zh": "控件高度",
+    "en": "Control height"
+  },
+  "m9d4d0404f3cd": {
+    "zh": "列表行高",
+    "en": "List row height"
+  },
+  "mede5507d72ab": {
+    "zh": "实例图标尺寸",
+    "en": "Instance icon size"
+  },
+  "m3a3ebd8ad659": {
+    "zh": "界面缩放",
+    "en": "Interface scale"
+  },
+  "m642aa86943c9": {
+    "zh": "本机字体名称",
+    "en": "Local font family"
+  },
+  "m5c550d69c217": {
+    "zh": "可输入已安装字体名称；不可用的字体或缺字会回退。字体文件不会随主题分发。",
+    "en": "Enter an installed font family. Missing fonts or glyphs fall back. Font files are not distributed with themes."
+  },
+  "mb15435ced2c9": {
+    "zh": "动画",
+    "en": "Motion"
+  },
+  "m6bea77acefb3": {
+    "zh": "标准",
+    "en": "Standard"
+  },
+  "mea1d2ea8979f": {
+    "zh": "未指定主题图片时的启动背景",
+    "en": "Launch background without a theme image"
+  },
+  "m9ccd565f5a01": {
+    "zh": "预设森林",
+    "en": "Forest"
+  },
+  "mff922e022c61": {
+    "zh": "纯色",
+    "en": "Plain"
+  },
+  "m6a80018273c0": {
+    "zh": "保留原有图片",
+    "en": "Keep existing image"
+  },
+  "mccb10ff66eae": {
+    "zh": "全局背景",
+    "en": "App background"
+  },
+  "mb2c98de68926": {
+    "zh": "配图模块",
+    "en": "Artwork module"
+  },
+  "m1ed6ce14ff27": {
+    "zh": "选择本地图片",
+    "en": "Choose local image"
+  },
+  "mbce2377283c2": {
+    "zh": "清除",
+    "en": "Clear"
+  },
+  "m80062f08d455": {
+    "zh": "背景填充",
+    "en": "Background fitting"
+  },
+  "m2bd69f764656": {
+    "zh": "铺满裁切",
+    "en": "Cover"
+  },
+  "m530aa0210369": {
+    "zh": "完整显示",
+    "en": "Contain"
+  },
+  "ma4c42dcc03c4": {
+    "zh": "背景水平位置",
+    "en": "Background position"
+  },
+  "m4823bb95b1d8": {
+    "zh": "背景遮罩",
+    "en": "Background shade"
+  },
+  "m80faf20d6a76": {
+    "zh": "背景模糊",
+    "en": "Background blur"
+  },
+  "m8e8ef53ad00c": {
+    "zh": "面板不透明度",
+    "en": "Panel opacity"
+  },
+  "md8a6d6a936c6": {
+    "zh": "整个窗口不透明度",
+    "en": "Whole-window opacity"
+  },
+  "med70473d5930": {
+    "zh": "窗口透明会让文字一起变透明，仅在桌面程序试用时生效。面板透明只透出软件背景。",
+    "en": "Window opacity also fades text and applies only when trying in the desktop app. Panel opacity reveals the app background."
+  },
+  "mdc46687e73ae": {
+    "zh": "侧栏宽度",
+    "en": "Sidebar width"
+  },
+  "m6df33ae8f742": {
+    "zh": "实例排列",
+    "en": "Instance view"
+  },
+  "m289f6eed62ec": {
+    "zh": "内置起点",
+    "en": "Starting points"
+  },
+  "mb5bc2c68343b": {
+    "zh": "AMBER 经典",
+    "en": "AMBER Classic"
+  },
+  "mdc4e23643f31": {
+    "zh": "紧凑工作台",
+    "en": "Workbench"
+  },
+  "mb23d96e39425": {
+    "zh": "大背景",
+    "en": "Scenery"
+  },
+  "mc0d18c963f30": {
+    "zh": "导入 .ambtheme",
+    "en": "Import .ambtheme"
+  },
+  "m20385bc4b5ea": {
+    "zh": "本地主题不需要官方审批。来源信息由作者声明；格式校验不代表安全认证。",
+    "en": "Local themes need no official approval. Authors declare sources; format validation is not security certification."
+  },
+  "m782e6cbb3c6a": {
+    "zh": "未声明作者",
+    "en": "Author unspecified"
+  },
+  "ma43412ecfdac": {
+    "zh": "移出主题库",
+    "en": "Remove from library"
+  },
+  "m31f05fa9475a": {
+    "zh": "未声明许可",
+    "en": "License unspecified"
+  },
+  "m85181985fbf5": {
+    "zh": "未声明来源",
+    "en": "Source unspecified"
+  },
+  "m8c99578d0d05": {
+    "zh": "导入范围",
+    "en": "Import scope"
+  },
+  "m03a8daaafc7d": {
+    "zh": "完整主题",
+    "en": "Whole theme"
+  },
+  "mf7637e8b318b": {
+    "zh": "仅配色",
+    "en": "Colors only"
+  },
+  "m3e803d189d24": {
+    "zh": "仅布局",
+    "en": "Layout only"
+  },
+  "m9c3963ba3d5d": {
+    "zh": "仅背景",
+    "en": "Backgrounds only"
+  },
+  "ma06b1bde4d56": {
+    "zh": "载入草稿预览",
+    "en": "Load into preview"
+  },
+  "ma083aef14710": {
+    "zh": "导出信息",
+    "en": "Export metadata"
+  },
+  "me479c05c94a1": {
+    "zh": "主题名称",
+    "en": "Theme name"
+  },
+  "m7d4146ca0827": {
+    "zh": "作者",
+    "en": "Author"
+  },
+  "mb24fe53f9769": {
+    "zh": "来源说明",
+    "en": "Source"
+  },
+  "m2a5828b7538d": {
+    "zh": "许可说明",
+    "en": "License"
+  },
+  "m7d14b16d7a2e": {
+    "zh": "真实控件预览",
+    "en": "Live control preview"
+  },
+  "mdc8db8dd4f07": {
+    "zh": "返回草稿",
+    "en": "Back to draft"
+  },
+  "me1c980b111c3": {
+    "zh": "对比当前外观",
+    "en": "Compare current"
+  },
+  "me49b7f0f3141": {
+    "zh": "选择列表",
+    "en": "Choice list"
+  },
+  "mb217b5d6c6af": {
+    "zh": "首选项",
+    "en": "First choice"
+  },
+  "mde1c3d3f9284": {
+    "zh": "其他选项",
+    "en": "Other choice"
+  },
+  "mb4d942a633a2": {
+    "zh": "不可用选项",
+    "en": "Unavailable"
+  },
+  "m9ead55c920b8": {
+    "zh": "输入框预览",
+    "en": "Input preview"
+  },
+  "m29693de1561f": {
+    "zh": "可输入文字",
+    "en": "Type here"
+  },
+  "m3126cc5cd34a": {
+    "zh": "不可用按钮",
+    "en": "Disabled button"
+  },
+  "m2791e67c8de8": {
+    "zh": "错误提示示例",
+    "en": "Example error message"
+  },
+  "m8b1083e92aeb": {
+    "zh": "预览展示样式与结构，不会启动游戏。窄窗口下双栏自动改为纵排。",
+    "en": "Preview shows styles and structure; it does not launch a game. Columns stack in narrow windows."
+  },
+  "m899432d83d98": {
+    "zh": "快捷操作",
+    "en": "Quick actions"
+  },
+  "mb341b84a7388": {
+    "zh": "任务进度",
+    "en": "Tasks"
+  },
+  "m42faf1ffc32f": {
+    "zh": "收藏实例",
+    "en": "Favorites"
+  },
+  "m3042565f2d44": {
+    "zh": "主题配图",
+    "en": "Theme artwork"
+  },
+  "me11c1d044330": {
+    "zh": "首页分区",
+    "en": "Home section"
+  },
+  "m5d6f637daa74": {
+    "zh": "分区",
+    "en": "Section"
+  },
+  "m94f31a390341": {
+    "zh": "分栏比例",
+    "en": "Column ratio"
+  },
+  "m524bae1a266d": {
+    "zh": "容器样式",
+    "en": "Container style"
+  },
+  "m86d5bec31e6f": {
+    "zh": "纵向排列",
+    "en": "Vertical stack"
+  },
+  "m6b0866152fba": {
+    "zh": "双栏排列",
+    "en": "Two columns"
+  },
+  "ma626aad412b7": {
+    "zh": "标签页",
+    "en": "Tabs"
+  },
+  "m06cef459f087": {
+    "zh": "包入分区",
+    "en": "Wrap in section"
+  },
+  "m82a59f3d1c16": {
+    "zh": "比例",
+    "en": "Ratio"
+  },
+  "m19ded9f7bd63": {
+    "zh": "分区比例",
+    "en": "Section ratio"
+  },
+  "m07c06700259e": {
+    "zh": "添加模块",
+    "en": "Add module"
+  },
+  "md182cd9bf91a": {
+    "zh": "＋ 添加模块",
+    "en": "＋ Add module"
+  },
+  "m4c5ac67200fd": {
+    "zh": "拖动模块可交换位置，也可用上下移动按钮。分区可以纵排、双栏或显示为标签页；双栏只在恰有两个子项时生效。",
+    "en": "Drag modules to swap positions, or use move buttons. Sections can stack, use two columns, or tabs. Columns require exactly two children."
+  },
+  "ma9543fe20917": {
+    "zh": "恢复原有首页布局",
+    "en": "Use classic home layout"
+  },
+  "m687ae20650f8": {
+    "zh": "主题恢复",
+    "en": "Theme recovery"
+  },
+  "m96150cdc3cb9": {
+    "zh": "保留这个外观？",
+    "en": "Keep this appearance?"
+  },
+  "m4233f9b782de": {
+    "zh": "恢复经典外观",
+    "en": "Restore classic appearance"
+  },
+  "m3ec35a1ea2ec": {
+    "zh": "未确认将自动恢复，剩余 ",
+    "en": "Reverts automatically in "
+  },
+  "m00fe8dda1fd7": {
+    "zh": " 秒",
+    "en": " seconds"
+  },
+  "m67dbaac879c4": {
+    "zh": "仅恢复外观，不影响账号或实例。",
+    "en": "Only appearance changes. Accounts and instances are untouched."
+  },
+  "m670ec25af841": {
+    "zh": "保留",
+    "en": "Keep"
+  },
+  "ma00efe557ba7": {
+    "zh": "恢复原样",
+    "en": "Revert"
+  },
+  "mba2e93e73037": {
+    "zh": "恢复默认",
+    "en": "Restore defaults"
+  },
+  "mfdd88cd1acb0": {
+    "zh": "设置保存在本机。外观可预览并试用；下载与内存默认值用于下一次操作。",
+    "en": "Settings stay on this computer. Preview and try appearance changes; download and memory defaults apply to future actions."
+  },
+  "m13c4edce9b34": {
+    "zh": "首页模块使用主题布局，可在外观与主题的布局页编辑。以下首页排序仅用于经典布局。",
+    "en": "Home modules use the theme layout. Edit them under Appearance & themes → Layout. The order below applies only to the classic layout."
+  },
+  "m46ca86da52b3": {
+    "zh": "暂无记录",
+    "en": "No entries yet"
+  },
+  "m86fd6654b8ca": {
+    "zh": "可在外观设置中为此模块选择图片。",
+    "en": "Choose an image for this module in appearance settings."
+  },
+  "me694406d11a1": {
+    "zh": "隐藏导航文字后，侧栏最低可缩至 72px；较窄时实例和关于入口显示为图标，悬停可查看名称。",
+    "en": "With navigation labels hidden, the sidebar can shrink to 72px. Narrow sidebars show instance and About icons with name tooltips."
+  },
+  "mb08a812bc051": {
+    "zh": "经典首页顺序与显示",
+    "en": "Classic home order & visibility"
+  },
+  "m3a06ff23e355": {
+    "zh": "当前使用经典首页。下面可调整顺序与显示；编辑分区后切换为主题模块布局。",
+    "en": "The classic home is active. Adjust its order and visibility below; editing sections switches to the theme module layout."
+  },
+  "mcde2cd071d25": {
+    "zh": "创建",
+    "en": "Create"
   }
 }

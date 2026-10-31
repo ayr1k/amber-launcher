@@ -37,6 +37,6 @@ jobs:
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: amber-windows
-          path: prototype/releases/1.0/**/AMBER-*-Setup-x64.exe
+          path: prototype/releases/1.1.0/**/AMBER-*-Setup-x64.exe
           retention-days: 7
           if-no-files-found: error

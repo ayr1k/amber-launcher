@@ -1,0 +1,82 @@
+{
+  "format": "ambtheme",
+  "schema": 1,
+  "compatibleVersions": [
+    "1.1.0"
+  ],
+  "requiredCapabilities": [
+    "appearance-v1",
+    "layout-v1"
+  ],
+  "appearance": {
+    "enabled": true,
+    "name": "AMBER Theme Starter",
+    "author": "AMBER contributors",
+    "source": "https://ayr1k.github.io/#/themes",
+    "license": "MPL-2.0",
+    "mode": "light",
+    "accent": "#245b48",
+    "background": "#f8faf7",
+    "surface": "#ffffff",
+    "text": "#193b30",
+    "muted": "#596e64",
+    "line": "#cbd6ce",
+    "radius": 10,
+    "borderWidth": 1,
+    "controlHeight": 44,
+    "rowHeight": 58,
+    "iconSize": 36,
+    "fontFamily": "Sarasa UI",
+    "fontSize": 14,
+    "scale": 100,
+    "menuStyle": "filled",
+    "listStyle": "lines",
+    "navLabels": true,
+    "panelOpacity": 100,
+    "windowOpacity": 100,
+    "backgroundAsset": null,
+    "heroAsset": null,
+    "artworkAsset": null,
+    "backgroundFit": "cover",
+    "backgroundPosition": 50,
+    "overlay": 20,
+    "blur": 0,
+    "motion": "standard",
+    "canvas": {
+      "id": "root",
+      "type": "split",
+      "direction": "horizontal",
+      "ratio": 65,
+      "children": [
+        {
+          "id": "launch",
+          "type": "module",
+          "module": "launch"
+        },
+        {
+          "id": "recent",
+          "type": "module",
+          "module": "recent"
+        }
+      ]
+    }
+  },
+  "chrome": {
+    "background": "none",
+    "windowCorners": "system",
+    "titlebarColor": "theme"
+  },
+  "layout": {
+    "navigation": "left",
+    "sidebarWidth": 260,
+    "contentWidth": "wide",
+    "instanceView": "list",
+    "homeSections": [
+      "launch",
+      "shortcuts",
+      "activity",
+      "details"
+    ],
+    "hiddenSections": []
+  }
+}

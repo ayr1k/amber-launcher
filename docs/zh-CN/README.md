@@ -1,12 +1,14 @@
 # AMBER
 
+1.1.0 新增外观工作室和跨产品主题包，参见[主题指南](THEMES.md)。
+
 [English](../../README.md) · [下载 Release](https://github.com/ayr1k/amber-launcher/releases) · [使用指南](USER-GUIDE.md)
 
 AMBER 是独立的 Windows Minecraft Java 版启动器，将实例隔离、游戏安装、模组管理、恢复和启动设置集中在同一界面。项目自有源码采用 MPL-2.0。
 
-## 1.0.0
+## 1.1.0
 
-适用于 Windows x64 的正式版。[下载安装包、源码和校验文件](https://github.com/ayr1k/amber-launcher/releases/tag/v1.0.0)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
+适用于 Windows x64 的正式版。[下载安装包、源码和校验文件](https://github.com/ayr1k/amber-launcher/releases/tag/v1.1.0)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
 
 - 一体化标题栏、独立窗口边框设置、窗口位置恢复与重新组织的隐私设置。
 
@@ -19,7 +21,7 @@ AMBER 是独立的 Windows Minecraft Java 版启动器，将实例隔离、游�
 
 ## 安装
 
-从 Release 下载 Windows x64 Setup 安装包，校验 SHA-256 后运行。安装器可选中英文。升级前退出游戏及 AMBER，备份重要存档。卸载程序不会自动删除游戏数据。当前预发布安装器未进行代码签名。
+从 Release 下载 Windows x64 Setup 安装包，校验 SHA-256 后运行。安装器可选中英文。升级前退出游戏及 AMBER，备份重要存档。卸载程序不会自动删除游戏数据。安装器未进行代码签名。
 
 ## 账号状态
 
@@ -44,3 +46,5 @@ AMBER 非 Mojang 或微软官方产品。Minecraft、下载组件及第三方项
 | [AmberX](https://github.com/ayr1k/AmberX) | 目标式操作、方案比较与试用体验的实验项目 |
 
 三个项目的数据目录和更新渠道独立。
+
+[外观与主题帮助](THEMES.md) · [主题格式与字段](AMBTHEME-FORMAT.md) · [可导入的基础示例](../AMBER-Theme-Starter.ambtheme) · [官方网站主题入口](https://ayr1k.github.io/#/themes)

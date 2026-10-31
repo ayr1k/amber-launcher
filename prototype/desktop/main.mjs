@@ -1,3 +1,5 @@
+import {Themes} from './themes.mjs';
+import {assetId,appearanceDefaults} from './theme-schema.mjs';
 import {EDITION,IS_AMBERE,PRODUCT_NAME} from './edition.mjs';
 import {BUILD_CHANNEL as awaitBuildChannel} from './build-channel.mjs';
 import {InstanceWorkbench} from './instance-workbench.mjs';
@@ -65,6 +67,7 @@ app.whenReady().then(async () => {
   protocol.handle('amber', async (request) => {
     const url = new URL(request.url);
     if (url.hostname !== 'app') return new Response('Forbidden', { status: 403 });
+    if(url.pathname.startsWith('/theme-assets/')){const name=url.pathname.slice('/theme-assets/'.length);if(!assetId.test(name))return new Response('Forbidden',{status:403});try{return new Response(await themes.asset(name),{headers:{'Content-Type':'image/png','X-Content-Type-Options':'nosniff'}});}catch{return new Response('Not found',{status:404});}}
     if (url.pathname.startsWith('/user-background/')) {const name = url.pathname.slice('/user-background/'.length);if (!backgroundPattern.test(name)) return new Response('Forbidden', { status: 403 });try {return new Response(await readFile(join(core.root, 'backgrounds', name)), { headers: { 'Content-Type': 'image/png', 'X-Content-Type-Options': 'nosniff' } });} catch {return new Response('Not found', { status: 404 });}}
     let path;
     try {path = resolve(assets, '.' + decodeURIComponent(url.pathname === '/' ? '/index.html' : url.pathname));}
@@ -96,7 +99,7 @@ app.whenReady().then(async () => {
       let result;try {if(IS_AMBERE&&(channel.startsWith('amber:ms-')||channel.startsWith('amber:ownership-')||channel==='amber:account-configure'))accounts.requireMicrosoft();result = await fn(...args);} catch (e) {const problem=errorDescriptor(redact(e.message,accounts.secrets()));throw Error('[AMBER '+problem.code+'] '+problem.text);}result = redactFields(result, accounts.secrets());if (smoke) {smokeChannels.add(channel);finishSmoke();}return result;
     });
   }
-  handle('amber:info', () => ({ version: app.getVersion(), buildChannel: (awaitBuildChannel), edition:EDITION, productName:PRODUCT_NAME, dataPath: core.root, platform: process.platform, recovery }));
+  handle('amber:info', () => ({ version: app.getVersion(), buildChannel: (awaitBuildChannel), edition:EDITION, productName:PRODUCT_NAME, dataPath: core.root, platform: process.platform, recovery, themeRecovery:settings.recovery||themes.recovery||null }));
   handle('amber:instances', async () => {const pending = await workflows.pending();return (await core.listInstances()).map((i) => ({ ...i, setup: pending.find((p) => p.instanceId === i.id) || null }));});
   handle('amber:versions', () => core.versions());
   handle('amber:create', (input) => {core.workflowGuard?.();return core.createInstance(input);});
@@ -110,6 +113,10 @@ app.whenReady().then(async () => {
   const content = new Modrinth(core);
   const packs = new Modpacks(core, content);
   const workflows = new Workflows(core, content),settings = new Settings(core.root),selections = new Map();
+  const themes=await new Themes(core.root,settings).init();
+  function applyAppearance(v){if(window&&!window.isDestroyed()){window.setOpacity(v.appearance?.enabled?(v.appearance.windowOpacity/100):1);window.webContents.setZoomFactor(v.appearance?.enabled?v.appearance.scale/100:1);window.webContents.send('amber:theme-changed');}}
+  themes.onChanged=applyAppearance;
+
   const guided=new GuidedCreation(core,content,workflows);
   const workbench=new InstanceWorkbench(core,workflows);core.workbench=workbench;
   for(const i of await core.listInstances()){try{const dir=await core.instancePath(i.id);await core.requireStopped(dir);await workbench.recover(dir);}catch(e){recovery.push({name:i.name,error:e.message});}}
@@ -219,8 +226,19 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   handle('amber:layout-import', async () => {const result = await dialog.showOpenDialog(window, { title: translateMessage('导入布局'), properties: ['openFile'], filters: [{ name: 'AMBER layout', extensions: ['json'] }] });if (result.canceled) return null;const path = result.filePaths[0];if ((await stat(path)).size > 64000) throw Error('布局文件过大');const data = JSON.parse(await readFile(path, 'utf8'));if (data.format !== 'amber-layout' || data.schema !== 1) throw Error('不是 AMBER 布局文件');return settings.save({ ...(await settings.get()), layout: validateLayout(data.layout) });});
   core.downloadThreads = (await settings.get()).threads;
   handle('amber:background-pick', async () => {const r = await dialog.showOpenDialog(window, { title: translateMessage('选择启动背景（20 MB 以内）'), properties: ['openFile'], filters: [{ name: '图片', extensions: ['png', 'jpg', 'jpeg', 'webp'] }] });if (r.canceled) return null;const background = await importBackground(core.root, r.filePaths[0], (bytes) => nativeImage.createFromBuffer(bytes));return settings.save({ ...(await settings.get()), background });});
+  handle('amber:themes-list',()=>themes.list());
+  handle('amber:theme-state',()=>themes.state());
+  handle('amber:theme-trial',v=>themes.trial(v));
+  handle('amber:theme-confirm',id=>themes.confirm(id));
+  handle('amber:theme-revert',()=>themes.revert());
+  handle('amber:theme-restore',()=>themes.restore());
+  handle('amber:theme-reset',()=>themes.reset());
+  handle('amber:theme-remove',id=>themes.remove(id));
+  handle('amber:theme-import',async()=>{const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'AMBER theme',extensions:['ambtheme']}]});if(r.canceled)return null;if((await stat(r.filePaths[0])).size>32*1024*1024)throw Error('Theme exceeds 32 MB / 主题包超过 32 MB');return themes.import(await readFile(r.filePaths[0]));});
+  handle('amber:theme-export',async(v,meta)=>{const bytes=await themes.export(validateSettings(v),meta);const r=await dialog.showSaveDialog(window,{defaultPath:'My-theme.ambtheme',filters:[{name:'AMBER theme',extensions:['ambtheme']}]});if(r.canceled)return false;await writeFile(r.filePath,bytes);return true;});
+  handle('amber:theme-image',async()=>{const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Image',extensions:['png','jpg','jpeg','webp']}]});if(r.canceled)return null;const name=await importBackground(core.root,r.filePaths[0],b=>nativeImage.createFromBuffer(b));return themes.storeAsset(await readFile(join(core.root,'backgrounds',name)));});
   handle('amber:settings', () => settings.get());
-  handle('amber:settings-save', async (v) => {v=validateSettings(v);if(launching&&v.graphicsMode!==(await settings.get()).graphicsMode)throw Error('正在准备启动。');if(v.graphicsMode==='system'&&(await settings.get()).graphicsMode!=='system')await graphics.restoreAll();const saved = await settings.save(v);core.downloadThreads = saved.threads;await refreshLocale();return saved;});
+  handle('amber:settings-save', async (v) => {if(themes.state())throw Error('Confirm or revert theme preview first / 请先保留或恢复当前主题试用');v=validateSettings(v);if(launching&&v.graphicsMode!==(await settings.get()).graphicsMode)throw Error('正在准备启动。');if(v.graphicsMode==='system'&&(await settings.get()).graphicsMode!=='system')await graphics.restoreAll();const saved = await settings.save(v);core.downloadThreads = saved.threads;await refreshLocale();applyAppearance(saved);return saved;});
   handle('amber:setup-state', () => workflows.state());
   handle('amber:setup-cancel', () => workflows.cancel());
   handle('amber:setup-repair', (id) => workflows.repairSetup(id));
@@ -286,8 +304,8 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
     const remembered=await placement.load(),prefs=await settings.get();initialCorners=prefs.windowCorners;placementMaximized=remembered?.maximized||false;
     const bounds=fitWindow(remembered?.bounds,screen.getAllDisplays(),screen.getPrimaryDisplay().id);
     window = new BrowserWindow({ title: PRODUCT_NAME, icon:join(assets,'brand/app-icon.png'), ...bounds, minWidth: Math.min(860,bounds.width), minHeight: Math.min(640,bounds.height), frame:false, roundedCorners:initialCorners==='system', thickFrame:true, show: false, backgroundColor: '#fafbf8', webPreferences: { preload: join(base, 'preload.cjs'), nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true } });
-    window.setMenu(null);
-    window.webContents.on('before-input-event',(event,input)=>{const method=editingCommand(input);if(method){event.preventDefault();window.webContents[method]();}});
+    window.setMenu(null);applyAppearance(prefs);
+    window.webContents.on('before-input-event',(event,input)=>{if(input.type==='keyDown'&&input.control&&input.shift&&input.key==='F12'){event.preventDefault();themes.reset().then(()=>window.webContents.reload()).catch(()=>{});return;}const method=editingCommand(input);if(method){event.preventDefault();window.webContents[method]();}});
     if(remembered?.maximized)window.maximize();
     window.on('maximize',()=>{placementMaximized=true;});window.on('unmaximize',()=>{placementMaximized=false;});
     for(const event of ['maximize','unmaximize','focus','blur','restore'])window.on(event,sendWindowInfo);
@@ -295,7 +313,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
     const recoverDisplay=()=>{if(!window||window.isDestroyed())return;const previous=window.getNormalBounds(),next=fitWindow(previous,screen.getAllDisplays(),screen.getPrimaryDisplay().id);if(['x','y','width','height'].some(k=>previous[k]!==next[k])){const maximized=window.isMaximized();if(maximized)window.unmaximize();window.setMinimumSize(Math.min(860,next.width),Math.min(640,next.height));window.setBounds(next);if(maximized)window.maximize();}};
     for(const event of ['display-removed','display-metrics-changed','display-added'])screen.on(event,recoverDisplay);
     window.on('closed',()=>{clearTimeout(placementTimer);for(const event of ['display-removed','display-metrics-changed','display-added'])screen.removeListener(event,recoverDisplay);window=null;});
-    window.once('ready-to-show',()=>{if(!smoke&&!qaUI)window.show();});
+    window.once('ready-to-show',()=>{if(!smoke&&(!qaUI||process.argv.includes('--qa-visible')))window.show();});
     let closeAllowed = false,closePrompt = false;
     window.on('close', async event => {
       if(closeAllowed)return;event.preventDefault();if(closePrompt)return;closePrompt=true;

@@ -1,0 +1,368 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AMBER theme v1",
+  "type": "object",
+  "required": [
+    "format",
+    "schema",
+    "appearance"
+  ],
+  "properties": {
+    "format": {
+      "const": "ambtheme"
+    },
+    "schema": {
+      "const": 1
+    },
+    "compatibleVersions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "requiredCapabilities": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "appearance-v1",
+          "layout-v1"
+        ]
+      }
+    },
+    "appearance": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "author": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "source": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "license": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "mode": {
+          "enum": [
+            "system",
+            "light",
+            "dark",
+            "custom"
+          ]
+        },
+        "accent": {
+          "type": "string",
+          "pattern": "^#[a-fA-F0-9]{6}$"
+        },
+        "background": {
+          "type": "string",
+          "pattern": "^#[a-fA-F0-9]{6}$"
+        },
+        "surface": {
+          "type": "string",
+          "pattern": "^#[a-fA-F0-9]{6}$"
+        },
+        "text": {
+          "type": "string",
+          "pattern": "^#[a-fA-F0-9]{6}$"
+        },
+        "muted": {
+          "type": "string",
+          "pattern": "^#[a-fA-F0-9]{6}$"
+        },
+        "line": {
+          "type": "string",
+          "pattern": "^#[a-fA-F0-9]{6}$"
+        },
+        "radius": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 24
+        },
+        "borderWidth": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 3
+        },
+        "controlHeight": {
+          "type": "number",
+          "minimum": 36,
+          "maximum": 60
+        },
+        "rowHeight": {
+          "type": "number",
+          "minimum": 40,
+          "maximum": 90
+        },
+        "iconSize": {
+          "type": "number",
+          "minimum": 24,
+          "maximum": 64
+        },
+        "fontFamily": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^[^;{}<>\\\\\"\\u0000-\\u001f]+$"
+        },
+        "fontSize": {
+          "type": "number",
+          "minimum": 12,
+          "maximum": 22
+        },
+        "scale": {
+          "type": "number",
+          "minimum": 85,
+          "maximum": 125
+        },
+        "menuStyle": {
+          "enum": [
+            "filled",
+            "outline",
+            "minimal"
+          ]
+        },
+        "listStyle": {
+          "enum": [
+            "lines",
+            "striped",
+            "spacious"
+          ]
+        },
+        "navLabels": {
+          "type": "boolean"
+        },
+        "panelOpacity": {
+          "type": "number",
+          "minimum": 60,
+          "maximum": 100
+        },
+        "windowOpacity": {
+          "type": "number",
+          "minimum": 70,
+          "maximum": 100
+        },
+        "backgroundAsset": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}\\.png$"
+        },
+        "heroAsset": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}\\.png$"
+        },
+        "artworkAsset": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}\\.png$"
+        },
+        "backgroundFit": {
+          "enum": [
+            "cover",
+            "contain"
+          ]
+        },
+        "backgroundPosition": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "overlay": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90
+        },
+        "blur": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "motion": {
+          "enum": [
+            "none",
+            "light",
+            "standard"
+          ]
+        },
+        "canvas": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/node"
+            }
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "chrome": {
+      "type": "object",
+      "properties": {
+        "windowCorners": {
+          "enum": [
+            "system",
+            "square"
+          ]
+        },
+        "titlebarColor": {
+          "enum": [
+            "theme",
+            "accent"
+          ]
+        },
+        "background": {
+          "enum": [
+            "forest",
+            "none"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "layout": {
+      "type": "object",
+      "properties": {
+        "navigation": {
+          "enum": [
+            "left",
+            "right",
+            "top"
+          ]
+        },
+        "sidebarWidth": {
+          "type": "integer",
+          "minimum": 72,
+          "maximum": 360
+        },
+        "contentWidth": {
+          "enum": [
+            "wide",
+            "comfortable"
+          ]
+        },
+        "instanceView": {
+          "enum": [
+            "list",
+            "grid"
+          ]
+        },
+        "homeSections": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "launch",
+              "shortcuts",
+              "activity",
+              "details"
+            ]
+          }
+        },
+        "hiddenSections": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "shortcuts",
+              "activity",
+              "details"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "node": {
+      "type": "object",
+      "required": [
+        "id",
+        "type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[-a-zA-Z0-9]{1,60}$"
+        },
+        "type": {
+          "enum": [
+            "module",
+            "split",
+            "tabs"
+          ]
+        },
+        "module": {
+          "enum": [
+            "launch",
+            "shortcuts",
+            "activity",
+            "details",
+            "instances",
+            "favorites",
+            "recent",
+            "artwork"
+          ]
+        },
+        "direction": {
+          "enum": [
+            "vertical",
+            "horizontal"
+          ]
+        },
+        "ratio": {
+          "type": "number",
+          "minimum": 25,
+          "maximum": 75
+        },
+        "children": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "module"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "module"
+            ]
+          },
+          "else": {
+            "required": [
+              "children"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

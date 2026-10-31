@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 import {g} from './guided-text.mjs';
+import {validateAppearance,appearanceDefaults} from './theme-schema.mjs';
 import {validateGraphicsMode} from './graphics.mjs';
 import {recoverInstance} from './recovery.mjs';
 import {validateBackground} from './backgrounds.mjs';
@@ -17,7 +18,7 @@ import { loaderVersions } from './loaders.mjs';
 import { importOptifine, optifineGame } from './local-content.mjs';
 import { installOptifine } from './optifine.mjs';
 
-export const defaults={graphicsMode:'system',windowCorners:'system',titlebarColor:'theme',language:"system",copyLoginCode:true,defaultAccountId:null,panelOpacity:100,background:'forest',theme:'system',uiStyle:'square',accent:'forest',density:'comfortable',motion:true,fontSize:14,threads:8,memory:4,layout:defaultLayout};
+export const defaults={appearance:appearanceDefaults,graphicsMode:'system',windowCorners:'system',titlebarColor:'theme',language:"system",copyLoginCode:true,defaultAccountId:null,panelOpacity:100,background:'forest',theme:'system',uiStyle:'square',accent:'forest',density:'comfortable',motion:true,fontSize:14,threads:8,memory:4,layout:defaultLayout};
 export function validateSettings(input){
  const s={...defaults,...input};
  validateGraphicsMode(s.graphicsMode);
@@ -26,12 +27,12 @@ export function validateSettings(input){
  if(!Number.isInteger(s.panelOpacity)||s.panelOpacity<60||s.panelOpacity>100)throw Error('面板不透明度应为 60–100%。');
  if(!['square','rounded'].includes(s.uiStyle)||!['system','light','dark'].includes(s.theme)||!['forest','amber','slate'].includes(s.accent)||!['comfortable','compact'].includes(s.density)||typeof s.motion!=='boolean'||![13,14,16,18].includes(s.fontSize)||!Number.isInteger(s.threads)||s.threads<1||s.threads>16||!Number.isInteger(s.memory)||s.memory<1||s.memory>32)throw Error('设置值不在支持范围内。');
  if(s.defaultAccountId!==null&&(typeof s.defaultAccountId!=='string'||s.defaultAccountId.length>100||!/^[a-zA-Z0-9_-]*$/.test(s.defaultAccountId)))throw Error('默认账号无效。');
- s.layout=validateLayout(s.layout);s.background=validateBackground(s.background);
+ s.appearance=validateAppearance(s.appearance);s.layout=validateLayout(s.layout);s.background=validateBackground(s.background);
  return Object.fromEntries(Object.keys(defaults).map(k=>[k,s[k]]));
 }
 export class Settings{
  constructor(root){this.path=join(root,'preferences.json');}
- async get(){try{return validateSettings(JSON.parse(await readFile(this.path,'utf8')));}catch(e){if(e.code==='ENOENT')return {...defaults};throw e;}}
+ async get(){try{const input=JSON.parse(await readFile(this.path,'utf8'));try{validateAppearance(input.appearance);}catch{await atomicJson(this.path+'.appearance-recovery.json',{appearance:input.appearance});input.appearance={...appearanceDefaults};await atomicJson(this.path,input);this.recovery='Invalid appearance restored to classic. / 外观配置损坏，已恢复经典外观，原配置已保留。';}return validateSettings(input);}catch(e){if(e.code==='ENOENT')return structuredClone(defaults);throw e;}}
  async save(input){const value=validateSettings(input);await atomicJson(this.path,value);return value;}
 }
 export function validateManifest(value){

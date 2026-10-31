@@ -17,3 +17,6 @@ prototype/public/fonts/*.ttf
 prototype/package-lock.json
 
 prototype/.qa/
+
+# Private, user-requested theme experiments; never ship or publish.
+local-test-themes/

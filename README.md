@@ -1,12 +1,14 @@
 # AMBER
 
+Appearance Studio and portable themes are available in 1.1.0. See the [theme guide](docs/THEMES.md).
+
 [简体中文](docs/zh-CN/README.md) · [Releases](https://github.com/ayr1k/amber-launcher/releases) · [User guide](docs/USER-GUIDE.md)
 
 AMBER is an independent Windows launcher for Minecraft: Java Edition. It keeps game instances separate and brings installation, mod management, recovery and launch settings into one workspace. Project-owned source is licensed under MPL-2.0.
 
-## 1.0.0
+## 1.1.0
 
-Stable release for Windows x64. [Download the installer, source and checksums](https://github.com/ayr1k/amber-launcher/releases/tag/v1.0.0). Includes instance management, content recommendations, mod updates, backups and recovery.
+Stable release for Windows x64. [Download the installer, source and checksums](https://github.com/ayr1k/amber-launcher/releases/tag/v1.1.0). Includes instance management, content recommendations, mod updates, backups and recovery.
 
 - Integrated title bar, independent window corners, remembered window placement and reorganized privacy settings.
 
@@ -19,11 +21,11 @@ Stable release for Windows x64. [Download the installer, source and checksums](h
 
 ## Install
 
-Download the Windows x64 Setup executable from [Releases](https://github.com/ayr1k/amber-launcher/releases), verify its SHA-256 checksum and run it. The installer offers Chinese and English. Close games and AMBER before upgrading; retain backups of important worlds. Uninstalling the program does not automatically remove game data. The prerelease installer is unsigned.
+Download the Windows x64 Setup executable from [Releases](https://github.com/ayr1k/amber-launcher/releases), verify its SHA-256 checksum and run it. The installer offers Chinese and English. Close games and AMBER before upgrading; retain backups of important worlds. Uninstalling the program does not automatically remove game data. The installer is unsigned.
 
 ## Account status
 
-Minecraft API access for AMBER has been approved. The user has successfully tested Microsoft licensed sign-in. Launch continues to verify eligibility. Approval is not an endorsement by Mojang or Microsoft. AMBER includes its public Microsoft Client ID. Login failure never silently switches to offline mode. AMBER requires online official eligibility verification for Microsoft and linked third-party launches. Explicitly created verified offline identities retain the official name and UUID with a maximum seven-day encrypted eligibility cache; this is a product policy, not a Mojang-approved exception. Legacy unverified offline accounts cannot launch in AMBER. Existing game instances and saves are preserved.
+Minecraft API access for AMBER has been approved. Launch continues to verify eligibility. Approval is not an endorsement by Mojang or Microsoft. AMBER includes its public Microsoft Client ID. Login failure never silently switches to offline mode. AMBER requires online official eligibility verification for Microsoft and linked third-party launches. Explicitly created verified offline identities retain the official name and UUID with a maximum seven-day encrypted eligibility cache; this is a product policy, not a Mojang-approved exception. Legacy unverified offline accounts cannot launch in AMBER. Existing game instances and saves are preserved.
 
 Third-party services require separate live validation. Offline mode does not grant Minecraft ownership or online-service access.
 
@@ -51,3 +53,5 @@ AMBER is not an official Mojang or Microsoft product. Minecraft, downloaded comp
 | [AmberX](https://github.com/ayr1k/AmberX) | Experimental goal-based workflows, comparison and trials |
 
 Each project uses separate data and update channels.
+
+[Appearance & theme help](docs/THEMES.md) · [Package format reference](docs/AMBTHEME-FORMAT.md) · [Importable starter theme](docs/AMBER-Theme-Starter.ambtheme) · [Themes on the website](https://ayr1k.github.io/#/themes)

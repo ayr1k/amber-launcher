@@ -1,3 +1,13 @@
+## 1.1.0
+
+- Refine rounded menu options, accent title-bar search contrast, 72px icon sidebars and consolidated layout settings.
+- Appearance Studio: custom colors, typography, control sizes, menu/list styles, local backgrounds, panel opacity and whole-window opacity.
+- Arrange the home page with stacks, two-column sections and tabs. Move modules, resize columns and undo or redo draft edits. Narrow windows stack columns automatically.
+- Import and export declarative `.ambtheme` packages across AMBER and AmberE, with selective color, background or layout import, metadata and compatibility notices.
+- Preview before applying. A 30-second trial reverts unless confirmed; interrupted trials recover on restart. Restore the previous appearance or press Ctrl+Shift+F12 to return to classic.
+- Existing appearance choices remain the default after upgrading. Themes exclude accounts and instance data, accept local PNG assets, and cannot execute scripts or arbitrary CSS.
+- Bilingual authoring documentation and an open versioned format. Account rules and update repositories remain product-specific.
+
 ## 1.0.0
 
 - Stable release for Windows x64, with separate AMBER and AmberE installations and update repositories.

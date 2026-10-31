@@ -23,6 +23,7 @@ import "./beta16.css";
 import "./beta17.css";
 import "./beta19.css";
 
+
 if (import.meta.env.DEV && new URLSearchParams(location.search).has('desktop-preview')) {
   const instance={id:'layout-only',name:'界面样例 · Fabric',game:'1.21.1',loader:'fabric',loaderVersion:'0.19.5',status:'installed',javaMajor:21,javaPath:'AMBER / runtimes / Temurin 21 / bin / java.exe'};
   const unavailable=async()=>{throw new Error('此浏览器页面仅用于桌面界面布局检查，请在 AMBER.exe 中使用真实功能。');};
@@ -85,6 +86,17 @@ if(import.meta.env.DEV&&window.amberDesktop?.preview){
  let prefs={...defaultPreviewPreferences};prefs={...prefs,language:new URLSearchParams(location.search).get('lang')||localStorage.getItem('amber.preview-language')||'zh-CN',copyLoginCode:true,theme:new URLSearchParams(location.search).get('theme')||'dark',panelOpacity:70};
  if(new URLSearchParams(location.search).has('qa-beta17')){const examples=['grass','dirt','anvil','pickaxe'].map((icon,n)=>({id:'layout-'+n,name:n?'界面样例 '+n+' · '+icon:'1.21.4-fabric',game:'1.21.4',loader:'fabric',loaderVersion:'0.19.5',icon,status:'installed',javaMajor:21}));api.listInstances=async()=>examples;} 
  api.settings=async()=>prefs;api.saveSettings=async value=>{prefs={...prefs,...value};localStorage.setItem('amber.preview-language',prefs.language);return prefs;};
+
+ let themePending=null,themePrevious=null,themeTimer=null;const themeListeners=new Set();
+ api.themesList=async()=>[];api.themeState=async()=>themePending;
+ api.onThemeChanged=fn=>{themeListeners.add(fn);return()=>themeListeners.delete(fn);};
+ const notifyTheme=()=>themeListeners.forEach(fn=>fn());
+ api.themeTrial=async value=>{clearTimeout(themeTimer);themePrevious=structuredClone(prefs);prefs=structuredClone(value);themePending={id:'preview-trial',expires:Date.now()+30000};notifyTheme();themeTimer=setTimeout(()=>api.themeRevert(),30000);return prefs;};
+ api.themeConfirm=async()=>{clearTimeout(themeTimer);themePending=null;return prefs;};
+ api.themeRevert=async()=>{clearTimeout(themeTimer);prefs=themePrevious||prefs;themePending=null;notifyTheme();return prefs;};
+ api.themeRestore=async()=>{prefs=themePrevious||prefs;notifyTheme();return prefs;};
+ api.themeReset=async()=>{clearTimeout(themeTimer);themePending=null;prefs={...prefs,...defaultPreviewPreferences};notifyTheme();return prefs;};
+ api.themeImport=api.themeExport=api.themeImage=api.themeRemove=async()=>{throw Error('Use the desktop app / 请在桌面程序中使用');};
  api.languageState=async()=>({language:prefs.language,pack:null});api.importLanguage=async()=>false;api.exportLanguage=async()=>false;
  api.copyPrivacyPath=async()=>true;
  let previewWindow={maximized:false,focused:true,corners:'system',cornersSupported:true};const windowListeners=new Set();api.windowState=async()=>previewWindow;api.onWindowState=fn=>{windowListeners.add(fn);return()=>windowListeners.delete(fn);};api.windowAction=async action=>{if(action==='maximize'){previewWindow={...previewWindow,maximized:!previewWindow.maximized};windowListeners.forEach(fn=>fn(previewWindow));}};
@@ -103,3 +115,5 @@ import './beta18.css';
 
 import './beta111.css';
 import './beta112.css';
+
+import "./themes.css";
