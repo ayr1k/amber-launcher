@@ -2,7 +2,7 @@
 
 [简体中文](zh-CN/AMBTHEME-FORMAT.md) · [Using themes](THEMES.md) · [Example JSON](theme-example.json) · [Download starter](AMBER-Theme-Starter.ambtheme)
 
-For AMBER and AmberE 1.1.0–1.1.1. Both products read the same format; a theme cannot change the product, account rules, update repository or game data. The separate starter demonstrates colors, rounded controls and a two-column home. It is not preinstalled. This document and the starter are licensed under MPL-2.0.
+For AMBER and AmberE 1.1.0–1.1.2. Both products read the same format; a theme cannot change the product, account rules, update repository or game data. The separate starter demonstrates colors, rounded controls and a two-column home. It is not preinstalled. This document and the starter are licensed under MPL-2.0.
 
 ## Import, edit and recover
 
@@ -41,6 +41,7 @@ Missing fields receive the defaults in [theme-example.json](theme-example.json) 
 | `radius`, `borderWidth` | 0–24 px; 0–3 px. Native window corners are separate. |
 | `controlHeight`, `rowHeight`, `iconSize` | 36–60 px; 40–90 px; 24–64 px. Icon size applies to instance icons. |
 | `fontFamily`, `fontSize`, `scale` | Installed font-family name (1–80 characters, no CSS syntax); 12–22 px; 85–125 percent. Missing fonts/glyphs fall back. |
+| `fontOffset` | Optional since 1.1.2, default 0; −3 to +3 px, editor step 0.5 px. Positive moves down, negative moves up. Applies to button, menu and single-line field text; older clients ignore this optional field. |
 | `menuStyle` | `filled`, `outline`, `minimal`. |
 | `listStyle` | `lines`, `striped`, `spacious`. |
 | `navLabels` | Boolean; false allows a narrow icon sidebar. |

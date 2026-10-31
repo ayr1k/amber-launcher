@@ -15,10 +15,10 @@
 .desktop-app[data-composition=true] .theme-splitter:is(:hover,:focus-visible):before{background:var(--green)}
 .app[data-theme-enabled=true] .launch-section[data-launch-layout=stacked] .launch-home-hero{min-height:0;padding:0;border:0;background:none;overflow:visible}
 .app[data-theme-enabled=true] .launch-section[data-launch-layout=stacked] .launch-background{display:none}
-.app[data-theme-enabled=true] .launch-section[data-launch-layout=stacked] .launch-dock{display:flex;flex-direction:column;align-items:stretch;width:min(100%,var(--composition-width));margin:var(--composition-top) 0 0;padding:0;background:color-mix(in srgb,var(--surface) var(--composition-dock),transparent);border:0;border-radius:var(--theme-radius)}
+.app[data-theme-enabled=true] .launch-section[data-launch-layout=stacked] .launch-dock{display:flex;flex-direction:column;align-items:stretch;width:min(100%,var(--composition-width));margin:min(var(--composition-top),max(0px,calc(100dvh - 760px))) 0 0;padding:0;background:color-mix(in srgb,var(--surface) var(--composition-dock),transparent);border:0;border-radius:var(--theme-radius)}
 .launch-section[data-eyebrow=false] .launch-dock>small{display:none}
 .app[data-theme-enabled=true] .launch-section[data-launch-layout=stacked] .instance-title{font-size:var(--composition-title);line-height:1.2;gap:24px;margin:0 0 14px;overflow-wrap:anywhere}
-.app[data-theme-enabled=true] .launch-section[data-launch-layout=stacked] .instance-title .instance-icon{width:64px;height:64px;background:none}
+.app[data-theme-enabled=true] .launch-section[data-launch-layout=stacked] .instance-title .instance-icon{width:min(64px,1em);height:min(64px,1em);flex:none;background:none}
 .launch-section[data-launch-layout=stacked] .launch-dock>p{font-size:18px;margin:0}
 .app[data-theme-enabled=true] .launch-section[data-launch-layout=stacked] .launch-identity{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;margin:26px 0 16px;align-items:end}
 .app[data-theme-enabled=true] .launch-section[data-launch-layout=stacked] .launch-identity label{max-width:none;min-width:0;grid-column:1 / -1;gap:10px}
@@ -31,7 +31,7 @@
 .ownership-details>summary{cursor:pointer;min-height:28px}
 .launch-section[data-launch-layout=classic] .ownership-details>summary{display:none}
 .launch-section[data-launch-layout=stacked] .ownership-details p{line-height:1.6;margin:8px 0}
-.app[data-theme-enabled=true] .launch-section[data-launch-layout=stacked] .launch-options{width:min(100%,var(--composition-width));margin:18px 0 0;padding:18px 0 0;border-top:1px solid var(--line)}
+.app[data-theme-enabled=true] .launch-section[data-launch-layout=stacked] .launch-options{width:min(100%,var(--composition-width));margin:18px 0 0;padding:0;border-top:1px solid var(--line)}
 .launch-section[data-launch-layout=stacked] .launch-options summary{justify-content:flex-start;gap:22px}
 .launch-section[data-launch-layout=stacked] .launch-options .instance-preferences{padding:18px 0;max-width:100%}
 .app[data-theme-enabled=true] .theme-module .home-shortcuts[data-shortcuts=compact]{display:flex;flex-wrap:wrap;gap:12px 28px;max-width:var(--composition-width)}
@@ -50,18 +50,23 @@
 .section-style-editor input[type=number]{width:100%}
 .theme-preview[data-composition=true] .launch-dock{margin-top:20px!important}
 .theme-preview .theme-section-surface[data-section-viewport=true]{min-height:0}
-@media(max-width:1100px){.desktop-app[data-composition=true] .theme-columns{grid-template-columns:minmax(0,1fr)}.desktop-app[data-composition=true] .theme-section-surface{max-width:100%}.desktop-app[data-composition=true] .section-border-left{border-left:0;border-top:1px solid var(--line)}.desktop-app[data-composition=true] .launch-section[data-launch-layout=stacked] .launch-dock{margin-top:min(var(--composition-top),80px)}}
+@media(max-width:1100px){.desktop-app[data-composition=true] .theme-columns{grid-template-columns:minmax(0,1fr)}.desktop-app[data-composition=true] .theme-section-surface{max-width:100%}.desktop-app[data-composition=true] .section-border-left{border-left:0;border-top:1px solid var(--line)}.desktop-app[data-composition=true] .launch-section[data-launch-layout=stacked] .launch-dock{margin-top:min(var(--composition-top),80px,max(0px,calc(100dvh - 760px)))}}
 @media(max-width:700px){.desktop-app[data-composition=true] .theme-section-surface{padding:20px!important}.app[data-theme-enabled=true] .launch-section[data-launch-layout=stacked] .instance-title{font-size:min(var(--composition-title),36px)}.section-style-editor{grid-template-columns:1fr}}
 
-/* A viewport-height image layer stays fixed in size when launch settings open. */
+/* Viewport images keep their crop on expansion and follow the section while scrolling. */
 .theme-section-surface{position:relative}
 .theme-section-surface::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:var(--section-image,none);background-size:var(--section-fit,cover);background-position:var(--section-position,center);background-repeat:no-repeat}
-.theme-section-surface[data-section-viewport=true]::before{bottom:auto;height:calc(100dvh - var(--composition-header,72px) - var(--composition-padding,0px)*2)}
-.theme-section-surface>*{--section-image:none}
+.theme-section-surface[data-section-viewport=true]::before{content:none}
+.theme-section-backdrop{position:absolute;inset:0;z-index:-1;pointer-events:none;background:var(--bg)}
+.theme-section-backdrop::before{content:'';display:block;position:sticky;top:0;height:calc(100dvh - var(--composition-header,72px) - var(--composition-padding,0px)*2);max-height:100%;background-image:var(--section-image);background-size:var(--section-fit,cover);background-position:var(--section-position,center);background-repeat:no-repeat}
+.theme-section-surface>:not(.theme-section-backdrop){--section-image:none}
+/* Stretch neighboring surfaces as well, so their tint never ends halfway down a column. */
+.theme-section-surface.theme-columns>.theme-cell{display:flex;flex-direction:column}
+.theme-section-surface.theme-columns>.theme-cell>:is(.theme-container,.theme-module){flex:1}
 .app[data-theme-enabled=true] .launch-section[data-launch-layout=stacked] .launch-identity{position:relative;display:flex;flex-direction:column;align-items:stretch}
 .launch-section[data-launch-layout=stacked] .launch-identity>button{position:absolute;right:0;top:-4px;margin:0;font-size:12px}
-.app[data-theme-enabled=true] .launch-section[data-launch-layout=stacked] .instance-title .instance-icon img{width:64px;height:64px;object-fit:contain}
-.app[data-theme-enabled=true] .launch-section[data-launch-layout=stacked] .launch-options>summary{padding:10px 0}
+.app[data-theme-enabled=true] .launch-section[data-launch-layout=stacked] .instance-title .instance-icon :is(img,.icon-glyph){width:100%;height:100%;object-fit:contain}
+.app[data-theme-enabled=true] .launch-section[data-launch-layout=stacked] .launch-options>summary{min-height:56px;padding:16px 0;align-items:center;line-height:1.4}
 .desktop-app[data-composition=true] .theme-home-library .instance-icon img{width:52px;height:52px;object-fit:contain}
 .desktop-app[data-composition=true] .topbar .brand img{width:160px;max-height:48px}
 .desktop-app[data-composition=true] .topbar .brand{flex-shrink:0}
@@ -79,3 +84,9 @@
 .theme-section-surface.theme-stack{gap:var(--section-gap,24px)}
 .theme-section-surface.theme-columns{gap:var(--section-gap,28px)}
 .app[data-theme-enabled=true] .launch-section[data-launch-layout=stacked] .launch-dock>.main-launch{margin-top:24px}
+
+/* Keep the primary action visible in short desktop windows without changing saved spacing. */
+@media(max-height:760px){
+.desktop-app[data-composition=true] .launch-section[data-launch-layout=stacked] .instance-title{font-size:min(var(--composition-title),48px);gap:16px}
+.desktop-app[data-composition=true] .launch-section[data-launch-layout=stacked] .launch-identity{margin-top:20px}
+}

@@ -1,3 +1,14 @@
+## 1.1.2
+
+- Add vertical control-text offset (−3 to +3 px), with preview, reset and theme round-trip support. Update the standalone Alloy text alignment while preserving its artwork.
+- Center launch-option rows, single-line fields and choice labels vertically; reserve scrollbar space to prevent horizontal background shifts when settings expand.
+- Keep viewport section backgrounds continuous while scrolling or expanding launch settings, without resizing or replacing the existing Alloy artwork.
+- Refine themed instance headers with consistent spacing and accent-colored active tabs; remove obsolete opaque filter backgrounds.
+- Align installed-content search, filters and counts, with wrapping layouts for smaller windows.
+- Reduce stacked home-page spacing and heading size in shorter windows so the primary launch action remains accessible.
+- Scale vector and image instance icons consistently beside launch headings.
+- Preserve existing 1.1.0 and 1.1.1 themes, saved preferences, instances and edition-specific authentication and update sources.
+
 ## 1.1.1
 
 - Refine header logo sizing and keep instance icons square; provide the AMBER Alloy theme as a separate download.

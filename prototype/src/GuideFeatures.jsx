@@ -1,10 +1,11 @@
+import {ControlButton} from './ControlButton.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import {g} from '../desktop/guided-text.mjs';
 import {utilityChoices,gameplayChoices} from '../desktop/guided-catalog.mjs';
 import {Select} from './Select';
 export function GuideFeatures({answers:a,set,addon=false}){
  const choices=(key,values)=><fieldset className="guide-interests"><legend>{g(key==='features'?'featureQuestion':'gameplayQuestion')}</legend>{values.map(v=><label key={v}><input type="checkbox" checked={a[key].includes(v)} onChange={()=>set(key,a[key].includes(v)?a[key].filter(x=>x!==v):[...a[key],v])}/>{g(v)}</label>)}</fieldset>;
- return <>{a.excludedFeatures?.length>0&&<button type="button" className="text-button" onClick={()=>set('excludedFeatures',[])}>{g('restoreSuggestions')}</button>}{a.change!=='vanilla'&&<>{choices('features',utilityChoices)}{a.features.includes('recipes')&&<label className="guide-field"><span>{g('recipePreference')}</span><Select value={a.recipePreference} onChange={e=>set('recipePreference',e.target.value)}>{['auto','jei','emi','rei'].map(v=><option key={v} value={v}>{v==='auto'?g('auto'):v.toUpperCase()}</option>)}</Select></label>}{!addon&&a.change==='expanded'&&a.play==='single'&&choices('gameplay',gameplayChoices)}</>}</>;
+ return <>{a.excludedFeatures?.length>0&&<ControlButton type="button" className="text-button" onClick={()=>set('excludedFeatures',[])}>{g('restoreSuggestions')}</ControlButton>}{a.change!=='vanilla'&&<>{choices('features',utilityChoices)}{a.features.includes('recipes')&&<label className="guide-field"><span>{g('recipePreference')}</span><Select value={a.recipePreference} onChange={e=>set('recipePreference',e.target.value)}>{['auto','jei','emi','rei'].map(v=><option key={v} value={v}>{v==='auto'?g('auto'):v.toUpperCase()}</option>)}</Select></label>}{!addon&&a.change==='expanded'&&a.play==='single'&&choices('gameplay',gameplayChoices)}</>}</>;
 }
 export function GuideVisualChoices({answers:a,set,addon=false}){
  if(addon)return <p className="native-note">{g('addonVisualManual')}</p>;

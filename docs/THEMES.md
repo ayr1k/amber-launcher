@@ -2,7 +2,7 @@
 
 [简体中文](zh-CN/THEMES.md)
 
-AMBER and AmberE 1.1.1 use the same local `.ambtheme` format. Open Settings → Appearance & themes. Existing settings remain active until you choose to change them. Color, control, background and layout edits remain in a draft; use Undo/Redo or compare with the active appearance. Export the draft to keep a personal copy before leaving the editor.
+AMBER and AmberE 1.1.2 use the same local `.ambtheme` format. Open Settings → Appearance & themes. Existing settings remain active until you choose to change them. Color, control, background and layout edits remain in a draft; use Undo/Redo or compare with the active appearance. Export the draft to keep a personal copy before leaving the editor.
 
 Use Theme library → Import, inspect the author's metadata, select a scope and load the draft. Try applies it for 30 seconds. Keep confirms; otherwise the previous appearance returns. An interrupted trial is restored at the next launch. Restore previous and Restore classic are available in the editor. Ctrl+Shift+F12 restores classic independently of the theme. Restoration does not affect instances or accounts. Window corners take effect after restarting; whole-window opacity also fades text. Windows 11 supports system window corners; other systems may use square corners.
 
@@ -36,7 +36,7 @@ Layout controls are consolidated in Appearance & themes → Layout. Classic home
 
 [Field and packaging reference](AMBTHEME-FORMAT.md) · [Importable starter](AMBER-Theme-Starter.ambtheme) · [Example JSON](theme-example.json)
 
-The starter is a separate educational download, not bundled in the app. Releases also include `AMBTHEME-Guide-1.1.1.zip` with bilingual help, the field reference, JSON Schema and an example package.
+The starter is a separate educational download, not bundled in the app. Releases also include `AMBTHEME-Guide-1.1.2.zip` with bilingual help, the field reference, JSON Schema and an example package.
 
 ## Fine-grained composition in 1.1.1
 
@@ -44,4 +44,11 @@ Appearance & themes → Layout lets you arrange a vertical launch area, tune hea
 
 Existing 1.1.0 packages import without conversion. New composition or node styles require `composition-v1`; old clients reject that capability instead of silently misrendering. The basic starter remains a 1.1.0-compatible example.
 
-[Download AMBER Alloy](AMBER-Alloy-1.1.1.ambtheme) for either edition 1.1.1 or later. Import the whole theme, load its draft, try it and keep within 30 seconds. It uses real instances and recent launches; an empty library stays empty. Themes are separate downloads, never automatically installed.
+[Download AMBER Alloy](AMBER-Alloy-1.1.2.ambtheme) for either edition 1.1.2 or later. Import the whole theme, load its draft, try it and keep within 30 seconds. It uses real instances and recent launches; an empty library stays empty. Themes are separate downloads, never automatically installed.
+
+## Vertical text offset (1.1.2)
+
+In Appearance & themes → Controls & type, adjust vertical text offset from −3 to +3 px in 0.5 px steps. Negative moves up, positive moves down; the default is 0. It adjusts button, menu and single-line field text without moving icons, borders or hit areas, or reflowing body paragraphs. Preview, reset, undo/redo and trial confirmation remain available. Theme exports retain the offset; older themes without this field use 0.
+
+Alloy 1.1.2 uses a 1.5 px downward correction and retains its original artwork. Existing Alloy users can also set 1.5 px manually and confirm the appearance trial. Revisit this setting after changing fonts.
+

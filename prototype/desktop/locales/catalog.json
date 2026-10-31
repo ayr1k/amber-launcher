@@ -8542,5 +8542,17 @@
   "ma9986f62d4ce": {
     "zh": "右侧留白",
     "en": "Right padding"
+  },
+  "theme112.fontOffset.0": {
+    "zh": "字体纵向偏移",
+    "en": "Vertical text offset"
+  },
+  "theme112.fontOffset.1": {
+    "zh": "重置字体偏移",
+    "en": "Reset text offset"
+  },
+  "theme112.fontOffset.2": {
+    "zh": "负值向上，正值向下。微调按钮、菜单和单行输入框中的文字，不移动边框或图标。",
+    "en": "Negative moves up; positive moves down. Adjusts text in buttons, menus and single-line fields without moving borders or icons."
   }
 }

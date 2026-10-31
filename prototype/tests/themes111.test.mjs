@@ -1,3 +1,4 @@
+import {VERSION} from '../desktop/product.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import test from 'node:test';import assert from 'node:assert/strict';
 import {readFile,mkdtemp,rm} from 'node:fs/promises';import {tmpdir} from 'node:os';import {join} from 'node:path';import {createRequire} from 'node:module';
@@ -21,7 +22,7 @@ test('composition validation is bounded, strips code and never accepts runtime p
 test('section layout, backgrounds and composition round-trip with an explicit capability',async t=>{
  const {themes,settings}=await fixture(t);const appearance=validateAppearance({...appearanceDefaults,enabled:true,composition:{...compositionDefaults,launchLayout:'stacked'},canvas});
  const bytes=await themes.export({...await settings.get(),appearance},{});const doc=JSON.parse(Buffer.from(unzipSync(bytes)['theme.json']).toString());
- assert.ok(doc.requiredCapabilities.includes('composition-v1'));assert.deepEqual(doc.compatibleVersions,['1.1.1']);const parsed=readTheme(bytes);assert.deepEqual(parsed.appearance,appearance);
+ assert.ok(doc.requiredCapabilities.includes('composition-v1'));assert.ok(doc.compatibleVersions.includes('1.1.1'));assert.ok(doc.compatibleVersions.includes(VERSION));const parsed=readTheme(bytes);assert.deepEqual(parsed.appearance,appearance);
  const entry=await themes.import(bytes);await themes.trial({...await settings.get(),appearance:entry.appearance});await themes.confirm(themes.state().id);const restarted=await new Themes(themes.root,new Settings(themes.root)).init();assert.deepEqual((await restarted.settings.get()).appearance,appearance);
 });
 test('exporting legacy layout does not require the new capability',async t=>{const {themes,settings}=await fixture(t);const bytes=await themes.export(await settings.get(),{});const doc=JSON.parse(Buffer.from(unzipSync(bytes)['theme.json']).toString());assert.ok(!doc.requiredCapabilities.includes('composition-v1'));assert.ok(doc.compatibleVersions.includes('1.1.0'));});

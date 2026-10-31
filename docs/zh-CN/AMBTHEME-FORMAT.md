@@ -2,7 +2,7 @@
 
 [English](../AMBTHEME-FORMAT.md) · [主题使用帮助](THEMES.md) · [示例 JSON](../theme-example.json) · [下载基础示例](../AMBER-Theme-Starter.ambtheme)
 
-适用于 AMBER 与 AmberE 1.1.0–1.1.1，两款产品读取同一格式。主题不能更改产品身份、账号规则、更新仓库或游戏数据。基础示例展示配色、圆角和双栏首页，单独提供下载，不预置在软件内。本说明及基础示例采用 MPL-2.0 许可。
+适用于 AMBER 与 AmberE 1.1.0–1.1.2，两款产品读取同一格式。主题不能更改产品身份、账号规则、更新仓库或游戏数据。基础示例展示配色、圆角和双栏首页，单独提供下载，不预置在软件内。本说明及基础示例采用 MPL-2.0 许可。
 
 ## 导入、编辑与恢复
 
@@ -24,7 +24,7 @@ preview.png                        可选，目前主题库不展示这张图
 assets/<64 位小写十六进制>.png       theme.json 引用的图片
 ```
 
-只允许以上文件。说明文档应放在主题包外；在包内添加 README 等文件会被拒绝。`AMBTHEME-Guide-1.1.1.zip` 是帮助资料压缩包，不能作为主题导入；请先解压，再导入其中的 `.ambtheme` 示例。
+只允许以上文件。说明文档应放在主题包外；在包内添加 README 等文件会被拒绝。`AMBTHEME-Guide-1.1.2.zip` 是帮助资料压缩包，不能作为主题导入；请先解压，再导入其中的 `.ambtheme` 示例。
 
 顶层 `format` 必须为 `ambtheme`，`schema` 必须为 `1`，`appearance` 保存外观配置。可选 `compatibleVersions` 为版本数组，例如 `["1.1.0"]`。`requiredCapabilities` 可包含 `appearance-v1`、`layout-v1`、`composition-v1`。布局树应声明前两者；使用 1.1.1 编排或分区样式时还需声明第三项。未知必需能力或格式版本会被拒绝；未匹配当前软件版本会提示但允许预览；未知可选外观字段会提示并忽略。
 
@@ -41,6 +41,7 @@ assets/<64 位小写十六进制>.png       theme.json 引用的图片
 | `radius`、`borderWidth` | 控件圆角 0–24 px、边框 0–3 px；系统窗口边框另设。 |
 | `controlHeight`、`rowHeight`、`iconSize` | 控件高 36–60 px、列表行高 40–90 px、实例图标 24–64 px。 |
 | `fontFamily`、`fontSize`、`scale` | 本机字体名称 1–80 字符，不含 CSS 语法；字号 12–22 px；缩放 85–125%。缺失字体或字形自动回退。 |
+| `fontOffset` | 1.1.2 新增，可选，默认 0；范围 −3 至 +3 px，编辑器步进 0.5 px。正值向下、负值向上；仅调整按钮、菜单和单行输入框的文字。旧版忽略此可选字段。 |
 | `menuStyle` | `filled` 填色、`outline` 描边、`minimal` 简约。 |
 | `listStyle` | `lines` 分隔线、`striped` 交替底色、`spacious` 留白。 |
 | `navLabels` | 是否显示导航文字，false 允许更窄的图标侧栏。 |

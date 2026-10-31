@@ -281,6 +281,13 @@
               ]
             }
           }
+        },
+        "fontOffset": {
+          "type": "number",
+          "minimum": -3,
+          "maximum": 3,
+          "default": 0,
+          "description": "Vertical control-text offset in CSS pixels; positive moves down. Available since 1.1.2."
         }
       },
       "additionalProperties": true

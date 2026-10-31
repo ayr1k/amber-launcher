@@ -65,3 +65,39 @@
 .desktop-app[data-sidebar-rail=true] .sidebar-about-icon{display:block;font-size:22px}
 }
 .desktop-app[data-sidebar-rail=true] .sidebar .instance-row.selected{box-shadow:inset 3px 0 var(--green)}
+
+/* 1.1.2: page headings and filters share the wallpaper instead of painting legacy slabs. */
+.desktop-app[data-theme-enabled=true] .instance-context{position:static;background:transparent;padding:20px 24px;gap:24px;flex-wrap:wrap}
+.desktop-app[data-theme-enabled=true] .instance-context>div{min-width:0;flex:1 1 240px}
+.desktop-app[data-theme-enabled=true] .instance-context+.store-tabs{background:transparent;padding:8px 24px 0;gap:24px;flex-wrap:wrap}
+.app[data-theme-enabled=true] .store-tabs button[aria-pressed=true]{border-color:var(--green)}
+.desktop-app[data-theme-enabled=true] .content-toolbar{display:grid;grid-template-columns:minmax(180px,1fr) minmax(130px,auto) minmax(130px,auto) auto;gap:16px;align-items:end;background:transparent;padding:16px 0;border-block:1px solid var(--line)}
+.desktop-app[data-theme-enabled=true] .content-toolbar label{min-width:0;gap:8px}
+.desktop-app[data-theme-enabled=true] .content-toolbar .content-filter{min-width:0}
+.desktop-app[data-theme-enabled=true] .content-toolbar :is(input,.amber-select){width:100%;min-width:0}
+.desktop-app[data-theme-enabled=true] .content-toolbar>small{display:flex;align-items:center;min-height:var(--theme-control);padding:0;font-variant-numeric:tabular-nums}
+@media(max-width:1100px){
+.desktop-app[data-theme-enabled=true] .content-toolbar{grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto}
+.desktop-app[data-theme-enabled=true] .content-toolbar .content-filter{grid-column:1 / -1}
+}
+@media(max-width:600px){
+.desktop-app[data-theme-enabled=true] .instance-context{padding:16px}
+.desktop-app[data-theme-enabled=true] .instance-context+.store-tabs{padding-inline:16px;gap:16px}
+.desktop-app[data-theme-enabled=true] .content-toolbar{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.desktop-app[data-theme-enabled=true] .content-toolbar>small{grid-column:1 / -1;min-height:0;justify-content:flex-end}
+}
+
+/* Reserve the scroll lane before expansion, keeping section crops and column widths stable. */
+.desktop-app .workspace-scroll{scrollbar-gutter:stable}
+/* Single-line fields use an explicit height; min-height alone leaves native text off-center. */
+.app[data-theme-enabled=true] :is(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]):not([type=hidden]):not([type=button]):not([type=submit]):not([type=reset]):not([type=image]),.select-trigger){height:var(--theme-control);min-height:var(--theme-control);padding-block:0;line-height:1.4}
+.app .select-trigger{align-items:center}
+.app .select-trigger>span{margin-block:0;line-height:1.4;align-self:center}
+.app .select-trigger>span:first-child{display:flex;align-items:center}
+.app .select-trigger .select-chevron{display:block;flex:none;width:16px;height:16px;align-self:center}
+
+/* Optical text alignment is independent of control geometry and icon placement. */
+.app [data-control-text]{display:inline-block;translate:0 var(--theme-text-offset,0px)}
+.app[data-theme-enabled=true] :is(.primary-nav button>span,.select-trigger>span:first-child>span:not(.instance-icon),.select-option>span:not(.instance-icon):not([aria-hidden])){translate:0 var(--theme-text-offset,0px)}
+.app[data-theme-enabled=true] input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]):not([type=hidden]):not([type=button]):not([type=submit]):not([type=reset]):not([type=image]){padding-top:max(0px,calc(var(--theme-text-offset,0px)*2));padding-bottom:max(0px,calc(var(--theme-text-offset,0px)*-2))}
+.theme-recovery,.window-controls{--theme-text-offset:0px!important}
