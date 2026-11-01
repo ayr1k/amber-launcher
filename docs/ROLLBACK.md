@@ -1,3 +1,7 @@
+# Rolling back from 1.2.1
+
+Export the current appearance and back up instances, worlds and settings first. Switch to classic or a 1.2.0 theme, close the game and launcher, then install the matching product's [1.2.0](https://github.com/ayr1k/amber-launcher/releases/tag/v1.2.0). Do not import new themes such as Nocturne declaring `section-panels-v1` into older clients. Downgrading the app does not undo world or mod changes; do not delete the game library. Keep the two products' data separate.
+
 # Rolling back from 1.2.0
 
 Export your theme and back up important instances, worlds and settings first. Restore classic or 1.1.2 Alloy, close the game and launcher, then install the matching product's [1.1.2 installer](https://github.com/ayr1k/amber-launcher/releases/tag/v1.1.2). Do not import Alloy 1.2.0 with new home modules into an older client. Keep the two products' data directories separate.

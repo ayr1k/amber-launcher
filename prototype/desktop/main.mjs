@@ -257,6 +257,8 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   handle('amber:theme-restore',()=>themes.restore());
   handle('amber:theme-reset',()=>themes.reset());
   handle('amber:theme-remove',id=>themes.remove(id));
+  handle('amber:theme-draft',(operation,v)=>{if(operation==='read')return themes.draft();if(operation==='clear')return themes.draft(null);if(operation==='save')return themes.draft(validateSettings(v));throw Error('Invalid theme draft operation');});
+  handle('amber:theme-save-local',(v,meta)=>themes.saveLocal(validateSettings(v),meta));
   handle('amber:theme-import',async()=>{const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'AMBER theme',extensions:['ambtheme']}]});if(r.canceled)return null;if((await stat(r.filePaths[0])).size>32*1024*1024)throw Error('Theme exceeds 32 MB / 主题包超过 32 MB');return themes.import(await readFile(r.filePaths[0]));});
   handle('amber:theme-export',async(v,meta)=>{const bytes=await themes.export(validateSettings(v),meta);const r=await dialog.showSaveDialog(window,{defaultPath:'My-theme.ambtheme',filters:[{name:'AMBER theme',extensions:['ambtheme']}]});if(r.canceled)return false;await writeFile(r.filePath,bytes);return true;});
   handle('amber:theme-image',async()=>{const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Image',extensions:['png','jpg','jpeg','webp']}]});if(r.canceled)return null;const name=await importBackground(core.root,r.filePaths[0],b=>nativeImage.createFromBuffer(b));return themes.storeAsset(await readFile(join(core.root,'backgrounds',name)));});

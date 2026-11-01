@@ -2,7 +2,7 @@
 
 [简体中文](zh-CN/THEMES.md)
 
-AMBER and AmberE 1.2.0 share the local `.ambtheme` format and continue to read 1.1.0–1.1.2 themes. Settings → Appearance & themes starts with Basics. Enable More settings or Advanced editing when needed; collapsing controls never deletes their values.
+AMBER and AmberE 1.2.1 share the local `.ambtheme` format and continue to read 1.1.0–1.2.0 themes. Settings → Appearance & themes starts with Basics. Enable More settings or Advanced editing when needed; collapsing controls never deletes their values.
 
 In Theme library, click Apply directly. First-time themes and major usability-affecting edits require confirmation within 30 seconds or automatically revert. An unchanged, previously confirmed appearance applies without another confirmation. Preview & edit only loads a draft; Apply changes affects the actual interface. Discard drafts or restore the previous/classic appearance.
 
@@ -22,7 +22,7 @@ See [the schema](theme.schema.json) and [an editable example](theme-example.json
 
 `appearance` supports name, author, source, license; mode (system/light/dark/custom); six HEX colors (accent/background/surface/text/muted/line); radius, borderWidth, controlHeight, rowHeight, iconSize, fontFamily, fontSize, scale, menuStyle (filled/outline/minimal), listStyle (lines/striped/spacious), navLabels; panelOpacity, windowOpacity; backgroundAsset, heroAsset, artworkAsset, backgroundFit (cover/contain), backgroundPosition, overlay, blur; motion (none/light/standard); and canvas. Missing fields receive defaults. Custom colors beyond accent apply in custom mode. Fonts use installed families with fallback and are not embedded.
 
-`canvas` is null for the classic home or a tree of `module`, `split` and `tabs` nodes. Every node has a unique alphanumeric/hyphen id. Modules: launch, shortcuts, activity, details, instances, favorites, recent, artwork. Each appears at most once and launch must remain. Split direction is vertical or horizontal; horizontal columns require exactly two children and ratio is 25–75. Maximum 32 nodes, depth 5 and 8 children per container. The editor supports nesting, module swaps, move buttons, and keyboard/pointer column resizing. Width-limited windows stack columns. The theme changes placement and appearance, never what authentication or installation actions do.
+`canvas` is null for the classic home or a tree of `module`, `split` and `tabs` nodes. Every node has a unique alphanumeric/hyphen id. Modules: launch, shortcuts, activity, details, instances, favorites, recent, artwork, calendar, news, storage, tools. Each appears at most once and launch must remain. Split direction is vertical or horizontal; horizontal columns require exactly two children and ratio is 25–75. Maximum 32 nodes, depth 5 and 8 children per container. The editor supports nesting, module swaps, move buttons, and keyboard/pointer column resizing. Width-limited windows stack columns. The theme changes placement and appearance, never what authentication or installation actions do.
 
 Top-level `layout` retains navigation position (left/right/top), sidebar width (72–360; widths below 220 apply only with navigation labels hidden), contentWidth (wide/comfortable), instanceView (list/grid) and classic home ordering. Optional `chrome` contains windowCorners (system/square), titlebarColor (theme/accent), and background (forest/none). Export converts an existing custom launch image into an embedded theme asset.
 
@@ -30,7 +30,7 @@ Top-level `layout` retains navigation position (left/right/top), sidebar width (
 
 Packages: at most 32 MiB compressed, 64 entries, 64 MiB unpacked and 20 MiB per entry. `theme.json` is at most 128,000 bytes. Referenced PNGs must match their filename's SHA-256, with nonzero dimensions and at most 16 million pixels. The local image picker normalizes images to PNG. Retain licenses for assets you redistribute; do not package personal screenshots or private data unintentionally.
 
-Supported schema: 1. Required capabilities: appearance-v1, layout-v1 and composition-v1. Unknown required capabilities or schema versions are rejected; unknown optional appearance fields are ignored with a warning. Unlisted compatibleVersions warn rather than prevent local import. All imported entries receive independent IDs, even when names match. Removing an entry retains images referenced by other themes. Export includes visual settings and referenced images only, not accounts, tokens, instances or machine-specific game paths.
+Supported schema: 1. Required capabilities: appearance-v1, layout-v1, composition-v1, home-modules-v1 and section-panels-v1. Unknown required capabilities or schema versions are rejected; unknown optional appearance fields are ignored with a warning. Unlisted compatibleVersions warn rather than prevent local import. All imported entries receive independent IDs, even when names match. Removing an entry retains images referenced by other themes. Export includes visual settings and referenced images only, not accounts, tokens, instances or machine-specific game paths.
 
 This is a declarative appearance system, not a general plugin runtime. Arbitrary commands, scripts, replacement authentication and unrestricted page markup are outside this format. Future capabilities must be versioned and explicitly declared, keeping today's themes usable and recoverable.
 
@@ -40,7 +40,7 @@ Layout controls are consolidated in Appearance & themes → Layout. Classic home
 
 [Field and packaging reference](AMBTHEME-FORMAT.md) · [Importable starter](AMBER-Theme-Starter.ambtheme) · [Example JSON](theme-example.json)
 
-The starter is a separate educational download, not bundled in the app. Releases also include `AMBTHEME-Guide-1.2.0.zip` with bilingual help, the field reference, JSON Schema and an example package.
+The starter is a separate educational download, not bundled in the app. Releases also include `AMBTHEME-Guide-1.2.1.zip` with bilingual help, the field reference, JSON Schema and an example package.
 
 ## Fine-grained composition in 1.1.1
 
@@ -48,7 +48,7 @@ Appearance & themes → Layout lets you arrange a vertical launch area, tune hea
 
 Existing 1.1.0 packages import without conversion. New composition or node styles require `composition-v1`; old clients reject that capability instead of silently misrendering. The basic starter remains a 1.1.0-compatible example.
 
-[Download AMBER Alloy](AMBER-Alloy-1.2.0.ambtheme) for either edition 1.2.0 or later. Import the whole theme and choose Apply; confirm that it displays correctly when requested. It uses real instances and recent launches; an empty library stays empty. Themes are separate downloads, never automatically installed.
+[Download AMBER Alloy](AMBER-Alloy-1.2.1.ambtheme) for either edition 1.2.1 or later. Import the whole theme and choose Apply; confirm that it displays correctly when requested. It uses real instances and recent launches; an empty library stays empty. Themes are separate downloads, never automatically installed.
 
 ## Vertical text offset (1.1.2)
 
@@ -58,3 +58,14 @@ Alloy 1.1.2 uses a 1.5 px downward correction and retains its original artwork. 
 
 
 The updated Alloy home uses fixed left/right sections: launch and utility tabs on the left, calendar and news on the right. Long content scrolls within its section. Edit home is in the title bar; calendar explanations are collapsed by default. Smaller windows fall back to page scrolling.
+
+
+## Official themes and the editor (1.2.1)
+
+Preview and download Alloy or Nocturne in the [official theme store](https://ayr1k.github.io/#/themes). Both work with AMBER and AmberE 1.2.1 and are separate downloads, not preinstalled. Alloy retains its triangular artwork and narrow icon rail. Nocturne offers a moonlit lakeside background, top navigation and independent news/calendar panels.
+
+The calendar shows its month and date grid. Select a date for records; its more button opens filters, totals, recording controls, export and clear. Explanations no longer occupy home space; the counting method is unchanged.
+
+Export metadata uses separate labeled fields and requires a name. Save to library neither applies the theme nor overwrites an existing name. Recover unapplied appearance drafts, inspect change summaries or reset one category. Advanced layout offers panel corners, borders and shadows; omitted fields preserve older themes.
+
+The new themes require 1.2.1; existing .ambtheme files need no conversion. See the [format reference](AMBTHEME-FORMAT.md) for authoring and safety limits.

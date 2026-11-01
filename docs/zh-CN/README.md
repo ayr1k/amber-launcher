@@ -1,14 +1,14 @@
 # AMBER
 
-1.2.0 带来可定制首页、游玩日历、Minecraft 官方新闻、存储分析与实用工具。外观设置按需展开，主题可直接应用；正常窗口优先单页浏览，更多内容在分区内滚动。兼容已有 1.1.x 主题。
+1.2.1 改善主题编辑与导出，带来精简游玩日历、独立首页面板、外观草稿恢复和本地主题保存。官方主题商城提供 Alloy 与 Nocturne 预览及下载，兼容已有 1.1.x 与 1.2.0 主题。
 
 [English](../../README.md) · [下载 Release](https://github.com/ayr1k/amber-launcher/releases) · [使用指南](USER-GUIDE.md)
 
 AMBER 是独立的 Windows Minecraft Java 版启动器，将实例隔离、游戏安装、模组管理、恢复和启动设置集中在同一界面。项目自有源码采用 MPL-2.0。
 
-## 1.2.0
+## 1.2.1
 
-适用于 Windows x64 的正式版。[下载安装包、源码和校验文件](https://github.com/ayr1k/amber-launcher/releases/tag/v1.2.0)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
+适用于 Windows x64 的正式版。[下载安装包、源码和校验文件](https://github.com/ayr1k/amber-launcher/releases/tag/v1.2.1)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
 
 - 一体化标题栏、独立窗口边框设置、窗口位置恢复与重新组织的隐私设置。
 
@@ -47,6 +47,6 @@ AMBER 非 Mojang 或微软官方产品。Minecraft、下载组件及第三方项
 
 三个项目的数据目录和更新渠道独立。
 
-[外观与主题帮助](THEMES.md) · [主题格式与字段](AMBTHEME-FORMAT.md) · [可导入的基础示例](../AMBER-Theme-Starter.ambtheme) · [官方网站主题入口](https://ayr1k.github.io/#/themes)
+[官方主题商城](https://ayr1k.github.io/#/themes) · [主题使用帮助](THEMES.md) · [主题格式规范](AMBTHEME-FORMAT.md)
 
-[AMBER Alloy 主题（需要 1.2.0 或更高版本）](../AMBER-Alloy-1.2.0.ambtheme)：石墨黑、深绿与琥珀三角纹理，独立下载，不预置。
+Alloy 与 Nocturne 均为独立下载的免费官方主题，适用于 AMBER 和 AmberE 1.2.1，不预置在软件内。

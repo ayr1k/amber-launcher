@@ -2,7 +2,7 @@
 
 [简体中文](zh-CN/AMBTHEME-FORMAT.md) · [Using themes](THEMES.md) · [Example JSON](theme-example.json) · [Download starter](AMBER-Theme-Starter.ambtheme)
 
-For AMBER and AmberE 1.1.0–1.2.0. Both products read the same format; a theme cannot change the product, account rules, update repository or game data. The separate starter demonstrates colors, rounded controls and a two-column home. It is not preinstalled. This document and the starter are licensed under MPL-2.0.
+For AMBER and AmberE 1.1.0–1.2.1. Both products read the same format; a theme cannot change the product, account rules, update repository or game data. The separate starter demonstrates colors, rounded controls and a two-column home. It is not preinstalled. This document and the starter are licensed under MPL-2.0.
 
 ## Import, edit and recover
 
@@ -133,3 +133,20 @@ News content is provided by the application, never by theme URLs. Themes do not 
 Optional `appearance.homeOverflow` is `sections` (default) or `page`. Sections mode fits the home to one workspace at viewports of at least 1000 × 640 CSS pixels and scrolls module contents independently. Smaller or zoomed viewports fall back to page scrolling. Page mode always preserves document flow. Older themes that omit this field use the single-screen preference.
 
 Optional node `style.scroll` is `auto` (default, independent module scrolling) or `section` (scroll this section together). A vertical split with two children uses `ratio` to allocate height. These optional fields retain schema 1. Home scrolling is available in the layout editor; section scrolling is available in advanced editing.
+
+
+## 1.2.1: independent panels and a minimal calendar
+
+The archive remains `schema: 1`; themes from 1.1.0 through 1.2.0 remain importable. Optional section `style` fields:
+
+| Field | Values | Effect |
+| --- | --- | --- |
+| `radius` | 0–24 | Independent panel corner radius in px |
+| `borderWidth` | 0–3 | All-edge border width, using the theme `line` color |
+| `shadow` | `none`, `soft`, `raised` | Bounded shadow presets; no arbitrary CSS |
+
+Omitted fields preserve existing rendering. Themes using these fields must declare `section-panels-v1` in `requiredCapabilities` and `1.2.1` in `compatibleVersions`, so older apps do not silently lose the panel styling. Exports add this declaration automatically. Edit them under advanced layout / section background and spacing. Panels are embedded home sections, not operating-system floating windows. Existing layout controls arrange and size them; overflowing content scrolls within sections.
+
+The shared play calendar displays its heading, month and date grid. Click a date for records; the more button opens filters, totals and recording settings. Existing themes, including Alloy, use this component without new calendar fields. Themes cannot change play history.
+
+Export requires a name; other metadata is optional. Saving to the library does not change the active theme. Duplicate names require renaming and never overwrite the original. Appearance drafts store only visual settings and require explicit application after restoration.

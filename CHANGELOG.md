@@ -1,3 +1,12 @@
+## 1.2.1
+
+- Fix theme export field alignment, responsive spacing and inline metadata validation.
+- Simplify the play calendar to its heading, month and dates; open records, filters, totals and recording settings on demand.
+- Add optional section corners, all-edge borders and bounded shadows while preserving existing theme defaults.
+- Correct two-row top navigation sizing, retain its About entry and remove the duplicate About/version footer.
+- Add appearance draft recovery, saved local themes, change summaries and category resets. Duplicate names cannot overwrite themes; recovered drafts require explicit application.
+- Add the standalone Nocturne theme and update Alloy calendar proportions without changing its artwork. Existing 1.1.x and 1.2.0 themes remain compatible.
+
 ## 1.2.0
 
 - Align screenshot instance and date filters with consistent labels, field heights and spacing; stack the filters in narrow windows.

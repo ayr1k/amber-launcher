@@ -26,7 +26,9 @@
         "enum": [
           "appearance-v1",
           "layout-v1",
-          "composition-v1"
+          "composition-v1",
+          "home-modules-v1",
+          "section-panels-v1"
         ]
       }
     },
@@ -510,6 +512,23 @@
                 "section"
               ],
               "default": "auto"
+            },
+            "radius": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 24
+            },
+            "borderWidth": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 3
+            },
+            "shadow": {
+              "enum": [
+                "none",
+                "soft",
+                "raised"
+              ]
             }
           }
         }

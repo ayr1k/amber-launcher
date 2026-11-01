@@ -1,14 +1,14 @@
 # AmberE
 
-1.2.0 brings a customizable home, play calendar, official Minecraft news, storage analysis and practical tools. Appearance settings expand as needed and themes apply directly. Home fits normal-size windows with independently scrolling sections. Existing 1.1.x themes remain supported.
+1.2.1 refines theme editing and export with a minimal play calendar, independent home panels, recoverable appearance drafts and saved local themes. Preview and download Alloy and Nocturne in the official theme store. Existing 1.1.x and 1.2.0 themes remain supported.
 
 [简体中文](docs/zh-CN/README.md) · [Releases](https://github.com/ayr1k/AmberE/releases) · [User guide](docs/USER-GUIDE.md)
 
 AmberE is an independent Windows distribution for Minecraft: Java Edition, providing offline and third-party accounts. It is maintained from the shared AMBER codebase under MPL-2.0, with its own application identity, data directory and update repository. It does not offer Microsoft sign-in or include a Microsoft application Client ID.
 
-## 1.2.0
+## 1.2.1
 
-Stable release for Windows x64. [Download the installer, source and checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.2.0). Includes instance management, content recommendations, mod updates, backups and recovery.
+Stable release for Windows x64. [Download the installer, source and checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.2.1). Includes instance management, content recommendations, mod updates, backups and recovery.
 
 - Offline identities and HTTPS third-party authentication, with Windows user encryption for saved credentials.
 - Isolated game instances; Java and loader installation; mod search, dependencies, updates and bulk management.
@@ -28,6 +28,6 @@ Offline and third-party identities do not grant Minecraft ownership or official 
 
 [Rollback guide](docs/ROLLBACK.md) / [回滚说明](docs/zh-CN/ROLLBACK.md)
 
-[Appearance & theme help](docs/THEMES.md) · [Package format reference](docs/AMBTHEME-FORMAT.md) · [Importable starter theme](docs/AMBER-Theme-Starter.ambtheme) · [Themes on the website](https://ayr1k.github.io/#/themes)
+[Official theme store](https://ayr1k.github.io/#/themes) · [Theme help](docs/THEMES.md) · [Theme format](docs/AMBTHEME-FORMAT.md)
 
-[AMBER Alloy theme (1.2.0+)](docs/AMBER-Alloy-1.2.0.ambtheme) — graphite, forest green and amber triangles; a separate download, not preinstalled.
+Alloy and Nocturne are free official themes for AMBER and AmberE 1.2.1, available separately and not preinstalled.

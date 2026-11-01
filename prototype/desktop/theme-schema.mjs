@@ -5,6 +5,12 @@ export const themeModules=['launch','shortcuts','activity','details','instances'
 export const appearanceDefaults={enabled:false,name:'AMBER Classic',author:'',source:'',license:'',mode:'system',accent:'#245b48',background:'#f8faf7',surface:'#ffffff',text:'#193b30',muted:'#596e64',line:'#cbd6ce',radius:0,borderWidth:1,controlHeight:44,rowHeight:58,iconSize:36,fontFamily:'Sarasa UI',fontSize:14,fontOffset:0,scale:100,menuStyle:'filled',listStyle:'lines',navLabels:true,panelOpacity:100,windowOpacity:100,backgroundAsset:null,heroAsset:null,artworkAsset:null,backgroundFit:'cover',backgroundPosition:50,overlay:20,blur:0,motion:'standard',homeOverflow:'sections',composition:null,canvas:null};
 export const appearanceKeys=Object.keys(appearanceDefaults);
 export const assetId=/^[a-f0-9]{64}\.png$/;
+export function themeMetadataErrors(value){
+ const errors={};for(const k of ['name','author','source','license']){
+  const text=value?.[k];if(typeof text!=='string'||text.length>(k==='name'?100:300)||/[\x00-\x1f\u202a-\u202e\u2066-\u2069]/.test(text))errors[k]='主题信息格式无效。';
+ }
+ if(typeof value?.name==='string'&&!value.name.trim())errors.name='请填写主题名称。';return errors;
+}
 export function validateCanvas(input){
  if(input==null)return null;let count=0;const ids=new Set(),modules=new Set();
  function visit(n,depth){if(!n||typeof n!=='object'||Array.isArray(n)||++count>32||depth>5||typeof n.id!=='string'||!/^[-a-zA-Z0-9]{1,60}$/.test(n.id)||ids.has(n.id))throw Error('Invalid layout tree / 布局结构无效');ids.add(n.id);
