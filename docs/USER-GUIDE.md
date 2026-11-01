@@ -63,4 +63,14 @@ Diagnostics export writes the exact last preview, without automatically attachin
 
 ## Appearance and themes
 
-Use Settings → Appearance & themes to edit colors, controls, backgrounds and home layouts. Import portable `.ambtheme` files from Theme library in either AMBER or AmberE. Preview and try before keeping; an unconfirmed trial reverts after 30 seconds. Ctrl+Shift+F12 restores classic. See [theme help](THEMES.md) and [format reference](AMBTHEME-FORMAT.md).
+Use Settings → Appearance & themes to edit colors, controls, backgrounds and home layouts. Import portable `.ambtheme` files from Theme library in either AMBER or AmberE. Apply a theme directly from the library. First application and major usability changes require confirmation within 30 seconds; otherwise the previous appearance is restored. Preview and editing remain optional. Ctrl+Shift+F12 restores classic. See [theme help](THEMES.md) and [format reference](AMBTHEME-FORMAT.md).
+
+## Personal home and tools (1.2.0)
+
+Use Edit home in the title bar to arrange modules or choose Simple, Daily or Information presets. Normal-size windows prefer one screen, with independently scrolling launch, calendar and news sections. Smaller or zoomed windows fall back to page scrolling. More settings → Layout offers the scrolling preference; Advanced editing exposes columns, tabs and section-level scrolling.
+
+The calendar shows locally observed runtime, which may include idle time; it is not active-play measurement. Select a date for records or expand the explanation for counting details. Disable, export or clear history without inventing durations for old launches. News refresh is manual by default, with categories, optional automatic refresh and offline caches. News and release notes never block game launching.
+
+Tools provides Java inspection, log shortcuts and local PNG screenshot browsing. Filter screenshots by instance/date, preview, copy or show them in their folder; no image is uploaded. Storage and maintenance scans disk usage on demand, supports cancellation and retains confirmation and active-data protections for cleanup.
+
+Appearance & themes starts with Basics; reveal More settings or Advanced editing as needed. Apply themes directly from the library, with optional preview/edit. Download and import the new Alloy separately; see [theme help](THEMES.md).

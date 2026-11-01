@@ -1,14 +1,14 @@
 # AMBER
 
-1.1.2 improves themed layouts, scrolling and control alignment, and adds adjustable vertical text offset. Existing 1.1.0 and 1.1.1 themes remain supported. See the [theme guide](docs/THEMES.md).
+1.2.0 brings a customizable home, play calendar, official Minecraft news, storage analysis and practical tools. Appearance settings expand as needed and themes apply directly. Home fits normal-size windows with independently scrolling sections. Existing 1.1.x themes remain supported.
 
 [简体中文](docs/zh-CN/README.md) · [Releases](https://github.com/ayr1k/amber-launcher/releases) · [User guide](docs/USER-GUIDE.md)
 
 AMBER is an independent Windows launcher for Minecraft: Java Edition. It keeps game instances separate and brings installation, mod management, recovery and launch settings into one workspace. Project-owned source is licensed under MPL-2.0.
 
-## 1.1.2
+## 1.2.0
 
-Stable release for Windows x64. [Download the installer, source and checksums](https://github.com/ayr1k/amber-launcher/releases/tag/v1.1.2). Includes instance management, content recommendations, mod updates, backups and recovery.
+Stable release for Windows x64. [Download the installer, source and checksums](https://github.com/ayr1k/amber-launcher/releases/tag/v1.2.0). Includes instance management, content recommendations, mod updates, backups and recovery.
 
 - Integrated title bar, independent window corners, remembered window placement and reorganized privacy settings.
 
@@ -56,4 +56,4 @@ Each project uses separate data and update channels.
 
 [Appearance & theme help](docs/THEMES.md) · [Package format reference](docs/AMBTHEME-FORMAT.md) · [Importable starter theme](docs/AMBER-Theme-Starter.ambtheme) · [Themes on the website](https://ayr1k.github.io/#/themes)
 
-[AMBER Alloy theme (1.1.2+)](docs/AMBER-Alloy-1.1.2.ambtheme) — graphite, forest green and amber triangles; a separate download, not preinstalled.
+[AMBER Alloy theme (1.2.0+)](docs/AMBER-Alloy-1.2.0.ambtheme) — graphite, forest green and amber triangles; a separate download, not preinstalled.

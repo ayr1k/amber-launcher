@@ -2,9 +2,13 @@
 
 [简体中文](zh-CN/THEMES.md)
 
-AMBER and AmberE 1.1.2 use the same local `.ambtheme` format. Open Settings → Appearance & themes. Existing settings remain active until you choose to change them. Color, control, background and layout edits remain in a draft; use Undo/Redo or compare with the active appearance. Export the draft to keep a personal copy before leaving the editor.
+AMBER and AmberE 1.2.0 share the local `.ambtheme` format and continue to read 1.1.0–1.1.2 themes. Settings → Appearance & themes starts with Basics. Enable More settings or Advanced editing when needed; collapsing controls never deletes their values.
 
-Use Theme library → Import, inspect the author's metadata, select a scope and load the draft. Try applies it for 30 seconds. Keep confirms; otherwise the previous appearance returns. An interrupted trial is restored at the next launch. Restore previous and Restore classic are available in the editor. Ctrl+Shift+F12 restores classic independently of the theme. Restoration does not affect instances or accounts. Window corners take effect after restarting; whole-window opacity also fades text. Windows 11 supports system window corners; other systems may use square corners.
+In Theme library, click Apply directly. First-time themes and major usability-affecting edits require confirmation within 30 seconds or automatically revert. An unchanged, previously confirmed appearance applies without another confirmation. Preview & edit only loads a draft; Apply changes affects the actual interface. Discard drafts or restore the previous/classic appearance.
+
+After import, apply immediately or add to the library only. Partial import and export metadata are expandable. Ctrl+Shift+F12 independently restores classic without touching accounts or instances. Window corners require restarting; whole-window opacity also fades text.
+
+Edit home offers module visibility, order and presets; Advanced editing retains fine column controls. New modules are `calendar`, `news`, `storage` and `tools`. Upgrading never automatically replaces a home layout. Calendar records, news refresh and tool favorites are local preferences and are not exported with a theme.
 
 ## Creating a package
 
@@ -36,7 +40,7 @@ Layout controls are consolidated in Appearance & themes → Layout. Classic home
 
 [Field and packaging reference](AMBTHEME-FORMAT.md) · [Importable starter](AMBER-Theme-Starter.ambtheme) · [Example JSON](theme-example.json)
 
-The starter is a separate educational download, not bundled in the app. Releases also include `AMBTHEME-Guide-1.1.2.zip` with bilingual help, the field reference, JSON Schema and an example package.
+The starter is a separate educational download, not bundled in the app. Releases also include `AMBTHEME-Guide-1.2.0.zip` with bilingual help, the field reference, JSON Schema and an example package.
 
 ## Fine-grained composition in 1.1.1
 
@@ -44,11 +48,13 @@ Appearance & themes → Layout lets you arrange a vertical launch area, tune hea
 
 Existing 1.1.0 packages import without conversion. New composition or node styles require `composition-v1`; old clients reject that capability instead of silently misrendering. The basic starter remains a 1.1.0-compatible example.
 
-[Download AMBER Alloy](AMBER-Alloy-1.1.2.ambtheme) for either edition 1.1.2 or later. Import the whole theme, load its draft, try it and keep within 30 seconds. It uses real instances and recent launches; an empty library stays empty. Themes are separate downloads, never automatically installed.
+[Download AMBER Alloy](AMBER-Alloy-1.2.0.ambtheme) for either edition 1.2.0 or later. Import the whole theme and choose Apply; confirm that it displays correctly when requested. It uses real instances and recent launches; an empty library stays empty. Themes are separate downloads, never automatically installed.
 
 ## Vertical text offset (1.1.2)
 
 In Appearance & themes → Controls & type, adjust vertical text offset from −3 to +3 px in 0.5 px steps. Negative moves up, positive moves down; the default is 0. It adjusts button, menu and single-line field text without moving icons, borders or hit areas, or reflowing body paragraphs. Preview, reset, undo/redo and trial confirmation remain available. Theme exports retain the offset; older themes without this field use 0.
 
-Alloy 1.1.2 uses a 1.5 px downward correction and retains its original artwork. Existing Alloy users can also set 1.5 px manually and confirm the appearance trial. Revisit this setting after changing fonts.
+Alloy 1.1.2 uses a 1.5 px downward correction and retains its original artwork. Existing Alloy users can also set 1.5 px manually and apply the appearance changes. Revisit this setting after changing fonts.
 
+
+The updated Alloy home uses fixed left/right sections: launch and utility tabs on the left, calendar and news on the right. Long content scrolls within its section. Edit home is in the title bar; calendar explanations are collapsed by default. Smaller windows fall back to page scrolling.

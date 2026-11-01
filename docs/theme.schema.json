@@ -279,6 +279,10 @@
                 "classic",
                 "compact"
               ]
+            },
+            "sidebarAbout": {
+              "type": "boolean",
+              "description": "Optional independent About visibility; omitted values inherit sidebarExtras."
             }
           }
         },
@@ -288,6 +292,14 @@
           "maximum": 3,
           "default": 0,
           "description": "Vertical control-text offset in CSS pixels; positive moves down. Available since 1.1.2."
+        },
+        "homeOverflow": {
+          "type": "string",
+          "enum": [
+            "sections",
+            "page"
+          ],
+          "default": "sections"
         }
       },
       "additionalProperties": true
@@ -398,7 +410,11 @@
             "instances",
             "favorites",
             "recent",
-            "artwork"
+            "artwork",
+            "calendar",
+            "news",
+            "storage",
+            "tools"
           ]
         },
         "direction": {
@@ -486,6 +502,14 @@
             },
             "viewport": {
               "type": "boolean"
+            },
+            "scroll": {
+              "type": "string",
+              "enum": [
+                "auto",
+                "section"
+              ],
+              "default": "auto"
             }
           }
         }

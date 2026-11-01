@@ -1,0 +1,117 @@
+/* SPDX-License-Identifier: MPL-2.0 */
+
+.home-module{min-width:0;padding:20px 0;color:var(--text)}
+.home-module-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.home-module-head h2{display:flex;align-items:center;gap:10px;font-size:1.15em;margin:0}
+.home-module-head svg{flex-shrink:0}.home-module p{line-height:1.65;margin:12px 0}
+.home-module small,.home-module .muted{color:var(--muted)}
+.home-module details{border-top:1px solid var(--line);padding-top:12px;margin-top:16px}.home-module summary{cursor:pointer;min-height:32px}
+.calendar-controls{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.calendar-controls .icon-button{display:flex;align-items:center;justify-content:center;width:36px;height:36px;padding:8px}.calendar-controls svg{width:18px;height:18px}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin-top:16px}.calendar-grid>small{text-align:center;padding:4px 0}
+.calendar-grid>button{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:32px;aspect-ratio:1.15;padding:3px;border:1px solid transparent;border-radius:var(--theme-radius,4px);background:transparent;color:var(--text);font-size:.9em}
+.calendar-grid>button[data-level="1"]{background:color-mix(in srgb,var(--accent,var(--green)) 12%,transparent)}
+.calendar-grid>button[data-level="2"]{background:color-mix(in srgb,var(--accent,var(--green)) 24%,transparent)}
+.calendar-grid>button[data-level="3"]{background:color-mix(in srgb,var(--accent,var(--green)) 38%,transparent)}
+.calendar-grid>button[data-level="4"]{background:color-mix(in srgb,var(--accent,var(--green)) 55%,transparent)}
+.calendar-grid>button[aria-pressed="true"]{outline:2px solid var(--accent,var(--green));outline-offset:-2px}.calendar-grid>button:hover{border-color:var(--accent,var(--green))}
+.calendar-unknown{position:absolute;bottom:0;right:4px;font-weight:700}.calendar-legend{font-size:.78em;color:var(--muted)}
+.calendar-day{border-top:1px solid var(--line);padding-top:12px}.calendar-run{display:flex;gap:12px;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.calendar-run>span{min-width:0;overflow-wrap:anywhere}.calendar-run small{display:block;margin-top:5px}.calendar-run>span:last-child{flex-shrink:0;font-size:.85em}
+.news-items{margin-top:12px}.news-item{display:flex;align-items:center;gap:16px;text-align:left;width:100%;padding:14px 0;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--text);border-radius:0}
+.news-item:hover{background:color-mix(in srgb,var(--accent,var(--green)) 8%,transparent)}.news-item img{width:110px;aspect-ratio:16/9;object-fit:cover;flex-shrink:0;border-radius:var(--theme-radius,4px)}
+.news-item>span{display:grid;gap:8px;min-width:0}.news-item strong{font-weight:600;line-height:1.5}.news-item small{font-size:.8em}
+.quick-tool-list,.theme-access,.module-add-list{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.theme-access{padding:16px 0}.theme-access label{margin:0}
+.theme-studio-body:has(>.theme-preview-side:not([open])){grid-template-columns:1fr}.theme-preview-side:not([open]){padding:12px 0;border:0;background:transparent}
+.theme-preview-side>summary{cursor:pointer;margin-bottom:16px}.theme-fields>details{padding:16px 0}.theme-fields>details>summary{cursor:pointer;margin-bottom:16px}
+.appearance-search-results{display:flex;flex-wrap:wrap;gap:8px;padding:12px 0}.simple-home-editor{padding:0 0 24px;border-bottom:1px solid var(--line);margin-bottom:24px}
+.simple-module-row{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding:8px 0;gap:12px}.simple-module-row label{margin:0}.simple-module-row .text-button{min-width:36px;min-height:36px}
+.module-add-list{margin-top:16px}.simple-home-editor>.inline-actions{margin-bottom:12px}.tools-page{max-width:1180px;margin:auto}.tools-page>.theme-check{margin:20px 0}
+.tool-java{display:grid;gap:10px;padding:20px 0;border-bottom:1px solid var(--line)}.tool-java code{overflow-wrap:anywhere;user-select:text}
+.screenshot-filters{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,300px);align-items:end;gap:20px;margin:24px 0}
+.tools-page .screenshot-filters>label{display:flex;flex-direction:column;align-items:stretch;gap:8px;min-width:0;margin:0;line-height:1.5}
+.screenshot-filters :is(input,.amber-select){display:block;min-width:0;width:100%;box-sizing:border-box;margin:0}
+.screenshot-filters :is(input,.select-trigger){height:var(--theme-control,44px);min-height:var(--theme-control,44px)}
+.screenshot-browser{display:grid;grid-template-columns:minmax(220px,1fr) minmax(0,2fr);gap:24px;margin-top:24px}.screenshot-list{max-height:65vh;overflow:auto;scrollbar-gutter:stable}
+.screenshot-list>button{display:grid;text-align:left;gap:8px;width:100%;padding:12px 8px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}.screenshot-browser figure{margin:0;min-width:0}
+.screenshot-browser figure>img{width:100%;max-height:60vh;object-fit:contain;background:color-mix(in srgb,var(--surface) 75%,transparent)}.screenshot-browser figcaption{padding:12px 0;overflow-wrap:anywhere}
+.storage-total{font-size:2rem;margin:24px 0 12px;font-weight:650}.storage-bar{display:flex;height:18px;gap:3px;margin-bottom:24px;overflow:hidden;border-radius:5px}.storage-bar>span{background:var(--accent,var(--green));opacity:var(--shade,.7);min-width:2px}
+.maintenance-rows>div{display:grid;grid-template-columns:minmax(180px,1fr) minmax(160px,1fr) auto;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--line)}.maintenance-rows small{display:block;margin-top:6px;color:var(--muted)}
+.storage-instances{margin-top:28px}.storage-instances>details{border-bottom:1px solid var(--line);padding:16px 0}.storage-instances summary{display:flex;align-items:center;gap:12px;cursor:pointer;min-height:32px}.storage-instances summary strong{flex:1}
+.storage-parts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 24px;padding:20px 0}.storage-parts>div{display:flex;justify-content:space-between;gap:16px}.storage-actions{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}
+.sidebar nav{min-height:0;overflow-y:auto;flex-shrink:1}
+@media(max-width:900px){.theme-studio-body{grid-template-columns:1fr!important}.screenshot-filters,.screenshot-browser{grid-template-columns:1fr}.screenshot-list{max-height:260px}.maintenance-rows>div{grid-template-columns:1fr auto}.maintenance-rows>div>button{grid-column:1/-1;justify-self:start}}
+@media(max-width:600px){.news-item img{width:80px}.storage-parts{grid-template-columns:1fr}.theme-access{align-items:flex-start;flex-direction:column}}
+
+.news-detail{border-top:1px solid var(--line);padding-top:20px;margin-top:20px}.news-detail pre{font:inherit;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;max-height:60vh;overflow:auto;user-select:text}
+
+.home-layout{position:relative}
+.theme-studio-heading{align-items:center}.theme-studio-heading p{margin:4px 0}.theme-recovery-actions{position:relative;flex-shrink:0}.theme-recovery-actions>summary{cursor:pointer;padding:12px}.theme-recovery-actions[open]>.inline-actions{position:absolute;right:0;top:100%;z-index:6;padding:12px;min-width:300px;background:var(--surface);border:1px solid var(--line)}
+.theme-studio[data-edit-level=basic]>.theme-help{display:none}.theme-studio[data-edit-level=basic] .theme-studio-toolbar>.button.secondary{display:none}.theme-studio[data-edit-level=basic] .theme-studio-toolbar>.inline-actions{display:none}.theme-studio[data-edit-level=basic][data-dirty=false]>.theme-studio-toolbar{display:none}
+.theme-access{gap:24px;padding:12px 0}.theme-access .theme-check{display:flex;align-items:center;gap:10px}.appearance-search{display:grid;gap:8px;margin-bottom:16px}.appearance-search>input{width:100%}.theme-studio-tabs{margin-top:8px}
+.theme-studio[data-edit-level=basic] .theme-studio-heading{margin-bottom:12px}.theme-studio[data-edit-level=basic] .theme-fields{max-width:680px}.theme-fields .theme-range{display:grid;gap:8px}
+
+.topbar .home-edit-trigger{display:flex;align-items:center;justify-content:center;gap:8px;min-width:44px;min-height:44px;padding:8px 12px;color:inherit;flex-shrink:0;-webkit-app-region:no-drag}
+.topbar .home-edit-trigger svg{width:20px;height:20px;flex-shrink:0}
+.desktop-app[data-titlebar-color=accent] .topbar .home-edit-trigger{color:var(--theme-ink,var(--surface));background:transparent}
+.desktop-app[data-titlebar-color=accent] .topbar .home-edit-trigger:hover{background:color-mix(in srgb,currentColor 14%,transparent)}
+.desktop-app[data-titlebar-color=accent] .topbar .home-edit-trigger:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+/* A reserved, transparent lane keeps the thumb away from text without a system track. */
+.desktop-app .home-layout :is(.theme-module,.theme-container,.theme-tabbar,.news-detail pre){scrollbar-width:auto;scrollbar-color:auto}
+.desktop-app .home-layout :is(.theme-module,.theme-container,.theme-tabbar,.news-detail pre)::-webkit-scrollbar{width:8px;height:8px;background:transparent}
+.desktop-app .home-layout :is(.theme-module,.theme-container,.theme-tabbar,.news-detail pre)::-webkit-scrollbar-track{background:transparent}
+.desktop-app .home-layout :is(.theme-module,.theme-container,.theme-tabbar,.news-detail pre)::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--muted) 30%,transparent);border:2px solid transparent;background-clip:padding-box;border-radius:8px}
+.desktop-app .home-layout :is(.theme-module,.theme-container,.theme-tabbar,.news-detail pre):is(:hover,:focus-within)::-webkit-scrollbar-thumb{background-color:color-mix(in srgb,var(--muted) 65%,transparent)}
+.desktop-app .home-layout :is(.theme-module,.theme-container,.theme-tabbar,.news-detail pre)::-webkit-scrollbar-button{display:none;width:0;height:0}
+.desktop-app .home-layout :is(.theme-module,.theme-container,.theme-tabbar,.news-detail pre)::-webkit-scrollbar-corner{background:transparent}
+.desktop-app .home-layout :is(.play-calendar,.minecraft-news){max-width:520px;margin-inline:auto;box-sizing:border-box}
+@media(forced-colors:active){.desktop-app .home-layout :is(.theme-module,.theme-container,.theme-tabbar,.news-detail pre){scrollbar-color:auto;scrollbar-width:auto}.desktop-app .home-layout :is(.theme-module,.theme-container,.theme-tabbar,.news-detail pre)::-webkit-scrollbar-thumb{background:ButtonText}}
+@media(max-width:1250px){.topbar .home-edit-trigger>span{display:none}}
+/* Fit the live home to the workspace. The editor preview keeps its natural flow. */
+@media(min-width:1000px) and (min-height:640px){
+ .desktop-app[data-page=home][data-home-flow=sections] .workspace-scroll{overflow:hidden}
+ .desktop-app[data-page=home][data-home-flow=sections] .desktop-content{height:100%;min-height:0;box-sizing:border-box}
+ .desktop-app[data-page=home][data-home-flow=sections] :is(.home-layout,.home-classic-fit){display:block;height:100%;min-height:0}
+ .desktop-app[data-page=home][data-home-flow=sections] :is(.theme-container,.theme-cell,.theme-module){min-height:0;height:100%;box-sizing:border-box}
+ .desktop-app[data-page=home][data-home-flow=sections] .theme-container{overflow:hidden}
+ .desktop-app[data-page=home][data-home-flow=sections] .theme-stack{display:grid;grid-template-rows:var(--fit-rows);grid-template-columns:minmax(0,1fr)}
+ .desktop-app[data-page=home][data-home-flow=sections] .theme-columns{display:grid;grid-template-columns:minmax(0,var(--split-left,50fr)) minmax(0,var(--split-right,50fr));grid-template-rows:minmax(0,1fr)}
+ .desktop-app[data-page=home][data-home-flow=sections] .theme-cell{min-width:0;overflow:hidden}
+ .desktop-app[data-page=home][data-home-flow=sections] .theme-module{overflow:auto;scrollbar-gutter:stable;overscroll-behavior:contain;padding-inline-end:10px;scroll-padding-block:10px}
+ .desktop-app[data-page=home][data-home-flow=sections] .theme-tabs{display:flex;flex-direction:column}
+ .desktop-app[data-page=home][data-home-flow=sections] .theme-tabbar{flex-shrink:0;gap:12px;margin-bottom:8px}
+ .desktop-app[data-page=home][data-home-flow=sections] .theme-tabbar button{padding:8px 4px;min-height:40px}
+ .desktop-app[data-page=home][data-home-flow=sections] .theme-tabs>[role=tabpanel]{flex:1;min-height:0;overflow:hidden}
+ .desktop-app[data-page=home][data-home-flow=sections] .theme-container[data-section-scroll=section]{overflow:auto;scrollbar-gutter:stable;overscroll-behavior:contain}
+ .desktop-app[data-page=home][data-home-flow=sections] .theme-container[data-section-scroll=section].theme-stack{display:flex}
+ .desktop-app[data-page=home][data-home-flow=sections] .theme-container[data-section-scroll=section].theme-columns{grid-template-rows:auto;align-items:start}
+ .desktop-app[data-page=home][data-home-flow=sections] .theme-container[data-section-scroll=section].theme-tabs>[role=tabpanel]{flex:none;overflow:visible}
+ .desktop-app[data-page=home][data-home-flow=sections] .theme-container[data-section-scroll=section] :is(.theme-container,.theme-cell,.theme-module){height:auto;min-height:0;overflow:visible}
+ .desktop-app[data-page=home][data-home-flow=sections] .theme-container[data-section-scroll=section] .theme-stack{display:flex}
+ .desktop-app[data-page=home][data-home-flow=sections] .theme-container[data-section-scroll=section]>.theme-cell{flex-shrink:0}
+ .desktop-app[data-page=home][data-home-flow=sections] .home-module{padding:0}
+ .desktop-app[data-page=home][data-home-flow=sections] .home-module-head{margin-bottom:10px}
+ .desktop-app[data-page=home][data-home-flow=sections] .calendar-controls{margin-bottom:8px}
+ .desktop-app[data-page=home][data-home-flow=sections] .calendar-grid{gap:3px;margin-top:10px}
+ .desktop-app[data-page=home][data-home-flow=sections] .calendar-grid>button{aspect-ratio:auto;height:30px;min-height:30px;width:100%;max-width:36px;justify-self:center}
+ .desktop-app[data-page=home][data-home-flow=sections] .home-module :is(.select-trigger,.select-control){min-height:40px;height:40px}
+ .desktop-app[data-page=home][data-home-flow=sections] .theme-tabs .theme-home-library>h2{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+ .desktop-app[data-page=home][data-home-flow=sections] .theme-home-library>button{padding:8px 0;gap:12px;min-height:64px}
+ .desktop-app[data-page=home][data-home-flow=sections] .theme-home-library .instance-icon img{width:40px;height:40px}
+ .desktop-app[data-page=home][data-home-flow=sections] .home-module p{margin:8px 0}
+ .desktop-app[data-page=home][data-home-flow=sections] .home-module details{margin-top:10px;padding-top:8px}
+ .desktop-app[data-page=home][data-home-flow=sections] .theme-home-library h2{margin:0 0 12px}
+ .desktop-app[data-page=home][data-home-flow=sections] .launch-home-hero{min-height:0}
+ .desktop-app[data-page=home][data-home-flow=sections] .launch-section[data-launch-layout=stacked] .launch-dock{margin:0}
+ .desktop-app[data-page=home][data-home-flow=sections] .launch-section[data-launch-layout=stacked] .instance-title{font-size:clamp(28px,3.1vw,var(--composition-title,48px));gap:16px;margin:0 0 12px}
+ .desktop-app[data-page=home][data-home-flow=sections] .launch-section[data-launch-layout=stacked] .launch-identity{margin:16px 0 12px;gap:8px}
+ .desktop-app[data-page=home][data-home-flow=sections] .launch-section[data-launch-layout=stacked] .launch-action-row{gap:10px 16px}
+ .desktop-app[data-page=home][data-home-flow=sections] .launch-section[data-launch-layout=stacked] .main-launch{min-height:48px;font-size:22px}
+ .desktop-app[data-page=home][data-home-flow=sections] .launch-options{margin-top:14px}
+ .desktop-app[data-page=home][data-home-flow=sections] .with-background .launch-dock{margin:32px 16px 16px;padding:20px;width:calc(100% - 32px)}
+ .desktop-app[data-page=home][data-home-flow=sections] .theme-module:focus-visible{outline:2px solid var(--accent,var(--green));outline-offset:-2px}
+ .desktop-app[data-page=home][data-home-flow=sections] .home-classic .home-shortcuts{grid-template-columns:minmax(0,1fr)}
+ .desktop-app[data-page=home][data-home-flow=sections] .home-classic .home-shortcuts>button{padding:12px 0}
+ .desktop-app[data-page=home][data-home-flow=sections] .home-classic .home-activity .section-title{flex-wrap:wrap;justify-content:flex-start}
+ .desktop-app[data-page=home][data-home-flow=sections] .home-classic .home-activity .section-title h2{flex-basis:100%;margin-bottom:0}
+}

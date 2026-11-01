@@ -1,14 +1,14 @@
 # AMBER
 
-1.1.2 改善主题布局、滚动和控件对齐，新增字体纵向偏移，兼容 1.1.0 与 1.1.1 主题包，参见[主题指南](THEMES.md)。
+1.2.0 带来可定制首页、游玩日历、Minecraft 官方新闻、存储分析与实用工具。外观设置按需展开，主题可直接应用；正常窗口优先单页浏览，更多内容在分区内滚动。兼容已有 1.1.x 主题。
 
 [English](../../README.md) · [下载 Release](https://github.com/ayr1k/amber-launcher/releases) · [使用指南](USER-GUIDE.md)
 
 AMBER 是独立的 Windows Minecraft Java 版启动器，将实例隔离、游戏安装、模组管理、恢复和启动设置集中在同一界面。项目自有源码采用 MPL-2.0。
 
-## 1.1.2
+## 1.2.0
 
-适用于 Windows x64 的正式版。[下载安装包、源码和校验文件](https://github.com/ayr1k/amber-launcher/releases/tag/v1.1.2)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
+适用于 Windows x64 的正式版。[下载安装包、源码和校验文件](https://github.com/ayr1k/amber-launcher/releases/tag/v1.2.0)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
 
 - 一体化标题栏、独立窗口边框设置、窗口位置恢复与重新组织的隐私设置。
 
@@ -49,4 +49,4 @@ AMBER 非 Mojang 或微软官方产品。Minecraft、下载组件及第三方项
 
 [外观与主题帮助](THEMES.md) · [主题格式与字段](AMBTHEME-FORMAT.md) · [可导入的基础示例](../AMBER-Theme-Starter.ambtheme) · [官方网站主题入口](https://ayr1k.github.io/#/themes)
 
-[AMBER Alloy 主题（需要 1.1.2 或更高版本）](../AMBER-Alloy-1.1.2.ambtheme)：石墨黑、深绿与琥珀三角纹理，独立下载，不预置。
+[AMBER Alloy 主题（需要 1.2.0 或更高版本）](../AMBER-Alloy-1.2.0.ambtheme)：石墨黑、深绿与琥珀三角纹理，独立下载，不预置。

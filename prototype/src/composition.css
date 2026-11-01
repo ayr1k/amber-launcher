@@ -5,7 +5,9 @@
 .desktop-app[data-composition=true] .primary-nav svg{width:var(--composition-nav);height:var(--composition-nav)}
 .desktop-app[data-composition=true] .sidebar>.primary-nav{gap:12px;padding:28px 6px;border-bottom:0}
 .desktop-app[data-composition=true] .sidebar>.primary-nav button{min-height:60px}
-.desktop-app[data-composition=true][data-sidebar-extras=false] .sidebar>:not(.primary-nav){display:none}
+.desktop-app[data-composition=true][data-sidebar-extras=false] .sidebar>:not(.primary-nav):not(.sidebar-bottom){display:none}
+.desktop-app[data-composition=true][data-sidebar-about=false] .sidebar-bottom{display:none}
+.desktop-app[data-composition=true][data-sidebar-extras=false] .sidebar-bottom{margin-top:auto}
 .desktop-app[data-composition=true] :is(.theme-columns,.theme-stack){gap:var(--section-gap,var(--composition-gap))}
 .theme-section-surface{min-width:0;box-sizing:border-box;isolation:isolate}
 .section-border-left{border-left:1px solid var(--line)}.section-border-top{border-top:1px solid var(--line)}

@@ -2,13 +2,13 @@
 
 [简体中文](zh-CN/AMBTHEME-FORMAT.md) · [Using themes](THEMES.md) · [Example JSON](theme-example.json) · [Download starter](AMBER-Theme-Starter.ambtheme)
 
-For AMBER and AmberE 1.1.0–1.1.2. Both products read the same format; a theme cannot change the product, account rules, update repository or game data. The separate starter demonstrates colors, rounded controls and a two-column home. It is not preinstalled. This document and the starter are licensed under MPL-2.0.
+For AMBER and AmberE 1.1.0–1.2.0. Both products read the same format; a theme cannot change the product, account rules, update repository or game data. The separate starter demonstrates colors, rounded controls and a two-column home. It is not preinstalled. This document and the starter are licensed under MPL-2.0.
 
 ## Import, edit and recover
 
 1. Download `AMBER-Theme-Starter.ambtheme` from the release or website.
-2. Open Settings → Appearance & themes → Theme library → Import. Review the name, author and warnings, choose the import scope and load the draft.
-3. Edit the draft or select Try. Confirm Keep within 30 seconds; otherwise the previous appearance returns. Interrupted trials recover when the app next starts.
+2. Open Settings → Appearance & themes → Theme library → Import. Review the metadata, then Apply this theme or Add to library only. Partial import is under Advanced import options.
+3. Apply directly from the library, or choose Preview & edit and Apply changes. First-time themes and major changes ask for confirmation within 30 seconds; unconfirmed or interrupted changes revert. Previously confirmed, unchanged themes apply in one step.
 4. Export to share the draft as a new `.ambtheme` package. Review any included images before sharing.
 
 Use Restore previous or Restore classic in the editor. **Ctrl+Shift+F12** restores classic even if a theme is difficult to use. Recovery changes appearance only. Window corners require a restart; whole-window opacity fades all text too.
@@ -119,3 +119,17 @@ Each layout node may have `style`: `padding` and `paddingTop/Right/Bottom/Left` 
 All options are declarative. They cannot inject CSS or code, hide launch errors or change account policy. Narrow windows stack columns. Section styles can be reset independently; classic recovery, the 30-second confirmation and interrupted-trial recovery remain available.
 
 [AMBER Alloy — composition example](AMBER-Alloy-1.1.1.ambtheme). Open its ZIP to inspect the manifest and hashed PNG; it requires 1.1.1 and is separate from the legacy-compatible starter.
+
+## 1.2.0 home modules
+
+Schema remains `1`; no scripts or arbitrary CSS are introduced. Add `home-modules-v1` to `requiredCapabilities` when using `calendar`, `news`, `storage` or `tools`. Mark compatibility as `1.2.0`; older clients will reject this capability safely. Existing themes remain readable; home now prefers viewport fitting with scrolling inside sections.
+
+`appearance.composition.sidebarAbout` is an optional boolean, independent of `sidebarExtras` (instance shortcuts). When absent, legacy themes retain the previous coupled visibility. New Alloy sets About to true and instance shortcuts to false.
+
+News content is provided by the application, never by theme URLs. Themes do not include play history, screenshots, news caches, favorites or account information. The new [Alloy package](AMBER-Alloy-1.2.0.ambtheme) preserves the original image bytes.
+
+### Home height and scrolling
+
+Optional `appearance.homeOverflow` is `sections` (default) or `page`. Sections mode fits the home to one workspace at viewports of at least 1000 × 640 CSS pixels and scrolls module contents independently. Smaller or zoomed viewports fall back to page scrolling. Page mode always preserves document flow. Older themes that omit this field use the single-screen preference.
+
+Optional node `style.scroll` is `auto` (default, independent module scrolling) or `section` (scroll this section together). A vertical split with two children uses `ratio` to allocate height. These optional fields retain schema 1. Home scrolling is available in the layout editor; section scrolling is available in advanced editing.

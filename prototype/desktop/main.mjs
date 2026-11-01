@@ -1,3 +1,5 @@
+import {PlayJournal,NewsFeed,HomePreferences,Screenshots} from './home-services.mjs';
+import {StorageSurvey} from './maintenance.mjs';
 import {Themes} from './themes.mjs';
 import {assetId,appearanceDefaults} from './theme-schema.mjs';
 import {EDITION,IS_AMBERE,PRODUCT_NAME} from './edition.mjs';
@@ -20,7 +22,7 @@ import { ModImport } from './mod-import.mjs';
 import { BulkContent } from './bulk-content.mjs';
 import { LaunchPreferences } from './launch-preferences.mjs';
 // SPDX-License-Identifier: MPL-2.0
-import { app, Menu, screen, BrowserWindow, ipcMain, protocol, net, shell, session, dialog, safeStorage, nativeImage, clipboard } from 'electron';
+import { app, powerMonitor, Menu, screen, BrowserWindow, ipcMain, protocol, net, shell, session, dialog, safeStorage, nativeImage, clipboard } from 'electron';
 import { spawn } from 'node:child_process';
 import { beginMicrosoftLogin, copyMicrosoftCode, pendingCode, clearCopiedCode } from './login-actions.mjs';
 import { AppUpdates, backupUpgradeConfig } from './app-updates.mjs';
@@ -75,7 +77,7 @@ app.whenReady().then(async () => {
     if (!path.startsWith(assets + sep)) return new Response('Forbidden', { status: 403 });
     const response = await net.fetch(pathToFileURL(path).href);
     const headers = new Headers(response.headers);
-    headers.set('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://cdn.modrinth.com; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-src 'none'");
+    headers.set('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://cdn.modrinth.com https://launchercontent.mojang.com; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-src 'none'");
     return new Response(response.body, { status: response.status, headers });
   });
   session.defaultSession.setPermissionRequestHandler((_contents, _permission, callback) => callback(false));
@@ -168,6 +170,24 @@ app.whenReady().then(async () => {
   content.updates = modUpdates;
   const libraryState = new LibraryState(core),modImport = new ModImport(core, content, modUpdates),health = new InstanceHealth(core, content, workflows, accounts, launchPreferences, settings);
   handle('amber:copy-error', (text) => {if (typeof text !== 'string' || text.length > 100000) throw Error('错误详情过长，请手动选择文字复制。');clipboard.writeText(redact(text, accounts.secrets()));return true;});
+  const journal=new PlayJournal(core.root),news=new NewsFeed(core.root),homePrefs=new HomePreferences(core.root),screenshots=new Screenshots(core),survey=new StorageSurvey(core,app.getPath('userData'));
+  try{await journal.migrate((await libraryState.get()).history);await journal.recover();}catch{/* Preserve an unreadable journal; it must never prevent launching the application. */}
+  await survey.init().catch(()=>{});
+  let journalObservation=null;const observe=()=>{if(storageBusy||upgradeBusy)return Promise.resolve();if(journalObservation)return journalObservation;journalObservation=(async()=>{try{const processes=(await core.runtimeStatus()).processes;if(!storageBusy&&!upgradeBusy)await journal.observe(processes);}catch{}})().finally(()=>journalObservation=null);return journalObservation;};
+  core.onSessionChanged=observe;await observe();const journalTimer=setInterval(observe,30000);journalTimer.unref();
+  powerMonitor.on('suspend',()=>{if(!storageBusy)journal.suspend().catch(()=>{});});powerMonitor.on('resume',()=>{journal.resume();observe();});
+  handle('amber:journal',()=>journal.get());
+  handle('amber:journal-enable',v=>journal.enable(v));
+  handle('amber:journal-clear',async()=>{const r=await dialog.showMessageBox(window,{type:'question',message:'清除本地游玩记录？ / Clear local play history?',buttons:['取消 / Cancel','清除 / Clear'],defaultId:0,cancelId:0});return r.response===1?journal.clear():journal.get();});
+  handle('amber:journal-export',async()=>{const r=await dialog.showSaveDialog(window,{defaultPath:'play-history.json',filters:[{name:'JSON',extensions:['json']}]});if(r.canceled)return false;await writeFile(r.filePath,JSON.stringify(await journal.get(),null,2));return true;});
+  handle('amber:news',()=>news.get());handle('amber:news-refresh',()=>news.refresh());handle('amber:news-cancel',()=>news.cancel());
+  handle('amber:news-open',async id=>shell.openExternal(await news.link(id)));handle('amber:news-detail',id=>news.detail(id));
+  handle('amber:home-prefs',()=>homePrefs.get());handle('amber:home-prefs-save',v=>homePrefs.save(v));
+  handle('amber:survey',()=>survey.get());handle('amber:survey-start',()=>survey.start());handle('amber:survey-cancel',()=>survey.cancel());
+  handle('amber:screenshots',id=>screenshots.list(id));
+  handle('amber:screenshot-read',async token=>(await screenshots.read(token)).bytes.toString('base64'));
+  handle('amber:screenshot-copy',async token=>{const image=nativeImage.createFromBuffer((await screenshots.read(token)).bytes);if(image.isEmpty())throw Error('Image unavailable');clipboard.writeImage(image);return true;});
+  handle('amber:screenshot-folder',async token=>shell.showItemInFolder((await screenshots.read(token)).path));
   handle('amber:library-state', () => libraryState.get());
   handle('amber:library-favorite', (id, value) => libraryState.favorite(id, value));
   handle('amber:library-sort', (value) => libraryState.sort(value));
@@ -208,7 +228,7 @@ app.whenReady().then(async () => {
   handle('amber:storage-info', async () => {const r = await storage.get(),disk = await statfs(core.root);return { path: core.root, freeBytes: disk.bavail * disk.bsize, onboarded: r.onboarded || !smoke && (await core.listInstances()).length > 0 };});
   handle('amber:onboarding-complete', () => storage.complete());
   handle('amber:storage-pick', async () => {const r = await dialog.showOpenDialog(window, { title: translateMessage('选择新的空数据文件夹'), properties: ['openDirectory', 'createDirectory'] });if (r.canceled) return null;const token = randomUUID();selections.set(token, { kind: 'storage', value: r.filePaths[0] });return { token, path: r.filePaths[0] };});
-  handle('amber:storage-move', async (token) => {const target = selection(token, 'storage');if (!target) throw Error('请先选择目标目录');return workflows.exclusive(async () => {for (const item of await core.listInstances()) await core.requireStopped(await core.instancePath(item.id));storageBusy = true;core.operation = { title: '复制并校验数据目录', state: 'running' };try {await storage.migrate(core, target);app.relaunch();app.exit(0);return true;} catch (e) {storageBusy = false;throw e;} finally {core.operation = null;}});});
+  handle('amber:storage-move', async (token) => {const target = selection(token, 'storage');if (!target) throw Error('请先选择目标目录');return workflows.exclusive(async () => {for (const item of await core.listInstances()) await core.requireStopped(await core.instancePath(item.id));storageBusy = true;core.operation = { title: '复制并校验数据目录', state: 'running' };try {news.cancel();survey.cancel();await Promise.allSettled([journalObservation,journal.queue,homePrefs.queue,news.pending,survey.done,...news.details.values()].filter(Boolean));await storage.migrate(core, target);app.relaunch();app.exit(0);return true;} catch (e) {storageBusy = false;throw e;} finally {core.operation = null;}});});
   handle('amber:instance-icon', (id, icon) => management.setIcon(id, icon));
   handle('amber:instance-rename', (id, name) => management.rename(id, name));
   handle('amber:instance-remove', (id) => management.remove(id));
@@ -231,6 +251,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   handle('amber:themes-list',()=>themes.list());
   handle('amber:theme-state',()=>themes.state());
   handle('amber:theme-trial',v=>themes.trial(v));
+  handle('amber:theme-apply',v=>themes.apply(v));handle('amber:theme-apply-entry',id=>themes.applyEntry(id));
   handle('amber:theme-confirm',id=>themes.confirm(id));
   handle('amber:theme-revert',()=>themes.revert());
   handle('amber:theme-restore',()=>themes.restore());
@@ -293,7 +314,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   handle('amber:ms-cancel', () => {clearCopiedCode(accounts);return accounts.cancelMicrosoft();});
   handle('amber:ms-open', () => shell.openExternal(pendingCode(accounts).url));
   let launching = false;
-  handle('amber:launch', async (id, options) => {if (launching) throw Error('正在准备启动。');launching = true;try {core.workflowGuard?.();if((await core.runtimeStatus()).processes.some(p=>p.instanceId===id&&p.state==='running'))throw Error('此实例已经在运行。');if (core.jobs.some((j) => j.state === 'running')) throw Error('请等待安装或更新结束后启动游戏。');await recoverModUpdate(await core.instancePath(id));if ((await workflows.pending()).some((p) => p.instanceId === id)) throw Error('实例安装尚未完成，请先在任务中心继续安装。');await content.validateLaunch(id);const launchPrefs = await launchPreferences.get(id);options = { ...options, accountId: launchPrefs.accountId ?? options.accountId, memory: launchPrefs.memory ?? options.memory };const identity = await accounts.authorizeLaunch(options.accountId,options.username);const extraJvm = identity?.server ? [`-javaagent:${await authAgent(core.root)}=${identity.server}`] : [];const run = await core.launch(id, { username: options.username, memory: options.memory, identity, extraJvm });await libraryState.launched(id, run).catch(() => {});return run;} finally {launching = false;}});
+  handle('amber:launch', async (id, options) => {if (launching) throw Error('正在准备启动。');launching = true;try {core.workflowGuard?.();if((await core.runtimeStatus()).processes.some(p=>p.instanceId===id&&p.state==='running'))throw Error('此实例已经在运行。');if (core.jobs.some((j) => j.state === 'running')) throw Error('请等待安装或更新结束后启动游戏。');await recoverModUpdate(await core.instancePath(id));if ((await workflows.pending()).some((p) => p.instanceId === id)) throw Error('实例安装尚未完成，请先在任务中心继续安装。');await content.validateLaunch(id);const launchPrefs = await launchPreferences.get(id);options = { ...options, accountId: launchPrefs.accountId ?? options.accountId, memory: launchPrefs.memory ?? options.memory };const identity = await accounts.authorizeLaunch(options.accountId,options.username);const extraJvm = identity?.server ? [`-javaagent:${await authAgent(core.root)}=${identity.server}`] : [];const run = await core.launch(id, { username: options.username, memory: options.memory, identity, extraJvm });await libraryState.launched(id, run).catch(() => {});await observe();return run;} finally {launching = false;}});
   handle('amber:open-instance', async (id) => {const error = await shell.openPath(await core.instancePath(id));if (error) throw new Error(error);});
   const placement=new WindowStateStore(app.getPath('userData'));
   let initialCorners='system',placementTimer,placementMaximized=false;

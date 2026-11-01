@@ -8554,5 +8554,557 @@
   "theme112.fontOffset.2": {
     "zh": "负值向上，正值向下。微调按钮、菜单和单行输入框中的文字，不移动边框或图标。",
     "en": "Negative moves up; positive moves down. Adjusts text in buttons, menus and single-line fields without moving borders or icons."
+  },
+  "maae1cb0bd00e": {
+    "zh": "}</p></div><dl className=\"detail-list\"><div><dt>来源</dt><dd>{detail.source}</dd></div><div><dt>示例版本</dt><dd className=\"mono\">{detail.version}</dd></div><div><dt>必需依赖</dt><dd>{detail.dependencies?.join(",
+    "en": ") || "
+  },
+  "m4840b64f60ae": {
+    "zh": "显示侧栏实例",
+    "en": "Show sidebar instances"
+  },
+  "ma86b5e61e87b": {
+    "zh": "显示关于入口",
+    "en": "Show About"
+  },
+  "mda21b765b36d": {
+    "zh": "实用工具",
+    "en": "Tools"
+  },
+  "m8a3095d8d974": {
+    "zh": "显示需要的内容，调整顺序；精细分栏可在高级编辑中设置。",
+    "en": "Show what you need and change the order. Fine-tune columns in Advanced editing."
+  },
+  "mbf39821a5db2": {
+    "zh": "简洁启动",
+    "en": "Simple"
+  },
+  "ma64681887dcb": {
+    "zh": "日常首页",
+    "en": "Daily"
+  },
+  "m83b8a0694092": {
+    "zh": "信息首页",
+    "en": "Information"
+  },
+  "m3b6fefc50feb": {
+    "zh": "小时",
+    "en": "h"
+  },
+  "mbd957bc497aa": {
+    "zh": "分钟",
+    "en": "m"
+  },
+  "m459258cb728d": {
+    "zh": "游玩日历",
+    "en": "Play calendar"
+  },
+  "mf9e727223456": {
+    "zh": "上个月",
+    "en": "Previous month"
+  },
+  "m3e0b634699d4": {
+    "zh": "下个月",
+    "en": "Next month"
+  },
+  "m3e1c8331dc57": {
+    "zh": "日历实例筛选",
+    "en": "Calendar instance filter"
+  },
+  "m4677587b77d2": {
+    "zh": "全部实例",
+    "en": "All instances"
+  },
+  "m6277ec3b0403": {
+    "zh": "浅 → 深：少于15分钟 / 15分钟 / 1小时 / 2小时以上；圆点表示记录不完整。",
+    "en": "Light → dark: under 15 min / 15 min / 1 h / 2 h or more. A dot marks incomplete records."
+  },
+  "m87bf29883524": {
+    "zh": "本月记录",
+    "en": "This month"
+  },
+  "m49da61ceeea2": {
+    "zh": "天",
+    "en": "days"
+  },
+  "m99804129cbe8": {
+    "zh": "当天没有游玩记录。",
+    "en": "No play records for this day."
+  },
+  "md0298d6e9246": {
+    "zh": "已移除的实例",
+    "en": "Removed instance"
+  },
+  "mc04d7672835a": {
+    "zh": "历史启动记录",
+    "en": "Historical launch"
+  },
+  "mf0b3297cc30d": {
+    "zh": "结束时间未知",
+    "en": "End time unknown"
+  },
+  "mfb57f1da2667": {
+    "zh": "仅统计可确认的运行时间，可能包含挂机；休眠和无法观测的时段不计入。",
+    "en": "Counts observed runtime, including possible idle time; sleep and unobserved intervals are excluded."
+  },
+  "m013243b36bf5": {
+    "zh": "记录与显示设置",
+    "en": "Recording and display"
+  },
+  "mf1314d7c6cb3": {
+    "zh": "记录本地运行时间",
+    "en": "Record runtime locally"
+  },
+  "m1e0259f31dad": {
+    "zh": "紧凑日历",
+    "en": "Compact calendar"
+  },
+  "mb4fbe589c50e": {
+    "zh": "导出记录",
+    "en": "Export history"
+  },
+  "mf2675833dba9": {
+    "zh": "清除记录…",
+    "en": "Clear history…"
+  },
+  "m78d6b8d055b4": {
+    "zh": "记录已关闭，已有记录保留。",
+    "en": "Recording is off; existing history is retained."
+  },
+  "m94c8c19eaea2": {
+    "zh": "Minecraft 新闻",
+    "en": "Minecraft news"
+  },
+  "m71659de804df": {
+    "zh": "正在刷新…",
+    "en": "Refreshing…"
+  },
+  "maee887434131": {
+    "zh": "刷新",
+    "en": "Refresh"
+  },
+  "m4952c84bebce": {
+    "zh": "新闻分类",
+    "en": "News category"
+  },
+  "mea6d06b02e43": {
+    "zh": "Java 更新",
+    "en": "Java releases"
+  },
+  "m425f5201e292": {
+    "zh": "综合资讯",
+    "en": "General news"
+  },
+  "m5ceaa91b1ad2": {
+    "zh": "阅读更新说明",
+    "en": "Read notes"
+  },
+  "m60a33e111c9c": {
+    "zh": "暂无新闻。可点击刷新获取官方内容。",
+    "en": "No news yet. Refresh to load official content."
+  },
+  "m16ff106bedea": {
+    "zh": "最后检查：",
+    "en": "Last checked: "
+  },
+  "m79a549e28c34": {
+    "zh": "新闻尚未刷新",
+    "en": "News has not been refreshed"
+  },
+  "ma05728336148": {
+    "zh": "显示此模块时自动刷新",
+    "en": "Refresh automatically while this module is visible"
+  },
+  "mdcd9739ad94c": {
+    "zh": "官方更新说明",
+    "en": "Official release notes"
+  },
+  "m8cacd711895a": {
+    "zh": "收起正文",
+    "en": "Close article"
+  },
+  "m49544cfcfc60": {
+    "zh": "部分新闻来源暂不可用，显示已有缓存。",
+    "en": "Some sources are unavailable. Showing cached items."
+  },
+  "m01bbda9859b3": {
+    "zh": "存储摘要",
+    "en": "Storage summary"
+  },
+  "mcf1dde08d26a": {
+    "zh": "尚未扫描存储占用。",
+    "en": "Storage has not been scanned."
+  },
+  "m9bb4342cf93d": {
+    "zh": "分析存储与维护 →",
+    "en": "Storage analysis and maintenance →"
+  },
+  "m61b29812bd43": {
+    "zh": "快捷工具",
+    "en": "Quick tools"
+  },
+  "m01b0eee4a0e2": {
+    "zh": "全部工具",
+    "en": "All tools"
+  },
+  "m19789c81d595": {
+    "zh": "Java 与环境",
+    "en": "Java & environment"
+  },
+  "m22652d64f4c9": {
+    "zh": "日志与诊断",
+    "en": "Logs & diagnostics"
+  },
+  "m7496f4ea2801": {
+    "zh": "截图浏览器",
+    "en": "Screenshots"
+  },
+  "m9559611b5d14": {
+    "zh": "加入首页快捷工具",
+    "en": "Add to home shortcuts"
+  },
+  "m9b208565dc6c": {
+    "zh": "检测本机 Java，查看实例使用关系。更改实例 Java 请进入启动设置。",
+    "en": "Inspect local Java and instance usage. Change an instance runtime in Launch settings."
+  },
+  "m2e72870bcbff": {
+    "zh": "检测 Java",
+    "en": "Detect Java"
+  },
+  "mfcbacffec438": {
+    "zh": "架构未知",
+    "en": "Architecture unknown"
+  },
+  "m2e48594516de": {
+    "zh": "无已配置的实例引用",
+    "en": "No configured instance references"
+  },
+  "mcc1715fa1f1c": {
+    "zh": "选择当前实例后，进入日志和现有的异常解决入口。",
+    "en": "Select an instance, then open its logs and recovery actions."
+  },
+  "m33b264a3a406": {
+    "zh": "打开当前实例日志",
+    "en": "Open current instance logs"
+  },
+  "mf18e2361402f": {
+    "zh": "截图所属实例",
+    "en": "Screenshot instance"
+  },
+  "md97653b2c033": {
+    "zh": "选择实例",
+    "en": "Choose instance"
+  },
+  "m336509c82bf9": {
+    "zh": "截图日期（留空显示全部）",
+    "en": "Screenshot date (blank for all)"
+  },
+  "m65bddf28ce2d": {
+    "zh": "此实例没有可显示的 PNG 截图。",
+    "en": "No PNG screenshots found for this instance."
+  },
+  "m4c2b82e6b7ea": {
+    "zh": "复制图片",
+    "en": "Copy image"
+  },
+  "m064fc3c848b0": {
+    "zh": "打开所在文件夹",
+    "en": "Show in folder"
+  },
+  "m1a02fba6b19d": {
+    "zh": "编辑首页",
+    "en": "Edit home"
+  },
+  "m323d825eab5d": {
+    "zh": "取消扫描",
+    "en": "Cancel scan"
+  },
+  "mee2714fd7087": {
+    "zh": "正在统计：",
+    "en": "Scanning: "
+  },
+  "m16085dc18453": {
+    "zh": "扫描已取消，下方显示已完成的部分。",
+    "en": "Scan cancelled. Completed portions are shown below."
+  },
+  "m4f394465fec1": {
+    "zh": "已统计大小（估算）",
+    "en": "Scanned size (estimate)"
+  },
+  "m8284301049c2": {
+    "zh": "统计中",
+    "en": "Scanning"
+  },
+  "md130e6eafbc0": {
+    "zh": "按实例查看",
+    "en": "By instance"
+  },
+  "m2e32563d978c": {
+    "zh": "下列实例已包含在上方总量中，不重复相加。",
+    "en": "These instances are included in the total above."
+  },
+  "mc73a6774d91c": {
+    "zh": "存档",
+    "en": "Worlds"
+  },
+  "me50c88a4cc32": {
+    "zh": "光影包",
+    "en": "Shader packs"
+  },
+  "mc95dc99afe57": {
+    "zh": "截图",
+    "en": "Screenshots"
+  },
+  "m7dbac1c20f23": {
+    "zh": "日志",
+    "en": "Logs"
+  },
+  "m10a25e2908ed": {
+    "zh": "管理此实例 →",
+    "en": "Manage instance →"
+  },
+  "macacc0b64434": {
+    "zh": "设置保存在本机。外观可预览后应用；下载与内存默认值用于下一次操作。",
+    "en": "Settings stay on this computer. Preview and apply appearance changes; download and memory defaults apply to future actions."
+  },
+  "md49d54149ddf": {
+    "zh": "外观已应用，显示是否正常？",
+    "en": "Appearance applied. Does everything look right?"
+  },
+  "m52a668b78441": {
+    "zh": "确认更改",
+    "en": "Confirm changes"
+  },
+  "md0f332a45224": {
+    "zh": "外观已应用。可使用“恢复上个外观”撤销。",
+    "en": "Appearance applied. Restore previous to undo."
+  },
+  "m0e31b2e88039": {
+    "zh": "已载入预览，当前界面未改变。点击应用更改后生效。",
+    "en": "Loaded into preview; the current interface is unchanged. Apply changes to use it."
+  },
+  "m31fa7fd663ab": {
+    "zh": "放弃未应用的修改并切换主题？",
+    "en": "Discard unapplied changes and switch themes?"
+  },
+  "mb136c7413442": {
+    "zh": "主题已应用。可撤销切换。",
+    "en": "Theme applied. You can undo the switch."
+  },
+  "mc8a5b7cd0676": {
+    "zh": "修改先进入预览，应用后生效。首次应用主题及较大布局变化需确认，未确认会恢复。Ctrl + Shift + F12 可恢复经典。",
+    "en": "Preview edits before applying. First-time themes and major layout changes require confirmation or revert automatically. Ctrl + Shift + F12 restores classic."
+  },
+  "m741f0c0de7eb": {
+    "zh": "应用更改",
+    "en": "Apply changes"
+  },
+  "m9b7824cefa1e": {
+    "zh": "放弃修改",
+    "en": "Discard changes"
+  },
+  "m7a1604323e8b": {
+    "zh": "切换主题",
+    "en": "Switch theme"
+  },
+  "m7c84b0f621f7": {
+    "zh": "更多外观设置",
+    "en": "More appearance settings"
+  },
+  "mb6b5c1084c2e": {
+    "zh": "高级编辑",
+    "en": "Advanced editing"
+  },
+  "m4228efe07038": {
+    "zh": "查找外观设置",
+    "en": "Find appearance settings"
+  },
+  "mbffcd6c146f2": {
+    "zh": "例如：字体偏移、透明度、日历",
+    "en": "For example: text offset, opacity, calendar"
+  },
+  "mb501d7a62684": {
+    "zh": "配色 强调色 明暗",
+    "en": "Palette accent color mode"
+  },
+  "m57c0162cc0d6": {
+    "zh": "字体纵向偏移 字号 圆角 菜单 列表 导航文字",
+    "en": "Vertical text offset font size corners menu list navigation labels"
+  },
+  "m025c548fdceb": {
+    "zh": "背景 透明度 窗口 标题栏",
+    "en": "Background opacity window title bar"
+  },
+  "m795fb4eff699": {
+    "zh": "首页 日历 新闻 模块 侧栏 关于 分区",
+    "en": "Home calendar news modules sidebar About sections"
+  },
+  "mf9eaaf40c198": {
+    "zh": "基础外观",
+    "en": "Basics"
+  },
+  "m4eafa9e925b3": {
+    "zh": "自定义",
+    "en": "Custom"
+  },
+  "m866b60241158": {
+    "zh": "控件外形",
+    "en": "Control shape"
+  },
+  "mc073c0960caf": {
+    "zh": "方正",
+    "en": "Square"
+  },
+  "m86dcc6c3fac0": {
+    "zh": "圆润",
+    "en": "Rounded"
+  },
+  "m1b0d53483606": {
+    "zh": "更换背景图",
+    "en": "Change background"
+  },
+  "m581b6f06c7c4": {
+    "zh": "清除背景图",
+    "en": "Clear background"
+  },
+  "mfad4c1ad21cf": {
+    "zh": "编辑首页模块",
+    "en": "Edit home modules"
+  },
+  "m8d4f3752b6f9": {
+    "zh": "更多设置仅改变可见选项，收起后不会清除你的主题配置。",
+    "en": "More settings only change the visible controls. Collapsing them preserves your theme configuration."
+  },
+  "mee884bbd71df": {
+    "zh": "当前主题",
+    "en": "Current theme"
+  },
+  "m63c73c4730f4": {
+    "zh": "应用",
+    "en": "Apply"
+  },
+  "md797afe3f63a": {
+    "zh": "预览与编辑",
+    "en": "Preview & edit"
+  },
+  "mdb66bc316f47": {
+    "zh": "应用此主题",
+    "en": "Apply this theme"
+  },
+  "m0a6a0a6e0c33": {
+    "zh": "已加入主题库，当前外观未改变。",
+    "en": "Added to the library; your appearance is unchanged."
+  },
+  "m1a9f026b2c3a": {
+    "zh": "仅加入主题库",
+    "en": "Add to library only"
+  },
+  "mcdb520d1317d": {
+    "zh": "高级导入选项",
+    "en": "Advanced import options"
+  },
+  "m37cea346c6a8": {
+    "zh": "展开外观预览",
+    "en": "Expand appearance preview"
+  },
+  "m51a75f4634df": {
+    "zh": "一",
+    "en": "Mon"
+  },
+  "m084b42f6e95e": {
+    "zh": "二",
+    "en": "Tue"
+  },
+  "ma4c3313deb18": {
+    "zh": "三",
+    "en": "Wed"
+  },
+  "m754a9d5828d5": {
+    "zh": "四",
+    "en": "Thu"
+  },
+  "mc9b87f516a38": {
+    "zh": "五",
+    "en": "Fri"
+  },
+  "mde07b5383874": {
+    "zh": "六",
+    "en": "Sat"
+  },
+  "m85217f7aff77": {
+    "zh": "日",
+    "en": "Sun"
+  },
+  "maa9034ebd9ac": {
+    "zh": "仅统计可确认的运行时间，可能包含挂机；并行实例分别累加。休眠和无法观测的时段不计入。",
+    "en": "Counts observed runtime, including possible idle time. Concurrent instances add together; sleep and unobserved intervals are excluded."
+  },
+  "m25f287d46c0f": {
+    "zh": "内容下载缓存",
+    "en": "Content download cache"
+  },
+  "m9ea0c7247df1": {
+    "zh": "加载器恢复缓存",
+    "en": "Loader recovery cache"
+  },
+  "m07b747390492": {
+    "zh": "内容与加载器缓存可能被恢复任务引用，不提供直接清空。",
+    "en": "Content and loader caches may be required for recovery; direct deletion is not offered."
+  },
+  "m293da6804e18": {
+    "zh": "日历示例，不包含游玩数据。",
+    "en": "Calendar sample; no play data included."
+  },
+  "m3d4b4b79ad40": {
+    "zh": "官方资讯与 Java 更新说明",
+    "en": "Official news and Java release notes"
+  },
+  "m5f0fbd364d27": {
+    "zh": "扫描后显示存储摘要",
+    "en": "Storage summary appears after scanning"
+  },
+  "m25ce96cd6b75": {
+    "zh": "恢复外观",
+    "en": "Restore appearance"
+  },
+  "mdf53ac2049e8": {
+    "zh": "重置本组外观设置",
+    "en": "Reset this appearance group"
+  },
+  "m8748ff702b8e": {
+    "zh": "分区滚动",
+    "en": "Section scrolling"
+  },
+  "m43e2a23270c4": {
+    "zh": "模块分别滚动",
+    "en": "Scroll modules independently"
+  },
+  "m5885995db452": {
+    "zh": "整个分区滚动",
+    "en": "Scroll this section together"
+  },
+  "md283b594177d": {
+    "zh": "记录说明",
+    "en": "About these records"
+  },
+  "m9c567d2d52d4": {
+    "zh": "可滚动分区",
+    "en": "Scrollable section"
+  },
+  "m4e30218a7322": {
+    "zh": "首页浏览方式",
+    "en": "Home scrolling"
+  },
+  "me123b6ad1004": {
+    "zh": "优先单页 · 分区滚动",
+    "en": "Fit window · section scrolling"
+  },
+  "m3c2649a060a7": {
+    "zh": "整页滚动",
+    "en": "Scroll whole page"
+  },
+  "mda6157f912a9": {
+    "zh": "正常窗口优先保持首页不滚动，长内容在分区内浏览。窄窗口或较大缩放时自动改为整页滚动，保留全部操作。",
+    "en": "At normal sizes, the home fits the window and sections scroll internally. Narrow windows or large zoom switch to page scrolling so every action remains reachable."
   }
 }

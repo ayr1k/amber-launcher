@@ -1,3 +1,20 @@
+## 1.2.0
+
+- Align screenshot instance and date filters with consistent labels, field heights and spacing; stack the filters in narrow windows.
+
+- Use unobtrusive home-section scrollbars with transparent tracks, no arrow buttons and reserved spacing beside content. Keep calendar date targets compact and constrain calendar/news reading width on wide windows.
+
+- Add optional home modules for a local play calendar, official Minecraft news, storage summary and favorite tools. Edit module order and visibility, choose Simple/Daily/Information presets, or expand Advanced editing for detailed columns and sections. Existing module selections remain available.
+- Fit normal-size home views to one workspace with independent section scrolling and utility tabs. Keep page scrolling as an option and automatically use it for smaller viewports. Move Edit home into the title bar and collapse calendar legends and counting explanations by default.
+- Record observed game runtime locally. View days and instances, export or clear history, and disable recording. Sleep, launcher downtime and missing exit times are marked incomplete rather than estimated as playtime; historical launch records have no invented duration.
+- Read official news and Java release/snapshot notes with category filters, manual refresh and optional automatic refresh. Cached content stays available offline; news never blocks launching games.
+- Simplify appearance settings into Basics, More settings and Advanced editing. Add group reset, setting search and independent sidebar-instance/About visibility without changing the `.ambtheme` schema.
+- Apply themes directly from the library. First-time themes and major visual changes retain a 30-second recovery confirmation; an unchanged, previously confirmed theme applies in one step. Preview/edit remains optional, with discard and restore controls.
+- Add cancellable storage analysis, category totals and per-instance world/mod/resource-pack/shader/screenshot/log sizes. Cleanup retains the existing confirmation and protection for active data.
+- Add Java inspection, log/recovery shortcuts and local PNG screenshot browsing by instance/date, with copy and show-in-folder actions. Pin tools to the home module.
+- Update the separate Alloy theme with the new home modules, a visible About entry and existing text alignment. Preserve the approved artwork bytes and support for 1.1.x themes.
+- Share these changes between AMBER and AmberE while preserving separate account policies, application data and update sources.
+
 ## 1.1.2
 
 - Add vertical control-text offset (−3 to +3 px), with preview, reset and theme round-trip support. Update the standalone Alloy text alignment while preserving its artwork.

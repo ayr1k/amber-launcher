@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MPL-2.0
 // Shared, declarative contract. No executable code or arbitrary CSS in themes.
 import {validateComposition,validateSectionStyle,compositionVariables} from './theme-composition.mjs';
-export const themeModules=['launch','shortcuts','activity','details','instances','favorites','recent','artwork'];
-export const appearanceDefaults={enabled:false,name:'AMBER Classic',author:'',source:'',license:'',mode:'system',accent:'#245b48',background:'#f8faf7',surface:'#ffffff',text:'#193b30',muted:'#596e64',line:'#cbd6ce',radius:0,borderWidth:1,controlHeight:44,rowHeight:58,iconSize:36,fontFamily:'Sarasa UI',fontSize:14,fontOffset:0,scale:100,menuStyle:'filled',listStyle:'lines',navLabels:true,panelOpacity:100,windowOpacity:100,backgroundAsset:null,heroAsset:null,artworkAsset:null,backgroundFit:'cover',backgroundPosition:50,overlay:20,blur:0,motion:'standard',composition:null,canvas:null};
+export const themeModules=['launch','shortcuts','activity','details','instances','favorites','recent','artwork','calendar','news','storage','tools'];
+export const appearanceDefaults={enabled:false,name:'AMBER Classic',author:'',source:'',license:'',mode:'system',accent:'#245b48',background:'#f8faf7',surface:'#ffffff',text:'#193b30',muted:'#596e64',line:'#cbd6ce',radius:0,borderWidth:1,controlHeight:44,rowHeight:58,iconSize:36,fontFamily:'Sarasa UI',fontSize:14,fontOffset:0,scale:100,menuStyle:'filled',listStyle:'lines',navLabels:true,panelOpacity:100,windowOpacity:100,backgroundAsset:null,heroAsset:null,artworkAsset:null,backgroundFit:'cover',backgroundPosition:50,overlay:20,blur:0,motion:'standard',homeOverflow:'sections',composition:null,canvas:null};
 export const appearanceKeys=Object.keys(appearanceDefaults);
 export const assetId=/^[a-f0-9]{64}\.png$/;
 export function validateCanvas(input){
@@ -20,7 +20,7 @@ export function validateAppearance(input){
  for(const k of ['accent','background','surface','text','muted','line'])if(!/^#[a-fA-F0-9]{6}$/.test(v[k]))throw Error('Use a six-digit HEX color / 请输入六位 HEX 颜色');
  const ranges={radius:[0,24],borderWidth:[0,3],controlHeight:[36,60],rowHeight:[40,90],iconSize:[24,64],fontSize:[12,22],fontOffset:[-3,3],scale:[85,125],panelOpacity:[60,100],windowOpacity:[70,100],backgroundPosition:[0,100],overlay:[0,90],blur:[0,20]};
  for(const [key,[min,max]] of Object.entries(ranges))if(!Number.isFinite(v[key])||v[key]<min||v[key]>max)throw Error('Theme value out of range: '+key);
- for(const [key,values] of Object.entries({mode:['system','light','dark','custom'],menuStyle:['filled','outline','minimal'],listStyle:['lines','striped','spacious'],backgroundFit:['cover','contain'],motion:['none','light','standard']}))if(!values.includes(v[key]))throw Error('Unknown theme option: '+key);
+ for(const [key,values] of Object.entries({mode:['system','light','dark','custom'],menuStyle:['filled','outline','minimal'],listStyle:['lines','striped','spacious'],backgroundFit:['cover','contain'],motion:['none','light','standard'],homeOverflow:['sections','page']}))if(!values.includes(v[key]))throw Error('Unknown theme option: '+key);
  if(typeof v.fontFamily!=='string'||!v.fontFamily.length||v.fontFamily.length>80||/[;{}<>\\"\x00-\x1f]/.test(v.fontFamily))throw Error('Invalid font name / 字体名称无效');
  for(const k of ['name','author','source','license'])if(typeof v[k]!=='string'||v[k].length>300)throw Error('Invalid theme metadata / 主题信息无效');
  for(const k of ['backgroundAsset','heroAsset','artworkAsset'])if(v[k]!==null&&!assetId.test(v[k]))throw Error('Import an image first / 请先导入图片');

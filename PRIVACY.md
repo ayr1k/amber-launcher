@@ -19,3 +19,9 @@ Game data remains after uninstall. Use the app's recycle bin and backup tools be
 Settings offers confirmed cleanup of downloaded app updates and old pre-upgrade configuration backups. It never targets active accounts, worlds or instance backups.
 
 Trial copies and change-recovery snapshots stay in the selected local game library. Copies may include worlds when explicitly selected; configuration snapshots can contain personal data written by games or mods. They are not automatically uploaded or included in preference-template exports. Template JSON contains questionnaire preferences only; review it before sharing. Global quick search searches local instances/actions and sends no search query to a server.
+
+## Home modules (1.2.0)
+
+The play journal is local and enabled by default. Its calendar settings let you disable, export or clear it. It records instance identifiers and observed runtime, which may include idle time; concurrent instance durations add together. Missing observations are marked incomplete. Old launch records carry unknown duration. Exported history contains instance identifiers and timestamps: review before sharing.
+
+News refresh is manual by default. Optional automatic refresh runs while its module is mounted and the document is visible, at most every 30 minutes. Requests reach `launchercontent.mojang.com`; opening general articles uses the system browser. Article text is not translated automatically and remote HTML is never executed. News and release-note caches remain local. Screenshot browsing reads local PNGs; Copy image writes the selected image to the system clipboard. No screenshot is uploaded. Storage analysis caches estimates locally and does not delete files automatically.

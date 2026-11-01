@@ -15,7 +15,7 @@ test('published 1.1.0 starter imports unchanged with original defaults and no ca
 });
 test('1.1.0 module tree remains byte-equivalent after validation when no new style is present',()=>{const old={id:'launch',type:'module',module:'launch'};assert.deepEqual(validateCanvas(old),old);assert.equal(validateAppearance({}).composition,null);assert.equal(validateAppearance({canvas:old}).composition,null);});
 test('composition validation is bounded, strips code and never accepts runtime policy',()=>{
- assert.deepEqual(validateComposition({}),compositionDefaults);assert.equal(validateComposition({script:'bad',accountId:'private'}).accountId,undefined);
+ const {sidebarAbout,...legacyDefaults}=compositionDefaults;assert.deepEqual(validateComposition({}),legacyDefaults);assert.equal(validateComposition({sidebarAbout:true}).sidebarAbout,true);assert.equal(validateComposition({script:'bad',accountId:'private'}).accountId,undefined);
  for(const bad of [{gap:-1},{gap:100},{launchWidth:Infinity},{launchLayout:'html'},{dockOpacity:101},{headerHeight:1},{sidebarExtras:'false'},{launchTopSpace:NaN}])assert.throws(()=>validateComposition(bad));
  assert.equal(validateSectionStyle({script:'bad'}).script,undefined);for(const bad of [{padding:-1},{background:'https://example.org/track'},{position:101},{viewport:'yes'},{fit:'url(x)'}])assert.throws(()=>validateSectionStyle(bad));
 });

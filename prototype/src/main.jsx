@@ -4,6 +4,7 @@ import {MICROSOFT_CLIENT_ID} from '../desktop/microsoft-config.mjs';
 import {defaultPreferences as defaultPreviewPreferences} from './Preferences';
 import './beta11.css';
 
+
 // SPDX-License-Identifier: MPL-2.0
 import React from "react";
 import {LocaleProvider} from "./Locale";
@@ -132,3 +133,5 @@ import './beta112.css';
 
 import "./themes.css";
 import "./composition.css";
+
+import './home120.css';

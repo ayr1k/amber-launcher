@@ -1,3 +1,9 @@
+# Rolling back from 1.2.0
+
+Export your theme and back up important instances, worlds and settings first. Restore classic or 1.1.2 Alloy, close the game and launcher, then install the matching product's [1.1.2 installer](https://github.com/ayr1k/amber-launcher/releases/tag/v1.1.2). Do not import Alloy 1.2.0 with new home modules into an older client. Keep the two products' data directories separate.
+
+Downgrading the program does not undo world or mod changes; restore instance backups to separate instances when necessary. Play history, news caches and storage summaries remain separate local data that older versions do not use. Do not delete the game library to downgrade.
+
 # Rolling back from 1.1.1
 
 Export your current theme and restore classic before returning to 1.1.0. Keep the export separately: 1.1.0 does not understand composition-v1 or section styles. Re-import it after upgrading again. Game-data rollback still requires its own backups.
