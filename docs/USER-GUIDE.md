@@ -81,3 +81,15 @@ Appearance & themes starts with Basics; reveal More settings or Advanced editing
 Get official themes in the [theme store](https://ayr1k.github.io/#/themes). Import and apply, or edit first. The appearance editor retains unapplied drafts; recovering a draft still requires explicit application. Save to library creates a separate theme without switching appearance; duplicate names require renaming. Export requires a nonempty name.
 
 The calendar initially shows only its month and dates. Select a date for records, or use its more button for filters and recording controls. Top navigation has a dedicated About entry instead of repeated footers on every page.
+
+## Download connections (1.2.2)
+
+Settings → Downloads → Download connections offers **Automatic**, **Official sources first**, and **Mainland China optimized**. Automatic compares lightweight connection probes and caches the choice for ten minutes; it does not detect location or promise a speed increase. Official-first and Mainland-China modes use the other source on failure unless fallback is disabled under More download settings. Only explicitly supported Minecraft metadata, assets and Maven URLs are mirrored. Modrinth, Java providers and authentication retain their own sources; CurseForge is not integrated.
+
+The task center shows source, transferred bytes, current speed and file details. Pause acts on active download stages, retaining the install lock and downloaded fragments. Resume continues the task; Cancel also works while paused. Preparation, extraction and installation finalization cannot be paused. Speed is an observation, not a guaranteed rate; totals can grow as later installation stages are discovered.
+
+Partial files end in `.amber-<hash>.part` and stay beside their intended downloaded file. A matching range response can resume them; unsupported ranges restart that file. Expected size and hash are verified before a partial becomes an installable file. A failed checksum discards the partial. Cancelling does not delete completed files. Closing the app does not automatically restart tasks at next launch: use Continue in the task center. Complete setup/content plans and standalone game/Java tasks are recoverable; one-off content updates may require returning to the instance to check updates again.
+
+Check download connections probes public Minecraft, BMCLAPI, Modrinth and Fabric endpoints. It sends no account or instance information and does not test all downloads. The copied report contains only service names, status and elapsed time. Normal network providers still observe connection metadata. Use the alternative-source continue action for applicable failed game/loader tasks, or change the strategy in the expanded task-center settings. Adaptive concurrency reduces subsequent parallel requests after repeated connection failures; it does not change the saved maximum.
+
+Mirror service and routing reference: [BMCLAPI by bangbang93](https://bmclapidoc.bangbang93.com/). Availability and content completeness depend on the provider.

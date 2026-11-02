@@ -18,14 +18,14 @@ export async function discoverJava(root){
  for(const loc of locations)for(const file of await findExecutables(loc))candidates.add(file);
  const found=await Promise.all([...candidates].map(p=>inspectJava(p).catch(()=>null)));return [...new Map(found.filter(Boolean).map(j=>[j.path.toLowerCase(),j])).values()];
 }
-export async function installJava(root,major,job,signal){
+export async function installJava(root,major,job,signal,fetcher=fetch){
  if(![8,16,17,21,25].includes(major))throw new Error(`自动安装暂不支持 Java ${major}，请手动选择兼容的 Java。`);
  job.phase=`获取 Java ${major} 官方运行时`;
  const url=`https://api.adoptium.net/v3/assets/latest/${major}/hotspot?architecture=x64&image_type=jre&os=windows&vendor=eclipse`;
- const response=await officialFetch(url,{signal:AbortSignal.any([signal,AbortSignal.timeout(20000)])});const releases=await response.json();const pkg=releases[0]?.binary?.package;if(!pkg||!pkg.name.endsWith('.zip')||!/^[a-f0-9]{64}$/.test(pkg.checksum))throw new Error('Adoptium 未返回可校验的 Java ZIP 包。');
+ const response=await officialFetch(url,{fetcher,signal:AbortSignal.any([signal,AbortSignal.timeout(20000)])});const releases=await response.json();const pkg=releases[0]?.binary?.package;if(!pkg||!pkg.name.endsWith('.zip')||!/^[a-f0-9]{64}$/.test(pkg.checksum))throw new Error('Adoptium 未返回可校验的 Java ZIP 包。');
  const archive=safePath(root,'runtimes/downloads/'+pkg.checksum+'.zip');
  job.phase=`下载 Java ${major}`;
- await download({path:archive,url:pkg.link,hash:pkg.checksum,algorithm:'sha256',size:pkg.size,label:'Temurin Java'},{root,signal,onBytes:n=>job.transferred+=n});
+ await download({path:archive,url:pkg.link,hash:pkg.checksum,algorithm:'sha256',size:pkg.size,label:'Temurin Java'},{root,signal,fetcher,onBytes:n=>job.transferred+=n});
  signal.throwIfAborted();job.phase=`展开 Java ${major}`;const target=safePath(root,'runtimes/'+pkg.checksum);await mkdir(target,{recursive:true});await extractZip(archive,target);
  const candidates=await findExecutables(target);for(const path of candidates){const info=await inspectJava(path);if(info.major===major)return info;}
  throw new Error('下载的 Java 与游戏版本要求不匹配。');

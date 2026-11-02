@@ -9186,5 +9186,193 @@
   "md3e406525e1e": {
     "zh": "恢复本分类默认值",
     "en": "Reset this category"
+  },
+  "ma30c45f41856": {
+    "zh": "下载连接",
+    "en": "Download connections"
+  },
+  "m47d6816892cc": {
+    "zh": "下载策略",
+    "en": "Download strategy"
+  },
+  "mc677a2371935": {
+    "zh": "自动选择 · 推荐",
+    "en": "Automatic · Recommended"
+  },
+  "mfd72ef166161": {
+    "zh": "官方源优先",
+    "en": "Official sources first"
+  },
+  "m386424ccc1d3": {
+    "zh": "中国大陆优化",
+    "en": "Mainland China optimized"
+  },
+  "m061197e23047": {
+    "zh": "根据连接情况选择支持的官方源或 BMCLAPI 镜像。Modrinth、Java 与账号认证继续使用各自来源。",
+    "en": "Choose between supported official sources and BMCLAPI based on connectivity. Modrinth, Java and authentication keep their own sources."
+  },
+  "md674fa0739ae": {
+    "zh": "更多下载设置",
+    "en": "More download settings"
+  },
+  "mf78dab53d690": {
+    "zh": "失败后自动切换来源",
+    "en": "Switch sources after a failure"
+  },
+  "m4116755380fc": {
+    "zh": "仅对有对应镜像的文件生效。关闭后只使用当前策略选定的来源。",
+    "en": "Only applies where a matching mirror exists. Disable to use only the selected source."
+  },
+  "m7a228bbe0e21": {
+    "zh": "弱网时自动降低并发",
+    "en": "Reduce concurrency on unstable connections"
+  },
+  "mb33533acb802": {
+    "zh": "已完成文件会复用；未完成文件仅在来源支持时续传，否则重新下载当前文件。",
+    "en": "Completed files are reused. Partial files resume when supported; otherwise the current file restarts."
+  },
+  "m574ec7517de1": {
+    "zh": "正在处理…",
+    "en": "Working…"
+  },
+  "m9d88a5b3b08f": {
+    "zh": "检查下载连接",
+    "en": "Check download connections"
+  },
+  "mdfaffcf18ce2": {
+    "zh": "镜像服务：BMCLAPI · bangbang93",
+    "en": "Mirror service: BMCLAPI · bangbang93"
+  },
+  "m6043b97c2ec8": {
+    "zh": "可连接",
+    "en": "Reachable"
+  },
+  "mb0db081c8a28": {
+    "zh": "连接需要处理",
+    "en": "Connection needs attention"
+  },
+  "m59137a15c0dc": {
+    "zh": "结果只代表本次连接，不保证所有文件均可下载。检测不会上传账号或实例信息。",
+    "en": "Results reflect this connection check, not every file. No account or instance information is uploaded."
+  },
+  "m4072bdee87c4": {
+    "zh": "摘要已复制",
+    "en": "Summary copied"
+  },
+  "me557f2f5092c": {
+    "zh": "复制诊断摘要",
+    "en": "Copy diagnostic summary"
+  },
+  "m72ae216089ad": {
+    "zh": "官方源",
+    "en": "Official"
+  },
+  "ma898478be181": {
+    "zh": "连接中",
+    "en": "Connecting"
+  },
+  "m2630ac513a95": {
+    "zh": "等待来源恢复",
+    "en": "Waiting for source"
+  },
+  "me2fc571a4cf0": {
+    "zh": "下载中",
+    "en": "Downloading"
+  },
+  "ma3f9afd0aae3": {
+    "zh": "重试中",
+    "en": "Retrying"
+  },
+  "mbbd1556bbb3a": {
+    "zh": "来源不支持续传，重新下载当前文件",
+    "en": "Source cannot resume; restarting this file"
+  },
+  "m22cb81ffbedd": {
+    "zh": "文件已完成",
+    "en": "File complete"
+  },
+  "mcbd2a4787257": {
+    "zh": "复用已完成文件",
+    "en": "Reusing completed files"
+  },
+  "m4e875cd1b7f7": {
+    "zh": "下载已暂停",
+    "en": "Download paused"
+  },
+  "m2dcf616ea611": {
+    "zh": "连接不稳定，已降低后续下载并发。",
+    "en": "Connection is unstable; subsequent downloads use fewer connections."
+  },
+  "m7730fe6c7fbe": {
+    "zh": "继续下载",
+    "en": "Resume download"
+  },
+  "m75f853d938c7": {
+    "zh": "暂停下载",
+    "en": "Pause download"
+  },
+  "mbb9cab59ac77": {
+    "zh": "文件与连接详情",
+    "en": "File & connection details"
+  },
+  "m75756055d696": {
+    "zh": "已使用保留的下载片段。",
+    "en": "Retained download fragments were reused."
+  },
+  "mb441d4b214f6": {
+    "zh": "下载策略与连接诊断",
+    "en": "Download strategy & diagnostics"
+  },
+  "mafab3b8fd84e": {
+    "zh": "切换镜像／官方并继续",
+    "en": "Switch mirror / official and continue"
+  },
+  "m7e7ea0190718": {
+    "zh": "连接中断，可检查网络后继续",
+    "en": "Connection interrupted; check the network and continue"
+  },
+  "md61f7b658dc1": {
+    "zh": "连接超时，可稍后重试",
+    "en": "Connection timed out; try again later"
+  },
+  "m29cb9584f94f": {
+    "zh": "校验失败，文件未安装",
+    "en": "Integrity check failed; file not installed"
+  },
+  "mcd1ddde26e83": {
+    "zh": "来源未找到文件，可切换下载策略",
+    "en": "File missing at source; try another strategy"
+  },
+  "m87f2eefb86cd": {
+    "zh": "来源拒绝访问",
+    "en": "Access refused by source"
+  },
+  "mee681d76e15e": {
+    "zh": "来源请求过多，等待后可继续",
+    "en": "Source rate limit reached; wait before continuing"
+  },
+  "m5c778291ae44": {
+    "zh": "来源拒绝访问，请查看文件页面或检查来源设置。",
+    "en": "The source refused access. Check the file page or download settings."
+  },
+  "m6eb5ddb87145": {
+    "zh": "来源暂时没有此文件，请切换来源或稍后重试。",
+    "en": "This file is not available at the source. Switch sources or try later."
+  },
+  "m893cf445c368": {
+    "zh": "来源请求过多，请稍后继续下载。",
+    "en": "The source is rate limiting requests. Resume later."
+  },
+  "m30c49b97198f": {
+    "zh": "连接或传输超时，请检查网络后继续下载。",
+    "en": "The connection or transfer timed out. Check your network and resume."
+  },
+  "ma74146ddde57": {
+    "zh": "文件校验未通过，未安装此文件，请切换来源后重试。",
+    "en": "Integrity verification failed; this file was not installed. Switch sources and retry."
+  },
+  "m72b4311221cf": {
+    "zh": "下载连接中断，已保留可续传片段，请检查网络后继续。",
+    "en": "Download interrupted. Resumable fragments were retained. Check your network and continue."
   }
 }

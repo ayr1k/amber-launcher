@@ -1,14 +1,14 @@
 # AMBER
 
-1.2.1 refines theme editing and export with a minimal play calendar, independent home panels, recoverable appearance drafts and saved local themes. Preview and download Alloy and Nocturne in the official theme store. Existing 1.1.x and 1.2.0 themes remain supported.
+1.2.2 adds regional download strategies, supported official/mirror fallback, pause and resume, task recovery and connection diagnostics. Existing themes and instances remain compatible; content downloads continue to use Modrinth.
 
 [简体中文](docs/zh-CN/README.md) · [Releases](https://github.com/ayr1k/amber-launcher/releases) · [User guide](docs/USER-GUIDE.md)
 
 AMBER is an independent Windows launcher for Minecraft: Java Edition. It keeps game instances separate and brings installation, mod management, recovery and launch settings into one workspace. Project-owned source is licensed under MPL-2.0.
 
-## 1.2.1
+## 1.2.2
 
-Stable release for Windows x64. [Download the installer, source and checksums](https://github.com/ayr1k/amber-launcher/releases/tag/v1.2.1). Includes instance management, content recommendations, mod updates, backups and recovery.
+Stable release for Windows x64. [Download the installer, source and checksums](https://github.com/ayr1k/amber-launcher/releases/tag/v1.2.2). Includes instance management, content recommendations, mod updates, backups and recovery.
 
 - Integrated title bar, independent window corners, remembered window placement and reorganized privacy settings.
 
@@ -56,4 +56,4 @@ Each project uses separate data and update channels.
 
 [Official theme store](https://ayr1k.github.io/#/themes) · [Theme help](docs/THEMES.md) · [Theme format](docs/AMBTHEME-FORMAT.md)
 
-Alloy and Nocturne are free official themes for AMBER and AmberE 1.2.1, available separately and not preinstalled.
+Alloy, Nocturne, Harvest and Verdant are free official themes for AMBER and AmberE 1.2.1 or newer, available separately and not preinstalled.

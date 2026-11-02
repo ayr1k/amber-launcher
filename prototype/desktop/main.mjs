@@ -44,6 +44,7 @@ import { installOptifine } from './optifine.mjs';
 import { importOptifine, importWorld } from './local-content.mjs';
 import { Modpacks } from './modpacks.mjs';
 import { Modrinth } from './modrinth.mjs';
+import {DownloadNetwork} from './network.mjs';
 import { Accounts } from './accounts.mjs';
 import { authAgent } from './auth-agent.mjs';
 import { VanillaLauncher } from './launcher.mjs';
@@ -116,6 +117,9 @@ app.whenReady().then(async () => {
   const packs = new Modpacks(core, content);
   const workflows = new Workflows(core, content),settings = new Settings(core.root),selections = new Map();
   const themes=await new Themes(core.root,settings).init();
+  const network=await new DownloadNetwork(core.root,{fetcher:core.fetcher}).init();network.configure((await settings.get()).network);core.fetcher=network.request;core.network=network;
+  handle('amber:network-diagnose',()=>network.diagnose());
+  handle('amber:network-pause',(id,value)=>network.pause(id,value));
   if(smoke){const a=(await settings.get()).appearance;for(const key of ['backgroundAsset','heroAsset','artworkAsset'])if(a[key]){const response=await net.fetch('amber://app/theme-assets/'+a[key]);const bytes=Buffer.from(await response.arrayBuffer());if(response.status!==200||response.headers.get('Content-Type')!=='image/png'||nativeImage.createFromBuffer(bytes).isEmpty())throw Error('Theme image protocol failed');}console.log('AMBER_THEME_ASSETS_OK');}
 
   function applyAppearance(v){if(window&&!window.isDestroyed()){window.setOpacity(v.appearance?.enabled?(v.appearance.windowOpacity/100):1);window.webContents.setZoomFactor(v.appearance?.enabled?v.appearance.scale/100:1);window.webContents.send('amber:theme-changed');}}
@@ -263,7 +267,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   handle('amber:theme-export',async(v,meta)=>{const bytes=await themes.export(validateSettings(v),meta);const r=await dialog.showSaveDialog(window,{defaultPath:'My-theme.ambtheme',filters:[{name:'AMBER theme',extensions:['ambtheme']}]});if(r.canceled)return false;await writeFile(r.filePath,bytes);return true;});
   handle('amber:theme-image',async()=>{const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Image',extensions:['png','jpg','jpeg','webp']}]});if(r.canceled)return null;const name=await importBackground(core.root,r.filePaths[0],b=>nativeImage.createFromBuffer(b));return themes.storeAsset(await readFile(join(core.root,'backgrounds',name)));});
   handle('amber:settings', () => settings.get());
-  handle('amber:settings-save', async (v) => {if(themes.state())throw Error('Confirm or revert theme preview first / 请先保留或恢复当前主题试用');v=validateSettings(v);if(launching&&v.graphicsMode!==(await settings.get()).graphicsMode)throw Error('正在准备启动。');if(v.graphicsMode==='system'&&(await settings.get()).graphicsMode!=='system')await graphics.restoreAll();const saved = await settings.save(v);core.downloadThreads = saved.threads;await refreshLocale();applyAppearance(saved);return saved;});
+  handle('amber:settings-save', async (v) => {if(themes.state())throw Error('Confirm or revert theme preview first / 请先保留或恢复当前主题试用');v=validateSettings(v);if(launching&&v.graphicsMode!==(await settings.get()).graphicsMode)throw Error('正在准备启动。');if(v.graphicsMode==='system'&&(await settings.get()).graphicsMode!=='system')await graphics.restoreAll();const saved = await settings.save(v);core.downloadThreads = saved.threads;network.configure(saved.network);await refreshLocale();applyAppearance(saved);return saved;});
   handle('amber:setup-state', () => workflows.state());
   handle('amber:setup-cancel', () => workflows.cancel());
   handle('amber:setup-repair', (id) => workflows.repairSetup(id));

@@ -1,3 +1,13 @@
+## 1.2.2
+
+- Add Automatic, Official sources first and Mainland China optimized download strategies. Supported Minecraft metadata, assets and Maven files can use BMCLAPI, with optional official/mirror fallback. Automatic selection uses temporary connection probes, not location tracking.
+- Preserve hash-specific partial downloads across pause, cancellation and restart. Resume only when the server returns a valid range; otherwise restart the current file. Completed files are reused, and final size/hash checks remain mandatory.
+- Add pause/resume for active game, Java and content download stages, with cancellation still available while paused. Extraction and installation finalization are not pause points.
+- Extend restart recovery to standalone game/Java preparation tasks. Keep complete installation/content plans and explicit continuation in the task center.
+- Show download source, byte progress, current transfer speed and connection details. Add connection diagnostics and a copyable summary in Settings and the task center, with an alternative-source retry for applicable game/loader stages.
+- Bound retries, honor rate-limit delays, reduce subsequent concurrency on unstable connections and cancel remaining pool requests after a terminal failure. Reject unsafe mirror redirects and preserve file integrity checks.
+- Keep Modrinth as the integrated content provider; this version adds no CurseForge integration. Preserve existing themes, account policies, separate product data/update sources and the previous installer for rollback.
+
 ## 1.2.1
 
 - Fix theme export field alignment, responsive spacing and inline metadata validation.

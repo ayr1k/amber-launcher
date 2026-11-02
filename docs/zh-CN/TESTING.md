@@ -1,11 +1,11 @@
-# 1.2.1 release verification / 版本验证
+# 1.2.2 release verification / 版本验证
 
-The appearance update covers export-field validation, minimal calendars, independent panels, draft recovery and top-navigation/footer layout. Automated coverage includes legacy themes and new panel round-trips. Native checks use synthetic data and cover both products, Chinese/English, normal/wide/narrow windows, calendar dialogs and focus restoration, library saves, draft recovery and About navigation.
+Scope: regional download strategies, retained/resumable partial files, bounded retries, task pause/cancel/recovery and connection diagnostics. CurseForge is not integrated. AmberX remains separate.
 
-Run `pnpm test`, `pnpm build`, `pnpm test:sites`, `pnpm release:check` and `pnpm desktop:smoke` from `prototype`. These checks do not certify every hardware, game or mod combination. Real Microsoft login was previously accepted by the maintainer and is not re-tested as part of this appearance change. AmberE exposes no Microsoft sign-in.
+336 automated tests and four site-build checks passed. Packaged startup checks passed for both products. Automated checks cover upgrade defaults, theme/account compatibility, range responses, fallback, hash rejection, cancellation, pause/resume, restart journals, DNS/redirect boundaries and pool cleanup. Native UI checks use isolated fixtures for AMBER and AmberE; they never use production account data. Public-endpoint checks verify only the sampled files and current connection. They do not establish Mainland China performance or universal mirror availability.
 
-本次覆盖主题导出校验、精简日历、独立面板、草稿恢复和顶部导航/底栏。自动回归包含旧主题兼容与新面板导入导出；原生界面检查使用隔离模拟数据，覆盖两款产品、中英文、正常/宽/窄窗口、日历弹窗与焦点返回、主题保存、草稿恢复及关于入口。不代表所有硬件、游戏或模组组合均已验证。
+本版检查地区下载、文件续传、重试、任务暂停/取消/恢复及连接诊断。原生检查仅使用隔离测试数据。公开文件抽检不代表所有下载或中国大陆网络性能均已验证。原有微软登录验收结果保持不变，本次不重新测试真实账号；AmberE 不提供微软登录。
 
-Installers are unsigned. Close the game and launcher before upgrading; back up important worlds. Uninstalling preserves game data. Windows user encryption does not protect against malicious software running as the same user.
+Run `pnpm test`, `pnpm build`, `pnpm test:sites` and `pnpm release:check` from prototype. Keep the 1.2.1 installers and important world backups. Installers are unsigned; close games and tasks before upgrading. Uninstall preserves user data. Existing .ambtheme files remain compatible and are not modified or bundled.
 
-安装包未签名。升级前关闭游戏与启动器并备份重要存档。卸载保留游戏数据；Windows 用户加密不能抵御以同一用户身份运行的恶意软件。
+保留 1.2.1 安装包与重要存档备份，升级前退出游戏和任务。安装包未签名；卸载保留用户数据。现有主题文件保持兼容，本版不修改或预置主题。

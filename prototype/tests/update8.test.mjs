@@ -33,10 +33,10 @@ test('download retries a temporary outage but never retries 404, and reuses veri
  await download(file,{root,fetcher:async()=>assert.fail('cached file fetched again')});
  let missing=0;await assert.rejects(download({...file,path:join(root,'missing.jar')},{root,fetcher:async()=>{missing++;return new Response('',{status:404});}}),/404/);assert.equal(missing,1);assert.ok(!(await readdir(root)).some(p=>p.endsWith('.part')));
 });
-test('cancellation during streaming removes temporary file and retry completes cleanly',async t=>{
+test('cancellation never publishes a final file and retry consumes retained partials cleanly',async t=>{
  const root=await temp(t),bytes=Buffer.from('complete'),controller=new AbortController(),file={path:join(root,'mod.jar'),url:'https://cdn.modrinth.com/test.jar',hash:createHash('sha1').update(bytes).digest('hex'),size:bytes.length};
- await assert.rejects(download(file,{root,signal:controller.signal,fetcher:async()=>new Response(new ReadableStream({start(c){c.enqueue(bytes.subarray(0,2));controller.abort(Error('取消'));c.close();}}))}));assert.deepEqual(await readdir(root),[]);
- await download(file,{root,fetcher:async()=>new Response(bytes)});assert.deepEqual(await readFile(file.path),bytes);
+ await assert.rejects(download(file,{root,signal:controller.signal,fetcher:async()=>new Response(new ReadableStream({start(c){c.enqueue(bytes.subarray(0,2));controller.abort(Error('取消'));c.close();}}))}));assert.ok((await readdir(root)).every(p=>p===`mod.jar.amber-${file.hash}.part`));
+ await download(file,{root,fetcher:async()=>new Response(bytes)});assert.deepEqual(await readFile(file.path),bytes);assert.deepEqual(await readdir(root),['mod.jar']);
 });
 test('conflicting enabled mods are named in both dependency directions; disabled mods do not block',async t=>{
  const dir=await temp(t);await mkdir(join(dir,'mods'));const store=new Modrinth({}),a={projectId:'a',versionId:'av',title:'Alpha',relative:'mods/a.jar',enabled:false,dependencies:[]},b={projectId:'b',versionId:'bv',title:'Beta',relative:'mods/b.jar',enabled:true,dependencies:[{dependency_type:'incompatible',project_id:'a'}]};
