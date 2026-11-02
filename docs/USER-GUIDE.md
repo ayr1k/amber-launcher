@@ -93,3 +93,19 @@ Partial files end in `.amber-<hash>.part` and stay beside their intended downloa
 Check download connections probes public Minecraft, BMCLAPI, Modrinth and Fabric endpoints. It sends no account or instance information and does not test all downloads. The copied report contains only service names, status and elapsed time. Normal network providers still observe connection metadata. Use the alternative-source continue action for applicable failed game/loader tasks, or change the strategy in the expanded task-center settings. Adaptive concurrency reduces subsequent parallel requests after repeated connection failures; it does not change the saved maximum.
 
 Mirror service and routing reference: [BMCLAPI by bangbang93](https://bmclapidoc.bangbang93.com/). Availability and content completeness depend on the provider.
+
+## Local modpacks, mod lists and backups (1.2.3)
+
+Choose Import modpack beside Import local mods under installed content, or from instance creation. Imports always create independent instances. MRPACK pins the author's game and loader versions (vanilla, Fabric, Forge or NeoForge); unsupported combinations are rejected. Optional client files are off by default, and server-only entries are excluded.
+
+Content ZIPs can include mods, config, resourcepacks, shaderpacks, saves, defaultconfigs, kubejs, scripts, options*.txt and servers.dat, optionally inside one wrapper/.minecraft root. Confirm the author's game and loader requirements when no standard manifest exists. Known loader mismatches, explicit game versions and duplicate mod IDs are checked, not every dependency or gameplay combination. The launcher does not execute archived installation scripts. Mods and game scripts can run when the game starts; use trusted sources.
+
+Limits: 300 MB compressed, 600 MB expanded, 256 MB per file and 10,000 entries. ZIP64, split and encrypted archives are unsupported. Displayed sizes cover pack content only. Space checks include the retained archive, content cache and installed copies plus a 1 GB allowance; game/Java/loader requirements may exceed that allowance. Authors can slim oversized packs before exporting again.
+
+MRPACK may need network downloads from trusted sources; files are verified before installation. The original is retained at .amber-setup/local-pack.zip in the new instance. Keep it while installation is incomplete. Resume explicitly in Tasks after restart, even if the originally selected file was moved. Failed instances stay recoverable instead of being marked ready; resume, inspect or recycle them.
+
+Instance overview shows provenance, import date and skipped items; modpack.json stores the complete installed content list. Local packs do not automatically track whole-pack updates. Try individual mod updates in a trial copy first.
+
+A mod list records project identities, version hints and enabled states to find compatible mods again. It contains no JARs, configurations or worlds and cannot reproduce a whole pack. Use Mod migration to import/export lists. Backups restore selected instance data through Backup & recovery. CurseForge manifests are recognized but downloads are not integrated. Other launchers' full instance archives are unsupported here.
+
+Java tools provide detection, path copying and explicitly configured instance references; this is not an exhaustive list of automatically resolved runtimes. Log tools select an instance and distinguish viewing logs from opening their folder. Pinning changes home shortcuts only.

@@ -1,11 +1,13 @@
-# 1.2.2 release verification / 版本验证
+# 1.2.3 版本验证
 
-Scope: regional download strategies, retained/resumable partial files, bounded retries, task pause/cancel/recovery and connection diagnostics. CurseForge is not integrated. AmberX remains separate.
+[English](../TESTING.md)
 
-336 automated tests and four site-build checks passed. Packaged startup checks passed for both products. Automated checks cover upgrade defaults, theme/account compatibility, range responses, fallback, hash rejection, cancellation, pause/resume, restart journals, DNS/redirect boundaries and pool cleanup. Native UI checks use isolated fixtures for AMBER and AmberE; they never use production account data. Public-endpoint checks verify only the sampled files and current connection. They do not establish Mainland China performance or universal mirror availability.
+本版包含本地 MRPACK／内容 ZIP 整合包导入、安装恢复、来源记录及 Java／日志工具布局优化。现有主题格式和账号规则保持不变。
 
-本版检查地区下载、文件续传、重试、任务暂停/取消/恢复及连接诊断。原生检查仅使用隔离测试数据。公开文件抽检不代表所有下载或中国大陆网络性能均已验证。原有微软登录验收结果保持不变，本次不重新测试真实账号；AmberE 不提供微软登录。
+353 项自动回归测试通过，其中 17 项覆盖本地整合包路径与校验、可选内容、已知加载器／版本不匹配、取消与重启恢复及文件保护。隔离桌面检查覆盖两款产品、五套外观、窄窗口和中英双语；两款打包程序的启动与接口冒烟检查通过。自动安装测试使用合成文件，不代表所有第三方整合包均已完成实际游戏兼容性验证。真实游戏、账号及服务组合需分别验证。
 
-Run `pnpm test`, `pnpm build`, `pnpm test:sites` and `pnpm release:check` from prototype. Keep the 1.2.1 installers and important world backups. Installers are unsigned; close games and tasks before upgrading. Uninstall preserves user data. Existing .ambtheme files remain compatible and are not modified or bundled.
+建议使用真实整合包，按作者要求选择版本，检查可选内容与配置，并测试取消后重启、在任务中心继续安装。原实例应保持不变，同时检查常用主题下的 Java／日志工具和模组清单导出区域。
 
-保留 1.2.1 安装包与重要存档备份，升级前退出游戏和任务。安装包未签名；卸载保留用户数据。现有主题文件保持兼容，本版不修改或预置主题。
+压缩包上限 300 MB，解压上限 600 MB，单文件上限 256 MB，最多 10000 项；MRPACK 内嵌覆盖文件另受现有读取器 100 MB 单文件限制。不支持 ZIP64、加密／分卷压缩包及任意启动器完整目录。CurseForge 清单仅识别，未接入下载；本地导入不自动追踪整包更新。
+
+降级前阅读[回退说明](ROLLBACK.md)。1.2.2 无法继续 1.2.3 新建的本地整合包安装记录。

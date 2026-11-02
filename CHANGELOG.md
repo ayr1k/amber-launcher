@@ -1,3 +1,13 @@
+## 1.2.3
+
+- Import local Modrinth MRPACKs and supported content ZIPs into independent instances from content management or creation. Review pinned versions, files and optional client content; fill in and confirm missing ZIP version requirements.
+- Retain the archive and import choices in each instance, with verified downloads, cancellation and explicit restart recovery. Reject unsafe paths, links, duplicate archive names, corruption and unsupported layouts before installation; never overwrite an existing instance.
+- Recognize CurseForge manifests, mod lists and instance backups without installing them as incomplete packs. CurseForge downloads are not integrated.
+- Show pack provenance and import reports; warn before individual mod updates diverge from a pack. Local imports do not track whole-pack updates automatically.
+- Reorganize Java and log tools with consistent heading, action and result areas; add detected Java path copying, log-instance selection and a log-folder shortcut.
+- Clarify mod lists versus modpacks and backups. Improve export heading/description/button spacing and group local mod source lookup options separately.
+- Preserve existing themes, account policies and edition-specific data/update sources.
+
 ## 1.2.2
 
 - Add Automatic, Official sources first and Mainland China optimized download strategies. Supported Minecraft metadata, assets and Maven files can use BMCLAPI, with optional official/mirror fallback. Automatic selection uses temporary connection probes, not location tracking.

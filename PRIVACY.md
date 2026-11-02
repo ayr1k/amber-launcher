@@ -29,3 +29,7 @@ News refresh is manual by default. Optional automatic refresh runs while its mod
 ## Download connections (1.2.2)
 
 Automatic source selection and manual connection diagnostics contact public Minecraft and BMCLAPI endpoints; diagnostics also contact Modrinth and Fabric. Requests send ordinary connection metadata (including your IP address and a launcher user-agent), not account tokens, instance names or local paths. Automatic selection caches a source choice for ten minutes without geolocation. Supported file downloads may use BMCLAPI and its public CDN nodes; third-party servers apply their own privacy policies. Account authentication is never routed through the download mirror. The copied diagnostic summary contains service names, statuses and elapsed times only. Partial files and task recovery records remain in the local game library.
+
+## Local modpack import (1.2.3)
+
+Selected archives and import choices are retained in the new instance’s `.amber-setup` folder to support recovery. Archives, embedded configuration files and worlds are not uploaded by the importer. MRPACK downloads contact the permitted content hosts in its manifest; game, Java and loader preparation contact their normal providers. Import reports contain relative file names and pack metadata. Backups of the instance may include this retained content; review it before sharing.

@@ -9374,5 +9374,273 @@
   "m72b4311221cf": {
     "zh": "下载连接中断，已保留可续传片段，请检查网络后继续。",
     "en": "Download interrupted. Resumable fragments were retained. Check your network and continue."
+  },
+  "pack123.title": {
+    "zh": "导入整合包",
+    "en": "Import modpack"
+  },
+  "pack123.intro": {
+    "zh": "从本地文件创建独立实例，不覆盖当前实例。",
+    "en": "Create an independent instance from a local file. The current instance is preserved."
+  },
+  "pack123.close": {
+    "zh": "关闭",
+    "en": "Close"
+  },
+  "pack123.choose": {
+    "zh": "选择本地文件…",
+    "en": "Choose local file…"
+  },
+  "pack123.chooseAgain": {
+    "zh": "重新选择…",
+    "en": "Choose another…"
+  },
+  "pack123.formats": {
+    "zh": "支持 .mrpack 与内容 ZIP；模组清单和备份会提示对应入口。",
+    "en": "MRPACK and content ZIP supported. Mod lists and backups are identified separately."
+  },
+  "pack123.done": {
+    "zh": "整合包已安装",
+    "en": "Modpack installed"
+  },
+  "pack123.doneNote": {
+    "zh": "文件安装与校验已完成，可查看导入结果或前往启动。兼容性仍需实际游玩确认。",
+    "en": "Files are installed and verified. Review the import or launch the instance. Gameplay compatibility still needs confirmation."
+  },
+  "pack123.zipTitle": {
+    "zh": "内容 ZIP",
+    "en": "Content ZIP"
+  },
+  "pack123.backupTitle": {
+    "zh": "这是实例备份或启动器实例档案",
+    "en": "Instance backup or launcher archive"
+  },
+  "pack123.backupNote": {
+    "zh": "请通过“备份与恢复”恢复 AMBER 已登记的备份。其他启动器的完整实例档案暂不支持，不能当作普通整合包直接覆盖。",
+    "en": "Restore registered AMBER backups through Backup & recovery. Full instance archives from other launchers are not supported by this importer."
+  },
+  "pack123.mod-listTitle": {
+    "zh": "这是模组清单",
+    "en": "This is a mod list"
+  },
+  "pack123.mod-listNote": {
+    "zh": "模组清单记录项目身份与启用状态，不包含模组文件、配置或存档。请先选择或创建目标实例，再在模组迁移中导入。",
+    "en": "Mod lists record project identities and enabled states, without mod files, configurations or worlds. Select or create a target instance, then use Mod migration."
+  },
+  "pack123.curseforgeTitle": {
+    "zh": "这是 CurseForge 清单型整合包",
+    "en": "CurseForge manifest modpack"
+  },
+  "pack123.curseforgeNote": {
+    "zh": "当前未接入 CurseForge，无法补齐清单中的下载文件。未创建实例或安装任何内容；请寻找作者提供的 MRPACK 或包含实际文件的内容 ZIP。",
+    "en": "CurseForge is not integrated, so manifest downloads cannot be resolved. Nothing was created or installed. Look for an author-provided MRPACK or content ZIP with actual files."
+  },
+  "pack123.openCorrect": {
+    "zh": "前往对应入口",
+    "en": "Open the appropriate page"
+  },
+  "pack123.localSource": {
+    "zh": "本地导入",
+    "en": "Local import"
+  },
+  "pack123.download": {
+    "zh": "内容下载",
+    "en": "Content download"
+  },
+  "pack123.contentSize": {
+    "zh": "内容大小",
+    "en": "Content size"
+  },
+  "pack123.name": {
+    "zh": "实例名称",
+    "en": "Instance name"
+  },
+  "pack123.game": {
+    "zh": "Minecraft 版本",
+    "en": "Minecraft version"
+  },
+  "pack123.loader": {
+    "zh": "加载器",
+    "en": "Loader"
+  },
+  "pack123.loaderVersion": {
+    "zh": "加载器版本",
+    "en": "Loader version"
+  },
+  "pack123.fixed": {
+    "zh": "版本由整合包清单确定。",
+    "en": "Versions are pinned by the pack manifest."
+  },
+  "pack123.zipAck": {
+    "zh": "我已核对作者说明，并确认所选游戏与加载器适用于此 ZIP。内容 ZIP 没有标准版本清单，启动器无法保证全部模组兼容。",
+    "en": "I checked the author’s instructions and selected the required game and loader. A content ZIP has no standard version manifest; compatibility cannot be guaranteed."
+  },
+  "pack123.spaceNote": {
+    "zh": "大小仅统计整合包内容；游戏、Java 和加载器另需下载。开始前检查所需内容空间并额外预留 1 GB，实际总占用仍可能更高。",
+    "en": "Sizes cover pack content only. Game, Java and loader files are additional. Import checks content space plus a 1 GB allowance; actual total usage may be higher."
+  },
+  "pack123.optional": {
+    "zh": "可选客户端文件（默认不选）",
+    "en": "Optional client files (off by default)"
+  },
+  "pack123.files": {
+    "zh": "查看文件清单",
+    "en": "View file list"
+  },
+  "pack123.first200": {
+    "zh": "仅展示前 200 项；安装后完整清单保存在实例内的 modpack.json。",
+    "en": "Showing the first 200 entries. After installation, the full list is saved in modpack.json in the instance."
+  },
+  "pack123.notes": {
+    "zh": "导入说明",
+    "en": "Import notes"
+  },
+  "pack123.loading": {
+    "zh": "正在读取版本…",
+    "en": "Loading versions…"
+  },
+  "pack123.reloadVersions": {
+    "zh": "重新读取版本",
+    "en": "Reload versions"
+  },
+  "pack123.preparing": {
+    "zh": "正在准备实例…",
+    "en": "Preparing instance…"
+  },
+  "pack123.working": {
+    "zh": "正在处理…",
+    "en": "Working…"
+  },
+  "pack123.create": {
+    "zh": "创建独立实例并安装",
+    "en": "Create instance & install"
+  },
+  "pack123.cancelling": {
+    "zh": "正在安全停止…",
+    "en": "Stopping safely…"
+  },
+  "pack123.cancelInstall": {
+    "zh": "取消安装",
+    "en": "Cancel installation"
+  },
+  "pack123.taskControls": {
+    "zh": "下载阶段可在任务中心暂停、继续或查看连接详情。取消后可在保留的实例中继续。",
+    "en": "Pause/resume download stages and inspect connections in Tasks. After cancellation, continue in the retained instance."
+  },
+  "pack123.retained": {
+    "zh": "实例与已完成文件已保留。可继续安装，或到任务中心检查；不再需要时可从实例列表移入回收站。",
+    "en": "The instance and completed files are retained. Resume or inspect it in Tasks; move it to the recycle bin from the instance list if no longer needed."
+  },
+  "pack123.resume": {
+    "zh": "继续安装",
+    "en": "Resume installation"
+  },
+  "pack123.tasks": {
+    "zh": "前往任务中心",
+    "en": "Open Tasks"
+  },
+  "pack123.folder": {
+    "zh": "打开实例文件夹",
+    "en": "Open instance folder"
+  },
+  "pack123.report": {
+    "zh": "查看导入结果",
+    "en": "View import report"
+  },
+  "pack123.launch": {
+    "zh": "前往启动",
+    "en": "Go to Launch"
+  },
+  "pack123.origin": {
+    "zh": "整合包来源",
+    "en": "Modpack origin"
+  },
+  "pack123.noAutoUpdate": {
+    "zh": "本地整合包不会自动追踪整包更新。单独更新模组可能偏离原方案，建议先在试用副本中检查。",
+    "en": "Local packs do not track whole-pack updates automatically. Individual mod updates may diverge from the pack; check them in a trial copy first."
+  },
+  "pack123.updateWarning": {
+    "zh": "此实例来自整合包。单独更新模组可能偏离作者的原方案，建议先在副本中试用。",
+    "en": "This instance comes from a modpack. Individual mod updates may diverge from the author’s setup; try a copy first."
+  },
+  "pack123.noNotes": {
+    "zh": "没有跳过项。",
+    "en": "No skipped entries."
+  },
+  "pack123.difference": {
+    "zh": "模组清单、整合包与备份有什么区别？",
+    "en": "Mod list, modpack or backup?"
+  },
+  "pack123.differenceNote": {
+    "zh": "模组清单用于重新匹配模组，不复原整套环境；整合包按作者方案准备内容，可能仍需下载；实例备份用于恢复备份时选定的数据。",
+    "en": "A mod list rematches mods, not a complete environment. A modpack prepares the author’s setup and may still need downloads. A backup restores the data selected when it was made."
+  },
+  "pack123.listNote": {
+    "zh": "记录模组来源与启用状态，方便重新安装或迁移。不包含模组文件、配置和存档。",
+    "en": "Record mod sources and enabled states for reinstallation or migration. Mod files, configurations and worlds are not included."
+  },
+  "pack123.lookupNote": {
+    "zh": "通过文件哈希匹配 Modrinth 来源，仅发送哈希，不上传原始模组文件。",
+    "en": "Match Modrinth sources using file hashes. Only hashes are sent, not the original mod files."
+  },
+  "pack123.modOptions": {
+    "zh": "本地模组导入选项",
+    "en": "Local mod import options"
+  },
+  "pack123.background": {
+    "zh": "转到任务中心",
+    "en": "Continue in Tasks"
+  },
+  "tools123.0": {
+    "zh": "选择实例，查看日志与异常解决入口。",
+    "en": "Choose an instance to view logs and recovery actions."
+  },
+  "tools123.1": {
+    "zh": "浏览、复制本地游戏截图。",
+    "en": "Browse and copy local game screenshots."
+  },
+  "tools123.2": {
+    "zh": "固定到首页",
+    "en": "Pin to home"
+  },
+  "tools123.3": {
+    "zh": "正在检测…",
+    "en": "Detecting…"
+  },
+  "tools123.4": {
+    "zh": "当前实例启动设置 →",
+    "en": "Current instance launch settings →"
+  },
+  "tools123.5": {
+    "zh": "未发现可用 Java。可以在实例启动设置中自动准备或手动选择。",
+    "en": "No usable Java found. Prepare or select Java in instance Launch settings."
+  },
+  "tools123.6": {
+    "zh": "尚未检测。点击“检测 Java”查看本机可用环境。",
+    "en": "Not scanned yet. Choose Detect Java to inspect available runtimes."
+  },
+  "tools123.7": {
+    "zh": "Java 路径已复制。",
+    "en": "Java path copied."
+  },
+  "tools123.8": {
+    "zh": "日志所属实例",
+    "en": "Log instance"
+  },
+  "tools123.9": {
+    "zh": "查看实例日志",
+    "en": "View instance logs"
+  },
+  "tools123.10": {
+    "zh": "打开日志文件夹",
+    "en": "Open logs folder"
+  },
+  "tools123.11": {
+    "zh": "请先选择要查看的实例。",
+    "en": "Choose an instance to inspect."
+  },
+  "tools123.12": {
+    "zh": "还没有实例，请先创建或导入整合包。",
+    "en": "No instances yet. Create one or import a modpack first."
   }
 }

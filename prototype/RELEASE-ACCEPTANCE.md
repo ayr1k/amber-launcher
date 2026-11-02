@@ -1,11 +1,13 @@
-# 1.2.2 release verification / 版本验证
+# 1.2.3 verification
 
-Scope: regional download strategies, retained/resumable partial files, bounded retries, task pause/cancel/recovery and connection diagnostics. CurseForge is not integrated. AmberX remains separate.
+[简体中文](https://github.com/ayr1k/amber-launcher/blob/main/docs/zh-CN/TESTING.md)
 
-336 automated tests and four site-build checks passed. Packaged startup checks passed for both products. Automated checks cover upgrade defaults, theme/account compatibility, range responses, fallback, hash rejection, cancellation, pause/resume, restart journals, DNS/redirect boundaries and pool cleanup. Native UI checks use isolated fixtures for AMBER and AmberE; they never use production account data. Public-endpoint checks verify only the sampled files and current connection. They do not establish Mainland China performance or universal mirror availability.
+The release includes local MRPACK/content ZIP import, retained installation recovery, pack provenance and reorganized Java/log tools. Existing theme formats and account boundaries are unchanged.
 
-本版检查地区下载、文件续传、重试、任务暂停/取消/恢复及连接诊断。原生检查仅使用隔离测试数据。公开文件抽检不代表所有下载或中国大陆网络性能均已验证。原有微软登录验收结果保持不变，本次不重新测试真实账号；AmberE 不提供微软登录。
+353 automated regression tests passed, including 17 local-pack checks for archive paths, corruption, optional choices, known loader/version mismatches, cancellation/restart recovery and file protection. Isolated desktop checks covered both editions, five themes, compact windows and bilingual layouts. Both packaged applications passed startup and IPC smoke checks. These checks use synthetic installation fixtures and do not establish compatibility for every third-party modpack. Live game, account and provider combinations require separate validation.
 
-Run `pnpm test`, `pnpm build`, `pnpm test:sites` and `pnpm release:check` from prototype. Keep the 1.2.1 installers and important world backups. Installers are unsigned; close games and tasks before upgrading. Uninstall preserves user data. Existing .ambtheme files remain compatible and are not modified or bundled.
+Test a real pack with the author-required versions, verify optional files and configs, then test cancellation and continuation from Tasks after restart. Existing instances must remain unchanged. Inspect Java/log tools and mod-list export in your usual theme.
 
-保留 1.2.1 安装包与重要存档备份，升级前退出游戏和任务。安装包未签名；卸载保留用户数据。现有主题文件保持兼容，本版不修改或预置主题。
+Archives are limited to 300 MB compressed, 600 MB expanded, 256 MB per file and 10000 entries. MRPACK embedded overrides additionally use the existing reader's 100 MB per-file limit. ZIP64, encrypted/split archives and arbitrary launcher folders are unsupported. CurseForge manifests are recognized but downloads are not integrated. Local imports do not track whole-pack updates.
+
+See the [rollback guide](https://github.com/ayr1k/amber-launcher/blob/main/docs/ROLLBACK.md) before downgrading. Version 1.2.2 cannot continue 1.2.3 local-pack installation records.

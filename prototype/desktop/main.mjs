@@ -43,6 +43,7 @@ import { Workflows, Settings, validateSettings, validateManifest } from './workf
 import { installOptifine } from './optifine.mjs';
 import { importOptifine, importWorld } from './local-content.mjs';
 import { Modpacks } from './modpacks.mjs';
+import {LocalPacks} from './local-packs.mjs';
 import { Modrinth } from './modrinth.mjs';
 import {DownloadNetwork} from './network.mjs';
 import { Accounts } from './accounts.mjs';
@@ -110,12 +111,19 @@ app.whenReady().then(async () => {
   handle('amber:install', (id, options) => core.install(id, options));
   handle('amber:cancel', (id) => {if (workflows.active) return workflows.cancel();return core.cancel(id);});
   handle('amber:java-scan', () => core.scanJava());
+  handle('amber:java-copy-detected',async path=>{const rows=await core.scanJava();if(!rows.some(r=>r.path===path))throw Error('Java not found / 未找到此 Java，请重新检测');clipboard.writeText(path);return true;});
+  handle('amber:logs-folder',async id=>{const dir=await core.instancePath(id);const path=join(dir,'logs');await ensureParents(dir,join(path,'probe'));const error=await shell.openPath(path);if(error)throw Error(error);return true;});
   handle('amber:java-prepare', (id) => core.prepareJava(id));
   handle('amber:java-select', (id, path) => core.selectJava(id, path));
   handle('amber:java-browse', async () => {const result = await dialog.showOpenDialog(window, { title: translateMessage('选择 Java 可执行文件'), properties: ['openFile'], filters: [{ name: 'Java', extensions: ['exe'] }] });return result.canceled ? null : core.addJava(result.filePaths[0]);});
   const content = new Modrinth(core);
   const packs = new Modpacks(core, content);
   const workflows = new Workflows(core, content),settings = new Settings(core.root),selections = new Map();
+  const localPacks=new LocalPacks(core,packs,workflows);workflows.localPacks=localPacks;
+  handle('amber:local-pack-pick',async()=>{if(workflows.active||core.jobs.some(j=>j.state==='running'))throw Error('Please wait for the current task / 请等待当前任务结束');const r=await dialog.showOpenDialog(window,{title:'Import modpack / 导入整合包',properties:['openFile'],filters:[{name:'Modpack / 整合包与清单',extensions:['mrpack','zip','json']}]});return r.canceled?null:localPacks.preview(r.filePaths[0]);});
+  handle('amber:local-pack-create',(id,input)=>localPacks.create(id,input));
+  handle('amber:local-pack-forget',id=>localPacks.forget(id));
+  handle('amber:pack-report',id=>localPacks.report(id));
   const themes=await new Themes(core.root,settings).init();
   const network=await new DownloadNetwork(core.root,{fetcher:core.fetcher}).init();network.configure((await settings.get()).network);core.fetcher=network.request;core.network=network;
   handle('amber:network-diagnose',()=>network.diagnose());
