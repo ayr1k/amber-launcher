@@ -1449,8 +1449,8 @@
     },
     {
       "path": "prototype/tests/import123.test.mjs",
-      "bytes": 12338,
-      "sha256": "88caf0e5889c544ea94a7d32bd67678e38d583627b4a7aed2fae8f1ecafef538"
+      "bytes": 12356,
+      "sha256": "bdd9af8074e92c68fe734648e24c6a482d94ea432f88f92919a48992c5815d85"
     },
     {
       "path": "prototype/tests/model.test.mjs",
