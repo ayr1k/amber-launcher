@@ -1,5 +1,5 @@
-# 1.3.0 local verification
+# 1.3.1 verification
 
-Stable 1.3.0 release. Accepted installer bytes are preserved; the internal build-channel label remains local and does not disable updates. This revision includes a CodeMirror configuration editor with tabs, line numbers, syntax highlighting, search/replace, undo/redo, UTF-8/BOM/newline preservation, JSON formatting, conflict detection and backup preview/restore. Home modules retain theme docking positions with bounded auxiliary tracks. Gradient tools provide adjustable stops and local presets. Screenshots support zoom and navigation. Dependency visualization combines recorded relationships with recognized Fabric/Quilt metadata.
+365 automated tests passed. Both products passed isolated desktop checks with Classic, Alloy, Nocturne, Harvest and Verdant; 1280×840 and 2560×1440 windows; 100%, 125% and 150% page zoom; selection styles, output formats, undo/redo, saved works, checkbox/backup alignment and English UI. Both packaged programs passed startup/IPC and checksum checks. The user accepted the installers.
 
-Limits: configuration text up to 2 MB; no NBT or script execution. Unknown mod declarations do not establish compatibility. Real-account skin CDN coverage and thousands-of-images performance remain unverified.
+Page zoom does not cover every Windows system-DPI configuration. Actual game/plugin font rendering was not verified. Plugin output needs compatible plugins; JSON is a text component, not a command. The accepted installers retain their informational local build label; update checks remain enabled. Publication preserves the accepted installer bytes.

@@ -123,3 +123,13 @@ Tools → File editor opens config/defaultconfigs/kubejs/scripts and supported r
 Tools → Gradient text supports multiple color stops and positions, reversal, bold text and local presets. JSON is a text component; MiniMessage and hex color codes require compatible plugins. Copy or export the output. Chinese and combined emoji are segmented together.
 
 Existing themes retain their navigation and docking positions. In large windows the side and bottom tracks are bounded, leaving extra room for the background. Theme packages are not converted.
+
+## Selection formatting (1.3.1)
+
+Select text in Tools → Gradient text, then apply solid color, a local gradient, bold, italic, underline or strikethrough. Clicking formatting controls preserves the selection. Mixed styles are marked in the toolbar. With no selection, formatting is disabled; enable Apply to all text explicitly to affect the document. Making a new selection returns to selection-only mode.
+
+Clear formatting restores the base gradient and normal type. Local colors remain when the base gradient changes; applying a local gradient restarts its endpoints within the selection. Undo/redo covers typing, formatting and color changes. Pasting inserts plain text. Text is limited to 4000 UTF-16 units; combined emoji are formatted as complete graphemes.
+
+Enter a name under Color presets & works. Save colors retains the old palette format; Save complete work includes text and styles. Works stay on this device. Loading replaces the current text after confirmation and can be undone. Save work before leaving the tool.
+
+JSON is a Java text component, without a command. MiniMessage and hex codes depend on compatible plugins. If literal text contains plugin color codes, hex export is blocked: use JSON or MiniMessage to preserve it. Preview uses the launcher font; the game's font and rendering may differ.

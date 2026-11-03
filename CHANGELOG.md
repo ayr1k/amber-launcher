@@ -1,3 +1,11 @@
+## 1.3.1
+
+- Align local-import checkboxes and backup controls; tools share the left page origin used elsewhere.
+- Apply solid colors, gradients, bold, italic, underline and strikethrough to selected text, with mixed states, clear formatting and undo/redo.
+- Styled editing, preview and serializers share one document model, including plain-text paste, combined characters, explicit style boundaries and escaping.
+- Retain existing color presets and save complete styled works separately; enter save names directly in the page.
+- Both editions retain existing theme compatibility. Stable 1.3.1 release for Windows x64.
+
 ## 1.3.0
 
 - Skin-head avatars with hat layers, local cache and manual refresh.

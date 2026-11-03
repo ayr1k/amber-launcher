@@ -1,3 +1,7 @@
+# Rolling back from 1.3.1
+
+Close games and the launcher and back up important data, then install the same product’s [1.3.0](https://github.com/ayr1k/amber-launcher/releases/tag/v1.3.0). Instances and themes require no conversion. Version 1.3.0 does not read complete styled works; export any needed text in 1.3.1 first and retain the local application data. Existing color presets remain usable. Downgrading does not undo game or mod changes.
+
 # Rolling back from 1.3.0
 
 Close games and save editor changes. Back up important data, then install the matching product’s [1.2.3](https://github.com/ayr1k/amber-launcher/releases/tag/v1.2.3). Keep the game library and themes. Downgrading does not undo configuration edits or world changes; use retained .bak files or instance backups when needed.

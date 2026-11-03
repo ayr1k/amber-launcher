@@ -1,0 +1,43 @@
+/* SPDX-License-Identifier: MPL-2.0 */
+/* Page origin belongs to the workspace, independent of the active tool. */
+.desktop-app .tools-page{max-width:none;width:100%;margin:0}
+.desktop-app .tools-page:has(.editor-studio){max-width:none}
+.desktop-app .tool-intro{gap:24px;align-items:flex-start}
+.desktop-app .tool-intro>div{min-width:0}
+.desktop-app :is(.check131,.import-source-option,.theme-check){display:flex;align-items:flex-start;gap:10px;line-height:1.6;min-width:0}
+.desktop-app :is(.check131,.import-source-option,.theme-check)>input[type=checkbox]{flex:0 0 18px;width:18px!important;height:18px;min-height:0;padding:0;margin:calc((1.6em - 18px)/2) 0 0;align-self:flex-start}
+.desktop-app :is(.check131,.import-source-option,.theme-check)>span{min-width:0;overflow-wrap:anywhere}
+.desktop-app .field-actions131{display:flex;align-items:flex-end;flex-wrap:wrap;gap:14px;margin:20px 0}
+.desktop-app .field-actions131>label{display:grid;gap:8px;margin:0;min-width:210px;max-width:100%}
+.desktop-app .field-actions131 :is(.select-trigger,.button){min-height:var(--theme-control,44px);height:auto;margin:0}
+.desktop-app .gradient131{grid-template-columns:minmax(0,1fr) minmax(0,1fr);max-width:1600px;gap:28px 32px}
+.gradient-topbar{grid-column:1/-1;display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.desktop-app .gradient-topbar>label{display:grid;gap:8px;margin:0;flex:1 1 300px;max-width:520px}
+.gradient-export,.gradient-saved-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.gradient-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.gradient-heading small{display:block;margin-top:6px;color:var(--muted)}
+.gradient131 h3{font-size:18px;margin:0}.gradient131 h4{margin:18px 0 8px}
+.gradient-output>h3{display:flex;align-items:center;min-height:38px}
+.desktop-app .gradient-save-name{display:grid;gap:8px;margin:16px 0;max-width:400px}
+.format-buttons{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.desktop-app .format-buttons>button{border:1px solid var(--line);background:var(--surface);color:var(--text);min-width:38px;min-height:38px;padding:6px 10px}
+.desktop-app .format-buttons>button[aria-pressed=true]{background:var(--green);color:var(--on-accent,var(--surface));border-color:var(--green)}
+.desktop-app .format-buttons>button[aria-pressed=mixed]{box-shadow:inset 0 -3px var(--green)}
+.gradient-editor{min-width:0;border:1px solid var(--line);background:var(--surface)}
+.gradient-editor .cm-editor{max-height:420px}.gradient-editor .cm-scroller{overflow:auto}
+.desktop-app .gradient-editor .cm-content{user-select:text;-webkit-user-select:text}
+.gradient-selection{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.gradient-selection>div{display:flex;gap:14px;margin-left:auto}.gradient-selection .check131{margin:0;color:var(--text)}
+.selection-color{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 0;border-block:1px solid var(--line)}
+.desktop-app .selection-color>label{display:flex;align-items:center;gap:12px;margin:0}
+.desktop-app .gradient131 input[type=color]{width:42px;height:40px;min-height:0;padding:5px;border:1px solid var(--line);background:var(--surface)}
+.desktop-app .gradient131 .gradient-stop{grid-template-columns:42px 76px minmax(60px,1fr) 42px 30px;gap:10px;margin:10px 0}
+.gradient131 code{font-size:12px;color:var(--text)}
+.gradient131-preview{min-height:220px;white-space:pre-wrap;overflow-wrap:anywhere;padding:24px;background:var(--surface);border:1px solid var(--line);font-size:26px;line-height:1.7;user-select:text}
+.desktop-app .gradient131 .gradient-output>textarea{height:240px;min-height:160px;font-family:monospace;font-size:13px;line-height:1.6;padding:14px}
+.gradient-output>p{margin:0;font-size:13px;line-height:1.7;color:var(--muted)}
+.gradient-saved{display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-bottom:1px solid var(--line)}
+.gradient-saved>button:first-child{min-width:0;overflow-wrap:anywhere;text-align:left}
+.gradient-notice{grid-column:1/-1;margin:0;min-height:1.6em}
+@media(max-width:1050px){.desktop-app .gradient131{grid-template-columns:minmax(0,1fr)}.gradient131-preview{min-height:160px}.gradient-heading{gap:10px}}
+@media(max-width:650px){.desktop-app .gradient131 .gradient-stop{grid-template-columns:42px 70px minmax(40px,1fr) 36px 24px;gap:6px}.gradient-topbar{align-items:stretch}.gradient-topbar>label{max-width:none}.gradient-export{gap:8px}}

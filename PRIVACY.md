@@ -37,3 +37,7 @@ Selected archives and import choices are retained in the new instance’s `.ambe
 ## 1.3.0 local tools
 
 Skin requests send a profile identifier to the identity provider and allowed texture hosts; images are cached locally. Screenshots, configurations, backups, graph positions and gradient presets are not automatically uploaded. Adjacent .bak configuration backups may contain server addresses or private data.
+
+## Styled text works (1.3.1)
+
+Color presets and complete styled works stay in this product’s local browser storage. They may contain text entered by the user. They are not automatically uploaded. Copy writes generated markup to the clipboard; Export saves a text file at the user’s request. Review text before sharing it.
