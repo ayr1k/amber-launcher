@@ -1,7 +1,12 @@
 {
-  "version": "1.3.3",
+  "version": "1.3.4",
   "repository": "https://github.com/ayr1k/amber-launcher",
   "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 195,
+      "sha256": "fd2e19c8f13ba6e13310a67c870eb8b2b47b4bb53197826fabcd135a73fae801"
+    },
     {
       "path": ".github/ISSUE_TEMPLATE/bug.yml",
       "bytes": 1050,
@@ -15,7 +20,7 @@
     {
       "path": ".github/workflows/windows.yml",
       "bytes": 2171,
-      "sha256": "e095ecf9ad9e33aa260901b628708c4fa5ea50429fcd492041c905db9d28a31e"
+      "sha256": "9d3aec5527dd256918006beaadedce1bd7cff9873e31dfea8936cdc15c4bb305"
     },
     {
       "path": ".gitignore",
@@ -24,13 +29,13 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 28670,
-      "sha256": "147e9b5df19dcfe3cb2daa80c3f140e2117d28f7b16d80747208486cf358ab8e"
+      "bytes": 30183,
+      "sha256": "92380c51193544746e9b243357cbd65054821878156bfbd42c4c2af4b167c73f"
     },
     {
       "path": "CONTRIBUTING.md",
       "bytes": 2030,
-      "sha256": "35570fca19e0d98d0698d5db22dbd90463ec0d795b2dc2c7353056abee56af14"
+      "sha256": "b0fa8dc557e3926bf30d209236b3f0e5e6b793bbc9acaf3dfb91ffe13f4f1e6b"
     },
     {
       "path": "LICENSE",
@@ -39,13 +44,13 @@
     },
     {
       "path": "PRIVACY.md",
-      "bytes": 6812,
-      "sha256": "2fe75e7ae7e60d13e4f831ace00634d96f8b3f5e5dd2b6d30ee9b63a79997ba7"
+      "bytes": 7264,
+      "sha256": "df63cbb1c19257f173269734d9e1ac5e55851884ea8fd719c85747ed434a63fd"
     },
     {
       "path": "README.md",
-      "bytes": 4757,
-      "sha256": "aedded9f8fc06d0747f17fea9407bab04201ed3539537591f4790635530f17b1"
+      "bytes": 4731,
+      "sha256": "387f61d2c5297d958b2bbc4e58085ef80fa5b3337a26943020b1d444befcce3b"
     },
     {
       "path": "SECURITY.md",
@@ -94,8 +99,8 @@
     },
     {
       "path": "docs/ROLLBACK.md",
-      "bytes": 5554,
-      "sha256": "436af320c1b2eacc2143c31398ac3df1a93387f7cdf8d508c56a8849f89e213c"
+      "bytes": 6104,
+      "sha256": "69a52bee9ddd057fddc2575f17770e23118f76fd6c817bf71e89962ecdaa2c42"
     },
     {
       "path": "docs/SECURITY-REVIEW.md",
@@ -109,8 +114,8 @@
     },
     {
       "path": "docs/TESTING.md",
-      "bytes": 5128,
-      "sha256": "94054e77053e8b57bd1089862d337b5158da78ca0c0f202f858afcbd24cabd78"
+      "bytes": 7296,
+      "sha256": "4de2c7a9124529577805fbb7d8d415a1fd003b98f94bd682110e643ffa4b9626"
     },
     {
       "path": "docs/THEMES.md",
@@ -119,8 +124,8 @@
     },
     {
       "path": "docs/USER-GUIDE.md",
-      "bytes": 21274,
-      "sha256": "4b9b7c4c12de51560c441cf8d3d3c59c595a0cae3611b838091f4d0203e19433"
+      "bytes": 24050,
+      "sha256": "1f43a0627a3f0c73e9b7f1bb543035ef0c357c5f3b4b1d0e035f13e02094d980"
     },
     {
       "path": "docs/theme-example.json",
@@ -139,13 +144,13 @@
     },
     {
       "path": "docs/zh-CN/CHANGELOG.md",
-      "bytes": 36570,
-      "sha256": "ff10d0dcc3453b218d0ce0d5b9bfb02727adf547cca0d953bd314f98fcd9564b"
+      "bytes": 37858,
+      "sha256": "91c0e26c3bc140a2ca2f626a56394a416b0da0cecfb3f8ab62cf743f125da434"
     },
     {
       "path": "docs/zh-CN/CONTRIBUTING.md",
       "bytes": 1689,
-      "sha256": "c84e4821a8d3ca1e0a1a06176a4ffdd6d2db356230be346047f75b08f81bd2f7"
+      "sha256": "8a95d043518e3cd83b6bb817d862f94f9d8e7619d3d234af2130bc3429fcda28"
     },
     {
       "path": "docs/zh-CN/LANGUAGE-PACKS.md",
@@ -154,18 +159,18 @@
     },
     {
       "path": "docs/zh-CN/PRIVACY.md",
-      "bytes": 5442,
-      "sha256": "94f8e12b4d55f37253039e85de115dc1aaa66ae3f0b69d8cb4745a6570f06089"
+      "bytes": 5811,
+      "sha256": "b3cde71df4115ec79c8ba354b313d446668f767069d5fbe349b1b2f4f6718460"
     },
     {
       "path": "docs/zh-CN/README.md",
-      "bytes": 3644,
-      "sha256": "3edf81609258391116facffb4f39a18919750123f57b6ad7a028a030870ae348"
+      "bytes": 3626,
+      "sha256": "f113801dd729b49638a1285ac7537bf5513bdcf40745867f12a848ade9297f71"
     },
     {
       "path": "docs/zh-CN/ROLLBACK.md",
-      "bytes": 4713,
-      "sha256": "82d128df1946add60574b5c63238040abdcdf678ccdf791ec01a047ffee1595d"
+      "bytes": 5192,
+      "sha256": "5ea91de6d80923a25a3d94d5dc696ac9e18428c30c6c862d6ac1aeea24c49fe2"
     },
     {
       "path": "docs/zh-CN/SECURITY-REVIEW.md",
@@ -184,8 +189,8 @@
     },
     {
       "path": "docs/zh-CN/TESTING.md",
-      "bytes": 3257,
-      "sha256": "c21efe58f04a70bd3f315caa369ddd3e5055610c16cb83f59ebddb46e10702b7"
+      "bytes": 3943,
+      "sha256": "4c8640c3c63ee117173f82bb5dd6b74761b634d7ba2c5b9a3cde11a3073e153a"
     },
     {
       "path": "docs/zh-CN/THEMES.md",
@@ -199,8 +204,8 @@
     },
     {
       "path": "docs/zh-CN/USER-GUIDE.md",
-      "bytes": 17809,
-      "sha256": "652659784eb5b13bc45cff1805ba7f03c985bed6f8b7ca90567369ad19809790"
+      "bytes": 20363,
+      "sha256": "8e3dea212ff988386d4eac14df34d5057ec56c199b27e351ed57cd14610d8314"
     },
     {
       "path": "prototype/.npmrc",
@@ -229,18 +234,18 @@
     },
     {
       "path": "prototype/README.md",
-      "bytes": 1190,
-      "sha256": "1241bbbb4c373d49df2f7ee16110b93f2a886eb8b8859f34d5c83ae045cad754"
+      "bytes": 1554,
+      "sha256": "44f0ea6bfd9713d40fb4b9926f9cb32a069b471e0bcf067dbfe8dc7d3c3a846c"
     },
     {
       "path": "prototype/RELEASE-ACCEPTANCE.md",
-      "bytes": 5128,
-      "sha256": "94054e77053e8b57bd1089862d337b5158da78ca0c0f202f858afcbd24cabd78"
+      "bytes": 7296,
+      "sha256": "4de2c7a9124529577805fbb7d8d415a1fd003b98f94bd682110e643ffa4b9626"
     },
     {
       "path": "prototype/THIRD_PARTY_NOTICES.md",
-      "bytes": 2696,
-      "sha256": "f8d68b1b18b363117aba5dd1994cfb7fa33892ee118b01099cd6bcb4537daafc"
+      "bytes": 3757,
+      "sha256": "1afa284ea4bf43a5698832968b1521e6d3b508e0522b01986c8b1461e86635c7"
     },
     {
       "path": "prototype/build/ambere.ico",
@@ -301,6 +306,16 @@
       "path": "prototype/desktop/backups.mjs",
       "bytes": 5406,
       "sha256": "f20a6e1b8a9fbdeda44e4020289107c09aa0f5db405a3a28bb4ddf97fb86a06c"
+    },
+    {
+      "path": "prototype/desktop/bin/seed-engine.exe",
+      "bytes": 1872896,
+      "sha256": "fac50fb0605ea4c4f07ead3a37b9692a8cb80d653687960a4f228f0bd1e58dbb"
+    },
+    {
+      "path": "prototype/desktop/bin/seed-engine.json",
+      "bytes": 237,
+      "sha256": "38a928305ccbc50cf007cd55d474515c635e8bcb7893e527bf384f1f1fc3b83f"
     },
     {
       "path": "prototype/desktop/bounded-io.mjs",
@@ -414,8 +429,8 @@
     },
     {
       "path": "prototype/desktop/home-services.mjs",
-      "bytes": 12438,
-      "sha256": "f208551ed26dbcc8e6840045d79ed4d6ea5a2e1103da09d1bbc831a3583b1e45"
+      "bytes": 12458,
+      "sha256": "d6ce05b291f10305f5ab3f406dee4d282112fbfcc1246d33b53056664ef9bca7"
     },
     {
       "path": "prototype/desktop/instance-health.mjs",
@@ -514,8 +529,8 @@
     },
     {
       "path": "prototype/desktop/locales/catalog.json",
-      "bytes": 313111,
-      "sha256": "04a94a69c328d6e4f2947805b255a21e5aaeef8eeccbce47b0cfeb5c156dd51f"
+      "bytes": 313186,
+      "sha256": "bc8ddf26a6dcbb892cf574e454c1c8ed7feab62a8a6d5052090982bf2a99a39b"
     },
     {
       "path": "prototype/desktop/localization.mjs",
@@ -529,8 +544,8 @@
     },
     {
       "path": "prototype/desktop/main.mjs",
-      "bytes": 56426,
-      "sha256": "17177e3386090bf30020dc596251c8d8e95eb10267bb45ae65de1d7beacda78c"
+      "bytes": 57831,
+      "sha256": "c0fe6d64f78800749eecb8897b311f07ed9def7ec1feabe96ce4da8d91437320"
     },
     {
       "path": "prototype/desktop/maintenance.mjs",
@@ -541,6 +556,11 @@
       "path": "prototype/desktop/microsoft-config.mjs",
       "bytes": 199,
       "sha256": "995cf39a48d02de920ec6036ab8d6fda6cbd20992d4f32ff7ffb436c2b8437c1"
+    },
+    {
+      "path": "prototype/desktop/minecraft134.mjs",
+      "bytes": 10613,
+      "sha256": "8d273d36df2788c03551fe363a47ff7dbd1c6d22476243f2ff0a38cf9709e747"
     },
     {
       "path": "prototype/desktop/mod-import.mjs",
@@ -574,8 +594,8 @@
     },
     {
       "path": "prototype/desktop/preload.cjs",
-      "bytes": 14961,
-      "sha256": "6e153b4a1fe10197b23cd76854fbf5e6eb67ef27f88a0acc36ef9142ac3a8dd3"
+      "bytes": 15137,
+      "sha256": "9237ca0a76f9fc11677eaea95ae32f7b684b0ff472e14b35d243b16d0252b571"
     },
     {
       "path": "prototype/desktop/privacy-cleanup.mjs",
@@ -616,6 +636,16 @@
       "path": "prototype/desktop/safe-copy.mjs",
       "bytes": 2436,
       "sha256": "1d877c299a50eb93e6c74488bb44e403dd392588f3e387d239f553f46442a3cd"
+    },
+    {
+      "path": "prototype/desktop/seed-engine134.c",
+      "bytes": 3609,
+      "sha256": "d9f5193a595d773b64f1299df47ac68b0c570cae56eb93d40ebcef08ec01c922"
+    },
+    {
+      "path": "prototype/desktop/seed134.mjs",
+      "bytes": 4347,
+      "sha256": "70ee116e12996a6ec022969eec229d2f9025d0cce0b4475ce3400f450a0b585f"
     },
     {
       "path": "prototype/desktop/server-properties132.mjs",
@@ -673,6 +703,1076 @@
       "sha256": "0a1df3a083d0c010560aa342e87959c8c1070e6fd54545741f083f22d0c8b551"
     },
     {
+      "path": "prototype/desktop/vendor/cubiomes/CMakeLists.txt",
+      "bytes": 10321,
+      "sha256": "04206156825e9fbcc3ab5c2fbae65e2118816bcbb5c0500384792fafd97e5f23"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/LICENSE",
+      "bytes": 1086,
+      "sha256": "24a6e9ce12e5c7731c35f1c645fc065512195f38f551d3d6ff9b8fd0f9e85988"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/README.md",
+      "bytes": 15349,
+      "sha256": "31139c833f8a391e10e3bfae669cf2a4fb796f2dd212847207da4ebb0cca82cb"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/UPSTREAM.json",
+      "bytes": 135,
+      "sha256": "28c7f575d19c46ee4310ee6c7de2155119878ea48c91107cb96c69a2961a2015"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/biomenoise.c",
+      "bytes": 75690,
+      "sha256": "fee63683666d0abd2a2b2760e6002bf8894da72cd8710ed60315d6f666ddb043"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/biomenoise.h",
+      "bytes": 12732,
+      "sha256": "65942ca6a2ea6a1895130d809ae12d68267761bdcf869c4a524154e0dcc1df32"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/biomes.c",
+      "bytes": 12574,
+      "sha256": "562186ab684191ce08b5f6f0209bcf1f0c552f80574be1a60b9f076d27c2dfbe"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/biomes.h",
+      "bytes": 7866,
+      "sha256": "6e3811a40b7c2fe26a421e75cdfff7b1142ce75c5779982f5a0178b7ee006d2f"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/carver.c",
+      "bytes": 23165,
+      "sha256": "fc3fcdec27653fbc75e5c6b16fbeaa0a2e76ae74ecca7e34ad8b2061973105dd"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/carver.h",
+      "bytes": 6279,
+      "sha256": "663b8e4240e3293023203cc73e243ac5520548163a26a6ca7f5d2db40a8cd811"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/features/abandoned_camp.c",
+      "bytes": 55585,
+      "sha256": "b193621c04f7c87687ed704f1ddb46825ab9a91eaa068cd1a40f4c1edfeabbe3"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/features/abandoned_camp.h",
+      "bytes": 329,
+      "sha256": "a8b9b6f387f1d1496fc5cb8da4ccd3dba1ec308f4bd5450fafbc2c10b4b14650"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/features/end_city.c",
+      "bytes": 8969,
+      "sha256": "59c8deaaf09aa68374b441b01b7674fff0ed228f08012448f7b3faccb55e60b4"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/features/end_city.h",
+      "bytes": 1055,
+      "sha256": "9a8e40fda80f7509ed4c3eaa0c7587bd023f0b95914eb1ea79a2b810bda6e5b6"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/features/fortress.c",
+      "bytes": 9089,
+      "sha256": "d5a850510696ca4bea6c6f0dc1decd370570766976813afee455c659bd7484fd"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/features/fortress.h",
+      "bytes": 1014,
+      "sha256": "847de15eade2e2d2e6ce76aa614ccb51b7084292c66ee9a9dc407533d1a04150"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/features/mineshaft.c",
+      "bytes": 20759,
+      "sha256": "539b659c839e9e6471da7dd5049cb20bded591979ed37c5bd3af1c95fe8d49b9"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/features/mineshaft.h",
+      "bytes": 488,
+      "sha256": "ca20b0affcc44c25f91585b4fd832d57c48b127e7b0ffc8909b8d65f890eb6da"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/features/ore.c",
+      "bytes": 46564,
+      "sha256": "d764068de03351ad99ae6aab258cae8783cc3f943b3362feae6ba2b410f90751"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/features/ore.h",
+      "bytes": 5840,
+      "sha256": "c776a8d332e5701606430d47082621278d6a4c6dc53864b263f9af404352bb16"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/features/piece.h",
+      "bytes": 1828,
+      "sha256": "a66539391b0ea7f5a8ba7bfcda6e3bf01ef46604557f276d6ed56def6f35eee9"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/features/stronghold.c",
+      "bytes": 24341,
+      "sha256": "2a4283d2cb7fb5c3676c4062b0d3235b0ba0a24b94f0096cc868843d030c9699"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/features/stronghold.h",
+      "bytes": 2610,
+      "sha256": "082c5e5f1cee6c884300db63b92a8d85af1264e623c17ade8a2f4b7cec938337"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/finders.c",
+      "bytes": 238348,
+      "sha256": "556d4677283072f4a133292a820c66bde219792a8d2fc9be52d883c51dd8d98b"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/finders.h",
+      "bytes": 35908,
+      "sha256": "56de3343c797e9026e875c2c282cfe109f61db88dd70590201537d97f23a21c1"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/generator.c",
+      "bytes": 28506,
+      "sha256": "ffb8f6bf75ba16e3809fe3dae0ac0b01171a70c1c627d211fedd6743fc33e6b6"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/generator.h",
+      "bytes": 4634,
+      "sha256": "f266bdf6c1f267984ff3c3da9843f580176c770d40788c3b5d90c4b1ca93e9f1"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/layers.c",
+      "bytes": 62213,
+      "sha256": "602a5837ad166f80dc1fd4395a9ac8f0063e801dd0cc47fe9dc2848b008a63a2"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/layers.h",
+      "bytes": 6905,
+      "sha256": "7c6c2af198e4d6d38a84ff6be9e6b8d0ca3b53424a7d90a14de75996e0687b04"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/cjson/cJSON.c",
+      "bytes": 82729,
+      "sha256": "50c82ccd0b053b5c75578f9159bb7c406047ebcff75c9bf71b13f6e0b7b4867c"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/cjson/cJSON.h",
+      "bytes": 16656,
+      "sha256": "55860a582283c7e21818739f8a6e7a874efa76e013aa5adf82f647507b430399"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/items.c",
+      "bytes": 26931,
+      "sha256": "477efd2e4f6eecaeef98e83ddb5d6ffcb15053e050b5ef36651fc3c843a84bb5"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/items.h",
+      "bytes": 4762,
+      "sha256": "aaa7fd9410ec7c47aef5390c62ed4b998bd354346fa0af6330cc9b6274bf8a64"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/logging.h",
+      "bytes": 348,
+      "sha256": "afa95deca42ec2c13b269d508bbc5f28ba615baaf18560fa20c40589dabc2162"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_functions.c",
+      "bytes": 50652,
+      "sha256": "75dd3192dc8dff9a1816b888c2e1df2f4f0c3afad1b1dc003bb026180507bc23"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_functions.h",
+      "bytes": 8010,
+      "sha256": "5512b6e8b4124e82a734ff81d21c884fa38cd3ccccb873490efc30f59b8463c4"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_table_context.c",
+      "bytes": 6325,
+      "sha256": "7cdf36822ec4bef24593b858a46d56bf089f9edf56415a9ba959e2fae5178e9c"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_table_context.h",
+      "bytes": 3402,
+      "sha256": "e0bb2eb0a2b17a3c1d879cd5d21a56b46f0160cb4e88340ef95a8cbedbc94736"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_table_parser.c",
+      "bytes": 39441,
+      "sha256": "fef5cca176129504e5da782e8ac45a9ebbddd7a11c7bf7ef40b9e11fbff32ee1"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_table_parser.h",
+      "bytes": 590,
+      "sha256": "5488fa80e52d794336b175174a46954d8b2dbd845e18b256f05da00c830f380c"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables.c",
+      "bytes": 16044,
+      "sha256": "883bf0cf5f2486f076d6a01a14e07f5a851484547af9170d2e552a546e472f9a"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables.h",
+      "bytes": 2218,
+      "sha256": "78b3742775670b1ae28a51d1dd2a353ad96482061404d7af34c23ed201f87689"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/barrels/abandoned_camp_barrel_26_3.c",
+      "bytes": 5089,
+      "sha256": "a91bc3bb3a5e51944de02dd5ad6285d24ec657062b6dfd5284bc6ad34821c2ed"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/barrels/abandoned_camp_barrel_26_3.h",
+      "bytes": 269,
+      "sha256": "2c51032c3ecdc9a77e7b123d906e594f57c56c18e87e0223a8674bf7488b57d9"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/abandoned_camp_common_chest_26_3.c",
+      "bytes": 9276,
+      "sha256": "661a6bb0e8d8aa63e5eb024adfebffbc991c4a177c01cea6d1e44cc34806bd64"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/abandoned_camp_common_chest_26_3.h",
+      "bytes": 293,
+      "sha256": "c41c92dedcc31f51a57eb6701ae4268c562b642998ad6a1bbdda26766f9b951d"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/abandoned_camp_secret_chest_26_3.c",
+      "bytes": 8521,
+      "sha256": "ed7415808765793d8792a2ea2d050a45d5bfb381da709e0923525e6fcfedc146"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/abandoned_camp_secret_chest_26_3.h",
+      "bytes": 293,
+      "sha256": "cfd1f0b3fc221e0ddb098998afd31bcb7c3fcd4b5206af463a5fb8357b07d9df"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/abandoned_mineshaft_1_13.c",
+      "bytes": 6923,
+      "sha256": "574736478f083628c491cbe47af4fae62e9b481b0dd3aa7c4b68547f6954f9a0"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/abandoned_mineshaft_1_13.h",
+      "bytes": 261,
+      "sha256": "4030d3200eb31e110029b6ae853275c49608b890edf3ad95c82b823a87f9dfd4"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/abandoned_mineshaft_1_17.c",
+      "bytes": 7106,
+      "sha256": "583d062e5b443484797ca11409ec2a81cec478e979754b22e994df55f9f5417e"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/abandoned_mineshaft_1_17.h",
+      "bytes": 261,
+      "sha256": "0a28362be0ed0123dacd6fca3614a7baff01f844c36ee517269fc687c3deb325"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/abandoned_mineshaft_1_21_1.c",
+      "bytes": 7159,
+      "sha256": "0ae623a8f26e2730c4d0d034a008811369c8cec96bdc98859667c32efd8ba276"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/abandoned_mineshaft_1_21_1.h",
+      "bytes": 269,
+      "sha256": "bbac1972407a6d34da7e580aed6474f7b8dcf0c6c8fcbe2e6317d0e35418aed5"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/abandoned_mineshaft_26_2.c",
+      "bytes": 7330,
+      "sha256": "1173679224c9a7d27a044ebdc491146004f0a8ce944a040269055925d99966fc"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/abandoned_mineshaft_26_2.h",
+      "bytes": 261,
+      "sha256": "ef71c296106ad6eeceb8ab68236fb1318c98717a34aabf6c0ce37b343b9dd68d"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/bastion_bridge_1_16_1.c",
+      "bytes": 6957,
+      "sha256": "3327cd502bdf5b961b5688875b0431a8fa48071fa82c506930ba1d32e1cd88e2"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/bastion_bridge_1_16_1.h",
+      "bytes": 249,
+      "sha256": "665c00254592e77f2324fe4a0fe1ae8af0618b996e1cc9b6d1da07987ee7708d"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/bastion_bridge_1_16_5.c",
+      "bytes": 7207,
+      "sha256": "c53e02cf1576936d4dd59a517412f6f54aa3a979b8059a0e74cc8cb5679ca45e"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/bastion_bridge_1_16_5.h",
+      "bytes": 249,
+      "sha256": "b608a0d9b3458f3b44154ea7212d800de12f62c6cc966e9ea3db0798dbe1b0f2"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/bastion_bridge_1_20.c",
+      "bytes": 9447,
+      "sha256": "9dabd90b0b958d14ecbf9d6d350c1012bd2ed61fa8f703eea53991537e141c16"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/bastion_bridge_1_20.h",
+      "bytes": 241,
+      "sha256": "1a471031290fc505a4ed5fd756d9f9eccc83585019df1759ad3914fcd173aa93"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/bastion_other_1_16_1.c",
+      "bytes": 8141,
+      "sha256": "4c5dc4127692e4c7bf0eda505923e45902f64e7d3f16ff48fd0dec5d56ce097f"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/bastion_other_1_16_1.h",
+      "bytes": 245,
+      "sha256": "81a0e29353949c81c24ea347bc6f1fd7fcbc3121494949cf6d59d3e11c4e81d6"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/bastion_other_1_16_5.c",
+      "bytes": 9584,
+      "sha256": "2f8119fe16243bb4ed50a1ffe99d1091aaadc93c2f26876a48023dfabdd36d46"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/bastion_other_1_16_5.h",
+      "bytes": 245,
+      "sha256": "fa261a0a0781927a6f907f9a9bf591e87c34dce8962dadc702121560fd7b3a2c"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/bastion_other_1_20.c",
+      "bytes": 11824,
+      "sha256": "aa85feb1767fd90e1c4e456996f5ee7e9e06bf56da6e51a17fa4f4c32c2a106f"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/bastion_other_1_20.h",
+      "bytes": 237,
+      "sha256": "f885bea470b22f491570125762a4c91c98131f31cc7be346be65594f9e924267"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/bastion_other_1_21_1.c",
+      "bytes": 11990,
+      "sha256": "1730dceabf06aeddbb295316c5251afb294e7ded3c3c58d0544c8ba2414c8def"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/bastion_other_1_21_1.h",
+      "bytes": 245,
+      "sha256": "04bff760a029f5b39b6a999734a1752ab68694cc1e2eedcf769da05d36c6df62"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/bastion_other_1_21_9.c",
+      "bytes": 12000,
+      "sha256": "8285e3474cbe6f409f6316ef6a0fc5e67e36331dd6eaa00fad4b1127ae3593ac"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/bastion_other_1_21_9.h",
+      "bytes": 245,
+      "sha256": "6d60114d67f3421630ec860dc2d1ffc8b2217cd1702eb7e35db0e5f5185ee28e"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/buried_treasure_1_13.c",
+      "bytes": 7323,
+      "sha256": "193adfa0919c7003e1e8314a86d11f2a601acaf17c787e7c4fc7e60141178822"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/buried_treasure_1_13.h",
+      "bytes": 245,
+      "sha256": "18f9dbbd635bdac3cdde86cec10d18769ebdd53ceb68bfe136c55863573d9299"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/buried_treasure_1_18.c",
+      "bytes": 8521,
+      "sha256": "2f44581643f8892da53dd30613fcebfa98ffc0a6eb5892b648026f78f420da30"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/buried_treasure_1_18.h",
+      "bytes": 245,
+      "sha256": "356e17aa5fd1962e094f3be2bf3037283968350ddc6e7b73bd3178abd63ced98"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/buried_treasure_1_21_11.c",
+      "bytes": 10817,
+      "sha256": "5a67d5c3e6c76c5941f15c2864df4864b07627f9861ccbe66ea20e79d9adb727"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/buried_treasure_1_21_11.h",
+      "bytes": 257,
+      "sha256": "6d8893ee6741715c4423ccb3fe01381755eff74f9749fca8185dc7705cffddc3"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/desert_pyramid_1_13.c",
+      "bytes": 5893,
+      "sha256": "fc68c13eee42aac2a97e02bc16ffbbc5b7c32025e955b9127db4dbe20b959e0c"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/desert_pyramid_1_13.h",
+      "bytes": 241,
+      "sha256": "d12af6fba94bc940ce1790f581167677d90d192c1d5a3fd62d244275779711eb"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/desert_pyramid_1_20.c",
+      "bytes": 7132,
+      "sha256": "659e5b29865370f68266a0d8b945bd9be0b30208b25a35de2b8f07054bd673a2"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/desert_pyramid_1_20.h",
+      "bytes": 241,
+      "sha256": "737ed1d14a52500a1a589612904ae15242fb7b1b5d66769f42f1519f9a189dd1"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/desert_pyramid_1_21_11.c",
+      "bytes": 7390,
+      "sha256": "95c7539e001f0e6a2f9068b46141dc5b78b42284505523f5716987bdeeecd305"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/desert_pyramid_1_21_11.h",
+      "bytes": 253,
+      "sha256": "25821f6b5d1b642f5883120a2f081e63155e2749e0ec2a3854ef792085ee4c3d"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/desert_pyramid_1_21_6.c",
+      "bytes": 7252,
+      "sha256": "af2bcca2dee8b4082dd870580362a63b993c4636455daeebe7ae5c7b80e48c0d"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/desert_pyramid_1_21_6.h",
+      "bytes": 249,
+      "sha256": "569c6d1a9eafe913ca4d12d9d6d1e6ef89108bdf967f7979a9d1ae98e7891883"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/desert_pyramid_1_21_9.c",
+      "bytes": 7380,
+      "sha256": "adf47702a947d272324419049342e5ef48a0be6c1cb8ddbc1f8cee2b4f86304d"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/desert_pyramid_1_21_9.h",
+      "bytes": 249,
+      "sha256": "4bcc3b4b8463497ab0cd56aa039a83f06acd690ea0db4d08a080e6d5b6e651aa"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/end_city_treasure_1_13.c",
+      "bytes": 6259,
+      "sha256": "cb25809b9c101672f693dbfcdeaa9ff2fd99955c9b9e2b9639955b28279778a1"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/end_city_treasure_1_13.h",
+      "bytes": 253,
+      "sha256": "8b37be81391bf8578fff8d934de1193b989d0d5184492d743103dc6e37813542"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/end_city_treasure_1_20.c",
+      "bytes": 7411,
+      "sha256": "52938a2f4dce657a853edfcb2e532fd5ae8b4c501b308efa3d96968fa96852ba"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/end_city_treasure_1_20.h",
+      "bytes": 253,
+      "sha256": "278302ea0ab9068b90c5660caec419e603d159eeb3b1f767874d9eda35432231"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/end_city_treasure_1_21_11.c",
+      "bytes": 8286,
+      "sha256": "364935fd2b62592834495cb4bab997c363a1ab6760eb766730ab0741b6e17cbc"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/end_city_treasure_1_21_11.h",
+      "bytes": 265,
+      "sha256": "b3657570115739064b1047f9ced032a2df2a4f3ab6c30f1220ca62f0d0395081"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/end_city_treasure_1_21_9.c",
+      "bytes": 7994,
+      "sha256": "381c8a1139b99564f18ba316c8c8f4c0d322dbb6a23deec92ba1dc2021423f61"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/end_city_treasure_1_21_9.h",
+      "bytes": 261,
+      "sha256": "514ed83c2c17fadfe80b1541c0a47f1c06496a15206b45e46ad664a80322e58a"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/igloo_chest_1_13.c",
+      "bytes": 3786,
+      "sha256": "e10d26d75a15b4d1fe5f06fb429daea9faadf7a5bbd5e3e9b0c43faefd837935"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/igloo_chest_1_13.h",
+      "bytes": 229,
+      "sha256": "3a36369fbcfeb170b5b9362bb5734617faa49be2eb625f8c356c9a7eb084609e"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/jungle_temple_1_13.c",
+      "bytes": 3334,
+      "sha256": "3d3300ba9f342edc3787f214b5adaa15dbc56a912a65ef527c2f73f3964b1ce8"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/jungle_temple_1_13.h",
+      "bytes": 237,
+      "sha256": "8b3371d017ef290b80f4c4801370ed3059558b7c7c25fd9df7d31cf8ec521f0f"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/jungle_temple_1_14.c",
+      "bytes": 3494,
+      "sha256": "c4bfb187c236d2e2b5667f03f0deb251c40bef9ee019fabe12ffe1e38c012690"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/jungle_temple_1_14.h",
+      "bytes": 237,
+      "sha256": "d9a7e1ba1d0c2364ae4605acef9960c791372fb8e6faf83c64c8c4d1b3c6da38"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/jungle_temple_1_20.c",
+      "bytes": 4719,
+      "sha256": "d4f5790ea876dc0b511008b0b5534b021a0d9d99830217c5ef1e3d9248e7912e"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/jungle_temple_1_20.h",
+      "bytes": 237,
+      "sha256": "f8ea22b188e3dba2c4d60a20ec61ffa95b5638c027ba94ef3bb686fec215cc7f"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/jungle_temple_1_21_11.c",
+      "bytes": 4920,
+      "sha256": "a51684183b916f3b0007b9ad5d4d6aebdaa57872e0110eb96aa8d37f4ecbb7bf"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/jungle_temple_1_21_11.h",
+      "bytes": 249,
+      "sha256": "b5090be998946282e9bcd70f0460dc95c7d656d4256ca650c189d8b7e0b72188"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/jungle_temple_1_21_6.c",
+      "bytes": 4835,
+      "sha256": "eaf036f3282ebf24fcd5910edf2f950c2551f048bb078d0f1a630ebdd36e43cf"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/jungle_temple_1_21_6.h",
+      "bytes": 245,
+      "sha256": "2ffcdcd131574465ddc7e709dc261c91e3c2a6196fccb6f0c804d34e63d4dd2d"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/jungle_temple_1_21_9.c",
+      "bytes": 4912,
+      "sha256": "dff07ee7144e8cc3358645651a6e59284d4cfefd8e8043d63717aaf230f23838"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/jungle_temple_1_21_9.h",
+      "bytes": 245,
+      "sha256": "4dcf5a023797e8ce15cba8f96b3bc33aa2f1b556d0a4d87f814f71b0e09a1044"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/jungle_temple_dispenser_1_13.c",
+      "bytes": 2193,
+      "sha256": "2562a3c3d61cf9ac10e05d3f3b150d38f27941cb4d9b64299ae0d4d075987ec3"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/jungle_temple_dispenser_1_13.h",
+      "bytes": 277,
+      "sha256": "b1d3d057aa1c4ec6750fd320b77f728de002bd970742f295ee14fc9e03265da9"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/nether_bridge_1_13.c",
+      "bytes": 3242,
+      "sha256": "65aec9d6f050202a7bd224e62e3e057f4cd4f36ef4b126ac5768ab05ce717729"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/nether_bridge_1_13.h",
+      "bytes": 237,
+      "sha256": "ee30265f202fdf1b89b0ee956fbe215f0d1632dbce4971649910b5f0294feb68"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/nether_bridge_1_20.c",
+      "bytes": 4382,
+      "sha256": "6ef85faa3314b545c9aaba728688f6008a54d488da2397fe9f0f53d8cbed6b87"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/nether_bridge_1_20.h",
+      "bytes": 237,
+      "sha256": "d179abda561b4992cd33b7ee3a4ae0855b8c1fb557e00387074df0951f2aa274"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/nether_bridge_1_21_9.c",
+      "bytes": 4489,
+      "sha256": "313e7f0569b6e66cf00c8c896ad3caf96b74663ebeeb23ab32d35fadc81314c7"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/nether_bridge_1_21_9.h",
+      "bytes": 245,
+      "sha256": "b72a178e84b2bba324cd1dfb4d4a54bf26089bfe7b801685f4eeee52c3f595f0"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/pillager_outpost_1_14.c",
+      "bytes": 6359,
+      "sha256": "f8dd0eaad389784032f45122bfd39f19ebadc1d21eadf2452896071068842f6a"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/pillager_outpost_1_14.h",
+      "bytes": 249,
+      "sha256": "689fde88f32b056220a3951edbeefae416a20159176c40b3dd86c206a4b820e6"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/pillager_outpost_1_19_2.c",
+      "bytes": 7545,
+      "sha256": "c536b9e04ac70918dd46b88a6fc22f46ae929b1f31c933e930174706942dff93"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/pillager_outpost_1_19_2.h",
+      "bytes": 257,
+      "sha256": "50e0c80bbf3f9bc5110d943757780200fa44751a19ccc25f2835ff7aa6c68839"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/pillager_outpost_1_20.c",
+      "bytes": 8755,
+      "sha256": "4ef30ceec2749609074787d590789a3531283bee17e09dee4227988e313fed73"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/pillager_outpost_1_20.h",
+      "bytes": 249,
+      "sha256": "5603eb23da7bd426768e79f72d5c8e1df534884eb2e8d314e301ac71da7f64ec"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/pillager_outpost_1_21_11.c",
+      "bytes": 8836,
+      "sha256": "80fd32ab51ef9f901075e59eccdabf74c0df57003d191c9444d31b8f969f39f3"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/pillager_outpost_1_21_11.h",
+      "bytes": 261,
+      "sha256": "20d0d50c6ca11c32e32908172c67f4a770cdefcb1fb0cc0de1cdae8950691024"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/ruined_portal_1_16_1.c",
+      "bytes": 6490,
+      "sha256": "803365429606e717b87379f2986e66e17f885340fc21fc1b47734b4178e6035a"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/ruined_portal_1_16_1.h",
+      "bytes": 245,
+      "sha256": "8f34be8759f8ae03827a263759808e49d3e43ea2fe80a7ba2716ccca853333e0"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/ruined_portal_1_21_5.c",
+      "bytes": 7968,
+      "sha256": "8cad8091c1597f883a6e499a5004482ee5d232821c056b769d6f0719b205c25b"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/ruined_portal_1_21_5.h",
+      "bytes": 245,
+      "sha256": "5a383f60d1e0946b9be893df8d02e88c93b2c99b0afecbc18f20ebda611bacbd"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_map_1_13.c",
+      "bytes": 3673,
+      "sha256": "fae629e59fdd31b85f3a9aa5dee910581c294d59de79fb0bce35e61b8c655d12"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_map_1_13.h",
+      "bytes": 237,
+      "sha256": "0f8a4abbd94f86b82e8e88015b4e6503e63933257c568d27a7757335c2aa65c7"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_map_1_18.c",
+      "bytes": 3728,
+      "sha256": "1d04955be6ac5558e55af9d71cbdb3190a4f5b6e2f30a7f397b2edbb07806ffe"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_map_1_18.h",
+      "bytes": 237,
+      "sha256": "709948f52028dcfe62c601173af8d151ddd4f9224ba3d1dbbee5f103230b8726"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_map_1_20.c",
+      "bytes": 4963,
+      "sha256": "e075fa0dbc2be6d04c287dd269e84e937b7b9ac29d75495724a7c0d08949c03e"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_map_1_20.h",
+      "bytes": 237,
+      "sha256": "692d64bbf077b53d3c674e7c8fe71f6f11d15c364214a71d87879ca0cd212ddb"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_map_1_21_11.c",
+      "bytes": 7178,
+      "sha256": "543b187c9c8957ac915298e4137206496e484ca86bd83ae0db0b1f90f28843ec"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_map_1_21_11.h",
+      "bytes": 249,
+      "sha256": "8da6a22fe44c2f53469229a6ea823e6893cc107535970ee09a5deeb292a6cf97"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_supply_1_13.c",
+      "bytes": 4108,
+      "sha256": "7f53acea4c04a5183473122f7ab2860747335cdf8e3bbfe06717a00c64294b86"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_supply_1_13.h",
+      "bytes": 249,
+      "sha256": "a358a9542eff249c25f42eb13da4df739f714714f3e1d247d75fa76b6581a65b"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_supply_1_14.c",
+      "bytes": 4764,
+      "sha256": "0aa3b27e76a6cfdd9f579641e9d9559d9a444dd226cd5a595721acc86aa053d2"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_supply_1_14.h",
+      "bytes": 249,
+      "sha256": "d45cabf38f20b0eed642bc7b7a019f2b0e9b1e0bf13cf6060734e1a134707f0d"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_supply_1_17.c",
+      "bytes": 4911,
+      "sha256": "5473c99bed0942720aa7168c5973d241db850909c39ff500083083a6fdf788af"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_supply_1_17.h",
+      "bytes": 249,
+      "sha256": "dbd91ffb68126c9e7c0da539768e0f5f7d6a47ad9cfac47702882245b29e64c9"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_supply_1_20.c",
+      "bytes": 6153,
+      "sha256": "d7dad803d99054eee75d0dadb372ae2f37cc2dcc4fc90596a22295e9ce0db780"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_supply_1_20.h",
+      "bytes": 249,
+      "sha256": "5e4ad4edb9e75de9a4c65fb2288f12f4f7b3806ba850bfbd11a5524446e528a6"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_supply_1_21_11.c",
+      "bytes": 8511,
+      "sha256": "2901e7e0956cf071cd1e66e39f6df91266ee7455ed4dd41c7fb502d9ef616f51"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_supply_1_21_11.h",
+      "bytes": 261,
+      "sha256": "1ffba34904ae0c6744bcd3bb15a92ca1d5df644f0b28fef6f1368a6362b9bbc5"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_treasure_1_13.c",
+      "bytes": 4558,
+      "sha256": "784be20dfe76cd026bb1a02e49934939bfb7893a122ffa74c53ed2203b78c66c"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_treasure_1_13.h",
+      "bytes": 257,
+      "sha256": "947beab66d7e40daf264a57a90e8da228c3a30471b66cbe152e39c44e553dedb"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_treasure_1_20.c",
+      "bytes": 5803,
+      "sha256": "2cf2265ef2121a67d9e7611b6a578917e6802c425bf11244a6780f823a166451"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_treasure_1_20.h",
+      "bytes": 257,
+      "sha256": "540cb564b86631f5a09ba34bccf4b28ae451964fb24ddabc1c84997c80b34315"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_treasure_1_21_11.c",
+      "bytes": 8029,
+      "sha256": "d229c6d49b5ba212ca2e4f6a13619d9d9c99c69d2cee322f320df97ff9a57064"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/shipwreck_treasure_1_21_11.h",
+      "bytes": 269,
+      "sha256": "f7eb776b9d9f6691cb780984309db394d95c8ee59bf985da63c404d1dfd8c9f6"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/stronghold_corridor_1_13.c",
+      "bytes": 3930,
+      "sha256": "2a756c98c6dcf2ca8efc0c8cafc633cc7f2df4efaedf5cc7af4e28077548bc29"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/stronghold_corridor_1_13.h",
+      "bytes": 261,
+      "sha256": "c44d5a8f1c58a8b5feb56cc34b7b35dafb6b8f42c3a820296f1f00c6dc4a9fe7"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/stronghold_corridor_1_18.c",
+      "bytes": 4013,
+      "sha256": "bbc9fee8964b7d13e248331497f9e0858e4d5dbea722c1dcf219345721da9d9f"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/stronghold_corridor_1_18.h",
+      "bytes": 261,
+      "sha256": "73eaf0793089beb019e70195d29c043c30b5ded50882c8cb5515b497e7d9f845"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/stronghold_corridor_1_20.c",
+      "bytes": 5150,
+      "sha256": "e57e1b3a42cc843659415f8e8d48925e733c18ebce7ea0920d07d76dc6425ce1"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/stronghold_corridor_1_20.h",
+      "bytes": 261,
+      "sha256": "b8a6e34267a2122a8110a711ec9e7dba77f2575957e41c17c86a515a0e207fce"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/stronghold_corridor_1_21_6.c",
+      "bytes": 5266,
+      "sha256": "5f33a95a5a353f1334a2033690b079abc9d3fd89a03c76961f90bb3fb2fa7cf3"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/stronghold_corridor_1_21_6.h",
+      "bytes": 269,
+      "sha256": "8b5d45e05ce68e5fad5cc241a3e4a1590f68501f2eff411a058164857aa771c9"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/stronghold_corridor_1_21_9.c",
+      "bytes": 5343,
+      "sha256": "fa5fe150fa59677192efa4da4971abe3f159269d11b15244d81ae7888807a3e7"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/stronghold_corridor_1_21_9.h",
+      "bytes": 269,
+      "sha256": "8b2ca34f28e6ca7933c91d5da07e23c80fba4c3465e7b4fc7a7b84baf0af3c7e"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/stronghold_crossing_1_13.c",
+      "bytes": 3096,
+      "sha256": "3da36830b466ff807ae58383bb61e8dc8c54dc99cebbc9b209106d4141192140"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/stronghold_crossing_1_13.h",
+      "bytes": 261,
+      "sha256": "fa66d3905c80d6cf6d3639b6b9b62c959a2fd2683e93357d1c83946ecd8dc2fb"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/stronghold_library_1_13.c",
+      "bytes": 2625,
+      "sha256": "9e18a59b62d531d78224449fe0a73235ffbbbe639bc4c6de52ad2c85d99e4f69"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/stronghold_library_1_13.h",
+      "bytes": 257,
+      "sha256": "758edc9044a350366d942e383ae708c9b6be12fdab13fd00a6c2bac4971d82c4"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/stronghold_library_1_20.c",
+      "bytes": 3714,
+      "sha256": "6bd55c45a85df47cc7344d53f01c0b3ef45986e05a2cb21b15c5ec9d9892be6d"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/stronghold_library_1_20.h",
+      "bytes": 257,
+      "sha256": "6f6fb4806035664cd4054a52f688245527122392b29f6c629be6fa4f76bd7cd1"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/trial_chambers/reward_1_21_1.c",
+      "bytes": 5580,
+      "sha256": "76f6d9df89672eec7feecad2411161ad6d4e6d8a5bfe1cb1e63a8f65e6be3e98"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/trial_chambers/reward_1_21_1.h",
+      "bytes": 220,
+      "sha256": "bac3b2e045cf0cb4079d27e651f03e5c3ff15b37163cfa72321206744624a724"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/trial_chambers/reward_common_1_21_1.c",
+      "bytes": 3306,
+      "sha256": "dff710f4e202aced4cc23c9a4cdfc94f150e7ef9ff32c80adf72c0d434dcb294"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/trial_chambers/reward_common_1_21_1.h",
+      "bytes": 248,
+      "sha256": "336d2e8d7a5683f2f9f52d8e8218bce0a118ff97f54886d90202a88fed885032"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/trial_chambers/reward_ominous_1_21_1.c",
+      "bytes": 5692,
+      "sha256": "cd54321411a1ee58e3ae6263099d03e0448b92b77198da29c19d947715adfbcb"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/trial_chambers/reward_ominous_1_21_1.h",
+      "bytes": 252,
+      "sha256": "ec498f221d487eda7640381629cb7dda746a65e0d18b1d0983910c5d4c5af8ed"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/trial_chambers/reward_ominous_common_1_21_1.c",
+      "bytes": 2836,
+      "sha256": "e0070cfc76482ca6367db9a90cbe66c6ab7b190d51ee5f47382aed5883cd719d"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/trial_chambers/reward_ominous_common_1_21_1.h",
+      "bytes": 280,
+      "sha256": "068a5d05bcf22eef898da69cbd82b02e444b840d3cfc4dc75c77164a84a134b8"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/trial_chambers/reward_ominous_rare_1_21_1.c",
+      "bytes": 3889,
+      "sha256": "3fcdfdddc1a20cfeab0a99c85c62bb8186201b894b78e8b0986958f4409a07f9"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/trial_chambers/reward_ominous_rare_1_21_1.h",
+      "bytes": 272,
+      "sha256": "7b92dcef1a69844b6248c7c3113afe1b3fbf9da91c5c4eb8ff69e2cb44cf3ddf"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/trial_chambers/reward_ominous_unique_1_21_1.c",
+      "bytes": 2365,
+      "sha256": "898c9f52693dfd487c53e824b57ff9482098d799106bed775917a51ba8cd02cc"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/trial_chambers/reward_ominous_unique_1_21_1.h",
+      "bytes": 280,
+      "sha256": "5ed056bd4d0545ea3fb016a0977f22ad91829f183cfba7df7bca609aada1f2c7"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/trial_chambers/reward_rare_1_21_1.c",
+      "bytes": 4696,
+      "sha256": "98a04e775bbf4285efc0cd1f630854519bc4f78c8f1693c3eb679172ef229c8c"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/trial_chambers/reward_rare_1_21_1.h",
+      "bytes": 240,
+      "sha256": "d8f82e969f802b74a3b1fa04ebd45b608500824c29031302ac33fc6a79cd28e6"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/trial_chambers/reward_unique_1_21_1.c",
+      "bytes": 2321,
+      "sha256": "d550cf09905b1eac07feeadc297015dcfc50b97d6cf2a164a589ac2abd0c4056"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/loot_tables/chests/trial_chambers/reward_unique_1_21_1.h",
+      "bytes": 248,
+      "sha256": "cff38ba1df543868e41e01ee339bb2e8ae637519061c90292cd0ea4900aecd4e"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/loot/mc_loot.h",
+      "bytes": 574,
+      "sha256": "aacc195057ff989170f53af252722b85bba2157d97fd9aaf3921de9fbf0dd859"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/noise.c",
+      "bytes": 17842,
+      "sha256": "24fd4ff5bd43833183e5040dffeae621fa3b746e2f782948eba7769cf0e6cf18"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/noise.h",
+      "bytes": 2696,
+      "sha256": "753228695c855904d147017f7a578f647aa4018008ef76b5a04733d782ade369"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/quadbase.c",
+      "bytes": 16646,
+      "sha256": "e320ed499c535fc799a98119d771ea5bc61ac1a1ca7fab1ec41f45a8a9432929"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/quadbase.h",
+      "bytes": 19809,
+      "sha256": "9d7815a02e9612d410d43bcb709b55b88d7e1f0a1be4242968588f814595c219"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/rng.h",
+      "bytes": 17373,
+      "sha256": "02d01db13534cad2186f004e7af99a3e042da5fe6fbb38d50be8c2e4a1a23b68"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/tables/btree18.h",
+      "bytes": 175909,
+      "sha256": "ffabeb009aec59bb61dbad24ea6f5c082ca3e7621bdd33ef5a7a7366830989c2"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/tables/btree19.h",
+      "bytes": 190529,
+      "sha256": "3a11862be451e1eb6aa1068ee37bcf1d281509a9493687b79e9bbf6c1c3d4f5f"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/tables/btree192.h",
+      "bytes": 176085,
+      "sha256": "444b5fe0e5f32ee0b62db92e5416353e593cea4283079a697404c6a346dac050"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/tables/btree20.h",
+      "bytes": 190536,
+      "sha256": "0156820dc82323ec129a7afbf5138a4c0fe116293530e1badb244ed9381f39dc"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/tables/btree215.h",
+      "bytes": 190552,
+      "sha256": "db6ed6270cccf4650c726527ca85af2ca45a4e0e7e6b133d39a083f9f37cde96"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/tables/btree21wd.h",
+      "bytes": 190556,
+      "sha256": "c64b7d9b22f69fe74a8f9a1865b8e693139fe7f853db71faf8f3f3807404392c"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/tables/btree262.h",
+      "bytes": 190646,
+      "sha256": "94985de98f5999e06550c6ea12b0eed8dea2c6d6bdb0a0eae1051f5037c05e90"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/tables/btree263.h",
+      "bytes": 190638,
+      "sha256": "36b483287ec5b115d2453ab53aa6bde1eb0a0345304d0b13764ea3bb182147e3"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/terrainnoise.c",
+      "bytes": 37510,
+      "sha256": "00b9bbc406b6b06bffb6dc107b5c08e953a52a66bee31a9716a2c6815a986067"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/terrainnoise.h",
+      "bytes": 13471,
+      "sha256": "e72c0e0645f4cfc5cc17640a689a1a79f2cde440e78ad5e15d5afa92c8f367a8"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/tests.c",
+      "bytes": 15582,
+      "sha256": "856973a0950e447755cfdc015f226261555dace9d52d4c113e51190f42599401"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/tests/CMakeLists.txt",
+      "bytes": 648,
+      "sha256": "889f9838db75e80a28e283f83dabf6ba0ec78ab493c3dbbbce389725cd71af0f"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/tests/test_biomes.c",
+      "bytes": 2964,
+      "sha256": "c12c46d9502a9128ae9e557fa15464faad8059cd8ab5a2e12f25432eaa8d8baf"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/tests/test_carvers.c",
+      "bytes": 581,
+      "sha256": "caee484c3d7e9ebdcc0dd19e2a6cd6067fcaffe9edf0fd7e9cec355702ed559d"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/tests/test_loot.c",
+      "bytes": 7234,
+      "sha256": "e7945e4f4f50b28580f7c4e5a6b7a6b40d3ba5873b2047182007ca7c2732986f"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/tests/test_pieces.c",
+      "bytes": 2142,
+      "sha256": "b176089cae83f9b0f2bf7c6c665fb0890dab64aaa38b41d6817ed3e39c3a7bf5"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/tests/test_structures.c",
+      "bytes": 2275,
+      "sha256": "f6df29e45ae3147bf62c626f49649de85b2467bbd2a021d9d9c5451e344b357c"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/tests/testing.h",
+      "bytes": 3183,
+      "sha256": "a5bda647993e4bcd377a15fa1c336df4c80d10337f92eb801f282caf793dd42c"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/util.c",
+      "bytes": 30332,
+      "sha256": "26c5b6c55b43a67e78615c9f336eb2e0736549850e26fe6dabaec54ec42ff5eb"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/util.h",
+      "bytes": 2328,
+      "sha256": "ec7319b091426c15fdf0c15ec87782a759cbc39c426bb5d9b4e07607249fb18b"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/xradv.c",
+      "bytes": 3536,
+      "sha256": "2a29c9250799bee696e29b4baeefaf9d3efcfb93ad991353339baae173387955"
+    },
+    {
+      "path": "prototype/desktop/vendor/cubiomes/xrms.h",
+      "bytes": 487290,
+      "sha256": "2f0ed2e6c13d242dee00ad8d386a912769c5987d22551192ccfb6dc89db2e1d1"
+    },
+    {
       "path": "prototype/desktop/vendor/fflate.cjs",
       "bytes": 92380,
       "sha256": "befa44cd80a1da830179db9e57930050a2e460ca3df13f0b05f83f52b1491818"
@@ -689,33 +1789,33 @@
     },
     {
       "path": "prototype/editions/ambere/changelog.en.md",
-      "bytes": 21950,
-      "sha256": "2671f8bb8b8e39d107b90d3e92c24eb63b5933afa8920bd93c6957d167b8d634"
+      "bytes": 23463,
+      "sha256": "fbb8650464f621aeb3e37d3845239e468f2d99ecfdca7f61f101e5ec10947552"
     },
     {
       "path": "prototype/editions/ambere/changelog.zh.md",
-      "bytes": 19159,
-      "sha256": "cd31a9df17730a1992bccc247157492d8d9d4f23fbf73bd7a5346f177c4836c1"
+      "bytes": 20447,
+      "sha256": "238a8a9d3f052c1a511fa9838651d780c5a74436c94804c604f4f72a464963db"
     },
     {
       "path": "prototype/editions/ambere/overview.en.md",
-      "bytes": 2704,
-      "sha256": "0e9c7d642356eb6a2fcf91b4f488cfb4802a84ef259f1146719b9a2a01bc58bd"
+      "bytes": 2678,
+      "sha256": "b8f62d988e6751973d4307a795f43d4ee087addec3e2b446e703fe62e2fa5413"
     },
     {
       "path": "prototype/editions/ambere/overview.zh.md",
-      "bytes": 2376,
-      "sha256": "3068567f1b11d632890b47a5ce6ccadb8a342d4348c942532b5fcf26dea008fb"
+      "bytes": 2358,
+      "sha256": "0cd5d3ec7ee943bd4970fd2ba5b75c98e352a99e207cde1acfaf4ecbacced7eb"
     },
     {
       "path": "prototype/editions/ambere/testing.md",
-      "bytes": 5128,
-      "sha256": "94054e77053e8b57bd1089862d337b5158da78ca0c0f202f858afcbd24cabd78"
+      "bytes": 7296,
+      "sha256": "4de2c7a9124529577805fbb7d8d415a1fd003b98f94bd682110e643ffa4b9626"
     },
     {
       "path": "prototype/electron-builder.yml",
       "bytes": 1269,
-      "sha256": "48e023c8a9ab0159968d8e88c5d44f8435a63071153d888e56c0c590108499b8"
+      "sha256": "77da44481c0229d0179c0795f5ae02aedea09dd4855e77fd173d9a3fdc4612bb"
     },
     {
       "path": "prototype/index.html",
@@ -724,8 +1824,8 @@
     },
     {
       "path": "prototype/package.json",
-      "bytes": 2587,
-      "sha256": "0a46c62304111e6032ca88a6fe7ff431b7ee6df0b5fa654922ff754b0331668d"
+      "bytes": 2615,
+      "sha256": "66536e00aac40739e69bea437642a4da0283fdcedf9e9f93e6fdb1873d0253d9"
     },
     {
       "path": "prototype/pnpm-lock.yaml",
@@ -874,8 +1974,8 @@
     },
     {
       "path": "prototype/public/licenses/RUNTIME-LICENSES.txt",
-      "bytes": 28784,
-      "sha256": "2705ac1b632f7f0afe61f4463ceddc308497d2ec8eeef35bb4d1d9c69362b67a"
+      "bytes": 32182,
+      "sha256": "500b626cc1340995795e86f0d7d09b70a6e0637d3f3019ba6229063c0a22ca9a"
     },
     {
       "path": "prototype/public/licenses/React-DOM.txt",
@@ -893,9 +1993,29 @@
       "sha256": "6a78f6ea32853c4e0ab41cbc18981501cb0a3011bdebce6c0713f35e07ac8a38"
     },
     {
+      "path": "prototype/public/licenses/cJSON-MIT.txt",
+      "bytes": 1140,
+      "sha256": "83d47cc6e4d33c9373f5cf2c0a19cbf72413d24462d1353859a6d4e4e9af3398"
+    },
+    {
+      "path": "prototype/public/licenses/cubiomes-MIT.txt",
+      "bytes": 1086,
+      "sha256": "24a6e9ce12e5c7731c35f1c645fc065512195f38f551d3d6ff9b8fd0f9e85988"
+    },
+    {
+      "path": "prototype/public/licenses/gradient-generator-MIT.txt",
+      "bytes": 1084,
+      "sha256": "44a462e0323da5f38911a5923c509e99e64f3b71c1b8fa5d8e5017a5199ce0a1"
+    },
+    {
       "path": "prototype/scripts/build-java-bridge.mjs",
       "bytes": 784,
       "sha256": "3e94cf534717167f51e79fa6a3dab18727dfc285982a5762ab3ff5872b35a78d"
+    },
+    {
+      "path": "prototype/scripts/build-seed-engine.mjs",
+      "bytes": 1328,
+      "sha256": "0d0b08c41fa9a81ac05a242a1cb0dac2a405f929e64aab31ef1f521893c21c2a"
     },
     {
       "path": "prototype/scripts/check-locales.mjs",
@@ -909,8 +2029,8 @@
     },
     {
       "path": "prototype/scripts/package-editions.mjs",
-      "bytes": 6102,
-      "sha256": "f65735e4f330269852e85af2e9221c0654ec68f396059fc3c7ef57aa43b88f0d"
+      "bytes": 6199,
+      "sha256": "d21708cbf2b5162f4c92ebb4744bea6f5712b9ca45948e0d16c3b288bd16094d"
     },
     {
       "path": "prototype/scripts/prepare-edition-source.mjs",
@@ -919,8 +2039,8 @@
     },
     {
       "path": "prototype/scripts/prepare-github.mjs",
-      "bytes": 3354,
-      "sha256": "dba1846278d3d2aa2c8a9fba0616f21192f30f962a7aca8f2a63f008c9349c55"
+      "bytes": 3395,
+      "sha256": "e0a2cc2e5713c2a17784c8d9eba91146764290512215c89f0c7aba4a562ac210"
     },
     {
       "path": "prototype/scripts/prepare-sites-build.mjs",
@@ -934,8 +2054,8 @@
     },
     {
       "path": "prototype/scripts/runtime-notices.mjs",
-      "bytes": 2042,
-      "sha256": "d06d1ec29da73f8f902fbf0bad163452a5d32fc9bbb01bf27c4f9848d3161ca3"
+      "bytes": 2216,
+      "sha256": "353ffe94c51e806b5abae4583296ab920b7d632d427ef8ec95bde391dcdb4340"
     },
     {
       "path": "prototype/scripts/verify-beta14-import.mjs",
@@ -971,6 +2091,11 @@
       "path": "prototype/scripts/verify-optifine.mjs",
       "bytes": 1823,
       "sha256": "d589256bf3940e0a9ca2636630899051abd7d5ad58d235ba06ae241e2bea8efc"
+    },
+    {
+      "path": "prototype/scripts/verify-seed-engine.mjs",
+      "bytes": 1323,
+      "sha256": "8b07741ac275269eb5c328fe122a78dad231c6f9aaa4efc544075cee49d3fb5b"
     },
     {
       "path": "prototype/scripts/verify-update2.mjs",
@@ -1094,8 +2219,13 @@
     },
     {
       "path": "prototype/src/Gradient130.jsx",
-      "bytes": 11707,
-      "sha256": "ad52611262fad45838ac74eb6f77fd7dbf2e57a5378bf2c2e79e02d41999e0a3"
+      "bytes": 12258,
+      "sha256": "dc696fa6926aeff0503c499b69ce0e130cfe2268c0b717b8f27af39831b79b0d"
+    },
+    {
+      "path": "prototype/src/GradientPicker134.jsx",
+      "bytes": 3311,
+      "sha256": "e81392637f98e116cd8dfc6bdef750bc34d183c3fee516b5456f77923451d4d0"
     },
     {
       "path": "prototype/src/GraphicsSettings.jsx",
@@ -1119,8 +2249,8 @@
     },
     {
       "path": "prototype/src/HomeModules.jsx",
-      "bytes": 17357,
-      "sha256": "dada9e5758cb1c96b3b68b132d568567307c393e0e4ef2c723332aae67b153eb"
+      "bytes": 17587,
+      "sha256": "4f47b0d168b230b11ead5872b969ccc6c5c24502e42a92db02e33999311c807c"
     },
     {
       "path": "prototype/src/InstalledDetail.jsx",
@@ -1139,8 +2269,8 @@
     },
     {
       "path": "prototype/src/InstanceManager.jsx",
-      "bytes": 10616,
-      "sha256": "c92bee4b30970fe5e3779a6b7f2b649da72c95259d0590edac8638cadc1ab99c"
+      "bytes": 11036,
+      "sha256": "b299b340d325fde9885fe845a20c557a51d5a429a82397fe7c35147e9a5ee5c9"
     },
     {
       "path": "prototype/src/InstanceOverview.jsx",
@@ -1176,6 +2306,11 @@
       "path": "prototype/src/MigrationPanel.jsx",
       "bytes": 3835,
       "sha256": "395e232032b695d092d04c33f1af7d74da1473dc82072485a3e70bee19084fce"
+    },
+    {
+      "path": "prototype/src/MinecraftImport134.jsx",
+      "bytes": 5331,
+      "sha256": "c59a3fcde594da8af4fffd8c6a383f59aad02b70632ef9f0081360e07acb2225"
     },
     {
       "path": "prototype/src/ModImportPanel.jsx",
@@ -1226,6 +2361,11 @@
       "path": "prototype/src/QuickSearch.jsx",
       "bytes": 3064,
       "sha256": "9c1077e689280a8b95e8c6d14049af487485eef9fe5a771998dd6393598d9490"
+    },
+    {
+      "path": "prototype/src/SeedMap134.jsx",
+      "bytes": 17112,
+      "sha256": "3ffbc340e09c98624993328ca4e62f78020ca22e9d02cbaa988e2d6e50d39bad"
     },
     {
       "path": "prototype/src/Select.jsx",
@@ -1409,8 +2549,13 @@
     },
     {
       "path": "prototype/src/gradient-model.mjs",
-      "bytes": 3071,
-      "sha256": "94ed39ebbab4e32dcb10af9270427d957f87228ef11d7627da47e0058e084f7c"
+      "bytes": 3771,
+      "sha256": "fdb9449bcd36ba730e4f346e0be7a57f1763a9b31595bb8412076279a1521bb8"
+    },
+    {
+      "path": "prototype/src/gradient-upstream134.mjs",
+      "bytes": 1997,
+      "sha256": "e7cb06d99f86779bc02085f30f99ee63ea36d940782a4a9ccb83d37ea009adde"
     },
     {
       "path": "prototype/src/home120.css",
@@ -1459,8 +2604,13 @@
     },
     {
       "path": "prototype/src/search133.mjs",
-      "bytes": 1818,
-      "sha256": "1d68f868e2bd582e12658442cbf2bdd1af31bdaec2ea29b4f3d7ee36dc3538b7"
+      "bytes": 1929,
+      "sha256": "a736c13e2dcc73525d47e7ea0d53916f47500ab16e67facdd53976597c0b3a9f"
+    },
+    {
+      "path": "prototype/src/seed-view134.mjs",
+      "bytes": 1871,
+      "sha256": "b4e9ecb02375bb252b141be44095806db2233320cae81d319beaa2283245edc7"
     },
     {
       "path": "prototype/src/styles.css",
@@ -1506,6 +2656,11 @@
       "path": "prototype/src/workspace133.css",
       "bytes": 2653,
       "sha256": "1a780b45635830eda717596d62f4a208fa0f74fd674a75bdbb9f1ba1ecb8c7d3"
+    },
+    {
+      "path": "prototype/src/workspace134.css",
+      "bytes": 5681,
+      "sha256": "e5346f9787f752e0c8ea90ae2209b1f7c10bfb531ab4542ae3cd8c166884c0c3"
     },
     {
       "path": "prototype/tests/accounts-fabric.test.mjs",
@@ -1691,6 +2846,11 @@
       "path": "prototype/tests/workspace133.test.mjs",
       "bytes": 2518,
       "sha256": "13b1c492b2aec4f82520280e25d1bc5aef0c73dfc2976a1d7f7ba64ee1400e8d"
+    },
+    {
+      "path": "prototype/tests/workspace134.test.mjs",
+      "bytes": 12576,
+      "sha256": "e88d8280ff213747ee860d968bb594b40a00708b2130b2b74db1a992d02c72b6"
     },
     {
       "path": "prototype/vite.config.mjs",

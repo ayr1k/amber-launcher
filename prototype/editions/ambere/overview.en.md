@@ -1,14 +1,14 @@
 # AmberE
 
-1.3.3 improves download feedback with dismissible fading notifications, fixes catalog layout and local screenshots, adds server-aware quick search, and keeps the title-bar mode switch in a stable position.
+1.3.4 adds an offline Java seed map with smooth dragging, an expanded gradient text studio, and copy-based import of original launcher .minecraft profiles into isolated instances.
 
 [简体中文](docs/zh-CN/README.md) · [Releases](https://github.com/ayr1k/AmberE/releases) · [User guide](docs/USER-GUIDE.md)
 
 AmberE is an independent Windows distribution for Minecraft: Java Edition, providing offline and third-party accounts. It is maintained from the shared AMBER codebase under MPL-2.0, with its own application identity, data directory and update repository. It does not offer Microsoft sign-in or include a Microsoft application Client ID.
 
-## 1.3.3
+## 1.3.4
 
-Stable release for Windows x64. [Download the installer, source and checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.3.3). Includes instance management, content recommendations, mod updates, backups and recovery.
+Stable release for Windows x64. [Download the installer, source and checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.3.4). Includes instance management, content recommendations, mod updates, backups and recovery.
 
 - Offline identities and HTTPS third-party authentication, with Windows user encryption for saved credentials.
 - Isolated game instances; Java and loader installation; mod search, dependencies, updates and bulk management.

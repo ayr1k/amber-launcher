@@ -45,3 +45,7 @@ Color presets and complete styled works stay in this product’s local browser s
 ## Server workspaces (1.3.2)
 
 Server worlds, settings, console logs, downloaded content, recovery copies and Java selections are stored locally under the selected game-data directory. Server configuration and its backups may contain plain-text RCON or management credentials. Room invitations contain a shared secret and are held for the active room; copy/share them only deliberately. Optional EasyTier downloads contact GitHub; configured discovery/relay peers can observe network addresses and traffic metadata. Server cores and plugins make their own network requests. No server data is uploaded to AMBER by this feature.
+
+## 1.3.4
+
+The seed map computes offline and stores seeds/markers locally; reading level.dat does not upload or modify worlds. Gradient text and palettes stay local. Original-launcher import copies only selected game data to a new instance and excludes account stores; metadata/download requests use the existing providers. The source directory is retained. Copied configurations and worlds may contain personal information; review before sharing.

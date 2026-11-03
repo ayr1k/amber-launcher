@@ -1,4 +1,6 @@
 import {configureTransferBudget} from './task-queue132.mjs';
+import {SeedMap,readWorldFile} from './seed134.mjs';
+import {MinecraftImport} from './minecraft134.mjs';
 import {Servers} from './servers132.mjs';
 import {Rooms} from './rooms132.mjs';
 import {DependencyMetadata} from './dependency130.mjs';
@@ -95,6 +97,15 @@ app.whenReady().then(async () => {
 
   const core = new VanillaLauncher(storageConfig.path);
   await core.init();
+  const seedMap=new SeedMap();
+  app.on('before-quit',()=>seedMap.cancel());
+  handle('amber:seed-map',async(action,input)=>{
+   if(action==='catalog')return seedMap.catalog();
+   if(action==='map')return seedMap.map(input);
+   if(action==='cancel'){seedMap.cancel();return true;}
+   if(action==='world'){const r=await dialog.showOpenDialog(window,{title:'读取世界种子 / Read world seed',properties:['openFile'],filters:[{name:'Java level.dat',extensions:['dat']}]});return r.canceled?null:readWorldFile(r.filePaths[0]);}
+   throw Error('Unknown map action');
+  });
   const recovery = await recoverTransactions(core);
   if (smoke) {const name = await importBackground(core.root, join(assets, 'assets/forest-banner.png'), (bytes) => nativeImage.createFromBuffer(bytes));const response = await net.fetch('amber://app/user-background/' + name);if (response.status !== 200 || response.headers.get('Content-Type') !== 'image/png' || (await response.arrayBuffer()).byteLength === 0) throw Error('Background round-trip failed');console.log('AMBER_BACKGROUND_OK');}
   if (smoke) {const sample = "amber-credential-codec-check";if (!safeStorage.isEncryptionAvailable() || (await safeStorage.decryptStringAsync(safeStorage.encryptString(sample))).result !== sample || (await safeStorage.decryptStringAsync(await safeStorage.encryptStringAsync(sample))).result !== sample) throw Error("Credential encryption unavailable");console.log("AMBER_SYSTEM_ENCRYPTION_OK");}
@@ -149,6 +160,15 @@ app.whenReady().then(async () => {
   const packs = new Modpacks(core, content);
   const workflows = new Workflows(core, content),settings = new Settings(core.root),selections = new Map();
   const localPacks=new LocalPacks(core,packs,workflows);workflows.localPacks=localPacks;
+  const minecraftImport=new MinecraftImport(core);
+  handle('amber:minecraft-import',async(action,...args)=>{
+   if(action==='pick'){const r=await dialog.showOpenDialog(window,{title:'选择原版 .minecraft / Select original .minecraft',properties:['openDirectory']});return r.canceled?null:minecraftImport.scan(r.filePaths[0]);}
+   if(action==='preview')return minecraftImport.preview(...args);
+   if(action==='create')return minecraftImport.create(...args);
+   if(action==='status')return minecraftImport.status();
+   if(action==='cancel'){minecraftImport.cancel();return true;}
+   throw Error('Unknown Minecraft import action');
+  });
   handle('amber:local-pack-pick',async()=>{const r=await dialog.showOpenDialog(window,{title:'Import modpack / 导入整合包',properties:['openFile'],filters:[{name:'Modpack / 整合包与清单',extensions:['mrpack','zip','json']}]});return r.canceled?null:localPacks.preview(r.filePaths[0]);});
   handle('amber:local-pack-create',(id,input)=>localPacks.create(id,input));
   handle('amber:local-pack-forget',id=>localPacks.forget(id));
@@ -395,11 +415,11 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
       if(closeAllowed)return;event.preventDefault();if(closePrompt)return;closePrompt=true;
       try {
         if(storageBusy){await dialog.showMessageBox(window,{type:'info',message:translateMessage('数据目录正在迁移，请等待完成。'),buttons:[translateMessage('确定')]});return;}
-        if(!smoke&&(workflows.active||core.jobs.some(j=>j.state==='running')||appUpdates.state.phase==='downloading')){
+        if(!smoke&&(minecraftImport.busy||workflows.active||core.jobs.some(j=>j.state==='running')||appUpdates.state.phase==='downloading')){
           const answer=await dialog.showMessageBox(window,{type:'warning',title:translateMessage('安装还未结束'),message:translateMessage('退出会中断当前下载或实例配置。'),detail:translateMessage('已完成的文件会保留，建议等待任务结束。实例安装可在任务中心继续；程序更新可在关于页重新下载。'),buttons:[translateMessage('继续等待'),translateMessage('取消任务并退出')],defaultId:0,cancelId:0,noLink:true});
           if(answer.response!==1)return;
-          appUpdates.cancel();workflows.cancel();for(const j of core.jobs.filter(j=>j.state==='running'))core.controllers.get(j.id)?.abort(Error('用户取消任务并退出。'));
-          while(workflows.active||core.jobs.some(j=>j.state==='running')||appUpdates.state.phase==='downloading')await new Promise(resolve=>setTimeout(resolve,150));
+          appUpdates.cancel();minecraftImport.cancel();workflows.cancel();for(const j of core.jobs.filter(j=>j.state==='running'))core.controllers.get(j.id)?.abort(Error('用户取消任务并退出。'));
+          while(minecraftImport.busy||workflows.active||core.jobs.some(j=>j.state==='running')||appUpdates.state.phase==='downloading')await new Promise(resolve=>setTimeout(resolve,150));
         }
         if(!smoke&&(servers.active||rooms.active)){
           const answer=await dialog.showMessageBox(window,{type:'question',message:'服务端或联机连接仍在运行 / Servers or networking are still active',buttons:['最小化并继续 / Minimize and continue','停止服务端并退出 / Stop and quit','返回 / Back'],defaultId:0,cancelId:2,noLink:true});

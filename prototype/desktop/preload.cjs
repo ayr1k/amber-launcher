@@ -152,6 +152,8 @@ contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
   copyDetectedJava:path=>ipcRenderer.invoke('amber:java-copy-detected',path),
   openLogsFolder:id=>ipcRenderer.invoke('amber:logs-folder',id),
   localPackPick:()=>ipcRenderer.invoke('amber:local-pack-pick'),
+  seedMap:(action,input)=>ipcRenderer.invoke('amber:seed-map',action,input),
+  minecraftImport:(action,...args)=>ipcRenderer.invoke('amber:minecraft-import',action,...args),
   localPackCreate:(id,input)=>ipcRenderer.invoke('amber:local-pack-create',id,input),
   localPackForget:id=>ipcRenderer.invoke('amber:local-pack-forget',id),
   packReport:id=>ipcRenderer.invoke('amber:pack-report',id),

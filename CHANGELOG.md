@@ -1,3 +1,11 @@
+## 1.3.4
+
+- Offline Java seed map (selected generator versions from 1.7.10 through 26.3): pan/zoom, scale, X/Z navigation, Y biome slice, three dimensions, biome/structure filtering, slime chunks, saved markers with import/export, and read-only level.dat seed import. Terrain relief is approximate; modded/datapack generation and mixed-version terrain may differ.
+- Seed-map controls and filters now sit above the map, with aligned marker fields and responsive structure options. Dragging moves cached map areas on animation frames while a coalesced background queue generates surrounding coverage; releasing the pointer preserves its position.
+- Larger gradient text studio with theme-aware color selection, hue/saturation/brightness picker, HEX/CSS color import, random palettes, seven output formats, and preserved selection formatting/undo/redo/local works. MIT character/color adapters adapted from tuanzisama's generator.
+- Import original .minecraft installations into isolated instances. Detect launcher profiles, custom gameDir and version inheritance; reconstruct supported Vanilla/Fabric/Forge/NeoForge setups from trusted metadata, copy selected content, and reuse hash-verified libraries/assets. Source files and account credentials are not changed or imported. Unknown custom clients are reported as unsupported. In-place shared-directory launching is not included.
+- Stable release of the accepted Windows installers, complete source and checksums. AmberX and theme artwork are unchanged.
+
 ## 1.3.3
 
 - Keep the title-bar mode switch before Edit home so it stays in place across pages.

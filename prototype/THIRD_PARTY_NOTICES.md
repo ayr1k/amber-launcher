@@ -23,3 +23,9 @@ Original license texts remain authoritative; translated explanations do not repl
 ## Optional EasyTier networking component
 
 EasyTier 2.6.4 (Apache-2.0) is downloaded on demand from its official release, not bundled in the installers. Source and license: https://github.com/EasyTier/EasyTier/tree/v2.6.4 . Archive SHA-256: 27af91e270e554709b048bd32327fefd2dfce5062ae1e8701af7550c6f525f84. Extracted core SHA-256: da7eb2d24b5416f3d3407636949e964a0750e3f9dc53a828cb6799a57ead445d.
+
+## 1.3.4 offline tools
+
+- Cubiomes, MIT (Cubitect and contributors), pinned xpple branch commit `6e3e00d26d73efec10e9c0ebaacb003aa3188179`: https://github.com/xpple/cubiomes . Bundled source in `desktop/vendor/cubiomes`, license in `public/licenses/cubiomes-MIT.txt`. Includes cJSON (MIT, Dave Gamble and contributors); complete notice remains at the beginning of its source and in `public/licenses/cJSON-MIT.txt`. The AMBER helper executable is built from this source; no Cubiomes Viewer code is included.
+- Minecraft Gradient Text Generator, copyright 2024 tuanzi, MIT: https://github.com/tuanzisama/minecraft-gradient-text-generator . The character builder and legacy color adapters are adapted into the existing editor, with fixes for literal replacement text. Full license: `public/licenses/gradient-generator-MIT.txt`. No upstream analytics, fonts or website shell are included.
+- The map does not embed or redistribute Chunkbase. Terrain shading is approximate. The gradient preview uses existing AMBER concept artwork, not an in-game screenshot.

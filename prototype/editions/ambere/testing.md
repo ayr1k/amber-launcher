@@ -1,3 +1,15 @@
+# 1.3.4 verification
+
+The user accepted both 1.3.4 installers and authorized stable publication. Preserve the accepted installer bytes and informational local-build label; update checks remain enabled. Both editions retain their existing account rules, identities, update repositories and data locations. No real accounts or worlds were used by automation.
+
+394 regression tests passed, including signed 64-bit/text seeds, a 26.3 Dappled Forest fixture, three-dimension map output, bounded NBT parsing, inherited/custom gameDir import, verified cache reuse, source preservation, account exclusion, link/cycle rejection, mixed text formatting and old works. Both editions passed isolated native UI checks for maps/markers, palette editing, import entry, English quick search and Classic/Nocturne/Alloy/Harvest/Verdant layouts; Nocturne also checked at 920×680 and 2560×1440. Synthetic import tests verify preparation and file integrity, not Minecraft gameplay.
+
+Seed-map feedback verification: both editions show changing map pixels while the pointer remains held, retain the camera on release, handle pointer cancellation and preserve marker placement after panning. Filters and marker controls stay above the map without overflow in five themes, including narrow and maximized windows; local/server modes and English labels checked. Queue tests cover serialized generation, coalescing, stale failures, retry and disposal.
+
+Manual acceptance: compare known world locations against the matching generator version; test a disposable copy of an original launcher profile and its selected worlds/mods. The source remains intact. Unsupported custom launch profiles are not executed. Direct shared-folder launch is not included. Map structure prediction does not guarantee terrain placement, and shaded height is approximate. Bedrock and custom world generators are not supported.
+
+If an import is cancelled, the source is retained and the partial new instance remains visible. If copying was interrupted, import again into a fresh instance before removing the partial copy. Stop games during copying. Java can be prepared using the existing launch controls.
+
 # 1.3.3 verification
 
 The user accepted both 1.3.3 installers and authorized stable publication. Preserve accepted installer bytes, including their informational local-build label; update checks remain enabled. Changes cover shared bottom task feedback, bounded catalog layout, local screenshot scope and workspace-aware quick search. Installer identities, account policies, themes and game/server data locations remain unchanged.

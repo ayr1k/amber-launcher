@@ -6,6 +6,8 @@ import {fileURLToPath} from 'node:url';
 import {spawn} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {build} from 'electron-builder';
+import {verify as verifySeedEngine} from './verify-seed-engine.mjs';
+await verifySeedEngine();
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const pkg=JSON.parse(await readFile(join(root,'package.json'),'utf8'));
 const base=join(root,'releases',pkg.version);

@@ -1,0 +1,4 @@
+# Keep pinned native-engine sources byte-identical across Windows checkouts.
+prototype/desktop/seed-engine134.c -text
+prototype/desktop/vendor/cubiomes/** -text
+prototype/desktop/bin/*.exe -text

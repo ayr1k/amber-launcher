@@ -1,3 +1,4 @@
+import {legacyOutput} from './gradient-upstream134.mjs';
 // SPDX-License-Identifier: MPL-2.0
 export const initialStops = [{color:'#52b788',at:0},{color:'#a9b6ff',at:100}];
 export const flags = ['bold','italic','underlined','strikethrough'];
@@ -22,6 +23,8 @@ export function textParts(text,marks,stops){
  return units.map(g=>{const m=marks[g.index]||{},at=i/Math.max(1,visible-1)*100;if(!/^[\r\n]+$/.test(g.segment))i++;return {text:g.segment,from:g.index,to:g.index+g.segment.length,color:m.color||colorAt(stops,at),...Object.fromEntries(flags.map(k=>[k,!!m[k]]))};});
 }
 export function serializeParts(parts,format){
+ if(['expanded','section','motd'].includes(format))return legacyOutput(parts,format==='motd'?'\\u00A7':format==='section'?'§':'&');
+ if(format==='html'){const esc=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('\"','&quot;');return '<div style=\"white-space:pre-wrap\">'+parts.map(p=>'<span style=\"color:'+p.color+';font-weight:'+(p.bold?'bold':'normal')+';font-style:'+(p.italic?'italic':'normal')+';text-decoration:'+([p.underlined?'underline':'',p.strikethrough?'line-through':''].filter(Boolean).join(' ')||'none')+'\">'+esc(p.text)+'</span>').join('')+'</div>';}
  if(format==='json')return JSON.stringify({text:'',extra:parts.map(({from,to,...p})=>p)});
  if(format==='hex')return parts.map(p=>`&r&#${p.color.slice(1)}${p.bold?'&l':''}${p.italic?'&o':''}${p.underlined?'&n':''}${p.strikethrough?'&m':''}${p.text}`).join('')+'&r';
  const tags={bold:'bold',italic:'italic',underlined:'underlined',strikethrough:'strikethrough'};
