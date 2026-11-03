@@ -31,6 +31,9 @@ jobs:
       - name: Run regression tests with bounded concurrency
         shell: pwsh
         run: |
+          # Warm Windows PowerShell before the bounded process-start probe.
+          & "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -NonInteractive -Command "Get-Process -Id $PID | Out-Null"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           $testFiles = ((Get-Content package.json -Raw | ConvertFrom-Json).scripts.test -replace '^node --test ', '') -split ' '
           node --test --test-concurrency=2 @testFiles
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
