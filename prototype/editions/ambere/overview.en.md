@@ -1,14 +1,14 @@
 # AmberE
 
-1.3.1 fixes interface alignment and adds selection-based gradient colors and styles, undo/redo and locally saved works.
+1.3.2 adds parallel downloads and a themed server workspace with isolated instances, explained settings, console monitoring, dependency-aware content downloads and optional EasyTier rooms.
 
 [简体中文](docs/zh-CN/README.md) · [Releases](https://github.com/ayr1k/AmberE/releases) · [User guide](docs/USER-GUIDE.md)
 
 AmberE is an independent Windows distribution for Minecraft: Java Edition, providing offline and third-party accounts. It is maintained from the shared AMBER codebase under MPL-2.0, with its own application identity, data directory and update repository. It does not offer Microsoft sign-in or include a Microsoft application Client ID.
 
-## 1.3.1
+## 1.3.2
 
-Stable release for Windows x64. [Download the installer, source and checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.3.1). Includes instance management, content recommendations, mod updates, backups and recovery.
+Stable release for Windows x64. [Download the installer, source and checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.3.2). Includes instance management, content recommendations, mod updates, backups and recovery.
 
 - Offline identities and HTTPS third-party authentication, with Windows user encryption for saved credentials.
 - Isolated game instances; Java and loader installation; mod search, dependencies, updates and bulk management.
@@ -31,3 +31,5 @@ Offline and third-party identities do not grant Minecraft ownership or official 
 [Official theme store](https://ayr1k.github.io/#/themes) · [Theme help](docs/THEMES.md) · [Theme format](docs/AMBTHEME-FORMAT.md)
 
 Alloy, Nocturne, Harvest and Verdant are free official themes for AMBER and AmberE 1.2.1 or newer, available separately and not preinstalled.
+
+[Server and connection guide](docs/SERVERS.md) (remote rooms are a testing feature).

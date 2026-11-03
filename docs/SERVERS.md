@@ -1,0 +1,25 @@
+# Servers and online play — 1.3.2
+
+1.3.2 feedback revision: local and online modes share navigation/icons, software settings/About/tools, page transitions and reduced-motion rules. Server creation moves to Instances after the first instance; settings and installed content are detail tabs. The catalog shares filters, project icons and compatible-version controls, with automatic required dependencies. Server tools read server configurations/logs; screenshots remain shared local-game screenshots. EULA alignment is corrected.
+
+The title-bar Local / Online switch changes the workspace only. Client and server instances are separate. Servers, downloads and EasyTier continue while you switch modes. The Online marker reports activity or failures; a running server is not proof of remote connectivity.
+
+Create an instance with a core, Minecraft version and unused port. Vanilla, stable Paper and Fabric use official downloads and a per-instance Java selection. Fabric bootstraps additional dependencies on its first run. For Spigot/CraftBukkit, import a trusted JAR built using official BuildTools and select Java. Read and accept the Minecraft EULA before starting.
+
+Use the console to send one command at a time. Save and stop sends `stop`; force termination is a separate action and may lose unsaved world changes. CPU is measured per process (100% = one logical core); working-set memory is not JVM heap size. Missing readings display “—”; TPS/MSPT are not inferred. The UI retains about 48 KB of output and the launcher console log is capped near 8 MB per run. The server core controls its own logs.
+
+Each instance has its own directory under `servers/<id>/` inside the game-data library. Core, Java and content changes require the instance to be stopped. Copies retain worlds, configuration and content while preserving the original. An upgrade copy needs its target core installed and compatible content checked; world downgrades are not guaranteed. Copies on the same drive do not replace off-drive backups.
+
+Visual server.properties settings include explanations, bounds and original values. Only recognized settings present in the file are shown; the initial server run generates further options. Unknown keys and comments are retained, with source editing available. Saving previews changes, backs up the previous file and rejects external-change conflicts. Running servers need a restart for saved settings. In-session drafts survive mode and instance switches; save before exiting the app.
+
+Modrinth content is filtered by game version and loader, with required dependency previews and known client-only exclusions. Metadata is not a compatibility guarantee. Files are downloaded and verified before installation. Other versions of the same tracked project must be handled first. Content removal keeps a recoverable copy and preserves configuration. Known required dependencies are protected; manually imported JAR dependencies need manual review.
+
+LAN players use the address shown in the instance overview. Allow the server through Windows Firewall as needed; the app does not edit firewall rules automatically.
+
+Optional remote rooms download official EasyTier 2.6.4 Windows x64 (~33 MB) on demand. Archive and executable hashes are checked. Both participants need the component. The host starts a server and shares the invitation; the guest connects Minecraft to the displayed loopback endpoint. No-TUN mode forwards the game TCP port without creating an adapter or changing DNS. It does not disable Minecraft identity authentication.
+
+Invitations contain a shared room secret, expire after 24 hours, and should only be shared with trusted people. Recreate a room to replace its secret. One room connection is maintained per launcher, independently of the number of running servers. Public or self-hosted peers provide discovery and possible relay; no availability or NAT traversal guarantee is offered. Third-party peers see connection addresses and traffic metadata. A running component is not proof of connectivity. EasyTier is Apache-2.0; see [source and license](https://github.com/EasyTier/EasyTier/tree/v2.6.4).
+
+Closing the app offers minimize-and-continue or stop-and-quit when a server or room is active. An unexpected launcher exit can leave a server detached; stop that original process before modifying the instance.
+
+Validation covers isolated synthetic process lifecycle, settings/recovery, themes, real official core/Java downloads and real EasyTier TCP forwarding through a local multi-process relay. It does not constitute live Minecraft gameplay, plugin compatibility or two-computer cross-network acceptance. Direct/relay behavior, reconnects and network changes still need two-computer testing. Version 1.3.2 is released with the documented remote-room testing limitations.

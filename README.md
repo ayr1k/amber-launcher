@@ -1,14 +1,14 @@
 # AMBER
 
-1.3.1 fixes interface alignment and adds selection-based gradient colors and styles, undo/redo and locally saved works.
+1.3.2 adds parallel downloads and a themed server workspace with isolated instances, explained settings, console monitoring, dependency-aware content downloads and optional EasyTier rooms.
 
 [简体中文](docs/zh-CN/README.md) · [Releases](https://github.com/ayr1k/amber-launcher/releases) · [User guide](docs/USER-GUIDE.md)
 
 AMBER is an independent Windows launcher for Minecraft: Java Edition. It keeps game instances separate and brings installation, mod management, recovery and launch settings into one workspace. Project-owned source is licensed under MPL-2.0.
 
-## 1.3.1
+## 1.3.2
 
-Stable release for Windows x64. [Download the installer, source and checksums](https://github.com/ayr1k/amber-launcher/releases/tag/v1.3.1). Includes instance management, content recommendations, mod updates, backups and recovery.
+Stable release for Windows x64. [Download the installer, source and checksums](https://github.com/ayr1k/amber-launcher/releases/tag/v1.3.2). Includes instance management, content recommendations, mod updates, backups and recovery.
 
 - Integrated title bar, independent window corners, remembered window placement and reorganized privacy settings.
 
@@ -57,3 +57,5 @@ Each project uses separate data and update channels.
 [Official theme store](https://ayr1k.github.io/#/themes) · [Theme help](docs/THEMES.md) · [Theme format](docs/AMBTHEME-FORMAT.md)
 
 Alloy, Nocturne, Harvest and Verdant are free official themes for AMBER and AmberE 1.2.1 or newer, available separately and not preinstalled.
+
+[Server and connection guide](docs/SERVERS.md) (remote rooms are a testing feature).

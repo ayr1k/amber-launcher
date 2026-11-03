@@ -185,10 +185,10 @@ export class GuidedCreation {
     for(const f of p.files){this.workflows.checkCancelled();const v=await api('version/'+f.versionId),project=await api('project/'+f.projectId);if(v.project_id!==f.projectId||!matchVersion(project,v,p.target,p.answers))failure('changedFile');const file=v.files?.find(x=>x.primary)||v.files?.[0];const folder={mod:'mods',shader:'shaderpacks',resourcepack:'resourcepacks'}[project.project_type];if(!file||stamp(fileIdentity(f))!==stamp([project.id,v.id,folder+'/'+file.filename,file.hashes?.sha1,file.size,file.url])||stamp(v.dependencies||[])!==stamp(f.dependencies)||project.slug!==f.slug)failure('changedFile');}
     const issues=planIssues(p.files,p.target,p.existing?{...p.answers,downloadGB:0,diskGB:0}:p.answers);issues.errors.push(...this.visualIssues(p.files,p.visual));if(issues.errors.length)failure(issues.errors[0]);if(!p.existing&&await this.space()<issues.reserve)failure('diskLimit');return p;
   }
-  async create(id,{name,icon='grass',threads=8,acknowledge=false}={}){
+  async create(id,{name,icon='grass',threads=8,acknowledge=false,requestKey}={}){
     const p=this.get(id);if(p.existing)failure('invalidPlan');if(p.blockers.length||p.issues.errors.length)failure('notCompatible');if(p.issues.warnings.length&&!acknowledge)failure('acknowledge');
     // create() enters the existing exclusive workflow before rechecking or creating files.
-    return this.workflows.create({name,icon,threads,...p.target},null,null,null,p);
+    return this.workflows.create({name,icon,threads,requestKey,...p.target},null,null,null,p);
   }
   async installGroup(id,p,type){
     const files=p.files.filter(f=>f.type===type);if(!files.length)return;

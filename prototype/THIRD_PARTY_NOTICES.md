@@ -19,3 +19,7 @@ Minecraft files, Temurin Java, Fabric, Forge, NeoForge, LiteLoader and OptiFine 
 authlib-injector is downloaded and SHA-256 verified on demand. Its AGPL-3.0 and project exception remain applicable; see [upstream source and license](https://github.com/yushijinhun/authlib-injector). The authentication implementation uses AMBER's public Client ID, not another launcher's identity.
 
 Original license texts remain authoritative; translated explanations do not replace them.
+
+## Optional EasyTier networking component
+
+EasyTier 2.6.4 (Apache-2.0) is downloaded on demand from its official release, not bundled in the installers. Source and license: https://github.com/EasyTier/EasyTier/tree/v2.6.4 . Archive SHA-256: 27af91e270e554709b048bd32327fefd2dfce5062ae1e8701af7550c6f525f84. Extracted core SHA-256: da7eb2d24b5416f3d3407636949e964a0750e3f9dc53a828cb6799a57ead445d.

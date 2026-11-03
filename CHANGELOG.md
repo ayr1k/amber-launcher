@@ -1,3 +1,14 @@
+## 1.3.2
+
+- Two concurrent installation tasks with per-instance cancellation, shared-file locks and a shared transfer limit. Long setup dialogs can continue in the background.
+- Local / Online title-bar switch with running-state indicators; switching modes keeps servers running. Both workspaces share navigation icons, themes, page transitions, software settings, tools and About.
+- Separate server instances and version-isolated worlds/configuration. Create servers from Instances; manage server properties and installed content in detail tabs.
+- Official Vanilla, stable Paper and Fabric core downloads; trusted Spigot/CraftBukkit JAR import, independent Java/memory, and upgrades in a copy that preserves the original.
+- Explained visual server.properties settings, source editing, external-change checks, backups and restoration. Live console/commands, process CPU/working-set memory, graceful stop and minimize-to-continue.
+- Server Modrinth catalog reuses local filters, project icons and compatible-version selection, automatically previews required dependencies, verifies downloads and retains removed content for recovery.
+- LAN connections and optional hash-verified EasyTier 2.6.4 no-TUN rooms. Remote rooms remain a testing feature: two-computer NAT/reconnection and plugin combinations need independent acceptance; public relay availability is not guaranteed.
+- Fix the homepage right-edge background seam and EULA alignment. Existing theme packages and artwork remain unchanged.
+
 ## 1.3.1
 
 - Align local-import checkboxes and backup controls; tools share the left page origin used elsewhere.

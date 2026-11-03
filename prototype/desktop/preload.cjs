@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MPL-2.0
 const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
+  server:(action,...args)=>ipcRenderer.invoke('amber:server',action,...args),
   editorHistory:(id,name)=>ipcRenderer.invoke('amber:editor-history',id,name),
   editorBackup:(id,name,token)=>ipcRenderer.invoke('amber:editor-backup',id,name,token),
   dependencyMetadata:id=>ipcRenderer.invoke('amber:dependency-metadata',id),
@@ -118,8 +119,8 @@ contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
   exportLayout: ()=>ipcRenderer.invoke('amber:layout-export'),
   importLayout: ()=>ipcRenderer.invoke('amber:layout-import'),
   pickBackground: ()=>ipcRenderer.invoke('amber:background-pick'),
-  setupState: ()=>ipcRenderer.invoke('amber:setup-state'),
-  cancelSetup: ()=>ipcRenderer.invoke('amber:setup-cancel'),
+  setupState: key=>ipcRenderer.invoke('amber:setup-state',key),
+  cancelSetup: ()=>ipcRenderer.invoke('amber:setup-cancel',id),
   repairSetup:id=>ipcRenderer.invoke('amber:setup-repair',id),
   retrySetup: id=>ipcRenderer.invoke('amber:setup-retry',id),
   contentCategories: ()=>ipcRenderer.invoke('amber:content-categories'),
@@ -154,7 +155,7 @@ contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
   localPackCreate:(id,input)=>ipcRenderer.invoke('amber:local-pack-create',id,input),
   localPackForget:id=>ipcRenderer.invoke('amber:local-pack-forget',id),
   packReport:id=>ipcRenderer.invoke('amber:pack-report',id),
-  packCreate: id => ipcRenderer.invoke('amber:pack-create',id),
+  packCreate: (id,key) => ipcRenderer.invoke('amber:pack-create',id,key),
   packPreview: (id,v) => ipcRenderer.invoke('amber:pack-preview',id,v),
   packInstall: (id,p) => ipcRenderer.invoke('amber:pack-install',id,p),
   contentSearch: (id,o) => ipcRenderer.invoke('amber:content-search',id,{query:o?.query,type:o?.type,offset:o?.offset,category:o?.category,sort:o?.sort}),

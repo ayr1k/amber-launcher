@@ -1,3 +1,6 @@
+import {configureTransferBudget} from './task-queue132.mjs';
+import {Servers} from './servers132.mjs';
+import {Rooms} from './rooms132.mjs';
 import {DependencyMetadata} from './dependency130.mjs';
 import {InstanceEditor} from './editor130.mjs';
 import {accountSkin} from './skins130.mjs';
@@ -112,18 +115,41 @@ app.whenReady().then(async () => {
   handle('amber:create', (input) => {core.workflowGuard?.();return core.createInstance(input);});
   handle('amber:status', async () => ({ ...(await core.runtimeStatus()), setups: await workflows.pending(), operation: core.operation || null, workflowActive: workflows.active, cancelling: workflows.active && workflows.cancelled }));
   handle('amber:install', (id, options) => core.install(id, options));
-  handle('amber:cancel', (id) => {if (workflows.active) return workflows.cancel();return core.cancel(id);});
+  handle('amber:cancel', (id) => {const job=core.jobs.find(j=>j.id===id);if(job&&[...workflows.scopes].some(s=>s.instanceId===job.instanceId))return workflows.cancel(job.instanceId);return core.cancel(id);});
   handle('amber:java-scan', () => core.scanJava());
   handle('amber:java-copy-detected',async path=>{const rows=await core.scanJava();if(!rows.some(r=>r.path===path))throw Error('Java not found / 未找到此 Java，请重新检测');clipboard.writeText(path);return true;});
   handle('amber:logs-folder',async id=>{const dir=await core.instancePath(id);const path=join(dir,'logs');await ensureParents(dir,join(path,'probe'));const error=await shell.openPath(path);if(error)throw Error(error);return true;});
   handle('amber:java-prepare', (id) => core.prepareJava(id));
   handle('amber:java-select', (id, path) => core.selectJava(id, path));
   handle('amber:java-browse', async () => {const result = await dialog.showOpenDialog(window, { title: translateMessage('选择 Java 可执行文件'), properties: ['openFile'], filters: [{ name: 'Java', extensions: ['exe'] }] });return result.canceled ? null : core.addJava(result.filePaths[0]);});
+  const servers=await new Servers(core).init(),rooms=new Rooms(core,servers);
+  const serverEditor=new InstanceEditor({instancePath:id=>servers.dir(id)},{directories:['config','defaultconfigs','plugins','kubejs','scripts'],files:['server.properties','bukkit.yml','spigot.yml','paper.yml','permissions.yml']});
+  const resourceTimer=setInterval(()=>servers.sample(),3000);resourceTimer.unref();
+  handle('amber:server',async(action,...args)=>{
+   const methods=['versions','create','install','launchSettings','properties','saveProperties','backups','restoreConfig','start','stop','command','copy','content','toggleContent','removeContent','contentHistory','restoreContent','search','categories','contentVersions','previewContent','installContent'];
+   if(methods.includes(action))return servers[action](...args);
+   if(['editorList','editorRead','editorHistory','editorBackup'].includes(action))return serverEditor[action.slice(6).toLowerCase()](...args);
+   if(action==='editorSave')return servers.locks.run(args[0],async()=>{await servers.stopped(args[0]);return serverEditor.save(...args);});
+   if(action==='openLogs'){const dir=await servers.dir(args[0]);const logs=join(dir,'logs');await ensureParents(dir,join(logs,'.check'));return shell.openPath(logs);}
+   if(action==='status')return {instances:await servers.list(),network:await rooms.state()};
+   if(action==='addresses'){const p=await servers.properties(args[0]);return servers.addresses(Number(p.values['server-port']||25565));}
+   if(action==='open'){const dir=await servers.dir(args[0]);return shell.openPath(dir);}
+   if(action==='pickJava'){const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Java',extensions:['exe']}]});return r.canceled?null:(await core.addJava(r.filePaths[0]));}
+   if(action==='importJar'||action==='importContent'){const r=await dialog.showOpenDialog(window,{properties:action==='importContent'?['openFile','multiSelections']:['openFile'],filters:[{name:'Java archive',extensions:['jar']}]});if(r.canceled)return null;return action==='importJar'?servers.importJar(args[0],r.filePaths[0]):servers.importContent(args[0],r.filePaths);}
+   if(action==='networkInstall')return rooms.install();
+   if(action==='host')return rooms.host(...args);
+   if(action==='join')return rooms.join(...args);
+   if(action==='leave')return rooms.leave();
+   if(action==='copyInvite'){const code=(await rooms.state()).room?.code;if(!code)throw Error('No hosted room');clipboard.writeText(code);return true;}
+   if(action==='eula')return shell.openExternal('https://www.minecraft.net/eula');
+   if(action==='buildtools')return shell.openExternal('https://www.spigotmc.org/wiki/buildtools/');
+   throw Error('Unknown server action');
+  });
   const content = new Modrinth(core);
   const packs = new Modpacks(core, content);
   const workflows = new Workflows(core, content),settings = new Settings(core.root),selections = new Map();
   const localPacks=new LocalPacks(core,packs,workflows);workflows.localPacks=localPacks;
-  handle('amber:local-pack-pick',async()=>{if(workflows.active||core.jobs.some(j=>j.state==='running'))throw Error('Please wait for the current task / 请等待当前任务结束');const r=await dialog.showOpenDialog(window,{title:'Import modpack / 导入整合包',properties:['openFile'],filters:[{name:'Modpack / 整合包与清单',extensions:['mrpack','zip','json']}]});return r.canceled?null:localPacks.preview(r.filePaths[0]);});
+  handle('amber:local-pack-pick',async()=>{const r=await dialog.showOpenDialog(window,{title:'Import modpack / 导入整合包',properties:['openFile'],filters:[{name:'Modpack / 整合包与清单',extensions:['mrpack','zip','json']}]});return r.canceled?null:localPacks.preview(r.filePaths[0]);});
   handle('amber:local-pack-create',(id,input)=>localPacks.create(id,input));
   handle('amber:local-pack-forget',id=>localPacks.forget(id));
   handle('amber:pack-report',id=>localPacks.report(id));
@@ -233,10 +259,10 @@ app.whenReady().then(async () => {
   handle('amber:app-update-download', () => appUpdates.download());
   handle('amber:app-update-cancel', () => appUpdates.cancel());
   handle('amber:app-update-install', async () => {
-    if (launching || storageBusy || workflows.active || core.jobs.some((j) => j.state === 'running')) throw Error('请等待游戏准备、安装或数据迁移结束后再升级。');
+    if (servers.active || rooms.active || launching || storageBusy || workflows.active || core.jobs.some((j) => j.state === 'running')) throw Error('请等待游戏准备、安装或数据迁移结束后再升级。');
     upgradeBusy = true;
     try {for (const item of await core.listInstances()) await core.requireStopped(await core.instancePath(item.id));
-      if (launching || storageBusy || workflows.active || core.jobs.some((j) => j.state === 'running')) throw Error('有新任务开始，请等待结束后再升级。');
+      if (servers.active || rooms.active || launching || storageBusy || workflows.active || core.jobs.some((j) => j.state === 'running')) throw Error('有新任务开始，请等待结束后再升级。');
       const file = await appUpdates.installer();const answer = await dialog.showMessageBox(window, { type: 'question', title: translateMessage('安装 AMBER 更新'), message: translateMessage('安装包已校验，是否退出 AMBER 并打开安装程序？'), detail: translateMessage('将保留游戏数据，并先备份账号和设置。请在安装向导中确认安装位置。'), buttons: [translateMessage('取消'), translateMessage('退出并安装')], defaultId: 0, cancelId: 0, noLink: true });if (answer.response !== 1) return false;
       await backupUpgradeConfig(app.getPath('userData'), core.root, app.getVersion());
       await new Promise((resolve, reject) => {const child = spawn(file, [], { detached: true, stdio: 'ignore', windowsHide: false });child.once('error', reject);child.once('spawn', () => {child.unref();resolve();});});
@@ -253,7 +279,7 @@ app.whenReady().then(async () => {
   handle('amber:storage-info', async () => {const r = await storage.get(),disk = await statfs(core.root);return { path: core.root, freeBytes: disk.bavail * disk.bsize, onboarded: r.onboarded || !smoke && (await core.listInstances()).length > 0 };});
   handle('amber:onboarding-complete', () => storage.complete());
   handle('amber:storage-pick', async () => {const r = await dialog.showOpenDialog(window, { title: translateMessage('选择新的空数据文件夹'), properties: ['openDirectory', 'createDirectory'] });if (r.canceled) return null;const token = randomUUID();selections.set(token, { kind: 'storage', value: r.filePaths[0] });return { token, path: r.filePaths[0] };});
-  handle('amber:storage-move', async (token) => {const target = selection(token, 'storage');if (!target) throw Error('请先选择目标目录');return workflows.exclusive(async () => {for (const item of await core.listInstances()) await core.requireStopped(await core.instancePath(item.id));storageBusy = true;core.operation = { title: '复制并校验数据目录', state: 'running' };try {news.cancel();survey.cancel();await Promise.allSettled([journalObservation,journal.queue,homePrefs.queue,news.pending,survey.done,...news.details.values()].filter(Boolean));await storage.migrate(core, target);app.relaunch();app.exit(0);return true;} catch (e) {storageBusy = false;throw e;} finally {core.operation = null;}});});
+  handle('amber:storage-move', async (token) => {if(servers.active||rooms.active)throw Error('Stop servers and leave the room before moving data / 迁移数据前请停止服务器并退出房间');const target = selection(token, 'storage');if (!target) throw Error('请先选择目标目录');return workflows.exclusive(async () => {for (const item of await core.listInstances()) await core.requireStopped(await core.instancePath(item.id));storageBusy = true;core.operation = { title: '复制并校验数据目录', state: 'running' };try {news.cancel();survey.cancel();await Promise.allSettled([journalObservation,journal.queue,homePrefs.queue,news.pending,survey.done,...news.details.values()].filter(Boolean));await storage.migrate(core, target);app.relaunch();app.exit(0);return true;} catch (e) {storageBusy = false;throw e;} finally {core.operation = null;}});});
   handle('amber:instance-icon', (id, icon) => management.setIcon(id, icon));
   handle('amber:instance-rename', (id, name) => management.rename(id, name));
   handle('amber:instance-remove', (id) => management.remove(id));
@@ -271,7 +297,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   handle('amber:lite-overlay', (id, v) => configureLiteOverlay(core, id, v));
   handle('amber:layout-export', async () => {const value = { format: 'amber-layout', schema: 1, layout: (await settings.get()).layout };const result = await dialog.showSaveDialog(window, { title: translateMessage('导出布局'), defaultPath: 'amber-layout.json', filters: [{ name: 'AMBER layout', extensions: ['json'] }] });if (result.canceled) return false;await writeFile(result.filePath, JSON.stringify(value, null, 2));return true;});
   handle('amber:layout-import', async () => {const result = await dialog.showOpenDialog(window, { title: translateMessage('导入布局'), properties: ['openFile'], filters: [{ name: 'AMBER layout', extensions: ['json'] }] });if (result.canceled) return null;const path = result.filePaths[0];if ((await stat(path)).size > 64000) throw Error('布局文件过大');const data = JSON.parse(await readFile(path, 'utf8'));if (data.format !== 'amber-layout' || data.schema !== 1) throw Error('不是 AMBER 布局文件');return settings.save({ ...(await settings.get()), layout: validateLayout(data.layout) });});
-  core.downloadThreads = (await settings.get()).threads;
+  core.downloadThreads = (await settings.get()).threads;configureTransferBudget(core.downloadThreads);
   handle('amber:background-pick', async () => {const r = await dialog.showOpenDialog(window, { title: translateMessage('选择启动背景（20 MB 以内）'), properties: ['openFile'], filters: [{ name: '图片', extensions: ['png', 'jpg', 'jpeg', 'webp'] }] });if (r.canceled) return null;const background = await importBackground(core.root, r.filePaths[0], (bytes) => nativeImage.createFromBuffer(bytes));return settings.save({ ...(await settings.get()), background });});
   handle('amber:themes-list',()=>themes.list());
   handle('amber:theme-state',()=>themes.state());
@@ -288,9 +314,9 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   handle('amber:theme-export',async(v,meta)=>{const bytes=await themes.export(validateSettings(v),meta);const r=await dialog.showSaveDialog(window,{defaultPath:'My-theme.ambtheme',filters:[{name:'AMBER theme',extensions:['ambtheme']}]});if(r.canceled)return false;await writeFile(r.filePath,bytes);return true;});
   handle('amber:theme-image',async()=>{const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Image',extensions:['png','jpg','jpeg','webp']}]});if(r.canceled)return null;const name=await importBackground(core.root,r.filePaths[0],b=>nativeImage.createFromBuffer(b));return themes.storeAsset(await readFile(join(core.root,'backgrounds',name)));});
   handle('amber:settings', () => settings.get());
-  handle('amber:settings-save', async (v) => {if(themes.state())throw Error('Confirm or revert theme preview first / 请先保留或恢复当前主题试用');v=validateSettings(v);if(launching&&v.graphicsMode!==(await settings.get()).graphicsMode)throw Error('正在准备启动。');if(v.graphicsMode==='system'&&(await settings.get()).graphicsMode!=='system')await graphics.restoreAll();const saved = await settings.save(v);core.downloadThreads = saved.threads;network.configure(saved.network);await refreshLocale();applyAppearance(saved);return saved;});
-  handle('amber:setup-state', () => workflows.state());
-  handle('amber:setup-cancel', () => workflows.cancel());
+  handle('amber:settings-save', async (v) => {if(themes.state())throw Error('Confirm or revert theme preview first / 请先保留或恢复当前主题试用');v=validateSettings(v);if(launching&&v.graphicsMode!==(await settings.get()).graphicsMode)throw Error('正在准备启动。');if(v.graphicsMode==='system'&&(await settings.get()).graphicsMode!=='system')await graphics.restoreAll();const saved = await settings.save(v);core.downloadThreads = saved.threads;configureTransferBudget(saved.threads);network.configure(saved.network);await refreshLocale();applyAppearance(saved);return saved;});
+  handle('amber:setup-state', (key) => workflows.state(key));
+  handle('amber:setup-cancel', (id) => workflows.cancel(id));
   handle('amber:setup-repair', (id) => workflows.repairSetup(id));
   handle('amber:setup-retry', (id) => workflows.retry(id));
   handle('amber:setup-choices', (game, type) => workflows.choices(game, type));
@@ -302,7 +328,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   handle('amber:migration-report', (id) => workflows.report(id));
   handle('amber:project-open', async (id) => {if (typeof id !== 'string' || !/^[-\w]{1,100}$/.test(id)) throw Error('无效项目');const p = await content.api('project/' + id);if (!['mod', 'modpack', 'shader', 'resourcepack'].includes(p.project_type)) throw Error('未知项目类型');return shell.openExternal('https://modrinth.com/' + p.project_type + '/' + encodeURIComponent(id));});
 
-  handle('amber:pack-create', async (planId) => {const plan = packs.plans.get(planId);if (!plan || plan.expiresAt < Date.now()) throw Error('整合包预览已过期');const prefs = await settings.get();const version = plan.loader === 'forge' ? plan.game + '-' + plan.loaderVersion : plan.loaderVersion;return workflows.create({ name: plan.title.slice(0, 60), game: plan.game, loader: plan.loader, version, threads: prefs.threads, packVersion: plan.versionId });});
+  handle('amber:pack-create', async (planId,requestKey) => {const plan = packs.plans.get(planId);if (!plan || plan.expiresAt < Date.now()) throw Error('整合包预览已过期');const prefs = await settings.get();const version = plan.loader === 'forge' ? plan.game + '-' + plan.loaderVersion : plan.loaderVersion;return workflows.create({ requestKey, name: plan.title.slice(0, 60), game: plan.game, loader: plan.loader, version, threads: prefs.threads, packVersion: plan.versionId });});
   handle('amber:pack-preview', (id, v) => packs.preview(id, v));
   handle('amber:pack-install', (id, p) => {const plan = packs.plans.get(p);if (!plan || plan.instanceId !== id || plan.expiresAt < Date.now()) throw Error('预览已过期，请重新检查');return workflows.startContent(id, plan, 'pack');});
   handle('amber:content-categories', () => content.categories());
@@ -341,7 +367,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   handle('amber:ms-cancel', () => {clearCopiedCode(accounts);return accounts.cancelMicrosoft();});
   handle('amber:ms-open', () => shell.openExternal(pendingCode(accounts).url));
   let launching = false;
-  handle('amber:launch', async (id, options) => {if (launching) throw Error('正在准备启动。');launching = true;try {core.workflowGuard?.();if((await core.runtimeStatus()).processes.some(p=>p.instanceId===id&&p.state==='running'))throw Error('此实例已经在运行。');if (core.jobs.some((j) => j.state === 'running')) throw Error('请等待安装或更新结束后启动游戏。');await recoverModUpdate(await core.instancePath(id));if ((await workflows.pending()).some((p) => p.instanceId === id)) throw Error('实例安装尚未完成，请先在任务中心继续安装。');await content.validateLaunch(id);const launchPrefs = await launchPreferences.get(id);options = { ...options, accountId: launchPrefs.accountId ?? options.accountId, memory: launchPrefs.memory ?? options.memory };const identity = await accounts.authorizeLaunch(options.accountId,options.username);const extraJvm = identity?.server ? [`-javaagent:${await authAgent(core.root)}=${identity.server}`] : [];const run = await core.launch(id, { username: options.username, memory: options.memory, identity, extraJvm });await libraryState.launched(id, run).catch(() => {});await observe();return run;} finally {launching = false;}});
+  handle('amber:launch', async (id, options) => {if (launching) throw Error('正在准备启动。');launching = true;try {core.workflowGuard?.(id);if((await core.runtimeStatus()).processes.some(p=>p.instanceId===id&&p.state==='running'))throw Error('此实例已经在运行。');if (core.jobs.some((j) => j.instanceId===id&&j.state === 'running')) throw Error('请等待此实例安装或更新结束后启动游戏。');await recoverModUpdate(await core.instancePath(id));if ((await workflows.pending()).some((p) => p.instanceId === id)) throw Error('实例安装尚未完成，请先在任务中心继续安装。');await content.validateLaunch(id);const launchPrefs = await launchPreferences.get(id);options = { ...options, accountId: launchPrefs.accountId ?? options.accountId, memory: launchPrefs.memory ?? options.memory };const identity = await accounts.authorizeLaunch(options.accountId,options.username);const extraJvm = identity?.server ? [`-javaagent:${await authAgent(core.root)}=${identity.server}`] : [];const run = await core.launch(id, { username: options.username, memory: options.memory, identity, extraJvm });await libraryState.launched(id, run).catch(() => {});await observe();return run;} finally {launching = false;}});
   handle('amber:open-instance', async (id) => {const error = await shell.openPath(await core.instancePath(id));if (error) throw new Error(error);});
   const placement=new WindowStateStore(app.getPath('userData'));
   let initialCorners='system',placementTimer,placementMaximized=false;
@@ -374,6 +400,11 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
           if(answer.response!==1)return;
           appUpdates.cancel();workflows.cancel();for(const j of core.jobs.filter(j=>j.state==='running'))core.controllers.get(j.id)?.abort(Error('用户取消任务并退出。'));
           while(workflows.active||core.jobs.some(j=>j.state==='running')||appUpdates.state.phase==='downloading')await new Promise(resolve=>setTimeout(resolve,150));
+        }
+        if(!smoke&&(servers.active||rooms.active)){
+          const answer=await dialog.showMessageBox(window,{type:'question',message:'服务端或联机连接仍在运行 / Servers or networking are still active',buttons:['最小化并继续 / Minimize and continue','停止服务端并退出 / Stop and quit','返回 / Back'],defaultId:0,cancelId:2,noLink:true});
+          if(answer.response===0){window.minimize();return;}if(answer.response!==1)return;
+          try{await servers.shutdown();await rooms.leave();}catch(e){await dialog.showMessageBox(window,{type:'warning',message:e.message});return;}
         }
         clearTimeout(placementTimer);await savePlacement();closeAllowed=true;window.close();
       }finally{closePrompt=false;}

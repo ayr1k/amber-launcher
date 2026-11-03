@@ -9642,5 +9642,9 @@
   "tools123.12": {
     "zh": "还没有实例，请先创建或导入整合包。",
     "en": "No instances yet. Create one or import a modpack first."
+  },
+  "tasks132.parallel": {
+    "zh": "同时执行最多两个安装任务，其余排队；同一实例保持串行。取消只影响所选任务，已校验文件和安装计划保留，可稍后继续。",
+    "en": "Up to two installation tasks run concurrently; others wait. Each instance stays serialized. Cancellation affects only the selected task; verified files and installation plans remain available to resume."
   }
 }

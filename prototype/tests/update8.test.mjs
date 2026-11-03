@@ -25,7 +25,7 @@ test('cancelling between setup stages stops subsequent stages and retries the sa
  core.configureLoader=async()=>order.push('loader');await work.retry('one');assert.deepEqual(order,['create','java','loader','loader','game']);assert.equal(JSON.parse(await readFile(join(dir,'setup-report.json'),'utf8')).state,'done');assert.equal((await work.retry('one')).id,'one');
 });
 test('cancel aborts the active job and workflow guard rejects subsequent writes',async()=>{
- let cancelled;const core={jobs:[{id:'j',state:'running'}],cancel:id=>cancelled=id},work=new Workflows(core,{});work.active=true;work.cancel();assert.equal(cancelled,'j');assert.throws(()=>work.context.run(true,()=>core.workflowGuard()),/取消/);
+ let cancelled;const core={jobs:[],cancel:id=>cancelled=id},work=new Workflows(core,{});await work.exclusive(async()=>{work.lastSetup='instance';core.jobs.push({id:'j',instanceId:'instance',state:'running'});work.cancel('instance');assert.equal(cancelled,'j');assert.throws(()=>core.workflowGuard('instance'),/取消/);},'instance');
 });
 test('download retries a temporary outage but never retries 404, and reuses verified data',async t=>{
  const root=await temp(t),bytes=Buffer.from('verified bytes'),file={path:join(root,'ok.jar'),url:'https://cdn.modrinth.com/test.jar',hash:createHash('sha1').update(bytes).digest('hex'),size:bytes.length};let calls=0;

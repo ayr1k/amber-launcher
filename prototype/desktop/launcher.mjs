@@ -1,3 +1,5 @@
+import {TaskQueue,withFileLock} from './task-queue132.mjs';
+import {basename} from 'node:path';
 // SPDX-License-Identifier: MPL-2.0
 import {requireLaunchGrant} from './launch-authorization.mjs';
 import {rendererFromLog} from './graphics.mjs';
@@ -19,22 +21,22 @@ async function readSession(dir){try{const session=JSON.parse(await readFile(join
 async function logTail(path){try{const file=await open(path,'r');try{const stat=await file.stat();const buffer=Buffer.alloc(Math.min(stat.size,24000));await file.read(buffer,0,buffer.length,Math.max(0,stat.size-buffer.length));return buffer.toString().replaceAll('<![CDATA[','').replaceAll(']]>','').replace(/<\/?log4j:[^>]*>/g,'').replace(/^\s*\n/gm,'');}finally{await file.close();}}catch{return '';}}
 
 export class VanillaLauncher extends LauncherCore {
- constructor(root,options){super(root,options);this.jobs=[];this.controllers=new Map();this.processes=new Map();this.javaCandidates=new Map();}
+ constructor(root,options){super(root,options);this.jobQueue=new TaskQueue(2);this.jobs=[];this.controllers=new Map();this.processes=new Map();this.javaCandidates=new Map();}
  status(){return {jobs:this.jobs.map(({controller,...j})=>({...j})),processes:[...this.processes.values()].map(({child,...p})=>p)};}
  async runtimeStatus(){const status=this.status();for(const instance of await this.listInstances()){if(status.processes.some(p=>p.instanceId===instance.id&&p.state==='running'))continue;const dir=await this.instancePath(instance.id),session=await readSession(dir);if(session?.game&&typeof session.logFile==='string'){const logPath=safePath(dir,'logs/'+session.logFile);status.processes.push({id:session.id,instanceId:instance.id,pid:session.pid,state:'running',startedAt:session.startedAt,javaPath:session.javaPath,javaVersion:session.javaVersion,memory:session.memory,graphics:session.graphics,logPath,tail:await logTail(logPath),renderer:rendererFromLog(await logTail(logPath))});}else if(!status.processes.some(p=>p.instanceId===instance.id)){try{const last=JSON.parse(await readFile(join(dir,'last-run.json'),'utf8'));if(['failed','exited'].includes(last.state)&&/^amber-[0-9]+\.log$/.test(last.logFile)){const logPath=safePath(dir,'logs/'+last.logFile);status.processes.push({...last,instanceId:instance.id,logPath,tail:await logTail(logPath)});}}catch{}}}return status;}
- async requireStopped(dir){this.workflowGuard?.();if(await readSession(dir))throw new Error('此实例已有运行中的游戏或启动任务，请先退出游戏。');}
+ async requireStopped(dir){this.workflowGuard?.(basename(dir));if(await readSession(dir))throw new Error('此实例已有运行中的游戏或启动任务，请先退出游戏。');}
  async scanJava(){const list=await discoverJava(this.root);for(const java of list)this.javaCandidates.set(java.path,java);return list;}
  async addJava(path){const java=await inspectJava(path);this.javaCandidates.set(java.path,java);return java;}
  cancel(id){const control=this.controllers.get(id);if(!control)throw new Error('任务已经结束。');const job=this.jobs.find(j=>j.id===id);if(job){job.cancellationRequested=true;job.phase='正在取消并整理文件，请稍候';}control.abort(new Error('用户取消了下载。'));}
  startJob(instanceId,kind,fn){
-  this.workflowGuard?.();
-  if(this.jobs.some(j=>j.state==='running'))throw new Error('请先完成或取消当前安装任务。');
+  this.workflowGuard?.(instanceId);
+  if(this.jobs.some(j=>(!j.instanceId||j.instanceId===instanceId)&&j.state==='running'))throw new Error('请先完成或取消当前安装任务。');
   if([...this.processes.values()].some(p=>p.instanceId===instanceId&&p.state==='running'))throw new Error('请先退出此实例的游戏。');
   const controller=new AbortController();const job={id:randomUUID(),instanceId,kind,state:'running',phase:'排队准备中',completed:0,total:0,transferred:0,startedAt:new Date().toISOString()};this.jobs.push(job);this.controllers.set(job.id,controller);
   const durable=['install','java'].includes(kind),journal=join(this.root,'instances',instanceId,'download-task.json');
   const run=async()=>{controller.signal.throwIfAborted();if(durable)await atomicJson(journal,{schema:1,kind,state:'running'});job.phase='准备中';return this.workbench && (kind.startsWith('content')||kind==='modpack') ? this.workbench.record(instanceId,kind,()=>fn(job,controller.signal),controller.signal) : fn(job,controller.signal);};
   const settle=async(state,error)=>{try{if(durable)await atomicJson(journal,{schema:1,kind,state,error});}catch{state='failed';error='Unable to save recovery record. Check storage permissions. / 无法保存恢复记录，请检查数据目录权限。';}job.error=error;job.finishedAt=new Date().toISOString();job.networkPaused=false;job.downloadActive=0;this.controllers.delete(job.id);job.phase=state==='done'?'已完成':state==='cancelled'?'已取消':'失败';job.state=state;};
-  Promise.resolve().then(()=>this.network?this.network.run(job,run):run()).then(()=>settle('done'),e=>settle(controller.signal.aborted?'cancelled':'failed',e.message));return {...job};
+  Promise.resolve().then(()=>this.jobQueue.run(instanceId,()=>{job.queued=false;return this.network?this.network.run(job,run):run();},{signal:controller.signal,onWaiting:()=>{job.queued=true;job.phase='Queued · two concurrent tasks / 排队中 · 同时执行两个任务';}})).then(()=>settle('done'),e=>settle(controller.signal.aborted?'cancelled':'failed',e.message));return {...job};
  }
  async metadata(id){const dir=await this.instancePath(id);const item=JSON.parse(await readFile(join(dir,'instance.json'),'utf8'));const meta=JSON.parse(await readFile(join(dir,'version.json'),'utf8'));if(item.metadataSha1&&await digest(join(dir,'version.json'))!==item.metadataSha1)throw new Error('版本元数据被更改，请重新创建实例。');if(meta.id!==item.game)throw new Error('实例版本元数据不匹配。');return {dir,item,meta};}
  async loaderVersions(id,type){const {meta}=await this.metadata(id);return type==='fabric'?fabricVersions(meta.id,this.fetcher):type==='liteloader'?liteVersions(meta.id,this.fetcher):loaderVersions(meta.id,type,this.fetcher);}
@@ -73,12 +75,12 @@ export class VanillaLauncher extends LauncherCore {
    }catch(e){item.status='incomplete';await atomicJson(join(dir,'instance.json'),item);throw e;}
   });
  }
- async prepareJava(id){const {dir,item,meta}=await this.metadata(id);await this.requireStopped(dir);return this.startJob(id,'java',async(job,signal)=>{const major=requiredJava(meta);const existing=(await this.scanJava()).find(j=>j.major===major);const java=existing||await installJava(this.root,major,job,signal,this.fetcher);item.javaPath=java.path;item.javaMajor=major;this.javaCandidates.set(java.path,java);await atomicJson(join(dir,'instance.json'),item);job.phase=`Java ${java.version} 已就绪`;});}
+ async prepareJava(id){const {dir,item,meta}=await this.metadata(id);await this.requireStopped(dir);return this.startJob(id,'java',async(job,signal)=>{const major=requiredJava(meta);const existing=(await this.scanJava()).find(j=>j.major===major);const java=existing||await withFileLock('java-install-'+major,()=>installJava(this.root,major,job,signal,this.fetcher),signal);item.javaPath=java.path;item.javaMajor=major;this.javaCandidates.set(java.path,java);await atomicJson(join(dir,'instance.json'),item);job.phase=`Java ${java.version} 已就绪`;});}
  async selectJava(id,path){if(!this.javaCandidates.has(path))throw new Error('请先检测 Java 或通过文件选择器添加。');const {dir,item,meta}=await this.metadata(id);await this.requireStopped(dir);const java=await inspectJava(path);if(java.major!==requiredJava(meta))throw new Error(`此版本需要 Java ${requiredJava(meta)}。`);item.javaPath=java.path;await atomicJson(join(dir,'instance.json'),item);return java;}
  async resolveGameJava(id){const {item,meta}=await this.runtimeMetadata(id);const java=item.javaPath?await inspectJava(item.javaPath):(await this.scanJava()).find(j=>j.major===requiredJava(meta));if(!java||java.major!==requiredJava(meta))throw new Error(`请先准备 Java ${requiredJava(meta)}。`);return java;}
  async launch(id,{username='Player',memory=4,identity=null,extraJvm=[]}={}){
   requireLaunchGrant(identity);
-  if(this.jobs.some(j=>j.state==='running'))throw new Error('请等待安装任务完成。');
+  if(this.jobs.some(j=>j.instanceId===id&&j.state==='running'))throw new Error('请等待安装任务完成。');
   if([...this.processes.values()].some(p=>p.instanceId===id&&p.state==='running'))throw new Error('此实例已经在运行。');
   const {dir,item,meta}=await this.runtimeMetadata(id);await this.requireStopped(dir);await this.workbench?.recover(dir);if(item.status!=='installed')throw new Error('请先完成游戏安装。');
   const receipt=JSON.parse(await readFile(join(dir,'installation.json'),'utf8'));if((receipt.loaderSha1||null)!==(item.loaderSha1||null))throw Error('加载器配置已变更，请重新安装。');if(receipt.metadataSha1!==await digest(join(dir,'version.json')))throw new Error('版本元数据校验失败。');

@@ -105,7 +105,7 @@ export class LocalPacks{
   const selected=plan.files.filter(f=>!f.optional||input.optional.includes(f.relative));
   const ids=new Set();for(const f of selected){const m=f.metadata;if(!m)continue;if(m.loaders.length&&!m.loaders.includes(target.loader))throw problem('Mod loader mismatch: '+f.relative,'模组声明的加载器与选择不符：'+f.relative);if(m.games.length&&m.games.every(g=>/^\d+(\.\d+){1,2}$/.test(g))&&!m.games.includes(target.game))throw problem('Minecraft version mismatch: '+f.relative,'模组声明的游戏版本与选择不符：'+f.relative);for(const id of m.modIds){if(ids.has(id))throw problem('Duplicate mod ID: '+id,'包内存在重复模组标识：'+id);ids.add(id);}}
   await requireSpace(this.core.root,plan.bytes.length+selected.reduce((n,f)=>n+f.size*2,0)+1073741824);
-  return this.workflows.create({name:input.name.trim(),game:target.game,loader:target.loader,version:target.version,threads:this.core.downloadThreads||8},null,null,null,null,{plan,selected:input.optional});
+  return this.workflows.create({requestKey:input.requestKey,name:input.name.trim(),game:target.game,loader:target.loader,version:target.version,threads:this.core.downloadThreads||8},null,null,null,null,{plan,selected:input.optional});
  }
  async retain(dir,{plan,selected}){
   const path=join(dir,'.amber-setup','local-pack.zip');await ensureParents(dir,path);await writeFile(path,plan.bytes,{flag:'wx'});

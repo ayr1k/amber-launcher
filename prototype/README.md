@@ -7,3 +7,5 @@ React interface in `src/`; Electron main-process services in `desktop/`; tests i
 React 界面位于 `src/`，Electron 主进程服务位于 `desktop/`，测试位于 `tests/`，安装器资源位于 `build/`。在此目录运行 pnpm。参阅[贡献指南](../docs/zh-CN/CONTRIBUTING.md)、[语言包接口](../docs/zh-CN/LANGUAGE-PACKS.md)和[测试指南](../docs/zh-CN/TESTING.md)。
 
 Official paired installers: `node scripts/package-editions.mjs --public` from `prototype`. Without `--public`, the paired build is marked as a local test build. Theme format and examples: [English](../docs/AMBTHEME-FORMAT.md) / [简体中文](../docs/zh-CN/AMBTHEME-FORMAT.md).
+
+1.3.2 publication preserves the user-accepted installer bytes, including the informational local-build label; update checks stay enabled. The exported source retains the same build-channel setting.

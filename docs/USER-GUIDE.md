@@ -133,3 +133,7 @@ Clear formatting restores the base gradient and normal type. Local colors remain
 Enter a name under Color presets & works. Save colors retains the old palette format; Save complete work includes text and styles. Works stay on this device. Loading replaces the current text after confirmation and can be undone. Save work before leaving the tool.
 
 JSON is a Java text component, without a command. MiniMessage and hex codes depend on compatible plugins. If literal text contains plugin color codes, hex export is blocked: use JSON or MiniMessage to preserve it. Preview uses the launcher font; the game's font and rendering may differ.
+
+## 1.3.2
+
+[Server and online workspace guide](SERVERS.md)

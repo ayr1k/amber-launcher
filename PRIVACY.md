@@ -41,3 +41,7 @@ Skin requests send a profile identifier to the identity provider and allowed tex
 ## Styled text works (1.3.1)
 
 Color presets and complete styled works stay in this product’s local browser storage. They may contain text entered by the user. They are not automatically uploaded. Copy writes generated markup to the clipboard; Export saves a text file at the user’s request. Review text before sharing it.
+
+## Server workspaces (1.3.2)
+
+Server worlds, settings, console logs, downloaded content, recovery copies and Java selections are stored locally under the selected game-data directory. Server configuration and its backups may contain plain-text RCON or management credentials. Room invitations contain a shared secret and are held for the active room; copy/share them only deliberately. Optional EasyTier downloads contact GitHub; configured discovery/relay peers can observe network addresses and traffic metadata. Server cores and plugins make their own network requests. No server data is uploaded to AMBER by this feature.

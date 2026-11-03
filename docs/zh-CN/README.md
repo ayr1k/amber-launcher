@@ -1,14 +1,14 @@
 # AMBER
 
-1.3.1 修复界面对齐，新增渐变文字选区颜色与样式、撤销重做及本地作品保存。
+1.3.2 新增并行下载与联机工作区：独立服务端实例、带说明的设置、控制台监控、依赖处理与可选 EasyTier 房间。
 
 [English](../../README.md) · [下载 Release](https://github.com/ayr1k/amber-launcher/releases) · [使用指南](USER-GUIDE.md)
 
 AMBER 是独立的 Windows Minecraft Java 版启动器，将实例隔离、游戏安装、模组管理、恢复和启动设置集中在同一界面。项目自有源码采用 MPL-2.0。
 
-## 1.3.1
+## 1.3.2
 
-适用于 Windows x64 的正式版。[下载安装包、源码和校验文件](https://github.com/ayr1k/amber-launcher/releases/tag/v1.3.1)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
+适用于 Windows x64 的正式版。[下载安装包、源码和校验文件](https://github.com/ayr1k/amber-launcher/releases/tag/v1.3.2)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
 
 - 一体化标题栏、独立窗口边框设置、窗口位置恢复与重新组织的隐私设置。
 
@@ -50,3 +50,5 @@ AMBER 非 Mojang 或微软官方产品。Minecraft、下载组件及第三方项
 [官方主题商城](https://ayr1k.github.io/#/themes) · [主题使用帮助](THEMES.md) · [主题格式规范](AMBTHEME-FORMAT.md)
 
 Alloy、Nocturne、Harvest 与 Verdant 均为独立下载的免费官方主题，适用于 AMBER 和 AmberE 1.2.1 及以上版本，不预置在软件内。
+
+[服务端与联机指南](SERVERS.md)（异地房间为测试功能）。
