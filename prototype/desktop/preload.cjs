@@ -1,6 +1,14 @@
 // SPDX-License-Identifier: MPL-2.0
 const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
+  editorHistory:(id,name)=>ipcRenderer.invoke('amber:editor-history',id,name),
+  editorBackup:(id,name,token)=>ipcRenderer.invoke('amber:editor-backup',id,name,token),
+  dependencyMetadata:id=>ipcRenderer.invoke('amber:dependency-metadata',id),
+  editorList:id=>ipcRenderer.invoke('amber:editor-list',id),
+  editorRead:(id,name)=>ipcRenderer.invoke('amber:editor-read',id,name),
+  editorSave:(id,input)=>ipcRenderer.invoke('amber:editor-save',id,input),
+  accountSkin:(id,refresh)=>ipcRenderer.invoke('amber:account-skin',id,refresh),
+  screenshotThumbnail:token=>ipcRenderer.invoke('amber:screenshot-thumbnail',token),
   networkDiagnose:()=>ipcRenderer.invoke('amber:network-diagnose'),
   pauseDownload:(id,value)=>ipcRenderer.invoke('amber:network-pause',id,value),
   journal:()=>ipcRenderer.invoke('amber:journal'),

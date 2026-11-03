@@ -1,3 +1,7 @@
+# Rolling back from 1.3.0
+
+Close games and save editor changes. Back up important data, then install the matching product’s [1.2.3](https://github.com/ayr1k/amber-launcher/releases/tag/v1.2.3). Keep the game library and themes. Downgrading does not undo configuration edits or world changes; use retained .bak files or instance backups when needed.
+
 # Rolling back from 1.2.3
 
 Close games and tasks and back up important data. Install the matching product’s [1.2.2](https://github.com/ayr1k/amber-launcher/releases/tag/v1.2.2) if needed. Existing completed instances and themes remain compatible. Version 1.2.2 cannot resume local-pack installation records introduced in 1.2.3: finish those tasks in 1.2.3 or move unwanted new instances to its recycle bin before downgrading. Reinstalling an earlier launcher does not undo world or mod changes.

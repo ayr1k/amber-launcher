@@ -1,3 +1,6 @@
+import {DependencyMetadata} from './dependency130.mjs';
+import {InstanceEditor} from './editor130.mjs';
+import {accountSkin} from './skins130.mjs';
 import {PlayJournal,NewsFeed,HomePreferences,Screenshots} from './home-services.mjs';
 import {StorageSurvey} from './maintenance.mjs';
 import {Themes} from './themes.mjs';
@@ -196,6 +199,16 @@ app.whenReady().then(async () => {
   handle('amber:news-open',async id=>shell.openExternal(await news.link(id)));handle('amber:news-detail',id=>news.detail(id));
   handle('amber:home-prefs',()=>homePrefs.get());handle('amber:home-prefs-save',v=>homePrefs.save(v));
   handle('amber:survey',()=>survey.get());handle('amber:survey-start',()=>survey.start());handle('amber:survey-cancel',()=>survey.cancel());
+  const dependency130=new DependencyMetadata(core);
+  handle('amber:dependency-metadata',async id=>dependency130.read(id,await content.list(id)));
+  const editor130=new InstanceEditor(core);
+  handle('amber:editor-history',(id,name)=>editor130.history(id,name));
+  handle('amber:editor-backup',(id,name,token)=>editor130.backup(id,name,token));
+  handle('amber:editor-list',id=>editor130.list(id));
+  handle('amber:editor-read',(id,name)=>editor130.read(id,name));
+  handle('amber:editor-save',(id,input)=>editor130.save(id,input));
+  handle('amber:account-skin',(id,refresh)=>accountSkin(accounts,id,refresh));
+  handle('amber:screenshot-thumbnail',async token=>{const img=nativeImage.createFromBuffer((await screenshots.read(token)).bytes);if(img.isEmpty())throw Error('Image unavailable');return img.resize({width:360}).toDataURL();});
   handle('amber:screenshots',id=>screenshots.list(id));
   handle('amber:screenshot-read',async token=>(await screenshots.read(token)).bytes.toString('base64'));
   handle('amber:screenshot-copy',async token=>{const image=nativeImage.createFromBuffer((await screenshots.read(token)).bytes);if(image.isEmpty())throw Error('Image unavailable');clipboard.writeImage(image);return true;});

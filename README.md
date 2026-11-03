@@ -1,14 +1,14 @@
 # AMBER
 
-1.2.3 adds local MRPACK and content ZIP import, optional client content and restart recovery. It clarifies modpacks, mod lists and backups, and improves Java/log tools and export layouts. Existing instances and themes remain compatible.
+1.3.0 adds skin avatars, a screenshot gallery, dependency graphs, a tabbed configuration editor, gradient text and docked large-window layouts.
 
 [简体中文](docs/zh-CN/README.md) · [Releases](https://github.com/ayr1k/amber-launcher/releases) · [User guide](docs/USER-GUIDE.md)
 
 AMBER is an independent Windows launcher for Minecraft: Java Edition. It keeps game instances separate and brings installation, mod management, recovery and launch settings into one workspace. Project-owned source is licensed under MPL-2.0.
 
-## 1.2.3
+## 1.3.0
 
-Stable release for Windows x64. [Download the installer, source and checksums](https://github.com/ayr1k/amber-launcher/releases/tag/v1.2.3). Includes instance management, content recommendations, mod updates, backups and recovery.
+Stable release for Windows x64. [Download the installer, source and checksums](https://github.com/ayr1k/amber-launcher/releases/tag/v1.3.0). Includes instance management, content recommendations, mod updates, backups and recovery.
 
 - Integrated title bar, independent window corners, remembered window placement and reorganized privacy settings.
 

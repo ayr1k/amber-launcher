@@ -33,3 +33,7 @@ Automatic source selection and manual connection diagnostics contact public Mine
 ## Local modpack import (1.2.3)
 
 Selected archives and import choices are retained in the new instance’s `.amber-setup` folder to support recovery. Archives, embedded configuration files and worlds are not uploaded by the importer. MRPACK downloads contact the permitted content hosts in its manifest; game, Java and loader preparation contact their normal providers. Import reports contain relative file names and pack metadata. Backups of the instance may include this retained content; review it before sharing.
+
+## 1.3.0 local tools
+
+Skin requests send a profile identifier to the identity provider and allowed texture hosts; images are cached locally. Screenshots, configurations, backups, graph positions and gradient presets are not automatically uploaded. Adjacent .bak configuration backups may contain server addresses or private data.

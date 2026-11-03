@@ -1,3 +1,12 @@
+## 1.3.0
+
+- Skin-head avatars with hat layers, local cache and manual refresh.
+- Screenshot thumbnails across instances, date/instance grouping, time sorting, zoom, copy and folder access.
+- Draggable themed dependency graphs, saved positions and recognized Fabric/Quilt declarations alongside installation records.
+- Configuration editor with tabs, line numbers, syntax colors, search/replace, undo/redo, JSON formatting, conflict checks and backup preview/restore.
+- Gradient text with adjustable color stops, local presets, JSON/MiniMessage/plugin output, copy and export.
+- Large-window home modules stay docked to theme edges with bounded auxiliary widths/heights. Existing theme packages need no conversion.
+
 ## 1.2.3
 
 - Import local Modrinth MRPACKs and supported content ZIPs into independent instances from content management or creation. Review pinned versions, files and optional client content; fill in and confirm missing ZIP version requirements.

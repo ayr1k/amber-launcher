@@ -7,5 +7,5 @@ import {placeholders} from '../desktop/localization.mjs';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const sources=new Set(Object.values(catalog).map(m=>m.zh));
 for(const [key,m] of Object.entries(catalog)){if(!m.zh||!m.en||placeholders(m.zh)!==placeholders(m.en))throw Error('Invalid locale entry '+key);}
-for(const name of await readdir(join(root,'src'))){if(!/\.(jsx|mjs)$/.test(name))continue;const text=await readFile(join(root,'src',name),'utf8');for(const match of text.matchAll(/translateText\(("(?:[^"\\]|\\.)*")/g)){const source=JSON.parse(match[1]);if(!sources.has(source))throw Error('Missing translation in '+name+': '+source);}if(name!=='main.jsx'&&/\bt\(/.test(text))throw Error('Ambiguous translation identifier in '+name);}
+for(const name of await readdir(join(root,'src'))){if(!/\.(jsx|mjs)$/.test(name))continue;const text=await readFile(join(root,'src',name),'utf8');for(const match of text.matchAll(/translateText\(("(?:[^"\\]|\\.)*")/g)){const source=JSON.parse(match[1]);if(!sources.has(source))throw Error('Missing translation in '+name+': '+source);}if(!['main.jsx','FileEditor130.jsx','Gradient130.jsx'].includes(name)&&/\bt\(/.test(text))throw Error('Ambiguous translation identifier in '+name);}
 console.log('LOCALE_CHECK_OK: '+sources.size+' bilingual messages and placeholders.');

@@ -1,13 +1,5 @@
-# 1.2.3 verification
+# 1.3.0 local verification
 
-[简体中文](https://github.com/ayr1k/amber-launcher/blob/main/docs/zh-CN/TESTING.md)
+Stable 1.3.0 release. Accepted installer bytes are preserved; the internal build-channel label remains local and does not disable updates. This revision includes a CodeMirror configuration editor with tabs, line numbers, syntax highlighting, search/replace, undo/redo, UTF-8/BOM/newline preservation, JSON formatting, conflict detection and backup preview/restore. Home modules retain theme docking positions with bounded auxiliary tracks. Gradient tools provide adjustable stops and local presets. Screenshots support zoom and navigation. Dependency visualization combines recorded relationships with recognized Fabric/Quilt metadata.
 
-The release includes local MRPACK/content ZIP import, retained installation recovery, pack provenance and reorganized Java/log tools. Existing theme formats and account boundaries are unchanged.
-
-353 automated regression tests passed, including 17 local-pack checks for archive paths, corruption, optional choices, known loader/version mismatches, cancellation/restart recovery and file protection. Isolated desktop checks covered both editions, five themes, compact windows and bilingual layouts. Both packaged applications passed startup and IPC smoke checks. These checks use synthetic installation fixtures and do not establish compatibility for every third-party modpack. Live game, account and provider combinations require separate validation.
-
-Test a real pack with the author-required versions, verify optional files and configs, then test cancellation and continuation from Tasks after restart. Existing instances must remain unchanged. Inspect Java/log tools and mod-list export in your usual theme.
-
-Archives are limited to 300 MB compressed, 600 MB expanded, 256 MB per file and 10000 entries. MRPACK embedded overrides additionally use the existing reader's 100 MB per-file limit. ZIP64, encrypted/split archives and arbitrary launcher folders are unsupported. CurseForge manifests are recognized but downloads are not integrated. Local imports do not track whole-pack updates.
-
-See the [rollback guide](https://github.com/ayr1k/amber-launcher/blob/main/docs/ROLLBACK.md) before downgrading. Version 1.2.2 cannot continue 1.2.3 local-pack installation records.
+Limits: configuration text up to 2 MB; no NBT or script execution. Unknown mod declarations do not establish compatibility. Real-account skin CDN coverage and thousands-of-images performance remain unverified.

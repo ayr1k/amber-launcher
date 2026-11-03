@@ -115,3 +115,11 @@
  .desktop-app[data-page=home][data-home-flow=sections] .home-classic .home-activity .section-title{flex-wrap:wrap;justify-content:flex-start}
  .desktop-app[data-page=home][data-home-flow=sections] .home-classic .home-activity .section-title h2{flex-basis:100%;margin-bottom:0}
 }
+/* Keep theme docking positions while capping auxiliary tracks. */
+@media(min-width:1500px) and (min-height:800px){
+.desktop-app[data-page=home][data-home-flow=sections] .theme-columns[data-launch-branch=first]{grid-template-columns:minmax(0,1fr) clamp(320px,25vw,480px)}
+.desktop-app[data-page=home][data-home-flow=sections] .theme-columns[data-launch-branch=last]{grid-template-columns:clamp(320px,25vw,480px) minmax(0,1fr)}
+.desktop-app[data-page=home][data-home-flow=sections] .theme-stack[data-launch-branch=first]{grid-template-rows:minmax(0,1fr) clamp(220px,32vh,380px)}
+.desktop-app[data-page=home][data-home-flow=sections] .theme-stack[data-launch-branch=last]{grid-template-rows:clamp(220px,32vh,380px) minmax(0,1fr)}
+.desktop-app[data-page=home][data-home-flow=sections] .theme-stack[data-launch-branch=none]{grid-template-rows:minmax(0,min(48%,440px)) minmax(0,min(48%,380px));align-content:space-between}
+}

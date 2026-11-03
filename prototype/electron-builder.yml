@@ -3,7 +3,7 @@ productName: AMBER
 asar: false
 npmRebuild: false
 directories:
-  output: releases/1.2.3/AMBER
+  output: releases/1.3.0/AMBER
   buildResources: build
 files:
   - desktop/**/*

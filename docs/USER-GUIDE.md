@@ -109,3 +109,17 @@ Instance overview shows provenance, import date and skipped items; modpack.json 
 A mod list records project identities, version hints and enabled states to find compatible mods again. It contains no JARs, configurations or worlds and cannot reproduce a whole pack. Use Mod migration to import/export lists. Backups restore selected instance data through Backup & recovery. CurseForge manifests are recognized but downloads are not integrated. Other launchers' full instance archives are unsupported here.
 
 Java tools provide detection, path copying and explicitly configured instance references; this is not an exhaustive list of automatically resolved runtimes. Log tools select an instance and distinguish viewing logs from opening their folder. Pinning changes home shortcuts only.
+
+## Visual tools and configuration editing (1.3.0)
+
+Accounts show the skin head with its hat layer; click the avatar to refresh. Failed requests retain a matching cache or default avatar. Third-party textures are restricted to the provider host or Minecraft textures host.
+
+Tools → Screenshots shows all or one instance, sorts by file time, and groups by date or instance. Open a thumbnail for zoom, previous/next, copying or locating the original. Groups do not move files.
+
+Instance content → Dependencies opens the themed draggable graph. Search, zoom, filter required/optional/conflict declarations and reset placement. Lines point from a mod to its dependency. Fabric/Quilt declarations and recorded install relationships are shown; unsupported or unresolved declarations are unknown, not proof of compatibility. Dragging never changes installed mods.
+
+Tools → File editor opens config/defaultconfigs/kubejs/scripts and supported root text files. Tabs retain edits; Ctrl+S saves, Ctrl+F searches, and the search panel supports replacement. Line numbers, syntax colors and undo/redo are available. JSON formatting and save validation apply only to JSON. UTF-8 text up to 2 MB is supported; NBT and script execution are excluded. Stop games before saving. External changes block overwrite. Each save creates an adjacent .bak file; Backups previews old content in the editor, and Save explicitly restores it. Backups may contain private configuration values: review before sharing.
+
+Tools → Gradient text supports multiple color stops and positions, reversal, bold text and local presets. JSON is a text component; MiniMessage and hex color codes require compatible plugins. Copy or export the output. Chinese and combined emoji are segmented together.
+
+Existing themes retain their navigation and docking positions. In large windows the side and bottom tracks are bounded, leaving extra room for the background. Theme packages are not converted.
