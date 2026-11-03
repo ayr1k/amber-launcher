@@ -1,3 +1,13 @@
+# 1.3.3 verification
+
+The user accepted both 1.3.3 installers and authorized stable publication. Preserve accepted installer bytes, including their informational local-build label; update checks remain enabled. Changes cover shared bottom task feedback, bounded catalog layout, local screenshot scope and workspace-aware quick search. Installer identities, account policies, themes and game/server data locations remain unchanged.
+
+380 automated regression tests passed. Both editions passed isolated native UI checks for task completion/five-second dismissal, concurrent tasks, failure retention, screenshot retry and workspace-aware search. Catalog geometry passed Classic, Alloy, Nocturne, Harvest and Verdant at 1280×840 and 2560×1440, plus Nocturne at 920×680. English search labels were verified. Installer startup and checksums are verified at delivery. Native UI checks use isolated --qa-ui data, synthetic catalogs/tasks and disposable instances; they do not download user content or access real accounts/worlds. Retain the 1.3.2 server/network testing limitations below.
+
+Final refinement checks passed in both editions: stable title-bar ordering in three themes at two window sizes, automatic and manual notification dismissal without replay, opacity fade and reduced-motion behavior, packaged startup and SHA-256 checks.
+
+Manual acceptance: complete simultaneous local/server downloads; verify completion disappears after five seconds, manual close removes the notification, and history remains in Tasks. Check failed tasks, narrow/maximized windows, theme switching, screenshot refresh and Ctrl+K destinations in both modes. Stop servers and games before installing or rolling back to 1.3.2; retain worlds and configuration backups.
+
 # 1.3.2 verification
 
 1.3.2 feedback revision: local and online modes now share navigation icons, software settings/About/tools, page transitions and reduced-motion rules. Servers have a separate searchable instance list; creation moves there after the first instance. Server settings and installed content are instance-detail tabs. The Modrinth catalog shares filters, icon rows and version controls with local mode, with automatic required-dependency preview. Server tools use server logs/configuration; screenshots remain shared local-game screenshots. EULA checkbox/text/link alignment is corrected.

@@ -1,3 +1,7 @@
+## 1.3.3 → 1.3.2
+
+Save and stop servers, close games and the launcher, and back up important worlds before installing the same product’s [1.3.2](https://github.com/ayr1k/amber-launcher/releases/tag/v1.3.2). Keep the full game library and application data. This maintenance release changes no instance or theme format. Downgrading the launcher does not undo game/mod updates or world changes.
+
 ## 1.3.2 → 1.3.1
 
 Save and stop all servers, disconnect rooms and exit the launcher before installing the retained 1.3.1 package. Keep the complete game-data library, especially `servers/`, worlds and configuration backups. Version 1.3.1 does not manage the new servers directory; do not delete it. Restore a pre-upgrade world copy when reverting a Minecraft server version; replacing the launcher does not downgrade worlds.

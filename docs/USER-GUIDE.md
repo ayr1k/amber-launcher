@@ -137,3 +137,5 @@ JSON is a Java text component, without a command. MiniMessage and hex codes depe
 ## 1.3.2
 
 [Server and online workspace guide](SERVERS.md)
+
+1.3.3: download feedback is shown in a bottom panel and fades out five seconds after success, with a manual close button. Use Tasks for history. Ctrl+K searches the active local/server workspace; mode switching keeps servers running. Screenshots in either mode belong to local game instances.

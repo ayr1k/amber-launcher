@@ -1,0 +1,27 @@
+/* SPDX-License-Identifier: MPL-2.0 */
+.workspace{position:relative}
+.task-feedback133{position:absolute;z-index:40;bottom:12px;right:16px;width:min(620px,calc(100% - 32px));background:var(--soft);color:var(--text);border:1px solid var(--line);box-shadow:0 4px 18px #0003;border-radius:var(--theme-radius,0px);overflow:hidden}
+.task-feedback-head133,.task-feedback-actions133{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:8px 14px}
+.task-feedback-head133 .text-button,.task-feedback-actions133 .text-button{margin:0;min-height:32px}
+.task-feedback-body133{max-height:min(360px,45dvh);overflow:auto;overscroll-behavior:contain;padding:0 14px 12px}
+.task-feedback-body133>article{border-top:1px solid var(--line);padding:12px 0;overflow-wrap:anywhere}
+.task-feedback-body133 p{margin:4px 0}.task-feedback-body133 progress{width:100%}.task-feedback-body133 .task-feedback-actions133{padding:4px 0;justify-content:flex-start;gap:12px 24px}
+.content-store.catalog-fit133{height:var(--catalog-height,65dvh);min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.catalog-fit133> :not(.store-split):not(.catalog-transition133){flex-shrink:0}
+.catalog-fit133>.store-split,.catalog-fit133>.catalog-transition133{flex:1;min-height:0;overflow:hidden}
+.catalog-fit133>.catalog-transition133{display:flex;flex-direction:column}
+.catalog-fit133 .store-split{min-height:0;height:100%;margin-bottom:0;overflow:hidden}
+.catalog-fit133 .store-split .browse-list{display:flex;flex-direction:column;position:static;max-height:none;height:100%;min-height:0;overflow:auto}
+.catalog-fit133 .browse-list>:not(.store-results){flex-shrink:0}
+.catalog-fit133 .browse-list>.store-results{flex:1;min-height:60px;overflow:auto;overscroll-behavior:contain}
+.catalog-fit133 .store-split .project-detail{height:100%;min-height:0;overflow:auto;overscroll-behavior:contain;padding-bottom:12px}
+.catalog-fit133 .store-split:not(.has-project) .browse-list{height:100%;overflow:auto}
+.catalog-fit133 .browse-list>.inline-actions{margin:8px 0;gap:16px}
+@media(max-width:1050px){.catalog-fit133 .store-split.has-project .browse-list{display:none}.task-feedback133{right:8px;width:calc(100% - 16px)}}
+
+.task-feedback-head-actions133{display:flex;align-items:center;gap:16px;margin-left:auto}
+
+.task-feedback133{opacity:1;transition:opacity 180ms ease-out}
+.task-feedback133.is-closing{opacity:0;pointer-events:none}
+.app.desktop-app.no-motion .task-feedback133{transition:none!important}
+@media(prefers-reduced-motion:reduce){.app.desktop-app[data-theme-enabled] .task-feedback133{transition:none!important}}

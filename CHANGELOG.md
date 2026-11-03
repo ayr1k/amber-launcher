@@ -1,3 +1,12 @@
+## 1.3.3
+
+- Keep the title-bar mode switch before Edit home so it stays in place across pages.
+- Shared bottom task feedback for local and server downloads. Successful notifications fade out after five seconds and can be closed manually; parallel activity and failures remain visible, with history in Tasks.
+- Keep content catalogs within the available viewport, with separate scrolling results/details, accessible pagination and spaced completion actions.
+- Remove a legacy screenshot request using server instance IDs. Both modes browse local game screenshots; refresh clears resolved errors and one unavailable instance does not hide other results.
+- Ctrl+K follows the active workspace, searches server instances and commands, and supports explicit mode switching without stopping servers.
+- Existing themes, account rules and data locations remain unchanged. Stable release with the accepted Windows installers, complete source archives and checksums.
+
 ## 1.3.2
 
 - Two concurrent installation tasks with per-instance cancellation, shared-file locks and a shared transfer limit. Long setup dialogs can continue in the background.
