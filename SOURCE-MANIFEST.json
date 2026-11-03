@@ -914,8 +914,8 @@
     },
     {
       "path": "prototype/scripts/prepare-edition-source.mjs",
-      "bytes": 10646,
-      "sha256": "36ed40e8a765ef728ba2a22bb63e0e2dcb3a3f4e735113963f5a74d27eeef942"
+      "bytes": 10648,
+      "sha256": "7e47cd7d36d86174d5b55545baab0b9f39592484069e0f44784600ae65714ecb"
     },
     {
       "path": "prototype/scripts/prepare-github.mjs",
