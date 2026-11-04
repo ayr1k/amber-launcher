@@ -22,8 +22,8 @@ export function fitWindow(saved, displays, primaryId) {
   return {x,y,width,height};
 }
 export function supportsWindowCorners(platform,release) {return platform==='win32' && Number(release.split('.')[2])>=22000 || platform==='darwin';}
-export function editingCommand(input){
-  if(input.type!=='keyDown'||!input.control||input.alt||input.meta)return null;
+export function editingCommand(input,platform=process.platform){
+  if(input.type!=='keyDown'||!(platform==='darwin'?input.meta:input.control)||input.alt||(platform!=='darwin'&&input.meta))return null;
   const key=String(input.key).toLowerCase();
   if(input.shift)return ({z:'redo',v:'pasteAndMatchStyle'})[key]||null;
   return ({a:'selectAll',c:'copy',x:'cut',v:'paste',z:'undo',y:'redo'})[key]||null;

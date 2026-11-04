@@ -4,7 +4,7 @@
 
 AMBER does not automatically upload diagnostic reports, raw logs, worlds or local mod files. Requested downloads and searches contact Mojang/Microsoft, Modrinth, loader providers, Adoptium or GitHub as needed. Those services receive ordinary network request information. Optional local-mod identification sends the file's SHA-1 hash to Modrinth, not its contents.
 
-Microsoft authorization takes place on Microsoft's website. AMBER does not collect Microsoft passwords. Third-party account passwords are sent to the HTTPS authentication address entered by the user and are not persisted. Tokens are stored using Windows user encryption in `accounts.json`; the public Client ID is not a secret. This encryption does not protect against malicious programs running under the same Windows identity.
+Microsoft authorization takes place on Microsoft's website. AMBER does not collect Microsoft passwords. Third-party account passwords are sent to the HTTPS authentication address entered by the user and are not persisted. Tokens are stored using system credential protection in `accounts.json`; the public Client ID is not a secret. This encryption does not protect against malicious programs running under the same operating-system identity.
 
 Settings → Language and privacy lists local storage locations. Instances include game/mod logs, worlds and configuration. Pre-upgrade backups may retain encrypted account data after an account is removed from the active store. Local removal does not revoke authorization with the account provider.
 
@@ -49,3 +49,9 @@ Server worlds, settings, console logs, downloaded content, recovery copies and J
 ## 1.3.4
 
 The seed map computes offline and stores seeds/markers locally; reading level.dat does not upload or modify worlds. Gradient text and palettes stay local. Original-launcher import copies only selected game data to a new instance and excludes account stores; metadata/download requests use the existing providers. The source directory is retained. Copied configurations and worlds may contain personal information; review before sharing.
+
+## 1.3.5 local identities and platforms
+
+Custom offline names and PNG skins remain in the encrypted account store. A loopback-only texture service serves one launch identity; it does not authenticate online or automatically upload skins. First use downloads and verifies the compatibility component from the official authlib-injector source.
+
+Credentials use Windows user protection, macOS Keychain or a secure Linux/FreeBSD keyring. The basic_text fallback is rejected. Default configuration roots are `%APPDATA%/<product>`, `~/Library/Application Support/<product>`, and `$XDG_CONFIG_HOME/<product>` (or `~/.config/<product>`); the game library is user-selected. System-bound account ciphertext is not portable authentication data.

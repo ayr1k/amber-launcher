@@ -54,7 +54,7 @@ export class VanillaLauncher extends LauncherCore {
  }
  async runtimeMetadata(id){const result=await this.metadata(id);if(result.item.loaderSha1){if(await digest(join(result.dir,'loader.json'))!==result.item.loaderSha1)throw Error('加载器配置校验失败。');const profile=JSON.parse(await readFile(join(result.dir,'loader.json'),'utf8'));result.meta=profile?.amberFormat?withLoader(result.meta,profile):withFabric(result.meta,profile);}return result;}
  async install(id,{threads=8}={}){
-  if(process.platform!=='win32'||process.arch!=='x64')throw new Error('此开发版安装器目前支持 Windows x64。');
+  if(!['win32','darwin','linux','freebsd'].includes(process.platform)||!['x64','arm64'].includes(process.arch))throw new Error('Unsupported platform');if(process.platform==='freebsd')throw Error('FreeBSD 客户端需要匹配的原生 LWJGL 库；当前实验版提供服务端和工具 / FreeBSD client requires matching native LWJGL libraries; server and tools are available.');
   if(!Number.isInteger(threads)||threads<1||threads>16)throw new Error('并发数应为 1–16。');
   const {dir,item,meta}=await this.runtimeMetadata(id);await this.requireStopped(dir);const plan=planFiles(meta,this.root);
   return this.startJob(id,'install',async(job,signal)=>{
@@ -79,6 +79,7 @@ export class VanillaLauncher extends LauncherCore {
  async selectJava(id,path){if(!this.javaCandidates.has(path))throw new Error('请先检测 Java 或通过文件选择器添加。');const {dir,item,meta}=await this.metadata(id);await this.requireStopped(dir);const java=await inspectJava(path);if(java.major!==requiredJava(meta))throw new Error(`此版本需要 Java ${requiredJava(meta)}。`);item.javaPath=java.path;await atomicJson(join(dir,'instance.json'),item);return java;}
  async resolveGameJava(id){const {item,meta}=await this.runtimeMetadata(id);const java=item.javaPath?await inspectJava(item.javaPath):(await this.scanJava()).find(j=>j.major===requiredJava(meta));if(!java||java.major!==requiredJava(meta))throw new Error(`请先准备 Java ${requiredJava(meta)}。`);return java;}
  async launch(id,{username='Player',memory=4,identity=null,extraJvm=[]}={}){
+  if(process.platform==='freebsd')throw Error('FreeBSD 实验包仅支持服务端与工具，尚不支持游戏客户端 / FreeBSD experimental bundle supports servers and utilities only');
   requireLaunchGrant(identity);
   if(this.jobs.some(j=>j.instanceId===id&&j.state==='running'))throw new Error('请等待安装任务完成。');
   if([...this.processes.values()].some(p=>p.instanceId===id&&p.state==='running'))throw new Error('此实例已经在运行。');

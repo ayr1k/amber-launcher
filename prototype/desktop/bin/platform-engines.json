@@ -1,0 +1,8 @@
+{
+  "sourceSha256": "01e0bf902ed2f8aeedee3c41b4039eb898639dfb0e6470fbd32ee0f533b54766",
+  "targets": {
+    "linux-x64": "e2bf889082d022ffaeb3eb70fef27f83660b175942e3bcf0297582c8837acc70",
+    "darwin-x64": "85c7bfe5eba57b76c75c66d78231a335ff4468deb29d987b18031f0cc5efa73f",
+    "darwin-arm64": "b58e251b5c04e70bf2a08b449f2f1635819ef817745972c3c45ff4f548aa7f66"
+  }
+}

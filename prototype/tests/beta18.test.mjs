@@ -27,7 +27,7 @@ test('main edition blocks anonymous, legacy offline and unlinked server launch; 
  const core=new VanillaLauncher(root);await assert.rejects(core.launch('nonexistent',{identity:{uuid,name:'Owner',accessToken:'fake'}}),/启动授权/);await assert.rejects(core.launch('nonexistent'),/启动授权/);
 });
 test('verified offline identity retains official UUID, survives restart, expires and rejects clock rollback',async t=>{
- const {a,state,root,fetcher,login}=await fixture(t);const owner=await login();await a.addOffline('Ignored');const offline=a.data.accounts.find(x=>x.type==='offline');assert.equal(offline.uuid,owner.uuid);assert.equal(offline.name,owner.name);
+ const {a,state,root,fetcher,login}=await fixture(t);const owner=await login();await a.addOffline('Custom');const offline=a.data.accounts.find(x=>x.type==='offline');assert.equal(offline.uuid,owner.uuid);assert.equal(offline.name,'Custom');
  state.network=true;const before=state.requests.length;const grant=await a.authorizeLaunch(offline.id);requireLaunchGrant(grant,true);assert.equal(state.requests.length,before);assert.throws(()=>requireLaunchGrant(grant),/启动授权/);
  const restored=new Accounts(root,{codec,fetcher,edition:'amber',now:()=>state.now});await restored.init();requireLaunchGrant(await restored.authorizeLaunch(offline.id));
  state.now+=OFFLINE_LEASE_MS;await assert.rejects(restored.authorizeLaunch(offline.id),/正版资格/);state.now=1;await assert.rejects(restored.authorizeLaunch(offline.id),/正版资格/);
@@ -59,10 +59,10 @@ test('independent update channels reject cross-repository and wrong-product asse
 
 test('authentication failures point to account recovery rather than a content-download error',()=>{for(const text of ['Minecraft 所有权检查失败（HTTP 403）','第三方账号尚未关联正版资格'])assert.equal(explainProblem(text).action,'accounts');});
 
-test('re-authenticating the same official profile preserves account links and repairs a renamed offline identity',async t=>{
+test('re-authenticating the same official profile preserves account links and keeps an independent offline name',async t=>{
  const {a,login}=await fixture(t);const owner=await login();await a.addOffline();const offline=a.data.accounts.find(x=>x.type==='offline');const offlineId=offline.id;
  await login();assert.equal(a.data.licenseAccountId,owner.id);assert.equal(a.data.accounts.filter(x=>x.type==='microsoft').length,1);requireLaunchGrant(await a.authorizeLaunch(offlineId));
- owner.name='RenamedOwner';await assert.rejects(a.authorizeLaunch(offlineId),/身份不一致/);await a.addOffline();assert.equal(offline.name,'RenamedOwner');assert.equal(offline.id,offlineId);assert.equal(a.data.accounts.filter(x=>x.type==='offline').length,1);requireLaunchGrant(await a.authorizeLaunch(offlineId));
+ owner.name='RenamedOwner';assert.equal((await a.authorizeLaunch(offlineId)).name,'Owner');await a.addOffline();assert.equal(offline.name,'RenamedOwner');assert.equal(offline.id,offlineId);assert.equal(a.data.accounts.filter(x=>x.type==='offline').length,1);requireLaunchGrant(await a.authorizeLaunch(offlineId));
 });
 
 test('linking requires online ownership; removal and delayed launches invalidate grants',async t=>{

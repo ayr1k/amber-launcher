@@ -9722,5 +9722,57 @@
   "seed134.map": {
     "zh": "种子地图",
     "en": "Seed map"
+  },
+  "m69956f1acd89": {
+    "zh": "编辑用户名与皮肤",
+    "en": "Edit username and skin"
+  },
+  "ma759dd2529f1": {
+    "zh": "保存名称",
+    "en": "Save name"
+  },
+  "ma7b2a8e55784": {
+    "zh": "改名保留此账号的 UUID。部分服务器按名称识别玩家，改名前请确认服务端规则。",
+    "en": "Renaming keeps this account’s UUID. Some servers identify players by name; check their rules before renaming."
+  },
+  "m47768a6d6120": {
+    "zh": "皮肤贴图预览",
+    "en": "Skin texture preview"
+  },
+  "mf5d00e4846a4": {
+    "zh": "皮肤模型",
+    "en": "Skin model"
+  },
+  "m86895d48ead2": {
+    "zh": "标准手臂",
+    "en": "Classic arms"
+  },
+  "m7d51098b0c1e": {
+    "zh": "窄手臂",
+    "en": "Slim arms"
+  },
+  "m6dba0aace1ba": {
+    "zh": "选择 PNG 皮肤",
+    "en": "Choose PNG skin"
+  },
+  "mf8ec2989c054": {
+    "zh": "恢复默认皮肤",
+    "en": "Reset skin"
+  },
+  "ma29ffcce0ab8": {
+    "zh": "支持 64×64、64×32 PNG。自定义皮肤用于本机离线游戏；首次使用需要下载皮肤兼容组件，游戏期间请保持启动器运行。其他玩家不一定能看到此皮肤。",
+    "en": "Supports 64×64 and 64×32 PNG. Custom skins apply to local offline play; first use downloads a compatibility component. Keep the launcher running during play. Other players may not see this skin."
+  },
+  "m10628764557c": {
+    "zh": "微软与第三方账号启动时在线验证资格；已验证离线身份支持自定义名称与皮肤，资格缓存最多使用 7 天。到期后需要联网重新验证。",
+    "en": "Microsoft and third-party accounts verify ownership online at launch. Verified offline identities allow custom names and skins with a maximum seven-day ownership cache; reconnect to renew it."
+  },
+  "md4cbf0f345cb": {
+    "zh": "将为 {0} 创建离线身份，保留其角色 UUID，用户名可独立设置。",
+    "en": "Create an offline identity for {0}, retaining its UUID with a separately editable username."
+  },
+  "m511588dbd50c": {
+    "zh": "登录令牌使用当前系统用户的系统密钥库加密保护。移除账号会删除本地记录，不会删除服务端账号。",
+    "en": "Login tokens are encrypted using the current system user’s key store. Removing an account deletes its local record, not the server account."
   }
 }

@@ -1,3 +1,7 @@
+## 1.3.5 → 1.3.4
+
+Rollback packages exist only for Windows; no previous official macOS/Linux/FreeBSD package is available. Stop games/servers and back up application credentials and the game library before installing the same product's 1.3.4. Older builds lack custom local skins; AMBER 1.3.4 expects the offline name to match its owner, so restore that name in 1.3.5 first if needed. Do not replace account stores or delete worlds to address login failures. Sign in again when migrating operating systems rather than copying encrypted credentials.
+
 ## 1.3.4 → 1.3.3
 
 Save and stop servers, close games and the launcher, and back up the library and application data before installing the same product’s [1.3.3](https://github.com/ayr1k/amber-launcher/releases/tag/v1.3.3). Seed-map tools and new palette formats will not be available. Keep exported markers and gradient works; older versions may not understand new options. Imported instances are separate copies; rolling back does not remove them or undo changes inside worlds. The original .minecraft directory was not modified by import.

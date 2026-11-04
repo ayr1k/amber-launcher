@@ -24,3 +24,7 @@ pnpm desktop
 
 项目自有改动采用 MPL-2.0，保留依赖和素材声明。PR 说明用户可见变化、验证结果与限制，界面模拟检查不能表述为真实游戏验收。
 
+
+## 1.3.5 platform builds / 平台构建
+
+See [platform build inputs and verification limits](../../prototype/PLATFORMS-1.3.5.md). Publish the accepted package bytes unchanged. Keep architecture-specific native map engines and their source manifest; platform artifacts are not interchangeable. No signing credentials or private account data belong in source exports.

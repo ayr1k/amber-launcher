@@ -24,3 +24,7 @@ Preserve transaction rollback, path checks, trusted download origins, checksums,
 
 Project-owned changes use MPL-2.0. Preserve all dependency and asset notices. Pull requests should explain the user-visible change, validation and remaining limitations. Do not label simulated UI checks as successful real-game tests.
 
+
+## 1.3.5 platform builds / 平台构建
+
+See [platform build inputs and verification limits](prototype/PLATFORMS-1.3.5.md). Publish the accepted package bytes unchanged. Keep architecture-specific native map engines and their source manifest; platform artifacts are not interchangeable. No signing credentials or private account data belong in source exports.

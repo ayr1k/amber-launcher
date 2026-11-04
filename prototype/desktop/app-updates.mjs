@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import {updateAssetName} from './platform135.mjs';
 import {atomicJson} from './core.mjs';
 import {PRODUCT_NAME,REPOSITORY_NAME} from './edition.mjs';
 import {mkdir,readFile,writeFile,copyFile,lstat} from 'node:fs/promises';
@@ -18,7 +19,7 @@ export function releaseCandidate(releases,current,product=PRODUCT_NAME,channel=c
   return releases.filter(r=>!r.draft&&(channel==='preview'||!r.prerelease&&/^v?\d+\.\d+\.\d+$/.test(r.tag_name))).filter(r=>{try{return compareVersions(r.tag_name,current)>0;}catch{return false;}})
     .sort((a,b)=>compareVersions(b.tag_name,a.tag_name)).map(r=>{
       const version=r.tag_name.replace(/^v/,'');
-      const name=`${product}-${version}-Setup-x64.exe`;
+      const name=updateAssetName(product,version);if(!name)return null;
       const asset=r.assets?.find(a=>a.name===name&&a.state==='uploaded');
       if(!asset||!Number.isSafeInteger(asset.size)||asset.size<1||asset.size>800_000_000||!/^sha256:[a-f0-9]{64}$/.test(asset.digest||''))return null;
       if(asset.browser_download_url!==`${repository}/releases/download/${r.tag_name}/${name}`)return null;

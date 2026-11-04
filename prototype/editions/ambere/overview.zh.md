@@ -1,16 +1,16 @@
 # AmberE
 
-1.3.4 新增可平滑拖动的离线 Java 种子地图，升级渐变文字工作区，并支持将原版启动器 .minecraft 配置复制导入独立实例。
+1.3.5 修复账号菜单主题配色，支持离线用户名与本地 PNG 皮肤编辑，并提供 Windows、macOS、Linux 下载；FreeBSD 为服务端与工具实验包，暂不支持游戏客户端。
 
 [English](../../README.md) · [下载 Release](https://github.com/ayr1k/AmberE/releases) · [使用指南](USER-GUIDE.md)
 
-AmberE 是面向 Minecraft Java 版的独立 Windows 发行项目，提供离线和第三方账号。基于 AMBER 共用代码维护，采用 MPL-2.0，并使用独立应用身份、数据目录和更新仓库。不提供微软登录，不内置微软应用 Client ID。
+AmberE 是面向 Minecraft Java 版的独立发行项目，提供离线和第三方账号。基于 AMBER 共用代码维护，采用 MPL-2.0，并使用独立应用身份、数据目录和更新仓库。不提供微软登录，不内置微软应用 Client ID。
 
-## 1.3.4
+## 1.3.5
 
-适用于 Windows x64 的正式版。[下载安装包、源码和校验文件](https://github.com/ayr1k/AmberE/releases/tag/v1.3.4)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
+提供 Windows x64 正式安装包及其他平台下载。[下载安装包、源码和校验文件](https://github.com/ayr1k/AmberE/releases/tag/v1.3.5)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
 
-- 离线身份与 HTTPS 第三方认证，保存的凭据由 Windows 当前用户加密保护。
+- 离线身份与 HTTPS 第三方认证，保存的凭据由系统密钥库保护。
 - 独立游戏实例、Java 与加载器安装、模组搜索、依赖选择、更新和批量管理。
 - 备份恢复、内容操作恢复、回收站、任务恢复、收藏与最近启动。
 - 中英双语、纯文本自定义语言包、主题、背景与一体化窗口控制。
@@ -21,6 +21,10 @@ AmberE 是面向 Minecraft Java 版的独立 Windows 发行项目，提供离线
 校验 SHA-256 后运行 Setup 安装包。使用独立程序目录，升级前退出 AmberE 与 Minecraft。安装器可选中英文，目前未签名；卸载保留游戏数据。
 
 离线和第三方身份不授予游戏所有权或官方在线服务权限，请合法取得游戏；第三方服务可能有自己的要求。AmberE 非 Mojang 或微软官方产品，不宣称已获微软 API 批准。
+
+## 平台下载与验证范围
+
+Windows x64：EXE；macOS Intel / Apple Silicon：独立 ZIP；Linux x64：DEB。macOS 尚未实机测试，Linux 尚需完整桌面/密钥库及游戏测试。FreeBSD amd64 仅为服务端与工具实验包。全部包未签名，macOS 未公证。查看[安装步骤与已知限制](../../prototype/PLATFORMS-1.3.5.md)及 [多平台下载页](https://ayr1k.github.io/#/download?product=ambere)。
 
 ## 文档
 

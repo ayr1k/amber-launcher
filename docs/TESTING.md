@@ -1,3 +1,11 @@
+# 1.3.5 verification
+
+The user accepted the local packages and authorized stable paired releases and Pages publication. Preserve all ten package bytes, including informational local-build labels and embedded documentation from the testing stage. Current release notes and this source documentation supersede embedded local-only wording. Signing remains deferred; no endorsement or exhaustive platform/gameplay acceptance is claimed.
+
+407 regression tests and 2398 bilingual message checks passed. Both Windows products passed packaged startup, credential encryption, IPC and native seed-engine checks; isolated account UI passed in five themes and normal/large windows. Real Authlib 6.0.54 and 10.0.77 parsed local skin profiles/signatures with synthetic identities. No real account or world was used by automation.
+
+Linux runtime and map engines ran in Ubuntu/WSL for both final packages; real Java 21 download, verification, extraction and discovery passed. WSL lacks a usable desktop keyring, so full account/desktop acceptance did not pass. macOS has checksum/architecture/package validation only, without a Mac runtime test. FreeBSD is an untested server/tools experiment; client launch is explicitly unavailable. See [platform setup](../prototype/PLATFORMS-1.3.5.md).
+
 # 1.3.4 verification
 
 The user accepted both 1.3.4 installers and authorized stable publication. Preserve the accepted installer bytes and informational local-build label; update checks remain enabled. Both editions retain their existing account rules, identities, update repositories and data locations. No real accounts or worlds were used by automation.

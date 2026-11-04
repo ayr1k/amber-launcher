@@ -1,14 +1,14 @@
 # AMBER
 
-1.3.4 新增可平滑拖动的离线 Java 种子地图，升级渐变文字工作区，并支持将原版启动器 .minecraft 配置复制导入独立实例。
+1.3.5 修复账号菜单主题配色，支持离线用户名与本地 PNG 皮肤编辑，并提供 Windows、macOS、Linux 下载；FreeBSD 为服务端与工具实验包，暂不支持游戏客户端。
 
 [English](../../README.md) · [下载 Release](https://github.com/ayr1k/amber-launcher/releases) · [使用指南](USER-GUIDE.md)
 
-AMBER 是独立的 Windows Minecraft Java 版启动器，将实例隔离、游戏安装、模组管理、恢复和启动设置集中在同一界面。项目自有源码采用 MPL-2.0。
+AMBER 是独立的 Minecraft Java 版启动器，将实例隔离、游戏安装、模组管理、恢复和启动设置集中在同一界面。项目自有源码采用 MPL-2.0。
 
-## 1.3.4
+## 1.3.5
 
-适用于 Windows x64 的正式版。[下载安装包、源码和校验文件](https://github.com/ayr1k/amber-launcher/releases/tag/v1.3.4)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
+提供 Windows x64 正式安装包及其他平台下载。[下载安装包、源码和校验文件](https://github.com/ayr1k/amber-launcher/releases/tag/v1.3.5)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
 
 - 一体化标题栏、独立窗口边框设置、窗口位置恢复与重新组织的隐私设置。
 
@@ -25,9 +25,13 @@ AMBER 是独立的 Windows Minecraft Java 版启动器，将实例隔离、游�
 
 ## 账号状态
 
-启动时继续验证游戏资格；这不代表 Mojang 或 Microsoft 官方背书。 AMBER 内置公开 Microsoft Client ID，认证失败不会静默切换离线身份。微软及关联的第三方账号在启动时在线验证官方资格；主动创建的已验证离线身份沿用官方角色名称和 UUID，资格加密保存，最多缓存七天。这是产品策略，不代表 Mojang 已批准的例外。旧的未验证离线账号不能在主版启动；原有实例和存档仍保留。
+启动时继续验证游戏资格；这不代表 Mojang 或 Microsoft 官方背书。 AMBER 内置公开 Microsoft Client ID，认证失败不会静默切换离线身份。微软及关联的第三方账号在启动时在线验证官方资格；主动创建的已验证离线身份沿用官方 UUID，支持自定义离线名称，资格加密保存，最多缓存七天。这是产品策略，不代表 Mojang 已批准的例外。旧的未验证离线账号不能在主版启动；原有实例和存档仍保留。
 
 第三方账号需单独进行真实服务验收。离线模式不授予游戏所有权或在线服务权限。
+
+## 平台下载与验证范围
+
+Windows x64：EXE；macOS Intel / Apple Silicon：独立 ZIP；Linux x64：DEB。macOS 尚未实机测试，Linux 尚需完整桌面/密钥库及游戏测试。FreeBSD amd64 仅为服务端与工具实验包。全部包未签名，macOS 未公证。查看[安装步骤与已知限制](../../prototype/PLATFORMS-1.3.5.md)及 [多平台下载页](https://ayr1k.github.io/#/download)。
 
 ## 文档
 

@@ -8,6 +8,8 @@ contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
   editorList:id=>ipcRenderer.invoke('amber:editor-list',id),
   editorRead:(id,name)=>ipcRenderer.invoke('amber:editor-read',id,name),
   editorSave:(id,input)=>ipcRenderer.invoke('amber:editor-save',id,input),
+  editOffline:(id,input)=>ipcRenderer.invoke('amber:offline-edit',id,input),
+  pickOfflineSkin:(id,model)=>ipcRenderer.invoke('amber:offline-skin-pick',id,model),
   accountSkin:(id,refresh)=>ipcRenderer.invoke('amber:account-skin',id,refresh),
   screenshotThumbnail:token=>ipcRenderer.invoke('amber:screenshot-thumbnail',token),
   networkDiagnose:()=>ipcRenderer.invoke('amber:network-diagnose'),

@@ -1,0 +1,30 @@
+{
+  "linux-x64": {
+    "version": "2.6.4",
+    "url": "https://github.com/EasyTier/EasyTier/releases/download/v2.6.4/easytier-linux-x86_64-v2.6.4.zip",
+    "hash": "61b659eaedba658fa66fe47d17e1426cdd77e5d02fa15fed447bb4357c09dfd6",
+    "size": 25506523,
+    "binaryHash": "35b854e0c5853c02733870488c977200f6aa06d09c08d5dc7f9f9e150e7be8d5"
+  },
+  "darwin-x64": {
+    "version": "2.6.4",
+    "url": "https://github.com/EasyTier/EasyTier/releases/download/v2.6.4/easytier-macos-x86_64-v2.6.4.zip",
+    "hash": "89fc28a6e6995259d76ce3f11775220e8a21c760e94df91a6a9db30a69b6982e",
+    "size": 33733545,
+    "binaryHash": "ddf95a012599e424a632105fc3dc87d15c0a2daaf30a20b71aa95c8f896f9a2f"
+  },
+  "darwin-arm64": {
+    "version": "2.6.4",
+    "url": "https://github.com/EasyTier/EasyTier/releases/download/v2.6.4/easytier-macos-aarch64-v2.6.4.zip",
+    "hash": "4be1882d1aa36d31c1d6ba0596f2cf8a097e371f8da124212324b2e0f8df7e4b",
+    "size": 30174017,
+    "binaryHash": "6478a522b8637e2bd2ad3adad66ed04a71b35f832bd9889bffaf1863262f6ddf"
+  },
+  "freebsd-x64": {
+    "version": "2.6.4",
+    "url": "https://github.com/EasyTier/EasyTier/releases/download/v2.6.4/easytier-freebsd-13.2-x86_64-v2.6.4.zip",
+    "hash": "a34d52a8890c181054d9d8cfb775a2a2c8940a7b606c262e3059e6ecd542c8fb",
+    "size": 35319429,
+    "binaryHash": "f81ece01624b3f5b1aeea40a6eaa77e01c5176a2de3ad8ab454ee2ee31a4972f"
+  }
+}

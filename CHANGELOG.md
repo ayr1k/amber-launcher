@@ -1,3 +1,10 @@
+## 1.3.5
+
+- Account-add tabs now follow the active theme instead of a fixed green underline.
+- Offline identities can change their name and import/reset a standard or slim PNG skin while retaining their UUID. AMBER still requires a verified owner and the existing offline lease; AmberE keeps its independent account policy. Local skin compatibility does not make skins visible to other players automatically.
+- Platform-aware Java installation, library selection, launch arguments, updates, server resource readings and networking components. Local macOS Intel/Apple Silicon ZIPs and Linux x64 DEBs accompany the Windows installers. FreeBSD is an experimental server/tools bundle; game-client support is not complete.
+- Publish the accepted packages unchanged, with complete source and SHA-256 checksums. Signing remains deferred. See prototype/PLATFORMS-1.3.5.md for setup, validation and limitations.
+
 ## 1.3.4
 
 - Offline Java seed map (selected generator versions from 1.7.10 through 26.3): pan/zoom, scale, X/Z navigation, Y biome slice, three dimensions, biome/structure filtering, slime chunks, saved markers with import/export, and read-only level.dat seed import. Terrain relief is approximate; modded/datapack generation and mixed-version terrain may differ.

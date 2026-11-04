@@ -2,3 +2,4 @@
 prototype/desktop/seed-engine134.c -text
 prototype/desktop/vendor/cubiomes/** -text
 prototype/desktop/bin/*.exe -text
+prototype/desktop/bin/seed-engine-* -text

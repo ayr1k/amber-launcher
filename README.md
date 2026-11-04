@@ -1,14 +1,14 @@
 # AMBER
 
-1.3.4 adds an offline Java seed map with smooth dragging, an expanded gradient text studio, and copy-based import of original launcher .minecraft profiles into isolated instances.
+1.3.5 adds theme-aware account tabs, editable offline names and local PNG skins, and platform packages for Windows, macOS and Linux. FreeBSD is an experimental server/tools bundle, not a supported game client.
 
 [简体中文](docs/zh-CN/README.md) · [Releases](https://github.com/ayr1k/amber-launcher/releases) · [User guide](docs/USER-GUIDE.md)
 
-AMBER is an independent Windows launcher for Minecraft: Java Edition. It keeps game instances separate and brings installation, mod management, recovery and launch settings into one workspace. Project-owned source is licensed under MPL-2.0.
+AMBER is an independent launcher for Minecraft: Java Edition. It keeps game instances separate and brings installation, mod management, recovery and launch settings into one workspace. Project-owned source is licensed under MPL-2.0.
 
-## 1.3.4
+## 1.3.5
 
-Stable release for Windows x64. [Download the installer, source and checksums](https://github.com/ayr1k/amber-launcher/releases/tag/v1.3.4). Includes instance management, content recommendations, mod updates, backups and recovery.
+Windows x64 release with additional platform downloads. [Download the installer, source and checksums](https://github.com/ayr1k/amber-launcher/releases/tag/v1.3.5). Includes instance management, content recommendations, mod updates, backups and recovery.
 
 - Integrated title bar, independent window corners, remembered window placement and reorganized privacy settings.
 
@@ -25,9 +25,13 @@ Download the Windows x64 Setup executable from [Releases](https://github.com/ayr
 
 ## Account status
 
-Minecraft API access for AMBER has been approved. Launch continues to verify eligibility. Approval is not an endorsement by Mojang or Microsoft. AMBER includes its public Microsoft Client ID. Login failure never silently switches to offline mode. AMBER requires online official eligibility verification for Microsoft and linked third-party launches. Explicitly created verified offline identities retain the official name and UUID with a maximum seven-day encrypted eligibility cache; this is a product policy, not a Mojang-approved exception. Legacy unverified offline accounts cannot launch in AMBER. Existing game instances and saves are preserved.
+Minecraft API access for AMBER has been approved. Launch continues to verify eligibility. Approval is not an endorsement by Mojang or Microsoft. AMBER includes its public Microsoft Client ID. Login failure never silently switches to offline mode. AMBER requires online official eligibility verification for Microsoft and linked third-party launches. Explicitly created verified offline identities retain the official UUID, with an editable offline name with a maximum seven-day encrypted eligibility cache; this is a product policy, not a Mojang-approved exception. Legacy unverified offline accounts cannot launch in AMBER. Existing game instances and saves are preserved.
 
 Third-party services require separate live validation. Offline mode does not grant Minecraft ownership or online-service access.
+
+## Platforms and verification
+
+Windows x64: EXE; macOS Intel / Apple Silicon: separate ZIPs; Linux x64: DEB. macOS needs device testing; Linux needs full desktop/keyring and gameplay testing. FreeBSD amd64 is an experimental server/tools bundle only. Packages are unsigned and macOS is not notarized. See [setup and limitations](prototype/PLATFORMS-1.3.5.md) and the [platform downloads](https://ayr1k.github.io/#/download).
 
 ## Documentation
 

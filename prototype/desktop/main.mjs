@@ -1,3 +1,4 @@
+import {readBoundedFile} from './bounded-io.mjs';
 import {configureTransferBudget} from './task-queue132.mjs';
 import {SeedMap,readWorldFile} from './seed134.mjs';
 import {MinecraftImport} from './minecraft134.mjs';
@@ -5,6 +6,7 @@ import {Servers} from './servers132.mjs';
 import {Rooms} from './rooms132.mjs';
 import {DependencyMetadata} from './dependency130.mjs';
 import {InstanceEditor} from './editor130.mjs';
+import {skinDimensions,startSkinBridge} from './offline135.mjs';
 import {accountSkin} from './skins130.mjs';
 import {PlayJournal,NewsFeed,HomePreferences,Screenshots} from './home-services.mjs';
 import {StorageSurvey} from './maintenance.mjs';
@@ -132,7 +134,7 @@ app.whenReady().then(async () => {
   handle('amber:logs-folder',async id=>{const dir=await core.instancePath(id);const path=join(dir,'logs');await ensureParents(dir,join(path,'probe'));const error=await shell.openPath(path);if(error)throw Error(error);return true;});
   handle('amber:java-prepare', (id) => core.prepareJava(id));
   handle('amber:java-select', (id, path) => core.selectJava(id, path));
-  handle('amber:java-browse', async () => {const result = await dialog.showOpenDialog(window, { title: translateMessage('选择 Java 可执行文件'), properties: ['openFile'], filters: [{ name: 'Java', extensions: ['exe'] }] });return result.canceled ? null : core.addJava(result.filePaths[0]);});
+  handle('amber:java-browse', async () => {const result = await dialog.showOpenDialog(window, { title: translateMessage('选择 Java 可执行文件'), properties: ['openFile'], ...(process.platform==='win32'?{filters:[{name:'Java',extensions:['exe']}]}:{}) });return result.canceled ? null : core.addJava(result.filePaths[0]);});
   const servers=await new Servers(core).init(),rooms=new Rooms(core,servers);
   const serverEditor=new InstanceEditor({instancePath:id=>servers.dir(id)},{directories:['config','defaultconfigs','plugins','kubejs','scripts'],files:['server.properties','bukkit.yml','spigot.yml','paper.yml','permissions.yml']});
   const resourceTimer=setInterval(()=>servers.sample(),3000);resourceTimer.unref();
@@ -285,7 +287,7 @@ app.whenReady().then(async () => {
       if (servers.active || rooms.active || launching || storageBusy || workflows.active || core.jobs.some((j) => j.state === 'running')) throw Error('有新任务开始，请等待结束后再升级。');
       const file = await appUpdates.installer();const answer = await dialog.showMessageBox(window, { type: 'question', title: translateMessage('安装 AMBER 更新'), message: translateMessage('安装包已校验，是否退出 AMBER 并打开安装程序？'), detail: translateMessage('将保留游戏数据，并先备份账号和设置。请在安装向导中确认安装位置。'), buttons: [translateMessage('取消'), translateMessage('退出并安装')], defaultId: 0, cancelId: 0, noLink: true });if (answer.response !== 1) return false;
       await backupUpgradeConfig(app.getPath('userData'), core.root, app.getVersion());
-      await new Promise((resolve, reject) => {const child = spawn(file, [], { detached: true, stdio: 'ignore', windowsHide: false });child.once('error', reject);child.once('spawn', () => {child.unref();resolve();});});
+      if(process.platform!=='win32'){const error=await shell.openPath(file);if(error)throw Error(error);}else await new Promise((resolve, reject) => {const child = spawn(file, [], { detached: true, stdio: 'ignore', windowsHide: false });child.once('error', reject);child.once('spawn', () => {child.unref();resolve();});});
       app.quit();return true;
     } finally {upgradeBusy = false;}
   });
@@ -377,7 +379,9 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   handle('amber:ownership-link',(id,ownerId)=>accounts.linkOwnership(id,ownerId));
   handle('amber:purchase',()=>shell.openExternal('https://www.minecraft.net/store/minecraft-java-bedrock-edition-pc'));
   handle('amber:account-configure', (id) => accounts.configure(id));
-  handle('amber:account-offline', (name) => accounts.addOffline(name));
+  handle('amber:offline-edit',(id,input)=>{if(!input||Object.keys(input).some(k=>!['name','skin','model'].includes(k))||input.skin!==undefined&&input.skin!==null)throw Error('Invalid account edit');return accounts.editOffline(id,input);});
+  handle('amber:offline-skin-pick',async(id,model)=>{if(!accounts.data.accounts.some(a=>a.id===id&&a.type==='offline'))throw Error('Offline account not found');const result=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'PNG skin',extensions:['png']}]});if(result.canceled)return accounts.list();const bytes=await readBoundedFile(result.filePaths[0],1_000_000,{binary:true});skinDimensions(bytes);const img=nativeImage.createFromBuffer(bytes);if(img.isEmpty())throw Error('Invalid PNG skin');return accounts.editOffline(id,{skin:{png:img.toPNG().toString('base64'),model}});});
+  handle('amber:account-offline' , (name) => accounts.addOffline(name));
   handle('amber:account-server', (input) => accounts.addServer(input));
   handle('amber:account-remove', (id) => accounts.remove(id));
   handle('amber:account-profile', (id, p) => accounts.selectProfile(id, p));
@@ -386,8 +390,9 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   handle('amber:ms-poll', () => accounts.pollMicrosoft());
   handle('amber:ms-cancel', () => {clearCopiedCode(accounts);return accounts.cancelMicrosoft();});
   handle('amber:ms-open', () => shell.openExternal(pendingCode(accounts).url));
+  const skinRuns=new Set();
   let launching = false;
-  handle('amber:launch', async (id, options) => {if (launching) throw Error('正在准备启动。');launching = true;try {core.workflowGuard?.(id);if((await core.runtimeStatus()).processes.some(p=>p.instanceId===id&&p.state==='running'))throw Error('此实例已经在运行。');if (core.jobs.some((j) => j.instanceId===id&&j.state === 'running')) throw Error('请等待此实例安装或更新结束后启动游戏。');await recoverModUpdate(await core.instancePath(id));if ((await workflows.pending()).some((p) => p.instanceId === id)) throw Error('实例安装尚未完成，请先在任务中心继续安装。');await content.validateLaunch(id);const launchPrefs = await launchPreferences.get(id);options = { ...options, accountId: launchPrefs.accountId ?? options.accountId, memory: launchPrefs.memory ?? options.memory };const identity = await accounts.authorizeLaunch(options.accountId,options.username);const extraJvm = identity?.server ? [`-javaagent:${await authAgent(core.root)}=${identity.server}`] : [];const run = await core.launch(id, { username: options.username, memory: options.memory, identity, extraJvm });await libraryState.launched(id, run).catch(() => {});await observe();return run;} finally {launching = false;}});
+  handle('amber:launch', async (id, options) => {if (launching) throw Error('正在准备启动。');launching = true;try {core.workflowGuard?.(id);if((await core.runtimeStatus()).processes.some(p=>p.instanceId===id&&p.state==='running'))throw Error('此实例已经在运行。');if (core.jobs.some((j) => j.instanceId===id&&j.state === 'running')) throw Error('请等待此实例安装或更新结束后启动游戏。');await recoverModUpdate(await core.instancePath(id));if ((await workflows.pending()).some((p) => p.instanceId === id)) throw Error('实例安装尚未完成，请先在任务中心继续安装。');await content.validateLaunch(id);const launchPrefs = await launchPreferences.get(id);options = { ...options, accountId: launchPrefs.accountId ?? options.accountId, memory: launchPrefs.memory ?? options.memory };const identity = await accounts.authorizeLaunch(options.accountId,options.username);const skinBridge=identity.localSkin?await startSkinBridge(identity,identity.localSkin):null;let run;try{const extraJvm = identity?.server||skinBridge ? [`-javaagent:${await authAgent(core.root,fetch,{preferCache:!!skinBridge})}=${identity.server||skinBridge.url}`] : [];if(skinBridge)extraJvm.push('-Dminecraft.api.discovery.host='+skinBridge.url+'discovery');run = await core.launch(id, { username: options.username, memory: options.memory, identity, extraJvm });if(skinBridge){const child=core.processes.get(run.id)?.child;if(child){skinRuns.add(run.id);const stopSkin=()=>{skinBridge.close();skinRuns.delete(run.id);};child.once('close',stopSkin);child.once('error',stopSkin);}else skinBridge.close();}}catch(e){skinBridge?.close();throw e;}await libraryState.launched(id, run).catch(() => {});await observe();return run;} finally {launching = false;}});
   handle('amber:open-instance', async (id) => {const error = await shell.openPath(await core.instancePath(id));if (error) throw new Error(error);});
   const placement=new WindowStateStore(app.getPath('userData'));
   let initialCorners='system',placementTimer,placementMaximized=false;
@@ -414,6 +419,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
     window.on('close', async event => {
       if(closeAllowed)return;event.preventDefault();if(closePrompt)return;closePrompt=true;
       try {
+        if(!smoke&&skinRuns.size){const answer=await dialog.showMessageBox(window,{type:'question',message:'离线游戏仍在使用本地皮肤 / Offline game is using a local skin',detail:'最小化可继续提供皮肤；退出后尚未缓存的皮肤可能无法加载。 / Minimize to keep serving skins; quitting may prevent uncached skins from loading.',buttons:['最小化 / Minimize','退出 / Quit','返回 / Back'],defaultId:0,cancelId:2});if(answer.response===0){window.minimize();return;}if(answer.response!==1)return;}
         if(storageBusy){await dialog.showMessageBox(window,{type:'info',message:translateMessage('数据目录正在迁移，请等待完成。'),buttons:[translateMessage('确定')]});return;}
         if(!smoke&&(minecraftImport.busy||workflows.active||core.jobs.some(j=>j.state==='running')||appUpdates.state.phase==='downloading')){
           const answer=await dialog.showMessageBox(window,{type:'warning',title:translateMessage('安装还未结束'),message:translateMessage('退出会中断当前下载或实例配置。'),detail:translateMessage('已完成的文件会保留，建议等待任务结束。实例安装可在任务中心继续；程序更新可在关于页重新下载。'),buttons:[translateMessage('继续等待'),translateMessage('取消任务并退出')],defaultId:0,cancelId:0,noLink:true});
