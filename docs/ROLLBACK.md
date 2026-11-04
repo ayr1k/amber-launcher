@@ -1,3 +1,7 @@
+## 1.4.0 → 1.3.6
+
+Stop games/servers and close the launcher. Back up the entire library and settings, then install the same product’s 1.3.6. Preserve 1.4.0 snapshots and pending upgrade records; older versions do not support these new workflows. Do not downgrade while an upgrade or backup is active.
+
 ## 1.3.6 → 1.3.5
 
 For Windows, stop games and servers, close the launcher, back up credentials/settings and the game library, then install the same product’s 1.3.5 installer from its release page. This update introduces no intentional account or world format migration. Preserve existing data; 1.3.5 lacks the new crash analysis and layout/pagination fixes. Other-platform downloads already remain at 1.3.5.

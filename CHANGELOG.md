@@ -1,3 +1,9 @@
+## 1.4.0
+
+- Add client/server automatic backups with retention and pinning, MRPACK upgrade previews into independent instances, server player and command management, linked clients and environment sharing, and crash dependency repair entry points. Improve backup/player layout spacing.
+- Automatic backups are opt-in per instance. Manual/pinned backups are retained; server snapshots require a stopped process.
+- Publish accepted Windows x64 installers, complete source and SHA-256; other platforms remain at 1.3.5.
+
 ## 1.3.6
 
 - Fix account avatar/action alignment when editing identities and online catalog pagination scrolling. Add local evidence-based crash analysis for recent runs and imported logs.

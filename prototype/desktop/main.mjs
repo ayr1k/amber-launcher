@@ -1,3 +1,7 @@
+import {ServerManagement140} from './server-management140.mjs';
+import {Environment140} from './environment140.mjs';
+import {PackUpgrade140} from './pack-upgrade140.mjs';
+import {Protection140} from './protection140.mjs';
 import {collectCrashLogs} from './crash-files136.mjs';
 import {redact as redactCrashLog} from './privacy.mjs';
 import {readBoundedFile} from './bounded-io.mjs';
@@ -48,7 +52,7 @@ import { diagnosticSummary } from './diagnostics.mjs';
 import { InstanceManagement } from './instance-management.mjs';
 import { configureLiteOverlay } from './legacy-combinations.mjs';
 import { validateLayout } from './layout-schema.mjs';
-import { readFile, writeFile, stat } from 'node:fs/promises';
+import { readFile, writeFile, stat, lstat } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 import { recoverTransactions } from './recovery.mjs';
 import { Workflows, Settings, validateSettings, validateManifest } from './workflows.mjs';
@@ -171,6 +175,8 @@ app.whenReady().then(async () => {
   const packs = new Modpacks(core, content);
   const workflows = new Workflows(core, content),settings = new Settings(core.root),selections = new Map();
   const localPacks=new LocalPacks(core,packs,workflows);workflows.localPacks=localPacks;
+  const packUpgrade140=new PackUpgrade140(core,packs,localPacks,workflows);
+  handle('amber:pack-upgrade',async(action,id,input)=>{if(action==='versions')return packUpgrade140.versions(id);if(action==='diff')return packUpgrade140.diff(id,input);if(action==='apply')return packUpgrade140.apply(id,input);if(action==='preview'){if(input)return packUpgrade140.preview(id,{version:input});const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Modrinth pack',extensions:['mrpack']}]});return r.canceled?null:packUpgrade140.preview(id,{path:r.filePaths[0]});}throw Error('Invalid action');});
   const minecraftImport=new MinecraftImport(core);
   handle('amber:minecraft-import',async(action,...args)=>{
    if(action==='pick'){const r=await dialog.showOpenDialog(window,{title:'选择原版 .minecraft / Select original .minecraft',properties:['openDirectory']});return r.canceled?null:minecraftImport.scan(r.filePaths[0]);}
@@ -237,6 +243,10 @@ app.whenReady().then(async () => {
   handle('amber:language-export', async () => {const r = await dialog.showSaveDialog(window, { title: translateMessage('导出语言包模板'), defaultPath: 'amber-language.json', filters: [{ name: 'JSON', extensions: ['json'] }] });if (r.canceled) return false;await writeFile(r.filePath, JSON.stringify(languageTemplate(), null, 2));return true;});
   handle('amber:language-remove', async () => {await languages.remove();const value = await settings.get();if (value.language.startsWith('x-')) await settings.save({ ...value, language: 'en-US' });return refreshLocale();});
   const management = new InstanceManagement(core, workflows),backups = new Backups(core, workflows);
+  const serverManagement140=new ServerManagement140(core,servers),environment140=new Environment140(core,servers,content,workflows);
+  handle('amber:server-management',async(action,id,input)=>{if(['players','player','commands','backups','backup','restore','policy','savePolicy','pinBackup'].includes(action))return serverManagement140[action](id,input);if(action==='command')return serverManagement140.consoleResult(id,input);if(action==='link')return environment140.links(id,input);if(action==='compare')return environment140.compare(id,input);if(action==='previewInstall')return environment140.previewInstall(id,input.localId,input.versionId);if(action==='install')return environment140.install(id);if(action==='export'){const r=await environment140.requirements(id);const out=await dialog.showSaveDialog(window,{defaultPath:'server-environment.json',filters:[{name:'Environment',extensions:['json']}]});if(out.canceled)return null;await writeFile(out.filePath,JSON.stringify(r.manifest,null,2));return {unknown:r.unknown,optional:r.optional};}if(action==='import'){const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Environment',extensions:['json']}]});if(r.canceled)return null;const st=await lstat(r.filePaths[0]);if(!st.isFile()||st.size>2000000)throw Error('Invalid environment file');return environment140.previewImport(JSON.parse(await readFile(r.filePaths[0],'utf8')));}if(action==='create')return environment140.create(id,input);throw Error('Invalid action');});
+  const protection140=new Protection140(core,backups);
+  handle('amber:protection', (action,id,value)=>{if(action==='state')return protection140.state(id);if(action==='save')return protection140.save(id,value);if(action==='pin')return backups.pin(id,value);throw Error('Invalid action');});
   const modUpdates = new ModUpdates(core, content);
   const bulkContent = new BulkContent(core, content, modUpdates),launchPreferences = new LaunchPreferences(core);
   content.updates = modUpdates;
@@ -245,7 +255,7 @@ app.whenReady().then(async () => {
   const journal=new PlayJournal(core.root),news=new NewsFeed(core.root),homePrefs=new HomePreferences(core.root),screenshots=new Screenshots(core),survey=new StorageSurvey(core,app.getPath('userData'));
   try{await journal.migrate((await libraryState.get()).history);await journal.recover();}catch{/* Preserve an unreadable journal; it must never prevent launching the application. */}
   await survey.init().catch(()=>{});
-  let journalObservation=null;const observe=()=>{if(storageBusy||upgradeBusy)return Promise.resolve();if(journalObservation)return journalObservation;journalObservation=(async()=>{try{const processes=(await core.runtimeStatus()).processes;if(!storageBusy&&!upgradeBusy)await journal.observe(processes);}catch{}})().finally(()=>journalObservation=null);return journalObservation;};
+  let journalObservation=null;const observe=()=>{if(storageBusy||upgradeBusy)return Promise.resolve();if(journalObservation)return journalObservation;journalObservation=(async()=>{try{const processes=(await core.runtimeStatus()).processes;if(!storageBusy&&!upgradeBusy){await journal.observe(processes);await protection140.observe(processes);}}catch{}})().finally(()=>journalObservation=null);return journalObservation;};
   core.onSessionChanged=observe;await observe();const journalTimer=setInterval(observe,30000);journalTimer.unref();
   powerMonitor.on('suspend',()=>{if(!storageBusy)journal.suspend().catch(()=>{});});powerMonitor.on('resume',()=>{journal.resume();observe();});
   handle('amber:journal',()=>journal.get());
@@ -281,7 +291,7 @@ app.whenReady().then(async () => {
   handle('amber:mod-update-scan', (id, pre) => modUpdates.scan(id, pre === true));
   handle('amber:mod-update-lock', async (id, p, value) => {await readyForModUpdate(id);return modUpdates.lock(id, p, value);});
   handle('amber:mod-update-preview', (id, choices, optional, excluded) => modUpdates.preview(id, choices, optional, excluded));
-  handle('amber:mod-update-install', async (id, plan) => {await readyForModUpdate(id);return modUpdates.install(id, plan);});
+  handle('amber:mod-update-install', async (id, plan) => {await readyForModUpdate(id);await protection140.before(id,'updates');return modUpdates.install(id, plan);});
   handle('amber:mod-update-history', (id) => modUpdates.history(id));
   handle('amber:mod-update-restore', async (id, record) => {await readyForModUpdate(id);return modUpdates.restore(id, record);});
   handle('amber:app-update-state', () => appUpdates.snapshot());
@@ -380,7 +390,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   handle('amber:optifine-install', async (id) => {const result = await dialog.showOpenDialog(window, { title: translateMessage('选择 OptiFine 官方安装器 JAR（独立安装，替换当前加载器）'), properties: ['openFile'], filters: [{ name: 'OptiFine', extensions: ['jar'] }] });return result.canceled ? null : installOptifine(core, id, result.filePaths[0]);});
   handle('amber:optifine-site', () => shell.openExternal('https://optifine.net/downloads'));
   handle('amber:loader-versions', (id, type) => core.loaderVersions(id, type));
-  handle('amber:loader-configure', (id, type, v) => core.configureLoader(id, type, v));
+  handle('amber:loader-configure', async (id, type, v) => {await protection140.before(id,'updates');return core.configureLoader(id,type,v);});
   handle('amber:fabric-versions', (id) => core.fabricVersions(id));
   handle('amber:fabric-configure', (id, version) => core.configureFabric(id, version));
   handle('amber:accounts', () => accounts.list());
@@ -401,7 +411,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   handle('amber:ms-open', () => shell.openExternal(pendingCode(accounts).url));
   const skinRuns=new Set();
   let launching = false;
-  handle('amber:launch', async (id, options) => {if (launching) throw Error('正在准备启动。');launching = true;try {core.workflowGuard?.(id);if((await core.runtimeStatus()).processes.some(p=>p.instanceId===id&&p.state==='running'))throw Error('此实例已经在运行。');if (core.jobs.some((j) => j.instanceId===id&&j.state === 'running')) throw Error('请等待此实例安装或更新结束后启动游戏。');await recoverModUpdate(await core.instancePath(id));if ((await workflows.pending()).some((p) => p.instanceId === id)) throw Error('实例安装尚未完成，请先在任务中心继续安装。');await content.validateLaunch(id);const launchPrefs = await launchPreferences.get(id);options = { ...options, accountId: launchPrefs.accountId ?? options.accountId, memory: launchPrefs.memory ?? options.memory };const identity = await accounts.authorizeLaunch(options.accountId,options.username);const skinBridge=identity.localSkin?await startSkinBridge(identity,identity.localSkin):null;let run;try{const extraJvm = identity?.server||skinBridge ? [`-javaagent:${await authAgent(core.root,fetch,{preferCache:!!skinBridge})}=${identity.server||skinBridge.url}`] : [];if(skinBridge)extraJvm.push('-Dminecraft.api.discovery.host='+skinBridge.url+'discovery');run = await core.launch(id, { username: options.username, memory: options.memory, identity, extraJvm });if(skinBridge){const child=core.processes.get(run.id)?.child;if(child){skinRuns.add(run.id);const stopSkin=()=>{skinBridge.close();skinRuns.delete(run.id);};child.once('close',stopSkin);child.once('error',stopSkin);}else skinBridge.close();}}catch(e){skinBridge?.close();throw e;}await libraryState.launched(id, run).catch(() => {});await observe();return run;} finally {launching = false;}});
+  handle('amber:launch', async (id, options) => {if (launching) throw Error('正在准备启动。');launching = true;try {core.workflowGuard?.(id);if((await core.runtimeStatus()).processes.some(p=>p.instanceId===id&&p.state==='running'))throw Error('此实例已经在运行。');if (core.jobs.some((j) => j.instanceId===id&&j.state === 'running')) throw Error('请等待此实例安装或更新结束后启动游戏。');await recoverModUpdate(await core.instancePath(id));if ((await workflows.pending()).some((p) => p.instanceId === id)) throw Error('实例安装尚未完成，请先在任务中心继续安装。');await content.validateLaunch(id);const launchPrefs = await launchPreferences.get(id);options = { ...options, accountId: launchPrefs.accountId ?? options.accountId, memory: launchPrefs.memory ?? options.memory };const identity = await accounts.authorizeLaunch(options.accountId,options.username);await protection140.before(id,'daily');const skinBridge=identity.localSkin?await startSkinBridge(identity,identity.localSkin):null;let run;try{const extraJvm = identity?.server||skinBridge ? [`-javaagent:${await authAgent(core.root,fetch,{preferCache:!!skinBridge})}=${identity.server||skinBridge.url}`] : [];if(skinBridge)extraJvm.push('-Dminecraft.api.discovery.host='+skinBridge.url+'discovery');run = await core.launch(id, { username: options.username, memory: options.memory, identity, extraJvm,joinServer:options.serverId?await (async()=>{const link=await environment140.links(options.serverId);if(link.localId!==id)throw Error('Select the linked client / 请选择关联客户端');const run=servers.runs.get(options.serverId);if(run?.state!=='running')throw Error('Start the server first / 请先启动服务端');return '127.0.0.1:'+run.port;})():null });if(skinBridge){const child=core.processes.get(run.id)?.child;if(child){skinRuns.add(run.id);const stopSkin=()=>{skinBridge.close();skinRuns.delete(run.id);};child.once('close',stopSkin);child.once('error',stopSkin);}else skinBridge.close();}}catch(e){skinBridge?.close();throw e;}await libraryState.launched(id, run).catch(() => {});await observe();return run;} finally {launching = false;}});
   handle('amber:open-instance', async (id) => {const error = await shell.openPath(await core.instancePath(id));if (error) throw new Error(error);});
   const placement=new WindowStateStore(app.getPath('userData'));
   let initialCorners='system',placementTimer,placementMaximized=false;
@@ -430,11 +440,11 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
       try {
         if(!smoke&&skinRuns.size){const answer=await dialog.showMessageBox(window,{type:'question',message:'离线游戏仍在使用本地皮肤 / Offline game is using a local skin',detail:'最小化可继续提供皮肤；退出后尚未缓存的皮肤可能无法加载。 / Minimize to keep serving skins; quitting may prevent uncached skins from loading.',buttons:['最小化 / Minimize','退出 / Quit','返回 / Back'],defaultId:0,cancelId:2});if(answer.response===0){window.minimize();return;}if(answer.response!==1)return;}
         if(storageBusy){await dialog.showMessageBox(window,{type:'info',message:translateMessage('数据目录正在迁移，请等待完成。'),buttons:[translateMessage('确定')]});return;}
-        if(!smoke&&(minecraftImport.busy||workflows.active||core.jobs.some(j=>j.state==='running')||appUpdates.state.phase==='downloading')){
+        if(!smoke&&(minecraftImport.busy||serverManagement140.backupBusy||workflows.active||core.jobs.some(j=>j.state==='running')||appUpdates.state.phase==='downloading')){
           const answer=await dialog.showMessageBox(window,{type:'warning',title:translateMessage('安装还未结束'),message:translateMessage('退出会中断当前下载或实例配置。'),detail:translateMessage('已完成的文件会保留，建议等待任务结束。实例安装可在任务中心继续；程序更新可在关于页重新下载。'),buttons:[translateMessage('继续等待'),translateMessage('取消任务并退出')],defaultId:0,cancelId:0,noLink:true});
           if(answer.response!==1)return;
           appUpdates.cancel();minecraftImport.cancel();workflows.cancel();for(const j of core.jobs.filter(j=>j.state==='running'))core.controllers.get(j.id)?.abort(Error('用户取消任务并退出。'));
-          while(minecraftImport.busy||workflows.active||core.jobs.some(j=>j.state==='running')||appUpdates.state.phase==='downloading')await new Promise(resolve=>setTimeout(resolve,150));
+          while(minecraftImport.busy||serverManagement140.backupBusy||workflows.active||core.jobs.some(j=>j.state==='running')||appUpdates.state.phase==='downloading')await new Promise(resolve=>setTimeout(resolve,150));
         }
         if(!smoke&&(servers.active||rooms.active)){
           const answer=await dialog.showMessageBox(window,{type:'question',message:'服务端或联机连接仍在运行 / Servers or networking are still active',buttons:['最小化并继续 / Minimize and continue','停止服务端并退出 / Stop and quit','返回 / Back'],defaultId:0,cancelId:2,noLink:true});

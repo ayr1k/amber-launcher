@@ -1,3 +1,9 @@
+# 1.4.0 release verification
+
+User-accepted Windows x64 installers are published unchanged. Local-build labels and embedded testing-stage documents are retained; these release notes supersede embedded local-only wording. Signing remains deferred. Other platforms remain at 1.3.5.
+
+420 regression tests passed, including server backup deduplication, retention, pinning, independent restores and failure blocking. Both editions passed packaged startup/IPC/map checks. Isolated UI checks covered Classic/Nocturne at 1280/1920 widths, Chinese/English and server backup policy saving; earlier 1.4.0 checks covered five themes. No real accounts or worlds were used. This is not exhaustive gameplay or cross-machine networking validation.
+
 # 1.3.6 release verification
 
 The user accepted both Windows x64 installers and authorized stable GitHub releases and Pages updates. Preserve accepted installer bytes, including local-build labels and embedded testing-stage documents; current release notes supersede embedded local-only wording. No 1.3.6 macOS/Linux/FreeBSD packages were produced; those downloads remain at 1.3.5. Signing remains deferred.

@@ -1,3 +1,4 @@
+import {retainUpgrade140,applyUpgrade140} from './pack-upgrade140.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import {g} from './guided-text.mjs';
 import {validateNetwork,networkDefaults} from './network.mjs';
@@ -39,7 +40,7 @@ export class Settings{
 }
 export function validateManifest(value){
  if(value?.format!=='amber-mod-list'||value.schema!==1||!Array.isArray(value.mods)||value.mods.length>500)throw Error('不支持的迁移清单（最多 500 个模组）。');
- return {format:'amber-mod-list',schema:1,source:String(value.source||'导入的清单').slice(0,100),mods:value.mods.map(m=>{if(m.projectId!=null&&!/^[a-zA-Z0-9]{1,100}$/.test(m.projectId))throw Error('清单包含无效项目 ID。');return {provider:'modrinth',projectId:m.provider&&m.provider!=='modrinth'?null:m.projectId||null,versionId:typeof m.versionId==='string'?m.versionId.slice(0,100):null,version:typeof m.version==='string'?m.version.slice(0,100):null,title:String(m.title||m.projectId||'未知模组').slice(0,200),enabled:m.enabled!==false,reason:m.provider&&m.provider!=='modrinth'?'不支持此清单的内容来源':String(m.reason||'').slice(0,300)};})};
+ return {format:'amber-mod-list',schema:1,strict:value.strict===true,source:String(value.source||'导入的清单').slice(0,100),mods:value.mods.map(m=>{if(m.projectId!=null&&!/^[a-zA-Z0-9]{1,100}$/.test(m.projectId))throw Error('清单包含无效项目 ID。');return {provider:'modrinth',projectId:m.provider&&m.provider!=='modrinth'?null:m.projectId||null,versionId:typeof m.versionId==='string'?m.versionId.slice(0,100):null,version:typeof m.version==='string'?m.version.slice(0,100):null,title:String(m.title||m.projectId||'未知模组').slice(0,200),enabled:m.enabled!==false,reason:m.provider&&m.provider!=='modrinth'?'不支持此清单的内容来源':String(m.reason||'').slice(0,300)};})};
 }
 export class Workflows{
  constructor(core,content){this.core=core;this.content=content;this.context=new AsyncLocalStorage();this.scopes=new Set();this.recentScopes=new Map();this.resumes=new Map();core.workflowGuard=(id)=>{const own=this.context.getStore();if([...this.scopes].some(s=>s!==own&&(s.key==='*'||!id||s.instanceId===id)))throw Error('This instance has an active task / 请等待此实例的任务结束');if(own?.cancelled)throw Error('Installation cancelled / 安装已取消');};}
@@ -89,6 +90,7 @@ export class Workflows{
     await step('visualSettings',()=>this.guided.configureVisuals(id,record.guided));
    }
    else if(afterSetup)await step('content',()=>afterSetup(item));
+   if(record.upgrade)await step('upgrade',()=>applyUpgrade140(dir));
    this.checkCancelled();record.state='done';record.step='done';this.resumes.delete(id);
   }catch(e){record.state=this.cancelled?'cancelled':'failed';record.error=e.message;throw Error(`实例“${item.name}”已保留，可在任务中心继续安装。${e.message}`);}
   finally{record.finishedAt=new Date().toISOString();await save();}
@@ -111,7 +113,7 @@ export class Workflows{
   const record={schema:2,state:'running',input:Object.fromEntries(['game','loader','version','liteVersion','addOptifine','threads'].map(k=>[k,input[k]])),manifest:manifest?validateManifest(manifest):null,packVersion:input.packVersion||null,startedAt:new Date().toISOString(),completed:[]};
   if(guided){record.guided=guided;record.kind='guided';await atomicJson(join(dir,'guided-plan.json'),guided);await atomicJson(join(dir,'launch-preferences.json'),{accountId:null,memory:guided.memory});}
   if(optifinePath){await mkdir(join(dir,'.amber-setup'),{recursive:true});const cached=join(dir,'.amber-setup','optifine.jar');await copyFile(optifinePath,cached);record.optifine=await digest(cached);}
-  if(localPack){record.localPack={schema:1,hash:localPack.plan.sourceHash,kind:localPack.plan.kind,selected:localPack.selected,title:localPack.plan.title,packVersion:localPack.plan.packVersion};await atomicJson(join(dir,'setup-report.json'),record);try{await this.localPacks.retain(dir,localPack);}catch(e){record.state='failed';record.error=e.message;await atomicJson(join(dir,'setup-report.json'),record);throw e;}}
+  if(localPack){record.localPack={schema:1,hash:localPack.plan.sourceHash,kind:localPack.plan.kind,selected:localPack.selected,title:localPack.plan.title,packVersion:localPack.plan.packVersion};await atomicJson(join(dir,'setup-report.json'),record);try{await this.localPacks.retain(dir,localPack);if(localPack.upgrade){record.upgrade=true;await retainUpgrade140(this.core,dir,localPack.upgrade);}}catch(e){record.state='failed';record.error=e.message;await atomicJson(join(dir,'setup-report.json'),record);throw e;}}
   await atomicJson(join(dir,'setup-report.json'),record);
   const run=()=>this.runPlan(item.id,record,afterSetup);this.resumes.set(item.id,run);return run();
  },'new:'+(typeof input.requestKey==='string'&&/^[a-f0-9-]{36}$/.test(input.requestKey)?input.requestKey:crypto.randomUUID()));}
@@ -122,7 +124,7 @@ export class Workflows{
  async migrate(id,manifest){return this.exclusive(()=>this.migrateInner(id,manifest));}
  async migrateInner(id,input){const manifest=validateManifest(input),{dir,item}=await this.core.metadata(id);await this.core.requireStopped(dir);const report={schema:1,source:manifest.source,target:`${item.name} · ${item.game} / ${item.loader}`,startedAt:new Date().toISOString(),results:[]},disabled=[];
   try{for(const mod of manifest.mods){this.checkCancelled();const row={title:mod.title,projectId:mod.projectId,previousVersion:mod.version,state:'skipped'};report.results.push(row);if(!mod.projectId){row.reason=mod.reason||'无法识别 Modrinth 项目';continue;}
-   try{const versions=await this.content.versions(id,mod.projectId);if(!versions.length){row.reason='目标 Minecraft / 加载器没有兼容版本';continue;}const plan=await this.content.preview(id,versions[0].id);const job=await this.wait(await this.content.install(id,plan.id));row.state='installed';row.version=versions[0].version_number;if(!mod.enabled)disabled.push(mod.projectId);}
+   try{const versions=await this.content.versions(id,mod.projectId);if(!versions.length){row.reason='目标 Minecraft / 加载器没有兼容版本';continue;}const selected=versions.find(v=>v.id===mod.versionId)||(!manifest.strict?versions[0]:null);if(!selected)throw Error('Required shared version unavailable / 指定共享版本不可用');const plan=await this.content.preview(id,selected.id);const job=await this.wait(await this.content.install(id,plan.id));row.state='installed';row.version=selected.version_number;if(!mod.enabled)disabled.push(mod.projectId);}
    catch(e){row.reason=e.message;if(/取消/.test(e.message)){row.state='cancelled';report.cancelled=true;break;}}
    await atomicJson(join(dir,'migration-report.json'),report);
   }
@@ -135,7 +137,7 @@ export class Workflows{
   // Disable consumers before their dependencies, independent of manifest order.
   let progressed=true;while(progressed&&pending.size){progressed=false;for(const project of pending){const f=installed.files.find(f=>f.projectId===project);if(!f||f.enabled===false){pending.delete(project);progressed=true;continue;}const consumers=installed.files.filter(c=>c!==f&&c.enabled!==false&&(c.dependencies||[]).some(d=>d.dependency_type==='required'&&(d.version_id?d.version_id===f.versionId:d.project_id===project)));if(consumers.length)continue;await this.content.toggle(id,f.relative);f.enabled=false;pending.delete(project);progressed=true;}}
   for(const project of new Set(disabled))if(required.has(project)||pending.has(project)){const row=report.results.find(r=>r.projectId===project);if(row)row.note=required.has(project)?'被其他已启用模组依赖，保持启用':'循环依赖无法逐项停用，保持启用';}
-  }finally{report.finishedAt=new Date().toISOString();await atomicJson(join(dir,'migration-report.json'),report);}return report;
+  }finally{report.finishedAt=new Date().toISOString();await atomicJson(join(dir,'migration-report.json'),report);}if(manifest.strict&&report.results.some(r=>r.state!=='installed'))throw Error('Shared environment incomplete; see migration report / 共享环境未完成，请查看迁移报告并重试');return report;
  }
  async report(id){try{return JSON.parse(await readFile(join(await this.core.instancePath(id),'migration-report.json'),'utf8'));}catch(e){if(e.code==='ENOENT')return null;throw e;}}
 }

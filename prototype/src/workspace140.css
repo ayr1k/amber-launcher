@@ -1,0 +1,23 @@
+.protection140,.pack-upgrade140,.server-management140{margin-block:24px;padding-block:16px;border-top:1px solid var(--line)}
+.protection140 .check,.pack-upgrade140 .check{display:inline-flex;align-items:center;gap:8px;margin-block:12px}
+.upgrade-files140{max-height:320px;overflow:auto;margin-block:16px}
+.upgrade-row140{display:flex;align-items:center;gap:16px;padding:10px 0;border-bottom:1px solid var(--line)}
+.upgrade-row140>span{flex:1;min-width:0;overflow-wrap:anywhere}.upgrade-row140 small{display:block;opacity:.75}
+.upgrade-row140 select{max-width:200px}.server-management140 .inline-actions{gap:12px;flex-wrap:wrap}
+.desktop-app .server-management140 .field-actions131>label{margin:0;min-width:210px}
+.desktop-app .server-management140>h2{margin-top:28px}
+.desktop-app .upgrade-row140>.amber-select{width:190px;flex:0 0 190px}
+@media(max-width:700px){.upgrade-row140{flex-wrap:wrap}.upgrade-row140>span{flex-basis:100%}}
+
+.desktop-app .server-management140>h2{margin:40px 0 14px}
+.desktop-app .server-management140>h2:first-of-type{margin-top:12px}
+.desktop-app .server-management140>p{margin:0 0 20px;line-height:1.75}
+.desktop-app .server-management140>.button{margin-bottom:20px}
+.desktop-app .server-management140>.upgrade-row140{padding-block:18px;gap:20px}
+.desktop-app .server-management140>details{margin-block:24px}
+.desktop-app .server-management140 .server-backup-actions140{margin-block:20px}
+.desktop-app .server-management140 .protection140{margin-block:24px;padding-block:20px}
+.desktop-app .server-management140 .protection140 h3{margin:0 0 16px}
+.desktop-app .server-management140 .protection140 label.check{display:inline-flex;align-items:center;gap:10px;margin:8px 20px 16px 0}
+.desktop-app .server-management140 .protection140 label.check input{width:auto;flex:none;margin:0}
+.desktop-app .server-management140 .protection140 .native-note{margin-top:20px;line-height:1.75}

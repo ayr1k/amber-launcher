@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MPL-2.0
 const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
+  serverManagement:(action,...args)=>ipcRenderer.invoke('amber:server-management',action,...args),
+  packUpgrade:(action,...args)=>ipcRenderer.invoke('amber:pack-upgrade',action,...args),
+  protection:(action,...args)=>ipcRenderer.invoke('amber:protection',action,...args),
   server:(action,...args)=>ipcRenderer.invoke('amber:server',action,...args),
   editorHistory:(id,name)=>ipcRenderer.invoke('amber:editor-history',id,name),
   editorBackup:(id,name,token)=>ipcRenderer.invoke('amber:editor-backup',id,name,token),
@@ -205,5 +208,5 @@ contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
   prepareJava: id => ipcRenderer.invoke('amber:java-prepare',id),
   selectJava: (id,path) => ipcRenderer.invoke('amber:java-select',id,path),
   browseJava: () => ipcRenderer.invoke('amber:java-browse'),
-  launch: (id,options) => ipcRenderer.invoke('amber:launch',id,{username:options?.username,memory:options?.memory,accountId:options?.accountId}),
+  launch: (id,options) => ipcRenderer.invoke('amber:launch',id,{username:options?.username,memory:options?.memory,accountId:options?.accountId,serverId:options?.serverId}),
 }));

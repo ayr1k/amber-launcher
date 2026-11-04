@@ -166,3 +166,13 @@ Use EXE on Windows, the matching CPU ZIP on macOS, and the package manager for t
 In Tools → Logs & diagnostics, select an instance and choose Analyze latest run, or import a .log / .txt file up to 2 MB. Abnormal exit views also show analysis. Expand Log evidence to inspect the source. Unknown errors remain explicitly undiagnosed.
 
 Rules cover Fabric missing/incompatible dependencies, required dependency messages, plugin dependencies, Java versions, memory reservation/exhaustion, port binding, damaged JARs, graphics initialization and declared conflicts. Mixin failures are only possible causes. Run timestamps exclude old logs; import manually when no run record exists. Analysis never installs/deletes mods or changes settings.
+
+## 1.4.0 protection and server management
+
+Local Instances → Manage → Backup and restore offers daily pre-launch, normal-exit and pre-mod/loader-update snapshots. Online Instances → Manage → Backups, players & client offers daily pre-start, normal-stop and pre-core/mod/plugin-install/update full snapshots. Policies are opt-in and per instance. Running worlds are never copied; forced or failed exits do not trigger normal-stop backups.
+
+Set count and capacity retention; pin important records. Manual/pinned snapshots are retained and at least the newest automatic snapshot is kept. Backup failure blocks the protected launch/update. Refresh backups to see new records. Restore creates an independent instance; restored servers get a different port and disabled automatic protection. Same-disk backups do not replace an off-device copy.
+
+Upgrade a local MRPACK or a known Modrinth pack after reviewing local edit/deletion conflicts; preparation creates a new instance and can resume after failure. Server player actions and saved commands use the console; verify its response. Link a client to compare recognized environment declarations, preview missing dependencies and launch into the local server. Shared manifests contain versions and mod sources, without worlds, accounts, server addresses or room secrets; imports create independent instances. Unknown content requires manual review; declared dependencies do not prove full compatibility.
+
+Crash dependency repair opens compatible search and installation previews for user confirmation; nothing is silently installed.

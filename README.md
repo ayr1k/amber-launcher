@@ -3,7 +3,7 @@
 <p align="center"><strong>Your world. Your way.</strong></p>
 
 <p align="center">
-  <a href="https://github.com/ayr1k/amber-launcher/releases/tag/v1.3.6"><img src="https://img.shields.io/badge/release-1.3.6-e9b53d?style=flat-square" alt="Release" /></a>
+  <a href="https://github.com/ayr1k/amber-launcher/releases/tag/v1.4.0"><img src="https://img.shields.io/badge/release-1.4.0-e9b53d?style=flat-square" alt="Release" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MPL--2.0-527b68?style=flat-square" alt="License" /></a>
   <a href="https://github.com/ayr1k/amber-launcher/actions/workflows/windows.yml"><img src="https://github.com/ayr1k/amber-launcher/actions/workflows/windows.yml/badge.svg" alt="Build" /></a>
   <a href="https://ayr1k.github.io/"><img src="https://img.shields.io/badge/website-AMBER-527b68?style=flat-square" alt="Website" /></a>
@@ -23,19 +23,19 @@ An independent Minecraft: Java Edition launcher bringing instances, content, the
   </tr>
 </table>
 
-Public AMBER 1.2.1 theme previews using demonstration data; these themes also work with AmberE. Click to enlarge. See the 1.3.6 notes below for current features and platform availability.
+Public AMBER 1.2.1 theme previews using demonstration data; these themes also work with AmberE. Click to enlarge. See the 1.4.0 notes below for current features and platform availability.
 
 ## Overview
 
 AMBER is an independent launcher for Minecraft: Java Edition. It keeps game instances separate and brings installation, mod management, recovery and launch settings into one workspace. Project-owned source is licensed under MPL-2.0.
 
-## 1.3.6
+## 1.4.0
 
-Fix account avatar/action alignment when editing identities and online catalog pagination scrolling. Add local evidence-based crash analysis for recent runs and imported logs.
+Add client/server automatic backups with retention and pinning, MRPACK upgrade previews into independent instances, server player and command management, linked clients and environment sharing, and crash dependency repair entry points. Improve backup/player layout spacing.
 
-This release ships Windows x64 1.3.6. macOS, Linux and FreeBSD downloads remain at 1.3.5 with their existing validation limits.
+This release ships Windows x64 1.4.0. macOS, Linux and FreeBSD downloads remain at 1.3.5 with their existing validation limits.
 
-Windows x64 release with additional platform downloads. [Download the installer, source and checksums](https://github.com/ayr1k/amber-launcher/releases/tag/v1.3.6). Includes instance management, content recommendations, mod updates, backups and recovery.
+Windows x64 release with additional platform downloads. [Download the installer, source and checksums](https://github.com/ayr1k/amber-launcher/releases/tag/v1.4.0). Includes instance management, content recommendations, mod updates, backups and recovery.
 
 - Integrated title bar, independent window corners, remembered window placement and reorganized privacy settings.
 
