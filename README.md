@@ -1,8 +1,31 @@
-# AMBER
+<h1 align="center">AMBER</h1>
 
-1.3.5 adds theme-aware account tabs, editable offline names and local PNG skins, and platform packages for Windows, macOS and Linux. FreeBSD is an experimental server/tools bundle, not a supported game client.
+<p align="center"><strong>Your world. Your way.</strong></p>
 
-[简体中文](docs/zh-CN/README.md) · [Releases](https://github.com/ayr1k/amber-launcher/releases) · [User guide](docs/USER-GUIDE.md)
+<p align="center">
+  <a href="https://github.com/ayr1k/amber-launcher/releases/tag/v1.3.5"><img src="https://img.shields.io/badge/release-1.3.5-e9b53d?style=flat-square" alt="Release" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MPL--2.0-527b68?style=flat-square" alt="License" /></a>
+  <a href="https://github.com/ayr1k/amber-launcher/actions/workflows/windows.yml"><img src="https://github.com/ayr1k/amber-launcher/actions/workflows/windows.yml/badge.svg" alt="Build" /></a>
+  <a href="https://ayr1k.github.io/"><img src="https://img.shields.io/badge/website-AMBER-527b68?style=flat-square" alt="Website" /></a>
+</p>
+
+<p align="center"><a href="https://ayr1k.github.io/">Website</a> · <a href="https://ayr1k.github.io/#/download">Downloads</a> · <a href="docs/USER-GUIDE.md">User guide</a> · <a href="https://ayr1k.github.io/#/themes">Themes</a> · <a href="docs/zh-CN/README.md">简体中文</a></p>
+
+An independent Minecraft: Java Edition launcher bringing instances, content, themes and server management into one workspace.
+
+## Screenshots
+
+<table>
+  <tr><th>Alloy</th><th>Nocturne</th></tr>
+  <tr>
+    <td width="50%"><a href="docs/images/launcher-alloy.png"><img src="docs/images/launcher-alloy.png" alt="AMBER Alloy theme home screen" width="100%" /></a></td>
+    <td width="50%"><a href="docs/images/launcher-nocturne.png"><img src="docs/images/launcher-nocturne.png" alt="AMBER Nocturne theme home screen" width="100%" /></a></td>
+  </tr>
+</table>
+
+Public AMBER 1.2.1 theme previews using demonstration data; these themes also work with AmberE. Click to enlarge. See the 1.3.5 notes below for current features and platform availability.
+
+## Overview
 
 AMBER is an independent launcher for Minecraft: Java Edition. It keeps game instances separate and brings installation, mod management, recovery and launch settings into one workspace. Project-owned source is licensed under MPL-2.0.
 

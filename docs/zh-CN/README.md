@@ -1,8 +1,31 @@
-# AMBER
+<h1 align="center">AMBER</h1>
 
-1.3.5 修复账号菜单主题配色，支持离线用户名与本地 PNG 皮肤编辑，并提供 Windows、macOS、Linux 下载；FreeBSD 为服务端与工具实验包，暂不支持游戏客户端。
+<p align="center"><strong>你的世界，由你掌握。</strong></p>
 
-[English](../../README.md) · [下载 Release](https://github.com/ayr1k/amber-launcher/releases) · [使用指南](USER-GUIDE.md)
+<p align="center">
+  <a href="https://github.com/ayr1k/amber-launcher/releases/tag/v1.3.5"><img src="https://img.shields.io/badge/release-1.3.5-e9b53d?style=flat-square" alt="Release" /></a>
+  <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MPL--2.0-527b68?style=flat-square" alt="License" /></a>
+  <a href="https://github.com/ayr1k/amber-launcher/actions/workflows/windows.yml"><img src="https://github.com/ayr1k/amber-launcher/actions/workflows/windows.yml/badge.svg" alt="Build" /></a>
+  <a href="https://ayr1k.github.io/"><img src="https://img.shields.io/badge/website-AMBER-527b68?style=flat-square" alt="Website" /></a>
+</p>
+
+<p align="center"><a href="https://ayr1k.github.io/">官网</a> · <a href="https://ayr1k.github.io/#/download">下载</a> · <a href="USER-GUIDE.md">使用指南</a> · <a href="https://ayr1k.github.io/#/themes">主题商城</a> · <a href="../../README.md">English</a></p>
+
+独立的 Minecraft Java 版启动器，将实例、内容、主题和服务端管理集中在同一工作区。
+
+## 软件截图
+
+<table>
+  <tr><th>Alloy</th><th>Nocturne</th></tr>
+  <tr>
+    <td width="50%"><a href="../../docs/images/launcher-alloy.png"><img src="../../docs/images/launcher-alloy.png" alt="AMBER Alloy theme home screen" width="100%" /></a></td>
+    <td width="50%"><a href="../../docs/images/launcher-nocturne.png"><img src="../../docs/images/launcher-nocturne.png" alt="AMBER Nocturne theme home screen" width="100%" /></a></td>
+  </tr>
+</table>
+
+截图来自公开的 AMBER 1.2.1 主题展示，使用演示数据；主题同样适用于 AmberE。点击可查看大图，当前功能与平台范围以 1.3.5 说明为准。
+
+## 项目简介
 
 AMBER 是独立的 Minecraft Java 版启动器，将实例隔离、游戏安装、模组管理、恢复和启动设置集中在同一界面。项目自有源码采用 MPL-2.0。
 
