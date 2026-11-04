@@ -29,8 +29,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 31094,
-      "sha256": "53238b3c264ef8835f150792555862cb5ff7539a12b631aaf6754beca92573fe"
+      "bytes": 31201,
+      "sha256": "415e85237f267cdc73ff832bc02f94e5ba046530bb84a068f5edfecc13ddb2ab"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -114,8 +114,8 @@
     },
     {
       "path": "docs/TESTING.md",
-      "bytes": 8579,
-      "sha256": "b93820c78dc93787a303e9cf67ec893f734257cdda3eed4a79805f893b3c1e1c"
+      "bytes": 8660,
+      "sha256": "6e83260e85fb1b7cfb7d8b38a028b293f963a53ceeb7e180aec762bdd896d57f"
     },
     {
       "path": "docs/THEMES.md",
@@ -144,8 +144,8 @@
     },
     {
       "path": "docs/zh-CN/CHANGELOG.md",
-      "bytes": 38670,
-      "sha256": "af126c596948c413bf24a5bda8f422196358dc96900bc26962168fab55670ceb"
+      "bytes": 38726,
+      "sha256": "dc17d2004681bb4227f0504b64948fd3f6cba3e8ab80b31f0f57f4f6708e0e1a"
     },
     {
       "path": "docs/zh-CN/CONTRIBUTING.md",
@@ -189,8 +189,8 @@
     },
     {
       "path": "docs/zh-CN/TESTING.md",
-      "bytes": 4657,
-      "sha256": "c71a468240ad2de243d0279f90dbed2c3eee3058491c339e03f3fa775c2cc8cd"
+      "bytes": 4753,
+      "sha256": "cae2a7bb57628c346c322247fc08785c0a070f6165c7a8a14d444e3c1e1f256c"
     },
     {
       "path": "docs/zh-CN/THEMES.md",
@@ -234,8 +234,8 @@
     },
     {
       "path": "prototype/PLATFORMS-1.3.5.md",
-      "bytes": 4539,
-      "sha256": "efd68f4a09e8a2623eba7d603d5c83a0575ce21cc17a2096292a1e8e376915ce"
+      "bytes": 4661,
+      "sha256": "20044f82da784b322977d34d6e3f849f2cc3d62a02b0aa57b2e1a5fc30c4fa2d"
     },
     {
       "path": "prototype/README.md",
@@ -244,8 +244,8 @@
     },
     {
       "path": "prototype/RELEASE-ACCEPTANCE.md",
-      "bytes": 8566,
-      "sha256": "72453a0a7d133c798e88b1f7c39247d48b4a9ddf4f0010ba3f3f442e71222b91"
+      "bytes": 8647,
+      "sha256": "b74be6d29bbef14b80e3b7088179843bb7461f644e9f23ccf19a1a4debb71b07"
     },
     {
       "path": "prototype/THIRD_PARTY_NOTICES.md",
@@ -1834,13 +1834,13 @@
     },
     {
       "path": "prototype/editions/ambere/changelog.en.md",
-      "bytes": 24374,
-      "sha256": "03668b12f9c78e8a53814bed33980e987fe9a059e3d7184127f1816968fd6324"
+      "bytes": 24481,
+      "sha256": "1ebe2952746cede5034a3284cb21da45e39fd70649cd40061b239442d6ae3dfb"
     },
     {
       "path": "prototype/editions/ambere/changelog.zh.md",
-      "bytes": 21259,
-      "sha256": "261156e897611727b202d7f9ba7862973bcfcbd5cb734eb25691eeb946b4888c"
+      "bytes": 21315,
+      "sha256": "ecaf2e9e6ee3553a68b6b35ae1f66137db2f73e58131b91fe27406496f5f5f05"
     },
     {
       "path": "prototype/editions/ambere/overview.en.md",
@@ -1854,8 +1854,8 @@
     },
     {
       "path": "prototype/editions/ambere/testing.md",
-      "bytes": 8566,
-      "sha256": "72453a0a7d133c798e88b1f7c39247d48b4a9ddf4f0010ba3f3f442e71222b91"
+      "bytes": 8647,
+      "sha256": "b74be6d29bbef14b80e3b7088179843bb7461f644e9f23ccf19a1a4debb71b07"
     },
     {
       "path": "prototype/electron-builder.yml",
@@ -2084,8 +2084,8 @@
     },
     {
       "path": "prototype/scripts/package-platforms135.py",
-      "bytes": 6545,
-      "sha256": "9e891735916d24e580ade52962d33649541c85178237041fced1ec2ee918aec1"
+      "bytes": 6838,
+      "sha256": "67ddbc09c29d4a551e14a5933c881f7f7d35df76444fe8b5c3771f470a57a609"
     },
     {
       "path": "prototype/scripts/prepare-edition-source.mjs",

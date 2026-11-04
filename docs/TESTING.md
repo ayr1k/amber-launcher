@@ -1,6 +1,6 @@
 # 1.3.5 verification
 
-The user accepted the local packages and authorized stable paired releases and Pages publication. Preserve all ten package bytes, including informational local-build labels and embedded documentation from the testing stage. Current release notes and this source documentation supersede embedded local-only wording. Signing remains deferred; no endorsement or exhaustive platform/gameplay acceptance is claimed.
+The user accepted the local packages and authorized stable paired releases and Pages publication. Windows/Linux/FreeBSD package bytes are preserved. macOS ZIPs add Electron/Chromium license notices; all existing application files, local-build labels and embedded testing-stage documents remain unchanged. Current release notes and this source documentation supersede embedded local-only wording. Signing remains deferred; no endorsement or exhaustive platform/gameplay acceptance is claimed.
 
 407 regression tests and 2398 bilingual message checks passed. Both Windows products passed packaged startup, credential encryption, IPC and native seed-engine checks; isolated account UI passed in five themes and normal/large windows. Real Authlib 6.0.54 and 10.0.77 parsed local skin profiles/signatures with synthetic identities. No real account or world was used by automation.
 

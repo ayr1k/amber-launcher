@@ -1,6 +1,6 @@
 # 1.3.5 platform packages / 多平台安装包
 
-The user accepted the packages and authorized GitHub releases and Pages publication. The accepted package bytes are preserved; signing remains deferred. Existing 1.3.4 installers remain available for rollback. Accounts, instances, saves, theme packages, website, promotional assets and AmberX are preserved.
+The user accepted the packages and authorized GitHub releases and Pages publication. Windows/Linux/FreeBSD package bytes are preserved. macOS ZIPs add the missing Electron and Chromium license notices, with all existing application files unchanged. Signing remains deferred. Existing 1.3.4 installers remain available for rollback. Accounts, instances, saves, theme packages, website, promotional assets and AmberX are preserved.
 
 | Platform | Release artifact | Verification and limits |
 | --- | --- | --- |

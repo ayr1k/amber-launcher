@@ -3,7 +3,7 @@
 - 添加账号标签的选中线跟随当前主题，修复固定绿色的问题。
 - 离线身份支持改名、导入/重置 PNG 皮肤、标准与窄手臂模型。改名保留 UUID；AMBER 正版资格及离线缓存规则不变，AmberE 保持独立账号规则。自定义皮肤仅供本机使用，其他玩家不一定可见。
 - 增加系统与架构对应的 Java、原生库、启动参数、更新包、服务端资源读取和联机组件处理。提供 Windows x64、macOS Intel/Apple Silicon ZIP、Linux x64 DEB；FreeBSD amd64 仅为服务端与工具实验包。
-- 保留用户验收包的原始字节，发布完整源码及 SHA-256。未签名、macOS 未公证；macOS 尚待实机验证，Linux 桌面密钥库及游戏仍需测试，FreeBSD 暂不支持游戏客户端。
+- 发布验收构建、完整源码及 SHA-256；macOS ZIP 补入遗漏的 Electron/Chromium 许可，原有应用文件不变。未签名、macOS 未公证；macOS 尚待实机验证，Linux 桌面密钥库及游戏仍需测试，FreeBSD 暂不支持游戏客户端。
 
 ## 1.3.4
 

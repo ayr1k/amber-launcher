@@ -43,6 +43,8 @@ for name in ['AMBER','AmberE']:
      v=plistlib.loads(data);v.update(CFBundleName=name,CFBundleDisplayName=name,CFBundleIdentifier='io.github.ayr1k.'+name.lower(),CFBundleShortVersionString=version,CFBundleVersion=version);data=plistlib.dumps(v)
     if rel=='Contents/Resources/electron.icns':data=icns
     dst.writestr(info,data)
+   for original,notice in [('LICENSE','LICENSE-Electron.txt'),('LICENSES.chromium.html','LICENSES.chromium.html')]:
+    i=zipfile.ZipInfo(app+'Contents/Resources/'+notice);i.create_system=3;i.external_attr=0o100644<<16;i.compress_type=zipfile.ZIP_DEFLATED;dst.writestr(i,src.read(original))
    for rel,data,mode in stage_files(name,target):
     i=zipfile.ZipInfo(app+'Contents/Resources/app/'+rel);i.create_system=3;i.external_attr=(0o100000|mode)<<16;i.compress_type=zipfile.ZIP_DEFLATED;dst.writestr(i,data)
   write_sum(out)
