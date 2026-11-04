@@ -1,14 +1,41 @@
-# AmberE
+<h1 align="center">AmberE</h1>
 
-1.3.5 adds theme-aware account tabs, editable offline names and local PNG skins, and platform packages for Windows, macOS and Linux. FreeBSD is an experimental server/tools bundle, not a supported game client.
+<p align="center"><strong>Offline and third-party identities. Your own adventure.</strong></p>
 
-[简体中文](docs/zh-CN/README.md) · [Releases](https://github.com/ayr1k/AmberE/releases) · [User guide](docs/USER-GUIDE.md)
+<p align="center">
+  <a href="https://github.com/ayr1k/AmberE/releases/tag/v1.3.6"><img src="https://img.shields.io/badge/release-1.3.6-e9b53d?style=flat-square" alt="Release" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MPL--2.0-527b68?style=flat-square" alt="License" /></a>
+  <a href="https://github.com/ayr1k/AmberE/actions/workflows/windows.yml"><img src="https://github.com/ayr1k/AmberE/actions/workflows/windows.yml/badge.svg" alt="Build" /></a>
+  <a href="https://ayr1k.github.io/"><img src="https://img.shields.io/badge/website-AMBER-527b68?style=flat-square" alt="Website" /></a>
+</p>
+
+<p align="center"><a href="https://ayr1k.github.io/">Website</a> · <a href="https://ayr1k.github.io/#/download?product=ambere">Downloads</a> · <a href="docs/USER-GUIDE.md">User guide</a> · <a href="https://ayr1k.github.io/#/themes">Themes</a> · <a href="docs/zh-CN/README.md">简体中文</a></p>
+
+An independent Minecraft: Java Edition launcher bringing instances, content, themes and server management into one workspace.
+
+## Screenshots
+
+<table>
+  <tr><th>Alloy</th><th>Nocturne</th></tr>
+  <tr>
+    <td width="50%"><a href="docs/images/launcher-alloy.png"><img src="docs/images/launcher-alloy.png" alt="AMBER Alloy theme home screen" width="100%" /></a></td>
+    <td width="50%"><a href="docs/images/launcher-nocturne.png"><img src="docs/images/launcher-nocturne.png" alt="AMBER Nocturne theme home screen" width="100%" /></a></td>
+  </tr>
+</table>
+
+Public AMBER 1.2.1 theme previews using demonstration data; these themes also work with AmberE. Click to enlarge. See the 1.3.6 notes below for current features and platform availability.
+
+## Overview
 
 AmberE is an independent distribution for Minecraft: Java Edition, providing offline and third-party accounts. It is maintained from the shared AMBER codebase under MPL-2.0, with its own application identity, data directory and update repository. It does not offer Microsoft sign-in or include a Microsoft application Client ID.
 
-## 1.3.5
+## 1.3.6
 
-Windows x64 release with additional platform downloads. [Download the installer, source and checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.3.5). Includes instance management, content recommendations, mod updates, backups and recovery.
+Fix account avatar/action alignment when editing identities and online catalog pagination scrolling. Add local evidence-based crash analysis for recent runs and imported logs.
+
+This release ships Windows x64 1.3.6. macOS, Linux and FreeBSD downloads remain at 1.3.5 with their existing validation limits.
+
+Windows x64 release with additional platform downloads. [Download the installer, source and checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.3.6). Includes instance management, content recommendations, mod updates, backups and recovery.
 
 - Offline identities and HTTPS third-party authentication, with system credential protection for saved credentials.
 - Isolated game instances; Java and loader installation; mod search, dependencies, updates and bulk management.

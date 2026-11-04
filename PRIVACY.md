@@ -55,3 +55,7 @@ The seed map computes offline and stores seeds/markers locally; reading level.da
 Custom offline names and PNG skins remain in the encrypted account store. A loopback-only texture service serves one launch identity; it does not authenticate online or automatically upload skins. First use downloads and verifies the compatibility component from the official authlib-injector source.
 
 Credentials use Windows user protection, macOS Keychain or a secure Linux/FreeBSD keyring. The basic_text fallback is rejected. Default configuration roots are `%APPDATA%/<product>`, `~/Library/Application Support/<product>`, and `$XDG_CONFIG_HOME/<product>` (or `~/.config/<product>`); the game library is user-selected. System-bound account ciphertext is not portable authentication data.
+
+## 1.3.6 log analysis
+
+Analysis runs locally without external AI services or log uploads. It reads bounded excerpts matching the selected instance run, or a manually selected log. Existing redaction rules are applied to evidence but cannot guarantee removal of all private information; review before sharing.

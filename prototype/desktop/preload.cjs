@@ -152,6 +152,7 @@ contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
   migrationReport: id => ipcRenderer.invoke('amber:migration-report',id),
   openProject: id => ipcRenderer.invoke('amber:project-open',id),
   copyDetectedJava:path=>ipcRenderer.invoke('amber:java-copy-detected',path),
+  analyzeLogs: input=>ipcRenderer.invoke('amber:analyze-logs',{id:input?.id,server:input?.server===true,importFile:input?.importFile===true}),
   openLogsFolder:id=>ipcRenderer.invoke('amber:logs-folder',id),
   localPackPick:()=>ipcRenderer.invoke('amber:local-pack-pick'),
   seedMap:(action,input)=>ipcRenderer.invoke('amber:seed-map',action,input),

@@ -8,8 +8,8 @@ React 界面位于 `src/`，Electron 主进程服务位于 `desktop/`，测试�
 
 Official paired installers: `node scripts/package-editions.mjs --public` from `prototype`. Without `--public`, the paired build is marked as a local test build. Theme format and examples: [English](../docs/AMBTHEME-FORMAT.md) / [简体中文](../docs/zh-CN/AMBTHEME-FORMAT.md).
 
-1.3.5 publication preserves the user-accepted installer bytes, including the informational local-build label; update checks stay enabled. The exported source retains the same build-channel setting.
+1.3.6 publication preserves the user-accepted installer bytes, including the informational local-build label; update checks stay enabled. The exported source retains the same build-channel setting.
 
-1.3.5 is released from the accepted build. Reproduce paired installers with `node scripts/package-editions.mjs` (without `--public`). The seed engine is bundled at `desktop/bin/seed-engine.exe`. Rebuild it on Windows using Zig 0.14.1: set `AMBER_ZIG` to `zig.exe`, then run `node scripts/build-seed-engine.mjs`. Pinned engine sources and licenses are included.
+1.3.6 is released from the accepted build. Reproduce paired installers with `node scripts/package-editions.mjs` (without `--public`). The seed engine is bundled at `desktop/bin/seed-engine.exe`. Rebuild it on Windows using Zig 0.14.1: set `AMBER_ZIG` to `zig.exe`, then run `node scripts/build-seed-engine.mjs`. Pinned engine sources and licenses are included.
 
 [Platform packages, build commands and limits / 平台包、构建与限制](PLATFORMS-1.3.5.md).

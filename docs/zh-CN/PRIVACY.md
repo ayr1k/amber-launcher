@@ -55,3 +55,7 @@ AMBER 与 AmberE 分别使用 `%APPDATA%/AMBER` 和 `%APPDATA%/AmberE`。AMBER �
 离线自定义名称和 PNG 皮肤保存在加密账号记录中。皮肤服务仅监听本机回环地址，为单次游戏身份提供贴图，不执行在线认证，不自动上传皮肤。首次需要从 authlib-injector 官方源下载并校验兼容组件。
 
 Windows 使用系统用户加密，macOS 使用 Keychain，Linux/FreeBSD 需要可用的安全密钥库，拒绝 basic_text 明文回退。默认启动器配置位置分别为 `%APPDATA%/<产品名>`、`~/Library/Application Support/<产品名>`、`$XDG_CONFIG_HOME/<产品名>`（未设置时 `~/.config/<产品名>`）；游戏库位置由用户选择。不要将系统绑定的账号密文当成跨平台凭据。
+
+## 1.3.6 日志分析
+
+分析在本机进行，不调用外部 AI 或上传日志。仅读取选定实例匹配运行时间的有限日志片段，或用户手动选择的日志文件。界面证据经过现有脱敏规则处理，但规则不保证消除全部私人信息，分享前请自行检查。

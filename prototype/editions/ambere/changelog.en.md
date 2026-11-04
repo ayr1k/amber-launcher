@@ -1,3 +1,9 @@
+## 1.3.6
+
+- Fix account avatar/action alignment when editing identities and online catalog pagination scrolling. Add local evidence-based crash analysis for recent runs and imported logs.
+- Analysis stays local, distinguishes reported errors from possible causes, and shows evidence. Not every crash is diagnosable.
+- Publish accepted Windows x64 installers unchanged, full source and SHA-256. Other platforms remain at 1.3.5.
+
 ## 1.3.5
 
 - Account-add tabs now follow the active theme instead of a fixed green underline.

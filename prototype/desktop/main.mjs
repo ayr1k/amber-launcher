@@ -1,3 +1,5 @@
+import {collectCrashLogs} from './crash-files136.mjs';
+import {redact as redactCrashLog} from './privacy.mjs';
 import {readBoundedFile} from './bounded-io.mjs';
 import {configureTransferBudget} from './task-queue132.mjs';
 import {SeedMap,readWorldFile} from './seed134.mjs';
@@ -131,6 +133,13 @@ app.whenReady().then(async () => {
   handle('amber:cancel', (id) => {const job=core.jobs.find(j=>j.id===id);if(job&&[...workflows.scopes].some(s=>s.instanceId===job.instanceId))return workflows.cancel(job.instanceId);return core.cancel(id);});
   handle('amber:java-scan', () => core.scanJava());
   handle('amber:java-copy-detected',async path=>{const rows=await core.scanJava();if(!rows.some(r=>r.path===path))throw Error('Java not found / 未找到此 Java，请重新检测');clipboard.writeText(path);return true;});
+  handle('amber:analyze-logs',async input=>{
+   if(input?.importFile===true){const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Logs',extensions:['log','txt']}]});if(r.canceled)return null;return {text:redactCrashLog(await readBoundedFile(r.filePaths[0],2_000_000)),sources:['Imported log / 导入的日志']};}
+   const server=input?.server===true,id=input?.id;
+   const dir=server?await servers.dir(id):await core.instancePath(id);
+   const run=server?servers.runs.get(id):(await core.runtimeStatus()).processes.filter(r=>r.instanceId===id).at(-1);
+   const result=await collectCrashLogs(dir,{...run,server});return {...result,text:redactCrashLog(result.text)};
+  });
   handle('amber:logs-folder',async id=>{const dir=await core.instancePath(id);const path=join(dir,'logs');await ensureParents(dir,join(path,'probe'));const error=await shell.openPath(path);if(error)throw Error(error);return true;});
   handle('amber:java-prepare', (id) => core.prepareJava(id));
   handle('amber:java-select', (id, path) => core.selectJava(id, path));

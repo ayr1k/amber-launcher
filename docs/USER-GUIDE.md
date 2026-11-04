@@ -160,3 +160,9 @@ AMBER still requires linked ownership and a valid offline lease; AmberE has no M
 
 Use EXE on Windows, the matching CPU ZIP on macOS, and the package manager for the Linux DEB and dependencies. Linux requires a configured desktop keyring. FreeBSD is a server/tools experiment without full game-client support. See [platform setup and validation](../prototype/PLATFORMS-1.3.5.md). Encrypted accounts cannot be copied across operating systems as portable credentials.
 
+
+## 1.3.6 crash analysis
+
+In Tools → Logs & diagnostics, select an instance and choose Analyze latest run, or import a .log / .txt file up to 2 MB. Abnormal exit views also show analysis. Expand Log evidence to inspect the source. Unknown errors remain explicitly undiagnosed.
+
+Rules cover Fabric missing/incompatible dependencies, required dependency messages, plugin dependencies, Java versions, memory reservation/exhaustion, port binding, damaged JARs, graphics initialization and declared conflicts. Mixin failures are only possible causes. Run timestamps exclude old logs; import manually when no run record exists. Analysis never installs/deletes mods or changes settings.

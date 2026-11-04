@@ -1,14 +1,41 @@
-# AmberE
+<h1 align="center">AmberE</h1>
 
-1.3.5 修复账号菜单主题配色，支持离线用户名与本地 PNG 皮肤编辑，并提供 Windows、macOS、Linux 下载；FreeBSD 为服务端与工具实验包，暂不支持游戏客户端。
+<p align="center"><strong>离线与第三方身份，独立的冒险空间。</strong></p>
 
-[English](../../README.md) · [下载 Release](https://github.com/ayr1k/AmberE/releases) · [使用指南](USER-GUIDE.md)
+<p align="center">
+  <a href="https://github.com/ayr1k/AmberE/releases/tag/v1.3.6"><img src="https://img.shields.io/badge/release-1.3.6-e9b53d?style=flat-square" alt="Release" /></a>
+  <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MPL--2.0-527b68?style=flat-square" alt="License" /></a>
+  <a href="https://github.com/ayr1k/AmberE/actions/workflows/windows.yml"><img src="https://github.com/ayr1k/AmberE/actions/workflows/windows.yml/badge.svg" alt="Build" /></a>
+  <a href="https://ayr1k.github.io/"><img src="https://img.shields.io/badge/website-AMBER-527b68?style=flat-square" alt="Website" /></a>
+</p>
+
+<p align="center"><a href="https://ayr1k.github.io/">官网</a> · <a href="https://ayr1k.github.io/#/download?product=ambere">下载</a> · <a href="USER-GUIDE.md">使用指南</a> · <a href="https://ayr1k.github.io/#/themes">主题商城</a> · <a href="../../README.md">English</a></p>
+
+独立的 Minecraft Java 版启动器，将实例、内容、主题和服务端管理集中在同一工作区。
+
+## 软件截图
+
+<table>
+  <tr><th>Alloy</th><th>Nocturne</th></tr>
+  <tr>
+    <td width="50%"><a href="../../docs/images/launcher-alloy.png"><img src="../../docs/images/launcher-alloy.png" alt="AMBER Alloy theme home screen" width="100%" /></a></td>
+    <td width="50%"><a href="../../docs/images/launcher-nocturne.png"><img src="../../docs/images/launcher-nocturne.png" alt="AMBER Nocturne theme home screen" width="100%" /></a></td>
+  </tr>
+</table>
+
+截图来自公开的 AMBER 1.2.1 主题展示，使用演示数据；主题同样适用于 AmberE。点击可查看大图，当前功能与平台范围以 1.3.6 说明为准。
+
+## 项目简介
 
 AmberE 是面向 Minecraft Java 版的独立发行项目，提供离线和第三方账号。基于 AMBER 共用代码维护，采用 MPL-2.0，并使用独立应用身份、数据目录和更新仓库。不提供微软登录，不内置微软应用 Client ID。
 
-## 1.3.5
+## 1.3.6
 
-提供 Windows x64 正式安装包及其他平台下载。[下载安装包、源码和校验文件](https://github.com/ayr1k/AmberE/releases/tag/v1.3.5)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
+修复账号编辑展开时头像和操作按钮位移、联机内容下载翻页滚动位置；新增基于日志依据的本地崩溃分析，支持最近一次运行和手动导入日志。
+
+本次发布 Windows x64 1.3.6；macOS、Linux、FreeBSD 下载暂保留 1.3.5，并沿用各自验证限制。
+
+提供 Windows x64 正式安装包及其他平台下载。[下载安装包、源码和校验文件](https://github.com/ayr1k/AmberE/releases/tag/v1.3.6)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
 
 - 离线身份与 HTTPS 第三方认证，保存的凭据由系统密钥库保护。
 - 独立游戏实例、Java 与加载器安装、模组搜索、依赖选择、更新和批量管理。

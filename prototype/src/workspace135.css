@@ -4,4 +4,9 @@
 .offline135{margin-top:12px;min-width:0}.offline135-editor{margin-top:12px;max-width:720px;padding:16px;border:1px solid var(--line);background:var(--surface)}
 .offline135-editor form{display:flex;gap:16px;align-items:end;flex-wrap:wrap}.offline135-editor .field{display:grid;gap:8px;max-width:280px;min-width:160px}.offline135-editor p{font-size:13px;color:var(--muted);line-height:1.7;margin-block:12px}
 .offline135-skin{display:flex;gap:20px;align-items:start;flex-wrap:wrap}.offline135-skin>img{width:128px;height:128px;object-fit:contain;image-rendering:pixelated;background:var(--soft)}.offline135-skin .inline-actions{margin-top:12px}
-.account-entry:has(.offline135-editor){align-items:start}.account-entry:has(.offline135-editor)>.avatar130{margin-top:6px}.offline135-editor form>.field,.offline135-editor form>.button{margin:0}
+.offline135-editor form>.field,.offline135-editor form>.button{margin:0}
+
+.account-panel .account-entry{display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;column-gap:24px}
+.account-entry>.offline135{grid-column:2 / -1;margin-top:0}
+@media(max-width:700px){.account-panel .account-entry{grid-template-columns:48px minmax(0,1fr)}.account-entry>.account-actions{grid-column:2}.account-entry>.offline135{grid-column:2}}
+.crash136 article{padding:14px 0;border-bottom:1px solid var(--line)}

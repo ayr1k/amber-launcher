@@ -1,3 +1,9 @@
+# 1.3.6 release verification
+
+The user accepted both Windows x64 installers and authorized stable GitHub releases and Pages updates. Preserve accepted installer bytes, including local-build labels and embedded testing-stage documents; current release notes supersede embedded local-only wording. No 1.3.6 macOS/Linux/FreeBSD packages were produced; those downloads remain at 1.3.5. Signing remains deferred.
+
+407 regression tests and 2398 bilingual-message checks passed. Both products passed isolated packaged startup/IPC/map checks, five-theme account layout checks at normal/large widths, and UI checks for server catalog pagination and log import. Log fixtures check dependency errors, multiple findings, unknown/normal logs and exclusion of old reports. These are not exhaustive gameplay or crash-cause guarantees. No real accounts or worlds were used.
+
 # 1.3.5 verification
 
 The user accepted the local packages and authorized stable paired releases and Pages publication. Windows/Linux/FreeBSD package bytes are preserved. macOS ZIPs add Electron/Chromium license notices; all existing application files, local-build labels and embedded testing-stage documents remain unchanged. Current release notes and this source documentation supersede embedded local-only wording. Signing remains deferred; no endorsement or exhaustive platform/gameplay acceptance is claimed.
