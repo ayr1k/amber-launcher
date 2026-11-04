@@ -1,3 +1,7 @@
+## 1.3.6 → 1.3.5
+
+For Windows, stop games and servers, close the launcher, back up credentials/settings and the game library, then install the same product’s 1.3.5 installer from its release page. This update introduces no intentional account or world format migration. Preserve existing data; 1.3.5 lacks the new crash analysis and layout/pagination fixes. Other-platform downloads already remain at 1.3.5.
+
 ## 1.3.5 → 1.3.4
 
 Rollback packages exist only for Windows; no previous official macOS/Linux/FreeBSD package is available. Stop games/servers and back up application credentials and the game library before installing the same product's 1.3.4. Older builds lack custom local skins; AMBER 1.3.4 expects the offline name to match its owner, so restore that name in 1.3.5 first if needed. Do not replace account stores or delete worlds to address login failures. Sign in again when migrating operating systems rather than copying encrypted credentials.

@@ -1,3 +1,7 @@
+# 1.3.6 verification
+
+407 regression tests and 2398 bilingual-message checks passed. Both Windows editions passed packaged startup/IPC/map checks, five-theme account expansion checks at normal and large widths, online catalog pagination and log-import UI checks. Synthetic logs cover dependencies, multiple findings, unknown/normal output and stale-report exclusion. Both GitHub Windows build-and-test workflows passed. No new macOS/Linux/FreeBSD 1.3.6 packages or validation are claimed. See [release validation](../prototype/RELEASE-ACCEPTANCE.md).
+
 # 1.3.5 verification
 
 The user accepted the local packages and authorized stable paired releases and Pages publication. Windows/Linux/FreeBSD package bytes are preserved. macOS ZIPs add Electron/Chromium license notices; all existing application files, local-build labels and embedded testing-stage documents remain unchanged. Current release notes and this source documentation supersede embedded local-only wording. Signing remains deferred; no endorsement or exhaustive platform/gameplay acceptance is claimed.
