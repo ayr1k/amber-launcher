@@ -110,7 +110,7 @@
     {
       "path": "docs/SERVERS.md",
       "bytes": 8172,
-      "sha256": "bd73f3cfb78cc8e1a2635b93e16b6f70d8222a016055e37d74feb4e33ccddb94"
+      "sha256": "d1f6863780c9f893643797e56347560dd4505d532413e385d9c01cf6f86e49f5"
     },
     {
       "path": "docs/TESTING.md",
@@ -195,7 +195,7 @@
     {
       "path": "docs/zh-CN/SERVERS.md",
       "bytes": 8880,
-      "sha256": "996800727d109ab9d8d08663905f7e568752b3c1efbf0ad0b29106e5d39f10d8"
+      "sha256": "622355f27fae157804bc8cee4f6eb8ede19ab4c00e98b779fd95d11638657f62"
     },
     {
       "path": "docs/zh-CN/TESTING.md",

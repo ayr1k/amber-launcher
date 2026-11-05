@@ -1,4 +1,4 @@
-# Servers and online play — 1.4.3
+# Servers and online play — 1.4.4
 
 1.3.2 feedback revision: local and online modes share navigation/icons, software settings/About/tools, page transitions and reduced-motion rules. Server creation moves to Instances after the first instance; settings and installed content are detail tabs. The catalog shares filters, project icons and compatible-version controls, with automatic required dependencies. Server tools read server configurations/logs; screenshots remain shared local-game screenshots. EULA alignment is corrected.
 
