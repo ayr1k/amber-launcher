@@ -29,7 +29,10 @@ test('fair admission gives new tasks slots; queued cancellation does not leak or
 test('cancelling a 128-file pool retains partial data and retries verified ranges',async()=>{
  const root=await mkdtemp(join(tmpdir(),'amber143-cancel-')),bytes=Buffer.alloc(8192,43),hash=createHash('sha256').update(bytes).digest('hex'),controller=new AbortController();let opened=0,resumed=0;
  const files=Array.from({length:128},(_,i)=>({path:join(root,'f'+i),url:'https://cdn.modrinth.com/'+i,hash,algorithm:'sha256',size:bytes.length}));configureTransferBudget(128);
- try{await assert.rejects(downloadPool(files,{root,threads:128,signal:controller.signal,fetcher:async()=>{if(++opened===32)setTimeout(()=>controller.abort(Error('cancel transfer')),25);return new Response(new ReadableStream({start(c){c.enqueue(bytes.subarray(0,4096));}}));}}),/cancel|abort/i);
+ try{const cancelled=assert.rejects(downloadPool(files,{root,threads:128,signal:controller.signal,fetcher:async()=>{opened++;return new Response(new ReadableStream({start(c){c.enqueue(bytes.subarray(0,4096));}}));}}),/cancel|abort/i);
+ // Observe an actual persisted partial before cancellation; fixed delays race
+ // file creation on slower Windows CI machines.
+ let persisted=false;try{for(let i=0;i<1000;i++){const part=await lstat(files[0].path+'.amber-'+hash+'.part').catch(()=>null);if(opened>=32&&part?.size>=4096){persisted=true;break;}await delay(10);}}finally{controller.abort(Error('cancel transfer'));await cancelled;}assert.ok(persisted,'a real partial must exist before cancellation');
  await downloadPool(files,{root,threads:128,fetcher:async(_url,options)=>{const offset=Number(options.headers.Range?.match(/bytes=(\d+)-/)?.[1]||0);if(offset)resumed++;return new Response(bytes.subarray(offset),{status:offset?206:200,headers:offset?{'Content-Range':`bytes ${offset}-${bytes.length-1}/${bytes.length}`}:{}});}});assert.ok(resumed>0);assert.ok((await Promise.all(files.map(verified))).every(Boolean));}finally{configureTransferBudget(8);}
 });
 test('adaptive transfers recover and all queued files finish after rate limiting',async()=>{
