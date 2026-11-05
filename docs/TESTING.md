@@ -1,3 +1,11 @@
+# 1.4.4 release verification
+
+Public-channel builds use the user-accepted 1.4.4 implementation; accepted Windows local installers are preserved separately. All 456 regression tests and four static-serving checks passed. Coverage includes server update dependency pins/locks, Quilt/Fabric compatibility, verified rollback and interrupted journals, shared bandwidth and priority admission. Both Windows editions passed isolated bilingual/theme UI and packaged startup checks.
+
+A separate Paper 1.21.1 test copy supplied real CPU, memory, TPS and MSPT samples, generated a 30-second report and stopped normally. The updated optional bridge retained player roster support. Reports are bounded local summaries, not stack profilers; unsupported core metrics remain unavailable. No user accounts or worlds were used as test fixtures.
+
+Matching Windows x64, macOS x64/arm64, Linux x64 and experimental FreeBSD packages are provided. Native non-Windows execution remains unverified; FreeBSD is server/tools-only. Packages remain unsigned and macOS is not notarized.
+
 # 1.4.3 release verification
 
 Public-channel builds from the accepted 1.4.3 implementation; accepted local installers are retained separately. All 448 regression tests passed, including simultaneous rate-limited retries, shared download limits, cancellation/resume, hashes, guarded server recycling and port conflicts. Both Windows editions passed packaged startup and bilingual UI checks for themed controls and recycle/restore/permanent-delete workflows using isolated synthetic data.

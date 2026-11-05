@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MPL-2.0
 const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
+  performance144:(action,id)=>ipcRenderer.invoke('amber:performance144',action,id),
+  transferStatus144:()=>ipcRenderer.invoke('amber:transfer-status144'),
+  prioritizeDownload144:id=>ipcRenderer.invoke('amber:transfer-priority144',id),
   serverManagement:(action,...args)=>ipcRenderer.invoke('amber:server-management',action,...args),
   packUpgrade:(action,...args)=>ipcRenderer.invoke('amber:pack-upgrade',action,...args),
   protection:(action,...args)=>ipcRenderer.invoke('amber:protection',action,...args),

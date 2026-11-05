@@ -1,3 +1,8 @@
+## 1.4.4
+
+- Add server mod/plugin updates with dependency previews, version locks and verified recovery. Add CPU/memory and supported TPS/MSPT trends with local performance reports. Add global download bandwidth limits, actual transfer counts and task priority.
+- Matching Windows, macOS Intel/Apple Silicon, Linux x64 and experimental FreeBSD packages, source and SHA-256. Native non-Windows validation limits remain.
+
 ## 1.4.3
 
 - Raise simultaneous file downloads to 128 with a shared budget, fair task admission and recovery after rate limiting. Download server content in parallel. Add a server instance recycle bin, port-aware restoration and exact-name permanent deletion. Align Java actions and make screenshot controls follow the theme.

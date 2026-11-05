@@ -38,6 +38,7 @@ async function downloadUnlocked(file,{root,signal,onBytes=()=>{},fetcher=fetch,t
     const resetIdle=()=>{clearTimeout(idle);idle=setTimeout(()=>controller.abort(Object.assign(Error('Download stalled / 下载长时间没有数据'),{code:'IDLE'})),45000);};
     const combined=AbortSignal.any([controller.signal,...(signal?[signal]:[])]);
     try{
+      network?.event(file,{phase:'queued'});
       return await withTransferBudget(async()=>{try{
       if(network?.isPaused())throw Error('Download paused / 下载已暂停');
       untrack=network?.track(controller);
@@ -46,14 +47,14 @@ async function downloadUnlocked(file,{root,signal,onBytes=()=>{},fetcher=fetch,t
       if(r.status===206){const range=/^bytes (\d+)-(\d+)\/(\d+)$/.exec(r.headers.get('content-range')||'');if(!range||+range[1]!==offset||+range[2]<offset||+range[2]>=+range[3]||file.size&&+range[3]!==file.size){await r.body?.cancel();throw Object.assign(Error('Invalid resume response / 续传响应无效'),{code:'CHECKSUM'});}}
       else if(offset){offset=0;await rm(temporary,{force:true});onBytes(-credited);credited=0;network?.event(file,{bytes:0,resumed:false,phase:'restarting'});}
       const h=createHash(file.algorithm||'sha1');if(offset)for await(const chunk of createReadStream(temporary))h.update(chunk);let count=offset;
-      const monitor=new Transform({transform(chunk,_encoding,callback){resetIdle();count+=chunk.length;if(count>(file.size||600_000_000))return callback(Object.assign(Error('文件大小超过声明值。'),{code:'CHECKSUM'}));h.update(chunk);credited+=chunk.length;onBytes(chunk.length);network?.event(file,{bytes:count,phase:'downloading'});callback(null,chunk);}});
+      const monitor=new Transform({transform(chunk,_encoding,callback){resetIdle();count+=chunk.length;if(count>(file.size||600_000_000))return callback(Object.assign(Error('文件大小超过声明值。'),{code:'CHECKSUM'}));h.update(chunk);credited+=chunk.length;onBytes(chunk.length);network?.event(file,{bytes:count,phase:'downloading'});clearTimeout(idle);Promise.resolve(network?.bandwidth.take(chunk.length,combined)).then(()=>{resetIdle();callback(null,chunk);},callback);}});
       resetIdle();await pipeline(Readable.fromWeb(r.body),monitor,createWriteStream(temporary,{flags:offset?'a':'w'}),{signal:combined});
       network?.event(file,{phase:'verifying'});
       if((file.size&&count!==file.size)||h.digest('hex')!==file.hash)throw Object.assign(Error('下载文件校验失败。'),{code:'CHECKSUM'});
       await rename(temporary,file.path);network?.event(file,{bytes:count,phase:'complete'});return {cached:false,resumed:offset>0};
       }catch(e){if(!signal?.aborted&&!network?.isPaused())network?.event(file,{error:networkReason(controller.signal.reason||e),phase:'retrying'});throw e;}
       },signal,{group,limit:()=>network?.concurrency(threads,scope)||threads});
-    }catch(e){last=controller.signal.reason||e;if(signal?.aborted)throw e;if(network?.isPaused()){attempt--;continue;}
+    }catch(e){untrack?.();untrack=null;last=controller.signal.reason||e;if(signal?.aborted)throw e;if(network?.isPaused()){attempt--;continue;}
       if(e.code==='CHECKSUM'||e.status===416){await rm(temporary,{force:true});onBytes(-credited);credited=0;network?.event(file,{bytes:0});if(e.code==='CHECKSUM')network?.rejectFile(file.url);}
       if(e.status&&e.status<500&&![408,429,416].includes(e.status))break;
       // Very long rate limits require an explicit later retry, never retry early.

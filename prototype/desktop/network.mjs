@@ -1,3 +1,5 @@
+import {Bandwidth144} from './bandwidth144.mjs';
+import {transferStatus144,reprioritize144} from './task-queue132.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import {AsyncLocalStorage} from 'node:async_hooks';
 import {lookup} from 'node:dns/promises';
@@ -10,8 +12,8 @@ import {join} from 'node:path';
 import {VERSION} from './product.mjs';
 import {REPOSITORY_URL,REPOSITORY_NAME} from './edition.mjs';
 
-export const networkDefaults={mode:'auto',fallback:true,adaptive:true};
-export function validateNetwork(v={}){const n={...networkDefaults,...v};if(!['auto','official','mainland'].includes(n.mode)||typeof n.fallback!=='boolean'||typeof n.adaptive!=='boolean')throw Error('Invalid download settings / 下载设置无效');return {mode:n.mode,fallback:n.fallback,adaptive:n.adaptive};}
+export const networkDefaults={mode:'auto',fallback:true,adaptive:true,bandwidthKib:0};
+export function validateNetwork(v={}){const n={...networkDefaults,...v};if(!['auto','official','mainland'].includes(n.mode)||typeof n.fallback!=='boolean'||typeof n.adaptive!=='boolean'||!Number.isInteger(n.bandwidthKib)||n.bandwidthKib<0||n.bandwidthKib>1048576)throw Error('Invalid download settings / 下载设置无效');return {mode:n.mode,fallback:n.fallback,adaptive:n.adaptive,bandwidthKib:n.bandwidthKib};}
 export function mirrorURL(value){const u=new URL(value);if(u.protocol!=='https:'||u.port||u.username||u.password)return null;const paths={
  'piston-meta.mojang.com':'','launchermeta.mojang.com':'','launcher.mojang.com':'','piston-data.mojang.com':'',
  'resources.download.minecraft.net':'/assets','libraries.minecraft.net':'/maven','maven.minecraftforge.net':'/maven','maven.fabricmc.net':'/maven'};
@@ -36,14 +38,16 @@ export function retryAfter(value,now=Date.now()){if(!value)return 0;const second
 export function networkReason(e){if(e?.status===429)return 'rate-limited';if([401,403].includes(e?.status))return 'restricted';if(e?.status===404)return 'missing';if(e?.code==='CHECKSUM')return 'checksum';if(e?.code==='IDLE'||/timeout|timed out/i.test(e?.message||''))return 'timeout';return 'connection';}
 
 export class DownloadNetwork{
- constructor(root,{fetcher=fetch,mirrorFetch=pinnedFetch}={}){this.root=root;this.raw=fetcher;this.mirrorFetch=mirrorFetch;this.settings=validateNetwork();this.context=new AsyncLocalStorage();this.jobs=new Map();this.cache=null;this.probing=null;this.cooldowns=new Map();this.request=this.request.bind(this);this.request.amberNetwork=this;}
- configure(v){this.settings=validateNetwork(v);}
+ constructor(root,{fetcher=fetch,mirrorFetch=pinnedFetch}={}){this.root=root;this.raw=fetcher;this.mirrorFetch=mirrorFetch;this.settings=validateNetwork();this.context=new AsyncLocalStorage();this.bandwidth=new Bandwidth144();this.jobs=new Map();this.cache=null;this.probing=null;this.cooldowns=new Map();this.request=this.request.bind(this);this.request.amberNetwork=this;}
+ configure(v){this.settings=validateNetwork(v);this.bandwidth.configure(this.settings.bandwidthKib);}
+ prioritize(id){const s=this.jobs.get(id);if(!s)throw Error("Task has ended / 任务已结束");for(const scope of this.jobs.values())scope.job.downloadPriority=false;s.job.downloadPriority=true;reprioritize144();return true;}
+ transferStatus(){return {...transferStatus144(),bandwidthKib:this.settings.bandwidthKib};}
  async init(){try{const c=JSON.parse(await readFile(join(this.root,'network-choice.json'),'utf8'));if(['official','mirror'].includes(c.source)&&c.expires>Date.now()&&c.expires<Date.now()+900000)this.cache=c;}catch{}return this;}
  async probe(url,fetcher=this.raw){const started=Date.now();try{const opts={method:'HEAD',redirect:'manual',signal:AbortSignal.timeout(5000),headers:{'User-Agent':`${REPOSITORY_NAME}/${VERSION} (${REPOSITORY_URL})`}};let r=await fetcher(url,opts);await r.body?.cancel();if([404,405].includes(r.status)){r=await fetcher(url,{...opts,method:'GET'});await r.body?.cancel();}return {ok:r.status>=200&&r.status<400,ms:Date.now()-started,status:r.status};}catch(e){return {ok:false,ms:Date.now()-started,reason:networkReason(e)};}}
  async choose(){if(this.settings.mode!=='auto')return this.settings.mode==='mainland'?'mirror':'official';if(this.cache?.expires>Date.now())return this.cache.source;
  if(!this.probing)this.probing=(async()=>{const [a,b]=await Promise.all([this.probe('https://piston-meta.mojang.com/mc/game/version_manifest_v2.json'),this.probe('https://bmclapi2.bangbang93.com/mc/game/version_manifest_v2.json',this.mirrorFetch)]);const source=b.ok&&(!a.ok||b.ms+100<a.ms)?'mirror':'official';this.cache={source,expires:Date.now()+600000};await writeFile(join(this.root,'network-choice.json'),JSON.stringify(this.cache)).catch(()=>{});return source;})().finally(()=>{this.probing=null;});return this.probing;}
  run(job,fn){const scope={job,paused:false,requests:new Set(),files:new Map(),failures:0,sourceOverrides:new Map(),sources:new Map()};this.jobs.set(job.id,scope);return this.context.run(scope,()=>Promise.resolve().then(fn)).finally(()=>{this.jobs.delete(job.id);});}
- pause(id,value){const s=this.jobs.get(id);if(typeof value!=='boolean'||!s||!['install','java','content','modpack','content-update','server-install','server-content'].includes(s.job.kind)||(!s.job.downloadActive&&!s.paused))throw Error('This task cannot be paused now / 当前阶段暂不可暂停');s.paused=value;s.job.networkPaused=value;if(value)for(const c of s.requests)c.abort(Error('Download paused / 下载已暂停'));return true;}
+ pause(id,value){const s=this.jobs.get(id);if(typeof value!=='boolean'||!s||!['install','java','content','modpack','content-update','server-install','server-content','server-content-update'].includes(s.job.kind)||(!s.job.downloadActive&&!s.paused))throw Error('This task cannot be paused now / 当前阶段暂不可暂停');s.paused=value;s.job.networkPaused=value;if(value)for(const c of s.requests)c.abort(Error('Download paused / 下载已暂停'));return true;}
  async gate(signal){const s=this.context.getStore();while(s?.paused){signal?.throwIfAborted();await delay(100,undefined,{signal});}}
  isPaused(){return !!this.context.getStore()?.paused;}
  track(controller){const s=this.context.getStore();if(s){s.requests.add(controller);s.job.downloadActive=(s.job.downloadActive||0)+1;}return ()=>{if(s){s.requests.delete(controller);s.job.downloadActive=Math.max(0,s.job.downloadActive-1);}};}

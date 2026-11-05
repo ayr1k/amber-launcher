@@ -9,6 +9,12 @@ import java.nio.charset.StandardCharsets;
 public final class AmberPlayers141 extends JavaPlugin {
  @Override public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
   if (!(sender instanceof ConsoleCommandSender)) return true;
+  if (label.equalsIgnoreCase("ambermetrics144")) {
+   Object server=getServer();double tps=-1,mspt=-1;
+   try {double[] values=(double[])server.getClass().getMethod("getTPS").invoke(server);if(values.length>0)tps=Math.min(20,values[0]);}catch(Exception ignored){}
+   try {mspt=((Number)server.getClass().getMethod("getAverageTickTime").invoke(server)).doubleValue();}catch(Exception ignored){}
+   sender.sendMessage("AMBER_METRICS144 {\"tps\":"+(Double.isFinite(tps)&&tps>=0?Double.toString(tps):"null")+",\"mspt\":"+(Double.isFinite(mspt)&&mspt>=0?Double.toString(mspt):"null")+"}");return true;
+  }
   StringBuilder out=new StringBuilder("["); boolean first=true;
   for(Player p:getServer().getOnlinePlayers()) {
    if(!p.getName().matches("[A-Za-z0-9_]{1,16}"))continue;

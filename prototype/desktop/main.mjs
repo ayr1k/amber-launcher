@@ -1,3 +1,5 @@
+import {ServerUpdates144} from './server-updates144.mjs';
+import {Performance144} from './performance144.mjs';
 import {ServerTrash143} from './server-trash143.mjs';
 import {Sakura142} from './sakura142.mjs';
 import {ServerManagement140} from './server-management140.mjs';
@@ -151,10 +153,12 @@ app.whenReady().then(async () => {
   handle('amber:java-select', (id, path) => core.selectJava(id, path));
   handle('amber:java-browse', async () => {const result = await dialog.showOpenDialog(window, { title: translateMessage('选择 Java 可执行文件'), properties: ['openFile'], ...(process.platform==='win32'?{filters:[{name:'Java',extensions:['exe']}]}:{}) });return result.canceled ? null : core.addJava(result.filePaths[0]);});
   const servers=await new Servers(core).init(),rooms=new Rooms(core,servers),sakura=new Sakura142(core,servers,credentialCodec(safeStorage));
+  const serverUpdates144=new ServerUpdates144(servers);
   const serverTrash=new ServerTrash143(servers,{connected:id=>rooms.starting||sakura.busy||rooms.active&&rooms.current?.serverId===id||sakura.active&&sakura.current?.serverId===id});
   const serverEditor=new InstanceEditor({instancePath:id=>servers.dir(id)},{directories:['config','defaultconfigs','plugins','kubejs','scripts'],files:['server.properties','bukkit.yml','spigot.yml','paper.yml','permissions.yml']});
   const resourceTimer=setInterval(()=>servers.sample(),3000);resourceTimer.unref();
   handle('amber:server',async(action,...args)=>{
+   const updateMethods={updateScan:'scan',updateLock:'lock',updatePreview:'preview',updateInstall:'install',updateHistory:'history',updateRestore:'restore'};if(Object.hasOwn(updateMethods,action))return serverUpdates144[updateMethods[action]](...args);
    const trashMethods={trashList:'list',trashDetails:'details',trashRemove:'remove',trashRestore:'restore',trashPurge:'purge'};if(Object.hasOwn(trashMethods,action))return serverTrash[trashMethods[action]](...args);
    const methods=['versions','create','install','launchSettings','properties','saveProperties','backups','restoreConfig','start','stop','command','copy','content','toggleContent','removeContent','contentHistory','restoreContent','search','categories','contentVersions','previewContent','installContent'];
    if(methods.includes(action))return servers[action](...args);
@@ -205,6 +209,8 @@ app.whenReady().then(async () => {
   const themes=await new Themes(core.root,settings).init();
   const network=await new DownloadNetwork(core.root,{fetcher:core.fetcher}).init();network.configure((await settings.get()).network);core.fetcher=network.request;core.network=network;
   handle('amber:network-diagnose',()=>network.diagnose());
+  handle('amber:transfer-status144',()=>network.transferStatus());
+  handle('amber:transfer-priority144',id=>{const job=core.jobs.find(j=>j.id===id&&j.state==='running');if(!job)throw Error('Task has ended / 任务已结束');for(const j of core.jobs)j.downloadPriority=j.id===id;core.jobQueue.waiting.sort((a,b)=>Number(b.key===job.instanceId)-Number(a.key===job.instanceId));if(network.jobs.has(id))network.prioritize(id);return true;});
   handle('amber:network-pause',(id,value)=>network.pause(id,value));
   if(smoke){const a=(await settings.get()).appearance;for(const key of ['backgroundAsset','heroAsset','artworkAsset'])if(a[key]){const response=await net.fetch('amber://app/theme-assets/'+a[key]);const bytes=Buffer.from(await response.arrayBuffer());if(response.status!==200||response.headers.get('Content-Type')!=='image/png'||nativeImage.createFromBuffer(bytes).isEmpty())throw Error('Theme image protocol failed');}console.log('AMBER_THEME_ASSETS_OK');}
 
@@ -256,6 +262,8 @@ app.whenReady().then(async () => {
   handle('amber:language-remove', async () => {await languages.remove();const value = await settings.get();if (value.language.startsWith('x-')) await settings.save({ ...value, language: 'en-US' });return refreshLocale();});
   const management = new InstanceManagement(core, workflows),backups = new Backups(core, workflows);
   const serverManagement140=new ServerManagement140(core,servers),environment140=new Environment140(core,servers,content,workflows);
+  const performance144=new Performance144(servers);const performanceTimer=setInterval(()=>performance144.sample().catch(()=>{}),3000);performanceTimer.unref();
+  handle('amber:performance144',async(action,id)=>{if(action==='state')return performance144.state(id);if(action==='collect')return performance144.collect(id);if(action==='export'){const state=await performance144.state(id);if(!state.report)throw Error('Collect a report first / 请先采集报告');const out=await dialog.showSaveDialog(window,{defaultPath:'server-performance.json',filters:[{name:'JSON',extensions:['json']}]});if(out.canceled)return null;await writeFile(out.filePath,JSON.stringify(state.report,null,2));return true;}throw Error('Invalid action');});
   handle('amber:server-management',async(action,id,input)=>{if(['roster','skin','installBridge','players','player','commands','backups','backup','restore','policy','savePolicy','pinBackup'].includes(action))return serverManagement140[action](id,input);if(action==='command')return serverManagement140.consoleResult(id,input);if(action==='link')return environment140.links(id,input);if(action==='compare')return environment140.compare(id,input);if(action==='previewInstall')return environment140.previewInstall(id,input.localId,input.versionId);if(action==='install')return environment140.install(id);if(action==='export'){const r=await environment140.requirements(id);const out=await dialog.showSaveDialog(window,{defaultPath:'server-environment.json',filters:[{name:'Environment',extensions:['json']}]});if(out.canceled)return null;await writeFile(out.filePath,JSON.stringify(r.manifest,null,2));return {unknown:r.unknown,optional:r.optional};}if(action==='import'){const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Environment',extensions:['json']}]});if(r.canceled)return null;const st=await lstat(r.filePaths[0]);if(!st.isFile()||st.size>2000000)throw Error('Invalid environment file');return environment140.previewImport(JSON.parse(await readFile(r.filePaths[0],'utf8')));}if(action==='create')return environment140.create(id,input);throw Error('Invalid action');});
   const protection140=new Protection140(core,backups);
   handle('amber:protection', (action,id,value)=>{if(action==='state')return protection140.state(id);if(action==='save')return protection140.save(id,value);if(action==='pin')return backups.pin(id,value);throw Error('Invalid action');});
