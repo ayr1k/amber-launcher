@@ -1,4 +1,9 @@
-<h1 align="center">AMBER</h1>
+<h1 align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="prototype/public/brand/amber-lockup-reverse.svg" />
+    <img src="prototype/public/brand/amber-lockup.svg" alt="AMBER" width="420" />
+  </picture>
+</h1>
 
 <p align="center"><strong>Your world. Your way.</strong></p>
 
