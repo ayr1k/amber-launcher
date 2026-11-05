@@ -1,6 +1,6 @@
 import {CurseForge141,cfProject} from './curseforge141.mjs';
 // SPDX-License-Identifier: MPL-2.0
-import {instanceLoaders} from './compatibility.mjs';
+import {instanceLoaders,compareContentVersions} from './compatibility.mjs';
 import { readFile, readdir, copyFile, rename, unlink, constants, lstat } from 'node:fs/promises';
 import { join } from 'node:path';
 import { randomUUID,createHash } from 'node:crypto';
@@ -27,7 +27,7 @@ export class Modrinth {
   const data=await this.api('search?'+params);return {hits:data.hits.map(p=>({id:p.project_id,icon:validIcon(p.icon_url),type:p.project_type,title:p.title,description:p.description,author:p.author,downloads:p.downloads})),total:data.total_hits};
  }
  compatible(v,item,type){return v.game_versions?.includes(item.game)&&(type!=='mod'||instanceLoaders(item).some(t=>v.loaders?.includes(t)))&&v.environment!=='dedicated_server_only'&&v.environment!=='server_only';}
- async versions(instanceId,project){const {item}=await this.core.metadata(instanceId);if(cfProject(project))return this.curseforge.versions(project,{game:item.game,loader:item.loader});const p=await this.api('project/'+id(project));if(p.project_type!=='modpack'&&!Object.hasOwn(folders,p.project_type))throw Error('此内容类型暂不支持直接安装。');const query=new URLSearchParams({game_versions:JSON.stringify([item.game]),include_changelog:'false',...(p.project_type==='mod'?{loaders:JSON.stringify(instanceLoaders(item))}:{})});return (await this.api(`project/${id(project)}/version?${query}`)).filter(v=>this.compatible(v,item,p.project_type)).sort((a,b)=>(a.version_type==='release'?0:1)-(b.version_type==='release'?0:1)||Date.parse(b.date_published)-Date.parse(a.date_published));}
+ async versions(instanceId,project){const {item}=await this.core.metadata(instanceId);if(cfProject(project))return this.curseforge.versions(project,{game:item.game,loader:item.loader});const p=await this.api('project/'+id(project));if(p.project_type!=='modpack'&&!Object.hasOwn(folders,p.project_type))throw Error('此内容类型暂不支持直接安装。');const query=new URLSearchParams({game_versions:JSON.stringify([item.game]),include_changelog:'false',...(p.project_type==='mod'?{loaders:JSON.stringify(instanceLoaders(item))}:{})});return (await this.api(`project/${id(project)}/version?${query}`)).filter(v=>this.compatible(v,item,p.project_type)).sort((a,b)=>compareContentVersions(a,b,item.loader));}
  async manifest(dir){try{return JSON.parse(await readFile(join(dir,'content.json'),'utf8'));}catch(e){if(e.code==='ENOENT')return {schema:1,files:[]};throw e;}}
  async preview(instanceId,versionId,selectedOptional=[],excludedRequired=[],interactive=false){
   if(!Array.isArray(selectedOptional)||selectedOptional.length>100||selectedOptional.some(k=>typeof k!=='string'||k.length>220))throw Error('可选依赖选择无效');if(!Array.isArray(excludedRequired)||excludedRequired.length>100||excludedRequired.some(k=>typeof k!=='string'||k.length>220))throw Error('必需依赖选择无效');const selected=new Set(selectedOptional),excluded=new Set(excludedRequired),optional=[],required=[],blockers=[];

@@ -63,3 +63,7 @@ Analysis runs locally without external AI services or log uploads. It reads boun
 ## 1.4.1
 
 Choosing CurseForge sends search/version/file requests and the application API key to its API/CDN, without account tokens or worlds. Player avatars query Mojang public skin endpoints by known UUID. Player actions are sent to the selected local server console.
+
+## Sakura Frp (1.4.2)
+
+Sakura connections contact its official API to read tunnel/node information and configuration using the saved access token, then connect to the selected node. The token is encrypted using system credential storage; configuration and credentials are passed in the frpc child environment, while the temporary disk file contains only a template. The template is removed on exit. Logs are bounded and redact the access token. Sakura and its nodes can observe account/tunnel identity, network addresses and traffic metadata. No account or server data is sent to an AMBER-operated service.

@@ -1,3 +1,13 @@
+# 1.4.2 验证
+
+双产品按公开发布渠道构建，包含最终联机说明区间距调整，同步提供 Windows x64、macOS Intel/Apple Silicon、Linux x64、FreeBSD 实验包、源码和 SHA-256。安装包未签名，macOS 未公证。
+
+真实 Quilt 1.21.1 服务端启动就绪并正常停止；26.2 的 Mod Menu 20.0.3 能解析 Fabric API 和 Text Placeholder API。Quilt 原生优先、Fabric 回退及精确依赖要求覆盖本地/联机和 CurseForge 回归检查。
+
+使用用户已保存的 Sakura 账号与隧道，验证官方配置 API、节点连接及公网 Minecraft 状态查询，返回 Paper 26.3。测试组件正常停止，未修改服务端或隧道配置。配置仅通过子进程环境传递，不明文落盘；中文与 UTF-8 分片日志、断线重连、启动取消、超时清理均有专项检查。Windows 双产品启动及中英文/主题界面检查通过。445 项回归中一项遇到 Windows 临时文件占用，其所在 11 项测试独立复测通过。
+
+macOS/Linux/FreeBSD 仍待对应真机执行验证，FreeBSD 仅实验性服务端与工具；不代表全部游戏、模组组合或双机 EasyTier/NAT 场景已验收，玩家 Ping 与完整管理操作限制沿用既有说明。
+
 # 1.4.1 验证
 
 427 项回归测试及双产品成品启动、通信、地图检查通过。本地/联机内容页、双平台切换、版本详情及已安装列表通过隔离测试。玩家页固定底部与独立列表滚动覆盖两套主题、两档宽度和中英文。验证真实 CurseForge 接口与 Paper 插件启动；远端玩家 Ping、完整玩家操作及 macOS/Linux 实机验收仍待验证，FreeBSD 仅实验性服务端与工具。

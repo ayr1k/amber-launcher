@@ -27,3 +27,8 @@
 @media(max-width:1350px){.desktop-app .home-edit-trigger{display:none}.topbar .mode132{margin-left:4px}.mode132 button{padding-inline:9px}.topbar .header-instance{min-width:190px}}
 @media(max-width:1050px){.server-grid132{grid-template-columns:minmax(0,1fr)}.server-field132{grid-template-columns:minmax(0,1fr) minmax(160px,35%)}.topbar .prototype-badge{display:none}.topbar .quick-trigger kbd{display:none}.topbar .header-instance>span{display:none}}
 @media(max-width:700px){.server-field132{grid-template-columns:1fr;gap:12px}.server-metrics132{grid-template-columns:1fr}.server-heading132{align-items:flex-start;flex-wrap:wrap}.mode132 button{padding-inline:6px}}
+
+.sakura142{padding-top:20px}.sakura142>p{margin:12px 0}.sakura142 .server-grid132{align-items:start;margin:24px 0}.sakura142 .server-grid132>label{display:flex;flex-direction:column;justify-content:flex-start;gap:10px;margin:0}.sakura142 .server-grid132 input{margin:0;width:100%;min-width:0}.sakura142 .server-grid132 small{color:var(--muted)}
+
+/* Keep connection guidance readable without stretching it across large windows. */
+.connections-intro132{display:grid;gap:26px;padding:24px 0 8px;max-width:1100px}.connections-intro132 h2{margin:0 0 12px;line-height:1.4}.connections-intro132 h3{margin:0 0 10px;line-height:1.5}.connections-intro132 p{margin:0;line-height:1.75}.connections-intro132 p+p{margin-top:10px}.connections-intro132 .connections-component132{margin-top:14px}.connections-intro132 .button{margin-top:16px}@media(max-width:700px){.connections-intro132{gap:22px;padding-top:20px}}

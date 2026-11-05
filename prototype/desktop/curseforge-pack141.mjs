@@ -10,7 +10,7 @@ export async function convertCursePack141(bytes,provider){
  if(m.manifestType!=='minecraftModpack'||m.manifestVersion!==1||!m.minecraft?.version||!Array.isArray(m.files)||m.files.length>5000)throw Error('Unsupported CurseForge manifest / 不支持的整合包清单');
  const dependencies={minecraft:m.minecraft.version};const loaders=m.minecraft.modLoaders||[];
  if(loaders.length>1)throw Error('Multiple pack loaders are not supported / 不支持多个加载器');
- if(loaders.length){const match=/^(forge|neoforge|fabric)-(.+)$/.exec(loaders[0].id);if(!match)throw Error('Unsupported pack loader / 不支持此加载器');dependencies[match[1]==='fabric'?'fabric-loader':match[1]]=match[2];}
+ if(loaders.length){const match=/^(forge|neoforge|fabric|quilt)-(.+)$/.exec(loaders[0].id);if(!match)throw Error('Unsupported pack loader / 不支持此加载器');dependencies[['quilt','fabric'].includes(match[1])?match[1]+'-loader':match[1]]=match[2];}
  const files=[],out={},paths=new Set();
  for(const entry of m.files){if(!Number.isSafeInteger(entry.projectID)||!Number.isSafeInteger(entry.fileID))throw Error('Invalid pack file ID');const v=await provider.version(`cf-${entry.projectID}-${entry.fileID}`),p=await provider.project(`cf-${entry.projectID}`),f=v.files[0];
   if(!f.url)throw Error(`作者未允许 API 下载：${p.title}。请从 CurseForge 项目页面手动获取完整包；本次没有安装文件。 / Author-restricted download: ${p.website||p.title}`);

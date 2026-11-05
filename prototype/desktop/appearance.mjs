@@ -5,6 +5,6 @@ export function validateIcon(value='grass') {
  return value;
 }
 export function defaultInstanceName(game,components=[]) {
- const order=['forge','neoforge','fabric','liteloader','optifine'];
+ const order=['forge','neoforge','quilt','fabric','liteloader','optifine'];
  return `${game}-${order.filter(k=>components.includes(k)).join('+')||'vanilla'}`;
 }

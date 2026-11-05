@@ -1,3 +1,4 @@
+import {quiltVersions,quiltProfile} from './quilt142.mjs';
 import {retainUpgrade140,applyUpgrade140} from './pack-upgrade140.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import {g} from './guided-text.mjs';
@@ -66,7 +67,7 @@ export class Workflows{
  async runContent(id,r){if(r.kind==='guided-addon')return this.guided.runAddon(id,r);const {dir,item}=await this.core.metadata(id);await this.core.requireStopped(dir);if(r.schema!==1||!['content','pack'].includes(r.kind)||typeof r.versionId!=='string'||!/^[-\w]{1,100}$/.test(r.versionId)||r.game!==item.game||r.loader!==item.loader)throw Error('内容恢复计划与当前实例不匹配，请检查版本设置。');const save=()=>atomicJson(join(dir,'content-task.json'),r);r.state='running';delete r.error;await save();try{this.checkCancelled();let job;if(r.kind==='pack')job=await this.installPack(id,r.versionId);else{const plan=await this.content.preview(id,r.versionId,r.optional,r.excludedRequired||[]);this.checkCancelled();job=await this.wait(await this.content.install(id,plan.id));}this.checkCancelled();r.state='done';r.completed=['content'];return job||{state:'done'};}catch(e){r.state=this.cancelled?'cancelled':'failed';r.error=e.message;throw e;}finally{r.finishedAt=new Date().toISOString();await save();}}
  async runPlan(id,record,afterSetup){
   const {dir,item}=await this.core.metadata(id);await this.core.requireStopped(dir);const input=record.input;
-  if(!input||input.game!==item.game||!['vanilla','fabric','forge','neoforge','liteloader','optifine'].includes(input.loader)||!Number.isInteger(input.threads)||input.threads<1||input.threads>16)throw Error('安装计划已损坏，请在版本设置中检查。');
+  if(!input||input.game!==item.game||!['vanilla','quilt','fabric','forge','neoforge','liteloader','optifine'].includes(input.loader)||!Number.isInteger(input.threads)||input.threads<1||input.threads>16)throw Error('安装计划已损坏，请在版本设置中检查。');
   const optifinePath=record.optifine?join(dir,'.amber-setup','optifine.jar'):null;
   if(optifinePath&&await digest(optifinePath)!==record.optifine)throw Error('保留的 OptiFine 安装器缺失或被修改，请重新选择官方安装器。');
   const completed=new Set(record.completed||[]),save=()=>atomicJson(join(dir,'setup-report.json'),record);
@@ -97,11 +98,11 @@ export class Workflows{
   return (await this.core.metadata(id)).item;
  }
  async wait(result){if(!result?.id||!result.state)return result;while(true){const job=this.core.jobs.find(j=>j.id===result.id);if(!job)throw Error('任务记录丢失。');if(job.state==='done')return job;if(job.state!=='running')throw Error(job.error||'任务已取消。');await new Promise(r=>setTimeout(r,150));}}
- async choices(game,type){if(!this.core.catalog)await this.core.versions();if(!this.core.catalog.some(v=>v.id===game))throw Error('未知 Minecraft 版本。');return type==='vanilla'||type==='optifine'?[]:type==='fabric'?fabricVersions(game,this.core.fetcher):type==='liteloader'?liteVersions(game,this.core.fetcher):loaderVersions(game,type,this.core.fetcher);}
+ async choices(game,type){if(!this.core.catalog)await this.core.versions();if(!this.core.catalog.some(v=>v.id===game))throw Error('未知 Minecraft 版本。');return type==='vanilla'||type==='optifine'?[]:type==='quilt'?quiltVersions(game,this.core.fetcher):type==='fabric'?fabricVersions(game,this.core.fetcher):type==='liteloader'?liteVersions(game,this.core.fetcher):loaderVersions(game,type,this.core.fetcher);}
  async create(input,optifinePath,manifest,afterSetup,guided,localPack){return this.exclusive(async()=>{this.lastSetup=null;
   if(!this.core.catalog)await this.core.versions();
   if(!Number.isInteger(input.threads)||input.threads<1||input.threads>16)throw Error('并发数应为 1–16');
-  if(!['vanilla','fabric','forge','neoforge','liteloader','optifine'].includes(input.loader))throw Error('不支持的加载器组合。');
+  if(!['vanilla','quilt','fabric','forge','neoforge','liteloader','optifine'].includes(input.loader))throw Error('不支持的加载器组合。');
   if(input.liteVersion&&(!['forge','optifine'].includes(input.loader)||!canCombine(input.game,[input.loader],'liteloader')))throw Error('所选历史加载器组合不兼容');
   if(input.liteVersion&&!(await this.choices(input.game,'liteloader')).some(v=>v.version===input.liteVersion))throw Error('请选择兼容的 LiteLoader 版本');
   if(input.addOptifine&&input.loader!=='forge')throw Error('OptiFine 组合目前仅支持 Forge');

@@ -1,3 +1,4 @@
+import {quiltVersions,quiltProfile} from './quilt142.mjs';
 import {collectCrashLogs} from './crash-files136.mjs';
 import {TaskQueue,withFileLock} from './task-queue132.mjs';
 import {basename} from 'node:path';
@@ -40,16 +41,16 @@ export class VanillaLauncher extends LauncherCore {
   Promise.resolve().then(()=>this.jobQueue.run(instanceId,()=>{job.queued=false;return this.network?this.network.run(job,run):run();},{signal:controller.signal,onWaiting:()=>{job.queued=true;job.phase='Queued · two concurrent tasks / 排队中 · 同时执行两个任务';}})).then(()=>settle('done'),e=>settle(controller.signal.aborted?'cancelled':'failed',e.message));return {...job};
  }
  async metadata(id){const dir=await this.instancePath(id);const item=JSON.parse(await readFile(join(dir,'instance.json'),'utf8'));const meta=JSON.parse(await readFile(join(dir,'version.json'),'utf8'));if(item.metadataSha1&&await digest(join(dir,'version.json'))!==item.metadataSha1)throw new Error('版本元数据被更改，请重新创建实例。');if(meta.id!==item.game)throw new Error('实例版本元数据不匹配。');return {dir,item,meta};}
- async loaderVersions(id,type){const {meta}=await this.metadata(id);return type==='fabric'?fabricVersions(meta.id,this.fetcher):type==='liteloader'?liteVersions(meta.id,this.fetcher):loaderVersions(meta.id,type,this.fetcher);}
- async configureLoader(id,type,version){if(type==='liteloader'){const {dir,item,meta}=await this.metadata(id);await this.requireStopped(dir);return this.startJob(id,'loader',async(job,signal)=>{job.phase='读取 LiteLoader 官方配置';const profile=await liteProfile(meta.id,version,this.fetcher,signal,this.root);await atomicJson(join(dir,'loader.json'),profile);delete item.liteVersion;delete item.liteBaseSha1;item.loader=type;item.loaderVersion=version;item.loaderSha1=await digest(join(dir,'loader.json'));item.status='metadata-ready';await atomicJson(join(dir,'instance.json'),item);});}return type==='fabric'||type==='vanilla'?this.configureFabric(id,type==='vanilla'?null:version):installLoader(this,id,type,version);}
+ async loaderVersions(id,type){const {meta}=await this.metadata(id);return type==='quilt'?quiltVersions(meta.id,this.fetcher):type==='fabric'?fabricVersions(meta.id,this.fetcher):type==='liteloader'?liteVersions(meta.id,this.fetcher):loaderVersions(meta.id,type,this.fetcher);}
+ async configureLoader(id,type,version){if(type==='liteloader'){const {dir,item,meta}=await this.metadata(id);await this.requireStopped(dir);return this.startJob(id,'loader',async(job,signal)=>{job.phase='读取 LiteLoader 官方配置';const profile=await liteProfile(meta.id,version,this.fetcher,signal,this.root);await atomicJson(join(dir,'loader.json'),profile);delete item.liteVersion;delete item.liteBaseSha1;item.loader=type;item.loaderVersion=version;item.loaderSha1=await digest(join(dir,'loader.json'));item.status='metadata-ready';await atomicJson(join(dir,'instance.json'),item);});}return ['quilt','fabric','vanilla'].includes(type)?this.configureFabric(id,type==='vanilla'?null:version,type):installLoader(this,id,type,version);}
  async fabricVersions(id){const {meta}=await this.metadata(id);return fabricVersions(meta.id,this.fetcher);}
- async configureFabric(id,version){
+ async configureFabric(id,version,type='fabric'){
   const {dir,item,meta}=await this.metadata(id);await this.requireStopped(dir);
   return this.startJob(id,'loader',async(job,signal)=>{
-   job.phase='读取 Fabric 配置与依赖校验值';
-   const profile=version?await fabricProfile(meta.id,version,this.fetcher,signal):null;
+   job.phase='读取 '+(type==='quilt'?'Quilt':'Fabric')+' 配置与依赖校验值';
+   const profile=version?await (type==='quilt'?quiltProfile:fabricProfile)(meta.id,version,this.fetcher,signal):null;
    await atomicJson(join(dir,'loader.json'),profile);
-   delete item.liteVersion;delete item.liteBaseSha1;item.loader=version?'fabric':'vanilla';item.loaderVersion=version||null;item.loaderSha1=await digest(join(dir,'loader.json'));item.status='metadata-ready';
+   delete item.liteVersion;delete item.liteBaseSha1;item.loader=version?type:'vanilla';item.loaderVersion=version||null;item.loaderSha1=await digest(join(dir,'loader.json'));item.status='metadata-ready';
    await atomicJson(join(dir,'instance.json'),item);
   });
  }

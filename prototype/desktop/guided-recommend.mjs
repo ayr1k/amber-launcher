@@ -1,3 +1,4 @@
+import {instanceLoaders,compareContentVersions} from './compatibility.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import {g} from './guided-text.mjs';
 import {answers,matchVersion,memoryBudget,RULE_VERSION} from './guided-model.mjs';
@@ -5,7 +6,6 @@ import {features,tiers,featureFor,requestedFeatures,visualBudget,impact} from '.
 
 
 const fail=k=>{throw Error(g(k));};
-const newest=vs=>vs.sort((a,b)=>Date.parse(b.date_published)-Date.parse(a.date_published));
 export async function recommend(guide,input,existing=null){
  const visuals=guide.visualRules;const a=answers(input);if(!existing)await guide.draft(a);
  const hardware=await guide.readHardware(),api=guide.session(),catalog=(await guide.core.versions()).versions;
@@ -29,8 +29,8 @@ export async function recommend(guide,input,existing=null){
  const candidates=[];
  const installed=existing?.files||[];
  const installedPins=new Map(installed.map(f=>[f.projectId,f.versionId]));
- for(const game of games)for(const loader of existing?[existing.item.loader]:a.serverLoader!=='unknown'?[a.serverLoader]:a.change==='vanilla'?['vanilla']:['fabric','neoforge','forge']){
-  if(required.some(p=>p.project_type==='mod'&&!p.loaders?.includes(loader)))continue;
+ for(const game of games)for(const loader of existing?[existing.item.loader]:a.serverLoader!=='unknown'?[a.serverLoader]:a.change==='vanilla'?['vanilla']:['fabric','quilt','neoforge','forge']){
+  if(required.some(p=>p.project_type==='mod'&&!instanceLoaders({loader}).some(l=>p.loaders?.includes(l))))continue;
   let version=existing?.item.loaderVersion||null;
   if(!existing&&loader!=='vanilla'){
    try{const rows=await guide.workflows.choices(game.id,loader);version=rows.find(v=>a.serverLoaderVersion?v.version===a.serverLoaderVersion||(loader==='forge'&&v.version===game.id+'-'+a.serverLoaderVersion):v.stable)?.version;if(!version&&a.freshness==='preview'&&!a.serverLoaderVersion)version=rows[0]?.version;if(!version)continue;}catch(e){guide.propagate(e);continue;}
@@ -39,10 +39,10 @@ export async function recommend(guide,input,existing=null){
   async function root(slug,{exact,feature,must=false,index=0}={}){
    const p=await project(slug);if(!p||!['mod','shader','resourcepack'].includes(p.project_type))return null;
    const saved=installed.find(f=>f.projectId===p.id);
-   const query=new URLSearchParams({game_versions:JSON.stringify([game.id]),...(p.project_type==='mod'?{loaders:JSON.stringify([loader])}:{}),include_changelog:'false'});
+   const query=new URLSearchParams({game_versions:JSON.stringify([game.id]),...(p.project_type==='mod'?{loaders:JSON.stringify(instanceLoaders({loader}))}:{}),include_changelog:'false'});
    try{
     const rows=saved?[await api('version/'+saved.versionId)]:exact?[await api('version/'+exact)]:await api('project/'+p.id+'/version?'+query);
-    const v=newest(rows.filter(v=>v.project_id===p.id&&matchVersion(p,v,target,a)&&(!exact||v.id===exact)))[index];
+    const v=rows.filter(v=>v.project_id===p.id&&matchVersion(p,v,target,a)&&(!exact||v.id===exact)).sort((a,b)=>compareContentVersions(a,b,loader))[index];
     if(!v||saved?.enabled===false)return null;
     const f=feature||featureFor(p.slug),def=features[f];
     return {projectId:p.id,versionId:v.id,title:p.title,slug:p.slug,type:p.project_type,feature:f||'custom',group:def?.group||'visual',reason:def?.reason||'reasonRequired',must,icon:p.icon_url||null,installed:!!saved};

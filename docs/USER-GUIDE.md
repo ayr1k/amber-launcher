@@ -84,7 +84,7 @@ The calendar initially shows only its month and dates. Select a date for records
 
 ## Download connections (1.2.2)
 
-Settings → Downloads → Download connections offers **Automatic**, **Official sources first**, and **Mainland China optimized**. Automatic compares lightweight connection probes and caches the choice for ten minutes; it does not detect location or promise a speed increase. Official-first and Mainland-China modes use the other source on failure unless fallback is disabled under More download settings. Only explicitly supported Minecraft metadata, assets and Maven URLs are mirrored. Modrinth, Java providers and authentication retain their own sources; CurseForge is not integrated.
+Settings → Downloads → Download connections offers **Automatic**, **Official sources first**, and **Mainland China optimized**. Automatic compares lightweight connection probes and caches the choice for ten minutes; it does not detect location or promise a speed increase. Official-first and Mainland-China modes use the other source on failure unless fallback is disabled under More download settings. Only explicitly supported Minecraft metadata, assets and Maven URLs are mirrored. Modrinth, Java providers and authentication retain their own sources; CurseForge content is available alongside Modrinth.
 
 The task center shows source, transferred bytes, current speed and file details. Pause acts on active download stages, retaining the install lock and downloaded fragments. Resume continues the task; Cancel also works while paused. Preparation, extraction and installation finalization cannot be paused. Speed is an observation, not a guaranteed rate; totals can grow as later installation stages are discovered.
 
@@ -96,7 +96,7 @@ Mirror service and routing reference: [BMCLAPI by bangbang93](https://bmclapidoc
 
 ## Local modpacks, mod lists and backups (1.2.3)
 
-Choose Import modpack beside Import local mods under installed content, or from instance creation. Imports always create independent instances. MRPACK pins the author's game and loader versions (vanilla, Fabric, Forge or NeoForge); unsupported combinations are rejected. Optional client files are off by default, and server-only entries are excluded.
+Choose Import modpack beside Import local mods under installed content, or from instance creation. Imports always create independent instances. MRPACK pins the author's game and loader versions (vanilla, Quilt, Fabric, Forge or NeoForge); unsupported combinations are rejected. Optional client files are off by default, and server-only entries are excluded.
 
 Content ZIPs can include mods, config, resourcepacks, shaderpacks, saves, defaultconfigs, kubejs, scripts, options*.txt and servers.dat, optionally inside one wrapper/.minecraft root. Confirm the author's game and loader requirements when no standard manifest exists. Known loader mismatches, explicit game versions and duplicate mod IDs are checked, not every dependency or gameplay combination. The launcher does not execute archived installation scripts. Mods and game scripts can run when the game starts; use trusted sources.
 
@@ -106,7 +106,7 @@ MRPACK may need network downloads from trusted sources; files are verified befor
 
 Instance overview shows provenance, import date and skipped items; modpack.json stores the complete installed content list. Local packs do not automatically track whole-pack updates. Try individual mod updates in a trial copy first.
 
-A mod list records project identities, version hints and enabled states to find compatible mods again. It contains no JARs, configurations or worlds and cannot reproduce a whole pack. Use Mod migration to import/export lists. Backups restore selected instance data through Backup & recovery. CurseForge manifests are recognized but downloads are not integrated. Other launchers' full instance archives are unsupported here.
+A mod list records project identities, version hints and enabled states to find compatible mods again. It contains no JARs, configurations or worlds and cannot reproduce a whole pack. Use Mod migration to import/export lists. Backups restore selected instance data through Backup & recovery. CurseForge manifest ZIPs can be downloaded/imported with dependency previews; author download restrictions are respected. Other launchers' full instance archives are unsupported here.
 
 Java tools provide detection, path copying and explicitly configured instance references; this is not an exhaustive list of automatically resolved runtimes. Log tools select an instance and distinguish viewing logs from opening their folder. Pinning changes home shortcuts only.
 
@@ -148,7 +148,7 @@ The map predicts supported Java vanilla generation, not explored chunks. It incl
 
 **Gradient studio:** edit text on the left and colors/output on the right (stacked on narrow windows). Use the color square and hue bar, edit HEX colors, import HEX/CSS palettes or try random colors. Existing selection formatting, local gradients, undo/redo and saved works remain available. Choose one of seven output formats and copy or export. Plugin formats require the target plugin; preview colors do not imply support by every Minecraft version.
 
-**Import .minecraft:** in Local → Instances, choose Import .minecraft, then select the original launcher folder and a recognized profile. Review the game, loader, source game directory and content groups, name the new instance, and choose Copy and install. Supported Vanilla/Fabric/Forge/NeoForge profiles are rebuilt from trusted metadata; verified local libraries/assets are reused. Custom gameDir and inherited versions are recognized. Close the source game before copying. Accounts, credentials and arbitrary launch arguments are not imported. The original folder stays intact; this is an independent copy, not a linked/shared game directory. Unknown custom clients are reported as unsupported.
+**Import .minecraft:** in Local → Instances, choose Import .minecraft, then select the original launcher folder and a recognized profile. Review the game, loader, source game directory and content groups, name the new instance, and choose Copy and install. Supported Vanilla/Quilt/Fabric/Forge/NeoForge profiles are rebuilt from trusted metadata; verified local libraries/assets are reused. Custom gameDir and inherited versions are recognized. Close the source game before copying. Accounts, credentials and arbitrary launch arguments are not imported. The original folder stays intact; this is an independent copy, not a linked/shared game directory. Unknown custom clients are reported as unsupported.
 
 Cancellation or a later download failure preserves source files and may leave a partial new instance. For interrupted copying, import into a fresh instance before removing the partial copy. Prepare Java through the usual launch controls. Keep independent world backups; launcher import checks do not establish mod/game compatibility.
 
@@ -182,3 +182,9 @@ Crash dependency repair opens compatible search and installation previews for us
 Choose Modrinth or CurseForge in Content. Compatible files and dependencies are previewed before installation. Author restrictions are respected; CurseForge manifest ZIPs import into independent instances.
 
 Online → Players refreshes on entry and periodically while visible. Only the roster scrolls; the fixed footer adds a name to the whitelist without requiring the player to join first. Actions require a running server. Choose a row action and Execute; review console feedback. Avatars use public skins for known UUIDs, with placeholders on failure. Real Ping needs the optional Paper/Spigot/CraftBukkit bridge: stop, install, then restart. Vanilla/Fabric or no bridge shows Unavailable.
+
+## 1.4.2: Quilt and Sakura Frp
+
+Choose Quilt in guided/manual creation, loader setup, supported pack imports or server creation. Quilt mod catalogs and dependency resolution also accept Fabric builds, preferring native Quilt builds while preserving author-pinned dependency versions. This does not guarantee every Fabric mod or mod combination works on Quilt.
+
+Online → Connections offers EasyTier and Sakura Frp tabs. For Sakura, create a TCP tunnel on its dashboard targeting 127.0.0.1 and the server port. Download the official component, save your access token and this instance’s tunnel ID, start the server, then start the tunnel. The token is encrypted locally. The launcher obtains configuration through the official API with TLS verification and passes it to frpc without storing plaintext configuration. Wait for Connected before sharing the public address. Check connection tests the API, installed component and saved tunnel configuration; detailed logs remain available. Stop the tunnel before changing its saved configuration.

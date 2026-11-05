@@ -50,7 +50,7 @@ for name in ['AMBER','AmberE']:
     i=zipfile.ZipInfo(app+'Contents/Resources/app/'+rel);i.create_system=3;i.external_attr=(0o100000|mode)<<16;i.compress_type=zipfile.ZIP_DEFLATED;dst.writestr(i,data)
   write_sum(out)
  # A Debian package with explicit dependencies; no maintainer scripts or data migration.
- debname=name.lower();control=f'Package: {debname}\nVersion: {version}\nArchitecture: amd64\nMaintainer: AMBER contributors\nSection: games\nPriority: optional\nDepends: libgtk-3-0 | libgtk-3-0t64, libnss3, libasound2 | libasound2t64, libgbm1, libxss1, libxtst6, libsecret-1-0\nDescription: {name} Minecraft launcher (unsigned local test build)\n'
+ debname=name.lower();control=f'Package: {debname}\nVersion: {version}\nArchitecture: amd64\nMaintainer: AMBER contributors\nSection: games\nPriority: optional\nDepends: libgtk-3-0 | libgtk-3-0t64, libnss3, libasound2 | libasound2t64, libgbm1, libxss1, libxtst6, libsecret-1-0\nDescription: {name} Minecraft launcher (unsigned)\n'
  ctl=io.BytesIO();data=io.BytesIO()
  with tarfile.open(fileobj=ctl,mode='w:gz') as t:tar_entry(t,'./control',control.encode())
  with tarfile.open(fileobj=data,mode='w:gz') as t:

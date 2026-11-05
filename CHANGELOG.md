@@ -1,3 +1,9 @@
+## 1.4.2
+
+- Complete Quilt creation, installation, imports and server support. Mod discovery, version selection and dependencies accept Fabric builds, prefer native Quilt builds and preserve exact dependency pins. Add Sakura Frp connections with repaired config retrieval and Chinese readiness detection; fix installed player-bridge state and theme selection colors, and improve connection-page spacing.
+- Sakura configuration is fetched through the documented public API with TLS verification. Tokens remain encrypted at rest; the temporary file contains only a template and the config is passed in the child environment. Connection checks, cancellation, timeouts and cleanup are included.
+- Real Quilt 1.21.1 startup and a public Sakura tunnel query to Paper 26.3 passed. Matching Windows, macOS, Linux and experimental FreeBSD artifacts are released with source and checksums. Non-Windows device acceptance is pending; FreeBSD remains server/tools-only.
+
 ## 1.4.1
 
 - Add CurseForge browsing, compatible versions, dependency previews and pack imports; a dedicated online Players page with avatars, action menus and a fixed manual whitelist form; themed thin scrollbars throughout; and the local content-page blank-screen fix. All platforms now have matching 1.4.1 packages.

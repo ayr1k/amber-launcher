@@ -1,3 +1,4 @@
+import {compareContentVersions} from './compatibility.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import {readFile,writeFile,mkdir,copyFile,unlink,readdir,lstat,constants} from 'node:fs/promises';
 import {join} from 'node:path';
@@ -46,11 +47,11 @@ export async function recoverModUpdate(dir){
 export class ModUpdates{
   constructor(core,content){this.core=core;this.content=content;this.plans=new Map();}
   async scan(instanceId,prerelease=false){
-    const {dir}=await this.core.metadata(instanceId),manifest=await this.content.manifest(dir),rows=[];
+    const {dir,item}=await this.core.metadata(instanceId),manifest=await this.content.manifest(dir),rows=[];
     for(const f of manifest.files.filter(f=>f.type==='mod'&&f.projectId&&f.versionId)){
       const row={projectId:f.projectId,title:f.title,current:f.version,locked:!!f.updateLocked,enabled:f.enabled!==false};
       try{await checked(dir,f);const current=await this.content.api('version/'+f.versionId);const versions=await this.content.versions(instanceId,f.projectId);
-        const candidate=versions.filter(v=>v.id!==f.versionId&&(prerelease||v.version_type==='release')&&Date.parse(v.date_published)>Date.parse(current.date_published)).sort((a,b)=>Date.parse(b.date_published)-Date.parse(a.date_published))[0];
+        const candidate=versions.filter(v=>v.id!==f.versionId&&(prerelease||v.version_type==='release')&&Date.parse(v.date_published)>Date.parse(current.date_published)).sort((a,b)=>item.loader==='quilt'?compareContentVersions(a,b,item.loader):Date.parse(b.date_published)-Date.parse(a.date_published))[0];
         if(candidate)Object.assign(row,{versionId:candidate.id,version:candidate.version_number,channel:candidate.version_type});
       }catch(e){row.error=e.message;}rows.push(row);
     }return {rows,stamp:contentStamp(manifest)};

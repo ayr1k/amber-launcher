@@ -3,7 +3,7 @@
 <p align="center"><strong>你的世界，由你掌握。</strong></p>
 
 <p align="center">
-  <a href="https://github.com/ayr1k/amber-launcher/releases/tag/v1.4.1"><img src="https://img.shields.io/badge/release-1.4.1-e9b53d?style=flat-square" alt="Release" /></a>
+  <a href="https://github.com/ayr1k/amber-launcher/releases/tag/v1.4.2"><img src="https://img.shields.io/badge/release-1.4.2-e9b53d?style=flat-square" alt="Release" /></a>
   <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MPL--2.0-527b68?style=flat-square" alt="License" /></a>
   <a href="https://github.com/ayr1k/amber-launcher/actions/workflows/windows.yml"><img src="https://github.com/ayr1k/amber-launcher/actions/workflows/windows.yml/badge.svg" alt="Build" /></a>
   <a href="https://ayr1k.github.io/"><img src="https://img.shields.io/badge/website-AMBER-527b68?style=flat-square" alt="Website" /></a>
@@ -23,24 +23,24 @@
   </tr>
 </table>
 
-截图来自公开的 AMBER 1.2.1 主题展示，使用演示数据；主题同样适用于 AmberE。点击可查看大图，当前功能与平台范围以 1.4.1 说明为准。
+截图来自公开的 AMBER 1.2.1 主题展示，使用演示数据；主题同样适用于 AmberE。点击可查看大图，当前功能与平台范围以 1.4.2 说明为准。
 
 ## 项目简介
 
 AMBER 是独立的 Minecraft Java 版启动器，将实例隔离、游戏安装、模组管理、恢复和启动设置集中在同一界面。项目自有源码采用 MPL-2.0。
 
-## 1.4.1
+## 1.4.2
 
-接入 CurseForge 内容下载、兼容版本、依赖预览和整合包导入；联机模式新增独立玩家页、头像、操作菜单及固定手动白名单入口；统一主题细滚动条，并修复本地内容下载白屏。所有平台同步提供 1.4.1。
+补齐 Quilt 手动/引导创建、安装、导入与服务端支持；模组搜索、版本选择和依赖解析支持 Fabric 回退，优先 Quilt 原生版本并保留精确依赖要求。新增 Sakura Frp 连接，修复配置获取和中文连接状态识别；修正玩家增强组件安装状态及主题选中色，并调整联机说明区间距。
 
-Windows/macOS/Linux/FreeBSD 均提供 1.4.1；macOS/Linux 待对应真机验收，FreeBSD 仅实验性服务端/工具。
+Windows/macOS/Linux/FreeBSD 均提供 1.4.2；macOS/Linux 待对应真机验收，FreeBSD 仅实验性服务端/工具。
 
-提供 Windows x64 正式安装包及其他平台下载。[下载安装包、源码和校验文件](https://github.com/ayr1k/amber-launcher/releases/tag/v1.4.1)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
+提供 Windows x64 正式安装包及其他平台下载。[下载安装包、源码和校验文件](https://github.com/ayr1k/amber-launcher/releases/tag/v1.4.2)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
 
 - 一体化标题栏、独立窗口边框设置、窗口位置恢复与重新组织的隐私设置。
 
 - 原生简体中文与英文，即时切换，支持导入纯文本语言包。
-- 原版、Fabric、Forge、NeoForge、LiteLoader 和 OptiFine 安装及显式兼容检查，实际支持取决于游戏版本和官方文件。
+- 原版、Quilt、Fabric、Forge、NeoForge、LiteLoader 和 OptiFine 安装及显式兼容检查，实际支持取决于游戏版本和官方文件。
 - Modrinth 兼容搜索、分类与排序，依赖选择、模组更新、版本锁定及批量管理。
 - 本地模组导入、跨版本清单迁移、内容操作恢复、实例备份与恢复、回收站与受保护的彻底删除。
 - 收藏、排序、最近启动、实例检查、安装任务跨重启继续和数据位置迁移。

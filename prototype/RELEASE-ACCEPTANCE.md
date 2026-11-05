@@ -1,3 +1,13 @@
+# 1.4.2 release verification
+
+The accepted implementation and final connection-page spacing are built for the public release channel. Both editions publish matching Windows x64, macOS Intel/Apple Silicon, Linux x64 and experimental FreeBSD artifacts, complete source and SHA-256. Packages remain unsigned; macOS is not notarized.
+
+Quilt 1.21.1 reached server-ready and stopped normally. Real Mod Menu 20.0.3 metadata for Minecraft 26.2 resolved Fabric API and Text Placeholder API without blockers. Native Quilt preference, Fabric fallback and exact dependency pins are covered by regression tests for client/server catalogs and CurseForge.
+
+Sakura was tested with the user's saved account and tunnel: the public configuration API returned successfully, frpc connected, and the public tunnel returned a real Paper 26.3 Minecraft status response. The temporary test component stopped normally; server/tunnel settings were unchanged. Configuration stays in the child environment, not a plaintext file. Tests cover Chinese and split UTF-8 logs, disconnect/reconnect, startup cancellation, timeouts and cleanup. Windows packaged startup and bilingual/theme UI checks passed. The 445-check regression run had one temporary Windows file-lock failure; its full 11-test file passed on retry.
+
+Native macOS/Linux/FreeBSD execution is not verified on target hardware. FreeBSD remains experimental server/tools-only. This is not exhaustive gameplay, mod compatibility or two-computer EasyTier/NAT acceptance. Real player Ping and full player operations retain the prior acceptance limits.
+
 # 1.4.1 release verification
 
 Publish the user-accepted repaired Windows installers unchanged, with matching macOS x64/arm64, Linux x64 and experimental FreeBSD packages, full source and SHA-256 checksums. Embedded local-test labels/documents are retained; these release notes supersede their no-publication wording. Signing remains deferred.

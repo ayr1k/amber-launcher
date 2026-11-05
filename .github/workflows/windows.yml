@@ -41,17 +41,17 @@ jobs:
       - run: pnpm test:sites
       - run: pnpm release:check
       - run: pnpm desktop:smoke
-      - run: pnpm package:all
+      - run: pnpm package:all --public
         env:
           AMBER_CURSEFORGE_API_KEY: ${{ secrets.AMBER_CURSEFORGE_API_KEY }}
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: amber-all-platforms
           path: |
-            prototype/releases/1.4.1/*-Setup-x64.exe
-            prototype/releases/1.4.1/*.zip
-            prototype/releases/1.4.1/*.deb
-            prototype/releases/1.4.1/*.tar.gz
-            prototype/releases/1.4.1/*.sha256
+            prototype/releases/1.4.2/*-Setup-x64.exe
+            prototype/releases/1.4.2/*.zip
+            prototype/releases/1.4.2/*.deb
+            prototype/releases/1.4.2/*.tar.gz
+            prototype/releases/1.4.2/*.sha256
           retention-days: 7
           if-no-files-found: error

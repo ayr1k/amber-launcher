@@ -101,3 +101,6 @@
 .app[data-theme-enabled=true] :is(.primary-nav button>span,.select-trigger>span:first-child>span:not(.instance-icon),.select-option>span:not(.instance-icon):not([aria-hidden])){translate:0 var(--theme-text-offset,0px)}
 .app[data-theme-enabled=true] input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]):not([type=hidden]):not([type=button]):not([type=submit]):not([type=reset]):not([type=image]){padding-top:max(0px,calc(var(--theme-text-offset,0px)*2));padding-bottom:max(0px,calc(var(--theme-text-offset,0px)*-2))}
 .theme-recovery,.window-controls{--theme-text-offset:0px!important}
+
+/* Derive legacy selection colors from the active theme, including old theme packages. */
+.app[data-theme-enabled=true]{--selected:color-mix(in srgb,var(--green) 18%,var(--surface));}

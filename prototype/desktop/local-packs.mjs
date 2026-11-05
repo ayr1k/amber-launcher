@@ -1,3 +1,4 @@
+import {instanceLoaders} from './compatibility.mjs';
 // SPDX-License-Identifier: MPL-2.0
 // Local archives never supply executable launcher settings or filesystem destinations.
 import {createRequire} from 'node:module';
@@ -58,8 +59,8 @@ export function parseLocalArchive(bytes,filename='pack.zip'){
  if(relative.includes('modrinth.index.json')){
   if(prefix)throw problem('MRPACK index must be at archive root','MRPACK 清单必须位于压缩包根目录，请重新导出');
   const parsed=parsePack(bytes,'pack-check',{includeOptional:true});const deps=parsed.index.dependencies,keys=Object.keys(deps).filter(k=>k!=='minecraft');
-  if(keys.length>1||keys.some(k=>!['fabric-loader','forge','neoforge'].includes(k)))throw problem('Unsupported loader combination','此整合包的加载器组合暂不支持，未开始安装');
-  const loader=keys[0]==='fabric-loader'?'fabric':keys[0]||'vanilla',loaderVersion=keys.length?deps[keys[0]]:'';
+  if(keys.length>1||keys.some(k=>!['quilt-loader','fabric-loader','forge','neoforge'].includes(k)))throw problem('Unsupported loader combination','此整合包的加载器组合暂不支持，未开始安装');
+  const loader=keys[0]==='quilt-loader'?'quilt':keys[0]==='fabric-loader'?'fabric':keys[0]||'vanilla',loaderVersion=keys.length?deps[keys[0]]:'';
   if(typeof deps.minecraft!=='string'||deps.minecraft.length>100||typeof loaderVersion!=='string'||loaderVersion.length>100)throw problem('Invalid version information','整合包版本信息无效');
   return {kind:'mrpack',title:String(parsed.index.name||basename(filename,'.mrpack')).slice(0,60),packVersion:String(parsed.index.versionId||'').slice(0,100),game:deps.minecraft,loader,version:loader==='forge'?deps.minecraft+'-'+loaderVersion:loaderVersion,files:parsed.files,warnings:parsed.warnings};
  }
@@ -100,10 +101,10 @@ export class LocalPacks{
   if(!input||typeof input.name!=='string'||!input.name.trim()||input.name.length>60||!Array.isArray(input.optional)||input.optional.length>10000||new Set(input.optional).size!==input.optional.length)throw problem('Invalid import settings','导入设置无效');
   if(input.optional.some(p=>!plan.files.some(f=>f.optional&&f.relative===p)))throw problem('Invalid optional file selection','可选文件选择无效');
   const target=plan.kind==='mrpack'?plan:input;
-  if(typeof target.game!=='string'||typeof target.version!=='string'||!['vanilla','fabric','forge','neoforge'].includes(target.loader))throw problem('Choose game and loader versions','请选择游戏与加载器版本');
+  if(typeof target.game!=='string'||typeof target.version!=='string'||!['vanilla','quilt','fabric','forge','neoforge'].includes(target.loader))throw problem('Choose game and loader versions','请选择游戏与加载器版本');
   if(target.loader==='vanilla'&&plan.files.some(f=>f.relative.startsWith('mods/')))throw problem('Mods require a loader','此包包含模组，请选择相应加载器');
   const selected=plan.files.filter(f=>!f.optional||input.optional.includes(f.relative));
-  const ids=new Set();for(const f of selected){const m=f.metadata;if(!m)continue;if(m.loaders.length&&!m.loaders.includes(target.loader))throw problem('Mod loader mismatch: '+f.relative,'模组声明的加载器与选择不符：'+f.relative);if(m.games.length&&m.games.every(g=>/^\d+(\.\d+){1,2}$/.test(g))&&!m.games.includes(target.game))throw problem('Minecraft version mismatch: '+f.relative,'模组声明的游戏版本与选择不符：'+f.relative);for(const id of m.modIds){if(ids.has(id))throw problem('Duplicate mod ID: '+id,'包内存在重复模组标识：'+id);ids.add(id);}}
+  const ids=new Set();for(const f of selected){const m=f.metadata;if(!m)continue;if(m.loaders.length&&!instanceLoaders(target).some(l=>m.loaders.includes(l)))throw problem('Mod loader mismatch: '+f.relative,'模组声明的加载器与选择不符：'+f.relative);if(m.games.length&&m.games.every(g=>/^\d+(\.\d+){1,2}$/.test(g))&&!m.games.includes(target.game))throw problem('Minecraft version mismatch: '+f.relative,'模组声明的游戏版本与选择不符：'+f.relative);for(const id of m.modIds){if(ids.has(id))throw problem('Duplicate mod ID: '+id,'包内存在重复模组标识：'+id);ids.add(id);}}
   await requireSpace(this.core.root,plan.bytes.length+selected.reduce((n,f)=>n+f.size*2,0)+1073741824);
   return this.workflows.create({requestKey:input.requestKey,name:input.name.trim(),game:target.game,loader:target.loader,version:target.version,threads:this.core.downloadThreads||8},null,null,null,null,{plan,selected:input.optional});
  }

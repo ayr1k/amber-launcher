@@ -1,3 +1,4 @@
+import {instanceLoaders,compareContentVersions} from './compatibility.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import {g} from './guided-text.mjs';
 import {GuidedPreferences} from './guided-preferences.mjs';
@@ -69,7 +70,7 @@ export class GuidedCreation {
     virtual.compatible=(v,item,type)=>matchVersion({project_type:type,...(projects.get(v.project_id)||{})},v,target,a);
     const projects=new Map();const originalApi=api;
     virtual.api=async path=>{const v=await originalApi(path);if(path.startsWith('project/')&&!path.includes('/version'))projects.set(v.id,v);return v;};
-    virtual.versions=async(_id,pid)=>{const p=await virtual.api('project/'+pid);return (pinned.has(pid)?[await api('version/'+pinned.get(pid))]:await api('project/'+pid+'/version?'+new URLSearchParams({game_versions:JSON.stringify([target.game]),...(p.project_type==='mod'?{loaders:JSON.stringify([target.loader])}:{}),include_changelog:'false'}))).filter(v=>matchVersion(p,v,target,a)).sort((x,y)=>Date.parse(y.date_published)-Date.parse(x.date_published));};
+    virtual.versions=async(_id,pid)=>{const p=await virtual.api('project/'+pid);return (pinned.has(pid)?[await api('version/'+pinned.get(pid))]:await api('project/'+pid+'/version?'+new URLSearchParams({game_versions:JSON.stringify([target.game]),...(p.project_type==='mod'?{loaders:JSON.stringify(instanceLoaders(target))}:{}),include_changelog:'false'}))).filter(v=>matchVersion(p,v,target,a)).sort((x,y)=>compareContentVersions(x,y,target.loader));};
     const plan=await virtual.preview('guided',roots.map(r=>r.versionId),optional,excluded,true);
     plan.files=plan.files.map(f=>({...f,slug:projects.get(f.projectId)?.slug||''}));
     // The shader API lists engine support; never assume a ZIP is usable with any loader.
@@ -175,7 +176,7 @@ export class GuidedCreation {
   }
   validateSaved(p){
     if(p?.schema!==1||![RULE_VERSION,'beta1.9-r1'].includes(p.ruleVersion)||!p.target||!Array.isArray(p.files)||p.files.length>100||!Array.isArray(p.roots)||p.roots.length>32)failure('invalidPlan');
-    const a=answers(p.answers);if((a.serverVersion&&a.serverVersion!==p.target.game)||(a.serverLoader!=='unknown'&&a.serverLoader!==p.target.loader)||(a.serverLoaderVersion&&p.target.version!==a.serverLoaderVersion&&p.target.version!==p.target.game+'-'+a.serverLoaderVersion))failure('changedTarget');if(!['vanilla','fabric','forge','neoforge'].includes(p.target.loader)||typeof p.target.game!=='string'||!Number.isInteger(p.memory)||p.memory<1||p.memory>32)failure('invalidPlan');
+    const a=answers(p.answers);if((a.serverVersion&&a.serverVersion!==p.target.game)||(a.serverLoader!=='unknown'&&a.serverLoader!==p.target.loader)||(a.serverLoaderVersion&&p.target.version!==a.serverLoaderVersion&&p.target.version!==p.target.game+'-'+a.serverLoaderVersion))failure('changedTarget');if(!['vanilla','quilt','fabric','forge','neoforge'].includes(p.target.loader)||typeof p.target.game!=='string'||!Number.isInteger(p.memory)||p.memory<1||p.memory>32)failure('invalidPlan');
     for(const f of p.files){if(!validId(f.projectId)||!validId(f.versionId)||!['mod','shader','resourcepack'].includes(f.type)||!Number.isSafeInteger(f.size)||f.size<1||!/^[a-f0-9]{40}$/.test(f.hash)||!Array.isArray(f.dependencies)||!Array.isArray(f.ignoredRequired))failure('invalidPlan');safePath(this.core.root,f.relative);safeURL(f.url);}
     for(const r of p.roots)if(!validId(r.versionId)||!p.files.some(f=>f.versionId===r.versionId))failure('invalidPlan');
     return p;

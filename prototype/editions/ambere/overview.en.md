@@ -3,7 +3,7 @@
 <p align="center"><strong>Offline and third-party identities. Your own adventure.</strong></p>
 
 <p align="center">
-  <a href="https://github.com/ayr1k/AmberE/releases/tag/v1.4.1"><img src="https://img.shields.io/badge/release-1.4.1-e9b53d?style=flat-square" alt="Release" /></a>
+  <a href="https://github.com/ayr1k/AmberE/releases/tag/v1.4.2"><img src="https://img.shields.io/badge/release-1.4.2-e9b53d?style=flat-square" alt="Release" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MPL--2.0-527b68?style=flat-square" alt="License" /></a>
   <a href="https://github.com/ayr1k/AmberE/actions/workflows/windows.yml"><img src="https://github.com/ayr1k/AmberE/actions/workflows/windows.yml/badge.svg" alt="Build" /></a>
   <a href="https://ayr1k.github.io/"><img src="https://img.shields.io/badge/website-AMBER-527b68?style=flat-square" alt="Website" /></a>
@@ -23,19 +23,19 @@ An independent Minecraft: Java Edition launcher bringing instances, content, the
   </tr>
 </table>
 
-Public AMBER 1.2.1 theme previews using demonstration data; these themes also work with AmberE. Click to enlarge. See the 1.4.1 notes below for current features and platform availability.
+Public AMBER 1.2.1 theme previews using demonstration data; these themes also work with AmberE. Click to enlarge. See the 1.4.2 notes below for current features and platform availability.
 
 ## Overview
 
 AmberE is an independent distribution for Minecraft: Java Edition, providing offline and third-party accounts. It is maintained from the shared AMBER codebase under MPL-2.0, with its own application identity, data directory and update repository. It does not offer Microsoft sign-in or include a Microsoft application Client ID.
 
-## 1.4.1
+## 1.4.2
 
-Add CurseForge browsing, compatible versions, dependency previews and pack imports; a dedicated online Players page with avatars, action menus and a fixed manual whitelist form; themed thin scrollbars throughout; and the local content-page blank-screen fix. All platforms now have matching 1.4.1 packages.
+Complete Quilt creation, installation, imports and server support. Mod discovery, version selection and dependencies accept Fabric builds, prefer native Quilt builds and preserve exact dependency pins. Add Sakura Frp connections with repaired config retrieval and Chinese readiness detection; fix installed player-bridge state and theme selection colors, and improve connection-page spacing.
 
-Windows/macOS/Linux/FreeBSD packages share version 1.4.1. Native macOS/Linux acceptance is pending; FreeBSD is experimental server/tools-only.
+Windows/macOS/Linux/FreeBSD packages share version 1.4.2. Native macOS/Linux acceptance is pending; FreeBSD is experimental server/tools-only.
 
-Windows x64 release with additional platform downloads. [Download the installer, source and checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.4.1). Includes instance management, content recommendations, mod updates, backups and recovery.
+Windows x64 release with additional platform downloads. [Download the installer, source and checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.4.2). Includes instance management, content recommendations, mod updates, backups and recovery.
 
 - Offline identities and HTTPS third-party authentication, with system credential protection for saved credentials.
 - Isolated game instances; Java and loader installation; mod search, dependencies, updates and bulk management.

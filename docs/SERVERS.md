@@ -1,10 +1,10 @@
-# Servers and online play — 1.3.2
+# Servers and online play — 1.4.2
 
 1.3.2 feedback revision: local and online modes share navigation/icons, software settings/About/tools, page transitions and reduced-motion rules. Server creation moves to Instances after the first instance; settings and installed content are detail tabs. The catalog shares filters, project icons and compatible-version controls, with automatic required dependencies. Server tools read server configurations/logs; screenshots remain shared local-game screenshots. EULA alignment is corrected.
 
 The title-bar Local / Online switch changes the workspace only. Client and server instances are separate. Servers, downloads and EasyTier continue while you switch modes. The Online marker reports activity or failures; a running server is not proof of remote connectivity.
 
-Create an instance with a core, Minecraft version and unused port. Vanilla, stable Paper and Fabric use official downloads and a per-instance Java selection. Fabric bootstraps additional dependencies on its first run. For Spigot/CraftBukkit, import a trusted JAR built using official BuildTools and select Java. Read and accept the Minecraft EULA before starting.
+Create an instance with a core, Minecraft version and unused port. Vanilla, stable Paper, Quilt and Fabric use official downloads and a per-instance Java selection. Fabric bootstraps additional dependencies on its first run. For Spigot/CraftBukkit, import a trusted JAR built using official BuildTools and select Java. Read and accept the Minecraft EULA before starting.
 
 Use the console to send one command at a time. Save and stop sends `stop`; force termination is a separate action and may lose unsaved world changes. CPU is measured per process (100% = one logical core); working-set memory is not JVM heap size. Missing readings display “—”; TPS/MSPT are not inferred. The UI retains about 48 KB of output and the launcher console log is capped near 8 MB per run. The server core controls its own logs.
 
@@ -16,10 +16,16 @@ Modrinth content is filtered by game version and loader, with required dependenc
 
 LAN players use the address shown in the instance overview. Allow the server through Windows Firewall as needed; the app does not edit firewall rules automatically.
 
-Optional remote rooms download official EasyTier 2.6.4 Windows x64 (~33 MB) on demand. Archive and executable hashes are checked. Both participants need the component. The host starts a server and shares the invitation; the guest connects Minecraft to the displayed loopback endpoint. No-TUN mode forwards the game TCP port without creating an adapter or changing DNS. It does not disable Minecraft identity authentication.
+Optional remote rooms download the platform-specific official EasyTier 2.6.4 component on demand (Windows x64: ~33 MB). Archive and executable hashes are checked. Both participants need the component. The host starts a server and shares the invitation; the guest connects Minecraft to the displayed loopback endpoint. No-TUN mode forwards the game TCP port without creating an adapter or changing DNS. It does not disable Minecraft identity authentication.
 
 Invitations contain a shared room secret, expire after 24 hours, and should only be shared with trusted people. Recreate a room to replace its secret. One room connection is maintained per launcher, independently of the number of running servers. Public or self-hosted peers provide discovery and possible relay; no availability or NAT traversal guarantee is offered. Third-party peers see connection addresses and traffic metadata. A running component is not proof of connectivity. EasyTier is Apache-2.0; see [source and license](https://github.com/EasyTier/EasyTier/tree/v2.6.4).
 
 Closing the app offers minimize-and-continue or stop-and-quit when a server or room is active. An unexpected launcher exit can leave a server detached; stop that original process before modifying the instance.
 
 Validation covers isolated synthetic process lifecycle, settings/recovery, themes, real official core/Java downloads and real EasyTier TCP forwarding through a local multi-process relay. It does not constitute live Minecraft gameplay, plugin compatibility or two-computer cross-network acceptance. Direct/relay behavior, reconnects and network changes still need two-computer testing. Version 1.3.2 is released with the documented remote-room testing limitations.
+
+## Quilt and Sakura Frp — 1.4.2
+
+Quilt server creation downloads official loader libraries and uses isolated server storage. Quilt catalogs include Fabric fallback with native Quilt preference and exact dependency pins. Online → Connections switches between EasyTier and Sakura Frp. Sakura needs an existing TCP tunnel targeting the current server’s loopback port and a saved access token. Start the server, then the tunnel, and wait for Connected before sharing the public address. Check connection validates the public API, component and configuration. Config is fetched over verified HTTPS and passed in memory to frpc; no plaintext config is stored. Stop-and-quit also stops the connection.
+
+A real Sakura public tunnel returned a Paper 26.3 Minecraft status response and stopped normally. This validates the tested connection, not every route, mod/plugin or non-Windows runtime.

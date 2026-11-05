@@ -1,0 +1,44 @@
+{
+  "win32-x64": {
+    "version": "0.51.0-sakura-15.1",
+    "url": "https://nya.globalslb.net/natfrp/client/frpc/0.51.0-sakura-15.1/frpc_windows_amd64.exe",
+    "size": 14209024,
+    "hash": "64234a5178af28df1a91d416d5cd26012447eb74d0856d06febfb1c8606b0b5f"
+  },
+  "win32-arm64": {
+    "version": "0.51.0-sakura-15.1",
+    "url": "https://nya.globalslb.net/natfrp/client/frpc/0.51.0-sakura-15.1/frpc_windows_arm64.exe",
+    "size": 13335040,
+    "hash": "b98a881477f203c968e24935a28f54b5871ddf6139ceb548f9231f36feb5976a"
+  },
+  "darwin-x64": {
+    "version": "0.51.0-sakura-15.1",
+    "url": "https://nya.globalslb.net/natfrp/client/frpc/0.51.0-sakura-15.1/frpc_darwin_amd64",
+    "size": 19069136,
+    "hash": "8c517c0c35435fbfddb88d25404fda72911a33b282a828cec8fb249aed02f650"
+  },
+  "darwin-arm64": {
+    "version": "0.51.0-sakura-15.1",
+    "url": "https://nya.globalslb.net/natfrp/client/frpc/0.51.0-sakura-15.1/frpc_darwin_arm64",
+    "size": 17917586,
+    "hash": "42b34d535031b77995df97752e07bf00fc68d701ba6cb20adb62c2ceb4794cfb"
+  },
+  "linux-x64": {
+    "version": "0.51.0-sakura-15.1",
+    "url": "https://nya.globalslb.net/natfrp/client/frpc/0.51.0-sakura-15.1/frpc_linux_amd64",
+    "size": 7051212,
+    "hash": "f4d07fca61c9a048e17cb171597f49171ce55b1a8bc2e0ab4e2b4d86c444f402"
+  },
+  "linux-arm64": {
+    "version": "0.51.0-sakura-15.1",
+    "url": "https://nya.globalslb.net/natfrp/client/frpc/0.51.0-sakura-15.1/frpc_linux_arm64",
+    "size": 6267348,
+    "hash": "1d93ec62b4fc46af3fc082b3f794bf09b5e1cbb41524ee5adb967b64236d9de0"
+  },
+  "freebsd-x64": {
+    "version": "0.51.0-sakura-15.1",
+    "url": "https://nya.globalslb.net/natfrp/client/frpc/0.51.0-sakura-15.1/frpc_freebsd_amd64",
+    "size": 18514054,
+    "hash": "690499d892ddb22c0512eccf437ce2746bd52606b38d32262a473313e3ed1574"
+  }
+}

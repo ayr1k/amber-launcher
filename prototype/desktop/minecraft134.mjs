@@ -15,7 +15,7 @@ export async function resolveProfile(root,id){
  const chain=[],seen=new Set();let next=id;
  while(next){if(!identifier(next)||seen.has(next)||chain.length>=16)throw Error('版本继承无效 / Invalid version inheritance');seen.add(next);const m=await json(safePath(root,`versions/${next}/${next}.json`));if(m.id!==next)throw Error('版本标识不匹配 / Version ID mismatch');chain.push(m);next=m.inheritsFrom;}
  const base=chain.at(-1),libraries=chain.flatMap(m=>m.libraries||[]).map(l=>l.name||'');let loader='vanilla',version='';
- for(const [prefix,type] of [['net.fabricmc:fabric-loader:','fabric'],['net.minecraftforge:forge:','forge'],['net.neoforged:neoforge:','neoforge']]){const entry=libraries.find(n=>n.startsWith(prefix));if(entry){if(loader!=='vanilla')throw Error('多加载器配置暂不支持 / Multiple loader profiles are unsupported');loader=type;version=entry.slice(prefix.length).split(':')[0];}}
+ for(const [prefix,type] of [['org.quiltmc:quilt-loader:','quilt'],['net.fabricmc:fabric-loader:','fabric'],['net.minecraftforge:forge:','forge'],['net.neoforged:neoforge:','neoforge']]){const entry=libraries.find(n=>n.startsWith(prefix));if(entry){if(loader!=='vanilla')throw Error('多加载器配置暂不支持 / Multiple loader profiles are unsupported');loader=type;version=entry.slice(prefix.length).split(':')[0];}}
  if(chain.length>1&&loader==='vanilla'||chain.some(m=>m.mainClass&&!['net.minecraft.client.main.Main','net.minecraft.launchwrapper.Launch'].includes(m.mainClass))&&loader==='vanilla')throw Error('无法识别此自定义客户端，请保留原启动器 / Unrecognized custom client; use its original launcher');
  if(!identifier(base.id)||!base.downloads?.client)throw Error('缺少原版版本信息 / Missing vanilla version metadata');
  return {game:base.id,loader,version,chain:chain.map(m=>m.id)};

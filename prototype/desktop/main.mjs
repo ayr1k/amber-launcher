@@ -1,3 +1,4 @@
+import {Sakura142} from './sakura142.mjs';
 import {ServerManagement140} from './server-management140.mjs';
 import {Environment140} from './environment140.mjs';
 import {PackUpgrade140} from './pack-upgrade140.mjs';
@@ -148,7 +149,7 @@ app.whenReady().then(async () => {
   handle('amber:java-prepare', (id) => core.prepareJava(id));
   handle('amber:java-select', (id, path) => core.selectJava(id, path));
   handle('amber:java-browse', async () => {const result = await dialog.showOpenDialog(window, { title: translateMessage('选择 Java 可执行文件'), properties: ['openFile'], ...(process.platform==='win32'?{filters:[{name:'Java',extensions:['exe']}]}:{}) });return result.canceled ? null : core.addJava(result.filePaths[0]);});
-  const servers=await new Servers(core).init(),rooms=new Rooms(core,servers);
+  const servers=await new Servers(core).init(),rooms=new Rooms(core,servers),sakura=new Sakura142(core,servers,credentialCodec(safeStorage));
   const serverEditor=new InstanceEditor({instancePath:id=>servers.dir(id)},{directories:['config','defaultconfigs','plugins','kubejs','scripts'],files:['server.properties','bukkit.yml','spigot.yml','paper.yml','permissions.yml']});
   const resourceTimer=setInterval(()=>servers.sample(),3000);resourceTimer.unref();
   handle('amber:server',async(action,...args)=>{
@@ -162,6 +163,14 @@ app.whenReady().then(async () => {
    if(action==='open'){const dir=await servers.dir(args[0]);return shell.openPath(dir);}
    if(action==='pickJava'){const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Java',extensions:['exe']}]});return r.canceled?null:(await core.addJava(r.filePaths[0]));}
    if(action==='importJar'||action==='importContent'){const r=await dialog.showOpenDialog(window,{properties:action==='importContent'?['openFile','multiSelections']:['openFile'],filters:[{name:'Java archive',extensions:['jar']}]});if(r.canceled)return null;return action==='importJar'?servers.importJar(args[0],r.filePaths[0]):servers.importContent(args[0],r.filePaths);}
+   if(action==='sakuraState')return sakura.state(...args);
+   if(action==='sakuraDiagnose')return sakura.diagnose(...args);
+   if(action==='sakuraSave')return sakura.save(...args);
+   if(action==='sakuraInstall')return sakura.install();
+   if(action==='sakuraStart')return sakura.start(...args);
+   if(action==='sakuraStop')return sakura.stop();
+   if(action==='sakuraWebsite')return shell.openExternal('https://www.natfrp.com/tunnel/');
+   if(action==='sakuraCopy'){const run=(await sakura.state()).run,address=run?.address;if(!address||!run.connected||!run.targetRunning)throw Error('隧道尚未连通 / Tunnel is not connected');clipboard.writeText(address);return true;}
    if(action==='networkInstall')return rooms.install();
    if(action==='host')return rooms.host(...args);
    if(action==='join')return rooms.join(...args);
@@ -300,10 +309,10 @@ app.whenReady().then(async () => {
   handle('amber:app-update-download', () => appUpdates.download());
   handle('amber:app-update-cancel', () => appUpdates.cancel());
   handle('amber:app-update-install', async () => {
-    if (servers.active || rooms.active || launching || storageBusy || workflows.active || core.jobs.some((j) => j.state === 'running')) throw Error('请等待游戏准备、安装或数据迁移结束后再升级。');
+    if (servers.active || (rooms.active||sakura.active) || launching || storageBusy || workflows.active || core.jobs.some((j) => j.state === 'running')) throw Error('请等待游戏准备、安装或数据迁移结束后再升级。');
     upgradeBusy = true;
     try {for (const item of await core.listInstances()) await core.requireStopped(await core.instancePath(item.id));
-      if (servers.active || rooms.active || launching || storageBusy || workflows.active || core.jobs.some((j) => j.state === 'running')) throw Error('有新任务开始，请等待结束后再升级。');
+      if (servers.active || (rooms.active||sakura.active) || launching || storageBusy || workflows.active || core.jobs.some((j) => j.state === 'running')) throw Error('有新任务开始，请等待结束后再升级。');
       const file = await appUpdates.installer();const answer = await dialog.showMessageBox(window, { type: 'question', title: translateMessage('安装 AMBER 更新'), message: translateMessage('安装包已校验，是否退出 AMBER 并打开安装程序？'), detail: translateMessage('将保留游戏数据，并先备份账号和设置。请在安装向导中确认安装位置。'), buttons: [translateMessage('取消'), translateMessage('退出并安装')], defaultId: 0, cancelId: 0, noLink: true });if (answer.response !== 1) return false;
       await backupUpgradeConfig(app.getPath('userData'), core.root, app.getVersion());
       if(process.platform!=='win32'){const error=await shell.openPath(file);if(error)throw Error(error);}else await new Promise((resolve, reject) => {const child = spawn(file, [], { detached: true, stdio: 'ignore', windowsHide: false });child.once('error', reject);child.once('spawn', () => {child.unref();resolve();});});
@@ -320,7 +329,7 @@ app.whenReady().then(async () => {
   handle('amber:storage-info', async () => {const r = await storage.get(),disk = await statfs(core.root);return { path: core.root, freeBytes: disk.bavail * disk.bsize, onboarded: r.onboarded || !smoke && (await core.listInstances()).length > 0 };});
   handle('amber:onboarding-complete', () => storage.complete());
   handle('amber:storage-pick', async () => {const r = await dialog.showOpenDialog(window, { title: translateMessage('选择新的空数据文件夹'), properties: ['openDirectory', 'createDirectory'] });if (r.canceled) return null;const token = randomUUID();selections.set(token, { kind: 'storage', value: r.filePaths[0] });return { token, path: r.filePaths[0] };});
-  handle('amber:storage-move', async (token) => {if(servers.active||rooms.active)throw Error('Stop servers and leave the room before moving data / 迁移数据前请停止服务器并退出房间');const target = selection(token, 'storage');if (!target) throw Error('请先选择目标目录');return workflows.exclusive(async () => {for (const item of await core.listInstances()) await core.requireStopped(await core.instancePath(item.id));storageBusy = true;core.operation = { title: '复制并校验数据目录', state: 'running' };try {news.cancel();survey.cancel();await Promise.allSettled([journalObservation,journal.queue,homePrefs.queue,news.pending,survey.done,...news.details.values()].filter(Boolean));await storage.migrate(core, target);app.relaunch();app.exit(0);return true;} catch (e) {storageBusy = false;throw e;} finally {core.operation = null;}});});
+  handle('amber:storage-move', async (token) => {if(servers.active||(rooms.active||sakura.active))throw Error('Stop servers and leave the room before moving data / 迁移数据前请停止服务器并退出房间');const target = selection(token, 'storage');if (!target) throw Error('请先选择目标目录');return workflows.exclusive(async () => {for (const item of await core.listInstances()) await core.requireStopped(await core.instancePath(item.id));storageBusy = true;core.operation = { title: '复制并校验数据目录', state: 'running' };try {news.cancel();survey.cancel();await Promise.allSettled([journalObservation,journal.queue,homePrefs.queue,news.pending,survey.done,...news.details.values()].filter(Boolean));await storage.migrate(core, target);app.relaunch();app.exit(0);return true;} catch (e) {storageBusy = false;throw e;} finally {core.operation = null;}});});
   handle('amber:instance-icon', (id, icon) => management.setIcon(id, icon));
   handle('amber:instance-rename', (id, name) => management.rename(id, name));
   handle('amber:instance-remove', (id) => management.remove(id));
@@ -446,10 +455,10 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
           appUpdates.cancel();minecraftImport.cancel();workflows.cancel();for(const j of core.jobs.filter(j=>j.state==='running'))core.controllers.get(j.id)?.abort(Error('用户取消任务并退出。'));
           while(minecraftImport.busy||serverManagement140.backupBusy||workflows.active||core.jobs.some(j=>j.state==='running')||appUpdates.state.phase==='downloading')await new Promise(resolve=>setTimeout(resolve,150));
         }
-        if(!smoke&&(servers.active||rooms.active)){
+        if(!smoke&&(servers.active||(rooms.active||sakura.active))){
           const answer=await dialog.showMessageBox(window,{type:'question',message:'服务端或联机连接仍在运行 / Servers or networking are still active',buttons:['最小化并继续 / Minimize and continue','停止服务端并退出 / Stop and quit','返回 / Back'],defaultId:0,cancelId:2,noLink:true});
           if(answer.response===0){window.minimize();return;}if(answer.response!==1)return;
-          try{await servers.shutdown();await rooms.leave();}catch(e){await dialog.showMessageBox(window,{type:'warning',message:e.message});return;}
+          try{await servers.shutdown();await rooms.leave();await sakura.stop();}catch(e){await dialog.showMessageBox(window,{type:'warning',message:e.message});return;}
         }
         clearTimeout(placementTimer);await savePlacement();closeAllowed=true;window.close();
       }finally{closePrompt=false;}
