@@ -43,10 +43,12 @@ const navIcons = { home: Play, instances: Stack, content: DownloadSimple, accoun
 
 export function DesktopApp() {useLocale();
   const [mode,setMode]=useState('local'),[serverPage,setServerPage]=useState('overview'),[serverId,setServerId]=useState(()=>localStorage.getItem('amber.server')||''),[serverStatus,setServerStatus]=useState({instances:[],network:null});
-  const refreshServers=async()=>{if(window.amberDesktop.server)setServerStatus(await window.amberDesktop.server('status'));};
-  useEffect(()=>{let live=true;const tick=()=>window.amberDesktop.server?.('status').then(s=>live&&setServerStatus(s)).catch(()=>{});tick();const timer=setInterval(tick,1500);return()=>{live=false;clearInterval(timer);};},[]);
+  const serverStatusLoaded=useRef(false);
+  const refreshServers=async()=>{if(window.amberDesktop.server){const s=await window.amberDesktop.server('status');serverStatusLoaded.current=true;setServerStatus(s);}};
+  useEffect(()=>{let live=true;const tick=()=>window.amberDesktop.server?.('status').then(s=>{if(live){serverStatusLoaded.current=true;setServerStatus(s);}}).catch(()=>{});tick();const timer=setInterval(tick,1500);return()=>{live=false;clearInterval(timer);};},[]);
   const serverCurrent=serverStatus.instances.find(s=>s.id===serverId)||serverStatus.instances[0];
   const selectServer=id=>{setServerId(id);localStorage.setItem('amber.server',id);};
+  useEffect(()=>{if(serverId&&!serverStatus.instances.some(s=>s.id===serverId)&&serverStatusLoaded.current){const next=serverStatus.instances[0]?.id||'';selectServer(next);}},[serverStatus]);
 
   const nav = [['home', translateText("启动")], ['instances', translateText("实例")], ['content', translateText("内容下载")], ['accounts', translateText("账号")], ['settings', translateText("设置")], ['tasks', translateText("任务")], ['tools',th('实用工具','Tools')]];
   const [quick,setQuick]=useState(false),[buildChannel,setBuildChannel]=useState(null);const scrolls=useRef(new Map());

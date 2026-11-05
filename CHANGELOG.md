@@ -1,3 +1,8 @@
+## 1.4.3
+
+- Raise simultaneous file downloads to 128 with a shared budget, fair task admission and recovery after rate limiting. Download server content in parallel. Add a server instance recycle bin, port-aware restoration and exact-name permanent deletion. Align Java actions and make screenshot controls follow the theme.
+- Matching Windows, macOS Intel/Apple Silicon, Linux x64 and experimental FreeBSD packages include source and SHA-256; existing native non-Windows acceptance limits remain.
+
 ## 1.4.2
 
 - Complete Quilt creation, installation, imports and server support. Mod discovery, version selection and dependencies accept Fabric builds, prefer native Quilt builds and preserve exact dependency pins. Add Sakura Frp connections with repaired config retrieval and Chinese readiness detection; fix installed player-bridge state and theme selection colors, and improve connection-page spacing.

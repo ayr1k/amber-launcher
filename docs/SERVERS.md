@@ -1,4 +1,4 @@
-# Servers and online play — 1.4.2
+# Servers and online play — 1.4.3
 
 1.3.2 feedback revision: local and online modes share navigation/icons, software settings/About/tools, page transitions and reduced-motion rules. Server creation moves to Instances after the first instance; settings and installed content are detail tabs. The catalog shares filters, project icons and compatible-version controls, with automatic required dependencies. Server tools read server configurations/logs; screenshots remain shared local-game screenshots. EULA alignment is corrected.
 
@@ -29,3 +29,9 @@ Validation covers isolated synthetic process lifecycle, settings/recovery, theme
 Quilt server creation downloads official loader libraries and uses isolated server storage. Quilt catalogs include Fabric fallback with native Quilt preference and exact dependency pins. Online → Connections switches between EasyTier and Sakura Frp. Sakura needs an existing TCP tunnel targeting the current server’s loopback port and a saved access token. Start the server, then the tunnel, and wait for Connected before sharing the public address. Check connection validates the public API, component and configuration. Config is fetched over verified HTTPS and passed in memory to frpc; no plaintext config is stored. Stop-and-quit also stops the connection.
 
 A real Sakura public tunnel returned a Paper 26.3 Minecraft status response and stopped normally. This validates the tested connection, not every route, mod/plugin or non-Windows runtime.
+
+## 1.4.3: download concurrency and server recycling
+
+In Settings, choose up to 128 simultaneous file downloads. The default remains 8; existing settings are retained. Tasks share one budget, and new tasks receive available slots fairly. Limits decrease after network failures or rate limiting and recover after successful files. This does not split one file into multiple ranges; try a lower value if the connection or provider becomes slower. Server content and dependencies download in parallel before the existing verified installation step.
+
+In Online → Instances, Delete moves an instance into the application recycle bin. Stop the server and its tunnel and finish or cancel associated jobs first. In Recycle bin, restore the instance; if its port is in use or assigned elsewhere, choose another port. Restoration does not start the server. Permanent deletion requires the exact instance name and removes its worlds, configuration and content. Separate backups and shared Java/download caches are retained.

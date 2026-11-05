@@ -1,3 +1,9 @@
+# 1.4.3 release verification
+
+Public-channel builds from the accepted 1.4.3 implementation; accepted local installers are retained separately. All 448 regression tests passed, including simultaneous rate-limited retries, shared download limits, cancellation/resume, hashes, guarded server recycling and port conflicts. Both Windows editions passed packaged startup and bilingual UI checks for themed controls and recycle/restore/permanent-delete workflows using isolated synthetic data.
+
+Matching Windows x64, macOS x64/arm64, Linux x64 and experimental FreeBSD packages are provided. Native non-Windows execution is not verified for this release; FreeBSD remains server/tools-only. Packages remain unsigned and macOS is not notarized. Concurrency counts simultaneous files, not ranges of a single file; higher settings do not guarantee faster downloads. Prior provider/gameplay acceptance limits remain.
+
 # 1.4.2 release verification
 
 The accepted implementation and final connection-page spacing are built for the public release channel. Both editions publish matching Windows x64, macOS Intel/Apple Silicon, Linux x64 and experimental FreeBSD artifacts, complete source and SHA-256. Packages remain unsigned; macOS is not notarized.

@@ -57,7 +57,7 @@ export class VanillaLauncher extends LauncherCore {
  async runtimeMetadata(id){const result=await this.metadata(id);if(result.item.loaderSha1){if(await digest(join(result.dir,'loader.json'))!==result.item.loaderSha1)throw Error('加载器配置校验失败。');const profile=JSON.parse(await readFile(join(result.dir,'loader.json'),'utf8'));result.meta=profile?.amberFormat?withLoader(result.meta,profile):withFabric(result.meta,profile);}return result;}
  async install(id,{threads=8}={}){
   if(!['win32','darwin','linux','freebsd'].includes(process.platform)||!['x64','arm64'].includes(process.arch))throw new Error('Unsupported platform');if(process.platform==='freebsd')throw Error('FreeBSD 客户端需要匹配的原生 LWJGL 库；当前实验版提供服务端和工具 / FreeBSD client requires matching native LWJGL libraries; server and tools are available.');
-  if(!Number.isInteger(threads)||threads<1||threads>16)throw new Error('并发数应为 1–16。');
+  if(!Number.isInteger(threads)||threads<1||threads>128)throw new Error('并发数应为 1–128。');
   const {dir,item,meta}=await this.runtimeMetadata(id);await this.requireStopped(dir);const plan=planFiles(meta,this.root);
   return this.startJob(id,'install',async(job,signal)=>{
    item.status='installing';await atomicJson(join(dir,'instance.json'),item);

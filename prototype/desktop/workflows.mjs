@@ -29,7 +29,7 @@ export function validateSettings(input){
  if(!['square','system'].includes(s.windowCorners)||!['theme','accent'].includes(s.titlebarColor))throw Error('窗口设置无效。');
  if(typeof s.language!=="string"||!(/^(system|zh-CN|en-US|x-[a-z0-9-]{2,32})$/.test(s.language))||typeof s.copyLoginCode!=="boolean")throw Error("语言或剪贴板设置无效。");
  if(!Number.isInteger(s.panelOpacity)||s.panelOpacity<60||s.panelOpacity>100)throw Error('面板不透明度应为 60–100%。');
- if(!['square','rounded'].includes(s.uiStyle)||!['system','light','dark'].includes(s.theme)||!['forest','amber','slate'].includes(s.accent)||!['comfortable','compact'].includes(s.density)||typeof s.motion!=='boolean'||![13,14,16,18].includes(s.fontSize)||!Number.isInteger(s.threads)||s.threads<1||s.threads>16||!Number.isInteger(s.memory)||s.memory<1||s.memory>32)throw Error('设置值不在支持范围内。');
+ if(!['square','rounded'].includes(s.uiStyle)||!['system','light','dark'].includes(s.theme)||!['forest','amber','slate'].includes(s.accent)||!['comfortable','compact'].includes(s.density)||typeof s.motion!=='boolean'||![13,14,16,18].includes(s.fontSize)||!Number.isInteger(s.threads)||s.threads<1||s.threads>128||!Number.isInteger(s.memory)||s.memory<1||s.memory>32)throw Error('设置值不在支持范围内。');
  if(s.defaultAccountId!==null&&(typeof s.defaultAccountId!=='string'||s.defaultAccountId.length>100||!/^[a-zA-Z0-9_-]*$/.test(s.defaultAccountId)))throw Error('默认账号无效。');
  s.appearance=validateAppearance(s.appearance);s.layout=validateLayout(s.layout);s.background=validateBackground(s.background);
  return Object.fromEntries(Object.keys(defaults).map(k=>[k,s[k]]));
@@ -67,7 +67,7 @@ export class Workflows{
  async runContent(id,r){if(r.kind==='guided-addon')return this.guided.runAddon(id,r);const {dir,item}=await this.core.metadata(id);await this.core.requireStopped(dir);if(r.schema!==1||!['content','pack'].includes(r.kind)||typeof r.versionId!=='string'||!/^[-\w]{1,100}$/.test(r.versionId)||r.game!==item.game||r.loader!==item.loader)throw Error('内容恢复计划与当前实例不匹配，请检查版本设置。');const save=()=>atomicJson(join(dir,'content-task.json'),r);r.state='running';delete r.error;await save();try{this.checkCancelled();let job;if(r.kind==='pack')job=await this.installPack(id,r.versionId);else{const plan=await this.content.preview(id,r.versionId,r.optional,r.excludedRequired||[]);this.checkCancelled();job=await this.wait(await this.content.install(id,plan.id));}this.checkCancelled();r.state='done';r.completed=['content'];return job||{state:'done'};}catch(e){r.state=this.cancelled?'cancelled':'failed';r.error=e.message;throw e;}finally{r.finishedAt=new Date().toISOString();await save();}}
  async runPlan(id,record,afterSetup){
   const {dir,item}=await this.core.metadata(id);await this.core.requireStopped(dir);const input=record.input;
-  if(!input||input.game!==item.game||!['vanilla','quilt','fabric','forge','neoforge','liteloader','optifine'].includes(input.loader)||!Number.isInteger(input.threads)||input.threads<1||input.threads>16)throw Error('安装计划已损坏，请在版本设置中检查。');
+  if(!input||input.game!==item.game||!['vanilla','quilt','fabric','forge','neoforge','liteloader','optifine'].includes(input.loader)||!Number.isInteger(input.threads)||input.threads<1||input.threads>128)throw Error('安装计划已损坏，请在版本设置中检查。');
   const optifinePath=record.optifine?join(dir,'.amber-setup','optifine.jar'):null;
   if(optifinePath&&await digest(optifinePath)!==record.optifine)throw Error('保留的 OptiFine 安装器缺失或被修改，请重新选择官方安装器。');
   const completed=new Set(record.completed||[]),save=()=>atomicJson(join(dir,'setup-report.json'),record);
@@ -101,7 +101,7 @@ export class Workflows{
  async choices(game,type){if(!this.core.catalog)await this.core.versions();if(!this.core.catalog.some(v=>v.id===game))throw Error('未知 Minecraft 版本。');return type==='vanilla'||type==='optifine'?[]:type==='quilt'?quiltVersions(game,this.core.fetcher):type==='fabric'?fabricVersions(game,this.core.fetcher):type==='liteloader'?liteVersions(game,this.core.fetcher):loaderVersions(game,type,this.core.fetcher);}
  async create(input,optifinePath,manifest,afterSetup,guided,localPack){return this.exclusive(async()=>{this.lastSetup=null;
   if(!this.core.catalog)await this.core.versions();
-  if(!Number.isInteger(input.threads)||input.threads<1||input.threads>16)throw Error('并发数应为 1–16');
+  if(!Number.isInteger(input.threads)||input.threads<1||input.threads>128)throw Error('并发数应为 1–128');
   if(!['vanilla','quilt','fabric','forge','neoforge','liteloader','optifine'].includes(input.loader))throw Error('不支持的加载器组合。');
   if(input.liteVersion&&(!['forge','optifine'].includes(input.loader)||!canCombine(input.game,[input.loader],'liteloader')))throw Error('所选历史加载器组合不兼容');
   if(input.liteVersion&&!(await this.choices(input.game,'liteloader')).some(v=>v.version===input.liteVersion))throw Error('请选择兼容的 LiteLoader 版本');

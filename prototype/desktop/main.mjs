@@ -1,3 +1,4 @@
+import {ServerTrash143} from './server-trash143.mjs';
 import {Sakura142} from './sakura142.mjs';
 import {ServerManagement140} from './server-management140.mjs';
 import {Environment140} from './environment140.mjs';
@@ -150,9 +151,11 @@ app.whenReady().then(async () => {
   handle('amber:java-select', (id, path) => core.selectJava(id, path));
   handle('amber:java-browse', async () => {const result = await dialog.showOpenDialog(window, { title: translateMessage('选择 Java 可执行文件'), properties: ['openFile'], ...(process.platform==='win32'?{filters:[{name:'Java',extensions:['exe']}]}:{}) });return result.canceled ? null : core.addJava(result.filePaths[0]);});
   const servers=await new Servers(core).init(),rooms=new Rooms(core,servers),sakura=new Sakura142(core,servers,credentialCodec(safeStorage));
+  const serverTrash=new ServerTrash143(servers,{connected:id=>rooms.starting||sakura.busy||rooms.active&&rooms.current?.serverId===id||sakura.active&&sakura.current?.serverId===id});
   const serverEditor=new InstanceEditor({instancePath:id=>servers.dir(id)},{directories:['config','defaultconfigs','plugins','kubejs','scripts'],files:['server.properties','bukkit.yml','spigot.yml','paper.yml','permissions.yml']});
   const resourceTimer=setInterval(()=>servers.sample(),3000);resourceTimer.unref();
   handle('amber:server',async(action,...args)=>{
+   const trashMethods={trashList:'list',trashDetails:'details',trashRemove:'remove',trashRestore:'restore',trashPurge:'purge'};if(Object.hasOwn(trashMethods,action))return serverTrash[trashMethods[action]](...args);
    const methods=['versions','create','install','launchSettings','properties','saveProperties','backups','restoreConfig','start','stop','command','copy','content','toggleContent','removeContent','contentHistory','restoreContent','search','categories','contentVersions','previewContent','installContent'];
    if(methods.includes(action))return servers[action](...args);
    if(['editorList','editorRead','editorHistory','editorBackup'].includes(action))return serverEditor[action.slice(6).toLowerCase()](...args);
@@ -167,12 +170,12 @@ app.whenReady().then(async () => {
    if(action==='sakuraDiagnose')return sakura.diagnose(...args);
    if(action==='sakuraSave')return sakura.save(...args);
    if(action==='sakuraInstall')return sakura.install();
-   if(action==='sakuraStart')return sakura.start(...args);
+   if(action==='sakuraStart')return servers.locks.run(args[0],()=>sakura.start(...args));
    if(action==='sakuraStop')return sakura.stop();
    if(action==='sakuraWebsite')return shell.openExternal('https://www.natfrp.com/tunnel/');
    if(action==='sakuraCopy'){const run=(await sakura.state()).run,address=run?.address;if(!address||!run.connected||!run.targetRunning)throw Error('隧道尚未连通 / Tunnel is not connected');clipboard.writeText(address);return true;}
    if(action==='networkInstall')return rooms.install();
-   if(action==='host')return rooms.host(...args);
+   if(action==='host')return servers.locks.run(args[0],()=>rooms.host(...args));
    if(action==='join')return rooms.join(...args);
    if(action==='leave')return rooms.leave();
    if(action==='copyInvite'){const code=(await rooms.state()).room?.code;if(!code)throw Error('No hosted room');clipboard.writeText(code);return true;}
