@@ -128,7 +128,7 @@ contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
   cancelSetup: ()=>ipcRenderer.invoke('amber:setup-cancel',id),
   repairSetup:id=>ipcRenderer.invoke('amber:setup-repair',id),
   retrySetup: id=>ipcRenderer.invoke('amber:setup-retry',id),
-  contentCategories: ()=>ipcRenderer.invoke('amber:content-categories'),
+  contentCategories: (provider)=>ipcRenderer.invoke('amber:content-categories',provider),
   themesList:()=>ipcRenderer.invoke('amber:themes-list'),
   themeState:()=>ipcRenderer.invoke('amber:theme-state'),
   themeTrial:v=>ipcRenderer.invoke('amber:theme-trial',v),
@@ -166,7 +166,7 @@ contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
   packCreate: (id,key) => ipcRenderer.invoke('amber:pack-create',id,key),
   packPreview: (id,v) => ipcRenderer.invoke('amber:pack-preview',id,v),
   packInstall: (id,p) => ipcRenderer.invoke('amber:pack-install',id,p),
-  contentSearch: (id,o) => ipcRenderer.invoke('amber:content-search',id,{query:o?.query,type:o?.type,offset:o?.offset,category:o?.category,sort:o?.sort}),
+  contentSearch: (id,o) => ipcRenderer.invoke('amber:content-search',id,{provider:o?.provider,query:o?.query,type:o?.type,offset:o?.offset,category:o?.category,sort:o?.sort}),
   contentVersions: (id,p) => ipcRenderer.invoke('amber:content-versions',id,p),
   contentPreview: (id,v,optional,excluded) => ipcRenderer.invoke('amber:content-preview',id,v,optional,excluded),
   dismissContent:id=>ipcRenderer.invoke('amber:content-dismiss',id),
@@ -210,3 +210,4 @@ contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
   browseJava: () => ipcRenderer.invoke('amber:java-browse'),
   launch: (id,options) => ipcRenderer.invoke('amber:launch',id,{username:options?.username,memory:options?.memory,accountId:options?.accountId,serverId:options?.serverId}),
 }));
+

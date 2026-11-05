@@ -59,3 +59,7 @@ Credentials use Windows user protection, macOS Keychain or a secure Linux/FreeBS
 ## 1.3.6 log analysis
 
 Analysis runs locally without external AI services or log uploads. It reads bounded excerpts matching the selected instance run, or a manually selected log. Existing redaction rules are applied to evidence but cannot guarantee removal of all private information; review before sharing.
+
+## 1.4.1
+
+Choosing CurseForge sends search/version/file requests and the application API key to its API/CDN, without account tokens or worlds. Player avatars query Mojang public skin endpoints by known UUID. Player actions are sent to the selected local server console.

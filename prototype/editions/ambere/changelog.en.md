@@ -1,3 +1,8 @@
+## 1.4.1
+
+- Add CurseForge browsing, compatible versions, dependency previews and pack imports; a dedicated online Players page with avatars, action menus and a fixed manual whitelist form; themed thin scrollbars throughout; and the local content-page blank-screen fix. All platforms now have matching 1.4.1 packages.
+- Real Ping requires the optional Paper/Spigot/CraftBukkit bridge; unsupported values are unavailable. Author download restrictions are respected. Packages remain unsigned.
+
 ## 1.4.0
 
 - Add client/server automatic backups with retention and pinning, MRPACK upgrade previews into independent instances, server player and command management, linked clients and environment sharing, and crash dependency repair entry points. Improve backup/player layout spacing.

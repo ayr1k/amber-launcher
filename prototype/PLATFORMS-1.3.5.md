@@ -1,3 +1,7 @@
+# 1.4.1 local packages / 本地测试包
+
+Both editions now produce matching 1.4.1 artifacts through `pnpm package:all`. The user authorized 1.4.1 publication after Windows acceptance. Windows automated tests pass; macOS/Linux need target-machine acceptance. FreeBSD remains experimental server/tools-only. The historical 1.3.5 verification below describes earlier runtime checks, not 1.4.1 native acceptance. Signing remains deferred.
+
 # 1.3.5 platform packages / 多平台安装包
 
 The user accepted the packages and authorized GitHub releases and Pages publication. Windows/Linux/FreeBSD package bytes are preserved. macOS ZIPs add the missing Electron and Chromium license notices, with all existing application files unchanged. Signing remains deferred. Existing 1.3.4 installers remain available for rollback. Accounts, instances, saves, theme packages, website, promotional assets and AmberX are preserved.

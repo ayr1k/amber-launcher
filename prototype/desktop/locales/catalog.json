@@ -9774,5 +9774,9 @@
   "m511588dbd50c": {
     "zh": "登录令牌使用当前系统用户的系统密钥库加密保护。移除账号会删除本地记录，不会删除服务端账号。",
     "en": "Login tokens are encrypted using the current system user’s key store. Removing an account deletes its local record, not the server account."
+  },
+  "m991e63fe2920": {
+    "zh": "玩家",
+    "en": "Players"
   }
 }

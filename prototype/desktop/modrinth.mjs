@@ -1,3 +1,4 @@
+import {CurseForge141,cfProject} from './curseforge141.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import {instanceLoaders} from './compatibility.mjs';
 import { readFile, readdir, copyFile, rename, unlink, constants, lstat } from 'node:fs/promises';
@@ -12,10 +13,10 @@ const ignored=(file,d,index)=>d.dependency_type==='required'&&(file.ignoredRequi
 const folders={mod:'mods',resourcepack:'resourcepacks',shader:'shaderpacks'};
 const id=v=>{if(typeof v!=='string'||!/^[-\w]{1,100}$/.test(v))throw Error('无效项目或版本 ID。');return v;};
 export class Modrinth {
- constructor(core){this.core=core;this.plans=new Map();}
- async api(path,{signal}={}){const r=await officialFetch('https://api.modrinth.com/v2/'+path,{fetcher:this.core.fetcher,signal:signal?AbortSignal.any([signal,AbortSignal.timeout(30000)]):AbortSignal.timeout(30000)});const text=await r.text();if(text.length>12_000_000)throw Error('Modrinth 响应过大。');return JSON.parse(text);}
- async categories(){if(!this.categoryCache){const rows=await this.api('tag/category');if(!Array.isArray(rows))throw Error('分类目录暂时不可用，请重试。');this.categoryCache=rows.filter(c=>typeof c.name==='string'&&/^[a-z0-9-]+$/.test(c.name)&&['mod','modpack','resourcepack','shader'].includes(c.project_type)).map(({name,project_type,header})=>({name,project_type,header}));}return this.categoryCache;}
- async search(instanceId,{query='',type='mod',offset=0,category='',sort='relevance'}={}){
+ constructor(core){this.core=core;this.curseforge=new CurseForge141(core);this.plans=new Map();}
+ async api(path,{signal}={}){const cf=await this.curseforge.route(path);if(cf!==undefined)return cf;const r=await officialFetch('https://api.modrinth.com/v2/'+path,{fetcher:this.core.fetcher,signal:signal?AbortSignal.any([signal,AbortSignal.timeout(30000)]):AbortSignal.timeout(30000)});const text=await r.text();if(text.length>12_000_000)throw Error('Modrinth 响应过大。');return JSON.parse(text);}
+ async categories(provider){if(provider==='curseforge')return this.curseforge.categories();if(!this.categoryCache){const rows=await this.api('tag/category');if(!Array.isArray(rows))throw Error('分类目录暂时不可用，请重试。');this.categoryCache=rows.filter(c=>typeof c.name==='string'&&/^[a-z0-9-]+$/.test(c.name)&&['mod','modpack','resourcepack','shader'].includes(c.project_type)).map(({name,project_type,header})=>({name,project_type,header}));}return this.categoryCache;}
+ async search(instanceId,{query='',type='mod',offset=0,category='',sort='relevance',provider='modrinth'}={}){if(provider==='curseforge'){const {item}=await this.core.metadata(instanceId);return this.curseforge.search(item,{query,type,offset,category,sort});}
   if(!['relevance','downloads','follows','newest','updated'].includes(sort))throw Error('不支持的排序方式。');
   if(category&&!(await this.categories()).some(c=>c.name===category&&c.project_type===type))throw Error('此分类不适用于当前内容类型，请重新选择。');
   if(type!=='modpack'&&!Object.hasOwn(folders,type))throw Error('不支持的内容类型。');
@@ -26,7 +27,7 @@ export class Modrinth {
   const data=await this.api('search?'+params);return {hits:data.hits.map(p=>({id:p.project_id,icon:validIcon(p.icon_url),type:p.project_type,title:p.title,description:p.description,author:p.author,downloads:p.downloads})),total:data.total_hits};
  }
  compatible(v,item,type){return v.game_versions?.includes(item.game)&&(type!=='mod'||instanceLoaders(item).some(t=>v.loaders?.includes(t)))&&v.environment!=='dedicated_server_only'&&v.environment!=='server_only';}
- async versions(instanceId,project){const {item}=await this.core.metadata(instanceId);const p=await this.api('project/'+id(project));if(p.project_type!=='modpack'&&!Object.hasOwn(folders,p.project_type))throw Error('此内容类型暂不支持直接安装。');const query=new URLSearchParams({game_versions:JSON.stringify([item.game]),include_changelog:'false',...(p.project_type==='mod'?{loaders:JSON.stringify(instanceLoaders(item))}:{})});return (await this.api(`project/${id(project)}/version?${query}`)).filter(v=>this.compatible(v,item,p.project_type)).sort((a,b)=>(a.version_type==='release'?0:1)-(b.version_type==='release'?0:1)||Date.parse(b.date_published)-Date.parse(a.date_published));}
+ async versions(instanceId,project){const {item}=await this.core.metadata(instanceId);if(cfProject(project))return this.curseforge.versions(project,{game:item.game,loader:item.loader});const p=await this.api('project/'+id(project));if(p.project_type!=='modpack'&&!Object.hasOwn(folders,p.project_type))throw Error('此内容类型暂不支持直接安装。');const query=new URLSearchParams({game_versions:JSON.stringify([item.game]),include_changelog:'false',...(p.project_type==='mod'?{loaders:JSON.stringify(instanceLoaders(item))}:{})});return (await this.api(`project/${id(project)}/version?${query}`)).filter(v=>this.compatible(v,item,p.project_type)).sort((a,b)=>(a.version_type==='release'?0:1)-(b.version_type==='release'?0:1)||Date.parse(b.date_published)-Date.parse(a.date_published));}
  async manifest(dir){try{return JSON.parse(await readFile(join(dir,'content.json'),'utf8'));}catch(e){if(e.code==='ENOENT')return {schema:1,files:[]};throw e;}}
  async preview(instanceId,versionId,selectedOptional=[],excludedRequired=[],interactive=false){
   if(!Array.isArray(selectedOptional)||selectedOptional.length>100||selectedOptional.some(k=>typeof k!=='string'||k.length>220))throw Error('可选依赖选择无效');if(!Array.isArray(excludedRequired)||excludedRequired.length>100||excludedRequired.some(k=>typeof k!=='string'||k.length>220))throw Error('必需依赖选择无效');const selected=new Set(selectedOptional),excluded=new Set(excludedRequired),optional=[],required=[],blockers=[];
@@ -39,7 +40,7 @@ export class Modrinth {
    if(!Object.hasOwn(folders,type)||!this.compatible(v,item,type))throw Error(`${p.title} 没有适配 ${item.game} / ${item.loader} 的客户端版本。`);
    const f=v.files?.find(f=>f.primary)||v.files?.[0];if(!f||! /^[a-f0-9]{40}$/.test(f.hashes?.sha1)||!Number.isSafeInteger(f.size)||f.size<=0)throw Error('内容缺少有效的文件校验信息。');
    if(f.filename.includes('/')||f.filename.includes('\\')||!(type==='mod'?/\.(jar|litemod)$/i:/\.zip$/i).test(f.filename))throw Error('不支持的内容文件名。');
-   const relative=folders[type]+'/'+f.filename;safePath(dir,relative);safeURL(f.url);
+   const relative=folders[type]+'/'+f.filename;safePath(dir,relative);if(!f.url)throw Error('CurseForge: author restricted third-party downloads; open the project page / 作者限制第三方下载，请打开项目页手动下载');safeURL(f.url);
    const old=installed.files.find(x=>x.projectId===v.project_id);
    if(old&&(old.versionId!==v.id||old.hash!==f.hashes.sha1))throw Error(`${p.title} 已安装其他版本；请在“已安装内容”中将旧版本移至回收目录，再安装新版本。`);
    chosen.set(v.project_id,{projectId:v.project_id,versionId:v.id,title:p.title,version:v.version_number,type,relative,hash:f.hashes.sha1,size:f.size,url:f.url,dependencies:v.dependencies||[],ignoredRequired:(v.dependencies||[]).flatMap((d,i)=>d.dependency_type==='required'&&excluded.has(depKey(v,i))?[depKey(v,i)]:[])});
@@ -83,7 +84,7 @@ export class Modrinth {
    const manifest=await this.manifest(dir),before=structuredClone(manifest),pending=[],reactivate=[];
    if(manifestStamp(manifest)!==plan.manifestStamp)throw Error('已安装内容发生变化，请重新检查依赖后安装。');
    for(const f of plan.files){const path=safePath(dir,f.relative);await ensureParents(dir,path);const old=manifest.files.find(x=>x.projectId===f.projectId);if(old){const current=safePath(dir,old.relative+(old.enabled===false?'.disabled':''));if(old.versionId===f.versionId&&await verified({...old,path:current})){old.ignoredRequired=f.ignoredRequired||[];if(old.enabled===false){reactivate.push({old,current,target:path});}continue;}throw Error(`${f.title} 的现有文件已更改或缺失，请先整理实例。`);}try{await lstat(path);throw Error(`已有同名文件：${f.relative}，请先在实例目录处理。`);}catch(e){if(e.code!=='ENOENT')throw e;}pending.push(f);}
-   job.total=pending.length;job.phase='下载 Modrinth 内容及所选依赖';
+   job.total=pending.length;job.phase='下载内容及所选依赖';
    const downloads=pending.map(f=>({...f,path:safePath(this.core.root,'content-cache/'+f.hash),label:f.title}));
    await downloadPool(downloads,{root:this.core.root,fetcher:this.core.fetcher,signal,threads:this.core.downloadThreads||8,onBytes:n=>job.transferred+=n,onFile:()=>job.completed++});signal.throwIfAborted();
    if(this.updates){for(const r of reactivate){const cached=safePath(this.core.root,'content-cache/'+r.old.hash);await ensureParents(this.core.root,cached);await copyFile(r.current,cached);}const next=[...pending.map(f=>({...f,enabled:true})),...reactivate.map(r=>({...r.old,enabled:true}))],after={...manifest,files:[...manifest.files.map(f=>({...f,enabled:reactivate.some(r=>r.old===f)?true:f.enabled})),...pending.map(f=>({...f,enabled:true}))]};job.operation='install';await this.updates.replace(dir,before,after,reactivate.map(r=>({...r.old,enabled:false})),next,f=>safePath(this.core.root,'content-cache/'+f.hash),signal,job);this.plans.delete(planId);return;}

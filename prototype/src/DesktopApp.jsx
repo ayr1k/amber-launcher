@@ -39,7 +39,7 @@ import { InstanceManager } from './InstanceManager';
 import { InstanceIcon } from './InstanceIcon';
 import { LaunchHome } from './LaunchHome';
 import { componentLabel } from '../desktop/compatibility.mjs';
-const navIcons = { home: Play, instances: Stack, content: DownloadSimple, accounts: UserCircle, settings: Gear, tasks: ClockCounterClockwise, tools:Toolbox,overview:Play,network:PlugsConnected,about:Info };
+const navIcons = { home: Play, instances: Stack, content: DownloadSimple, accounts: UserCircle, settings: Gear, tasks: ClockCounterClockwise, tools:Toolbox,players:UserCircle,overview:Play,network:PlugsConnected,about:Info };
 
 export function DesktopApp() {useLocale();
   const [mode,setMode]=useState('local'),[serverPage,setServerPage]=useState('overview'),[serverId,setServerId]=useState(()=>localStorage.getItem('amber.server')||''),[serverStatus,setServerStatus]=useState({instances:[],network:null});

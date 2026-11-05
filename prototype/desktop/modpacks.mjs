@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import {convertCursePack141} from './curseforge-pack141.mjs';
 import {createRequire} from 'node:module';
 import {createHash,randomUUID} from 'node:crypto';
 import {readFile,writeFile,copyFile,unlink,lstat,constants} from 'node:fs/promises';
@@ -22,10 +23,10 @@ export function parsePack(bytes,root,{includeOptional=false}={}){
 export class Modpacks{
  constructor(core,store){this.core=core;this.store=store;this.plans=new Map();}
  async preview(id,version){
-  const v=await this.store.api('version/'+encodeURIComponent(version)),p=await this.store.api('project/'+encodeURIComponent(v.project_id));if(p.project_type!=='modpack')throw Error('请选择 Modrinth 整合包。');
-  const f=v.files.find(f=>f.primary)||v.files[0];if(!f?.filename.endsWith('.mrpack'))throw Error('此版本没有 MRPACK 文件。');
+  const v=await this.store.api('version/'+encodeURIComponent(version)),p=await this.store.api('project/'+encodeURIComponent(v.project_id));if(p.project_type!=='modpack')throw Error('请选择整合包 / Select a modpack');
+  const f=v.files.find(f=>f.primary)||v.files[0];if(!f?.url)throw Error('作者未允许 API 下载，请打开项目页面手动获取 / Author-restricted download');if(!f?.filename.endsWith('.mrpack')&&!String(version).startsWith('cf-'))throw Error('此版本没有 MRPACK 文件。');
   const path=safePath(this.core.root,'content-cache/'+f.hashes.sha1);await download({path,url:f.url,hash:f.hashes.sha1,size:f.size},{root:this.core.root,fetcher:this.core.fetcher});
-  const {dir,item}=id?await this.core.metadata(id):{dir:join(this.core.root,'pack-preview'),item:{}},parsed=parsePack(await readFile(path),dir),deps=parsed.index.dependencies;
+  const {dir,item}=id?await this.core.metadata(id):{dir:join(this.core.root,'pack-preview'),item:{}},parsed=parsePack(String(version).startsWith('cf-')?await convertCursePack141(await readFile(path),this.store.curseforge):await readFile(path),dir),deps=parsed.index.dependencies;
   const keys=Object.keys(deps).filter(k=>k!=='minecraft');if(keys.length>1||keys.some(k=>!['fabric-loader','forge','neoforge'].includes(k)))throw Error('此整合包加载器组合暂不支持：'+JSON.stringify(deps));
   const type=keys[0]==='fabric-loader'?'fabric':keys[0]||'vanilla',required=keys[0]?deps[keys[0]]:null,actual=item.loader==='forge'?item.loaderVersion?.replace(item.game+'-',''):item.loaderVersion;
   const compatible=item.game===deps.minecraft&&item.loader===type&&(!required||actual===required);

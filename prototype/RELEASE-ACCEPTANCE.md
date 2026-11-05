@@ -1,3 +1,9 @@
+# 1.4.1 release verification
+
+Publish the user-accepted repaired Windows installers unchanged, with matching macOS x64/arm64, Linux x64 and experimental FreeBSD packages, full source and SHA-256 checksums. Embedded local-test labels/documents are retained; these release notes supersede their no-publication wording. Signing remains deferred.
+
+427 regression tests passed. Both packaged editions passed startup/IPC/map checks. Isolated UI checks verified local/online catalogs, both providers, local version details and installed content; player list/footer checks covered Classic/Nocturne, 1280/1920 and Chinese/English. CurseForge real API/search/download authentication and a real isolated Paper bridge startup were verified. Remote-player Ping and full real-player operations remain for runtime acceptance; no fabricated latency is shown. macOS/Linux target-device acceptance is pending, and FreeBSD remains experimental server/tools-only. No real accounts or worlds were used.
+
 # 1.4.0 release verification
 
 User-accepted Windows x64 installers are published unchanged. Local-build labels and embedded testing-stage documents are retained; these release notes supersede embedded local-only wording. Signing remains deferred. Other platforms remain at 1.3.5.

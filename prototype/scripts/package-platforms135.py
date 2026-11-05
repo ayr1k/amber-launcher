@@ -30,6 +30,7 @@ def tar_entry(t,name,data,mode=0o644,link=None):
  if link is not None:info.type=tarfile.SYMTYPE;info.linkname=link;info.size=0;t.addfile(info)
  else:info.size=len(data);t.addfile(info,io.BytesIO(data))
 for name in ['AMBER','AmberE']:
+ if not (base/'stages'/name/'package.json').is_file():continue
  icon=(root/'build/ambere.png' if name=='AmberE' else root/'public/brand/app-icon.png').read_bytes()
  size=struct.unpack('>I',icon[16:20])[0];icon_type={128:b'ic07',256:b'ic08',512:b'ic09',1024:b'ic10'}[size]
  icns=b'icns'+struct.pack('>I',len(icon)+16)+icon_type+struct.pack('>I',len(icon)+8)+icon

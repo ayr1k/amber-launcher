@@ -169,10 +169,16 @@ Rules cover Fabric missing/incompatible dependencies, required dependency messag
 
 ## 1.4.0 protection and server management
 
-Local Instances → Manage → Backup and restore offers daily pre-launch, normal-exit and pre-mod/loader-update snapshots. Online Instances → Manage → Backups, players & client offers daily pre-start, normal-stop and pre-core/mod/plugin-install/update full snapshots. Policies are opt-in and per instance. Running worlds are never copied; forced or failed exits do not trigger normal-stop backups.
+Local Instances → Manage → Backup and restore offers daily pre-launch, normal-exit and pre-mod/loader-update snapshots. Online Instances → Manage → Backups & client offers daily pre-start, normal-stop and pre-core/mod/plugin-install/update full snapshots. Policies are opt-in and per instance. Running worlds are never copied; forced or failed exits do not trigger normal-stop backups.
 
 Set count and capacity retention; pin important records. Manual/pinned snapshots are retained and at least the newest automatic snapshot is kept. Backup failure blocks the protected launch/update. Refresh backups to see new records. Restore creates an independent instance; restored servers get a different port and disabled automatic protection. Same-disk backups do not replace an off-device copy.
 
 Upgrade a local MRPACK or a known Modrinth pack after reviewing local edit/deletion conflicts; preparation creates a new instance and can resume after failure. Server player actions and saved commands use the console; verify its response. Link a client to compare recognized environment declarations, preview missing dependencies and launch into the local server. Shared manifests contain versions and mod sources, without worlds, accounts, server addresses or room secrets; imports create independent instances. Unknown content requires manual review; declared dependencies do not prove full compatibility.
 
 Crash dependency repair opens compatible search and installation previews for user confirmation; nothing is silently installed.
+
+## 1.4.1
+
+Choose Modrinth or CurseForge in Content. Compatible files and dependencies are previewed before installation. Author restrictions are respected; CurseForge manifest ZIPs import into independent instances.
+
+Online → Players refreshes on entry and periodically while visible. Only the roster scrolls; the fixed footer adds a name to the whitelist without requiring the player to join first. Actions require a running server. Choose a row action and Execute; review console feedback. Avatars use public skins for known UUIDs, with placeholders on failure. Real Ping needs the optional Paper/Spigot/CraftBukkit bridge: stop, install, then restart. Vanilla/Fabric or no bridge shows Unavailable.

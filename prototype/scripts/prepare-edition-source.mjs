@@ -10,7 +10,7 @@ if(EDITION!=='amber')throw Error('This is already an edition export; use pnpm re
 const source=join(root,'releases',`AMBER-${pkg.version}-github-source`),target=join(root,'releases',`AmberE-${pkg.version}-workspace`),app=join(target,'prototype'),stage=join(root,'releases',pkg.version,'stages/AmberE');
 try{await access(target);throw Error('Edition export exists; preserve it before regenerating.');}catch(e){if(e.code!=='ENOENT')throw e;}
 await access(join(stage,'desktop/edition.mjs'));await cp(source,target,{recursive:true});await unlink(join(target,'SOURCE-MANIFEST.json'));
-for(const folder of ['desktop','public','build'])await cp(join(stage,folder),join(app,folder),{recursive:true});
+for(const folder of ['desktop','public','build'])await cp(join(stage,folder),join(app,folder),{recursive:true,filter:path=>!path.endsWith('curseforge-build-key.json')});
 const metadata={...pkg,name:'ambere-launcher',description:'AmberE Minecraft Java launcher',scripts:{...pkg.scripts,'package:editions':'pnpm package:installer'}};
 await writeFile(join(app,'package.json'),JSON.stringify(metadata,null,2)+'\n');
 let config=await readFile(join(app,'electron-builder.yml'),'utf8');config=config.replace('io.github.ayr1k.amber','io.github.ayr1k.ambere').replaceAll('AMBER','AmberE');await writeFile(join(app,'electron-builder.yml'),config);

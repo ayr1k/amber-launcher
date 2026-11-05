@@ -20,3 +20,5 @@ prototype/.qa/
 
 # Private, user-requested theme experiments; never ship or publish.
 local-test-themes/
+
+**/curseforge-build-key.json

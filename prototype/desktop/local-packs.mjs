@@ -88,9 +88,9 @@ export class LocalPacks{
  constructor(core,packs,workflows){this.core=core;this.packs=packs;this.workflows=workflows;this.plans=new Map();}
  async preview(path){
   const st=await lstat(path);if(!st.isFile()||st.isSymbolicLink()||st.size>MAX_ARCHIVE)throw problem('Invalid or oversized file','请选择不超过 300 MB 的普通整合包文件');
-  const bytes=await readFile(path),name=basename(path);
+  let bytes=await readFile(path);const name=basename(path);
   if(/\.json$/i.test(name)){if(bytes.length>2_000_000)throw problem('Manifest too large','清单过大');let value;try{value=JSON.parse(bytes.toString('utf8'));}catch{throw problem('Invalid JSON manifest','JSON 清单损坏');}if(value.format==='amber-mod-list')return {kind:'mod-list',files:[],warnings:[]};throw problem('Not a supported mod list','不是支持的模组清单，请使用模组迁移入口');}
-  const parsed=await parseInWorker(bytes,name);if(!['zip','mrpack'].includes(parsed.kind))return parsed;
+  let parsed=await parseInWorker(bytes,name);if(parsed.kind==='curseforge'){const {convertCursePack141}=await import('./curseforge-pack141.mjs');bytes=await convertCursePack141(bytes,this.packs.store.curseforge);parsed=await parseInWorker(bytes,name);}if(!['zip','mrpack'].includes(parsed.kind))return parsed;
   const id=randomUUID(),sourceHash=hash(bytes);this.plans.clear();this.plans.set(id,{...parsed,bytes,sourceHash,expiresAt:Date.now()+1800000});
   const {bytes:_,files,...publicPlan}=parsed;return {...publicPlan,id,archiveBytes:bytes.length,files:files.map(({bytes,...f})=>({...f,download:!bytes,url:undefined})),downloadBytes:files.filter(f=>!f.bytes&&!f.optional).reduce((n,f)=>n+f.size,0)};
  }
