@@ -102,3 +102,10 @@ test('real lstat boundary cannot race backup polling into recreating a recycled 
  try{const read=db.state(a.id);await entered.promise;await assert.rejects(trash.remove(a.id),/Wait for|等待/);resume.resolve();await read;}finally{resume.resolve();mock.mock.restore();syncBuiltinESMExports();}
  await trash.remove(a.id);await assert.rejects(lstat(join(servers.root,a.id)),{code:'ENOENT'});await assert.rejects(db.state(a.id),{code:'ENOENT'});await assert.rejects(lstat(join(servers.root,a.id)),{code:'ENOENT'});await trash.restore(a.id);assert.equal(await readFile(join((await db.paths(a.id)).data,'fixture'),'utf8'),'original database');
 });
+
+test('recycle registers its entire operation before any implicit migration and shutdown waits',{timeout:10000},async t=>{
+ const f=await backupFixture(t),{db,trash,a,servers}=f;await legacy150(f);const entered=gate150(),resume=gate150(),original=fsPromises.lstat;let intercepted=false;
+ const mock=t.mock.method(fsPromises,'lstat',async function(path,...args){const result=await original(path,...args);if(!intercepted&&String(path)===join(servers.root,a.id,'server.json')){intercepted=true;entered.resolve();await resume.promise;}return result;});syncBuiltinESMExports();
+ try{const removal=trash.remove(a.id);await entered.promise;assert.equal(db.active,true);let done=false;const closing=db.shutdown().then(()=>done=true);await Promise.resolve();assert.equal(done,false);resume.resolve();await Promise.all([removal,closing]);}finally{resume.resolve();mock.mock.restore();syncBuiltinESMExports();}
+ await assert.rejects(lstat(join(servers.root,a.id)),{code:'ENOENT'});await trash.restore(a.id);assert.equal(await readFile(join((await db.paths(a.id)).data,'fixture'),'utf8'),'original database');
+});
