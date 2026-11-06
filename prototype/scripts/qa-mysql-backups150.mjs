@@ -1,7 +1,7 @@
 import {randomUUID} from 'node:crypto';
 // SPDX-License-Identifier: MPL-2.0
 import assert from 'node:assert/strict';
-import {mkdtemp,mkdir,copyFile,rm,access,rename,readFile} from 'node:fs/promises';
+import {mkdtemp,mkdir,copyFile,rm,access,rename,readFile,writeFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';import {join} from 'node:path';
 import {VanillaLauncher} from '../desktop/launcher.mjs';import {Servers} from '../desktop/servers132.mjs';import {ServerTrash143} from '../desktop/server-trash143.mjs';import {MySQL150} from '../desktop/mysql150.mjs';import {Ports150} from '../desktop/ports150.mjs';
 if(!process.env.AMBER_MYSQL_ARCHIVE)throw Error('Expected verified Oracle archive');
