@@ -1,3 +1,10 @@
+## 1.4.8
+
+- Show a lightweight startup window before loading the main application. Status follows actual data-location checks, recovery, account/settings loading and interface preparation. Reveal the main window after initial data, locale and React commit are ready, without a minimum animation delay or waiting for hidden-window animation frames. Preserve existing recovery choices, error reporting and single-instance behavior.
+- Download eligible hash-declared files of at least 32 MiB using up to four resumable ranges. Requests share the existing connection budget and total bandwidth limit. Validate ranges, length, encoding and validators, then verify the assembled file hash. Unsupported sources or unsuitable files fall back to the existing serial path.
+- Preserve partial resume, pause/cancel, retries and source fallback. Successful/cache paths clean up known fragments for the current hash; cleanup failure keeps the verified destination. Cancellation after assembly can resume without a network transfer, and pausing final verification releases the connection slot. Startup and download explanations support the existing themes and language catalog.
+- Publish matching AMBER/AmberE Windows x64, macOS Intel/Apple Silicon, Linux x64 and experimental FreeBSD packages with source and SHA-256. Existing controlled startup/download measurements are not OS cold-start results or promises of faster real-CDN downloads. Native non-Windows desktop acceptance remains pending; FreeBSD is server/tools-only.
+
 ## 1.4.7
 
 - Close to the tray by default while a managed server is starting, running or stopping. Settings → Data & onboarding offers automatic, always-tray or quit behavior; tray actions restore or explicitly quit. Linux and tray-creation failures retain a taskbar entry through minimization.

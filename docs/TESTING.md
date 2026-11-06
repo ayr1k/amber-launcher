@@ -1,3 +1,13 @@
+# 1.4.8 release verification
+
+Release baseline: merged AMBER PR #4 (`5426477ddd428175851946fae60506c0be50d4c7`), reviewed task head `2bec3e53c866920cfa53e1d7ab1717fe04dba6b9`. The release uses the accepted startup/download implementation unchanged. Content, UI, timing and benchmark acceptance is provided by the task reviewers and Dot, as recorded in LOCAL-TEST-1.4.8.md and docs/evidence; it is not repeated as an additional release gate.
+
+The release regression run passed **516/516 without skips**. Production builds, four static-serving checks, 2,483 bilingual-message checks and source/license checks passed. Release validation checks source provenance, public-channel/package identity, packaged startup, platform archive contents, source manifests, checksums and published download links. Test operations use temporary synthetic data; no personal accounts, game libraries or worlds are used.
+
+The existing task record includes multi-theme/language/size checks, startup timing/failure paths and controlled loopback download benchmarks. Its timings begin at application entry, not an OS cold start. Controlled single-connection bottlenecks can benefit from ranges; server total bandwidth, application caps and sources without range support may not. These are task-review results, not new real-CDN or real-game acceptance by the release process.
+
+Official AMBER/AmberE packages use version 1.4.8 and public update channels with independent identities/data. Windows x64, macOS x64/arm64, Linux x64 and experimental FreeBSD artifacts are provided. Native non-Windows desktop execution, real-CDN speed, actual accounts/gameplay, cold starts and the upgrade installer wizard remain outside the verified scope. FreeBSD is server/tools-only. Packages are unsigned and macOS is not notarized. Public source excludes injected build credentials and private test assets.
+
 # 1.4.7 release verification
 
 Release baseline: merged AMBER PR #3 (`6842409348b0e1b1fec395b80ea6521cd2631c52`), reviewed task head `84a0e98db6e66d6c7294c094cfd8c3811629ed08`. Both editions use the accepted tray/scheduling implementation and review corrections. Changes after merge are release versioning, documentation and packaging/source-export metadata.

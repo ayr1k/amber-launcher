@@ -75,3 +75,7 @@ Feedback is prepared locally from your input. Diagnostics are excluded unless yo
 ## Server schedules (1.4.7)
 
 Task names, target server identifiers, frequency, console commands and last results are stored in the local game library. Scheduling does not upload this configuration. A command is sent to the selected managed server console when its task runs. Closing to the tray keeps the launcher and eligible schedules running until you explicitly quit.
+
+## Startup appearance cache (1.4.8)
+
+The small local startup cache stores display preferences and localized loading labels only. It does not choose a game-library location and is not uploaded. Download ranges contact the selected existing download source; partial fragments remain local until assembly and cleanup.

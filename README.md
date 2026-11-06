@@ -8,7 +8,7 @@
 <p align="center"><strong>Your world. Your way.</strong></p>
 
 <p align="center">
-  <a href="https://github.com/ayr1k/amber-launcher/releases/tag/v1.4.7"><img src="https://img.shields.io/badge/release-1.4.7-e9b53d?style=flat-square" alt="Release" /></a>
+  <a href="https://github.com/ayr1k/amber-launcher/releases/tag/v1.4.8"><img src="https://img.shields.io/badge/release-1.4.8-e9b53d?style=flat-square" alt="Release" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MPL--2.0-527b68?style=flat-square" alt="License" /></a>
   <a href="https://github.com/ayr1k/amber-launcher/actions/workflows/windows.yml"><img src="https://github.com/ayr1k/amber-launcher/actions/workflows/windows.yml/badge.svg" alt="Build" /></a>
   <a href="https://ayr1k.github.io/"><img src="https://img.shields.io/badge/website-AMBER-527b68?style=flat-square" alt="Website" /></a>
@@ -28,19 +28,19 @@ An independent Minecraft: Java Edition launcher bringing instances, content, the
   </tr>
 </table>
 
-Public AMBER 1.2.1 theme previews using demonstration data; these themes also work with AmberE. Click to enlarge. See the 1.4.7 notes below for current features and platform availability.
+Public AMBER 1.2.1 theme previews using demonstration data; these themes also work with AmberE. Click to enlarge. See the 1.4.8 notes below for current features and platform availability.
 
 ## Overview
 
 AMBER is an independent launcher for Minecraft: Java Edition. It keeps game instances separate and brings installation, mod management, recovery and launch settings into one workspace. Project-owned source is licensed under MPL-2.0.
 
-## 1.4.7
+## 1.4.8
 
-Keep managed servers running in the tray when closing the window. Add server restarts and console commands to Tasks with one-shot, daily or interval schedules, clear next-run/result information and safe pause, shutdown and backup handling.
+Show lightweight startup feedback for real preparation stages, then reveal the main window as soon as initial data, language and rendering are ready. Eligible large files use up to four resumable ranges within the existing shared connection and bandwidth limits, with source fallback and final hash verification.
 
-Windows/macOS/Linux/FreeBSD packages share version 1.4.7. Native macOS/Linux acceptance is pending; FreeBSD is experimental server/tools-only.
+Windows/macOS/Linux/FreeBSD packages share version 1.4.8. Native macOS/Linux acceptance is pending; FreeBSD is experimental server/tools-only.
 
-Windows x64 release with additional platform downloads. [Download the installer, source and checksums](https://github.com/ayr1k/amber-launcher/releases/tag/v1.4.7). Includes instance management, content recommendations, mod updates, backups and recovery.
+Windows x64 release with additional platform downloads. [Download the installer, source and checksums](https://github.com/ayr1k/amber-launcher/releases/tag/v1.4.8). Includes instance management, content recommendations, mod updates, backups and recovery.
 
 - Integrated title bar, independent window corners, remembered window placement and reorganized privacy settings.
 

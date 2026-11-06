@@ -1,3 +1,9 @@
+# 1.4.8 formal release
+
+PR #4 has been merged as `5426477ddd428175851946fae60506c0be50d4c7`, with reviewed head `2bec3e53c866920cfa53e1d7ab1717fe04dba6b9`. The user requested the complete formal release on 2026-11-06. Official packages use **1.4.8 / public**. The task-candidate descriptions and local-test installer hashes below are retained as historical review evidence; they do not describe the official public-channel installers. Current release verification is recorded in RELEASE-ACCEPTANCE.md. Content, UI and performance acceptance is owned by the task reviewers and Dot; the release process relies on that evidence.
+
+PR #4 已合并，用户已要求完整正式发布。正式包为 **1.4.8 / public**；下方任务候选说明及本地测试安装包哈希保留为历史审核证据，不代表本次正式安装包。发布验证见 RELEASE-ACCEPTANCE.md，内容、界面与性能验收沿用任务审核及 Dot 的结论。
+
 # AMBER / AmberE 1.4.8 task candidate
 
 This is a PR test delivery, not a formal release. The task branch is
