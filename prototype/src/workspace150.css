@@ -14,3 +14,9 @@
 
 .workspace150 .select-trigger > span > span { white-space:normal; overflow:visible; text-overflow:clip; overflow-wrap:anywhere; }
 @media(max-width:1050px) { .workspace150 .form-grid { grid-template-columns:minmax(0,1fr); } }
+
+.sakura150 > h2 + p { margin-block:12px; }
+.sakura-create150, .sakura-create150 > form { display:grid; gap:16px; }
+.sakura-create150 > h3, .sakura-create150 > p, .sakura-create150 > form > p { margin:0; }
+.sakura-create150 > button, .sakura-create150 > form > button { justify-self:start; }
+.sakura-create150 > form > .form-grid { margin-top:0; }
