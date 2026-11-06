@@ -11,3 +11,6 @@
 .skin-stage150.background-light { background:var(--preview-light); }
 .skin-stage150.background-dark { background:var(--preview-dark); }
 @media(max-width:1050px) { .account-columns150 { grid-template-columns:minmax(0,1fr); gap:24px; } }
+
+.workspace150 .select-trigger > span > span { white-space:normal; overflow:visible; text-overflow:clip; overflow-wrap:anywhere; }
+@media(max-width:1050px) { .workspace150 .form-grid { grid-template-columns:minmax(0,1fr); } }
