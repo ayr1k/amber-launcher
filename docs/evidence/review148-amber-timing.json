@@ -1,0 +1,630 @@
+[
+  {
+    "edition": "amber",
+    "mode": "gpu",
+    "trial": 1,
+    "data": "<isolated temporary profile>",
+    "renderer": {
+      "commit": 1793992637169,
+      "ui": true,
+      "text": 281,
+      "contentOpacity": 1
+    },
+    "commitToShowMs": 6,
+    "showToContentMs": 9,
+    "firstUsableFrame": 0,
+    "frames": [
+      {
+        "at": 1793992637184,
+        "contentInk": 35355
+      },
+      {
+        "at": 1793992637345,
+        "contentInk": 34798
+      },
+      {
+        "at": 1793992637427,
+        "contentInk": 34798
+      },
+      {
+        "at": 1793992637487,
+        "contentInk": 34764
+      }
+    ],
+    "marks": [
+      {
+        "stage": "visible",
+        "ms": 224,
+        "at": 1793992636717
+      },
+      {
+        "stage": "storage",
+        "ms": 322,
+        "at": 1793992636816
+      },
+      {
+        "stage": "recovery",
+        "ms": 327,
+        "at": 1793992636820
+      },
+      {
+        "stage": "accounts",
+        "ms": 329,
+        "at": 1793992636823
+      },
+      {
+        "stage": "settings",
+        "ms": 332,
+        "at": 1793992636825
+      },
+      {
+        "stage": "library",
+        "ms": 335,
+        "at": 1793992636829
+      },
+      {
+        "stage": "interface",
+        "ms": 373,
+        "at": 1793992636867
+      },
+      {
+        "stage": "committed",
+        "ms": 675,
+        "at": 1793992637168
+      },
+      {
+        "stage": "ready",
+        "ms": 675,
+        "at": 1793992637168
+      },
+      {
+        "stage": "shown",
+        "ms": 682,
+        "at": 1793992637175
+      }
+    ],
+    "gpu": {
+      "2d_canvas": "enabled",
+      "direct_rendering_display_compositor": "disabled_off_ok",
+      "gpu_compositing": "enabled",
+      "multiple_raster_threads": "enabled_on",
+      "opengl": "enabled_on",
+      "rasterization": "enabled",
+      "raw_draw": "disabled_off_ok",
+      "skia_graphite": "disabled_off",
+      "trees_in_viz": "disabled_off",
+      "video_decode": "enabled",
+      "video_encode": "enabled",
+      "webgl": "enabled",
+      "webgpu": "enabled",
+      "webnn": "disabled_off"
+    },
+    "singleInstance": "passed"
+  },
+  {
+    "edition": "amber",
+    "mode": "gpu",
+    "trial": 2,
+    "data": "<isolated temporary profile>",
+    "renderer": {
+      "commit": 1793992639485.3,
+      "ui": true,
+      "text": 281,
+      "contentOpacity": 1
+    },
+    "commitToShowMs": 6.7,
+    "showToContentMs": 9,
+    "firstUsableFrame": 0,
+    "frames": [
+      {
+        "at": 1793992639501,
+        "contentInk": 35355
+      },
+      {
+        "at": 1793992639669,
+        "contentInk": 34798
+      },
+      {
+        "at": 1793992639796,
+        "contentInk": 34764
+      },
+      {
+        "at": 1793992639885,
+        "contentInk": 34764
+      }
+    ],
+    "marks": [
+      {
+        "stage": "visible",
+        "ms": 215,
+        "at": 1793992639035
+      },
+      {
+        "stage": "storage",
+        "ms": 312,
+        "at": 1793992639132
+      },
+      {
+        "stage": "recovery",
+        "ms": 317,
+        "at": 1793992639137
+      },
+      {
+        "stage": "accounts",
+        "ms": 318,
+        "at": 1793992639138
+      },
+      {
+        "stage": "settings",
+        "ms": 321,
+        "at": 1793992639140
+      },
+      {
+        "stage": "library",
+        "ms": 324,
+        "at": 1793992639144
+      },
+      {
+        "stage": "interface",
+        "ms": 364,
+        "at": 1793992639184
+      },
+      {
+        "stage": "committed",
+        "ms": 665,
+        "at": 1793992639485
+      },
+      {
+        "stage": "ready",
+        "ms": 665,
+        "at": 1793992639485
+      },
+      {
+        "stage": "shown",
+        "ms": 672,
+        "at": 1793992639492
+      }
+    ],
+    "gpu": {
+      "2d_canvas": "enabled",
+      "direct_rendering_display_compositor": "disabled_off_ok",
+      "gpu_compositing": "enabled",
+      "multiple_raster_threads": "enabled_on",
+      "opengl": "enabled_on",
+      "rasterization": "enabled",
+      "raw_draw": "disabled_off_ok",
+      "skia_graphite": "disabled_off",
+      "trees_in_viz": "disabled_off",
+      "video_decode": "enabled",
+      "video_encode": "enabled",
+      "webgl": "enabled",
+      "webgpu": "enabled",
+      "webnn": "disabled_off"
+    },
+    "singleInstance": "not repeated"
+  },
+  {
+    "edition": "amber",
+    "mode": "gpu",
+    "trial": 3,
+    "data": "<isolated temporary profile>",
+    "renderer": {
+      "commit": 1793992641761,
+      "ui": true,
+      "text": 281,
+      "contentOpacity": 1
+    },
+    "commitToShowMs": 5,
+    "showToContentMs": 9,
+    "firstUsableFrame": 0,
+    "frames": [
+      {
+        "at": 1793992641775,
+        "contentInk": 35355
+      },
+      {
+        "at": 1793992641800,
+        "contentInk": 35591
+      },
+      {
+        "at": 1793992641945,
+        "contentInk": 34798
+      },
+      {
+        "at": 1793992642079,
+        "contentInk": 34764
+      },
+      {
+        "at": 1793992642154,
+        "contentInk": 34764
+      }
+    ],
+    "marks": [
+      {
+        "stage": "visible",
+        "ms": 209,
+        "at": 1793992641306
+      },
+      {
+        "stage": "storage",
+        "ms": 305,
+        "at": 1793992641402
+      },
+      {
+        "stage": "recovery",
+        "ms": 309,
+        "at": 1793992641406
+      },
+      {
+        "stage": "accounts",
+        "ms": 311,
+        "at": 1793992641407
+      },
+      {
+        "stage": "settings",
+        "ms": 314,
+        "at": 1793992641410
+      },
+      {
+        "stage": "library",
+        "ms": 317,
+        "at": 1793992641414
+      },
+      {
+        "stage": "interface",
+        "ms": 359,
+        "at": 1793992641455
+      },
+      {
+        "stage": "committed",
+        "ms": 663,
+        "at": 1793992641760
+      },
+      {
+        "stage": "ready",
+        "ms": 663,
+        "at": 1793992641760
+      },
+      {
+        "stage": "shown",
+        "ms": 670,
+        "at": 1793992641766
+      }
+    ],
+    "gpu": {
+      "2d_canvas": "enabled",
+      "direct_rendering_display_compositor": "disabled_off_ok",
+      "gpu_compositing": "enabled",
+      "multiple_raster_threads": "enabled_on",
+      "opengl": "enabled_on",
+      "rasterization": "enabled",
+      "raw_draw": "disabled_off_ok",
+      "skia_graphite": "disabled_off",
+      "trees_in_viz": "disabled_off",
+      "video_decode": "enabled",
+      "video_encode": "enabled",
+      "webgl": "enabled",
+      "webgpu": "enabled",
+      "webnn": "disabled_off"
+    },
+    "singleInstance": "not repeated"
+  },
+  {
+    "edition": "amber",
+    "mode": "software",
+    "trial": 1,
+    "data": "<isolated temporary profile>",
+    "renderer": {
+      "commit": 1793992643781.7002,
+      "ui": true,
+      "text": 281,
+      "contentOpacity": 1
+    },
+    "commitToShowMs": 7.3,
+    "showToContentMs": 9,
+    "firstUsableFrame": 0,
+    "frames": [
+      {
+        "at": 1793992643798,
+        "contentInk": 38780
+      },
+      {
+        "at": 1793992643883,
+        "contentInk": 35260
+      },
+      {
+        "at": 1793992643966,
+        "contentInk": 35456
+      },
+      {
+        "at": 1793992644112,
+        "contentInk": 34687
+      },
+      {
+        "at": 1793992644250,
+        "contentInk": 34653
+      }
+    ],
+    "marks": [
+      {
+        "stage": "visible",
+        "ms": 107,
+        "at": 1793992643477
+      },
+      {
+        "stage": "storage",
+        "ms": 200,
+        "at": 1793992643570
+      },
+      {
+        "stage": "recovery",
+        "ms": 205,
+        "at": 1793992643575
+      },
+      {
+        "stage": "accounts",
+        "ms": 206,
+        "at": 1793992643576
+      },
+      {
+        "stage": "settings",
+        "ms": 208,
+        "at": 1793992643578
+      },
+      {
+        "stage": "library",
+        "ms": 211,
+        "at": 1793992643581
+      },
+      {
+        "stage": "interface",
+        "ms": 250,
+        "at": 1793992643620
+      },
+      {
+        "stage": "committed",
+        "ms": 412,
+        "at": 1793992643781
+      },
+      {
+        "stage": "ready",
+        "ms": 412,
+        "at": 1793992643782
+      },
+      {
+        "stage": "shown",
+        "ms": 419,
+        "at": 1793992643789
+      }
+    ],
+    "gpu": {
+      "2d_canvas": "unavailable_software",
+      "direct_rendering_display_compositor": "disabled_off_ok",
+      "gpu_compositing": "disabled_software",
+      "multiple_raster_threads": "enabled_on",
+      "opengl": "disabled_off",
+      "rasterization": "disabled_software",
+      "raw_draw": "disabled_off_ok",
+      "skia_graphite": "disabled_off",
+      "trees_in_viz": "disabled_off",
+      "video_decode": "disabled_software",
+      "video_encode": "disabled_software",
+      "webgl": "unavailable_software",
+      "webgpu": "unavailable_software",
+      "webnn": "unavailable_software"
+    },
+    "singleInstance": "passed"
+  },
+  {
+    "edition": "amber",
+    "mode": "software",
+    "trial": 2,
+    "data": "<isolated temporary profile>",
+    "renderer": {
+      "commit": 1793992645823.6,
+      "ui": true,
+      "text": 281,
+      "contentOpacity": 1
+    },
+    "commitToShowMs": 7.4,
+    "showToContentMs": 9,
+    "firstUsableFrame": 0,
+    "frames": [
+      {
+        "at": 1793992645840,
+        "contentInk": 38780
+      },
+      {
+        "at": 1793992645853,
+        "contentInk": 35260
+      },
+      {
+        "at": 1793992646012,
+        "contentInk": 35456
+      },
+      {
+        "at": 1793992646156,
+        "contentInk": 34687
+      },
+      {
+        "at": 1793992646294,
+        "contentInk": 34653
+      }
+    ],
+    "marks": [
+      {
+        "stage": "visible",
+        "ms": 102,
+        "at": 1793992645516
+      },
+      {
+        "stage": "storage",
+        "ms": 198,
+        "at": 1793992645612
+      },
+      {
+        "stage": "recovery",
+        "ms": 202,
+        "at": 1793992645616
+      },
+      {
+        "stage": "accounts",
+        "ms": 203,
+        "at": 1793992645617
+      },
+      {
+        "stage": "settings",
+        "ms": 206,
+        "at": 1793992645620
+      },
+      {
+        "stage": "library",
+        "ms": 209,
+        "at": 1793992645623
+      },
+      {
+        "stage": "interface",
+        "ms": 247,
+        "at": 1793992645661
+      },
+      {
+        "stage": "committed",
+        "ms": 409,
+        "at": 1793992645823
+      },
+      {
+        "stage": "ready",
+        "ms": 409,
+        "at": 1793992645823
+      },
+      {
+        "stage": "shown",
+        "ms": 417,
+        "at": 1793992645831
+      }
+    ],
+    "gpu": {
+      "2d_canvas": "unavailable_software",
+      "direct_rendering_display_compositor": "disabled_off_ok",
+      "gpu_compositing": "disabled_software",
+      "multiple_raster_threads": "enabled_on",
+      "opengl": "disabled_off",
+      "rasterization": "disabled_software",
+      "raw_draw": "disabled_off_ok",
+      "skia_graphite": "disabled_off",
+      "trees_in_viz": "disabled_off",
+      "video_decode": "disabled_software",
+      "video_encode": "disabled_software",
+      "webgl": "unavailable_software",
+      "webgpu": "unavailable_software",
+      "webnn": "unavailable_software"
+    },
+    "singleInstance": "not repeated"
+  },
+  {
+    "edition": "amber",
+    "mode": "software",
+    "trial": 3,
+    "data": "<isolated temporary profile>",
+    "renderer": {
+      "commit": 1793992647795.9,
+      "ui": true,
+      "text": 281,
+      "contentOpacity": 1
+    },
+    "commitToShowMs": 6.1,
+    "showToContentMs": 12,
+    "firstUsableFrame": 0,
+    "frames": [
+      {
+        "at": 1793992647814,
+        "contentInk": 38780
+      },
+      {
+        "at": 1793992647890,
+        "contentInk": 35260
+      },
+      {
+        "at": 1793992647978,
+        "contentInk": 35456
+      },
+      {
+        "at": 1793992648128,
+        "contentInk": 34687
+      },
+      {
+        "at": 1793992648270,
+        "contentInk": 34653
+      }
+    ],
+    "marks": [
+      {
+        "stage": "visible",
+        "ms": 106,
+        "at": 1793992647492
+      },
+      {
+        "stage": "storage",
+        "ms": 200,
+        "at": 1793992647586
+      },
+      {
+        "stage": "recovery",
+        "ms": 204,
+        "at": 1793992647590
+      },
+      {
+        "stage": "accounts",
+        "ms": 205,
+        "at": 1793992647591
+      },
+      {
+        "stage": "settings",
+        "ms": 208,
+        "at": 1793992647594
+      },
+      {
+        "stage": "library",
+        "ms": 211,
+        "at": 1793992647597
+      },
+      {
+        "stage": "interface",
+        "ms": 251,
+        "at": 1793992647637
+      },
+      {
+        "stage": "committed",
+        "ms": 409,
+        "at": 1793992647795
+      },
+      {
+        "stage": "ready",
+        "ms": 409,
+        "at": 1793992647795
+      },
+      {
+        "stage": "shown",
+        "ms": 417,
+        "at": 1793992647802
+      }
+    ],
+    "gpu": {
+      "2d_canvas": "unavailable_software",
+      "direct_rendering_display_compositor": "disabled_off_ok",
+      "gpu_compositing": "disabled_software",
+      "multiple_raster_threads": "enabled_on",
+      "opengl": "disabled_off",
+      "rasterization": "disabled_software",
+      "raw_draw": "disabled_off_ok",
+      "skia_graphite": "disabled_off",
+      "trees_in_viz": "disabled_off",
+      "video_decode": "disabled_software",
+      "video_encode": "disabled_software",
+      "webgl": "unavailable_software",
+      "webgpu": "unavailable_software",
+      "webnn": "unavailable_software"
+    },
+    "singleInstance": "not repeated"
+  }
+]

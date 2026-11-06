@@ -13,7 +13,7 @@ const assert=require('node:assert/strict');
  const app=await electron.launch({executablePath:join(root,'node_modules/electron/dist/electron.exe'),args:[stage,'--qa-ui','--qa-visible'],env});
  try{
   assert.equal(resolve(await app.evaluate(({app})=>app.getPath('userData'))),resolve(data));
-  let page=await app.firstWindow();page.setDefaultTimeout(15000);
+  let page;for(let i=0;i<400;i++){page=app.windows().find(p=>p.url().startsWith('amber://app/'));if(page)break;await new Promise(r=>setTimeout(r,50));}if(!page)throw Error('Main window did not load');page.setDefaultTimeout(15000);
   await page.locator('.onboarding').waitFor();
   await page.evaluate(async()=>{const value=await window.amberDesktop.settings();await window.amberDesktop.saveSettings({...value,language:'en-US'});});
   await page.reload();await page.locator('.onboarding').waitFor();

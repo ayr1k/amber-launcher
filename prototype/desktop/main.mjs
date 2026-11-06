@@ -1,3 +1,4 @@
+import {startup} from './startup148.mjs';
 import {ServerSchedules} from './server-schedules147.mjs';
 import {shouldHideToTray} from './tray147.mjs';
 import {feedbackDraft,feedbackUrl} from './feedback.mjs';
@@ -78,16 +79,11 @@ const base = dirname(fileURLToPath(import.meta.url));
 const assets = resolve(base, '../dist/client');
 const smoke = process.argv.includes('--smoke-test');
 const qaUI = !app.isPackaged && process.argv.includes('--qa-ui');
-app.setPath('userData', join(app.getPath('appData'), PRODUCT_NAME));
-if (smoke || qaUI) app.setPath('userData', process.env.AMBER_SMOKE_ROOT ? resolve(process.env.AMBER_SMOKE_ROOT) : resolve(base, '../.smoke-data'));
-app.setName(PRODUCT_NAME);
-if (!app.requestSingleInstanceLock()) app.exit(0);
-protocol.registerSchemesAsPrivileged([{ scheme: 'amber', privileges: { standard: true, secure: true, supportFetchAPI: true } }]);
 let window,activatePending = false;
-let loaded = false;
+let loaded = false,interfaceReady=false;
 const smokeChannels = new Set();
-function finishSmoke() {if (smoke && loaded && ['amber:info', 'amber:instances', 'amber:status', 'amber:settings', 'amber:window-state'].every((c) => smokeChannels.has(c))) {console.log('AMBER_DESKTOP_AND_IPC_OK');setTimeout(() => app.quit(), 250);}}
-app.on('second-instance', () => {activatePending = true;if (window) {if (window.isMinimized()) window.restore();window.show();window.focus();}});
+function finishSmoke() {if (smoke && loaded && interfaceReady && ['amber:info', 'amber:instances', 'amber:status', 'amber:settings', 'amber:window-state'].every((c) => smokeChannels.has(c))) {console.log('AMBER_DESKTOP_AND_IPC_OK');setTimeout(() => app.quit(), 250);}}
+app.on('second-instance', () => {activatePending = true;if (window&&interfaceReady) {if (window.isMinimized()) window.restore();window.show();window.focus();}});
 if (smoke) setTimeout(() => {console.error('AMBER_SMOKE_TIMEOUT');app.exit(2);}, 20000).unref();
 app.whenReady().then(async () => {
   Menu.setApplicationMenu(null);
@@ -107,6 +103,7 @@ app.whenReady().then(async () => {
   });
   session.defaultSession.setPermissionRequestHandler((_contents, _permission, callback) => callback(false));
   session.defaultSession.setPermissionCheckHandler(() => false);
+  startup.stage('storage');
   const storage = new Storage(app.getPath('userData'));let storageConfig;let storageBusy=false;
   while(!storageConfig){try{storageConfig=await storage.validateExisting();}catch(e){if(smoke||qaUI)throw e;const answer=await dialog.showMessageBox({type:'error',title:'游戏数据位置不可用 / Game data unavailable',message:'原数据位置无法读取，未创建空库。请连接原磁盘后重试，或重新选择原数据目录。 / Reconnect the original drive or locate your existing library. No empty library was created.',detail:redact(e.message),buttons:['重试 / Retry','选择原目录 / Locate library','退出 / Quit'],defaultId:0,cancelId:2});if(answer.response===2){app.quit();return;}if(answer.response===1){const pick=await dialog.showOpenDialog({properties:['openDirectory']});if(!pick.canceled)try{await storage.reconnect(pick.filePaths[0]);}catch(err){await dialog.showMessageBox({type:'error',message:redact(err.message)});}}}}
 
@@ -121,9 +118,11 @@ app.whenReady().then(async () => {
    if(action==='world'){const r=await dialog.showOpenDialog(window,{title:'读取世界种子 / Read world seed',properties:['openFile'],filters:[{name:'Java level.dat',extensions:['dat']}]});return r.canceled?null:readWorldFile(r.filePaths[0]);}
    throw Error('Unknown map action');
   });
+  startup.stage('recovery');
   const recovery = await recoverTransactions(core);
   if (smoke) {const name = await importBackground(core.root, join(assets, 'assets/forest-banner.png'), (bytes) => nativeImage.createFromBuffer(bytes));const response = await net.fetch('amber://app/user-background/' + name);if (response.status !== 200 || response.headers.get('Content-Type') !== 'image/png' || (await response.arrayBuffer()).byteLength === 0) throw Error('Background round-trip failed');console.log('AMBER_BACKGROUND_OK');}
   if (smoke) {const sample = "amber-credential-codec-check";if (!safeStorage.isEncryptionAvailable() || (await safeStorage.decryptStringAsync(safeStorage.encryptString(sample))).result !== sample || (await safeStorage.decryptStringAsync(await safeStorage.encryptStringAsync(sample))).result !== sample) throw Error("Credential encryption unavailable");console.log("AMBER_SYSTEM_ENCRYPTION_OK");}
+  startup.stage('accounts');
   const accounts = new Accounts(core.root, { codec: credentialCodec(safeStorage) });await accounts.init();
   const appUpdates = await new AppUpdates(app.getPath('userData'), app.getVersion()).init();let upgradeBusy = false;
   function handle(channel, fn) {
@@ -210,6 +209,7 @@ app.whenReady().then(async () => {
   handle('amber:local-pack-create',(id,input)=>localPacks.create(id,input));
   handle('amber:local-pack-forget',id=>localPacks.forget(id));
   handle('amber:pack-report',id=>localPacks.report(id));
+  startup.stage('settings');
   const themes=await new Themes(core.root,settings).init();
   const network=await new DownloadNetwork(core.root,{fetcher:core.fetcher}).init();network.configure((await settings.get()).network);core.fetcher=network.request;core.network=network;
   handle('amber:network-diagnose',()=>network.diagnose());
@@ -218,11 +218,12 @@ app.whenReady().then(async () => {
   handle('amber:network-pause',(id,value)=>network.pause(id,value));
   if(smoke){const a=(await settings.get()).appearance;for(const key of ['backgroundAsset','heroAsset','artworkAsset'])if(a[key]){const response=await net.fetch('amber://app/theme-assets/'+a[key]);const bytes=Buffer.from(await response.arrayBuffer());if(response.status!==200||response.headers.get('Content-Type')!=='image/png'||nativeImage.createFromBuffer(bytes).isEmpty())throw Error('Theme image protocol failed');}console.log('AMBER_THEME_ASSETS_OK');}
 
-  function applyAppearance(v){if(window&&!window.isDestroyed()){window.setOpacity(v.appearance?.enabled?(v.appearance.windowOpacity/100):1);window.webContents.setZoomFactor(v.appearance?.enabled?v.appearance.scale/100:1);window.webContents.send('amber:theme-changed');}}
+  function applyAppearance(v){startup.preferences(v,translateMessage).catch(()=>{});if(window&&!window.isDestroyed()){window.setOpacity(v.appearance?.enabled?(v.appearance.windowOpacity/100):1);window.webContents.setZoomFactor(v.appearance?.enabled?v.appearance.scale/100:1);window.webContents.send('amber:theme-changed');}}
   themes.onChanged=applyAppearance;
 
   const guided=new GuidedCreation(core,content,workflows);
   const workbench=new InstanceWorkbench(core,workflows);core.workbench=workbench;
+  startup.stage('library');
   for(const i of await core.listInstances()){try{const dir=await core.instancePath(i.id);await core.requireStopped(dir);await workbench.recover(dir);}catch(e){recovery.push({name:i.name,error:e.message});}}
   handle('amber:workbench',id=>workbench.inspect(id));
   handle('amber:workbench-good',id=>workbench.markGood(id));
@@ -260,6 +261,7 @@ app.whenReady().then(async () => {
   const languages = new LanguagePacks(app.getPath('userData'));
   async function refreshLocale() {const value = await settings.get(),pack = await languages.get();setLocale(value.language, pack, app.getLocale());return { language: value.language, pack };}
   await refreshLocale();
+  await startup.preferences(await settings.get(),translateMessage);
   handle('amber:language-state', refreshLocale);
   handle('amber:language-import', async () => {const r = await dialog.showOpenDialog(window, { title: translateMessage('导入语言包'), properties: ['openFile'], filters: [{ name: 'AMBER JSON', extensions: ['json'] }] });if (r.canceled) return false;const pack = await languages.preview(r.filePaths[0]);const answer = await dialog.showMessageBox(window, { type: 'question', title: translateMessage('导入语言包'), message: pack.name, detail: translateMessage('将替换当前自定义语言包。只导入可信来源；文字可能改变提示的含义。'), buttons: [translateMessage('取消'), translateMessage('导入')], defaultId: 0, cancelId: 0, noLink: true });if (answer.response !== 1) return false;await languages.save(pack);await refreshLocale();return true;});
   handle('amber:language-export', async () => {const r = await dialog.showSaveDialog(window, { title: translateMessage('导出语言包模板'), defaultPath: 'amber-language.json', filters: [{ name: 'JSON', extensions: ['json'] }] });if (r.canceled) return false;await writeFile(r.filePath, JSON.stringify(languageTemplate(), null, 2));return true;});
@@ -446,10 +448,12 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   const windowInfo=()=>({maximized:window?.isMaximized()||false,focused:window?.isFocused()||false,corners:initialCorners,cornersSupported:supportsWindowCorners(process.platform,osRelease())});
   const sendWindowInfo=()=>{if(window&&!window.isDestroyed())window.webContents.send('amber:window-state-changed',windowInfo());};
   handle('amber:window-state',windowInfo);
+  handle('amber:startup-ready',()=>{if(!interfaceReady){if(!startup.finish(window))return false;interfaceReady=true;if(activatePending&&!smoke){window.focus();activatePending=false;}finishSmoke();}return true;});
+  handle('amber:startup-failed',()=>{if(!interfaceReady)startup.fail(Error('Main interface failed to render'));return true;});
   handle('amber:window-action',action=>{runWindowAction(window,action);return true;});
   const savePlacement=()=>placement.save(window.getNormalBounds(),window.isMinimized()?placementMaximized:window.isMaximized()).catch(e=>console.error(redact(e.message)));
   let tray=null,explicitQuit=false,exitApproved=false;
-  function restoreWindow(){if(window&&!window.isDestroyed()){if(window.isMinimized())window.restore();window.show();window.focus();}}
+  function restoreWindow(){if(!interfaceReady){startup.focus();return;}if(window&&!window.isDestroyed()){if(window.isMinimized())window.restore();window.show();window.focus();}}
   function hideToTray(){
     try{
       if(!tray){
@@ -472,6 +476,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   app.on('before-quit',event=>{if(!exitApproved&&window&&!window.isDestroyed()){event.preventDefault();explicitQuit=true;restoreWindow();window.close();}});
   app.on('will-quit',()=>{tray?.destroy();tray=null;});
   async function createWindow() {
+    interfaceReady=false;
     const remembered=await placement.load(),prefs=await settings.get();initialCorners=prefs.windowCorners;placementMaximized=remembered?.maximized||false;
     const bounds=fitWindow(remembered?.bounds,screen.getAllDisplays(),screen.getPrimaryDisplay().id);
     window = new BrowserWindow({ title: PRODUCT_NAME, icon:join(assets,'brand/app-icon.png'), ...bounds, minWidth: Math.min(860,bounds.width), minHeight: Math.min(640,bounds.height), frame:false, roundedCorners:initialCorners==='system', thickFrame:true, show: false, backgroundColor: '#fafbf8', webPreferences: { preload: join(base, 'preload.cjs'), nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true } });
@@ -484,7 +489,6 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
     const recoverDisplay=()=>{if(!window||window.isDestroyed())return;const previous=window.getNormalBounds(),next=fitWindow(previous,screen.getAllDisplays(),screen.getPrimaryDisplay().id);if(['x','y','width','height'].some(k=>previous[k]!==next[k])){const maximized=window.isMaximized();if(maximized)window.unmaximize();window.setMinimumSize(Math.min(860,next.width),Math.min(640,next.height));window.setBounds(next);if(maximized)window.maximize();}};
     for(const event of ['display-removed','display-metrics-changed','display-added'])screen.on(event,recoverDisplay);
     window.on('closed',()=>{clearTimeout(placementTimer);for(const event of ['display-removed','display-metrics-changed','display-added'])screen.removeListener(event,recoverDisplay);window=null;});
-    window.once('ready-to-show',()=>{if(!smoke&&(!qaUI||process.argv.includes('--qa-visible')))window.show();});
     let closeAllowed = false,closePrompt = false;
     window.on('close', async event => {
       if(closeAllowed)return;event.preventDefault();if(closePrompt)return;closePrompt=true;
@@ -513,9 +517,11 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
     window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
     window.webContents.on('will-navigate', (event, url) => {if (url !== 'amber://app/') event.preventDefault();});
     window.webContents.on('will-attach-webview', (event) => event.preventDefault());
-    window.webContents.on('did-fail-load', (_event, code, description) => {console.error('LOAD_FAILED', code, description);if (smoke) app.exit(1);});
-    window.webContents.on('did-finish-load', () => {loaded = true;if (activatePending && !smoke) {window.show();window.focus();activatePending = false;}finishSmoke();});
-    window.loadURL('amber://app/');
+    window.webContents.on('did-fail-load', (_event, code, description,_url,isMainFrame) => {if(isMainFrame&&code!==-3)startup.fail(Error('LOAD_FAILED '+code+' '+description));});
+    window.webContents.on('render-process-gone',()=>startup.fail(Error('Main renderer stopped')));
+    window.webContents.on('did-finish-load', () => {loaded = true;finishSmoke();});
+    startup.stage('interface');startup.watch();
+    window.loadURL('amber://app/').catch(error=>startup.fail(error));
   }
   schedules=await new ServerSchedules(core.root,servers,{blocked:id=>storageBusy||upgradeBusy||core.jobs.some(j=>j.state==='running'&&j.instanceId===id)}).init();
   handle('amber:server-schedules',async(action,input)=>{
@@ -529,4 +535,4 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   await createWindow();schedules.start();
   app.on('window-all-closed', () => {if (process.platform !== 'darwin') app.quit();});
   app.on('activate', () => {restoreWindow();if (!BrowserWindow.getAllWindows().length) createWindow().catch(e=>console.error(redact(e.message)));});
-}).catch((error) => {console.error(redact(error?.message || String(error)));app.exit(1);});
+}).catch((error) => {console.error(redact(error?.message || String(error)));startup.fail(Error(redact(error?.message||String(error))));});
