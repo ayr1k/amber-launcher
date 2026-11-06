@@ -1,0 +1,47 @@
+name: PR test installers
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  installers:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: prototype
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
+        with:
+          version: 11.25.0
+          package_json_file: prototype/package.json
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec install-electron
+      - run: pnpm build
+      - run: pnpm release:check
+      - run: pnpm package:editions
+        env:
+          AMBER_CURSEFORGE_API_KEY: ${{ secrets.AMBER_CURSEFORGE_API_KEY }}
+      - name: Record tested revision
+        shell: pwsh
+        run: |
+          $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
+          $revision = git rev-parse HEAD
+          Set-Content -Encoding utf8 "releases/$version/TEST-REVISION.txt" "Commit: $revision`nChannel: local test (not a formal release)`nArtifacts: AMBER and AmberE Windows x64 installers`nSHA-256: see each installer's .sha256 file"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: pr-test-installers-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            prototype/releases/*/*-Setup-x64.exe
+            prototype/releases/*/*-Setup-x64.exe.sha256
+            prototype/releases/*/TEST-REVISION.txt
+          retention-days: 30
+          if-no-files-found: error

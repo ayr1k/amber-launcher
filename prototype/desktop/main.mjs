@@ -1,3 +1,4 @@
+import {feedbackDraft,feedbackUrl} from './feedback.mjs';
 import {ServerUpdates144} from './server-updates144.mjs';
 import {Performance144} from './performance144.mjs';
 import {ServerTrash143} from './server-trash143.mjs';
@@ -348,7 +349,10 @@ app.whenReady().then(async () => {
   handle('amber:instance-trash', () => management.list());
   handle('amber:trash-details', (id) => management.trashDetails(id));
   handle('amber:trash-purge', (id, confirmation) => management.purge(id, confirmation));
-  let diagnosticPreview=null;
+  handle('amber:feedback-prepare',fields=>feedbackDraft(fields,feedbackDiagnosticPreview,text=>redact(text,accounts.secrets())));
+  handle('amber:feedback-open',()=>shell.openExternal(feedbackUrl));
+  let diagnosticPreview=null,feedbackDiagnosticPreview=null;
+  handle('amber:feedback-diagnostics',async()=>{feedbackDiagnosticPreview=localizeFields(await summary());return feedbackDiagnosticPreview;});
   const summary = async () => diagnosticSummary({ version: app.getVersion(), platform: process.platform, arch: process.arch, instances: await core.listInstances(), status: await core.runtimeStatus() });
   handle('amber:diagnostics-preview', async()=>{diagnosticPreview=localizeFields(await summary());return diagnosticPreview;});
   handle('amber:privacy-cleanup',async kind=>{if(!['updates','upgrade-backups'].includes(kind))throw Error('不支持的清理目标。');if(upgradeBusy||storageBusy||launching||workflows.active||core.jobs.some(j=>j.state==='running')||['downloading','checking'].includes(appUpdates.state.phase))throw Error('请等待当前任务结束。');const usage=await measureDirectory(join(app.getPath('userData'),kind));if(!usage.complete)throw Error('清理预览不完整，请检查目录权限或链接。');const answer=await dialog.showMessageBox(window,{type:'warning',title:translateMessage('清理本地副本'),message:translateMessage(kind==='updates'?'删除下载的程序更新包？':'删除旧升级配置备份？'),detail:translateMessage('此操作不可撤销。不会删除活动账号、实例、存档或实例备份。旧配置备份可能包含加密的历史账号库。')+'\n'+join(app.getPath('userData'),kind)+'\n'+usage.files+' files · '+(usage.bytes/1048576).toFixed(1)+' MB',buttons:[translateMessage('取消'),translateMessage('确认清理')],defaultId:0,cancelId:0,noLink:true});if(answer.response!==1)return false;if(upgradeBusy||storageBusy||launching||workflows.active||core.jobs.some(j=>j.state==='running')||['downloading','checking'].includes(appUpdates.state.phase))throw Error('请等待当前任务结束。');upgradeBusy=true;try{await cleanupPrivateCopies(app.getPath('userData'),kind);if(kind==='updates'){appUpdates.candidate=null;appUpdates.state={phase:'idle'};}return true;}finally{upgradeBusy=false;}});
