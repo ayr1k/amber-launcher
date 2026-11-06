@@ -74,7 +74,13 @@ test('sleep resume cannot write or restart scheduling during migration',async t=
  try{await f.schedules.withPaused(async()=>{
   const before=await readFile(f.schedules.path,'utf8');f.advance(65000);await f.schedules.resumeAfterSleep();
   assert.equal(f.schedules.paused,true);assert.equal(await readFile(f.schedules.path,'utf8'),before);assert.equal(f.schedules.timer,null);
- });}finally{await f.schedules.pause();}
+ });await f.schedules.tick();assert.equal(f.calls.length,0);assert.equal(f.schedules.rows[0].last.state,'missed');}finally{await f.schedules.pause();}
+});
+test('resume deferred by migration restarts only after the hold even if already suspended',async t=>{
+ const f=await fixture(t);await f.schedules.save({...task,kind:'interval',minutes:1});f.schedules.start();await f.schedules.suspend();
+ try{await f.schedules.withPaused(async()=>{f.advance(65000);await f.schedules.resumeAfterSleep();assert.equal(f.schedules.timer,null);});
+  assert.ok(f.schedules.timer);await f.schedules.tick();assert.equal(f.calls.length,0);assert.equal(f.schedules.rows[0].last.state,'missed');
+ }finally{await f.schedules.pause();}
 });
 test('valid 03:00 task fires at spring DST transition',async t=>{
  const previous=process.env.TZ;process.env.TZ='Europe/Berlin';

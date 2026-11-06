@@ -38,12 +38,12 @@ the PR head SHA in `TEST-REVISION.txt`, not the inherited version string.
 ## Verified locally / 本地验证
 
 - Node 24.22.1; pnpm 11.25.0; locked dependencies installed.
-- `node --test tests/release147.test.mjs`: 29/29 passed after independent-review fixes.
+- `node --test tests/release147.test.mjs`: 30/30 passed after independent-review fixes.
 - `node --test tests/servers132.test.mjs tests/release140.test.mjs tests/release144.test.mjs tests/release147.test.mjs tests/sites-worker.test.mjs`: 53/53 passed.
 - `pnpm build`, `node scripts/check-locales.mjs`, and
   `node scripts/release-check.mjs`: passed. Vite retains the existing large-bundle warning.
 - With approved normal execution permissions, the complete regression suite passed
-  **493/493, no skips**, using `node --test --test-concurrency=2` and the test list
+  **494/494, no skips**, using `node --test --test-concurrency=2` and the test list
   from `package.json`. Fixtures remained within the isolated task temporary root.
 - Reused the existing, version-matching Electron 45.0.0 runtime. Desktop smoke passed
   background assets, system encryption, theme assets and desktop/IPC initialization.
@@ -51,7 +51,7 @@ the PR head SHA in `TEST-REVISION.txt`, not the inherited version string.
   UI create/pause/persist, a real one-shot timer skipping an offline target, actual
   native window hiding, second-instance restore and default idle exit. Playwright
   is an external QA dependency and is not shipped.
-- 新增重启/备份锁竞争、备份失败、替代进程、睡眠恢复测试已通过。完整回归 493 项和
+- 新增重启/备份锁竞争、备份失败、替代进程、睡眠恢复测试已通过。完整回归 494 项和
   隔离桌面验收通过；未进行真实 Minecraft 世界重启或非 Windows 真机验收。
 
 ## Independent-review corrections / 独立审核修复
@@ -77,14 +77,15 @@ the PR head SHA in `TEST-REVISION.txt`, not the inherited version string.
 ## Follow-up boundary review
 
 Four new isolated regressions failed against the previous revision and passed after
-the fixes (29 task-specific tests, 493 full regressions):
+the fixes (30 task-specific tests, 494 full regressions):
 
 - A cancelled restart no longer makes a server appear inactive during automatic
   exit backup. Finalization remains active until its completion promise resolves;
   the explicit-quit path therefore waits through the existing shutdown guard.
 - Migration owns a pause hold. Sleep/resume cannot restart the timer or write
   schedule state inside that hold; suspend also prevents premature restart when
-  the migration hold ends before system resume.
+  the migration hold ends before system resume. Deferred resume skips sleep deadlines
+  after releasing the hold, including when migration began while already suspended.
 - A DST offset transition within the same time zone retains the already calculated
   deadline. A valid 03:00 spring-transition task runs, rather than being recalculated
   to tomorrow. Changing the time-zone identity still recalculates daily times.

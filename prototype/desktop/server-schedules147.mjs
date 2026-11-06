@@ -143,9 +143,9 @@ export class ServerSchedules {
   start(){if(this.timer||this.pauseHolds||this.sleeping)return;this.paused=false;this.timer=setInterval(()=>{this.dispatch().catch(e=>{this.error=redact(e.message);});},1000);this.timer.unref?.();}
   async pause(){this.paused=true;clearInterval(this.timer);this.timer=null;for(const r of this.running.values())r.controller.abort(Error('Task cancelled / 任务已取消'));await this.queue;await Promise.all([...this.running.values()].map(r=>r.promise));}
   suspend(){this.sleeping=true;return this.pause();}
-  async withPaused(fn){if(!this.pauseHolds)this.resumeAfterHold=!!this.timer;this.pauseHolds++;try{await this.pause();return await fn();}finally{this.pauseHolds--;if(!this.pauseHolds&&this.resumeAfterHold){this.resumeAfterHold=false;this.start();}}}
+  async withPaused(fn){if(!this.pauseHolds)this.resumeAfterHold=!!this.timer;this.pauseHolds++;try{await this.pause();return await fn();}finally{this.pauseHolds--;if(!this.pauseHolds){const restart=this.resumeAfterHold;this.resumeAfterHold=false;if(this.deferredResume&&!this.sleeping)await this.resumeAfterSleep();else if(restart)this.start();}}}
   resumeAfterSleep(){return this.serial(async()=>{
-    this.sleeping=false;if(this.error||this.pauseHolds)return;
+    this.sleeping=false;if(this.error)return;if(this.pauseHolds){this.deferredResume=true;return;}this.deferredResume=false;
     for(const task of this.rows)if(task.enabled&&task.nextRun&&Date.parse(task.nextRun)<=this.now()){
       task.last={state:'missed',at:task.nextRun};task.nextRun=nextOccurrence(task,this.now());
       if(task.kind==='once')task.enabled=false;
