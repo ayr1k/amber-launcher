@@ -51,7 +51,7 @@ the PR head SHA in `TEST-REVISION.txt`, not the inherited version string.
   UI create/pause/persist, a real one-shot timer skipping an offline target, actual
   native window hiding, second-instance restore and default idle exit. Playwright
   is an external QA dependency and is not shipped.
-- 新增重启/备份锁竞争、备份失败、替代进程、睡眠恢复测试已通过。完整回归 4810 项和
+- 新增重启/备份锁竞争、备份失败、替代进程、睡眠恢复测试已通过。完整回归 489 项和
   隔离桌面验收通过；未进行真实 Minecraft 世界重启或非 Windows 真机验收。
 
 ## Independent-review corrections / 独立审核修复
@@ -71,7 +71,7 @@ the PR head SHA in `TEST-REVISION.txt`, not the inherited version string.
   and resumes it after a failed migration. The old code's write-order risk was
   confirmed by inspection; no real migration checksum failure is claimed. A new
   regression proves no scheduler writes occur inside the migration critical section.
-- 新增 9 项测试覆盖以上边界。已修复 5 项功能问题，并为迁移写入隔离增加保护和测试；
+- 新增 10 项测试覆盖以上边界。已修复 5 项功能问题，并为迁移写入隔离增加保护和测试；
   不把静态迁移风险描述成已复现的真实迁移失败。
 
 ## Initial sandbox limitations / 初次受限环境记录
