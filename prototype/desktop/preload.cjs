@@ -7,6 +7,7 @@ contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
   serverManagement:(action,...args)=>ipcRenderer.invoke('amber:server-management',action,...args),
   packUpgrade:(action,...args)=>ipcRenderer.invoke('amber:pack-upgrade',action,...args),
   protection:(action,...args)=>ipcRenderer.invoke('amber:protection',action,...args),
+  serverSchedules:(action,input)=>ipcRenderer.invoke('amber:server-schedules',action,input),
   server:(action,...args)=>ipcRenderer.invoke('amber:server',action,...args),
   editorHistory:(id,name)=>ipcRenderer.invoke('amber:editor-history',id,name),
   editorBackup:(id,name,token)=>ipcRenderer.invoke('amber:editor-backup',id,name,token),

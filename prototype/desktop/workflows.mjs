@@ -21,9 +21,10 @@ import { loaderVersions } from './loaders.mjs';
 import { importOptifine, optifineGame } from './local-content.mjs';
 import { installOptifine } from './optifine.mjs';
 
-export const defaults={network:networkDefaults,appearance:appearanceDefaults,graphicsMode:'system',windowCorners:'system',titlebarColor:'theme',language:"system",copyLoginCode:true,defaultAccountId:null,panelOpacity:100,background:'forest',theme:'system',uiStyle:'square',accent:'forest',density:'comfortable',motion:true,fontSize:14,threads:8,memory:4,layout:defaultLayout};
+export const defaults={network:networkDefaults,appearance:appearanceDefaults,graphicsMode:'system',closeBehavior:'server',windowCorners:'system',titlebarColor:'theme',language:"system",copyLoginCode:true,defaultAccountId:null,panelOpacity:100,background:'forest',theme:'system',uiStyle:'square',accent:'forest',density:'comfortable',motion:true,fontSize:14,threads:8,memory:4,layout:defaultLayout};
 export function validateSettings(input){
  const s={...defaults,...input};
+ if(!['server','tray','quit'].includes(s.closeBehavior))throw Error('Invalid close behavior / 关闭行为无效');
  s.network=validateNetwork(s.network);
  validateGraphicsMode(s.graphicsMode);
  if(!['square','system'].includes(s.windowCorners)||!['theme','accent'].includes(s.titlebarColor))throw Error('窗口设置无效。');

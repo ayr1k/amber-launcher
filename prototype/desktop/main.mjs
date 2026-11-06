@@ -1,3 +1,5 @@
+import {ServerSchedules} from './server-schedules147.mjs';
+import {shouldHideToTray} from './tray147.mjs';
 import {feedbackDraft,feedbackUrl} from './feedback.mjs';
 import {ServerUpdates144} from './server-updates144.mjs';
 import {Performance144} from './performance144.mjs';
@@ -43,7 +45,7 @@ import { ModImport } from './mod-import.mjs';
 import { BulkContent } from './bulk-content.mjs';
 import { LaunchPreferences } from './launch-preferences.mjs';
 // SPDX-License-Identifier: MPL-2.0
-import { app, powerMonitor, Menu, screen, BrowserWindow, ipcMain, protocol, net, shell, session, dialog, safeStorage, nativeImage, clipboard } from 'electron';
+import { app, powerMonitor, Tray, Menu, screen, BrowserWindow, ipcMain, protocol, net, shell, session, dialog, safeStorage, nativeImage, clipboard } from 'electron';
 import { spawn } from 'node:child_process';
 import { beginMicrosoftLogin, copyMicrosoftCode, pendingCode, clearCopiedCode } from './login-actions.mjs';
 import { AppUpdates, backupUpgradeConfig } from './app-updates.mjs';
@@ -154,6 +156,7 @@ app.whenReady().then(async () => {
   handle('amber:java-select', (id, path) => core.selectJava(id, path));
   handle('amber:java-browse', async () => {const result = await dialog.showOpenDialog(window, { title: translateMessage('选择 Java 可执行文件'), properties: ['openFile'], ...(process.platform==='win32'?{filters:[{name:'Java',extensions:['exe']}]}:{}) });return result.canceled ? null : core.addJava(result.filePaths[0]);});
   const servers=await new Servers(core).init(),rooms=new Rooms(core,servers),sakura=new Sakura142(core,servers,credentialCodec(safeStorage));
+  let schedules;
   const serverUpdates144=new ServerUpdates144(servers);
   const serverTrash=new ServerTrash143(servers,{connected:id=>rooms.starting||sakura.busy||rooms.active&&rooms.current?.serverId===id||sakura.active&&sakura.current?.serverId===id});
   const serverEditor=new InstanceEditor({instancePath:id=>servers.dir(id)},{directories:['config','defaultconfigs','plugins','kubejs','scripts'],files:['server.properties','bukkit.yml','spigot.yml','paper.yml','permissions.yml']});
@@ -445,6 +448,29 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   handle('amber:window-state',windowInfo);
   handle('amber:window-action',action=>{runWindowAction(window,action);return true;});
   const savePlacement=()=>placement.save(window.getNormalBounds(),window.isMinimized()?placementMaximized:window.isMaximized()).catch(e=>console.error(redact(e.message)));
+  let tray=null,explicitQuit=false,exitApproved=false;
+  function restoreWindow(){if(window&&!window.isDestroyed()){if(window.isMinimized())window.restore();window.show();window.focus();}}
+  function hideToTray(){
+    try{
+      if(!tray){
+        const icon=nativeImage.createFromPath(join(assets,'brand/app-icon.png')).resize({width:24,height:24});
+        if(icon.isEmpty())throw Error('Tray icon unavailable');
+        tray=new Tray(icon);tray.setToolTip(PRODUCT_NAME);
+        tray.on('click',restoreWindow);tray.on('double-click',restoreWindow);
+      }
+      tray.setContextMenu(Menu.buildFromTemplate([
+        {label:translateMessage('恢复窗口'),click:restoreWindow},
+        {type:'separator'},
+        {label:translateMessage('退出 AMBER'),click:()=>{explicitQuit=true;restoreWindow();window?.close();}}
+      ]));
+      // Linux shells may accept a tray object without displaying a status icon.
+      // Keep a taskbar entry on Linux so the window is always recoverable.
+      if(process.platform==='linux')window.minimize();else window.hide();
+      return true;
+    }catch(e){tray?.destroy();tray=null;window.minimize();return false;}
+  }
+  app.on('before-quit',event=>{if(!exitApproved&&window&&!window.isDestroyed()){event.preventDefault();explicitQuit=true;restoreWindow();window.close();}});
+  app.on('will-quit',()=>{tray?.destroy();tray=null;});
   async function createWindow() {
     const remembered=await placement.load(),prefs=await settings.get();initialCorners=prefs.windowCorners;placementMaximized=remembered?.maximized||false;
     const bounds=fitWindow(remembered?.bounds,screen.getAllDisplays(),screen.getPrimaryDisplay().id);
@@ -462,7 +488,10 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
     let closeAllowed = false,closePrompt = false;
     window.on('close', async event => {
       if(closeAllowed)return;event.preventDefault();if(closePrompt)return;closePrompt=true;
+      let pausedSchedules=false;
       try {
+        const prefs=await settings.get();
+        if(!smoke&&shouldHideToTray(prefs.closeBehavior,servers.active,explicitQuit)){await savePlacement();hideToTray();return;}
         if(!smoke&&skinRuns.size){const answer=await dialog.showMessageBox(window,{type:'question',message:'离线游戏仍在使用本地皮肤 / Offline game is using a local skin',detail:'最小化可继续提供皮肤；退出后尚未缓存的皮肤可能无法加载。 / Minimize to keep serving skins; quitting may prevent uncached skins from loading.',buttons:['最小化 / Minimize','退出 / Quit','返回 / Back'],defaultId:0,cancelId:2});if(answer.response===0){window.minimize();return;}if(answer.response!==1)return;}
         if(storageBusy){await dialog.showMessageBox(window,{type:'info',message:translateMessage('数据目录正在迁移，请等待完成。'),buttons:[translateMessage('确定')]});return;}
         if(!smoke&&(minecraftImport.busy||serverManagement140.backupBusy||workflows.active||core.jobs.some(j=>j.state==='running')||appUpdates.state.phase==='downloading')){
@@ -471,13 +500,15 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
           appUpdates.cancel();minecraftImport.cancel();workflows.cancel();for(const j of core.jobs.filter(j=>j.state==='running'))core.controllers.get(j.id)?.abort(Error('用户取消任务并退出。'));
           while(minecraftImport.busy||serverManagement140.backupBusy||workflows.active||core.jobs.some(j=>j.state==='running')||appUpdates.state.phase==='downloading')await new Promise(resolve=>setTimeout(resolve,150));
         }
+        await schedules?.pause();pausedSchedules=true;
         if(!smoke&&(servers.active||(rooms.active||sakura.active))){
           const answer=await dialog.showMessageBox(window,{type:'question',message:'服务端或联机连接仍在运行 / Servers or networking are still active',buttons:['最小化并继续 / Minimize and continue','停止服务端并退出 / Stop and quit','返回 / Back'],defaultId:0,cancelId:2,noLink:true});
           if(answer.response===0){window.minimize();return;}if(answer.response!==1)return;
           try{await servers.shutdown();await rooms.leave();await sakura.stop();}catch(e){await dialog.showMessageBox(window,{type:'warning',message:e.message});return;}
         }
-        clearTimeout(placementTimer);await savePlacement();closeAllowed=true;window.close();
-      }finally{closePrompt=false;}
+        clearTimeout(placementTimer);await savePlacement();exitApproved=true;closeAllowed=true;window.close();app.quit();
+      }catch(e){restoreWindow();await dialog.showMessageBox(window,{type:'error',message:redact(e.message)});}
+      finally{closePrompt=false;explicitQuit=false;if(pausedSchedules&&!exitApproved)schedules?.start();}
     });
     window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
     window.webContents.on('will-navigate', (event, url) => {if (url !== 'amber://app/') event.preventDefault();});
@@ -486,7 +517,16 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
     window.webContents.on('did-finish-load', () => {loaded = true;if (activatePending && !smoke) {window.show();window.focus();activatePending = false;}finishSmoke();});
     window.loadURL('amber://app/');
   }
-  await createWindow();
+  schedules=await new ServerSchedules(core.root,servers,{blocked:()=>storageBusy||upgradeBusy||workflows.active||serverManagement140.backupBusy||core.jobs.some(j=>j.state==='running')}).init();
+  handle('amber:server-schedules',async(action,input)=>{
+    if(action==='list')return schedules.list();
+    if(action==='save')return schedules.save(input);
+    if(action==='remove')return schedules.remove(input);
+    throw Error('Unknown schedule action');
+  });
+  powerMonitor.on('suspend',()=>{schedules.pause().catch(e=>console.error(redact(e.message)));});
+  powerMonitor.on('resume',()=>{if(!exitApproved)schedules.resumeAfterSleep().catch(e=>console.error(redact(e.message)));});
+  await createWindow();schedules.start();
   app.on('window-all-closed', () => {if (process.platform !== 'darwin') app.quit();});
-  app.on('activate', () => {if (!BrowserWindow.getAllWindows().length) createWindow().catch(e=>console.error(redact(e.message)));});
+  app.on('activate', () => {restoreWindow();if (!BrowserWindow.getAllWindows().length) createWindow().catch(e=>console.error(redact(e.message)));});
 }).catch((error) => {console.error(redact(error?.message || String(error)));app.exit(1);});
