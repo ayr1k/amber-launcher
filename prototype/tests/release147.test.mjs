@@ -9,6 +9,7 @@ import {shouldHideToTray} from '../desktop/tray147.mjs';
 import {Servers} from '../desktop/servers132.mjs';
 import {TaskQueue} from '../desktop/task-queue132.mjs';
 import {createHash} from 'node:crypto';
+import {EventEmitter} from 'node:events';
 import {validateSettings} from '../desktop/workflows.mjs';
 const id='12345678-1234-1234-1234-123456789abc';
 const task={serverId:id,name:'Noon restart',enabled:true,action:'restart',kind:'daily',time:'12:00'};
@@ -47,6 +48,43 @@ test('resume skips even short sleep deadlines, without replaying commands',async
  await f.schedules.resumeAfterSleep();await f.schedules.pause();assert.equal(f.schedules.rows[0].last.state,'missed');assert.equal(f.calls.length,0);
 });
 const gate=()=>{let release;const promise=new Promise(r=>release=r);return {promise,release};};
+test('cancelled restart remains active until automatic stop backup finishes',async t=>{
+ const root=await mkdtemp(join(tmpdir(),'amber-finalize147-'));t.after(()=>rm(root,{recursive:true,force:true}));
+ const entered=gate(),backup=gate(),controller=new AbortController(),jar=Buffer.from('fake jar');
+ await writeFile(join(root,'server.jar'),jar);await writeFile(join(root,'eula.txt'),'eula=true\n');
+ const child=new EventEmitter();child.stdout=new EventEmitter();child.stderr=new EventEmitter();child.stdout.setEncoding=child.stderr.setEncoding=()=>{};
+ child.stdin=new EventEmitter();child.stdin.write=()=>{child.emit('close',0);};
+ const server=new Servers({root},{inspectRuntime:async()=>({major:21,path:'unused'}),checkPort:async()=>{},spawnProcess:()=>child});
+ server.stopped=async()=>{};server.read=async()=>({dir:root,item:{memory:1,status:'ready',javaPath:'unused',type:'vanilla',jarHash:createHash('sha256').update(jar).digest('hex')}});server.properties=async()=>({values:{}});
+ server.afterNormalStop=async()=>{entered.release();await backup.promise;};
+ await server.startUnlocked(id);server.runs.get(id).state='running';
+ const restart=server.restartScheduled(id,()=>controller.signal.aborted,120000,{signal:controller.signal});await entered.promise;controller.abort();await assert.rejects(restart,/cancelled/);
+ let completed=false;const shutdown=server.shutdown().then(()=>completed=true);
+ try{assert.equal(server.active,true);await new Promise(r=>setImmediate(r));assert.equal(completed,false);}finally{backup.release();await shutdown;}
+ assert.equal(server.active,false);
+});
+test('unclaimed queued work cannot overtake a requested pause',async t=>{
+ const f=await fixture(t);await f.schedules.save({...task,kind:'interval',minutes:1,action:'command',command:'say forbidden'});
+ const block=gate();const held=f.schedules.serial(()=>block.promise);f.advance(60000);
+ const tick=f.schedules.tick(),pause=f.schedules.save({...f.schedules.rows[0],enabled:false});block.release();
+ await Promise.all([held,tick,pause]);assert.equal(f.calls.length,0);
+});
+test('sleep resume cannot write or restart scheduling during migration',async t=>{
+ const f=await fixture(t);await f.schedules.save({...task,kind:'interval',minutes:1});f.schedules.start();
+ try{await f.schedules.withPaused(async()=>{
+  const before=await readFile(f.schedules.path,'utf8');f.advance(65000);await f.schedules.resumeAfterSleep();
+  assert.equal(f.schedules.paused,true);assert.equal(await readFile(f.schedules.path,'utf8'),before);assert.equal(f.schedules.timer,null);
+ });}finally{await f.schedules.pause();}
+});
+test('valid 03:00 task fires at spring DST transition',async t=>{
+ const previous=process.env.TZ;process.env.TZ='Europe/Berlin';
+ t.mock.timers.enable({apis:['Date'],now:Date.parse('2026-03-29T00:59:59Z')});
+ try{const root=await mkdtemp(join(tmpdir(),'amber-dst147-'));t.after(()=>rm(root,{recursive:true,force:true}));
+  const calls=[],servers={read:async()=>({}),runs:new Map([[id,{state:'running'}]]),locks:new TaskQueue(),command:async()=>calls.push(1)};
+  const schedules=await new ServerSchedules(root,servers).init();await schedules.save({...task,time:'03:00',action:'command',command:'say dawn'});
+  t.mock.timers.tick(1000);await schedules.tick();assert.equal(calls.length,1);
+ }finally{t.mock.timers.reset();if(previous===undefined)delete process.env.TZ;else process.env.TZ=previous;}
+});
 test('a consumed one-shot restart can still be paused while it is running',async t=>{
  const f=await fixture(t),entered=gate();f.servers.restartScheduled=async(_id,_cancel,_timeout,{signal})=>{entered.release();await new Promise((_,reject)=>signal.addEventListener('abort',()=>reject(signal.reason),{once:true}));};
  await f.schedules.save({...task,kind:'once',at:'2026-11-06T10:01:00Z'});f.advance(60000);const work=f.schedules.tick();await entered.promise;

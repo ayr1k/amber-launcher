@@ -9,7 +9,8 @@ const uuid=/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i;
 // 200 tasks, each with up to 2,000 UTF-16 command units and bounded result text.
 // Even JSON-escaped control characters fit; read and write use the same limit.
 export const SCHEDULE_STORE_LIMIT=8_000_000;
-const zoneKey=()=>Intl.DateTimeFormat().resolvedOptions().timeZone+':'+new Date().getTimezoneOffset();
+// DST changes the offset within one zone, not the already calculated deadline.
+const zoneKey=()=>Intl.DateTimeFormat().resolvedOptions().timeZone;
 export function validateSchedule(input){
   if(!input||!uuid.test(input.serverId)||typeof input.name!=='string'||!input.name.trim()||input.name.length>80||typeof input.enabled!=='boolean'||!['restart','command'].includes(input.action)||!['once','daily','interval'].includes(input.kind))throw Error('Invalid scheduled task / 定时任务无效');
   const value={serverId:input.serverId,name:input.name.trim(),enabled:input.enabled,action:input.action,kind:input.kind};
@@ -41,7 +42,7 @@ export function nextOccurrence(task,now){
 export class ServerSchedules {
   constructor(root,servers,{now=Date.now,blocked=()=>false}={}){
     this.path=join(root,'server-schedules.json');this.servers=servers;this.now=now;this.blocked=blocked;
-    this.rows=[];this.queue=Promise.resolve();this.paused=false;this.running=new Map();this.zone=zoneKey();
+    this.rows=[];this.queue=Promise.resolve();this.paused=false;this.running=new Map();this.zone=zoneKey();this.pauseRequests=new Map();this.pauseHolds=0;this.sleeping=false;
   }
   serial(fn){const result=this.queue.then(fn);this.queue=result.catch(()=>{});return result;}
   async persist(){const data={schema:1,tasks:this.rows};if(Buffer.byteLength(JSON.stringify(data,null,2))>SCHEDULE_STORE_LIMIT)throw Error('Schedule store is too large / 定时任务存储超过上限');await atomicJson(this.path,data);}
@@ -67,7 +68,8 @@ export class ServerSchedules {
   save(input){
     // Cancellation is synchronous and independent of persistence or other servers.
     let task;try{task=validateSchedule(input);}catch(e){return Promise.reject(e);}
-    if(input.id&&!task.enabled)this.running.get(input.id)?.controller.abort(Error('Task cancelled / 任务已取消'));
+    const pauseId=input.id&&!task.enabled?input.id:null;
+    if(pauseId){this.pauseRequests.set(pauseId,(this.pauseRequests.get(pauseId)||0)+1);this.running.get(pauseId)?.controller.abort(Error('Task cancelled / 任务已取消'));}
     return this.serial(async()=>{
     if(this.error)throw Error(this.error);
     const old=input.id?this.rows.find(t=>t.id===input.id):null;
@@ -83,7 +85,7 @@ export class ServerSchedules {
     const row={...task,id:old?.id||randomUUID(),nextRun,last:old?.last};
     const previous=this.rows;this.rows=old?this.rows.map(t=>t.id===old.id?row:t):[...this.rows,row];
     try{await this.persist();}catch(e){this.rows=previous;throw e;}return this.list();
-  });}
+  }).finally(()=>{if(pauseId){const count=this.pauseRequests.get(pauseId)-1;if(count)this.pauseRequests.set(pauseId,count);else this.pauseRequests.delete(pauseId);}});}
   remove(id){return this.serial(async()=>{
     if(this.error)throw Error(this.error);
     if(this.running.has(id))throw Error('Task is running / 任务正在执行');
@@ -98,7 +100,7 @@ export class ServerSchedules {
     if(this.paused||this.error)return [];
     const changedZone=this.refreshZone(),pending=[];let changed=changedZone;
     for(const task of this.rows){
-      if(this.paused||!task.enabled||!task.nextRun||Date.parse(task.nextRun)>this.now())continue;
+      if(this.paused||this.pauseRequests.has(task.id)||!task.enabled||!task.nextRun||Date.parse(task.nextRun)>this.now())continue;
       const due=Date.parse(task.nextRun),now=this.now();
       task.nextRun=nextOccurrence(task,now);if(task.kind==='once')task.enabled=false;changed=true;
       if(this.running.has(task.id))continue;
@@ -138,11 +140,12 @@ export class ServerSchedules {
     });}
   }
   async tick(){await Promise.all(await this.dispatch());}
-  start(){if(this.timer)return;this.paused=false;this.timer=setInterval(()=>{this.dispatch().catch(e=>{this.error=redact(e.message);});},1000);this.timer.unref?.();}
+  start(){if(this.timer||this.pauseHolds||this.sleeping)return;this.paused=false;this.timer=setInterval(()=>{this.dispatch().catch(e=>{this.error=redact(e.message);});},1000);this.timer.unref?.();}
   async pause(){this.paused=true;clearInterval(this.timer);this.timer=null;for(const r of this.running.values())r.controller.abort(Error('Task cancelled / 任务已取消'));await this.queue;await Promise.all([...this.running.values()].map(r=>r.promise));}
-  async withPaused(fn){const wasRunning=!!this.timer;await this.pause();try{return await fn();}finally{if(wasRunning)this.start();}}
+  suspend(){this.sleeping=true;return this.pause();}
+  async withPaused(fn){if(!this.pauseHolds)this.resumeAfterHold=!!this.timer;this.pauseHolds++;try{await this.pause();return await fn();}finally{this.pauseHolds--;if(!this.pauseHolds&&this.resumeAfterHold){this.resumeAfterHold=false;this.start();}}}
   resumeAfterSleep(){return this.serial(async()=>{
-    if(this.error)return;
+    this.sleeping=false;if(this.error||this.pauseHolds)return;
     for(const task of this.rows)if(task.enabled&&task.nextRun&&Date.parse(task.nextRun)<=this.now()){
       task.last={state:'missed',at:task.nextRun};task.nextRun=nextOccurrence(task,this.now());
       if(task.kind==='once')task.enabled=false;

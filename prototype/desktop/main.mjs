@@ -524,7 +524,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
     if(action==='remove')return schedules.remove(input);
     throw Error('Unknown schedule action');
   });
-  powerMonitor.on('suspend',()=>{schedules.pause().catch(e=>console.error(redact(e.message)));});
+  powerMonitor.on('suspend',()=>{schedules.suspend().catch(e=>console.error(redact(e.message)));});
   powerMonitor.on('resume',()=>{if(!exitApproved)schedules.resumeAfterSleep().catch(e=>console.error(redact(e.message)));});
   await createWindow();schedules.start();
   app.on('window-all-closed', () => {if (process.platform !== 'darwin') app.quit();});
