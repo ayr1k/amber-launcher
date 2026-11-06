@@ -1,3 +1,13 @@
+# 1.4.7 release verification
+
+Release baseline: merged AMBER PR #3 (`6842409348b0e1b1fec395b80ea6521cd2631c52`), reviewed task head `84a0e98db6e66d6c7294c094cfd8c3811629ed08`. Both editions use the accepted tray/scheduling implementation and review corrections. Changes after merge are release versioning, documentation and packaging/source-export metadata.
+
+The full release regression run passed **494/494 with no skips**, including 30 scheduling/tray-specific tests. Production builds, four static-serving checks, 2,472 bilingual messages and source/license checks passed. Both public-channel edition stages passed isolated Windows desktop acceptance: schedule create/pause/persist, a real one-shot timer skipping an offline target, native window hiding, second-instance restore and idle close. Test profiles were temporary synthetic data. The earlier task's layout and boundary acceptance remains in LOCAL-TEST-1.4.7.md; its inherited 1.4.6/local installer descriptions are historical, not the official 1.4.7/public release.
+
+Shutdown/backup locking, cancellation through async startup, per-server concurrency, busy/lateness admission, migration holds, sleep recovery and daily time-zone/DST boundaries are covered by controlled regression fixtures. These checks are not real Minecraft world/plugin shutdown or operating-system sleep testing. Actual server shutdown/restart, long-running schedules and native macOS/Linux tray behavior still require acceptance in the target environment. Commands are sent to the managed server console; success does not certify plugin completion.
+
+Formal distributions use public update channels with independent application identities and data. Windows x64, macOS x64/arm64, Linux x64 and experimental FreeBSD packages share version 1.4.7. Native non-Windows execution remains unverified for this release; FreeBSD is server/tools-only. Packages are unsigned and macOS is not notarized. Source archives exclude build-injected credentials and private test assets.
+
 # 1.4.6 release verification
 
 Release baseline: merged AMBER PR #2 (`45761325c41021ce8be28a165195e75aef54b57a`), reviewed task head `742f58b497e939528eb4e31a1323e6d73ef518a1`. The release synchronizes this shared implementation into AMBER and AmberE; changes after the merge are release versioning, documentation, source-export inclusion of the acceptance runner and packaging metadata.

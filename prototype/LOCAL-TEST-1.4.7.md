@@ -1,3 +1,9 @@
+# 1.4.7 formal release
+
+This checklist retains the historical task-candidate validation below. PR #3 has been merged as `6842409348b0e1b1fec395b80ea6521cd2631c52`, with reviewed head `84a0e98db6e66d6c7294c094cfd8c3811629ed08`. The user requested the full formal release on 2026-11-06. Official packages use version **1.4.7** and the **public** update channel; the inherited 1.4.6/local descriptions below refer only to the earlier PR candidates. Current release checks are recorded in RELEASE-ACCEPTANCE.md.
+
+本文件保留任务阶段的历史验收。PR #3 已合并，用户已要求执行 1.4.7 完整正式发布流程。正式包为 **1.4.7 / public**；下方 1.4.6、本地测试渠道及不包含发布授权的描述仅对应原任务交付。当前发布验证见 RELEASE-ACCEPTANCE.md。
+
 # 1.4.7 task implementation — local validation and CI delivery
 
 Branch: `feat/1.4.7-tray-server-schedules`. Based on 1.4.6, commit

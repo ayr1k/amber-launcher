@@ -71,3 +71,7 @@ Sakura connections contact its official API to read tunnel/node information and 
 ## Feedback drafts (1.4.6)
 
 Feedback is prepared locally from your input. Diagnostics are excluded unless you inspect and explicitly include them. Preview and copy the best-effort redacted draft before opening GitHub; the URL carries no draft or diagnostic content and the app does not submit an issue. Sharing happens when you manually submit it on GitHub. Review free text for personal information.
+
+## Server schedules (1.4.7)
+
+Task names, target server identifiers, frequency, console commands and last results are stored in the local game library. Scheduling does not upload this configuration. A command is sent to the selected managed server console when its task runs. Closing to the tray keeps the launcher and eligible schedules running until you explicitly quit.

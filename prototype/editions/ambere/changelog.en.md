@@ -1,3 +1,10 @@
+## 1.4.7
+
+- Close to the tray by default while a managed server is starting, running or stopping. Settings → Data & onboarding offers automatic, always-tray or quit behavior; tray actions restore or explicitly quit. Linux and tray-creation failures retain a taskbar entry through minimization.
+- Add Server schedules inside Tasks alongside Downloads & activity. Create, edit, pause or delete one-shot, daily-local-time and fixed-interval tasks for normal server restart or a single console command. View the next run and last result in theme-aware, spaced task cards with wrapping long commands.
+- Restart waits up to two minutes for normal shutdown and automatic exit backup, releasing the instance lock while backup runs. Cancellation, timeout, failed backup or a replacement run prevent restart; no forced termination. Pause cancels pending restarts, and migration/sleep handling preserves scheduling holds. Missed, offline and busy occurrences are skipped without catch-up. Command completion means submitted to the server console, not confirmed plugin execution.
+- Publish synchronized Windows x64, macOS Intel/Apple Silicon, Linux x64 and experimental FreeBSD packages with full source and SHA-256. Native non-Windows tray/runtime behavior, live-game shutdown/restart and long-running schedules remain outside this release's verified scope; FreeBSD is server/tools-only.
+
 ## 1.4.6
 
 - Add “I already play Minecraft” to first-run setup, with existing-folder and local-modpack import routes. Imported instances are independent copies; source files and edition-specific account rules are preserved.
