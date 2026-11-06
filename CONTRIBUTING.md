@@ -16,7 +16,7 @@ pnpm desktop
 
 `pnpm dev` is a browser preview; real file operations and launches require the desktop app. `pnpm package:installer` builds the x64 NSIS installer. Never test destructive actions against personal instances; use temporary fixtures.
 
-`pnpm package:editions` builds both AMBER and AmberE from the same source into `prototype/releases/1.3.4`. `node scripts/package-editions.mjs amber` or `ambere` builds one edition. Staging sets an immutable edition constant, replaces branding, and removes Microsoft API methods and the built-in Client ID from AmberE. Both installers have independent application identities and update assets. The command never publishes. Keep shared features in the common source; do not maintain a separate audit-only codebase. Real-game verification must use the desktop account authorization flow; headless verification scripts cannot bypass eligibility checks.
+`pnpm package:editions` builds both AMBER and AmberE from the same source into `prototype/releases/<version>`. `node scripts/package-editions.mjs amber` or `ambere` builds one edition. Staging sets an immutable edition constant, replaces branding, and removes Microsoft API methods and the built-in Client ID from AmberE. Both installers have independent application identities and update assets. The command never publishes. Keep shared features in the common source; do not maintain a separate audit-only codebase. Real-game verification must use the desktop account authorization flow; headless verification scripts cannot bypass eligibility checks.
 
 Keep English and Chinese documentation synchronized. Add translation entries for new application text, retain stable keys and preserve placeholders. See the language-pack guide. Do not translate user names, filenames, project descriptions or executable arguments.
 
@@ -28,3 +28,7 @@ Project-owned changes use MPL-2.0. Preserve all dependency and asset notices. Pu
 ## 1.3.5 platform builds / 平台构建
 
 See [platform build inputs and verification limits](prototype/PLATFORMS-1.3.5.md). Publish the accepted package bytes unchanged. Keep architecture-specific native map engines and their source manifest; platform artifacts are not interchangeable. No signing credentials or private account data belong in source exports.
+
+## Task delivery and releases
+
+Dot coordinates task chats and reviews their pull requests. Each task PR links downloadable test installers, the tested revision, validation and limitations. The user tests and decides whether to merge. A formal release is requested separately and may combine several merged PRs; it builds official packages from main and synchronizes release notes, bilingual documentation and GitHub Pages.

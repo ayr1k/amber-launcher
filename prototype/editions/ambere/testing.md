@@ -1,3 +1,11 @@
+# 1.4.6 release verification
+
+Release baseline: merged AMBER PR #2 (`45761325c41021ce8be28a165195e75aef54b57a`), reviewed task head `742f58b497e939528eb4e31a1323e6d73ef518a1`. The release synchronizes this shared implementation into AMBER and AmberE; changes after the merge are release versioning, documentation, source-export inclusion of the acceptance runner and packaging metadata.
+
+The release regression run passed all 464 tests, with four static-serving tests, production builds, 2,427 bilingual message checks and source/license checks. Both public-channel edition stages passed isolated Windows desktop onboarding checks: account setup leaves onboarding pending, refreshing preserves continuation, returning selects step 3, and choosing existing-game import clears the pending state. The PR's earlier broader acceptance is recorded separately in docs/ONBOARDING-FEEDBACK-ACCEPTANCE.md. See LOCAL-TEST-1.4.6.md for the checklist. Tests use temporary synthetic profiles, not personal accounts or worlds.
+
+Formal packages use the public update channel. Windows x64, macOS x64/arm64, Linux x64 and experimental FreeBSD packages are built from the shared release source. Packaging is not native device acceptance: macOS/Linux/FreeBSD execution remains unverified for this release; FreeBSD is server/tools-only. Packages are unsigned and macOS is not notarized. No new certification of real PCL/HMCL layouts, actual accounts, gameplay or player-submitted feedback is claimed. Feedback redaction remains best effort and manual review is required before sharing.
+
 # 1.4.5 release verification
 
 Close-button follow-up: Windows native hit testing across 15 points of the screenshot viewer close button passed at 1300×900, 1280×720 and 1100×800 (125% zoom). All points are client controls; closing restores title-bar dragging. This fixes the middle strip being intercepted as a native caption drag region.

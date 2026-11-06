@@ -1,3 +1,10 @@
+## 1.4.6
+
+- Add “I already play Minecraft” to first-run setup, with existing-folder and local-modpack import routes. Imported instances are independent copies; source files and edition-specific account rules are preserved.
+- Keep onboarding pending while configuring an account. Continue directly to game creation or import, including after refreshing or restarting; completing a choice or explicitly skipping clears the pending state.
+- Add feedback drafts in About and Language/privacy. Review steps, expected and actual results, optionally inspect and include diagnostics, then preview redacted content and copy it before opening GitHub. No feedback is submitted automatically, and URLs contain no feedback content. Editing inputs or diagnostic consent invalidates the old preview. Review free text for personal information before sharing.
+- Publish matching AMBER/AmberE Windows x64, macOS Intel/Apple Silicon, Linux x64 and experimental FreeBSD packages with source and SHA-256. Native non-Windows acceptance remains pending; FreeBSD is server/tools-only.
+
 ## 1.4.5
 
 - Rebuild screenshot viewing with themed controls, fit/original-size zoom and recoverable image deletion. Keep landscape server launch within one screen, with the console on the left, compact 2×2 performance cards on the right and launch settings below. Fix the screenshot close button being intercepted by title-bar dragging.

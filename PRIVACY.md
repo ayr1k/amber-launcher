@@ -67,3 +67,7 @@ Choosing CurseForge sends search/version/file requests and the application API k
 ## Sakura Frp (1.4.2)
 
 Sakura connections contact its official API to read tunnel/node information and configuration using the saved access token, then connect to the selected node. The token is encrypted using system credential storage; configuration and credentials are passed in the frpc child environment, while the temporary disk file contains only a template. The template is removed on exit. Logs are bounded and redact the access token. Sakura and its nodes can observe account/tunnel identity, network addresses and traffic metadata. No account or server data is sent to an AMBER-operated service.
+
+## Feedback drafts (1.4.6)
+
+Feedback is prepared locally from your input. Diagnostics are excluded unless you inspect and explicitly include them. Preview and copy the best-effort redacted draft before opening GitHub; the URL carries no draft or diagnostic content and the app does not submit an issue. Sharing happens when you manually submit it on GitHub. Review free text for personal information.

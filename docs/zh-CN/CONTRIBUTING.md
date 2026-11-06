@@ -16,7 +16,7 @@ pnpm desktop
 
 `pnpm dev` 仅是浏览器预览，真实文件操作和启动需使用桌面版。`pnpm package:installer` 构建 x64 NSIS 安装包。删除等破坏性操作只能在临时测试实例上验证。
 
-`pnpm package:editions` 从同一份源码构建 AMBER 与 AmberE，输出到 `prototype/releases/1.3.4`。`node scripts/package-editions.mjs amber` 或 `ambere` 可单独构建。构建阶段设置固定版本标识、替换品牌，并从 AmberE 移除微软接口和内置 Client ID；两个安装包的应用身份与更新文件分别独立。此命令不会发布。共用功能保持在共同源码中，不维护仅用于审核的临时代码库。真实游戏测试须经过桌面版账号授权流程，命令行验证脚本不能绕过资格检查。
+`pnpm package:editions` 从同一份源码构建 AMBER 与 AmberE，输出到 `prototype/releases/<version>`。`node scripts/package-editions.mjs amber` 或 `ambere` 可单独构建。构建阶段设置固定版本标识、替换品牌，并从 AmberE 移除微软接口和内置 Client ID；两个安装包的应用身份与更新文件分别独立。此命令不会发布。共用功能保持在共同源码中，不维护仅用于审核的临时代码库。真实游戏测试须经过桌面版账号授权流程，命令行验证脚本不能绕过资格检查。
 
 中英文文档同步更新。新增应用文案须加入翻译目录，保留稳定键与占位符。参见语言包指南。用户名称、文件名、项目介绍和执行参数不翻译。
 
@@ -28,3 +28,7 @@ pnpm desktop
 ## 1.3.5 platform builds / 平台构建
 
 See [platform build inputs and verification limits](../../prototype/PLATFORMS-1.3.5.md). Publish the accepted package bytes unchanged. Keep architecture-specific native map engines and their source manifest; platform artifacts are not interchangeable. No signing credentials or private account data belong in source exports.
+
+## 任务交付与正式发布
+
+Dot 协调任务聊天并审核 PR。每个任务 PR 提供可下载的测试安装包、对应提交、验证结果与限制，由用户测试并决定是否合并。正式发布由用户另行要求，可汇总多个已合并 PR；从主分支构建正式包，同步发布说明、中英文文档及 GitHub Pages。
