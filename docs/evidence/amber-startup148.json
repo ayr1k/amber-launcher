@@ -1,0 +1,125 @@
+[
+  {
+    "name": "light-en",
+    "edition": "amber",
+    "marks": [
+      {
+        "stage": "visible",
+        "ms": 95
+      },
+      {
+        "stage": "storage",
+        "ms": 190
+      },
+      {
+        "stage": "recovery",
+        "ms": 196
+      },
+      {
+        "stage": "accounts",
+        "ms": 197
+      },
+      {
+        "stage": "settings",
+        "ms": 200
+      },
+      {
+        "stage": "library",
+        "ms": 203
+      },
+      {
+        "stage": "interface",
+        "ms": 246
+      },
+      {
+        "stage": "ready",
+        "ms": 1408
+      }
+    ],
+    "splashCaptured": true,
+    "errors": [],
+    "overflow": false
+  },
+  {
+    "name": "dark-zh",
+    "edition": "amber",
+    "marks": [
+      {
+        "stage": "visible",
+        "ms": 103
+      },
+      {
+        "stage": "storage",
+        "ms": 198
+      },
+      {
+        "stage": "recovery",
+        "ms": 203
+      },
+      {
+        "stage": "accounts",
+        "ms": 204
+      },
+      {
+        "stage": "settings",
+        "ms": 207
+      },
+      {
+        "stage": "library",
+        "ms": 211
+      },
+      {
+        "stage": "interface",
+        "ms": 253
+      },
+      {
+        "stage": "ready",
+        "ms": 2431
+      }
+    ],
+    "splashCaptured": true,
+    "errors": [],
+    "overflow": false
+  },
+  {
+    "name": "custom-small",
+    "edition": "amber",
+    "marks": [
+      {
+        "stage": "visible",
+        "ms": 106
+      },
+      {
+        "stage": "storage",
+        "ms": 199
+      },
+      {
+        "stage": "recovery",
+        "ms": 204
+      },
+      {
+        "stage": "accounts",
+        "ms": 205
+      },
+      {
+        "stage": "settings",
+        "ms": 208
+      },
+      {
+        "stage": "library",
+        "ms": 213
+      },
+      {
+        "stage": "interface",
+        "ms": 252
+      },
+      {
+        "stage": "ready",
+        "ms": 2407
+      }
+    ],
+    "splashCaptured": true,
+    "errors": [],
+    "overflow": false
+  }
+]

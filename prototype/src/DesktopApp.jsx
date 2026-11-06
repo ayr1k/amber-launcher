@@ -43,6 +43,8 @@ import { componentLabel } from '../desktop/compatibility.mjs';
 const navIcons = { home: Play, instances: Stack, content: DownloadSimple, accounts: UserCircle, settings: Gear, tasks: ClockCounterClockwise, tools:Toolbox,players:UserCircle,overview:Play,network:PlugsConnected,about:Info };
 
 export function DesktopApp() {useLocale();
+  const [initialReady,setInitialReady]=useState(false);
+  useEffect(()=>{if(!initialReady)return;let second;const first=requestAnimationFrame(()=>{second=requestAnimationFrame(()=>window.amberDesktop.startupReady?.());});return()=>{cancelAnimationFrame(first);cancelAnimationFrame(second);};},[initialReady]);
   const [mode,setMode]=useState('local'),[serverPage,setServerPage]=useState('overview'),[serverId,setServerId]=useState(()=>localStorage.getItem('amber.server')||''),[serverStatus,setServerStatus]=useState({instances:[],network:null});
   const serverStatusLoaded=useRef(false);
   const refreshServers=async()=>{if(window.amberDesktop.server){const s=await window.amberDesktop.server('status');serverStatusLoaded.current=true;setServerStatus(s);}};
@@ -60,7 +62,13 @@ export function DesktopApp() {useLocale();
   useEffect(() => {const key=page+':'+active;const frame=requestAnimationFrame(()=>{if(scroller.current)scroller.current.scrollTop=scrolls.current.get(key)||0;});return()=>cancelAnimationFrame(frame);}, [page,active]);
   useEffect(()=>{const key=e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'&&!document.querySelector('dialog[open]')){e.preventDefault();setQuick(true);}};window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key);},[]);
   async function refresh() {const [v, l] = await Promise.all([api.listInstances(), api.libraryState()]);setInstances(v);setLibrary(l);}
-  useEffect(() => {api.info().then(i=>{setBuildChannel(i.buildChannel||'local');if(i.themeRecovery)setError(i.themeRecovery);}).catch((e) => setError(e.message));api.storageInfo?.().then((i) => {setWelcome(!i.onboarded&&!resumeOnboarding);if(resumeOnboarding)setPage('accounts');}).catch((e) => setError(e.message));api.settings?.().then(setSettings).catch((e) => setError(e.message));const mq = matchMedia('(prefers-color-scheme: dark)'),change = (e) => setSystemDark(e.matches);mq.addEventListener('change', change);return () => mq.removeEventListener('change', change);}, []);
+  useEffect(() => {let live=true;Promise.allSettled([
+    api.info().then(i=>{if(live){setBuildChannel(i.buildChannel||'local');if(i.themeRecovery)setError(i.themeRecovery);}}),
+    api.storageInfo?.().then(i=>{if(live){setWelcome(!i.onboarded&&!resumeOnboarding);if(resumeOnboarding)setPage('accounts');}}),
+    api.settings?.().then(v=>{if(live)setSettings(v);}),
+    Promise.all([api.listInstances(),api.libraryState()]).then(([v,l])=>{if(live){setInstances(v);setLibrary(l);}})
+  ]).then(results=>{if(!live)return;const failure=results.find(r=>r.status==='rejected');if(failure)setError(failure.reason.message);setInitialReady(true);});
+    const mq=matchMedia('(prefers-color-scheme: dark)'),change=e=>setSystemDark(e.matches);mq.addEventListener('change',change);return()=>{live=false;mq.removeEventListener('change',change);};}, []);
   useEffect(() => {let disposed = false;const tick = () => Promise.all([api.listInstances(), api.libraryState()]).then(([v, l]) => {if (!disposed) {setInstances(v);setLibrary(l);}}).catch((e) => !disposed && setError(e.message));tick();const timer = setInterval(tick, 1500);return () => {disposed = true;clearInterval(timer);};}, []);
   function select(id, home = false) {setActive(id);localStorage.setItem('amber.active', id);if (home) setPage('home');}
   const appearance={...appearanceDefaults,...settings.appearance};

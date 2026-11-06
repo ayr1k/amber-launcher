@@ -12,7 +12,7 @@ const assert=require('node:assert/strict');
  const child=app.process();
  try{
   assert.equal(resolve(await app.evaluate(({app})=>app.getPath('userData'))),resolve(data));
-  const page=await app.firstWindow();page.setDefaultTimeout(20000);
+  let page;for(let i=0;i<400;i++){page=app.windows().find(p=>p.url().startsWith('amber://app/'));if(page)break;await new Promise(r=>setTimeout(r,50));}if(!page)throw Error('Main window did not load');page.setDefaultTimeout(20000);
   await page.waitForFunction(()=>!!window.amberDesktop);
   await page.evaluate(async()=>{await window.amberDesktop.completeOnboarding();const s=await window.amberDesktop.settings();await window.amberDesktop.saveSettings({...s,language:'en-US'});});
   await page.reload();

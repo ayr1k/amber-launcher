@@ -1,11 +1,12 @@
 import {curseHeaders141} from './curseforge-key141.mjs';
-import {withFileLock,withTransferBudget} from './task-queue132.mjs';
+import {withFileLock,withTransferBudget,transferStatus144} from './task-queue132.mjs';
+import {segmentRanges,segmentedDownload,clearSegments,segmentPaths} from './download-segments148.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import {VERSION} from './product.mjs';
 import {REPOSITORY_NAME,REPOSITORY_URL} from './edition.mjs';
 import {setTimeout as delay} from 'node:timers/promises';
 import { createReadStream, createWriteStream } from 'node:fs';
-import { mkdir, rename, rm, stat, lstat, copyFile } from 'node:fs/promises';
+import { mkdir, rename, rm, stat, statfs, lstat, copyFile } from 'node:fs/promises';
 import { dirname, resolve, sep, relative } from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import { Readable, Transform } from 'node:stream';
@@ -20,7 +21,7 @@ export async function digest(path,algorithm='sha1'){const h=createHash(algorithm
 export async function verified(file){try{const s=await lstat(file.path);return s.isFile()&&!s.isSymbolicLink()&&(!file.size||s.size===file.size)&&await digest(file.path,file.algorithm||'sha1')===file.hash;}catch{return false;}}
 export async function officialFetch(url,{signal,fetcher=fetch,headers={}}={}){let next=safeURL(url);for(let i=0;i<6;i++){const r=await fetcher(next,{signal,redirect:'manual',headers:{'User-Agent':`${REPOSITORY_NAME}/${VERSION} (${REPOSITORY_URL})`,...headers,...await curseHeaders141(next)}});if([301,302,303,307,308].includes(r.status)){const location=r.headers.get('location');await r.body?.cancel();if(!location)throw new Error('下载重定向缺少地址。');next=safeURL(new URL(location,next).href);continue;}if(!r.ok){await r.body?.cancel();const error=new Error(`下载请求失败 (${r.status})`);error.status=r.status;error.retryAfterMs=retryAfter(r.headers.get('retry-after'));throw error;}return r;}throw new Error('下载重定向次数过多。');}
 export function download(file,options={}){return withFileLock(file.path,()=>downloadUnlocked(file,options),options.signal);}
-async function downloadUnlocked(file,{root,signal,onBytes=()=>{},fetcher=fetch,threads=128,transferGroup}={}){
+async function downloadUnlocked(file,{root,signal,onBytes=()=>{},fetcher=fetch,threads=128,transferGroup,segments=true}={}){
   if(!/^[0-9a-f]{40}$|^[0-9a-f]{64}$|^[0-9a-f]{128}$/.test(file.hash))throw new Error('下载缺少完整性校验值。');
   signal?.throwIfAborted();await ensureParents(root,file.path);
   const network=fetcher.amberNetwork,scope=network?.context.getStore(),group=scope||transferGroup||signal||Symbol('transfer');
@@ -29,6 +30,9 @@ async function downloadUnlocked(file,{root,signal,onBytes=()=>{},fetcher=fetch,t
   // Stable, hash-specific partials survive cancellation and process restart.
   const temporary=file.path+'.amber-'+(file.hash.length>64?file.hash.slice(0,40):file.hash)+'.part';await ensureParents(root,temporary);
   let last,credited=0;
+  let useSegments=segments&&segmentRanges(file.size).length>0&&threads>1&&transferStatus144().limit>1;
+  try{if((await lstat(temporary)).size>0)useSegments=false;}catch(e){if(e.code!=='ENOENT')throw e;}
+  if(useSegments){try{const disk=await statfs(dirname(file.path));if(disk.bavail*disk.bsize<file.size*2)useSegments=false;}catch{useSegments=false;}}
   for(let attempt=0;attempt<3;attempt++){
     signal?.throwIfAborted();await network?.gate(signal);let offset=0;
     try{const st=await lstat(temporary);if(!st.isFile()||st.isSymbolicLink())throw Error('不安全的下载片段。');offset=st.size;}catch(e){if(e.code!=='ENOENT')throw e;}
@@ -39,6 +43,16 @@ async function downloadUnlocked(file,{root,signal,onBytes=()=>{},fetcher=fetch,t
     const combined=AbortSignal.any([controller.signal,...(signal?[signal]:[])]);
     try{
       network?.event(file,{phase:'queued'});
+      if(useSegments){
+        untrack=network?.track(controller);
+        const result=await segmentedDownload(file,{temporary,signal:combined,network,group,
+          limit:()=>network?.concurrency(threads,scope)||threads,
+          ensurePath:path=>ensureParents(root,path),verify:verified,
+          onBytes:bytes=>{credited+=bytes;onBytes(bytes);},
+          fetchRange:(start,end,active,etag)=>officialFetch(file.url,{signal:active,fetcher,headers:{'Accept-Encoding':'identity',Range:`bytes=${start}-${end}`,...(etag?{'If-Range':etag}:{})}})});
+        await rename(temporary,file.path);await clearSegments(temporary);
+        network?.event(file,{bytes:file.size,phase:'complete'});return result;
+      }
       return await withTransferBudget(async()=>{try{
       if(network?.isPaused())throw Error('Download paused / 下载已暂停');
       untrack=network?.track(controller);
@@ -51,10 +65,22 @@ async function downloadUnlocked(file,{root,signal,onBytes=()=>{},fetcher=fetch,t
       resetIdle();await pipeline(Readable.fromWeb(r.body),monitor,createWriteStream(temporary,{flags:offset?'a':'w'}),{signal:combined});
       network?.event(file,{phase:'verifying'});
       if((file.size&&count!==file.size)||h.digest('hex')!==file.hash)throw Object.assign(Error('下载文件校验失败。'),{code:'CHECKSUM'});
-      await rename(temporary,file.path);network?.event(file,{bytes:count,phase:'complete'});return {cached:false,resumed:offset>0};
+      await rename(temporary,file.path);await clearSegments(temporary);network?.event(file,{bytes:count,phase:'complete'});return {cached:false,resumed:offset>0};
       }catch(e){if(!signal?.aborted&&!network?.isPaused())network?.event(file,{error:networkReason(controller.signal.reason||e),phase:'retrying'});throw e;}
       },signal,{group,limit:()=>network?.concurrency(threads,scope)||threads});
     }catch(e){untrack?.();untrack=null;last=controller.signal.reason||e;if(signal?.aborted)throw e;if(network?.isPaused()){attempt--;continue;}
+      if(useSegments){
+        useSegments=false;onBytes(-credited);credited=0;
+        network?.event(file,{bytes:0,error:networkReason(last),phase:'retrying'});
+        // Keep only the contiguous prefix for serial resume and release shard
+        // storage before fallback. Never reuse a failed hash.
+        if(e.code!=='CHECKSUM'){
+          try{const first=segmentPaths(temporary)[0];if((await lstat(first)).isFile())await copyFile(first,temporary);}catch(copyError){if(copyError.code!=='ENOENT')throw copyError;}
+        }
+        await clearSegments(temporary);
+        // Capability negotiation is not one of the normal retry attempts.
+        if(e.code==='RANGE_UNSUPPORTED'){attempt--;continue;}
+      }
       if(e.code==='CHECKSUM'||e.status===416){await rm(temporary,{force:true});onBytes(-credited);credited=0;network?.event(file,{bytes:0});if(e.code==='CHECKSUM')network?.rejectFile(file.url);}
       if(e.status&&e.status<500&&![408,429,416].includes(e.status))break;
       // Very long rate limits require an explicit later retry, never retry early.

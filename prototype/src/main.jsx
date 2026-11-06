@@ -120,7 +120,7 @@ if(import.meta.env.DEV&&window.amberDesktop?.preview&&new URLSearchParams(locati
  api.themeReset=async()=>{settings={...original};return settings;};
 }
 
-createRoot(document.getElementById("root")).render(
+createRoot(document.getElementById("root"), {onUncaughtError(error){console.error(error);window.amberDesktop?.startupFailed?.();}}).render(
   <React.StrictMode>
     <LocaleProvider><App /></LocaleProvider>
   </React.StrictMode>,
