@@ -1,0 +1,12 @@
+.account-detail150 { min-width: 0; }
+.account-columns150 { display:grid; grid-template-columns:minmax(0,1fr) minmax(280px,1fr); gap:32px; align-items:start; }
+.account-columns150 > section { min-width:0; }
+.account-columns150 dd { margin:8px 0 20px; overflow-wrap:anywhere; }
+.account-statistics150 { margin-top:24px; }
+.account-statistics150 summary { cursor:pointer; font-weight:600; padding-block:12px; }
+.account-statistics150 li { margin-block:12px; overflow-wrap:anywhere; }
+.skin-stage150 { width:100%; min-height:260px; overflow:hidden; }
+.skin-stage150 canvas { display:block; max-width:100%; touch-action:none; }
+.skin-stage150.background-light { background:var(--surface); }
+.skin-stage150.background-dark { background:var(--text); }
+@media(max-width:1050px) { .account-columns150 { grid-template-columns:minmax(0,1fr); gap:24px; } }

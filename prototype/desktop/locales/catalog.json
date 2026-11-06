@@ -9783,103 +9783,114 @@
     "zh": "Quilt",
     "en": "Quilt"
   },
-    "entry.title": {
-        "zh": "我已经在玩 Minecraft",
-        "en": "I already play Minecraft"
-    },
-    "entry.copy": {
-        "zh": "导入会创建新的独立实例，保留原目录或压缩包。以后两边的存档和设置不会自动同步。",
-        "en": "Import creates a new independent instance and retains the original folder or archive. Worlds and settings will not sync between the two copies."
-    },
-    "entry.folder": {
-        "zh": "导入现有游戏目录",
-        "en": "Import an existing game folder"
-    },
-    "entry.folderNote": {
-        "zh": "选择 .minecraft 后检查识别出的版本、实际游戏目录和要复制的内容，再确认导入。PCL / HMCL 等启动器的目录布局需要逐项确认；未识别的配置不会直接执行。",
-        "en": "Choose .minecraft, then review the detected version, actual game folder and selected content before importing. Check layouts from launchers such as PCL / HMCL individually; unrecognized profiles are not executed."
-    },
-    "entry.pack": {
-        "zh": "导入本地整合包",
-        "en": "Import a local modpack"
-    },
-    "entry.packNote": {
-        "zh": "支持 Modrinth MRPACK 和受支持的内容 ZIP；先检查格式和文件清单。备份、模组清单及其他格式会显示各自的处理提示。",
-        "en": "Supports Modrinth MRPACK and supported content ZIP files. Review the detected format and file list first. Backups, mod lists and other formats receive their own guidance."
-    },
-    "entry.account": {
-        "zh": "账号、登录凭据不会随游戏目录导入。启动游戏仍需按当前版本的账号规则配置账号；导入可能需要下载缺少的游戏文件。",
-        "en": "Accounts and login credentials are not imported from game folders. Launching still requires an account under this edition’s rules; missing game files may need downloading."
-    },
-    "entry.later": {
-        "zh": "稍后导入",
-        "en": "Import later"
-    },
-    "feedback.title": {
-        "zh": "反馈问题",
-        "en": "Report a problem"
-    },
-    "feedback.intro": {
-        "zh": "描述你做了什么、希望发生什么以及实际遇到的问题。可以不提供诊断信息。",
-        "en": "Describe what you did, what you expected and what happened. Diagnostics are optional."
-    },
-    "feedback.start": {
-        "zh": "填写反馈",
-        "en": "Write feedback"
-    },
-    "feedback.hide": {
-        "zh": "收起反馈（本次草稿保留）",
-        "en": "Hide feedback (keep this draft)"
-    },
-    "feedback.steps": {
-        "zh": "操作步骤",
-        "en": "Steps to reproduce"
-    },
-    "feedback.expected": {
-        "zh": "预期结果",
-        "en": "Expected result"
-    },
-    "feedback.actual": {
-        "zh": "实际结果或错误",
-        "en": "Actual result or error"
-    },
-    "feedback.previewDiagnostics": {
-        "zh": "检查可选诊断摘要",
-        "en": "Inspect optional diagnostics"
-    },
-    "feedback.include": {
-        "zh": "附上上方已检查的诊断摘要",
-        "en": "Include the diagnostics inspected above"
-    },
-    "feedback.privacy": {
-        "zh": "诊断摘要不包含账号、令牌、实例名称、本地路径或原始日志。你填写的文字仍可能含有个人信息，请在分享前检查。",
-        "en": "Diagnostics exclude accounts, tokens, instance names, local paths and raw logs. Your own text may still contain personal information; review it before sharing."
-    },
-    "feedback.preview": {
-        "zh": "生成反馈预览",
-        "en": "Preview feedback"
-    },
-    "feedback.review": {
-        "zh": "请检查下面将复制的内容。只有你在 GitHub 上点击提交后，反馈才会公开发布。",
-        "en": "Review the content below before copying. Your feedback is published only when you submit it on GitHub."
-    },
-    "feedback.copy": {
-        "zh": "复制已检查的反馈",
-        "en": "Copy reviewed feedback"
-    },
-    "feedback.open": {
-        "zh": "打开 GitHub 问题页",
-        "en": "Open GitHub issue page"
-    },
-    "feedback.copied": {
-        "zh": "已复制。打开问题页后粘贴并补充标题；需要 GitHub 账号。打开失败时仍可保留这份文本。",
-        "en": "Copied. Paste into the issue page and add a title; a GitHub account is required. Keep this text if the page cannot open."
-    },
-    "entry.choose": {"zh":"选择你的开始方式","en":"Choose how to get started"},
-    "entry.chooseNote": {"zh":"可以创建新实例，也可以导入已有游戏或本地整合包。所有入口稍后仍可在实例管理中找到。","en":"Create a new instance or import an existing game or local modpack. These options remain available from instance management later."}
-,
-    "entry.resume": {"zh":"继续选择游戏：创建或导入","en":"Continue to create or import a game"},
-    "entry.resumeNote": {"zh":"首次引导尚未完成。账号准备好后，可继续创建实例或导入已有游戏；也可以稍后再设置账号。","en":"Setup is not finished. When your account is ready, continue to create an instance or import an existing game. You can also finish account setup later."},
+  "entry.title": {
+    "zh": "我已经在玩 Minecraft",
+    "en": "I already play Minecraft"
+  },
+  "entry.copy": {
+    "zh": "导入会创建新的独立实例，保留原目录或压缩包。以后两边的存档和设置不会自动同步。",
+    "en": "Import creates a new independent instance and retains the original folder or archive. Worlds and settings will not sync between the two copies."
+  },
+  "entry.folder": {
+    "zh": "导入现有游戏目录",
+    "en": "Import an existing game folder"
+  },
+  "entry.folderNote": {
+    "zh": "选择 .minecraft 后检查识别出的版本、实际游戏目录和要复制的内容，再确认导入。PCL / HMCL 等启动器的目录布局需要逐项确认；未识别的配置不会直接执行。",
+    "en": "Choose .minecraft, then review the detected version, actual game folder and selected content before importing. Check layouts from launchers such as PCL / HMCL individually; unrecognized profiles are not executed."
+  },
+  "entry.pack": {
+    "zh": "导入本地整合包",
+    "en": "Import a local modpack"
+  },
+  "entry.packNote": {
+    "zh": "支持 Modrinth MRPACK 和受支持的内容 ZIP；先检查格式和文件清单。备份、模组清单及其他格式会显示各自的处理提示。",
+    "en": "Supports Modrinth MRPACK and supported content ZIP files. Review the detected format and file list first. Backups, mod lists and other formats receive their own guidance."
+  },
+  "entry.account": {
+    "zh": "账号、登录凭据不会随游戏目录导入。启动游戏仍需按当前版本的账号规则配置账号；导入可能需要下载缺少的游戏文件。",
+    "en": "Accounts and login credentials are not imported from game folders. Launching still requires an account under this edition’s rules; missing game files may need downloading."
+  },
+  "entry.later": {
+    "zh": "稍后导入",
+    "en": "Import later"
+  },
+  "feedback.title": {
+    "zh": "反馈问题",
+    "en": "Report a problem"
+  },
+  "feedback.intro": {
+    "zh": "描述你做了什么、希望发生什么以及实际遇到的问题。可以不提供诊断信息。",
+    "en": "Describe what you did, what you expected and what happened. Diagnostics are optional."
+  },
+  "feedback.start": {
+    "zh": "填写反馈",
+    "en": "Write feedback"
+  },
+  "feedback.hide": {
+    "zh": "收起反馈（本次草稿保留）",
+    "en": "Hide feedback (keep this draft)"
+  },
+  "feedback.steps": {
+    "zh": "操作步骤",
+    "en": "Steps to reproduce"
+  },
+  "feedback.expected": {
+    "zh": "预期结果",
+    "en": "Expected result"
+  },
+  "feedback.actual": {
+    "zh": "实际结果或错误",
+    "en": "Actual result or error"
+  },
+  "feedback.previewDiagnostics": {
+    "zh": "检查可选诊断摘要",
+    "en": "Inspect optional diagnostics"
+  },
+  "feedback.include": {
+    "zh": "附上上方已检查的诊断摘要",
+    "en": "Include the diagnostics inspected above"
+  },
+  "feedback.privacy": {
+    "zh": "诊断摘要不包含账号、令牌、实例名称、本地路径或原始日志。你填写的文字仍可能含有个人信息，请在分享前检查。",
+    "en": "Diagnostics exclude accounts, tokens, instance names, local paths and raw logs. Your own text may still contain personal information; review it before sharing."
+  },
+  "feedback.preview": {
+    "zh": "生成反馈预览",
+    "en": "Preview feedback"
+  },
+  "feedback.review": {
+    "zh": "请检查下面将复制的内容。只有你在 GitHub 上点击提交后，反馈才会公开发布。",
+    "en": "Review the content below before copying. Your feedback is published only when you submit it on GitHub."
+  },
+  "feedback.copy": {
+    "zh": "复制已检查的反馈",
+    "en": "Copy reviewed feedback"
+  },
+  "feedback.open": {
+    "zh": "打开 GitHub 问题页",
+    "en": "Open GitHub issue page"
+  },
+  "feedback.copied": {
+    "zh": "已复制。打开问题页后粘贴并补充标题；需要 GitHub 账号。打开失败时仍可保留这份文本。",
+    "en": "Copied. Paste into the issue page and add a title; a GitHub account is required. Keep this text if the page cannot open."
+  },
+  "entry.choose": {
+    "zh": "选择你的开始方式",
+    "en": "Choose how to get started"
+  },
+  "entry.chooseNote": {
+    "zh": "可以创建新实例，也可以导入已有游戏或本地整合包。所有入口稍后仍可在实例管理中找到。",
+    "en": "Create a new instance or import an existing game or local modpack. These options remain available from instance management later."
+  },
+  "entry.resume": {
+    "zh": "继续选择游戏：创建或导入",
+    "en": "Continue to create or import a game"
+  },
+  "entry.resumeNote": {
+    "zh": "首次引导尚未完成。账号准备好后，可继续创建实例或导入已有游戏；也可以稍后再设置账号。",
+    "en": "Setup is not finished. When your account is ready, continue to create an instance or import an existing game. You can also finish account setup later."
+  },
   "mcbd7dc0ea697": {
     "zh": "关闭窗口时",
     "en": "When closing the window"
@@ -10056,7 +10067,10 @@
     "zh": "确认删除",
     "en": "Confirm deletion"
   },
-  "mc2015b835bf4": {"zh":"实例忙时直接跳过，不排队。每日时间跟随系统时区。暂停会取消尚未启动的重启，已发出的指令无法撤回。","en":"Busy instances are skipped without queuing. Daily times follow the system time zone. Pausing cancels a restart that has not launched yet; commands already sent cannot be recalled."},
+  "mc2015b835bf4": {
+    "zh": "实例忙时直接跳过，不排队。每日时间跟随系统时区。暂停会取消尚未启动的重启，已发出的指令无法撤回。",
+    "en": "Busy instances are skipped without queuing. Daily times follow the system time zone. Pausing cancels a restart that has not launched yet; commands already sent cannot be recalled."
+  },
   "startup148_modules": {
     "zh": "正在加载程序…",
     "en": "Loading application…"
@@ -10100,5 +10114,1197 @@
   "startup148_error": {
     "zh": "启动未完成，请查看错误提示。",
     "en": "Startup did not finish. Please check the error message."
+  },
+  "m6ba7ad54f575": {
+    "zh": "无法创建 3D 预览，请检查图形加速支持。",
+    "en": "Cannot create a 3D preview. Check graphics acceleration support."
+  },
+  "m81872f2ec792": {
+    "zh": "图形上下文已丢失，请重新进入账号详情。",
+    "en": "Graphics context lost. Reopen account details."
+  },
+  "m144dfef6fd47": {
+    "zh": "此账号暂无可用皮肤。",
+    "en": "No skin is available for this account."
+  },
+  "m9739031845a4": {
+    "zh": "皮肤加载失败，请稍后重试。",
+    "en": "Skin could not be loaded. Please try again later."
+  },
+  "m6d6fd135956a": {
+    "zh": "3D 皮肤预览",
+    "en": "3D skin preview"
+  },
+  "mad3349a62e08": {
+    "zh": "拖拽旋转，滚轮缩放",
+    "en": "Drag to rotate; scroll to zoom"
+  },
+  "m5a36650035a4": {
+    "zh": "预览背景",
+    "en": "Preview background"
+  },
+  "m7053e5a5294f": {
+    "zh": "预览动作",
+    "en": "Preview animation"
+  },
+  "m1c4ec47c2a1c": {
+    "zh": "静止",
+    "en": "Still"
+  },
+  "mbed4c87f1838": {
+    "zh": "待机",
+    "en": "Idle"
+  },
+  "m65b5d7cf7468": {
+    "zh": "行走",
+    "en": "Walk"
+  },
+  "md26d64795f1d": {
+    "zh": "奔跑",
+    "en": "Run"
+  },
+  "m3a1b8628c657": {
+    "zh": "背景和动作仅用于预览，不会更改账号皮肤。",
+    "en": "Backgrounds and animations only affect this preview, not your account skin."
+  },
+  "mf87fdda573f5": {
+    "zh": "返回账号列表",
+    "en": "Back to accounts"
+  },
+  "m872ee15ad04a": {
+    "zh": "账号信息",
+    "en": "Account information"
+  },
+  "m30c4353597f7": {
+    "zh": "账号类型",
+    "en": "Account type"
+  },
+  "m94b52a856b9d": {
+    "zh": "第三方账号",
+    "en": "Third-party account"
+  },
+  "m3ca40a586103": {
+    "zh": "授权状态",
+    "en": "Authorization status"
+  },
+  "m1a66a9592af9": {
+    "zh": "本机游玩统计",
+    "en": "Play time on this device"
+  },
+  "mdd843da5eb13": {
+    "zh": "仅包含本机观察到的运行时长，可能包含空闲时间；缺失记录不作推算。",
+    "en": "Only runtime observed on this device is counted, including possible idle time. Missing records are not estimated."
+  },
+  "m9b1830480c80": {
+    "zh": "总时长",
+    "en": "Total time"
+  },
+  "m964b9dfa89c2": {
+    "zh": "最近游玩",
+    "en": "Last played"
+  },
+  "m9d38156ac637": {
+    "zh": "游玩记录已关闭。",
+    "en": "Play recording is disabled."
+  },
+  "m4346012d4eb4": {
+    "zh": "部分记录不完整。",
+    "en": "Some records are incomplete."
+  },
+  "m8efa80684f6c": {
+    "zh": "历史未归属",
+    "en": "Unattributed history"
+  },
+  "m2a1d9519d00a": {
+    "zh": "{0} 小时",
+    "en": "{0} hours"
+  },
+  "m758d9fa85f7b": {
+    "zh": "本机账号",
+    "en": "Local account"
+  },
+  "mbd8b8a5a30d3": {
+    "zh": "账号详情",
+    "en": "Account details"
+  },
+  "m730da70298b5": {
+    "zh": "头盔",
+    "en": "Helmet"
+  },
+  "medddeddef773": {
+    "zh": "胸甲",
+    "en": "Chestplate"
+  },
+  "m0db4f5a0fe2a": {
+    "zh": "护腿",
+    "en": "Leggings"
+  },
+  "mee5d39049671": {
+    "zh": "靴子",
+    "en": "Boots"
+  },
+  "m9bac2781f36a": {
+    "zh": "海龟壳",
+    "en": "Turtle Shell"
+  },
+  "m09e4cdfa680b": {
+    "zh": "鞘翅",
+    "en": "Elytra"
+  },
+  "m391aa9b897c3": {
+    "zh": "剑",
+    "en": "Sword"
+  },
+  "mfdbb5947f8af": {
+    "zh": "斧头",
+    "en": "Axe"
+  },
+  "m9d7b51eb5cf6": {
+    "zh": "重锤",
+    "en": "Mace"
+  },
+  "m26394d092838": {
+    "zh": "三叉戟",
+    "en": "Trident"
+  },
+  "mfe75c6d00e0a": {
+    "zh": "镐",
+    "en": "Pickaxe"
+  },
+  "mc62eba6bbd3d": {
+    "zh": "铲",
+    "en": "Shovel"
+  },
+  "m4d2437324a0d": {
+    "zh": "锄头",
+    "en": "Hoe"
+  },
+  "md97da89d3d05": {
+    "zh": "弓",
+    "en": "Bow"
+  },
+  "m589c31669663": {
+    "zh": "盾牌",
+    "en": "Shield"
+  },
+  "me86ef966639c": {
+    "zh": "弩",
+    "en": "Crossbow"
+  },
+  "md0a174989804": {
+    "zh": "刷子",
+    "en": "Brush"
+  },
+  "mf3148c533874": {
+    "zh": "矛",
+    "en": "Spear"
+  },
+  "m8a79cb558d90": {
+    "zh": "钓鱼竿",
+    "en": "Fishing Rod"
+  },
+  "m003e6674d0fe": {
+    "zh": "剪刀",
+    "en": "Shears"
+  },
+  "m047b36f4b220": {
+    "zh": "打火石",
+    "en": "Flint and Steel"
+  },
+  "m78cbf8e957e1": {
+    "zh": "胡萝卜钓竿",
+    "en": "Carrot on a Stick"
+  },
+  "m253058f4ec99": {
+    "zh": "诡异菌钓竿",
+    "en": "Warped Fungus on a Stick"
+  },
+  "m85bc0873e245": {
+    "zh": "南瓜",
+    "en": "Pumpkin"
+  },
+  "m1be968f12524": {
+    "zh": "书",
+    "en": "Book"
+  },
+  "m0f810a7901cf": {
+    "zh": "保护",
+    "en": "Protection"
+  },
+  "m562af708fee2": {
+    "zh": "水下速掘",
+    "en": "Aqua Affinity"
+  },
+  "ma9c2c54420d7": {
+    "zh": "节肢杀手",
+    "en": "Bane of Arthropods"
+  },
+  "m5ea9055f2030": {
+    "zh": "爆炸保护",
+    "en": "Blast Protection"
+  },
+  "mcd359324b796": {
+    "zh": "引雷",
+    "en": "Channeling"
+  },
+  "m5c721dbbfa08": {
+    "zh": "深海探索者",
+    "en": "Depth Strider"
+  },
+  "m2810c1ae78fd": {
+    "zh": "效率",
+    "en": "Efficiency"
+  },
+  "m58e483b0be6a": {
+    "zh": "掉落缓冲",
+    "en": "Feather Falling"
+  },
+  "m78d182d786b4": {
+    "zh": "火焰附加",
+    "en": "Fire Aspect"
+  },
+  "mec1d043359c0": {
+    "zh": "火焰保护",
+    "en": "Fire Protection"
+  },
+  "made7675701e2": {
+    "zh": "火矢",
+    "en": "Flame"
+  },
+  "mb019a849ea5b": {
+    "zh": "时运",
+    "en": "Fortune"
+  },
+  "md256ef3eb277": {
+    "zh": "冰霜行者",
+    "en": "Frost Walker"
+  },
+  "m395191f66ed8": {
+    "zh": "穿刺",
+    "en": "Impaling"
+  },
+  "m8651f50cc425": {
+    "zh": "无限",
+    "en": "Infinity"
+  },
+  "m7a22cc916abf": {
+    "zh": "击退",
+    "en": "Knockback"
+  },
+  "m7225b1462dba": {
+    "zh": "掠夺",
+    "en": "Looting"
+  },
+  "meaf086f666cf": {
+    "zh": "忠诚",
+    "en": "Loyalty"
+  },
+  "m5e5f6a567cda": {
+    "zh": "海之眷顾",
+    "en": "Luck of the Sea"
+  },
+  "m76b7a3e068f1": {
+    "zh": "突进",
+    "en": "Lunge"
+  },
+  "m29bb093ec79d": {
+    "zh": "钓饵",
+    "en": "Lure"
+  },
+  "mce4ad7b2db22": {
+    "zh": "经验修补",
+    "en": "Mending"
+  },
+  "mac09a1077a27": {
+    "zh": "多重射击",
+    "en": "Multishot"
+  },
+  "m77a322bc1460": {
+    "zh": "穿透",
+    "en": "Piercing"
+  },
+  "m16b7568de479": {
+    "zh": "力量",
+    "en": "Power"
+  },
+  "mdbe9a7391d69": {
+    "zh": "弹射物保护",
+    "en": "Projectile Protection"
+  },
+  "mbe164c9c5abb": {
+    "zh": "冲击",
+    "en": "Punch"
+  },
+  "m577f53ba8f1f": {
+    "zh": "快速装填",
+    "en": "Quick Charge"
+  },
+  "m32f80c9ff6bc": {
+    "zh": "水下呼吸",
+    "en": "Respiration"
+  },
+  "me32b2a7e7d2e": {
+    "zh": "激流",
+    "en": "Riptide"
+  },
+  "ma9270f7f7539": {
+    "zh": "锋利",
+    "en": "Sharpness"
+  },
+  "m0284c2ed27b1": {
+    "zh": "精准采集",
+    "en": "Silk Touch"
+  },
+  "m1f90178f01a9": {
+    "zh": "亡灵杀手",
+    "en": "Smite"
+  },
+  "m1a472fa7455a": {
+    "zh": "灵魂疾行",
+    "en": "Soul Speed"
+  },
+  "m6fba48da2652": {
+    "zh": "横扫之刃",
+    "en": "Sweeping Edge"
+  },
+  "mb052e021db26": {
+    "zh": "迅捷潜行",
+    "en": "Swift Sneak"
+  },
+  "mf1aeedccde43": {
+    "zh": "荆棘",
+    "en": "Thorns"
+  },
+  "m5ad0c596f2dc": {
+    "zh": "耐久",
+    "en": "Unbreaking"
+  },
+  "mf2bce8cbb27d": {
+    "zh": "绑定诅咒",
+    "en": "Curse of Binding"
+  },
+  "m17428248cb12": {
+    "zh": "消失诅咒",
+    "en": "Curse of Vanishing"
+  },
+  "m81afae4fef36": {
+    "zh": "致密",
+    "en": "Density"
+  },
+  "m26cdc4a97086": {
+    "zh": "破甲",
+    "en": "Breach"
+  },
+  "m315fff020514": {
+    "zh": "风爆",
+    "en": "Wind Burst"
+  },
+  "m25aecfd219a5": {
+    "zh": "附魔顺序计算器",
+    "en": "Enchantment order calculator"
+  },
+  "mcc14bf914868": {
+    "zh": "离线计算铁砧合并顺序与经验费用。",
+    "en": "Calculate anvil merge order and experience costs offline."
+  },
+  "mbc3a8eda09ee": {
+    "zh": "离线计算 Java 版铁砧顺序。装备与每本附魔书必须没有既有铁砧惩罚；不支持修理、重命名、已有附魔或合并低等级书。",
+    "en": "Offline Java Edition anvil planning. Gear and every book must have zero prior-work penalty. Repairs, renaming, existing enchantments and upgrading lower-level books are unsupported."
+  },
+  "mf935d445fbc7": {
+    "zh": "规则采用所附上游数据快照，包含重锤与矛；不代表所有历史版本、基岩版或模组规则。每步最多 39 级。",
+    "en": "Rules use the bundled upstream snapshot, including maces and spears; they do not cover every historical version, Bedrock or modded rules. Each step is limited to 39 levels."
+  },
+  "mdcdf765a1318": {
+    "zh": "未能计算可用顺序，请减少附魔数量或检查组合。",
+    "en": "No usable order was calculated. Reduce the number of enchantments or check the combination."
+  },
+  "mef6d08702acb": {
+    "zh": "不添加",
+    "en": "None"
+  },
+  "mcc4a6567e347": {
+    "zh": "计算附魔顺序",
+    "en": "Calculate order"
+  },
+  "mdb9d3c253311": {
+    "zh": "铁砧合并步骤",
+    "en": "Anvil merge steps"
+  },
+  "m841dd4e49807": {
+    "zh": "总等级费用：{0}；逐步从零级获取经验时合计 {1} XP。",
+    "en": "Total level cost: {0}; {1} XP when earning each step from level zero."
+  },
+  "m31b9ab75c77c": {
+    "zh": "左侧为目标，右侧为材料。费用 {0} 级（{1} XP），结果惩罚 {2}。",
+    "en": "Target on the left, sacrifice on the right. Cost: {0} levels ({1} XP); resulting penalty: {2}."
+  },
+  "m058b1292d925": {
+    "zh": "请选择有效装备。",
+    "en": "Choose valid equipment."
+  },
+  "m4c8087e80c56": {
+    "zh": "请选择 1 至 10 种附魔。",
+    "en": "Choose between 1 and 10 enchantments."
+  },
+  "m603743fe6d1e": {
+    "zh": "附魔或等级不适用于此装备。",
+    "en": "The enchantment or level does not apply to this equipment."
+  },
+  "m641b5e277dc1": {
+    "zh": "所选附魔互不兼容，请调整组合。",
+    "en": "Selected enchantments are incompatible. Adjust the combination."
+  },
+  "m5f0a2c174eef": {
+    "zh": "下载官方 Sakura 组件",
+    "en": "Download official Sakura component"
+  },
+  "mfabde03a871c": {
+    "zh": "主动选择后将皮肤上传到此账号的 Minecraft 官方服务。",
+    "en": "Your chosen skin will be uploaded to this account's official Minecraft service."
+  },
+  "m76ecc81acd61": {
+    "zh": "仅从 AMBER 移除关联，保留 Sakura 远程隧道。是否继续？",
+    "en": "Remove only the AMBER association and keep the remote Sakura tunnel?"
+  },
+  "ma758dac3ca75": {
+    "zh": "仅在插件需要数据库时启用。每实例独立进程与数据，使用本机受限账号，不注册系统服务，不自动公开数据库端口。",
+    "en": "Enable only when a plugin needs a database. Each instance has separate data and a process, restricted local credentials, no system service and no automatic public exposure."
+  },
+  "m6e584e3d5ce6": {
+    "zh": "保存配置",
+    "en": "Save configuration"
+  },
+  "m1dd21d1bb97a": {
+    "zh": "保留失败数据并重置准备状态",
+    "en": "Keep failed data and reset preparation"
+  },
+  "mca4d973c0b00": {
+    "zh": "停止",
+    "en": "Stop"
+  },
+  "md9fd321ddbe7": {
+    "zh": "关联失效",
+    "en": "Invalid association"
+  },
+  "mcd7b983f3cf1": {
+    "zh": "关联隧道",
+    "en": "Linked tunnels"
+  },
+  "mc07096931888": {
+    "zh": "准备本地数据库",
+    "en": "Prepare local database"
+  },
+  "m2838a890857d": {
+    "zh": "初始化未完成，数据已保留。请查看日志后恢复或重新准备，不要删除其他实例目录。",
+    "en": "Initialization is incomplete; data was retained. Inspect the log before recovery or preparation. Do not delete other instances."
+  },
+  "md639077ef242": {
+    "zh": "删除远程隧道请在 Sakura 控制台单独操作。",
+    "en": "Delete remote tunnels separately in the Sakura dashboard."
+  },
+  "mda55efb80be2": {
+    "zh": "前往服务端设置修改主端口",
+    "en": "Edit the game port in server settings"
+  },
+  "mab2f31f30acf": {
+    "zh": "协议",
+    "en": "Protocol"
+  },
+  "mcf98b1208cf1": {
+    "zh": "取消准备",
+    "en": "Cancel preparation"
+  },
+  "m022f82f343a1": {
+    "zh": "名称／用途",
+    "en": "Name / purpose"
+  },
+  "m2500e36e8ae2": {
+    "zh": "在 Sakura 控制台创建远程隧道，再在此关联实例端口。协议、节点能力和账号额度以服务商实际支持为准。",
+    "en": "Create a remote tunnel in the Sakura dashboard, then associate an instance port here. Protocols, node capabilities and quotas depend on the provider."
+  },
+  "m37aac5b4e639": {
+    "zh": "地址",
+    "en": "Address"
+  },
+  "m135283b441c6": {
+    "zh": "备份与恢复要求先停止此数据库；恢复保留原数据副本，不影响其他实例。删除实例时数据库随实例进入回收站。",
+    "en": "Stop this database before backup or restore. Restore keeps the previous data and leaves other instances running. Deleting an instance moves its database into the recycle bin with it."
+  },
+  "m4e7b4b14507c": {
+    "zh": "备份数据库",
+    "en": "Back up database"
+  },
+  "m4c6de01bbe86": {
+    "zh": "复制地址",
+    "en": "Copy address"
+  },
+  "m6ee743c73026": {
+    "zh": "实例端口",
+    "en": "Instance ports"
+  },
+  "me0534b8a4e46": {
+    "zh": "恢复",
+    "en": "Restore"
+  },
+  "m23c3cde763b3": {
+    "zh": "恢复此备份？当前数据将保留为恢复前副本。",
+    "en": "Restore this backup? Current data will be kept as a pre-restore copy."
+  },
+  "m2b1a442b44c3": {
+    "zh": "打开 Sakura 控制台",
+    "en": "Open Sakura dashboard"
+  },
+  "me0c590656b5d": {
+    "zh": "打开此服务商站点",
+    "en": "Open this provider's website"
+  },
+  "m6f7aa407d074": {
+    "zh": "插件数据库密码",
+    "en": "Plugin database password"
+  },
+  "m263200d7d529": {
+    "zh": "数据库",
+    "en": "Database"
+  },
+  "m38fe1397d811": {
+    "zh": "数据库日志",
+    "en": "Database log"
+  },
+  "ma50aa1d2b32f": {
+    "zh": "新增隧道关联",
+    "en": "Add tunnel association"
+  },
+  "m10fafbeaa7fd": {
+    "zh": "暂无日志",
+    "en": "No log available"
+  },
+  "me6fc5eb8c3b8": {
+    "zh": "未启动",
+    "en": "Not started"
+  },
+  "m865cea6fb03f": {
+    "zh": "本地 MySQL",
+    "en": "Local MySQL"
+  },
+  "m8f7858dfbb91": {
+    "zh": "本地 MySQL 当前仅支持 Windows x64。",
+    "en": "Local MySQL currently supports Windows x64 only."
+  },
+  "mb885df8bb927": {
+    "zh": "查看插件连接信息",
+    "en": "Show plugin connection details"
+  },
+  "m074b0821da75": {
+    "zh": "此服务商没有已验证的兼容换肤接口。请前往该服务商站点换肤；不会把登录凭据发送到其他站点。",
+    "en": "A compatible upload capability could not be verified for this provider. Use its website to change skins. Credentials are never sent to another provider."
+  },
+  "m506364f4289f": {
+    "zh": "添加附加端口",
+    "en": "Add additional port"
+  },
+  "m0d0e1a86b3aa": {
+    "zh": "用户",
+    "en": "User"
+  },
+  "md6e78ca122de": {
+    "zh": "移除本机关联",
+    "en": "Remove local association"
+  },
+  "m005d838b32db": {
+    "zh": "移除端口记录",
+    "en": "Remove port record"
+  },
+  "me71ac32b544b": {
+    "zh": "端口",
+    "en": "Port"
+  },
+  "m4b572ca944df": {
+    "zh": "端口与数据库",
+    "en": "Ports & database"
+  },
+  "mc4e5811c5c1e": {
+    "zh": "端口记录用于规划和关联隧道，不会自动配置插件、打开防火墙或使公网连通。请在对应插件中设置相同端口与协议。",
+    "en": "Port records plan tunnel associations; they do not configure plugins, open firewalls or establish public connectivity. Set matching ports and protocols in each plugin."
+  },
+  "m94a3195a324b": {
+    "zh": "访问密钥（留空保留已保存密钥）",
+    "en": "Access token (leave empty to keep saved token)"
+  },
+  "m732e5b3923cb": {
+    "zh": "返回隧道列表",
+    "en": "Back to tunnels"
+  },
+  "m9c349c1d101b": {
+    "zh": "选择并上传官方皮肤",
+    "en": "Choose and upload official skin"
+  },
+  "mbbe1530f9676": {
+    "zh": "选择并上传服务商皮肤",
+    "en": "Choose and upload provider skin"
+  },
+  "mec893fb59509": {
+    "zh": "隐藏连接信息",
+    "en": "Hide connection details"
+  },
+  "m17f261a9385c": {
+    "zh": "隧道 ID",
+    "en": "Tunnel ID"
+  },
+  "mc0f201e4b0c5": {
+    "zh": "首次准备将从 Oracle 下载并校验约 268 MiB 的 GPLv2 MySQL Community 组件。多实例同时运行会分别占用内存。",
+    "en": "First preparation downloads and verifies about 268 MiB of GPLv2 MySQL Community files from Oracle. Concurrent instances use separate memory."
+  },
+  "m45c97940ef7a": {
+    "zh": "将所选皮肤上传到此微软账号的 Minecraft 官方服务？",
+    "en": "Upload the selected skin to this Microsoft account's official Minecraft service?"
+  },
+  "m4730a6ae6349": {
+    "zh": "将所选皮肤上传到此账号的服务商？",
+    "en": "Upload the selected skin to this account's provider?"
+  },
+  "m9e07e3c0532d": {
+    "zh": "上传",
+    "en": "Upload"
+  },
+  "m1c1d243e1425": {
+    "zh": "官方已接受皮肤上传，已刷新皮肤信息；公开贴图可能稍后更新。",
+    "en": "The official service accepted the skin. Skin information was refreshed; public textures may update later."
+  },
+  "m3d16bcd53cef": {
+    "zh": "服务商已接受上传，已请求刷新皮肤。",
+    "en": "The provider accepted the upload. A skin refresh was requested."
+  },
+  "m3c458a814a7c": {
+    "zh": "服务商未声明支持此角色的皮肤上传。",
+    "en": "The provider does not declare skin uploads for this profile."
+  },
+  "m88c1aceb2180": {
+    "zh": "皮肤上传结果未确认，请刷新服务商资料后再重试。",
+    "en": "The upload result is uncertain. Refresh the provider profile before retrying."
+  },
+  "mef3882578839": {
+    "zh": "皮肤上传结果未确认，请刷新官方资料后再重试。",
+    "en": "The upload result is uncertain. Refresh the official profile before retrying."
+  },
+  "m93f335fb1397": {
+    "zh": "官方皮肤上传失败（HTTP {0}）。",
+    "en": "Official skin upload failed (HTTP {0})."
+  },
+  "m030890cacaf9": {
+    "zh": "服务商皮肤上传失败（HTTP {0}）。",
+    "en": "Provider skin upload failed (HTTP {0})."
+  },
+  "mfd2e4e685df2": {
+    "zh": "官方响应无法确认，请刷新账号皮肤。",
+    "en": "The official response could not be confirmed. Refresh the account skin."
+  },
+  "m2eac72fdca42": {
+    "zh": "编辑附加端口",
+    "en": "Edit additional port"
+  },
+  "m4b29ce8e4093": {
+    "zh": "取消编辑",
+    "en": "Cancel editing"
+  },
+  "mf95ea7f4c063": {
+    "zh": "未启用",
+    "en": "Disabled"
+  },
+  "m0b3f63abd74f": {
+    "zh": "初始化中",
+    "en": "Initializing"
+  },
+  "ma029b8b4da30": {
+    "zh": "初始化未完成",
+    "en": "Initialization incomplete"
+  },
+  "mab27f80d046f": {
+    "zh": "已就绪",
+    "en": "Ready"
+  },
+  "m33439d263173": {
+    "zh": "启动中",
+    "en": "Starting"
+  },
+  "mf006455e3baf": {
+    "zh": "已停止",
+    "en": "Stopped"
+  },
+  "mfc7b21cf8185": {
+    "zh": "已接管运行进程",
+    "en": "Recovered running process"
+  },
+  "maf48159f380f": {
+    "zh": "正在停止",
+    "en": "Stopping"
+  },
+  "m826d8863bdaf": {
+    "zh": "整服备份和实例副本不包含数据库；请在这里单独备份数据库。取消准备会等待共享组件下载结束，并保留已生成的数据。",
+    "en": "Server snapshots and instance copies exclude databases. Back up the database separately here. Cancelling preparation waits for a shared component download to finish and preserves generated data."
+  },
+  "mce28ad56d51b": {
+    "zh": "Invalid database configuration / 数据库配置无效",
+    "en": "Invalid database configuration"
+  },
+  "me6bc13f5073c": {
+    "zh": "Database is not initialized / 数据库尚未初始化",
+    "en": "Database is not initialized"
+  },
+  "m86dc3a699090": {
+    "zh": "Database operation in progress / 数据库操作进行中",
+    "en": "Database operation in progress"
+  },
+  "m569a5bd75943": {
+    "zh": "No incomplete preparation / 没有待恢复的初始化记录",
+    "en": "No incomplete preparation"
+  },
+  "m3327f7b1736e": {
+    "zh": "Stop the database first / 请先停止数据库",
+    "en": "Stop the database first"
+  },
+  "mfddd4f2e3874": {
+    "zh": "Database preparation cancelled / 数据库准备已取消",
+    "en": "Database preparation cancelled"
+  },
+  "m74607197abfd": {
+    "zh": "Local MySQL is currently supported on Windows x64 / 本地 MySQL 当前仅支持 Windows x64",
+    "en": "Local MySQL is currently supported on Windows x64"
+  },
+  "m6cdeb459d715": {
+    "zh": "Invalid MySQL component / MySQL 组件无效",
+    "en": "Invalid MySQL component"
+  },
+  "m717d602149b1": {
+    "zh": "MySQL component changed; preserve files and reinstall / MySQL 组件已改变",
+    "en": "MySQL component changed; preserve files and reinstall"
+  },
+  "mb0461753fa42": {
+    "zh": "MySQL archive too large / MySQL 压缩包超出允许大小",
+    "en": "MySQL archive too large"
+  },
+  "m73c5bc098d32": {
+    "zh": "MySQL command timed out / MySQL 指令超时",
+    "en": "MySQL command timed out"
+  },
+  "m836bb5b86986": {
+    "zh": "Cannot run MySQL component / 无法运行 MySQL 组件",
+    "en": "Cannot run MySQL component"
+  },
+  "m8f36674586bc": {
+    "zh": "MySQL startup timed out / MySQL 启动超时",
+    "en": "MySQL startup timed out"
+  },
+  "m41c5dc8de17b": {
+    "zh": "Database data already exists; restore or inspect it before retrying / 已有数据库记录，请先恢复或检查",
+    "en": "Database data already exists; restore or inspect it before retrying"
+  },
+  "m279bfce18b14": {
+    "zh": "Existing data directory preserved / 已有数据目录已保留",
+    "en": "Existing data directory preserved"
+  },
+  "me06e6a550e81": {
+    "zh": "Secure storage unavailable / 系统安全存储不可用",
+    "en": "Secure storage unavailable"
+  },
+  "m8fc6271e26a9": {
+    "zh": "No free database port / 没有可用的数据库端口",
+    "en": "No free database port"
+  },
+  "m5facb93df14a": {
+    "zh": "Database already running / 数据库已在运行",
+    "en": "Database already running"
+  },
+  "m6d3c14f23770": {
+    "zh": "Database is still stopping; data preserved / 数据库仍在停止，数据已保留",
+    "en": "Database is still stopping; data preserved"
+  },
+  "m6ae3a729610e": {
+    "zh": "Launcher closing / 启动器正在退出",
+    "en": "Launcher closing"
+  },
+  "m5cc90faca7fe": {
+    "zh": "Stop this database before backup / 备份前请停止此数据库",
+    "en": "Stop this database before backup"
+  },
+  "m022887f474d8": {
+    "zh": "Database not ready / 数据库尚未就绪",
+    "en": "Database not ready"
+  },
+  "mc72b87fea353": {
+    "zh": "Stop this database before restore / 恢复前请停止此数据库",
+    "en": "Stop this database before restore"
+  },
+  "mb319bb6e197a": {
+    "zh": "Unknown backup / 找不到此备份",
+    "en": "Unknown backup"
+  },
+  "mb2957243b953": {
+    "zh": "Invalid backup / 备份记录无效",
+    "en": "Invalid backup"
+  },
+  "m2e6c33d3925c": {
+    "zh": "Invalid port record / 端口记录无效",
+    "en": "Invalid port record"
+  },
+  "mae66175f1f91": {
+    "zh": "Invalid port configuration / 端口配置无效",
+    "en": "Invalid port configuration"
+  },
+  "mfda54d1ba794": {
+    "zh": "Invalid port identity / 端口标识无效",
+    "en": "Invalid port identity"
+  },
+  "m349f33948dff": {
+    "zh": "Port no longer exists / 端口已失效",
+    "en": "Port no longer exists"
+  },
+  "m041e5542b61d": {
+    "zh": "Edit the game port in server settings / 请在服务端设置中修改主端口",
+    "en": "Edit the game port in server settings"
+  },
+  "md5ef3bc94bf6": {
+    "zh": "Stop linked tunnels first / 请先停止关联隧道",
+    "en": "Stop linked tunnels first"
+  },
+  "m1b2a1fcf2937": {
+    "zh": "Port is assigned to another record / 端口与已有记录冲突",
+    "en": "Port is assigned to another record"
+  },
+  "m99a4995e5e15": {
+    "zh": "Too many ports / 端口记录过多",
+    "en": "Too many ports"
+  },
+  "mcff2a55d8a4a": {
+    "zh": "Cannot remove game port / 不能移除游戏主端口",
+    "en": "Cannot remove game port"
+  },
+  "me3685bae27d5": {
+    "zh": "Port association no longer exists / 关联端口已失效",
+    "en": "Port association no longer exists"
+  },
+  "mf902ee395dd6": {
+    "zh": "Invalid tunnel configuration / 隧道配置无效",
+    "en": "Invalid tunnel configuration"
+  },
+  "md4f323bc776d": {
+    "zh": "Unknown tunnel association / 找不到隧道关联",
+    "en": "Unknown tunnel association"
+  },
+  "m087825848d7e": {
+    "zh": "Stop this tunnel first / 请先停止此隧道",
+    "en": "Stop this tunnel first"
+  },
+  "m2002844db376": {
+    "zh": "Stop all tunnels before changing credentials / 修改凭据前请停止所有隧道",
+    "en": "Stop all tunnels before changing credentials"
+  },
+  "ma519849e5e02": {
+    "zh": "Invalid tunnel name / 隧道名称无效",
+    "en": "Invalid tunnel name"
+  },
+  "mcf5212ceae52": {
+    "zh": "Tunnel already associated / 此隧道已关联",
+    "en": "Tunnel already associated"
+  },
+  "m3c64c828cf96": {
+    "zh": "Too many tunnels / 隧道记录过多",
+    "en": "Too many tunnels"
+  },
+  "mbdb126c286fb": {
+    "zh": "Tunnel already starting / 隧道已在启动",
+    "en": "Tunnel already starting"
+  },
+  "m4fee37dba4a3": {
+    "zh": "Wait for component installation / 请等待组件安装完成",
+    "en": "Wait for component installation"
+  },
+  "m57f1cb3825fd": {
+    "zh": "Tunnel already active / 隧道已在运行",
+    "en": "Tunnel already active"
+  },
+  "m43fb4d01df22": {
+    "zh": "Port conflict / 端口配置冲突",
+    "en": "Port conflict"
+  },
+  "m42e9f021659c": {
+    "zh": "Tunnel start cancelled / 隧道启动已取消",
+    "en": "Tunnel start cancelled"
+  },
+  "ma2f43772edf5": {
+    "zh": "Stop all tunnels before installing / 安装组件前请停止所有隧道",
+    "en": "Stop all tunnels before installing"
+  },
+  "m014f6b6e39d3": {
+    "zh": "Start this association before diagnostics / 诊断前请启动此隧道",
+    "en": "Start this association before diagnostics"
+  },
+  "m2272a4149347": {
+    "zh": "Invalid skin model / 皮肤模型无效",
+    "en": "Invalid skin model"
+  },
+  "m87a280e5a02d": {
+    "zh": "Invalid skin file / 皮肤文件无效",
+    "en": "Invalid skin file"
+  },
+  "mdd99ca5a6ffd": {
+    "zh": "Microsoft account not found / 找不到微软账号",
+    "en": "Microsoft account not found"
+  },
+  "mfba21dcc0c4e": {
+    "zh": "Third-party account not found / 找不到第三方账号",
+    "en": "Third-party account not found"
+  },
+  "m780e533af0c6": {
+    "zh": "Invalid profile / 角色无效",
+    "en": "Invalid profile"
+  },
+  "m6fba220e545d": {
+    "zh": "Invalid skin / 皮肤无效",
+    "en": "Invalid skin"
+  },
+  "mec24952f9cca": {
+    "zh": "Invalid provider refresh / 服务商返回的身份刷新结果无效",
+    "en": "Invalid provider refresh"
+  },
+  "m72cb9d8110b3": {
+    "zh": "各实例统计",
+    "en": "Statistics by instance"
+  },
+  "m9614353432c3": {
+    "zh": "新建 Sakura 远端隧道",
+    "en": "Create a remote Sakura tunnel"
+  },
+  "meb373fd0ba05": {
+    "zh": "使用已保存密钥向 Sakura 创建隧道，占用账号额度。不会自动启动，也不会购买套餐。",
+    "en": "Create a tunnel on Sakura with the saved token, using your tunnel quota. This does not start it or purchase a plan."
+  },
+  "m8fd86dd11a50": {
+    "zh": "读取节点与账号额度",
+    "en": "Load nodes and account quota"
+  },
+  "mec5efb63c8d6": {
+    "zh": "已使用 {0}／{1} 条隧道",
+    "en": "Using {0} of {1} tunnels"
+  },
+  "me5584470d68f": {
+    "zh": "远端隧道名称",
+    "en": "Remote tunnel name"
+  },
+  "m0e456131a2d2": {
+    "zh": "服务器使用范围",
+    "en": "Server audience"
+  },
+  "me9f03ddcbec1": {
+    "zh": "仅熟人私下联机",
+    "en": "Private play with friends"
+  },
+  "ma93d174c0991": {
+    "zh": "公开宣传或公开招募玩家",
+    "en": "Publicly advertised or recruiting players"
+  },
+  "m522441449b16": {
+    "zh": "Sakura 节点",
+    "en": "Sakura node"
+  },
+  "m258bf7433d62": {
+    "zh": "远端端口（留空自动分配）",
+    "en": "Remote port (blank for automatic assignment)"
+  },
+  "m249aa6c1f32f": {
+    "zh": "公开游戏服务器只能使用 Sakura 允许的专用节点。最终端口、节点权限及额度以服务商响应为准。",
+    "en": "Public game servers require dedicated nodes permitted by Sakura. Final port, node access and quota depend on the provider response."
+  },
+  "m52c04f617067": {
+    "zh": "创建远端隧道并关联",
+    "en": "Create and link remote tunnel"
+  },
+  "mbd5c97af45e6": {
+    "zh": "保存访问密钥",
+    "en": "Save access token"
+  },
+  "m89ad24a7914e": {
+    "zh": "有待确认的远端操作，请先核对结果，勿重复提交。",
+    "en": "A remote operation has an uncertain result. Verify it before submitting again."
+  },
+  "mfd9b7f2d78e6": {
+    "zh": "核对远端结果",
+    "en": "Check remote result"
+  },
+  "m20270b92d91a": {
+    "zh": "已核对，解除待确认状态",
+    "en": "Verified; clear pending state"
+  },
+  "me0b7e1b13dd7": {
+    "zh": "删除 Sakura 远端隧道",
+    "en": "Delete remote Sakura tunnel"
+  },
+  "m1d0fbbf7c1f2": {
+    "zh": "远端删除会影响其他设备使用此隧道；仅移除本机关联不会删除远端记录。",
+    "en": "Remote deletion affects other devices using this tunnel. Removing the local link leaves the remote record intact."
+  },
+  "m256a958fc9a1": {
+    "zh": "整服手动备份、自动退出备份和恢复副本均不包含本地 MySQL。请到此实例的“端口与数据库”停止数据库并单独备份。",
+    "en": "Manual server backups, automatic exit backups and restored copies exclude local MySQL. Open this instance’s Ports and database page, stop its database and back it up separately."
+  },
+  "mec6e095469c9": {
+    "zh": "实例复制不复制本地 MySQL 数据和凭据，也不复制附加端口记录。请到“端口与数据库”管理独立数据库备份。",
+    "en": "Instance copies exclude local MySQL data and credentials, and additional port records. Manage separate database backups under Ports and database."
+  },
+  "m380156808d30": {
+    "zh": "无法确认节点能力。",
+    "en": "Node capabilities could not be verified."
+  },
+  "mde359762ac3d": {
+    "zh": "节点离线。",
+    "en": "The node is offline."
+  },
+  "mdf3b7b16971b": {
+    "zh": "节点暂不接受新隧道。",
+    "en": "The node is not accepting new tunnels."
+  },
+  "mb07f3095f2f0": {
+    "zh": "账号等级不满足节点要求。",
+    "en": "The account tier does not meet this node’s requirements."
+  },
+  "m17a1d99ba85c": {
+    "zh": "节点不支持 UDP。",
+    "en": "This node does not support UDP."
+  },
+  "mebc579de119b": {
+    "zh": "公开游戏服务器需要服务商允许的专用节点。",
+    "en": "Public game servers require a dedicated node permitted by the provider."
+  },
+  "m3b6688bc2aca": {
+    "zh": "此节点强制访问认证，当前创建面板不支持此能力。",
+    "en": "This node requires access authentication, which this creation panel does not support."
+  },
+  "mf931f77f1291": {
+    "zh": "请先保存 Sakura 访问密钥。",
+    "en": "Save a Sakura access token first."
+  },
+  "m0fa374524574": {
+    "zh": "远端结果未确认，请核对远端列表，勿重复提交。",
+    "en": "The remote result is uncertain. Check the remote list; do not resubmit."
+  },
+  "ma6798ca08f8f": {
+    "zh": "Sakura 操作失败（HTTP {0}）；请检查权限、额度和服务商限制。",
+    "en": "Sakura operation failed (HTTP {0}); check permissions, quota and provider restrictions."
+  },
+  "mabf4630aa805": {
+    "zh": "无法确认 Sakura 账号权限或额度。",
+    "en": "Sakura account permissions or quota could not be verified."
+  },
+  "ma8b72f652788": {
+    "zh": "远端操作进行中，请等待结果。",
+    "en": "A remote operation is in progress; wait for its result."
+  },
+  "m2f9e4164c217": {
+    "zh": "远端隧道参数无效。",
+    "en": "Invalid remote tunnel parameters."
+  },
+  "m539579f1b683": {
+    "zh": "Sakura 隧道额度已用完。",
+    "en": "Sakura tunnel quota is exhausted."
+  },
+  "m959910de6401": {
+    "zh": "仍有待确认的远端操作，请先核对。",
+    "en": "A remote operation remains uncertain; verify it first."
+  },
+  "meeeb9435e768": {
+    "zh": "远端隧道已创建并关联；尚未启动，不代表公网已连通。",
+    "en": "Remote tunnel created and linked. It has not started; public connectivity is not established."
+  },
+  "mf75f7cb017fc": {
+    "zh": "找不到隧道关联。",
+    "en": "Tunnel association not found."
+  },
+  "m5a0c9c2338bf": {
+    "zh": "请先停止此隧道。",
+    "en": "Stop this tunnel first."
+  },
+  "m0d538d8227c7": {
+    "zh": "远端隧道已不存在，请仅移除本机关联。",
+    "en": "The remote tunnel no longer exists. Remove only the local association."
+  },
+  "m66840a300625": {
+    "zh": "服务商已锁定此隧道的删除操作。",
+    "en": "The provider has locked deletion of this tunnel."
+  },
+  "m26cbb07ec8e6": {
+    "zh": "远端记录已删除，但服务商未能踢下线；请在控制台核对。本机关联仍保留。",
+    "en": "The remote record was deleted, but the provider could not disconnect it. Check the dashboard. The local association is retained."
+  },
+  "m24e7f32be276": {
+    "zh": "远端隧道已删除，本机关联仍保留，可单独移除。",
+    "en": "The remote tunnel was deleted. Its local association is retained and can be removed separately."
+  },
+  "mab3a31ccadcc": {
+    "zh": "没有待确认的远端操作。",
+    "en": "No remote operation needs verification."
+  },
+  "m243eab051188": {
+    "zh": "未能唯一确认远端结果，请在 Sakura 控制台核对后再解除待确认状态。",
+    "en": "The remote result could not be uniquely identified. Check the Sakura dashboard before clearing the pending state."
+  },
+  "m9b1a212a5ae9": {
+    "zh": "远端记录仍存在，请在 Sakura 控制台核对后再解除待确认状态。",
+    "en": "The remote record still exists. Check the Sakura dashboard before clearing the pending state."
+  },
+  "m377caa9139e6": {
+    "zh": "已核对远端结果，本地记录已更新。",
+    "en": "Remote result verified; local records updated."
+  },
+  "m444c8b93f413": {
+    "zh": "远端隧道已删除，请移除本机关联。",
+    "en": "The remote tunnel was deleted. Remove the local association."
+  },
+  "me3fc39b1c7fe": {
+    "zh": "远端隧道已删除或正在核对删除结果。",
+    "en": "The remote tunnel was deleted, or its deletion is being verified."
+  },
+  "mdccf6a93a703": {
+    "zh": "请先停止隧道并等待远端操作结束。",
+    "en": "Stop tunnels and wait for remote operations to finish."
+  },
+  "m2545910cd199": {
+    "zh": "访问密钥或系统安全存储不可用。",
+    "en": "The access token or secure system storage is unavailable."
+  },
+  "m9a4a14368664": {
+    "zh": "已在 Sakura 控制台核对远端结果？",
+    "en": "Have you checked the remote result in the Sakura dashboard?"
+  },
+  "m7a7cf9e5f0c6": {
+    "zh": "解除待确认状态不会撤销远端操作。再次创建可能产生重复隧道。",
+    "en": "Clearing the pending state does not undo the remote operation. Creating again may produce a duplicate tunnel."
+  },
+  "mf4a186f20e08": {
+    "zh": "已解除待确认状态，请以服务商记录为准。",
+    "en": "Pending state cleared. The provider record remains authoritative."
+  },
+  "m00b99771abe2": {
+    "zh": "创建 Sakura 远端隧道？",
+    "en": "Create a remote Sakura tunnel?"
+  },
+  "mb01e9e3b3624": {
+    "zh": "将向 Sakura 提交名称、节点及本机端口，占用该账号的隧道额度。",
+    "en": "Sends the name, node and local port to Sakura and uses this account’s tunnel quota."
+  },
+  "mc230718e96cc": {
+    "zh": "确认创建远端隧道",
+    "en": "Confirm remote tunnel creation"
+  },
+  "m7b9e695c0a1d": {
+    "zh": "永久删除 Sakura 远端隧道？",
+    "en": "Permanently delete the remote Sakura tunnel?"
+  },
+  "m38c813decdbd": {
+    "zh": "这是服务商端删除，不是仅移除本机关联。远端地址可能无法恢复，其他设备使用此隧道也会受到影响。",
+    "en": "This deletes the tunnel at the provider. Its address may not be recoverable, and other devices using it are affected."
+  },
+  "m3401ae7f9d79": {
+    "zh": "确认删除远端隧道",
+    "en": "Confirm remote tunnel deletion"
   }
 }

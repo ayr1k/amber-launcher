@@ -20,6 +20,12 @@ authlib-injector is downloaded and SHA-256 verified on demand. Its AGPL-3.0 and 
 
 Original license texts remain authoritative; translated explanations do not replace them.
 
+## 1.5.0 account preview and enchant calculator
+
+- skinview3d 3.4.2, MIT, bs-community contributors, and its Three.js/skinview-utils dependencies are bundled locally. Complete transitive runtime notices are preserved in `public/licenses/RUNTIME-LICENSES.txt`. Source: https://github.com/bs-community/skinview3d . No remote executable page is loaded.
+- iamcal/enchant-order, MIT, copyright 2021 Cal Henderson, pinned commit `9345bd097a300266e347d874feb46ef7e1bd4158`: https://github.com/iamcal/enchant-order . License: `public/licenses/enchant-order-MIT.txt`; source and adaptation notes: `src/vendor/enchant-order/SOURCE.json`. Only the calculation worker and rule/name data are integrated; no upstream website, analytics or external resource loading.
+- Optional MySQL Community 8.4.13 is downloaded separately from Oracle, not bundled. Its GPLv2/additional permissions and complete third-party notices remain in the component LICENSE. Source, checksum, architecture and redistribution boundaries: [1.5.0 task notes](LOCAL-TEST-1.5.0.md).
+
 ## Optional EasyTier networking component
 
 EasyTier 2.6.4 (Apache-2.0) is downloaded on demand from its official release, not bundled in the installers. Source and license: https://github.com/EasyTier/EasyTier/tree/v2.6.4 . Archive SHA-256: 27af91e270e554709b048bd32327fefd2dfce5062ae1e8701af7550c6f525f84. Extracted core SHA-256: da7eb2d24b5416f3d3407636949e964a0750e3f9dc53a828cb6799a57ead445d.

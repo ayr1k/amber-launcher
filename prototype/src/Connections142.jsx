@@ -1,9 +1,10 @@
+import {Sakura150} from './Sakura150';
 import {useEffect,useState} from 'react';
 import {getLocale} from '../desktop/localization.mjs';
 import {ControlButton as Button} from './ControlButton.mjs';
 const sx=(z,e)=>getLocale()==='en-US'?e:z,call=(...args)=>window.amberDesktop.server(...args);
 const message=value=>{const parts=String(value||'').split(' / ');return parts.length===2?sx(parts[0],parts[1]):String(value||'');};
-export function Connections142({current,children}){const [tab,setTab]=useState('easytier');return <section><div className="tabs"><Button className={tab==='easytier'?'active':''} aria-selected={tab==='easytier'} onClick={()=>setTab('easytier')}>EasyTier</Button><Button className={tab==='sakura'?'active':''} aria-selected={tab==='sakura'} onClick={()=>setTab('sakura')}>Sakura Frp</Button></div><div hidden={tab!=='easytier'}>{children}</div><div hidden={tab!=='sakura'}><Sakura current={current} active={tab==='sakura'}/></div></section>;}
+export function Connections142({current,children}){const [tab,setTab]=useState('easytier');return <section><div className="tabs"><Button className={tab==='easytier'?'active':''} aria-selected={tab==='easytier'} onClick={()=>setTab('easytier')}>EasyTier</Button><Button className={tab==='sakura'?'active':''} aria-selected={tab==='sakura'} onClick={()=>setTab('sakura')}>Sakura Frp</Button></div><div hidden={tab!=='easytier'}>{children}</div><div hidden={tab!=='sakura'}><Sakura150 current={current} active={tab==='sakura'}/></div></section>;}
 function Sakura({current,active}){
  const [state,setState]=useState(null),[token,setToken]=useState(''),[tunnel,setTunnel]=useState(''),[busy,setBusy]=useState(''),[error,setError]=useState(''),[diagnosis,setDiagnosis]=useState(null);const id=current?.id;
  useEffect(()=>{let live=true;async function load(){try{const s=await call('sakuraState',id);if(live)setState(s);}catch(e){if(live)setError(e.message);}}if(active)load();const timer=setInterval(()=>{if(active&&!document.hidden)load();},2500);return()=>{live=false;clearInterval(timer);};},[id,active]);

@@ -56,7 +56,7 @@ export class Sakura142{
    signal.throwIfAborted();const c=await this.config(),binding=c.bindings?.[id];if(!c.secret||!binding)throw Error('请先保存访问密钥和隧道 ID / Save token and tunnel first');
    const token=await this.codec.decryptString(Buffer.from(c.secret,'base64'));
    const tunnels=await this.api('tunnels',token,signal),t=tunnels.find(x=>String(x.id)===binding.tunnel);const props=await this.servers.properties(id);
-   if(!t||t.type!=='tcp'||t.status!==0||!['127.0.0.1','localhost','::1'].includes(t.local_ip)||Number(t.local_port)!==Number(props.values['server-port']||25565))throw Error('请在 Sakura 官网将此 TCP 隧道指向本机当前服务端端口 / Tunnel must target this server on loopback');
+   if(!t||t.type!==(binding.protocol||'tcp')||t.status!==0||!['127.0.0.1','localhost','::1'].includes(t.local_ip)||Number(t.local_port)!==Number(binding.port||props.values['server-port']||25565))throw Error('请在 Sakura 官网核对隧道协议及本机目标端口 / Check the tunnel protocol and loopback target on Sakura');
    if(!['running','starting'].includes(this.servers.runs.get(id)?.state))throw Error('请先启动服务端 / Start the server first');
    const nodes=await this.api('nodes',token,signal),host=nodes[t.node]?.host;if(!host||!/^[\w.-]+$/.test(host)||!/^\d{1,5}$/.test(String(t.remote)))throw Error('无法确认公网地址 / Cannot confirm public endpoint');
    r={serverId:id,state:'starting',phase:'config',connected:false,address:host+':'+t.remote,tail:'',error:''};this.current=r;

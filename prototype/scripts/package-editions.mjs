@@ -3,7 +3,7 @@
 import {cp,mkdir,readFile,writeFile,copyFile,access,realpath,lstat,rm} from 'node:fs/promises';
 import {resolve,dirname,join} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {spawn} from 'node:child_process';
+import {execFileSync,spawn} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {build} from 'electron-builder';
 import {EDITION} from '../desktop/edition.mjs';
@@ -11,6 +11,7 @@ import {verify as verifySeedEngine} from './verify-seed-engine.mjs';
 await verifySeedEngine();
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const pkg=JSON.parse(await readFile(join(root,'package.json'),'utf8'));
+const provenance={schema:1,version:pkg.version,commit:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),taskHead:process.env.AMBER_TASK_HEAD||null,eventSha:process.env.AMBER_EVENT_SHA||null,dirty:!!execFileSync('git',['status','--porcelain'],{cwd:root,encoding:'utf8'}).trim(),channel:process.argv.includes('--public')?'public':'local',workflow:process.env.GITHUB_RUN_ID?`https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`:null,builtAt:new Date().toISOString()};
 const base=join(root,'releases',pkg.version);
 const requested=process.argv.slice(2).filter(x=>!x.startsWith('--'));
 const editions=requested.length?requested:(EDITION==='ambere'?['ambere']:['amber','ambere']);
@@ -26,17 +27,19 @@ for(const edition of editions){
   await rm(stage,{recursive:true});
  }catch(e){if(e.code!=='ENOENT')throw e;}
  await mkdir(stage,{recursive:true});
- for(const entry of ['src','desktop','public','build','index.html','vite.config.mjs','LICENSE','THIRD_PARTY_NOTICES.md','RELEASE-ACCEPTANCE.md','LOCAL-TEST-1.4.8.md'])await cp(join(root,entry),join(stage,entry),{recursive:true});
+ for(const entry of ['src','desktop','public','build','index.html','vite.config.mjs','LICENSE','THIRD_PARTY_NOTICES.md','RELEASE-ACCEPTANCE.md','LOCAL-TEST-1.5.0.md'])await cp(join(root,entry),join(stage,entry),{recursive:true});
  await copyFile(join(root,'..','CHANGELOG.md'),join(stage,'CHANGELOG.md'));
  const metadata={...pkg,name:edition==='ambere'?'ambere-launcher':pkg.name,description:name+' Minecraft Java launcher',dependencies:{},devDependencies:{}};
  await writeFile(join(stage,'package.json'),JSON.stringify(metadata,null,2));
+ await writeFile(join(stage,'desktop/build-provenance.json'),JSON.stringify({...provenance,product:name},null,2));
  await writeFile(join(stage,'desktop/build-channel.mjs'),"export const BUILD_CHANNEL='"+(process.argv.includes('--public')?'public':'local')+"';\n");
  if(edition==='ambere'){
+  await rm(join(stage,'desktop/microsoft-skin150.mjs'),{force:true});
   await copyFile(join(root,'editions/ambere/testing.md'),join(stage,'RELEASE-ACCEPTANCE.md'));
   await copyFile(join(root,'editions/ambere/changelog.en.md'),join(stage,'CHANGELOG.md'));
   let source=await readFile(join(stage,'desktop/edition.mjs'),'utf8');await writeFile(join(stage,'desktop/edition.mjs'),source.replace("EDITION = 'amber'","EDITION = 'ambere'"));
   await writeFile(join(stage,'desktop/microsoft-config.mjs'),"// AmberE has no Microsoft application registration.\nexport const MICROSOFT_CLIENT_ID = '';\n");
-  let preload=await readFile(join(stage,'desktop/preload.cjs'),'utf8');preload=preload.split('\n').filter(line=>!/^\s*(?:verifyOwnership|linkOwnership|configureAccount|startMicrosoft|pollMicrosoft|cancelMicrosoft|copyMicrosoft|openMicrosoft):/.test(line)).join('\n');await writeFile(join(stage,'desktop/preload.cjs'),preload);
+  let preload=await readFile(join(stage,'desktop/preload.cjs'),'utf8');preload=preload.split('\n').filter(line=>!/^\s*(?:uploadMicrosoftSkin|verifyOwnership|linkOwnership|configureAccount|startMicrosoft|pollMicrosoft|cancelMicrosoft|copyMicrosoft|openMicrosoft):/.test(line)).join('\n');await writeFile(join(stage,'desktop/preload.cjs'),preload);
   for(const kind of ['mark','lockup'])for(const suffix of ['','-mono','-reverse'])await copyFile(join(stage,`public/brand/ambere-${kind}${suffix}.svg`),join(stage,`public/brand/amber-${kind}${suffix}.svg`));
   await copyFile(join(root,'build/ambere.ico'),join(stage,'build/icon.ico'));
   await copyFile(join(root,'build/ambere.png'),join(stage,'public/brand/app-icon.png'));
@@ -48,6 +51,7 @@ for(const edition of editions){
  if(process.argv.includes('--stage-only'))continue;
  await build({projectDir:stage,config,publish:'never'});
  const filename=`${name}-${pkg.version}-Setup-x64.exe`;await access(join(out,filename));await copyFile(join(out,filename),join(base,filename));
+ await writeFile(join(base,filename+'.provenance.json'),JSON.stringify({...provenance,product:name},null,2));
  const bytes=await readFile(join(base,filename));await writeFile(join(base,filename+'.sha256'),createHash('sha256').update(bytes).digest('hex')+'  '+filename+'\n');
  console.log('LOCAL_INSTALLER_READY',join(base,filename));
 }
