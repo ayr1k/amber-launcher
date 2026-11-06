@@ -11338,5 +11338,73 @@
   "m33a13bbcc1aa": {
     "zh": "本地 MySQL 数据和凭据会保留。若原数据库端口冲突，恢复时会分配空闲端口并显示结果；请据此更新插件连接配置。",
     "en": "Local MySQL data and credentials will be preserved. If its port conflicts, restoration assigns a free port and shows the result; update your plugin connection settings accordingly."
+  },
+  "mc2fab6fef41d": {
+    "zh": "仅恢复数据库到空的恢复实例，不恢复世界、插件或原服务端文件。原备份保留，不自动启动。继续？",
+    "en": "Restore only the database into an empty recovery instance, without worlds, plugins or original server files? The backup is retained and nothing starts automatically."
+  },
+  "mb73d100153c0": {
+    "zh": "独立数据库备份库",
+    "en": "Independent database backups"
+  },
+  "m0b8a26a9ada1": {
+    "zh": "数据库备份存放在实例目录之外，回收或永久删除实例均保留。恢复需要原系统用户的凭据密钥；备份不包含世界和插件文件。",
+    "en": "Database backups are stored outside instance directories and survive recycling or permanent instance deletion. Recovery requires the original OS credential key; worlds and plugin files are not included."
+  },
+  "m009e95885e5d": {
+    "zh": "刷新备份库",
+    "en": "Refresh backup library"
+  },
+  "m26fc8e3dac3b": {
+    "zh": "正在检查数据库备份…",
+    "en": "Checking database backups…"
+  },
+  "mf68b2dd0f592": {
+    "zh": "暂无独立数据库备份。",
+    "en": "No independent database backups yet."
+  },
+  "m269971eb0764": {
+    "zh": "原实例仍在使用中，请在实例内恢复备份。",
+    "en": "The original instance exists. Restore the backup within that instance."
+  },
+  "m3d27b416cacd": {
+    "zh": "原实例在回收站，请先恢复该实例。",
+    "en": "The original instance is in the recycle bin. Restore that instance first."
+  },
+  "m1ae0667c6118": {
+    "zh": "原实例已不存在，可仅恢复数据库。",
+    "en": "The original instance no longer exists. Its database can be recovered."
+  },
+  "m3c84412a8cd3": {
+    "zh": "打开原实例",
+    "en": "Open original instance"
+  },
+  "m82f85321296f": {
+    "zh": "恢复数据库实例",
+    "en": "Recover database instance"
+  },
+  "m4de53b216829": {
+    "zh": "独立数据库备份保留在备份库中。当前实例内未备份的数据库数据将永久删除；普通整服快照不包含数据库。",
+    "en": "Independent database backups remain in the backup library. Unbacked-up database data in this instance will be permanently deleted; ordinary server snapshots do not include the database."
+  },
+  "m65b3995df606": {
+    "zh": "数据库备份保存在独立备份库。原实例永久删除后，仍可从联机实例列表的备份库恢复数据库。",
+    "en": "Database backups are kept in the independent backup library. After permanent instance deletion, recover the database from the library in the server instance list."
+  },
+  "m2ad1990cdeab": {
+    "zh": "数据库备份记录无效，原文件已保留。",
+    "en": "The database backup record is invalid. Original files were preserved."
+  },
+  "mf1cd3681f42c": {
+    "zh": "数据库备份迁移目标冲突，原文件已保留。",
+    "en": "The database backup migration destination conflicts. Original files were preserved."
+  },
+  "mdb850841d582": {
+    "zh": "数据库备份迁移校验失败，原文件已保留。",
+    "en": "Database backup migration verification failed. Original files were preserved."
+  },
+  "m9f5098e5ef28": {
+    "zh": "原实例仍存在，请在原实例中恢复数据库备份。",
+    "en": "The original instance still exists. Restore the database backup within that instance."
   }
 }

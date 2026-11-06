@@ -181,6 +181,8 @@ app.whenReady().then(async () => {
    if(action==='pickJava'){const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Java',extensions:['exe']}]});return r.canceled?null:(await core.addJava(r.filePaths[0]));}
    if(action==='importJar'||action==='importContent'){const r=await dialog.showOpenDialog(window,{properties:action==='importContent'?['openFile','multiSelections']:['openFile'],filters:[{name:'Java archive',extensions:['jar']}]});if(r.canceled)return null;return action==='importJar'?servers.importJar(args[0],r.filePaths[0]):servers.importContent(args[0],r.filePaths);}
    const mysqlMethods={mysqlState:'state',mysqlInitialize:'initialize',mysqlStart:'start',mysqlStop:'stop',mysqlBackup:'backup',mysqlRestore:'restore',mysqlConnection:'connection',mysqlCancel:'cancel',mysqlResetPreparation:'resetPreparation'};if(Object.hasOwn(mysqlMethods,action))return mysql150[mysqlMethods[action]](...args);
+   if(action==='mysqlBackupLibrary')return mysql150.backupStore.library();
+   if(action==='mysqlRecoverOrphan')return mysql150.backupStore.recover(...args);
    if(action==='portsList')return ports150.list(...args);
    if(action==='portsSave')return ports150.save(...args);
    if(action==='portsRemove')return ports150.remove(...args);
