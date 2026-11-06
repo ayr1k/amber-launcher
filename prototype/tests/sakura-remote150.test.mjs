@@ -22,3 +22,32 @@ test('64 links reject remote creation before POST; oversized and malformed saved
 test('63 links reserve capacity atomically against local association during remote creation',async t=>{const {m,calls}=await fixture(t);await fillLinks(m,63);let entered,release;const waiting=new Promise(r=>entered=r),gate=new Promise(r=>release=r),fetch=m.core.fetcher;m.core.fetcher=async(url,options)=>{if(options.method==='POST'){entered();await gate;}return fetch(url,options);};const creating=m.remote.create('server',createInput);await waiting;await assert.rejects(m.save('server',{name:'Concurrent link',portId:'voice',tunnel:'333'}),/待确认/);assert.equal((await m.config()).tunnels.length,63);release();await creating;assert.equal((await m.config()).tunnels.length,64);await assert.rejects(m.save('server',{name:'No space',portId:'voice',tunnel:'334'}),/容量/);assert.equal(calls.filter(c=>c.method==='POST').length,1);});
 test('local association winning the last slot prevents remote POST',async t=>{const {m,calls}=await fixture(t);await fillLinks(m,63);const saving=m.save('server',{name:'Last slot',portId:'voice',tunnel:'333'});const creating=m.remote.create('server',createInput);await saving;await assert.rejects(creating,/容量/);assert.equal((await m.config()).tunnels.length,64);assert.equal(calls.filter(c=>c.method==='POST').length,0);});
 test('lost response plus legacy full capacity preserves pending operation until space is freed',async t=>{const {m,mode,calls}=await fixture(t);await fillLinks(m,63);mode('lost');await assert.rejects(m.remote.create('server',createInput),/未确认/);const pending=(await m.config()).remoteOperation;const c=await m.config();c.tunnels.push({id:'legacy-extra',serverId:'server',portId:'voice',name:'Legacy',tunnel:'333'});await atomicJson(join(m.base.root,'settings.json'),c);await assert.rejects(m.remote.reconcile(),/容量/);assert.deepEqual((await m.config()).remoteOperation,pending);assert.equal((await m.state()).tunnels.length,64);await m.remove('legacy-extra');await m.remote.reconcile();assert.equal((await m.config()).tunnels.length,64);assert.equal((await m.config()).remoteOperation,undefined);assert.equal(calls.filter(c=>c.method==='POST').length,1);});
+
+
+test('Sakura configuration replacement retries are bounded and preserve old data on failure',async t=>{
+ const fs=await import('node:fs/promises'),{default:fsPromises}=fs,{syncBuiltinESMExports}=await import('node:module'),{writeSakuraConfig150}=await import('../desktop/sakura-config150.mjs');
+ for(const scenario of [
+  {name:'temporary Windows EPERM',code:'EPERM',syscall:'rename',failures:2,attempts:3,platform:'win32',success:true},
+  {name:'temporary Windows EBUSY',code:'EBUSY',syscall:'rename',failures:1,attempts:2,platform:'win32',success:true},
+  {name:'persistent Windows EPERM',code:'EPERM',syscall:'rename',failures:99,attempts:5,platform:'win32'},
+  {name:'other permission error',code:'EACCES',syscall:'rename',failures:99,attempts:1,platform:'win32'},
+  {name:'other operation',code:'EPERM',syscall:'open',failures:99,attempts:1,platform:'win32'},
+  {name:'non-Windows EPERM',code:'EPERM',syscall:'rename',failures:99,attempts:1,platform:'linux'}
+ ])await t.test(scenario.name,async t=>{
+  const root=await mkdtemp(join(tmpdir(),'amber-config-retry150-')),file=join(root,'settings.json'),old={secret:'synthetic-old',tunnels:['preserved']},next={secret:'synthetic-next',tunnels:['updated']};t.after(()=>rm(root,{recursive:true,force:true}));await atomicJson(file,old);
+  const original=fsPromises.rename,waits=[];let attempts=0;const denied=Object.assign(Error('synthetic replacement failure'),{code:scenario.code,syscall:scenario.syscall});
+  t.mock.method(fsPromises,'rename',async(source,dest)=>{if(dest===file){attempts++;assert.deepEqual(JSON.parse(await fs.readFile(file,'utf8')),old);if(attempts<=scenario.failures)throw denied;}return original(source,dest);});syncBuiltinESMExports();
+  try{
+   const writing=writeSakuraConfig150(file,next,{platform:scenario.platform,sleep:async ms=>{waits.push(ms);assert.deepEqual(await fs.readdir(root),['settings.json']);}});
+   if(scenario.success)await writing;else await assert.rejects(writing,e=>e===denied);
+   assert.equal(attempts,scenario.attempts);assert.deepEqual(waits,[25,50,100,200].slice(0,scenario.attempts-1));assert.deepEqual(JSON.parse(await fs.readFile(file,'utf8')),scenario.success?next:old);assert.deepEqual(await fs.readdir(root),['settings.json']);
+  }finally{t.mock.restoreAll();syncBuiltinESMExports();}
+ });
+});
+
+
+test('local configuration replacement retries never repeat a remote creation POST',async t=>{
+ const {m,calls}=await fixture(t),{default:fs}=await import('node:fs/promises'),{syncBuiltinESMExports}=await import('node:module'),original=fs.rename;let denied=0;
+ t.mock.method(fs,'rename',async(source,dest)=>{if(process.platform==='win32'&&dest===join(m.base.root,'settings.json')&&calls.some(c=>c.method==='POST')&&denied<2){denied++;throw Object.assign(Error('synthetic Windows replacement lock'),{code:'EPERM',syscall:'rename'});}return original(source,dest);});syncBuiltinESMExports();
+ try{await m.remote.create('server',createInput);assert.equal(denied,process.platform==='win32'?2:0);assert.equal(calls.filter(c=>c.method==='POST').length,1);const config=await m.config();assert.equal(config.tunnels.length,1);assert.equal(config.remoteOperation,undefined);}finally{t.mock.restoreAll();syncBuiltinESMExports();}
+});

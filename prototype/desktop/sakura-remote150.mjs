@@ -3,13 +3,13 @@
 import {reserveTunnel150,appendTunnel150} from './sakura150.mjs';
 import {randomUUID} from 'node:crypto';
 import {join} from 'node:path';
-import {atomicJson} from './core.mjs';
+import {writeSakuraConfig150} from './sakura-config150.mjs';
 import {responseText} from './bounded-io.mjs';
 const endpoint='https://api.natfrp.com/v4/';
 import {nodeRestriction150} from './sakura-rules150.mjs';
 export class SakuraRemote150 {
  constructor(manager){this.manager=manager;this.pending=null;}
- async configChange(fn){return this.manager.change(async()=>{const c=await this.manager.config();await fn(c);await atomicJson(join(this.manager.base.root,'settings.json'),c);return c;});}
+ async configChange(fn){return this.manager.change(async()=>{const c=await this.manager.config();await fn(c);await writeSakuraConfig150(join(this.manager.base.root,'settings.json'),c);return c;});}
  async token(){const c=await this.manager.config();if(!c.secret)throw Error('请先保存 Sakura 访问密钥。');return this.manager.codec.decryptString(Buffer.from(c.secret,'base64'));}
  async request(path,{method='GET',body,expected=200}={}){
   const token=await this.token();let response;
