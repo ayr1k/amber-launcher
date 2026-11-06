@@ -2,6 +2,14 @@
 // FIFO admission; cancellation never belongs to another caller.
 export class TaskQueue {
  constructor(limit=2){this.limit=limit;this.active=new Set();this.waiting=[];}
+ async tryRun(key,fn){
+  // Scheduled work must not sit behind user operations and execute much later.
+  if(this.active.size>=this.limit||[...this.active,...this.waiting].some(t=>t.key===key)){
+   const error=Error('Instance is busy / 实例正在执行其他操作');error.code='TASK_QUEUE_BUSY';throw error;
+  }
+  const ticket={key};this.active.add(ticket);
+  try{return await fn();}finally{this.active.delete(ticket);this.pump();}
+ }
  async run(key,fn,{signal,onWaiting=()=>{}}={}){
   signal?.throwIfAborted();
   const ticket={key};

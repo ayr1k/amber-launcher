@@ -38,12 +38,12 @@ the PR head SHA in `TEST-REVISION.txt`, not the inherited version string.
 ## Verified locally / 本地验证
 
 - Node 24.22.1; pnpm 11.25.0; locked dependencies installed.
-- `node --test tests/release147.test.mjs`: 15/15 passed.
+- `node --test tests/release147.test.mjs`: 25/25 passed after independent-review fixes.
 - `node --test tests/servers132.test.mjs tests/release140.test.mjs tests/release144.test.mjs tests/release147.test.mjs tests/sites-worker.test.mjs`: 53/53 passed.
 - `pnpm build`, `node scripts/check-locales.mjs`, and
   `node scripts/release-check.mjs`: passed. Vite retains the existing large-bundle warning.
 - With approved normal execution permissions, the complete regression suite passed
-  **479/479, no skips**, using `node --test --test-concurrency=2` and the test list
+  **489/489, no skips**, using `node --test --test-concurrency=2` and the test list
   from `package.json`. Fixtures remained within the isolated task temporary root.
 - Reused the existing, version-matching Electron 45.0.0 runtime. Desktop smoke passed
   background assets, system encryption, theme assets and desktop/IPC initialization.
@@ -51,8 +51,28 @@ the PR head SHA in `TEST-REVISION.txt`, not the inherited version string.
   UI create/pause/persist, a real one-shot timer skipping an offline target, actual
   native window hiding, second-instance restore and default idle exit. Playwright
   is an external QA dependency and is not shipped.
-- 新增重启/备份锁竞争、备份失败、替代进程、睡眠恢复测试已通过。完整回归 479 项和
+- 新增重启/备份锁竞争、备份失败、替代进程、睡眠恢复测试已通过。完整回归 4810 项和
   隔离桌面验收通过；未进行真实 Minecraft 世界重启或非 Windows 真机验收。
+
+## Independent-review corrections / 独立审核修复
+
+- Cancellation is checked after Java inspection, port checks, pre-start backup,
+  Quilt arguments, and log opening, immediately before recording/spawning a new
+  process. Manual stop and task/global pause cannot be lost during async preflight.
+- Only durable occurrence claims and state writes share the persistence queue.
+  Executions on different servers run independently; pause aborts the task token
+  immediately, without waiting for another server's restart. Same-instance overlap
+  and busy instance locks are skipped, not queued. An occurrence is rechecked for
+  the existing 60-second lateness tolerance at admission, before any command/stop.
+- Daily deadlines are recalculated when system zone or UTC offset changes, with
+  no catch-up. Storage reads/writes share an 8 MB cap, sufficient for 200 bounded
+  tasks including worst-case JSON escaping; 200 maximal Chinese commands round-trip.
+- Library relocation now pauses and drains scheduling before entering migration,
+  and resumes it after a failed migration. The old code's write-order risk was
+  confirmed by inspection; no real migration checksum failure is claimed. A new
+  regression proves no scheduler writes occur inside the migration critical section.
+- 新增 9 项测试覆盖以上边界。已修复 5 项功能问题，并为迁移写入隔离增加保护和测试；
+  不把静态迁移风险描述成已复现的真实迁移失败。
 
 ## Initial sandbox limitations / 初次受限环境记录
 

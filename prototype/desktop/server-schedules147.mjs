@@ -6,6 +6,10 @@ import {atomicJson} from './core.mjs';
 import {redact} from './privacy.mjs';
 
 const uuid=/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i;
+// 200 tasks, each with up to 2,000 UTF-16 command units and bounded result text.
+// Even JSON-escaped control characters fit; read and write use the same limit.
+export const SCHEDULE_STORE_LIMIT=8_000_000;
+const zoneKey=()=>Intl.DateTimeFormat().resolvedOptions().timeZone+':'+new Date().getTimezoneOffset();
 export function validateSchedule(input){
   if(!input||!uuid.test(input.serverId)||typeof input.name!=='string'||!input.name.trim()||input.name.length>80||typeof input.enabled!=='boolean'||!['restart','command'].includes(input.action)||!['once','daily','interval'].includes(input.kind))throw Error('Invalid scheduled task / 定时任务无效');
   const value={serverId:input.serverId,name:input.name.trim(),enabled:input.enabled,action:input.action,kind:input.kind};
@@ -37,17 +41,18 @@ export function nextOccurrence(task,now){
 export class ServerSchedules {
   constructor(root,servers,{now=Date.now,blocked=()=>false}={}){
     this.path=join(root,'server-schedules.json');this.servers=servers;this.now=now;this.blocked=blocked;
-    this.rows=[];this.queue=Promise.resolve();this.paused=false;this.running=new Set();
+    this.rows=[];this.queue=Promise.resolve();this.paused=false;this.running=new Map();this.zone=zoneKey();
   }
   serial(fn){const result=this.queue.then(fn);this.queue=result.catch(()=>{});return result;}
-  async persist(){await atomicJson(this.path,{schema:1,tasks:this.rows});}
+  async persist(){const data={schema:1,tasks:this.rows};if(Buffer.byteLength(JSON.stringify(data,null,2))>SCHEDULE_STORE_LIMIT)throw Error('Schedule store is too large / 定时任务存储超过上限');await atomicJson(this.path,data);}
   async init(){
     try{
-      const data=JSON.parse(await readBoundedFile(this.path,1000000));
+      const data=JSON.parse(await readBoundedFile(this.path,SCHEDULE_STORE_LIMIT));
       if(data.schema!==1||!Array.isArray(data.tasks)||data.tasks.length>200)throw Error('Invalid schedule store');
       const ids=new Set();this.rows=data.tasks.map(row=>{
         if(!uuid.test(row.id)||ids.has(row.id))throw Error('Invalid task ID');ids.add(row.id);
-        const task={...validateSchedule(row),id:row.id,last:row.last};
+        const last=row.last?{state:String(row.last.state).slice(0,30),at:String(row.last.at).slice(0,40),...(row.last.error?{error:String(row.last.error).slice(0,1000)}:{})}:undefined;
+        const task={...validateSchedule(row),id:row.id,last};
         // Never replay commands after a crash, restart or missed deadline.
         task.nextRun=task.enabled?nextOccurrence(task,this.now()):null;
         if(row.last?.state==='running')task.last={state:'interrupted',at:row.last.at};
@@ -59,11 +64,18 @@ export class ServerSchedules {
     return this;
   }
   list(){return {tasks:structuredClone(this.rows),error:this.error||'',timezone:Intl.DateTimeFormat().resolvedOptions().timeZone};}
-  save(input){return this.serial(async()=>{
+  save(input){
+    // Cancellation is synchronous and independent of persistence or other servers.
+    let task;try{task=validateSchedule(input);}catch(e){return Promise.reject(e);}
+    if(input.id&&!task.enabled)this.running.get(input.id)?.controller.abort(Error('Task cancelled / 任务已取消'));
+    return this.serial(async()=>{
     if(this.error)throw Error(this.error);
-    const task=validateSchedule(input),old=input.id?this.rows.find(t=>t.id===input.id):null;
+    const old=input.id?this.rows.find(t=>t.id===input.id):null;
     if(input.id&&!old)throw Error('Unknown task');
-    if(old&&this.running.has(old.id))throw Error('Task is running / 任务正在执行');
+    if(old&&this.running.has(old.id)){
+      if(task.enabled)throw Error('Task is running / 任务正在执行');
+      old.enabled=false;old.nextRun=null;await this.persist();return this.list();
+    }
     if(!old&&this.rows.length>=200)throw Error('Maximum 200 tasks');
     await this.servers.read(task.serverId);
     const nextRun=task.enabled?nextOccurrence(task,this.now()):null;
@@ -78,32 +90,57 @@ export class ServerSchedules {
     const previous=this.rows;this.rows=this.rows.filter(t=>t.id!==id);
     try{await this.persist();}catch(e){this.rows=previous;throw e;}return this.list();
   });}
-  tick(){return this.serial(async()=>{
-    if(this.paused||this.error)return;
+  refreshZone(){const current=zoneKey();if(current===this.zone)return false;this.zone=current;
+    for(const task of this.rows)if(task.enabled&&task.kind==='daily')task.nextRun=nextOccurrence(task,this.now());
+    return true;
+  }
+  dispatch(){return this.serial(async()=>{
+    if(this.paused||this.error)return [];
+    const changedZone=this.refreshZone(),pending=[];let changed=changedZone;
     for(const task of this.rows){
       if(this.paused||!task.enabled||!task.nextRun||Date.parse(task.nextRun)>this.now())continue;
       const due=Date.parse(task.nextRun),now=this.now();
-      task.nextRun=nextOccurrence(task,now);if(task.kind==='once')task.enabled=false;
+      task.nextRun=nextOccurrence(task,now);if(task.kind==='once')task.enabled=false;changed=true;
+      if(this.running.has(task.id))continue;
+      const busyServer=[...this.running.values()].some(r=>r.task.serverId===task.serverId);
+      if(now-due>60000||busyServer||this.blocked(task.serverId)){
+        task.last={at:new Date(now).toISOString(),state:now-due>60000?'missed':'busy'};continue;
+      }
       task.last={at:new Date(now).toISOString(),state:'running'};
-      // Persist the claim before sending a command: at-most-once, including crashes.
-      await this.persist();this.running.add(task.id);
-      try{
-        if(now-due>60000){task.last.state='missed';continue;}
-        if(this.blocked()){task.last.state='busy';continue;}
-        if(this.servers.runs.get(task.serverId)?.state!=='running'){task.last.state='offline';continue;}
-        if(task.action==='restart')await this.servers.restartScheduled(task.serverId,()=>this.paused);
-        else await this.servers.locks.run(task.serverId,()=>{
-          if(this.paused)throw Error('Task cancelled / 任务已取消');
-          if(this.servers.runs.get(task.serverId)?.state!=='running')throw Error('Server not ready / 服务端尚未就绪');
-          return this.servers.command(task.serverId,task.command);
-        });
-        task.last.state='done';
-      }catch(e){task.last.state='failed';task.last.error=redact(String(e.message)).slice(0,1000);}
-      finally{this.running.delete(task.id);await this.persist();}
+      const run={task,due,controller:new AbortController(),promise:null};this.running.set(task.id,run);pending.push(run);
     }
+    // Persist all claims before executing, but never hold the persistence queue
+    // across stop/backup/start: unrelated servers and pause must remain responsive.
+    try{if(changed)await this.persist();}catch(e){for(const r of pending)this.running.delete(r.task.id);throw e;}
+    for(const run of pending)run.promise=this.execute(run).catch(e=>{this.error=redact(e.message);});
+    return pending.map(r=>r.promise);
   });}
-  start(){if(this.timer)return;this.paused=false;this.timer=setInterval(()=>{if(!this.ticking){this.ticking=true;this.tick().catch(e=>{this.error=redact(e.message);}).finally(()=>this.ticking=false);}},1000);this.timer.unref?.();}
-  async pause(){this.paused=true;clearInterval(this.timer);this.timer=null;await this.queue;}
+  async execute(run){const {task,due,controller}=run;let state='done',error;
+    const cancelled=()=>this.paused||controller.signal.aborted;
+    const expired=()=>this.now()-due>60000;
+    try{
+      if(cancelled())throw Error('Task cancelled / 任务已取消');
+      if(expired()){state='missed';return;}
+      if(this.blocked(task.serverId)){state='busy';return;}
+      if(this.servers.runs.get(task.serverId)?.state!=='running'){state='offline';return;}
+      if(task.action==='restart')await this.servers.restartScheduled(task.serverId,cancelled,120000,{signal:controller.signal,expired});
+      else await this.servers.locks.tryRun(task.serverId,()=>{
+        if(cancelled())throw Error('Task cancelled / 任务已取消');
+        if(expired()){state='missed';return;}
+        if(this.blocked(task.serverId)){state='busy';return;}
+        if(this.servers.runs.get(task.serverId)?.state!=='running'){state='offline';return;}
+        return this.servers.command(task.serverId,task.command);
+      });
+    }catch(e){state=cancelled()?'cancelled':e.code==='TASK_QUEUE_BUSY'?'busy':e.code==='SCHEDULE_MISSED'?'missed':'failed';if(state==='failed')error=redact(String(e.message)).slice(0,1000);}
+    finally{await this.serial(async()=>{
+      this.running.delete(task.id);
+      if(this.rows.includes(task)){task.last={...task.last,state,...(error?{error}:{})};await this.persist();}
+    });}
+  }
+  async tick(){await Promise.all(await this.dispatch());}
+  start(){if(this.timer)return;this.paused=false;this.timer=setInterval(()=>{this.dispatch().catch(e=>{this.error=redact(e.message);});},1000);this.timer.unref?.();}
+  async pause(){this.paused=true;clearInterval(this.timer);this.timer=null;for(const r of this.running.values())r.controller.abort(Error('Task cancelled / 任务已取消'));await this.queue;await Promise.all([...this.running.values()].map(r=>r.promise));}
+  async withPaused(fn){const wasRunning=!!this.timer;await this.pause();try{return await fn();}finally{if(wasRunning)this.start();}}
   resumeAfterSleep(){return this.serial(async()=>{
     if(this.error)return;
     for(const task of this.rows)if(task.enabled&&task.nextRun&&Date.parse(task.nextRun)<=this.now()){

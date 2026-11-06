@@ -8,6 +8,7 @@ import {ServerSchedules,validateSchedule,nextOccurrence} from '../desktop/server
 import {shouldHideToTray} from '../desktop/tray147.mjs';
 import {Servers} from '../desktop/servers132.mjs';
 import {TaskQueue} from '../desktop/task-queue132.mjs';
+import {createHash} from 'node:crypto';
 import {validateSettings} from '../desktop/workflows.mjs';
 const id='12345678-1234-1234-1234-123456789abc';
 const task={serverId:id,name:'Noon restart',enabled:true,action:'restart',kind:'daily',time:'12:00'};
@@ -44,4 +45,78 @@ test('a replacement run from manual launch is never started twice',async()=>{
 test('resume skips even short sleep deadlines, without replaying commands',async t=>{
  const f=await fixture(t);await f.schedules.save({...task,kind:'interval',minutes:1});await f.schedules.pause();f.advance(65000);
  await f.schedules.resumeAfterSleep();await f.schedules.pause();assert.equal(f.schedules.rows[0].last.state,'missed');assert.equal(f.calls.length,0);
+});
+const gate=()=>{let release;const promise=new Promise(r=>release=r);return {promise,release};};
+test('a consumed one-shot restart can still be paused while it is running',async t=>{
+ const f=await fixture(t),entered=gate();f.servers.restartScheduled=async(_id,_cancel,_timeout,{signal})=>{entered.release();await new Promise((_,reject)=>signal.addEventListener('abort',()=>reject(signal.reason),{once:true}));};
+ await f.schedules.save({...task,kind:'once',at:'2026-11-06T10:01:00Z'});f.advance(60000);const work=f.schedules.tick();await entered.promise;
+ const claimed=f.schedules.list().tasks[0];assert.equal(claimed.enabled,false);assert.equal(claimed.last.state,'running');
+ await f.schedules.save({...claimed,enabled:false});await work;assert.equal(f.schedules.rows[0].last.state,'cancelled');
+});
+test('a slow restart does not delay another server or a pause request',async t=>{
+ const f=await fixture(t),second='87654321-1234-1234-1234-123456789abc',entered=gate();
+ f.servers.runs.set(second,{state:'running'});
+ f.servers.restartScheduled=async(_id,_cancel,_timeout,{signal})=>{entered.release();await new Promise((resolve,reject)=>{if(signal.aborted)reject(signal.reason);else signal.addEventListener('abort',()=>reject(signal.reason),{once:true});});};
+ await f.schedules.save({...task,kind:'interval',minutes:1});
+ await f.schedules.save({...task,serverId:second,kind:'interval',minutes:1,action:'command',command:'say independent'});
+ f.advance(60000);const work=f.schedules.tick();await entered.promise;
+ await new Promise(r=>setImmediate(r));assert.deepEqual(f.calls,[[second,'say independent']]);
+ const first=f.schedules.list().tasks[0];await f.schedules.save({...first,enabled:false});await work;
+ assert.equal(f.schedules.rows[0].enabled,false);assert.equal(f.schedules.rows[0].last.state,'cancelled');
+});
+test('pause before execution is immediate even while claims are being persisted',async t=>{
+ const f=await fixture(t);await f.schedules.save({...task,kind:'interval',minutes:1,action:'command',command:'say never'});
+ const entered=gate(),release=gate(),persist=f.schedules.persist.bind(f.schedules);let first=true;
+ f.schedules.persist=async()=>{if(first){first=false;entered.release();await release.promise;}await persist();};
+ f.advance(60000);const work=f.schedules.tick();await entered.promise;
+ const paused=f.schedules.save({...f.schedules.list().tasks[0],enabled:false});release.release();await Promise.all([work,paused]);
+ assert.equal(f.calls.length,0);assert.equal(f.schedules.rows[0].last.state,'cancelled');
+});
+test('busy instance admission skips instead of executing 180 seconds later',async t=>{
+ const f=await fixture(t),entered=gate(),release=gate();const held=f.servers.locks.run(id,async()=>{entered.release();await release.promise;});await entered.promise;
+ await f.schedules.save({...task,kind:'interval',minutes:1,action:'command',command:'say never late'});f.advance(60000);
+ await f.schedules.tick();assert.equal(f.schedules.rows[0].last.state,'busy');assert.equal(f.servers.locks.waiting.length,0);
+ f.advance(180000);release.release();await held;assert.equal(f.calls.length,0);
+});
+test('a claim delayed by persistence is rechecked at execution',async t=>{
+ const f=await fixture(t);await f.schedules.save({...task,kind:'interval',minutes:1,action:'command',command:'say expired'});
+ const persist=f.schedules.persist.bind(f.schedules);let first=true;f.schedules.persist=async()=>{if(first){first=false;f.advance(180000);}await persist();};
+ f.advance(60000);await f.schedules.tick();assert.equal(f.calls.length,0);assert.equal(f.schedules.rows[0].last.state,'missed');
+});
+test('daily task recomputes its first deadline when system time zone changes',async t=>{
+ const previous=process.env.TZ;
+ try{process.env.TZ='Etc/UTC';const f=await fixture(t);await f.schedules.save(task);assert.equal(f.schedules.rows[0].nextRun,'2026-11-06T12:00:00.000Z');
+  process.env.TZ='Europe/Berlin';await f.schedules.tick();assert.equal(f.schedules.rows[0].nextRun,'2026-11-06T11:00:00.000Z');
+  f.advance(3600000);await f.schedules.tick();assert.equal(f.calls.length,1);assert.equal(new Date(f.schedules.rows[0].nextRun).getHours(),12);
+ }finally{if(previous===undefined)delete process.env.TZ;else process.env.TZ=previous;}
+});
+test('200 maximum-length Chinese commands survive save and restart',async t=>{
+ const f=await fixture(t);for(let n=0;n<200;n++)await f.schedules.save({...task,name:'中文任务'.repeat(20),kind:'interval',minutes:1,action:'command',command:'中'.repeat(2000)});
+ assert.ok((await readFile(f.schedules.path)).length>1000000);
+ const restored=await new ServerSchedules(f.root,f.servers).init();assert.equal(restored.error,undefined);assert.equal(restored.rows.length,200);assert.equal(restored.rows[199].command,'中'.repeat(2000));
+});
+test('scheduled restart cannot wait behind an occupied instance lock',async()=>{
+ const f=restartFixture(),entered=gate(),release=gate();const held=f.server.locks.run(id,async()=>{entered.release();await release.promise;});await entered.promise;
+ await assert.rejects(f.server.restartScheduled(id),e=>e.code==='TASK_QUEUE_BUSY');release.release();await held;assert.deepEqual(f.writes,[]);
+});
+test('cancellation during actual Java preflight or pre-start backup never spawns',async t=>{
+ for(const phase of ['java','backup'])for(const action of ['stop','pause']){
+  const root=await mkdtemp(join(tmpdir(),'amber-preflight147-'));t.after(()=>rm(root,{recursive:true,force:true}));
+  const entered=gate(),release=gate(),controller=new AbortController();let spawns=0;
+  const jar=Buffer.from('isolated fake JAR');await writeFile(join(root,'server.jar'),jar);await writeFile(join(root,'eula.txt'),'eula=true\n');
+  const server=new Servers({root},{inspectRuntime:async()=>{if(phase==='java'){entered.release();await release.promise;}return {major:21,path:'unused'};},checkPort:async()=>{},spawnProcess:()=>{spawns++;throw Error('Must not spawn');}});
+  const done=gate(),old={state:'running',exitCode:0,done:done.promise,child:{stdin:{write:()=>{old.state='stopped';done.release();}}}};server.runs.set(id,old);
+  server.stopped=async()=>{};server.read=async()=>({dir:root,item:{memory:1,status:'ready',javaPath:'unused',javaMajor:21,type:'vanilla',jarHash:createHash('sha256').update(jar).digest('hex')}});server.properties=async()=>({values:{}});
+  server.beforeProtectedAction=async()=>{if(phase==='backup'){entered.release();await release.promise;}};
+  const work=server.restartScheduled(id,()=>controller.signal.aborted,120000,{signal:controller.signal});await entered.promise;
+  if(action==='stop')await server.stop(id);else controller.abort(Error('pause'));
+  release.release();await assert.rejects(work,/cancelled/);assert.equal(spawns,0);assert.equal(server.runs.get(id),old);
+ }
+});
+test('migration pause drains work and prevents all scheduler writes until finished',async t=>{
+ const f=await fixture(t);await f.schedules.save({...task,kind:'interval',minutes:1});f.schedules.start();
+ try{await assert.rejects(f.schedules.withPaused(async()=>{
+  const before=await readFile(f.schedules.path,'utf8');f.advance(180000);await f.schedules.tick();assert.equal(await readFile(f.schedules.path,'utf8'),before);assert.equal(f.calls.length,0);throw Error('migration fixture failed');
+ }),/migration fixture failed/);assert.equal(f.schedules.paused,false);
+ }finally{await f.schedules.pause();}
 });

@@ -10055,5 +10055,6 @@
   "ma3ea3c17b401": {
     "zh": "确认删除",
     "en": "Confirm deletion"
-  }
+  },
+  "mc2015b835bf4": {"zh":"实例忙时直接跳过，不排队。每日时间跟随系统时区。暂停会取消尚未启动的重启，已发出的指令无法撤回。","en":"Busy instances are skipped without queuing. Daily times follow the system time zone. Pausing cancels a restart that has not launched yet; commands already sent cannot be recalled."}
 }

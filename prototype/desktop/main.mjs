@@ -345,7 +345,7 @@ app.whenReady().then(async () => {
   handle('amber:storage-info', async () => {const r = await storage.get(),disk = await statfs(core.root);return { path: core.root, freeBytes: disk.bavail * disk.bsize, onboarded: r.onboarded || !smoke && (await core.listInstances()).length > 0 };});
   handle('amber:onboarding-complete', () => storage.complete());
   handle('amber:storage-pick', async () => {const r = await dialog.showOpenDialog(window, { title: translateMessage('选择新的空数据文件夹'), properties: ['openDirectory', 'createDirectory'] });if (r.canceled) return null;const token = randomUUID();selections.set(token, { kind: 'storage', value: r.filePaths[0] });return { token, path: r.filePaths[0] };});
-  handle('amber:storage-move', async (token) => {if(servers.active||(rooms.active||sakura.active))throw Error('Stop servers and leave the room before moving data / 迁移数据前请停止服务器并退出房间');const target = selection(token, 'storage');if (!target) throw Error('请先选择目标目录');return workflows.exclusive(async () => {for (const item of await core.listInstances()) await core.requireStopped(await core.instancePath(item.id));storageBusy = true;core.operation = { title: '复制并校验数据目录', state: 'running' };try {news.cancel();survey.cancel();await Promise.allSettled([journalObservation,journal.queue,homePrefs.queue,news.pending,survey.done,...news.details.values()].filter(Boolean));await storage.migrate(core, target);app.relaunch();app.exit(0);return true;} catch (e) {storageBusy = false;throw e;} finally {core.operation = null;}});});
+  handle('amber:storage-move', async (token) => {if(servers.active||(rooms.active||sakura.active))throw Error('Stop servers and leave the room before moving data / 迁移数据前请停止服务器并退出房间');const target = selection(token, 'storage');if (!target) throw Error('请先选择目标目录');return schedules.withPaused(()=>workflows.exclusive(async () => {for (const item of await core.listInstances()) await core.requireStopped(await core.instancePath(item.id));storageBusy = true;core.operation = { title: '复制并校验数据目录', state: 'running' };try {news.cancel();survey.cancel();await Promise.allSettled([journalObservation,journal.queue,homePrefs.queue,news.pending,survey.done,...news.details.values()].filter(Boolean));await storage.migrate(core, target);app.relaunch();app.exit(0);return true;} catch (e) {storageBusy = false;throw e;} finally {core.operation = null;}}));});
   handle('amber:instance-icon', (id, icon) => management.setIcon(id, icon));
   handle('amber:instance-rename', (id, name) => management.rename(id, name));
   handle('amber:instance-remove', (id) => management.remove(id));
@@ -517,7 +517,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
     window.webContents.on('did-finish-load', () => {loaded = true;if (activatePending && !smoke) {window.show();window.focus();activatePending = false;}finishSmoke();});
     window.loadURL('amber://app/');
   }
-  schedules=await new ServerSchedules(core.root,servers,{blocked:()=>storageBusy||upgradeBusy||workflows.active||serverManagement140.backupBusy||core.jobs.some(j=>j.state==='running')}).init();
+  schedules=await new ServerSchedules(core.root,servers,{blocked:id=>storageBusy||upgradeBusy||core.jobs.some(j=>j.state==='running'&&j.instanceId===id)}).init();
   handle('amber:server-schedules',async(action,input)=>{
     if(action==='list')return schedules.list();
     if(action==='save')return schedules.save(input);
