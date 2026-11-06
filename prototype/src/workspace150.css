@@ -7,6 +7,7 @@
 .account-statistics150 li { margin-block:12px; overflow-wrap:anywhere; }
 .skin-stage150 { width:100%; min-height:260px; overflow:hidden; }
 .skin-stage150 canvas { display:block; max-width:100%; touch-action:none; }
-.skin-stage150.background-light { background:var(--surface); }
-.skin-stage150.background-dark { background:var(--text); }
+.skin-stage150.background-theme { background:var(--bg); }
+.skin-stage150.background-light { background:var(--preview-light); }
+.skin-stage150.background-dark { background:var(--preview-dark); }
 @media(max-width:1050px) { .account-columns150 { grid-template-columns:minmax(0,1fr); gap:24px; } }

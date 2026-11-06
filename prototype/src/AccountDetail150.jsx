@@ -33,8 +33,9 @@ function SkinPreview({account}) {
 
 export function AccountDetail150({account,onBack,busy,act,status}) {
  const [capability,setCapability]=useState(null);
- useEffect(()=>{let live=true;if(account.type==='yggdrasil')window.amberDesktop.providerSkinCapability(account.id).then(c=>live&&setCapability(c)).catch(()=>live&&setCapability({supported:false}));return()=>{live=false;};},[account.id]);
+ useEffect(()=>{let live=true;setCapability(null);if(account.type==='yggdrasil')window.amberDesktop.providerSkinCapability(account.id).then(c=>live&&setCapability(c)).catch(()=>live&&setCapability({supported:false}));return()=>{live=false;};},[account.id,account.skinRevision]);
  const [skinModel,setSkinModel]=useState(account.skinModel||'default');
+ useEffect(()=>setSkinModel(account.skinModel||'default'),[account.id,account.skinRevision]);
  const [stats,setStats]=useState(null),[error,setError]=useState(''),[names,setNames]=useState({});
  useEffect(()=>{let live=true;const refresh=()=>Promise.all([window.amberDesktop.journal(),window.amberDesktop.listInstances()]).then(([journal,instances])=>{if(live){setStats(accountStatistics(journal,account.id));setNames(Object.fromEntries(instances.map(i=>[i.id,i.name])));}}).catch(e=>live&&setError(e.message));refresh();const timer=setInterval(refresh,30000);return()=>{live=false;clearInterval(timer);};},[account.id]);
  const duration=ms=>translateText("{0} 小时",[Number(ms/3600000).toFixed(2)]);
