@@ -11,7 +11,7 @@ app.on('before-quit',()=>{exiting=true;});
 const smoke=process.argv.includes('--smoke-test'),qa=!app.isPackaged&&process.argv.includes('--qa-ui');
 const visible=!smoke&&(!qa||process.argv.includes('--qa-visible'));
 const marks=[];const started=performance.now();
-function mark(stage){marks.push({stage,ms:Math.round(performance.now()-started)});if(smoke||qa)console.log('AMBER_STARTUP',JSON.stringify(marks.at(-1)));}
+function mark(stage){marks.push({stage,ms:Math.round(performance.now()-started),at:Date.now()});if(smoke||qa)console.log('AMBER_STARTUP',JSON.stringify(marks.at(-1)));}
 function state(){const language=style.language==='system'?app.getLocale():style.language,english=!/^zh\b/i.test(language);return {product:PRODUCT_NAME,phase,style,language:english?'en-US':'zh-CN',text:labels?.[phase]||startupMessages[phase]?.[english?1:0],slow:labels?.slow||startupMessages.slow[english?1:0]};}
 function send(){if(splash&&!splash.isDestroyed())splash.webContents.send('amber:startup-state',state());}
 export const startup={
@@ -28,7 +28,7 @@ export const startup={
     cacheQueue=cacheQueue.catch(()=>{}).then(async()=>{await writeFile(path+'.tmp',value);await rename(path+'.tmp',path);});await cacheQueue.catch(()=>{});
   },
   focus(){if(!finished&&splash&&!splash.isDestroyed()){if(splash.isMinimized())splash.restore();if(visible){splash.show();splash.focus();}return true;}return false;},
-  finish(window){if(failed)return;finished=true;clearTimeout(watchdog);clearTimeout(slowTimer);mark('ready');splash?.hide();if(visible)window.show();splash?.destroy();splash=null;},
+  finish(window){if(failed||window.isDestroyed())return false;mark('committed');finished=true;clearTimeout(watchdog);clearTimeout(slowTimer);mark('ready');if(visible){window.once('show',()=>mark('shown'));window.show();}splash?.hide();splash?.destroy();splash=null;return true;},
   async fail(error){if(failed)return;failed=true;phase='error';send();clearTimeout(watchdog);clearTimeout(slowTimer);
     console.error('AMBER_STARTUP_FAILED',error?.message||String(error));
     if(smoke||qa){app.exit(1);return;}

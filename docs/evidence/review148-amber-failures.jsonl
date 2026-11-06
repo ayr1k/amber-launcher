@@ -1,0 +1,4 @@
+{"scenario":"missing-library","exitCode":1,"noEmptyLibrary":true}
+{"scenario":"module-error","exitCode":1,"noEmptyLibrary":false}
+{"scenario":"navigation-error","exitCode":1,"noEmptyLibrary":false}
+{"scenario":"quit-missing-library","exitCode":0,"noEmptyLibrary":true}

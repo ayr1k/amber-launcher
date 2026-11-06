@@ -1,0 +1,229 @@
+{
+  "node": "v24.22.1",
+  "platform": "win32",
+  "bytes": 33554432,
+  "sha256": "1cbd22e11bc209926b1e050d644779ba4105d7a023109c3b78bb35edf5c7c292",
+  "iterations": 3,
+  "parallelBudget": 8,
+  "method": "Same immutable file and loopback HTTP server; alternating order; elapsed includes disk writes, assembly and SHA-256. Fixture transport only; not a CDN or Internet speed claim.",
+  "summary": [
+    {
+      "scenario": "per-connection",
+      "serialMs": 3959,
+      "automaticMs": 1055,
+      "speedup": 3.75
+    },
+    {
+      "scenario": "shared-bottleneck",
+      "serialMs": 3978,
+      "automaticMs": 4046,
+      "speedup": 0.98
+    },
+    {
+      "scenario": "no-range",
+      "serialMs": 3967,
+      "automaticMs": 3968,
+      "speedup": 1
+    },
+    {
+      "scenario": "app-limit",
+      "serialMs": 4017,
+      "automaticMs": 4072,
+      "speedup": 0.99
+    }
+  ],
+  "rows": [
+    {
+      "scenario": "per-connection",
+      "trial": 1,
+      "mode": "serial",
+      "ms": 3976,
+      "MiBps": 8.05,
+      "segmented": false
+    },
+    {
+      "scenario": "per-connection",
+      "trial": 1,
+      "mode": "automatic",
+      "ms": 1073,
+      "MiBps": 29.83,
+      "segmented": true
+    },
+    {
+      "scenario": "per-connection",
+      "trial": 2,
+      "mode": "automatic",
+      "ms": 1055,
+      "MiBps": 30.34,
+      "segmented": true
+    },
+    {
+      "scenario": "per-connection",
+      "trial": 2,
+      "mode": "serial",
+      "ms": 3959,
+      "MiBps": 8.08,
+      "segmented": false
+    },
+    {
+      "scenario": "per-connection",
+      "trial": 3,
+      "mode": "serial",
+      "ms": 3939,
+      "MiBps": 8.12,
+      "segmented": false
+    },
+    {
+      "scenario": "per-connection",
+      "trial": 3,
+      "mode": "automatic",
+      "ms": 1041,
+      "MiBps": 30.74,
+      "segmented": true
+    },
+    {
+      "scenario": "shared-bottleneck",
+      "trial": 1,
+      "mode": "serial",
+      "ms": 3978,
+      "MiBps": 8.04,
+      "segmented": false
+    },
+    {
+      "scenario": "shared-bottleneck",
+      "trial": 1,
+      "mode": "automatic",
+      "ms": 4058,
+      "MiBps": 7.89,
+      "segmented": true
+    },
+    {
+      "scenario": "shared-bottleneck",
+      "trial": 2,
+      "mode": "automatic",
+      "ms": 4036,
+      "MiBps": 7.93,
+      "segmented": true
+    },
+    {
+      "scenario": "shared-bottleneck",
+      "trial": 2,
+      "mode": "serial",
+      "ms": 3967,
+      "MiBps": 8.07,
+      "segmented": false
+    },
+    {
+      "scenario": "shared-bottleneck",
+      "trial": 3,
+      "mode": "serial",
+      "ms": 3985,
+      "MiBps": 8.03,
+      "segmented": false
+    },
+    {
+      "scenario": "shared-bottleneck",
+      "trial": 3,
+      "mode": "automatic",
+      "ms": 4046,
+      "MiBps": 7.91,
+      "segmented": true
+    },
+    {
+      "scenario": "no-range",
+      "trial": 1,
+      "mode": "serial",
+      "ms": 3967,
+      "MiBps": 8.07,
+      "segmented": false
+    },
+    {
+      "scenario": "no-range",
+      "trial": 1,
+      "mode": "automatic",
+      "ms": 3968,
+      "MiBps": 8.06,
+      "segmented": false
+    },
+    {
+      "scenario": "no-range",
+      "trial": 2,
+      "mode": "automatic",
+      "ms": 3969,
+      "MiBps": 8.06,
+      "segmented": false
+    },
+    {
+      "scenario": "no-range",
+      "trial": 2,
+      "mode": "serial",
+      "ms": 3965,
+      "MiBps": 8.07,
+      "segmented": false
+    },
+    {
+      "scenario": "no-range",
+      "trial": 3,
+      "mode": "serial",
+      "ms": 3980,
+      "MiBps": 8.04,
+      "segmented": false
+    },
+    {
+      "scenario": "no-range",
+      "trial": 3,
+      "mode": "automatic",
+      "ms": 3961,
+      "MiBps": 8.08,
+      "segmented": false
+    },
+    {
+      "scenario": "app-limit",
+      "trial": 1,
+      "mode": "serial",
+      "ms": 4017,
+      "MiBps": 7.97,
+      "segmented": false
+    },
+    {
+      "scenario": "app-limit",
+      "trial": 1,
+      "mode": "automatic",
+      "ms": 4072,
+      "MiBps": 7.86,
+      "segmented": true
+    },
+    {
+      "scenario": "app-limit",
+      "trial": 2,
+      "mode": "automatic",
+      "ms": 4073,
+      "MiBps": 7.86,
+      "segmented": true
+    },
+    {
+      "scenario": "app-limit",
+      "trial": 2,
+      "mode": "serial",
+      "ms": 4017,
+      "MiBps": 7.97,
+      "segmented": false
+    },
+    {
+      "scenario": "app-limit",
+      "trial": 3,
+      "mode": "serial",
+      "ms": 4009,
+      "MiBps": 7.98,
+      "segmented": false
+    },
+    {
+      "scenario": "app-limit",
+      "trial": 3,
+      "mode": "automatic",
+      "ms": 4072,
+      "MiBps": 7.86,
+      "segmented": true
+    }
+  ]
+}

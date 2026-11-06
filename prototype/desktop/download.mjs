@@ -25,10 +25,23 @@ async function downloadUnlocked(file,{root,signal,onBytes=()=>{},fetcher=fetch,t
   if(!/^[0-9a-f]{40}$|^[0-9a-f]{64}$|^[0-9a-f]{128}$/.test(file.hash))throw new Error('下载缺少完整性校验值。');
   signal?.throwIfAborted();await ensureParents(root,file.path);
   const network=fetcher.amberNetwork,scope=network?.context.getStore(),group=scope||transferGroup||signal||Symbol('transfer');
-  if(await verified(file)){network?.event(file,{bytes:file.size||0,phase:'cached'});return {cached:true};}
-  if(file.url==='amber-cache:'+file.hash){const cache=safePath(root,'loader-cache/'+file.hash);if(!await verified({...file,path:cache}))throw Error('加载器补丁缓存损坏，请重新安装加载器。');await copyFile(cache,file.path);return {cached:true};}
   // Stable, hash-specific partials survive cancellation and process restart.
-  const temporary=file.path+'.amber-'+(file.hash.length>64?file.hash.slice(0,40):file.hash)+'.part';await ensureParents(root,temporary);
+  const temporary=file.path+'.amber-'+(file.hash.length>64?file.hash.slice(0,40):file.hash)+'.part';
+  async function complete(result,event,publish=false){
+    signal?.throwIfAborted();await network?.gate(signal);signal?.throwIfAborted();
+    if(publish)await rename(temporary,file.path);
+    // All success paths converge here, including recovery after a process died
+    // between assembly, publication and cleanup. Never recurse or follow links.
+    try{
+      const paths=[temporary,...segmentPaths(temporary)];
+      for(const path of paths){await ensureParents(root,path);try{if(!(await lstat(path)).isFile())throw Error('Unexpected download sidecar type / 下载临时文件类型异常');}catch(e){if(e.code!=='ENOENT')throw e;}}
+      for(const path of paths)await rm(path,{force:true});
+    }catch(cause){throw Object.assign(Error('Download verified; temporary-file cleanup failed / 下载已校验，临时文件清理失败',{cause}),{code:'SIDECAR_CLEANUP'});}
+    network?.event(file,event);return result;
+  }
+  if(await verified(file))return complete({cached:true},{bytes:file.size||0,phase:'cached'});
+  if(file.url==='amber-cache:'+file.hash){const cache=safePath(root,'loader-cache/'+file.hash);if(!await verified({...file,path:cache}))throw Error('加载器补丁缓存损坏，请重新安装加载器。');signal?.throwIfAborted();await copyFile(cache,file.path);return complete({cached:true},{bytes:file.size||0,phase:'cached'});}
+  await ensureParents(root,temporary);
   let last,credited=0;
   let useSegments=segments&&segmentRanges(file.size).length>0&&threads>1&&transferStatus144().limit>1;
   try{if((await lstat(temporary)).size>0)useSegments=false;}catch(e){if(e.code!=='ENOENT')throw e;}
@@ -36,7 +49,7 @@ async function downloadUnlocked(file,{root,signal,onBytes=()=>{},fetcher=fetch,t
   for(let attempt=0;attempt<3;attempt++){
     signal?.throwIfAborted();await network?.gate(signal);let offset=0;
     try{const st=await lstat(temporary);if(!st.isFile()||st.isSymbolicLink())throw Error('不安全的下载片段。');offset=st.size;}catch(e){if(e.code!=='ENOENT')throw e;}
-    if(offset&&(await verified({...file,path:temporary}))){await rename(temporary,file.path);network?.event(file,{bytes:offset,phase:'complete',resumed:true});return {cached:false,resumed:true};}
+    if(offset&&(await verified({...file,path:temporary})))return complete({cached:false,resumed:true},{bytes:offset,phase:'complete',resumed:true},true);
     if(offset>=(file.size||600_000_000)){await rm(temporary,{force:true});offset=0;}
     const controller=new AbortController();let idle,untrack;
     const resetIdle=()=>{clearTimeout(idle);idle=setTimeout(()=>controller.abort(Object.assign(Error('Download stalled / 下载长时间没有数据'),{code:'IDLE'})),45000);};
@@ -50,10 +63,9 @@ async function downloadUnlocked(file,{root,signal,onBytes=()=>{},fetcher=fetch,t
           ensurePath:path=>ensureParents(root,path),verify:verified,
           onBytes:bytes=>{credited+=bytes;onBytes(bytes);},
           fetchRange:(start,end,active,etag)=>officialFetch(file.url,{signal:active,fetcher,headers:{'Accept-Encoding':'identity',Range:`bytes=${start}-${end}`,...(etag?{'If-Range':etag}:{})}})});
-        await rename(temporary,file.path);await clearSegments(temporary);
-        network?.event(file,{bytes:file.size,phase:'complete'});return result;
+        return await complete(result,{bytes:file.size,phase:'complete'},true);
       }
-      return await withTransferBudget(async()=>{try{
+      const completed=await withTransferBudget(async()=>{try{
       if(network?.isPaused())throw Error('Download paused / 下载已暂停');
       untrack=network?.track(controller);
       resetIdle();network?.event(file,{bytes:offset,resumed:offset>0,phase:'connecting'});
@@ -65,10 +77,13 @@ async function downloadUnlocked(file,{root,signal,onBytes=()=>{},fetcher=fetch,t
       resetIdle();await pipeline(Readable.fromWeb(r.body),monitor,createWriteStream(temporary,{flags:offset?'a':'w'}),{signal:combined});
       network?.event(file,{phase:'verifying'});
       if((file.size&&count!==file.size)||h.digest('hex')!==file.hash)throw Object.assign(Error('下载文件校验失败。'),{code:'CHECKSUM'});
-      await rename(temporary,file.path);await clearSegments(temporary);network?.event(file,{bytes:count,phase:'complete'});return {cached:false,resumed:offset>0};
+      return {result:{cached:false,resumed:offset>0},bytes:count};
       }catch(e){if(!signal?.aborted&&!network?.isPaused())network?.event(file,{error:networkReason(controller.signal.reason||e),phase:'retrying'});throw e;}
       },signal,{group,limit:()=>network?.concurrency(threads,scope)||threads});
-    }catch(e){untrack?.();untrack=null;last=controller.signal.reason||e;if(signal?.aborted)throw e;if(network?.isPaused()){attempt--;continue;}
+      // A pause at final verification must not retain the shared network slot.
+      clearTimeout(idle);untrack?.();untrack=null;
+      return await complete(completed.result,{bytes:completed.bytes,phase:'complete'},true);
+    }catch(e){untrack?.();untrack=null;last=controller.signal.reason||e;if(signal?.aborted||e.code==='SIDECAR_CLEANUP')throw e;if(network?.isPaused()){attempt--;continue;}
       if(useSegments){
         useSegments=false;onBytes(-credited);credited=0;
         network?.event(file,{bytes:0,error:networkReason(last),phase:'retrying'});

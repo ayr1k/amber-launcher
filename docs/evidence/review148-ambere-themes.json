@@ -1,0 +1,182 @@
+[
+  {
+    "name": "light-en",
+    "edition": "ambere",
+    "data": "<isolated temporary profile>",
+    "marks": [
+      {
+        "stage": "visible",
+        "ms": 105,
+        "at": 1793992546701
+      },
+      {
+        "stage": "storage",
+        "ms": 194,
+        "at": 1793992546791
+      },
+      {
+        "stage": "recovery",
+        "ms": 199,
+        "at": 1793992546795
+      },
+      {
+        "stage": "accounts",
+        "ms": 200,
+        "at": 1793992546797
+      },
+      {
+        "stage": "settings",
+        "ms": 202,
+        "at": 1793992546799
+      },
+      {
+        "stage": "library",
+        "ms": 206,
+        "at": 1793992546803
+      },
+      {
+        "stage": "interface",
+        "ms": 250,
+        "at": 1793992546846
+      },
+      {
+        "stage": "committed",
+        "ms": 409,
+        "at": 1793992547006
+      },
+      {
+        "stage": "ready",
+        "ms": 409,
+        "at": 1793992547006
+      },
+      {
+        "stage": "shown",
+        "ms": 418,
+        "at": 1793992547014
+      }
+    ],
+    "splashCaptured": true,
+    "errors": [],
+    "overflow": false
+  },
+  {
+    "name": "dark-zh",
+    "edition": "ambere",
+    "data": "<isolated temporary profile>",
+    "marks": [
+      {
+        "stage": "visible",
+        "ms": 108,
+        "at": 1793992549727
+      },
+      {
+        "stage": "storage",
+        "ms": 198,
+        "at": 1793992549818
+      },
+      {
+        "stage": "recovery",
+        "ms": 203,
+        "at": 1793992549822
+      },
+      {
+        "stage": "accounts",
+        "ms": 204,
+        "at": 1793992549823
+      },
+      {
+        "stage": "settings",
+        "ms": 206,
+        "at": 1793992549825
+      },
+      {
+        "stage": "library",
+        "ms": 210,
+        "at": 1793992549829
+      },
+      {
+        "stage": "interface",
+        "ms": 253,
+        "at": 1793992549873
+      },
+      {
+        "stage": "committed",
+        "ms": 575,
+        "at": 1793992550194
+      },
+      {
+        "stage": "ready",
+        "ms": 575,
+        "at": 1793992550194
+      },
+      {
+        "stage": "shown",
+        "ms": 582,
+        "at": 1793992550201
+      }
+    ],
+    "splashCaptured": true,
+    "errors": [],
+    "overflow": false
+  },
+  {
+    "name": "custom-small",
+    "edition": "ambere",
+    "data": "<isolated temporary profile>",
+    "marks": [
+      {
+        "stage": "visible",
+        "ms": 108,
+        "at": 1793992552768
+      },
+      {
+        "stage": "storage",
+        "ms": 203,
+        "at": 1793992552864
+      },
+      {
+        "stage": "recovery",
+        "ms": 209,
+        "at": 1793992552869
+      },
+      {
+        "stage": "accounts",
+        "ms": 210,
+        "at": 1793992552870
+      },
+      {
+        "stage": "settings",
+        "ms": 212,
+        "at": 1793992552873
+      },
+      {
+        "stage": "library",
+        "ms": 217,
+        "at": 1793992552877
+      },
+      {
+        "stage": "interface",
+        "ms": 261,
+        "at": 1793992552921
+      },
+      {
+        "stage": "committed",
+        "ms": 848,
+        "at": 1793992553508
+      },
+      {
+        "stage": "ready",
+        "ms": 848,
+        "at": 1793992553509
+      },
+      {
+        "stage": "shown",
+        "ms": 855,
+        "at": 1793992553515
+      }
+    ],
+    "splashCaptured": true,
+    "errors": [],
+    "overflow": false
+  }
+]

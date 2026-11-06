@@ -448,7 +448,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   const windowInfo=()=>({maximized:window?.isMaximized()||false,focused:window?.isFocused()||false,corners:initialCorners,cornersSupported:supportsWindowCorners(process.platform,osRelease())});
   const sendWindowInfo=()=>{if(window&&!window.isDestroyed())window.webContents.send('amber:window-state-changed',windowInfo());};
   handle('amber:window-state',windowInfo);
-  handle('amber:startup-ready',()=>{if(!interfaceReady){interfaceReady=true;startup.finish(window);if(activatePending&&!smoke){window.focus();activatePending=false;}finishSmoke();}return true;});
+  handle('amber:startup-ready',()=>{if(!interfaceReady){if(!startup.finish(window))return false;interfaceReady=true;if(activatePending&&!smoke){window.focus();activatePending=false;}finishSmoke();}return true;});
   handle('amber:startup-failed',()=>{if(!interfaceReady)startup.fail(Error('Main interface failed to render'));return true;});
   handle('amber:window-action',action=>{runWindowAction(window,action);return true;});
   const savePlacement=()=>placement.save(window.getNormalBounds(),window.isMinimized()?placementMaximized:window.isMaximized()).catch(e=>console.error(redact(e.message)));
