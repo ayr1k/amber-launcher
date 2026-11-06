@@ -43,3 +43,9 @@ In Online → Instances → Content → Check updates (also available under Cont
 The online launch page shows ten minutes of CPU, working-set memory and supported TPS/MSPT trends. Stop the server to install/update the performance/player component, then restart it. Paper supplies real tick metrics; unsupported cores show unavailable values. Collect a 30-second local report and explicitly export JSON when needed. Reports contain bounded numeric samples and event categories, are not automatically uploaded, and cannot prove which plugin caused lag.
 
 Settings / Task center provides global bandwidth in KiB/s (0 means unlimited), actual active/queued transfer counts and priority. Priority takes the next available slots without interrupting current transfers. The limit applies to file download bodies, not all application network traffic.
+
+## 1.4.5: screenshot viewer and server launch layout
+
+Tools → Screenshot browser opens images in a themed viewer with a fixed header and toolbar. Choose Fit to see the complete image or 100% for original pixels; zoom, pan, use arrow keys to switch images and Esc or Close to exit. Delete is available on screenshot cards and in the viewer. After confirmation, the image goes to the operating system trash; recover it there if needed. Failed deletion leaves the file intact. Deleting the current image selects its neighbour; deleting the last image closes the viewer. Screenshots stay local.
+
+In landscape windows, the online launch page keeps the console on the left, four compact performance cards in a 2×2 grid on the right and core/launch settings below. Only the console scrolls internally. Open performance explanations, reports and maintenance in separate panels. Narrow/portrait windows stack the console before performance and settings, with normal page scrolling.

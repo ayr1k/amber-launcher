@@ -1,3 +1,11 @@
+# 1.4.5 release verification
+
+Close-button follow-up: Windows native hit testing across 15 points of the screenshot viewer close button passed at 1300×900, 1280×720 and 1100×800 (125% zoom). All points are client controls; closing restores title-bar dragging. This fixes the middle strip being intercepted as a native caption drag region.
+
+All 461 regression tests and four static-serving checks passed. Isolated native UI checks covered 1280×720, 1300×900, 1100×800 and 1920×1080 landscape layouts, portrait ordering, Nocturne/Alloy, English/Chinese, larger typography and zoom, populated metrics, modal details, fit/original-size image viewing and actual system-trash deletion of synthetic images. Landscape checks assert no page overflow or clipped metric contents.
+
+Public-channel builds use the user-accepted implementation. Matching Windows x64, macOS x64/arm64, Linux x64 and experimental FreeBSD packages are provided. FreeBSD is server/tools-only. Packages remain unsigned and macOS is not notarized. Screenshot trash uses registered, revalidated image paths and never falls back to permanent removal. Landscape launch is bounded to the workspace; portrait layouts stack console before performance. User accounts, worlds and theme packages are not test fixtures. See LOCAL-TEST-1.4.5.md for acceptance steps. Native non-Windows trash and execution checks remain separate.
+
 # 1.4.4 release verification
 
 Public-channel builds use the user-accepted 1.4.4 implementation; accepted Windows local installers are preserved separately. All 456 regression tests and four static-serving checks passed. Coverage includes server update dependency pins/locks, Quilt/Fabric compatibility, verified rollback and interrupted journals, shared bandwidth and priority admission. Both Windows editions passed isolated bilingual/theme UI and packaged startup checks.

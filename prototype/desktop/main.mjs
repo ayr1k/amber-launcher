@@ -299,6 +299,7 @@ app.whenReady().then(async () => {
   handle('amber:screenshots',id=>screenshots.list(id));
   handle('amber:screenshot-read',async token=>(await screenshots.read(token)).bytes.toString('base64'));
   handle('amber:screenshot-copy',async token=>{const image=nativeImage.createFromBuffer((await screenshots.read(token)).bytes);if(image.isEmpty())throw Error('Image unavailable');clipboard.writeImage(image);return true;});
+  handle('amber:screenshot-delete',token=>screenshots.trash(token,path=>shell.trashItem(path)));
   handle('amber:screenshot-folder',async token=>shell.showItemInFolder((await screenshots.read(token)).path));
   handle('amber:library-state', () => libraryState.get());
   handle('amber:library-favorite', (id, value) => libraryState.favorite(id, value));

@@ -1,3 +1,9 @@
+## 1.4.5
+
+- Rebuild screenshot viewing with themed controls, fit/original-size zoom and recoverable image deletion. Keep landscape server launch within one screen, with the console on the left, compact 2×2 performance cards on the right and launch settings below. Fix the screenshot close button being intercepted by title-bar dragging.
+- Narrow/portrait layouts stack console, performance and settings. Details, reports and maintenance open separately. Failed trash operations preserve the original and never fall back to permanent deletion.
+- Matching Windows, macOS Intel/Apple Silicon, Linux x64 and experimental FreeBSD packages, source and SHA-256. Native non-Windows validation limits remain.
+
 ## 1.4.4
 
 - Add server mod/plugin updates with dependency previews, version locks and verified recovery. Add CPU/memory and supported TPS/MSPT trends with local performance reports. Add global download bandwidth limits, actual transfer counts and task priority.

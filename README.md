@@ -8,7 +8,7 @@
 <p align="center"><strong>Your world. Your way.</strong></p>
 
 <p align="center">
-  <a href="https://github.com/ayr1k/amber-launcher/releases/tag/v1.4.4"><img src="https://img.shields.io/badge/release-1.4.4-e9b53d?style=flat-square" alt="Release" /></a>
+  <a href="https://github.com/ayr1k/amber-launcher/releases/tag/v1.4.5"><img src="https://img.shields.io/badge/release-1.4.5-e9b53d?style=flat-square" alt="Release" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MPL--2.0-527b68?style=flat-square" alt="License" /></a>
   <a href="https://github.com/ayr1k/amber-launcher/actions/workflows/windows.yml"><img src="https://github.com/ayr1k/amber-launcher/actions/workflows/windows.yml/badge.svg" alt="Build" /></a>
   <a href="https://ayr1k.github.io/"><img src="https://img.shields.io/badge/website-AMBER-527b68?style=flat-square" alt="Website" /></a>
@@ -28,19 +28,19 @@ An independent Minecraft: Java Edition launcher bringing instances, content, the
   </tr>
 </table>
 
-Public AMBER 1.2.1 theme previews using demonstration data; these themes also work with AmberE. Click to enlarge. See the 1.4.4 notes below for current features and platform availability.
+Public AMBER 1.2.1 theme previews using demonstration data; these themes also work with AmberE. Click to enlarge. See the 1.4.5 notes below for current features and platform availability.
 
 ## Overview
 
 AMBER is an independent launcher for Minecraft: Java Edition. It keeps game instances separate and brings installation, mod management, recovery and launch settings into one workspace. Project-owned source is licensed under MPL-2.0.
 
-## 1.4.4
+## 1.4.5
 
-Add server mod/plugin updates with dependency previews, version locks and verified recovery. Add CPU/memory and supported TPS/MSPT trends with local performance reports. Add global download bandwidth limits, actual transfer counts and task priority.
+Rebuild screenshot viewing with themed controls, fit/original-size zoom and recoverable image deletion. Keep landscape server launch within one screen, with the console on the left, compact 2×2 performance cards on the right and launch settings below. Fix the screenshot close button being intercepted by title-bar dragging.
 
-Windows/macOS/Linux/FreeBSD packages share version 1.4.4. Native macOS/Linux acceptance is pending; FreeBSD is experimental server/tools-only.
+Windows/macOS/Linux/FreeBSD packages share version 1.4.5. Native macOS/Linux acceptance is pending; FreeBSD is experimental server/tools-only.
 
-Windows x64 release with additional platform downloads. [Download the installer, source and checksums](https://github.com/ayr1k/amber-launcher/releases/tag/v1.4.4). Includes instance management, content recommendations, mod updates, backups and recovery.
+Windows x64 release with additional platform downloads. [Download the installer, source and checksums](https://github.com/ayr1k/amber-launcher/releases/tag/v1.4.5). Includes instance management, content recommendations, mod updates, backups and recovery.
 
 - Integrated title bar, independent window corners, remembered window placement and reorganized privacy settings.
 

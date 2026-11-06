@@ -26,7 +26,7 @@ for(const edition of editions){
   await rm(stage,{recursive:true});
  }catch(e){if(e.code!=='ENOENT')throw e;}
  await mkdir(stage,{recursive:true});
- for(const entry of ['src','desktop','public','build','index.html','vite.config.mjs','LICENSE','THIRD_PARTY_NOTICES.md','RELEASE-ACCEPTANCE.md','LOCAL-TEST-1.4.4.md'])await cp(join(root,entry),join(stage,entry),{recursive:true});
+ for(const entry of ['src','desktop','public','build','index.html','vite.config.mjs','LICENSE','THIRD_PARTY_NOTICES.md','RELEASE-ACCEPTANCE.md','LOCAL-TEST-1.4.5.md'])await cp(join(root,entry),join(stage,entry),{recursive:true});
  await copyFile(join(root,'..','CHANGELOG.md'),join(stage,'CHANGELOG.md'));
  const metadata={...pkg,name:edition==='ambere'?'ambere-launcher':pkg.name,description:name+' Minecraft Java launcher',dependencies:{},devDependencies:{}};
  await writeFile(join(stage,'package.json'),JSON.stringify(metadata,null,2));

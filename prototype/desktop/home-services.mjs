@@ -78,7 +78,17 @@ export class HomePreferences {
 }
 
 export class Screenshots {
- constructor(core){this.core=core;this.tokens=new Map();}
- async list(id){const dir=join(await this.core.instancePath(id),'screenshots');await ensureParents(this.core.root,dir);let names;try{if((await lstat(dir)).isSymbolicLink())throw Error('Screenshot folder cannot be a link');names=await readdir(dir);}catch(e){if(e.code==='ENOENT')return [];throw e;}const items=[];for(const name of names.filter(n=>/\.png$/i.test(n)).slice(0,2000)){const path=join(dir,name);await ensureParents(this.core.root,path);const s=await lstat(path);if(!s.isFile()||s.isSymbolicLink()||s.size>20*1024*1024)continue;const token=createHash('sha256').update(path).digest('hex');this.tokens.set(token,path);items.push({token,name,date:new Date(s.mtimeMs).toISOString(),bytes:s.size});}return items.sort((a,b)=>b.date.localeCompare(a.date));}
+ constructor(core){this.core=core;this.tokens=new Map();this.identities=new Map();this.deleting=new Set();}
+ async list(id){const dir=join(await this.core.instancePath(id),'screenshots');await ensureParents(this.core.root,dir);let names;try{if((await lstat(dir)).isSymbolicLink())throw Error('Screenshot folder cannot be a link');names=await readdir(dir);}catch(e){if(e.code==='ENOENT')return [];throw e;}const items=[];for(const name of names.filter(n=>/\.png$/i.test(n)).slice(0,2000)){const path=join(dir,name);await ensureParents(this.core.root,path);const s=await lstat(path);if(!s.isFile()||s.isSymbolicLink()||s.size>20*1024*1024)continue;const token=createHash('sha256').update(path).digest('hex');this.tokens.set(token,path);this.identities.set(token,{ino:s.ino,size:s.size,mtimeMs:s.mtimeMs});items.push({token,name,date:new Date(s.mtimeMs).toISOString(),bytes:s.size});}return items.sort((a,b)=>b.date.localeCompare(a.date));}
+ async trash(token,moveToTrash){
+  if(this.deleting.has(token))throw Error('Screenshot deletion is in progress / 正在删除截图');
+  this.deleting.add(token);
+  try{
+   const {path}=await this.read(token),expected=this.identities.get(token),current=await lstat(path);
+   if(!expected||current.ino!==expected.ino||current.size!==expected.size||current.mtimeMs!==expected.mtimeMs)throw Error('Screenshot changed; refresh before deleting / 截图已变化，请刷新后再删除');
+   // Never fall back to unlink: failure must leave the original in place.
+   await moveToTrash(path);this.tokens.delete(token);this.identities.delete(token);return true;
+  }finally{this.deleting.delete(token);}
+ }
  async read(token){const path=this.tokens.get(token);if(!path)throw Error('Choose a screenshot again / 请重新选择截图');await ensureParents(this.core.root,path);const s=await lstat(path);if(!s.isFile()||s.isSymbolicLink()||s.size>20*1024*1024)throw Error('Invalid screenshot');const bytes=await readFile(path);if(bytes.length<24||bytes.subarray(0,8).toString('hex')!=='89504e470d0a1a0a'||bytes.readUInt32BE(16)*bytes.readUInt32BE(20)>40_000_000)throw Error('Invalid screenshot image');return {path,bytes};}
 }

@@ -37,6 +37,7 @@ contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
   screenshots:(id)=>ipcRenderer.invoke('amber:screenshots',id),
   screenshotRead:(token)=>ipcRenderer.invoke('amber:screenshot-read',token),
   screenshotCopy:(token)=>ipcRenderer.invoke('amber:screenshot-copy',token),
+  screenshotDelete:token=>ipcRenderer.invoke('amber:screenshot-delete',token),
   screenshotFolder:(token)=>ipcRenderer.invoke('amber:screenshot-folder',token),
   themeApply:(v)=>ipcRenderer.invoke('amber:theme-apply',v),
   themeApplyEntry:(id)=>ipcRenderer.invoke('amber:theme-apply-entry',id),
