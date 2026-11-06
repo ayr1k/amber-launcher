@@ -161,10 +161,10 @@ app.whenReady().then(async () => {
   const servers=await new Servers(core).init(),rooms=new Rooms(core,servers),ports150=new Ports150(servers),sakura=new Sakura150(core,servers,credentialCodec(safeStorage),ports150);
   ports150.inUse=(id,portId)=>sakura.activeFor(id,portId);
   const mysql150=new MySQL150(core,servers,credentialCodec(safeStorage));
-  mysql150.ports=ports150;ports150.reserved=async()=>{const rows=[];for(const instance of await servers.list()){const c=await mysql150.config(instance.id);if(c)rows.push({serverId:instance.id,portId:'mysql',protocol:'tcp',port:c.port,name:'MySQL'});}return rows;};servers.validatePort150=async(id,port)=>{if((await ports150.conflicts(id,{protocol:'tcp',port},'main')).length)throw Error('Port conflicts with another instance / 端口与其他实例冲突');};await mysql150.recover();
+  mysql150.ports=ports150;ports150.reserved=()=>mysql150.databaseReservations();servers.validatePort150=async(id,port)=>{if((await ports150.conflicts(id,{protocol:'tcp',port},'main')).length)throw Error('Port conflicts with another instance / 端口与其他实例冲突');};await mysql150.recover();
   let schedules;
   const serverUpdates144=new ServerUpdates144(servers);
-  const serverTrash=new ServerTrash143(servers,{connected:id=>rooms.starting||rooms.active&&rooms.current?.serverId===id||sakura.activeFor(id)||mysql150.activeFor(id)});
+  const serverTrash=new ServerTrash143(servers,{database:mysql150,connected:id=>rooms.starting||rooms.active&&rooms.current?.serverId===id||sakura.activeFor(id)||mysql150.activeFor(id)});
   const serverEditor=new InstanceEditor({instancePath:id=>servers.dir(id)},{directories:['config','defaultconfigs','plugins','kubejs','scripts'],files:['server.properties','bukkit.yml','spigot.yml','paper.yml','permissions.yml']});
   const resourceTimer=setInterval(()=>servers.sample(),3000);resourceTimer.unref();
   handle('amber:server',async(action,...args)=>{

@@ -41,3 +41,11 @@ Local-channel packaged test builds accept `--qa-ui` with `AMBER_SMOKE_ROOT` for 
 Pending final evidence must distinguish automated pass/fail, actual packaged desktop interaction, untested environments and real external services awaiting authorization. Independent review is coordinated by 小岚; neither implementation nor a green CI substitutes for that review or user acceptance.
 
 Sakura API contract: [official OpenAPI](https://github.com/natfrp/api/blob/fab03fc7470b95ce0064d3067570eb01d1298258/openapi.yaml). Creation uses POST `/v4/tunnels` (201); deletion uses POST `/v4/tunnel/delete` and examines both deleted and failed-disconnection IDs. Nodes requiring mandatory access authentication are explicitly unsupported in this creation panel. Raw user-info responses, which include a token, never cross into the renderer.
+
+## Independent-review recovery fixes
+
+The 64-link Sakura limit is checked and reserved in the same serialized configuration transaction before a remote creation POST. A pending creation blocks new local associations; removal of unrelated stopped local links remains available to free capacity. Reconciliation checks capacity without losing its pending record. Older oversized lists and invalid entries remain visible and can be explicitly removed locally; no remote deletion or silent truncation occurs.
+
+MySQL cancellation owns an abort controller before waiting for the instance lock and cancels that queued operation. Active and recycled databases reserve their ports together; initialization and recycle transitions share the allocation queue. Restoring an older conflicting recycled database selects a free port, preserves its data and credentials, and displays the old/new port with instructions to update plugin connection settings. The restore confirmation explains this behavior in advance. Database backup restore preserves the current connection port instead of reverting to an obsolete backup port.
+
+Packaged desktop verification reproduced context loss on an offline skin/model revision. The preview now gives each revision a new canvas while disposing the old viewer and GPU resources. Acceptance checks repeated skin/model changes, error states, context loss, re-entry and offscreen pause in both editions.

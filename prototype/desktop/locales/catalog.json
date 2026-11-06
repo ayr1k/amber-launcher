@@ -11318,5 +11318,25 @@
   "m9aae423ec77e": {
     "zh": "可在此新建远端隧道，或关联已有隧道与实例端口。协议、节点能力和账号额度以服务商实际支持为准。",
     "en": "Create a remote tunnel here, or link an existing tunnel to an instance port. Protocols, node capabilities and quota depend on the provider."
+  },
+  "m3404115e747a": {
+    "zh": "本机关联容量已满，请先移除不需要的本机关联；远端记录不会被删除。",
+    "en": "Local links are at capacity. Remove an unneeded local link first; remote tunnels are preserved."
+  },
+  "me1a1a21c5036": {
+    "zh": "请移除此异常本机关联后重新关联；远端记录不会被删除。",
+    "en": "Remove this invalid local link and link it again; the remote tunnel is preserved."
+  },
+  "m05a38ce0daee": {
+    "zh": "本机关联记录超过容量上限，原记录已保留。请移除不需要的本机关联后继续；不会删除远端隧道。",
+    "en": "Local links exceed the capacity limit. All records have been preserved. Remove unneeded local links to continue; remote tunnels will not be deleted."
+  },
+  "m3e3c1bc1ae4b": {
+    "zh": "数据库端口已从 {0} 改为 {1}。数据和凭据已保留，请更新插件的数据库连接端口。",
+    "en": "The database port changed from {0} to {1}. Data and credentials were preserved. Update the database connection port in your plugins."
+  },
+  "m33a13bbcc1aa": {
+    "zh": "本地 MySQL 数据和凭据会保留。若原数据库端口冲突，恢复时会分配空闲端口并显示结果；请据此更新插件连接配置。",
+    "en": "Local MySQL data and credentials will be preserved. If its port conflicts, restoration assigns a free port and shows the result; update your plugin connection settings accordingly."
   }
 }
