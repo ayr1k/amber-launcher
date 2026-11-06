@@ -108,7 +108,7 @@ app.whenReady().then(async () => {
   session.defaultSession.setPermissionRequestHandler((_contents, _permission, callback) => callback(false));
   session.defaultSession.setPermissionCheckHandler(() => false);
   startup.stage('storage');
-  const storage = new Storage(app.getPath('userData'));let storageConfig;let storageBusy=false;
+  const storage = new Storage(app.getPath('userData'));let storageConfig;let storageBusy=false,exitBusy=false;
   while(!storageConfig){try{storageConfig=await storage.validateExisting();}catch(e){if(smoke||qaUI)throw e;const answer=await dialog.showMessageBox({type:'error',title:'游戏数据位置不可用 / Game data unavailable',message:'原数据位置无法读取，未创建空库。请连接原磁盘后重试，或重新选择原数据目录。 / Reconnect the original drive or locate your existing library. No empty library was created.',detail:redact(e.message),buttons:['重试 / Retry','选择原目录 / Locate library','退出 / Quit'],defaultId:0,cancelId:2});if(answer.response===2){app.quit();return;}if(answer.response===1){const pick=await dialog.showOpenDialog({properties:['openDirectory']});if(!pick.canceled)try{await storage.reconnect(pick.filePaths[0]);}catch(err){await dialog.showMessageBox({type:'error',message:redact(err.message)});}}}}
 
   const core = new VanillaLauncher(storageConfig.path);
@@ -133,6 +133,7 @@ app.whenReady().then(async () => {
     ipcMain.handle(channel, async (event, ...args) => {
       const source = new URL(event.senderFrame.url);
       if (event.sender !== window?.webContents || event.senderFrame !== window.webContents.mainFrame || source.protocol !== 'amber:' || source.host !== 'app') throw new Error('请求来源不受信任。');
+      if(exitBusy&&!['amber:window-action','amber:window-state'].includes(channel))throw Error('Launcher closing / 启动器正在退出');
       if (storageBusy && !['amber:info', 'amber:status', 'amber:setup-cancel', 'amber:window-action', 'amber:window-state'].includes(channel)) throw Error('数据目录正在迁移，请等待完成。');
       if (upgradeBusy && !['amber:info', 'amber:status', 'amber:app-update-state', 'amber:window-action', 'amber:window-state'].includes(channel)) throw Error('正在准备升级，请稍候。');
       let result;try {if(IS_AMBERE&&(channel.startsWith('amber:ms-')||channel.startsWith('amber:ownership-')||channel==='amber:account-configure'))accounts.requireMicrosoft();result = await fn(...args);} catch (e) {const problem=errorDescriptor(redact(e.message,accounts.secrets()));throw Error('[AMBER '+problem.code+'] '+problem.text);}result = redactFields(result, accounts.secrets());if (smoke) {smokeChannels.add(channel);finishSmoke();}return result;
@@ -353,12 +354,12 @@ app.whenReady().then(async () => {
   handle('amber:app-update-install', async () => {
     if (servers.active || (rooms.active||sakura.active||mysql150.active) || launching || storageBusy || workflows.active || core.jobs.some((j) => j.state === 'running')) throw Error('请等待游戏准备、安装或数据迁移结束后再升级。');
     upgradeBusy = true;
-    try {for (const item of await core.listInstances()) await core.requireStopped(await core.instancePath(item.id));
+    try {const installed=await mysql150.withQuiesced(async()=>{for (const item of await core.listInstances()) await core.requireStopped(await core.instancePath(item.id));
       if (servers.active || (rooms.active||sakura.active||mysql150.active) || launching || storageBusy || workflows.active || core.jobs.some((j) => j.state === 'running')) throw Error('有新任务开始，请等待结束后再升级。');
       const file = await appUpdates.installer();const answer = await dialog.showMessageBox(window, { type: 'question', title: translateMessage('安装 AMBER 更新'), message: translateMessage('安装包已校验，是否退出 AMBER 并打开安装程序？'), detail: translateMessage('将保留游戏数据，并先备份账号和设置。请在安装向导中确认安装位置。'), buttons: [translateMessage('取消'), translateMessage('退出并安装')], defaultId: 0, cancelId: 0, noLink: true });if (answer.response !== 1) return false;
       await backupUpgradeConfig(app.getPath('userData'), core.root, app.getVersion());
       if(process.platform!=='win32'){const error=await shell.openPath(file);if(error)throw Error(error);}else await new Promise((resolve, reject) => {const child = spawn(file, [], { detached: true, stdio: 'ignore', windowsHide: false });child.once('error', reject);child.once('spawn', () => {child.unref();resolve();});});
-      app.quit();return true;
+      return true;});if(installed)app.quit();return installed;
     } finally {upgradeBusy = false;}
   });
   workflows.installPack = async (id, version) => {try {const r = JSON.parse(await readFile(join(await core.instancePath(id), 'modpack.json'), 'utf8'));if (r.versionId === version) return;} catch (e) {if (e.code !== 'ENOENT') throw e;}const p = await packs.preview(id, version);return workflows.wait(await packs.install(id, p.id));};
@@ -371,7 +372,7 @@ app.whenReady().then(async () => {
   handle('amber:storage-info', async () => {const r = await storage.get(),disk = await statfs(core.root);return { path: core.root, freeBytes: disk.bavail * disk.bsize, onboarded: r.onboarded || !smoke && (await core.listInstances()).length > 0 };});
   handle('amber:onboarding-complete', () => storage.complete());
   handle('amber:storage-pick', async () => {const r = await dialog.showOpenDialog(window, { title: translateMessage('选择新的空数据文件夹'), properties: ['openDirectory', 'createDirectory'] });if (r.canceled) return null;const token = randomUUID();selections.set(token, { kind: 'storage', value: r.filePaths[0] });return { token, path: r.filePaths[0] };});
-  handle('amber:storage-move', async (token) => {if(servers.active||(rooms.active||sakura.active||mysql150.active))throw Error('Stop servers and leave the room before moving data / 迁移数据前请停止服务器并退出房间');const target = selection(token, 'storage');if (!target) throw Error('请先选择目标目录');return schedules.withPaused(()=>workflows.exclusive(async () => {for (const item of await core.listInstances()) await core.requireStopped(await core.instancePath(item.id));storageBusy = true;core.operation = { title: '复制并校验数据目录', state: 'running' };try {news.cancel();survey.cancel();await Promise.allSettled([journalObservation,journal.queue,homePrefs.queue,news.pending,survey.done,...news.details.values()].filter(Boolean));await storage.migrate(core, target);app.relaunch();app.exit(0);return true;} catch (e) {storageBusy = false;throw e;} finally {core.operation = null;}}));});
+  handle('amber:storage-move', async (token) => {if(servers.active||(rooms.active||sakura.active||mysql150.active))throw Error('Stop servers and leave the room before moving data / 迁移数据前请停止服务器并退出房间');const target = selection(token, 'storage');if (!target) throw Error('请先选择目标目录');return schedules.withPaused(()=>workflows.exclusive(async () => {for (const item of await core.listInstances()) await core.requireStopped(await core.instancePath(item.id));storageBusy = true;core.operation = { title: '复制并校验数据目录', state: 'running' };try {return await mysql150.withQuiesced(async()=>{if(mysql150.active)throw Error('Database still active / 数据库仍在运行');news.cancel();survey.cancel();await Promise.allSettled([journalObservation,journal.queue,homePrefs.queue,news.pending,survey.done,...news.details.values()].filter(Boolean));await storage.migrate(core, target);app.relaunch();app.exit(0);return true;});} catch (e) {storageBusy = false;throw e;} finally {core.operation = null;}}));});
   handle('amber:instance-icon', (id, icon) => management.setIcon(id, icon));
   handle('amber:instance-rename', (id, name) => management.rename(id, name));
   handle('amber:instance-remove', (id) => management.remove(id));
@@ -532,11 +533,11 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
         if(!smoke&&(servers.active||(rooms.active||sakura.active||mysql150.active))){
           const answer=await dialog.showMessageBox(window,{type:'question',message:'服务端或联机连接仍在运行 / Servers or networking are still active',buttons:['最小化并继续 / Minimize and continue','停止服务端并退出 / Stop and quit','返回 / Back'],defaultId:0,cancelId:2,noLink:true});
           if(answer.response===0){window.minimize();return;}if(answer.response!==1)return;
-          try{await servers.shutdown();await rooms.leave();await sakura.stop();await mysql150.shutdown();}catch(e){await dialog.showMessageBox(window,{type:'warning',message:e.message});return;}
+          exitBusy=true;try{await servers.shutdown();await rooms.leave();await sakura.stop();await mysql150.shutdown();}catch(e){await dialog.showMessageBox(window,{type:'warning',message:e.message});return;}
         }
-        clearTimeout(placementTimer);await savePlacement();exitApproved=true;closeAllowed=true;window.close();app.quit();
+        exitBusy=true;await mysql150.withQuiesced(async()=>{clearTimeout(placementTimer);await savePlacement();exitApproved=true;closeAllowed=true;window.close();app.quit();});
       }catch(e){restoreWindow();await dialog.showMessageBox(window,{type:'error',message:redact(e.message)});}
-      finally{closePrompt=false;explicitQuit=false;if(pausedSchedules&&!exitApproved)schedules?.start();}
+      finally{if(!exitApproved)exitBusy=false;closePrompt=false;explicitQuit=false;if(pausedSchedules&&!exitApproved)schedules?.start();}
     });
     window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
     window.webContents.on('will-navigate', (event, url) => {if (url !== 'amber://app/') event.preventDefault();});

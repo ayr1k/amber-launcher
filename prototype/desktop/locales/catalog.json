@@ -11406,5 +11406,29 @@
   "m9f5098e5ef28": {
     "zh": "原实例仍存在，请在原实例中恢复数据库备份。",
     "en": "The original instance still exists. Restore the database backup within that instance."
+  },
+  "m28cfb97ba210": {
+    "zh": "数据库操作正在等待退出或数据迁移完成",
+    "en": "Database operations are paused for exit or data migration"
+  },
+  "mc57d66407868": {
+    "zh": "数据库维护操作进行中",
+    "en": "Database maintenance is already in progress"
+  },
+  "m6c4b76fd0952": {
+    "zh": "数据库迁移暂存清理失败，原备份已保留",
+    "en": "Database migration staging cleanup failed; original backup retained"
+  },
+  "m395e3da157f9": {
+    "zh": "无法识别迁移暂存目录，原备份已保留",
+    "en": "Unrecognized migration staging directory; original backup retained"
+  },
+  "m90d0c222d22f": {
+    "zh": "未完成迁移暂存已保留，原备份仍在",
+    "en": "Unfinished migration staging retained; original backup is preserved"
+  },
+  "mf3ce7735a9a6": {
+    "zh": "数据库仍在运行",
+    "en": "Database still active"
   }
 }
