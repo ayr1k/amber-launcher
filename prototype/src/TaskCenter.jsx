@@ -1,3 +1,4 @@
+import {ServerSchedulesPanel} from './ServerSchedules147';
 import {NetworkSettings,DownloadProgress,nt} from './NetworkSettings';
 import {ControlButton} from './ControlButton.mjs';
 import {g} from '../desktop/guided-text.mjs';
@@ -7,7 +8,8 @@ import { stepLabel } from './instance-status.mjs';
 import { useEffect, useState } from 'react';
 import { ProblemNotice } from './ProblemNotice';
 const labels = { get running() {return translateText("进行中");}, get done() {return translateText("已完成");}, get failed() {return translateText("失败");}, get cancelled() {return translateText("已取消");} };
-export function TaskCenter({ instances, settings, onOpen }) {useLocale();
+export function TaskCenter(props){useLocale();const [tab,setTab]=useState('activity');return <><nav className="store-tabs" aria-label={translateText("任务")}><ControlButton aria-pressed={tab==='activity'} onClick={()=>setTab('activity')}>{translateText("下载与活动")}</ControlButton><ControlButton aria-pressed={tab==='scheduled'} onClick={()=>setTab('scheduled')}>{translateText("服务端定时任务")}</ControlButton></nav>{tab==='scheduled'?<ServerSchedulesPanel/>:<TaskActivity {...props}/>}</>;}
+function TaskActivity({ instances, settings, onOpen }) {useLocale();
   const api = window.amberDesktop,[transfers,setTransfers]=useState(null),[status, setStatus] = useState({ jobs: [], processes: [] }),[filter, setFilter] = useState('all'),[error, setError] = useState(''),[busy, setBusy] = useState(false),[dismiss, setDismiss] = useState(null);
   useEffect(() => {let live = true;const refresh = () => {api.transferStatus144().then(v=>live&&setTransfers(v)).catch(()=>{});return api.status().then((s) => live && setStatus(s)).catch((e) => live && setError(e.message));};refresh();const timer = setInterval(refresh, 1000);return () => {live = false;clearInterval(timer);};}, []);
   async function act(fn) {if (busy) return;setBusy(true);setError('');try {await fn();setStatus(await api.status());} catch (e) {setError(e.message);} finally {setBusy(false);}}

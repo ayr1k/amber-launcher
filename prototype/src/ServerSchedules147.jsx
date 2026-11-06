@@ -1,0 +1,45 @@
+// SPDX-License-Identifier: MPL-2.0
+import {useEffect,useState} from 'react';
+import {useLocale} from './Locale';
+import {t as translateText,getLocale} from '../desktop/localization.mjs';
+import {ControlButton} from './ControlButton.mjs';
+import {Select} from './Select';
+import {SettingRow} from './SettingRow';
+import {ProblemNotice} from './ProblemNotice';
+import './schedules147.css';
+
+const blank=()=>({name:'',serverId:'',enabled:true,action:'restart',kind:'daily',time:'12:00',minutes:60,command:'',at:''});
+const localDate=value=>{if(!value)return '';const date=new Date(value);return new Date(date.getTime()-date.getTimezoneOffset()*60000).toISOString().slice(0,16);};
+export function ServerSchedulesPanel(){
+  useLocale();const api=window.amberDesktop,[data,setData]=useState({tasks:[]}),[servers,setServers]=useState([]),[form,setForm]=useState(null),[busy,setBusy]=useState(false),[error,setError]=useState(''),[remove,setRemove]=useState(null);
+  useEffect(()=>{let live=true;const refresh=async()=>{try{const [next,status]=await Promise.all([api.serverSchedules('list'),api.server('status')]);if(live){setData(next);setServers(status.instances);}}catch(e){if(live)setError(e.message);}};refresh();const timer=setInterval(refresh,3000);return()=>{live=false;clearInterval(timer);};},[]);
+  const change=(key,value)=>setForm(v=>({...v,[key]:value}));
+  async function act(action,input){if(busy)return;setBusy(true);setError('');try{setData(await api.serverSchedules(action,input));setForm(null);setRemove(null);}catch(e){setError(e.message);}finally{setBusy(false);}}
+  const states={cancelled:translateText("已取消"),done:translateText("已提交执行"),failed:translateText("失败"),running:translateText("进行中"),missed:translateText("已错过，未补执行"),offline:translateText("服务端未运行，已跳过"),busy:translateText("其他操作占用，已跳过"),interrupted:translateText("执行中断，未重试")};
+  const date=value=>value?new Date(value).toLocaleString(getLocale()):'—';
+  return <section className="server-schedules">
+    <header className="schedule-page-heading"><h1>{translateText("服务端定时任务")}</h1><ControlButton className="button" disabled={busy||!!data.error||!servers.length} onClick={()=>setForm({...blank(),serverId:servers[0]?.id||''})}>{translateText("添加定时任务")}</ControlButton></header>
+    <div className="schedule-guidance"><div className="schedule-guidance-copy"><p>{translateText("仅在 AMBER 运行且服务端就绪时执行。退出或睡眠期间错过的任务不补执行。重启会正常停服并等待保存完成，最多等待两分钟，不会强制结束进程。")}</p><p>{translateText("实例忙时直接跳过，不排队。每日时间跟随系统时区。暂停会取消尚未启动的重启，已发出的指令无法撤回。")}</p></div><p className="schedule-timezone"><span>{translateText("每日时间使用电脑当前时区：")}</span><strong>{data.timezone}</strong></p></div>
+    <ProblemNotice error={error||data.error}/>
+    {!servers.length&&<p className="schedule-empty">{translateText("请先创建服务端实例。")}</p>}
+    {form&&<form className="native-section schedule-editor" onSubmit={e=>{e.preventDefault();act('save',form);}}><h2>{form.id?translateText("编辑定时任务"):translateText("添加定时任务")}</h2>
+      <SettingRow title={translateText("任务名称")}><input required maxLength={80} aria-label={translateText("任务名称")} value={form.name} onChange={e=>change('name',e.target.value)}/></SettingRow>
+      <SettingRow title={translateText("服务端实例")}><Select aria-label={translateText("服务端实例")} value={form.serverId} onChange={e=>change('serverId',e.target.value)}>{servers.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</Select></SettingRow>
+      <SettingRow title={translateText("任务动作")}><Select aria-label={translateText("任务动作")} value={form.action} onChange={e=>change('action',e.target.value)}><option value="restart">{translateText("正常重启服务端")}</option><option value="command">{translateText("执行控制台指令")}</option></Select></SettingRow>
+      {form.action==='command'&&<SettingRow title={translateText("控制台指令")} description={translateText("只发送一行服务端指令，不执行系统命令。请确认指令对世界和玩家的影响。完成表示已发送，不保证插件已执行成功。")}><input required maxLength={2000} aria-label={translateText("控制台指令")} value={form.command} onChange={e=>change('command',e.target.value)}/></SettingRow>}
+      <SettingRow title={translateText("执行频率")}><Select aria-label={translateText("执行频率")} value={form.kind} onChange={e=>change('kind',e.target.value)}><option value="once">{translateText("单次")}</option><option value="daily">{translateText("每日")}</option><option value="interval">{translateText("固定间隔")}</option></Select></SettingRow>
+      {form.kind==='daily'?<SettingRow title={translateText("每日时间")}><input required type="time" aria-label={translateText("每日时间")} value={form.time} onChange={e=>change('time',e.target.value)}/></SettingRow>:form.kind==='interval'?<SettingRow title={translateText("间隔（分钟）")} description={translateText("从保存或启动 AMBER 时开始计时。") }><input required type="number" min="1" max="525600" step="1" aria-label={translateText("间隔（分钟）")} value={form.minutes} onChange={e=>change('minutes',Number(e.target.value))}/></SettingRow>:<SettingRow title={translateText("执行时间")}><input required type="datetime-local" aria-label={translateText("执行时间")} value={localDate(form.at)} onChange={e=>change('at',e.target.value?new Date(e.target.value).toISOString():'')}/></SettingRow>}
+      <label><input type="checkbox" checked={form.enabled} onChange={e=>change('enabled',e.target.checked)}/>{translateText("启用任务")}</label><div className="inline-actions"><button className="button" type="submit" disabled={busy}>{translateText("保存任务")}</button><ControlButton className="button secondary" disabled={busy} onClick={()=>setForm(null)}>{translateText("取消")}</ControlButton></div>
+    </form>}
+    {!data.tasks.length&&!form&&<p className="schedule-empty">{translateText("暂无定时任务。")}</p>}
+    <div className="schedule-list">{data.tasks.map(task=><article className="schedule-card" key={task.id}>
+      <header className="schedule-card-heading"><div><h2>{task.name}</h2><p>{servers.find(s=>s.id===task.serverId)?.name||translateText("服务端已移除")}</p></div><span className={"schedule-state "+(task.enabled||task.last?.state==="running"?"is-active":"")}>{task.last?.state==='running'?states.running:task.enabled?translateText("已启用"):translateText("已暂停")}</span></header>
+      <dl className="schedule-facts"><div><dt>{translateText("任务动作")}</dt><dd>{task.action==='restart'?translateText("正常重启服务端"):translateText("执行控制台指令")}</dd></div><div><dt>{translateText("执行频率")}</dt><dd>{task.kind==='daily'?translateText("每日")+' '+task.time:task.kind==='interval'?task.minutes+' '+translateText("分钟"):translateText("单次")}</dd></div><div><dt>{translateText("下次执行：")}</dt><dd>{date(task.nextRun)}</dd></div></dl>
+      {task.command&&<code className="schedule-command">{task.command}</code>}
+      {task.last&&<p className="schedule-result" role="status"><span>{states[task.last.state]||task.last.state}</span><time dateTime={task.last.at}>{date(task.last.at)}</time></p>}
+      <ProblemNotice error={task.last?.error}/>
+      <footer className="schedule-card-actions"><div className="schedule-primary-actions"><ControlButton className="button secondary" disabled={busy||task.last?.state==='running'} onClick={()=>setForm({...blank(),...task})}>{translateText("编辑")}</ControlButton><ControlButton className="button secondary" disabled={busy} onClick={()=>act('save',{...task,enabled:task.last?.state==='running'?false:!task.enabled})}>{task.enabled||task.last?.state==='running'?translateText("暂停任务"):translateText("启用任务")}</ControlButton></div><ControlButton className="text-button" disabled={busy||task.last?.state==='running'} onClick={()=>setRemove(task.id)}>{translateText("删除任务")}</ControlButton></footer>
+      {remove===task.id&&<div className="schedule-delete-confirm"><span>{translateText("确认删除此定时任务？")}</span><ControlButton className="text-button" disabled={busy} onClick={()=>act('remove',task.id)}>{translateText("确认删除")}</ControlButton><ControlButton className="text-button" onClick={()=>setRemove(null)}>{translateText("取消")}</ControlButton></div>}
+    </article>)}</div>
+  </section>;
+}

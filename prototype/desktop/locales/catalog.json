@@ -9879,5 +9879,182 @@
     "entry.chooseNote": {"zh":"可以创建新实例，也可以导入已有游戏或本地整合包。所有入口稍后仍可在实例管理中找到。","en":"Create a new instance or import an existing game or local modpack. These options remain available from instance management later."}
 ,
     "entry.resume": {"zh":"继续选择游戏：创建或导入","en":"Continue to create or import a game"},
-    "entry.resumeNote": {"zh":"首次引导尚未完成。账号准备好后，可继续创建实例或导入已有游戏；也可以稍后再设置账号。","en":"Setup is not finished. When your account is ready, continue to create an instance or import an existing game. You can also finish account setup later."}
+    "entry.resumeNote": {"zh":"首次引导尚未完成。账号准备好后，可继续创建实例或导入已有游戏；也可以稍后再设置账号。","en":"Setup is not finished. When your account is ready, continue to create an instance or import an existing game. You can also finish account setup later."},
+  "mcbd7dc0ea697": {
+    "zh": "关闭窗口时",
+    "en": "When closing the window"
+  },
+  "m858402dae664": {
+    "zh": "进入托盘后服务端与定时任务继续运行；退出 AMBER 或电脑睡眠时不会执行定时任务。Linux 保留任务栏入口。",
+    "en": "Servers and schedules keep running in the tray. Tasks do not run while AMBER is closed or the computer sleeps. Linux keeps a taskbar entry."
+  },
+  "m05d929918efb": {
+    "zh": "服务端运行时进入托盘，否则退出",
+    "en": "Use tray while a server is active; otherwise quit"
+  },
+  "m3c91ed736240": {
+    "zh": "总是进入托盘",
+    "en": "Always use tray"
+  },
+  "m19cc9eaddcd2": {
+    "zh": "退出 AMBER",
+    "en": "Quit AMBER"
+  },
+  "m196315c50a10": {
+    "zh": "恢复窗口",
+    "en": "Restore window"
+  },
+  "m3286cb464a81": {
+    "zh": "下载与活动",
+    "en": "Downloads & activity"
+  },
+  "m8cf79a8b4850": {
+    "zh": "服务端定时任务",
+    "en": "Server schedules"
+  },
+  "m12f8036ae875": {
+    "zh": "已提交执行",
+    "en": "Submitted for execution"
+  },
+  "mada027397e0f": {
+    "zh": "已错过，未补执行",
+    "en": "Missed; not replayed"
+  },
+  "m26fca9cbdb07": {
+    "zh": "服务端未运行，已跳过",
+    "en": "Skipped: server offline"
+  },
+  "m4b24b793dc6f": {
+    "zh": "其他操作占用，已跳过",
+    "en": "Skipped: another operation is active"
+  },
+  "md4c2e4fb012a": {
+    "zh": "执行中断，未重试",
+    "en": "Interrupted; not retried"
+  },
+  "mc18827e93652": {
+    "zh": "仅在 AMBER 运行且服务端就绪时执行。退出或睡眠期间错过的任务不补执行。重启会正常停服并等待保存完成，最多等待两分钟，不会强制结束进程。",
+    "en": "Runs only while AMBER is open and the server is ready. Missed tasks during exit or sleep are not replayed. Restart waits up to two minutes for a normal shutdown and saving; it never force-kills the server."
+  },
+  "m2136b8a2a104": {
+    "zh": "每日时间使用电脑当前时区：",
+    "en": "Daily times use the current computer time zone: "
+  },
+  "m8875ce8d26c2": {
+    "zh": "添加定时任务",
+    "en": "Add scheduled task"
+  },
+  "m5ec1a6556c3b": {
+    "zh": "请先创建服务端实例。",
+    "en": "Create a server instance first."
+  },
+  "m6d931444b2c7": {
+    "zh": "编辑定时任务",
+    "en": "Edit scheduled task"
+  },
+  "m2479560deb33": {
+    "zh": "任务名称",
+    "en": "Task name"
+  },
+  "m8d807de6256d": {
+    "zh": "服务端实例",
+    "en": "Server instance"
+  },
+  "mf1cc3cd9c91d": {
+    "zh": "任务动作",
+    "en": "Task action"
+  },
+  "m6eb6cf00fadd": {
+    "zh": "正常重启服务端",
+    "en": "Restart server gracefully"
+  },
+  "m33d7f4da1710": {
+    "zh": "执行控制台指令",
+    "en": "Send console command"
+  },
+  "mc15c579a8e71": {
+    "zh": "控制台指令",
+    "en": "Console command"
+  },
+  "med0e6016c548": {
+    "zh": "只发送一行服务端指令，不执行系统命令。请确认指令对世界和玩家的影响。完成表示已发送，不保证插件已执行成功。",
+    "en": "Sends one server command, never a system command. Check its effect on worlds and players. Completion means sent; it does not confirm plugin execution."
+  },
+  "m56a782688460": {
+    "zh": "执行频率",
+    "en": "Frequency"
+  },
+  "m3de42d7c68d4": {
+    "zh": "单次",
+    "en": "Once"
+  },
+  "mfd7b67c923cd": {
+    "zh": "每日",
+    "en": "Daily"
+  },
+  "m6c9084f96f7f": {
+    "zh": "固定间隔",
+    "en": "Fixed interval"
+  },
+  "m227ebc503fc1": {
+    "zh": "每日时间",
+    "en": "Daily time"
+  },
+  "m63f674fb44eb": {
+    "zh": "间隔（分钟）",
+    "en": "Interval (minutes)"
+  },
+  "m300880d52c37": {
+    "zh": "从保存或启动 AMBER 时开始计时。",
+    "en": "The interval starts when saved or when AMBER starts."
+  },
+  "m45e03e436ed0": {
+    "zh": "执行时间",
+    "en": "Run at"
+  },
+  "me69df86265e3": {
+    "zh": "启用任务",
+    "en": "Enable task"
+  },
+  "m24a015d6239c": {
+    "zh": "保存任务",
+    "en": "Save task"
+  },
+  "m266deeaaa417": {
+    "zh": "暂无定时任务。",
+    "en": "No scheduled tasks yet."
+  },
+  "meb0c326b60ae": {
+    "zh": "已暂停",
+    "en": "Paused"
+  },
+  "mf168ff9a0cd8": {
+    "zh": "服务端已移除",
+    "en": "Server removed"
+  },
+  "m788777213573": {
+    "zh": "下次执行：",
+    "en": "Next run: "
+  },
+  "mb8aa675cf380": {
+    "zh": "暂停任务",
+    "en": "Pause task"
+  },
+  "m29dfebea0fda": {
+    "zh": "删除任务",
+    "en": "Delete task"
+  },
+  "m9e093ca6772f": {
+    "zh": "确认删除此定时任务？",
+    "en": "Delete this scheduled task?"
+  },
+  "m051836569928": {
+    "zh": "编辑",
+    "en": "Edit"
+  },
+  "ma3ea3c17b401": {
+    "zh": "确认删除",
+    "en": "Confirm deletion"
+  },
+  "mc2015b835bf4": {"zh":"实例忙时直接跳过，不排队。每日时间跟随系统时区。暂停会取消尚未启动的重启，已发出的指令无法撤回。","en":"Busy instances are skipped without queuing. Daily times follow the system time zone. Pausing cancels a restart that has not launched yet; commands already sent cannot be recalled."}
 }
