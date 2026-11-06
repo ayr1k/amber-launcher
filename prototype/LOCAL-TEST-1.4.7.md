@@ -1,8 +1,9 @@
-# 1.4.7 task implementation — validation pending
+# 1.4.7 task implementation — local validation and CI delivery
 
 Branch: `feat/1.4.7-tray-server-schedules`. Based on 1.4.6, commit
-`353b5c5ed74f2e66d512c939635703ad65b8ce3c`. These are uncommitted task changes,
-not a released build. Package version remains 1.4.6 pending test delivery.
+`353b5c5ed74f2e66d512c939635703ad65b8ce3c`. This is a task candidate,
+not a released build. Package version remains 1.4.6; identify test installers by
+the PR head SHA in `TEST-REVISION.txt`, not the inherited version string.
 
 ## Implemented behavior / 已实现行为
 
@@ -41,9 +42,22 @@ not a released build. Package version remains 1.4.6 pending test delivery.
 - `node --test tests/servers132.test.mjs tests/release140.test.mjs tests/release144.test.mjs tests/release147.test.mjs tests/sites-worker.test.mjs`: 53/53 passed.
 - `pnpm build`, `node scripts/check-locales.mjs`, and
   `node scripts/release-check.mjs`: passed. Vite retains the existing large-bundle warning.
-- 新增重启/备份锁竞争、备份失败、替代进程、睡眠恢复测试已通过；尚无真实游戏或桌面托盘验收。
+- With approved normal execution permissions, the complete regression suite passed
+  **479/479, no skips**, using `node --test --test-concurrency=2` and the test list
+  from `package.json`. Fixtures remained within the isolated task temporary root.
+- Reused the existing, version-matching Electron 45.0.0 runtime. Desktop smoke passed
+  background assets, system encryption, theme assets and desktop/IPC initialization.
+- `scripts/qa-tray-schedules147.cjs` verifies isolated userData before any mutation,
+  UI create/pause/persist, a real one-shot timer skipping an offline target, actual
+  native window hiding, second-instance restore and default idle exit. Playwright
+  is an external QA dependency and is not shipped.
+- 新增重启/备份锁竞争、备份失败、替代进程、睡眠恢复测试已通过。完整回归 479 项和
+  隔离桌面验收通过；未进行真实 Minecraft 世界重启或非 Windows 真机验收。
 
-## Blocked validation / 验证阻碍
+## Initial sandbox limitations / 初次受限环境记录
+
+These failures were resolved for validation by the user-authorized normal permission
+request flow. They are retained for traceability; no security settings were changed.
 
 Commands were run from the task checkout's `prototype` directory:
 
@@ -80,13 +94,14 @@ junction fixtures (`EPERM`, `syscall: symlink`):
 node 'C:\Users\lempi\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\node_modules\pnpm\bin\pnpm.cjs' desktop:smoke
 ```
 
-This failed before launch: the Electron 45.0.0 binary is absent, its automatic
+This initial attempt failed before launch: the Electron 45.0.0 binary was absent, its automatic
 download returned `TypeError: fetch failed`, then `Electron failed to install
-correctly`. No desktop/tray runtime acceptance or installer is claimed.
+correctly`. The later approved run reused the matching cached runtime successfully.
 
-继续完整验证需要明确授权在允许测试夹具链接和本机回环连接的环境执行测试，
-以及下载/安装锁定的 Electron 运行时并执行隔离桌面验收。当前未申请提升权限，
-未通过其他工具绕过限制，未修改被阻止的测试。
+用户后续明确授权正常权限申请流程；获批后完整测试及桌面验收通过。
+本机已有 Git 身份经 API 核实为 ayr1k，拥有仓库写入权限；插件身份为另一访问路径。
+没有修改全局账号或系统安全配置，也未删除、跳过原先受限的测试。
 
-No PR or installers have been delivered, and no merge, tag, formal release or
-Pages deployment has been performed. Retain this checkout and branch for continuation.
+The task PR records CI results, downloadable AMBER/AmberE Windows x64 test installers,
+the exact head revision and checksums. CI and scripted UI checks are not live-game
+or non-Windows acceptance. No merge, tag, formal release or Pages deployment is authorized.
