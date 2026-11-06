@@ -95,6 +95,20 @@ the fixes (30 task-specific tests, 494 full regressions):
 These tests use controlled processes, backup promises and clocks, not a live game
 or a real operating-system sleep/DST transition.
 
+## Schedule layout refinement
+
+- Separated heading/action, guidance and time-zone information with readable line
+  spacing; cards now group name/state, labeled execution facts and footer actions.
+- Long commands wrap inside a bounded area. Delete confirmation has its own row;
+  editor controls have more room. Existing bilingual messages and scheduling
+  behavior are retained. CSS is scoped to this panel and uses theme variables.
+- Isolated Electron layout checks cover Chinese/dark at 1440 px, English/light at
+  1024 px, and English/dark with 18 px application font at 800 px. Long task names,
+  commands and editor controls were inspected; panel/card horizontal-overflow checks
+  passed. Native screenshots used software rendering to avoid stale occluded frames.
+- Build, source and all 2,472 bilingual-message checks passed. The existing dual
+  edition task/tray desktop acceptance and CI results are recorded in the task PR.
+
 ## Initial sandbox limitations / 初次受限环境记录
 
 These failures were resolved for validation by the user-authorized normal permission
