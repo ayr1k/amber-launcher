@@ -40,3 +40,11 @@ test('server copies and exit snapshots never copy database credentials or live d
  const {core,servers,a}=await fixture(t),dir=await servers.dir(a.id);await mkdir(join(dir,'mysql150'));await writeFile(join(dir,'mysql150','settings.json'),'private fixture');await writeFile(join(dir,'amber-ports.json'),'port fixture');const copy=await servers.copy(a.id);await assert.rejects(readFile(join(await servers.dir(copy.id),'mysql150','settings.json')),{code:'ENOENT'});await assert.rejects(readFile(join(await servers.dir(copy.id),'amber-ports.json')),{code:'ENOENT'});
  const management=new ServerManagement140(core,servers);const token=await management.snapshot(a.id,'exit');const manifest=JSON.parse(await readFile(join(management.root,token,'backup.json')));assert.ok(manifest.files.every(f=>!f.relative.startsWith('mysql150/')));
 });
+test('concurrent database reservations are unique and cancellation never initializes after a shared download',async t=>{
+ const {core,servers,a,b}=await fixture(t),db=new MySQL150(core,servers,codec),secret={admin:'fixture',plugin:'fixture'};
+ const [one,two]=await Promise.all([db.allocateConfig(a.id,secret),db.allocateConfig(b.id,secret)]);assert.notEqual(one.port,two.port);
+ await db.resetPreparation(a.id);let release,entered;const ready=new Promise(r=>entered=r);db.install=()=>{entered();return new Promise(r=>release=r);};let commands=0;db.command=async()=>{commands++;};const task=db.initialize(a.id);await ready;db.cancel(a.id);release();await assert.rejects(task,/cancelled/);assert.equal(commands,0);assert.equal(await db.config(a.id),null);
+});
+test('unverifiable database process metadata blocks destructive actions without crashing startup',async t=>{
+ const {core,servers,a}=await fixture(t),db=new MySQL150(core,servers,codec),p=await db.paths(a.id);await writeFile(join(p.root,'session.json'),'{broken');await db.recover();assert.equal(db.activeFor(a.id),true);await assert.rejects(db.resetPreparation(a.id),/recovery metadata/);
+});

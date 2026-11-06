@@ -1,4 +1,4 @@
-name: Windows tests and task installers
+name: All-platform packages and Windows tests
 on:
   push:
     branches: [main]
@@ -26,6 +26,7 @@ jobs:
           version: 11.25.0
           package_json_file: prototype/package.json
       - run: pnpm install --frozen-lockfile
+      - run: pnpm exec install-electron
       - name: Canonicalize Windows temporary directory
         shell: pwsh
         run: |
@@ -43,21 +44,15 @@ jobs:
       - run: pnpm test:sites
       - run: pnpm release:check
       - run: pnpm desktop:smoke
-      - name: Build task Windows installers
-        if: github.ref != 'refs/heads/main' || github.event_name == 'pull_request'
-        run: pnpm package:editions
-        env:
-          AMBER_TASK_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
-          AMBER_EVENT_SHA: ${{ github.sha }}
-          AMBER_CURSEFORGE_API_KEY: ${{ secrets.AMBER_CURSEFORGE_API_KEY }}
       - name: Build existing main platform artifacts
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         run: pnpm package:all --public
         env:
           AMBER_CURSEFORGE_API_KEY: ${{ secrets.AMBER_CURSEFORGE_API_KEY }}
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+      - if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: amber-test-installers-${{ github.event.pull_request.head.sha || github.sha }}
+          name: amber-all-platforms
           path: |
             prototype/releases/1.5.0/*-Setup-x64.exe
             prototype/releases/1.5.0/*.zip

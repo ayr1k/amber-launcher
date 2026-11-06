@@ -14,8 +14,7 @@ const codec={isEncryptionAvailable:async()=>true,encryptString:async s=>Buffer.f
 const mysql=new MySQL150({root,fetcher:fetch},servers,codec);
 try{
  await mkdir(mysql.component,{recursive:true});await copyFile(process.env.AMBER_MYSQL_ARCHIVE,join(mysql.component,'mysql.zip'));
- await mysql.initialize(ids[0]);console.log('first initialization passed');
- await mysql.initialize(ids[1]);console.log('second initialization passed');
+ await Promise.all(ids.map(id=>mysql.initialize(id)));console.log('concurrent initialization and unique port allocation passed');
  const c1=await mysql.config(ids[0]),c2=await mysql.config(ids[1]);assert.notEqual(c1.port,c2.port);
  await mysql.start(ids[0]);await mysql.start(ids[1]);console.log('two independent processes passed');
  const a=await mysql.credentials(c1),b=await mysql.credentials(c2);assert.notEqual(a.plugin,b.plugin);

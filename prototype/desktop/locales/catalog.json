@@ -11306,5 +11306,17 @@
   "m3401ae7f9d79": {
     "zh": "确认删除远端隧道",
     "en": "Confirm remote tunnel deletion"
+  },
+  "mffe21a671190": {
+    "zh": "显示密码",
+    "en": "Show password"
+  },
+  "mdd1d07bd9ceb": {
+    "zh": "隐藏密码",
+    "en": "Hide password"
+  },
+  "m9aae423ec77e": {
+    "zh": "可在此新建远端隧道，或关联已有隧道与实例端口。协议、节点能力和账号额度以服务商实际支持为准。",
+    "en": "Create a remote tunnel here, or link an existing tunnel to an instance port. Protocols, node capabilities and quota depend on the provider."
   }
 }

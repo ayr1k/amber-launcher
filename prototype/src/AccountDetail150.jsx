@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MPL-2.0
 import {useEffect,useRef,useState} from 'react';
 import {SkinViewer,WalkingAnimation,RunningAnimation,IdleAnimation} from 'skinview3d';
+import {disposeSkinPreview150} from './skin-preview150.mjs';
 import {t as translateText} from '../desktop/localization.mjs';
 import {accountStatistics} from '../desktop/account-statistics150.mjs';
 import {OfflineIdentity135} from './OfflineIdentity135';
@@ -24,7 +25,7 @@ function SkinPreview({account}) {
   document.addEventListener('visibilitychange',sync);
   const lost=e=>{e.preventDefault();contextLost=true;v.renderPaused=true;setError(translateText("图形上下文已丢失，请重新进入账号详情。"));};canvas.current.addEventListener('webglcontextlost',lost);
   window.amberDesktop.accountSkin(account.id).then(async src=>{if(disposed)return;if(!src){setError(translateText("此账号暂无可用皮肤。"));return;}const image=new Image();image.src=src;await image.decode();if(disposed)return;await v.loadSkin(image,{model:account.skinModel||'auto-detect'});}).catch(()=>{if(!disposed)setError(translateText("皮肤加载失败，请稍后重试。"));});
-  return()=>{disposed=true;changes.disconnect();reduced.removeEventListener('change',sync);observer.disconnect();resize.disconnect();document.removeEventListener('visibilitychange',sync);v.canvas.removeEventListener('webglcontextlost',lost);v.dispose();viewer.current=null;};
+  return()=>{disposed=true;changes.disconnect();reduced.removeEventListener('change',sync);observer.disconnect();resize.disconnect();document.removeEventListener('visibilitychange',sync);v.canvas.removeEventListener('webglcontextlost',lost);disposeSkinPreview150(v);viewer.current=null;};
  },[account.id,account.skinRevision]);
  useEffect(()=>{const v=viewer.current;if(!v)return;v.animation=motion==='walk'?new WalkingAnimation():motion==='run'?new RunningAnimation():motion==='idle'?new IdleAnimation():null;if(v.animation)v.animation.paused=matchMedia('(prefers-reduced-motion: reduce)').matches||host.current.closest('.app')?.classList.contains('no-motion');},[motion,account.id,account.skinRevision]);
  return <section className="skin-preview150"><h2>{translateText("3D 皮肤预览")}</h2><div ref={host} className={'skin-stage150 background-'+background}><canvas ref={canvas} aria-label={translateText("拖拽旋转，滚轮缩放")}/></div>{error&&<p role="status">{error}</p>}<p>{translateText("拖拽旋转，滚轮缩放")}</p><div className="form-grid"><label>{translateText("预览背景")}<Select value={background} onChange={e=>setBackground(e.target.value)}>{[['theme','跟随主题'],['light','浅色'],['dark','深色']].map(([key,name])=><option key={key} value={key}>{translateText(name)}</option>)}</Select></label><label>{translateText("预览动作")}<Select value={motion} onChange={e=>setMotion(e.target.value)}>{[['none','静止'],['idle','待机'],['walk','行走'],['run','奔跑']].map(([key,name])=><option key={key} value={key}>{translateText(name)}</option>)}</Select></label></div><p>{translateText("背景和动作仅用于预览，不会更改账号皮肤。")}</p></section>;
