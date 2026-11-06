@@ -14,7 +14,14 @@ import {configureTransferBudget,transferStatus144} from '../desktop/task-queue13
 import {DownloadNetwork} from '../desktop/network.mjs';
 import {startupStyle} from '../desktop/startup-style148.mjs';
 import {contrast} from '../desktop/theme-schema.mjs';
+import {setLocale,t as translateText,validateLanguagePack} from '../desktop/localization.mjs';
 const bytes=Buffer.alloc(SEGMENT_THRESHOLD);for(let i=0;i<bytes.length;i++)bytes[i]=i%251;
+const downloadCopy=[['同时下载的连接数','Concurrent download connections'],['所有任务与大文件分段共享此连接上限。32 MiB 以上且支持范围请求的文件最多使用 4 路；不支持时自动回退。提速取决于来源和网络，弱网时可降低并发。','All tasks and file segments share this connection limit. Files of at least 32 MiB use up to 4 ranges when supported, with automatic fallback. Speed gains depend on the source and network. Reduce concurrency on unstable connections.']];
+for(const locale of ['zh-CN','en-US','x-review148'])test(`download connection and range copy translates in ${locale}`,t=>{
+ const pack=locale.startsWith('x-')?validateLanguagePack({format:'amber-language',schema:1,locale,name:'Partial test language',messages:{m311bb313fdec:'Fixture accounts'}}):null;
+ setLocale(locale,pack);t.after(()=>setLocale('zh-CN'));
+ for(const [zh,en] of downloadCopy)assert.equal(translateText(zh),locale==='zh-CN'?zh:en);
+});
 async function fixture(t){const root=await mkdtemp(join(tmpdir(),'amber148-'));t.after(()=>rm(root,{recursive:true,force:true}));configureTransferBudget(8);t.after(()=>configureTransferBudget(8));const file={path:join(root,'file.bin'),url:'https://libraries.minecraft.net/fixture.bin',size:bytes.length,hash:createHash('sha256').update(bytes).digest('hex'),algorithm:'sha256'};return {root,file,part:file.path+'.amber-'+file.hash+'.part'};}
 function server({ignore=false,wrong=false,corrupt=false,etag='"fixture"',slow=false,onRequest=()=>{}}={}){
   const requests=[];let active=0,peak=0;

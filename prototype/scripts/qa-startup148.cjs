@@ -44,10 +44,16 @@ async function waitFor(fn){for(let i=0;i<400;i++){const value=await fn();if(valu
      assert.deepEqual(errors,[]);
      const settingsButton=page.locator('.primary-nav button').filter({hasText:item.language==='zh-CN'?'设置':'Settings'}).first();await settingsButton.click();
      await page.getByRole('button',{name:item.language==='zh-CN'?'下载':'Download',exact:true}).click();
+     const connectionLabel=item.language==='zh-CN'?'同时下载的连接数':'Concurrent download connections';
+     const rangeHelp=item.language==='zh-CN'?'所有任务与大文件分段共享此连接上限。32 MiB 以上且支持范围请求的文件最多使用 4 路；不支持时自动回退。提速取决于来源和网络，弱网时可降低并发。':'All tasks and file segments share this connection limit. Files of at least 32 MiB use up to 4 ranges when supported, with automatic fallback. Speed gains depend on the source and network. Reduce concurrency on unstable connections.';
+     const connection=page.locator('.settings-group label').filter({hasText:connectionLabel}).first();
+     await connection.scrollIntoViewIfNeeded();assert.ok(await connection.isVisible());assert.equal(await connection.evaluate(el=>[...el.childNodes].filter(node=>node.nodeType===Node.TEXT_NODE).map(node=>node.textContent).join('').trim()),connectionLabel);
+     await page.getByText(rangeHelp,{exact:true}).scrollIntoViewIfNeeded();assert.ok(await page.getByText(rangeHelp,{exact:true}).isVisible());
+     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
      await page.screenshot({path:join(output,item.name+'-downloads.png')});assert.deepEqual(errors,[]);
      await page.reload();await page.locator('.desktop-app').waitFor();assert.deepEqual(errors,[]);
      const marks=[...logs.matchAll(/AMBER_STARTUP (\{[^\r\n]+\})/g)].map(match=>JSON.parse(match[1]));
-     assert.ok(marks.find(m=>m.stage==='ready'));results.push({name:item.name,edition:info.edition,data,marks,splashCaptured,errors,overflow});
+     assert.ok(marks.find(m=>m.stage==='ready'));results.push({name:item.name,edition:info.edition,data,marks,splashCaptured,errors,overflow,downloadCopy:{connectionLabel,rangeHelp,visible:true}});
    }finally{await app.close();await writeFile(join(output,item.name+'.log'),logs);}
  }
  await writeFile(join(output,'results.json'),JSON.stringify(results,null,2));console.log(JSON.stringify(results,null,2));

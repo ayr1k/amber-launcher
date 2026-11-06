@@ -10089,6 +10089,14 @@
     "zh": "仍在处理，请稍候。",
     "en": "Still working. Please wait."
   },
+  "download148_connections": {
+    "zh": "同时下载的连接数",
+    "en": "Concurrent download connections"
+  },
+  "download148_segments": {
+    "zh": "所有任务与大文件分段共享此连接上限。32 MiB 以上且支持范围请求的文件最多使用 4 路；不支持时自动回退。提速取决于来源和网络，弱网时可降低并发。",
+    "en": "All tasks and file segments share this connection limit. Files of at least 32 MiB use up to 4 ranges when supported, with automatic fallback. Speed gains depend on the source and network. Reduce concurrency on unstable connections."
+  },
   "startup148_error": {
     "zh": "启动未完成，请查看错误提示。",
     "en": "Startup did not finish. Please check the error message."

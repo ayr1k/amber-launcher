@@ -7,57 +7,62 @@
       {
         "stage": "visible",
         "ms": 105,
-        "at": 1793992387672
+        "at": 1793993596758
       },
       {
         "stage": "storage",
-        "ms": 198,
-        "at": 1793992387766
+        "ms": 200,
+        "at": 1793993596853
       },
       {
         "stage": "recovery",
-        "ms": 203,
-        "at": 1793992387770
+        "ms": 205,
+        "at": 1793993596858
       },
       {
         "stage": "accounts",
-        "ms": 204,
-        "at": 1793992387771
+        "ms": 206,
+        "at": 1793993596859
       },
       {
         "stage": "settings",
-        "ms": 207,
-        "at": 1793992387774
+        "ms": 209,
+        "at": 1793993596862
       },
       {
         "stage": "library",
-        "ms": 211,
-        "at": 1793992387778
+        "ms": 212,
+        "at": 1793993596865
       },
       {
         "stage": "interface",
-        "ms": 253,
-        "at": 1793992387820
+        "ms": 258,
+        "at": 1793993596911
       },
       {
         "stage": "committed",
-        "ms": 413,
-        "at": 1793992387980
+        "ms": 418,
+        "at": 1793993597071
       },
       {
         "stage": "ready",
-        "ms": 413,
-        "at": 1793992387981
+        "ms": 418,
+        "at": 1793993597071
       },
       {
         "stage": "shown",
-        "ms": 421,
-        "at": 1793992387988
+        "ms": 426,
+        "at": 1793993597079
       }
     ],
     "splashCaptured": true,
     "errors": [],
-    "overflow": false
+    "overflow": false,
+    "downloadCopy": {
+      "connectionLabel": "Concurrent download connections",
+      "rangeHelp": "All tasks and file segments share this connection limit. Files of at least 32 MiB use up to 4 ranges when supported, with automatic fallback. Speed gains depend on the source and network. Reduce concurrency on unstable connections.",
+      "visible": true
+    }
   },
   {
     "name": "dark-zh",
@@ -66,58 +71,63 @@
     "marks": [
       {
         "stage": "visible",
-        "ms": 105,
-        "at": 1793992390828
+        "ms": 102,
+        "at": 1793993599810
       },
       {
         "stage": "storage",
-        "ms": 201,
-        "at": 1793992390925
+        "ms": 197,
+        "at": 1793993599905
       },
       {
         "stage": "recovery",
-        "ms": 206,
-        "at": 1793992390930
+        "ms": 202,
+        "at": 1793993599910
       },
       {
         "stage": "accounts",
-        "ms": 207,
-        "at": 1793992390931
+        "ms": 203,
+        "at": 1793993599911
       },
       {
         "stage": "settings",
-        "ms": 210,
-        "at": 1793992390933
+        "ms": 205,
+        "at": 1793993599913
       },
       {
         "stage": "library",
-        "ms": 214,
-        "at": 1793992390937
+        "ms": 209,
+        "at": 1793993599917
       },
       {
         "stage": "interface",
-        "ms": 258,
-        "at": 1793992390981
+        "ms": 253,
+        "at": 1793993599961
       },
       {
         "stage": "committed",
-        "ms": 425,
-        "at": 1793992391148
+        "ms": 418,
+        "at": 1793993600125
       },
       {
         "stage": "ready",
-        "ms": 425,
-        "at": 1793992391148
+        "ms": 418,
+        "at": 1793993600126
       },
       {
         "stage": "shown",
-        "ms": 432,
-        "at": 1793992391155
+        "ms": 424,
+        "at": 1793993600132
       }
     ],
     "splashCaptured": true,
     "errors": [],
-    "overflow": false
+    "overflow": false,
+    "downloadCopy": {
+      "connectionLabel": "同时下载的连接数",
+      "rangeHelp": "所有任务与大文件分段共享此连接上限。32 MiB 以上且支持范围请求的文件最多使用 4 路；不支持时自动回退。提速取决于来源和网络，弱网时可降低并发。",
+      "visible": true
+    }
   },
   {
     "name": "custom-small",
@@ -126,57 +136,62 @@
     "marks": [
       {
         "stage": "visible",
-        "ms": 101,
-        "at": 1793992394174
+        "ms": 110,
+        "at": 1793993602775
       },
       {
         "stage": "storage",
-        "ms": 196,
-        "at": 1793992394269
+        "ms": 207,
+        "at": 1793993602872
       },
       {
         "stage": "recovery",
-        "ms": 201,
-        "at": 1793992394274
+        "ms": 212,
+        "at": 1793993602877
       },
       {
         "stage": "accounts",
-        "ms": 204,
-        "at": 1793992394277
+        "ms": 214,
+        "at": 1793993602879
       },
       {
         "stage": "settings",
-        "ms": 206,
-        "at": 1793992394279
+        "ms": 216,
+        "at": 1793993602881
       },
       {
         "stage": "library",
-        "ms": 211,
-        "at": 1793992394284
+        "ms": 222,
+        "at": 1793993602887
       },
       {
         "stage": "interface",
-        "ms": 255,
-        "at": 1793992394328
+        "ms": 264,
+        "at": 1793993602929
       },
       {
         "stage": "committed",
-        "ms": 414,
-        "at": 1793992394486
+        "ms": 574,
+        "at": 1793993603239
       },
       {
         "stage": "ready",
-        "ms": 414,
-        "at": 1793992394487
+        "ms": 575,
+        "at": 1793993603240
       },
       {
         "stage": "shown",
-        "ms": 422,
-        "at": 1793992394495
+        "ms": 583,
+        "at": 1793993603248
       }
     ],
     "splashCaptured": true,
     "errors": [],
-    "overflow": false
+    "overflow": false,
+    "downloadCopy": {
+      "connectionLabel": "Concurrent download connections",
+      "rangeHelp": "All tasks and file segments share this connection limit. Files of at least 32 MiB use up to 4 ranges when supported, with automatic fallback. Speed gains depend on the source and network. Reduce concurrency on unstable connections.",
+      "visible": true
+    }
   }
 ]

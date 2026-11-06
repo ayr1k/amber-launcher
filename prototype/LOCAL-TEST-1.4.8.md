@@ -50,8 +50,8 @@ this document authorizes a merge, stable Release or Pages deployment.
 Windows, Node 24.22.1, pnpm 11.25.0, Electron 45.0.0. Synthetic temporary profiles
 and temporary download roots only; no personal accounts, libraries or worlds.
 
-- Full regression: 513/513 passed, no skips (494 existing + 19 task checks).
-- Build, four Sites compatibility checks, 2,481 bilingual messages and source
+- Full regression: 516/516 passed, no skips (494 existing + 22 task checks).
+- Build, four Sites compatibility checks, 2,483 bilingual messages and source
   checks passed. The existing large JavaScript bundle warning remains.
 - Native Electron startup/IPC smoke passed. See the review timing evidence below
   for the corrected startup handoff; the earlier 1,630 ms readiness observation
@@ -116,6 +116,18 @@ Current timing, first-frame screenshots and rerun theme evidence are stored in
 `ambere-startup148.json` and their screenshots remain historical evidence from
 the first delivery; they are not presented as measurements of this correction.
 CI results and exact-head packaged smoke are recorded separately in the PR.
+
+The final localization correction adds the two download settings messages to
+the formal catalog. Those two UI calls now use the existing `translateText`
+form so the required catalog checker covers them; the global `th()` contract is
+unchanged. Three targeted tests check Chinese, English and a partial custom
+language's English fallback. Desktop QA now scrolls to the actual connection
+label/range explanation and asserts exact visible text before its screenshot.
+Both editions reran all three theme/language/size cases after this correction.
+The timing, failure, onboarding/tray and download performance evidence above
+was retained from `8d8848a` because this final patch changes only language text,
+its UI translation calls and verification; full regression and CI packaging
+were rerun for the final commit.
 
 ## Same-condition download measurements
 
