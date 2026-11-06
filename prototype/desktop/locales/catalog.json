@@ -9782,5 +9782,102 @@
   "guide.quilt": {
     "zh": "Quilt",
     "en": "Quilt"
-  }
+  },
+    "entry.title": {
+        "zh": "我已经在玩 Minecraft",
+        "en": "I already play Minecraft"
+    },
+    "entry.copy": {
+        "zh": "导入会创建新的独立实例，保留原目录或压缩包。以后两边的存档和设置不会自动同步。",
+        "en": "Import creates a new independent instance and retains the original folder or archive. Worlds and settings will not sync between the two copies."
+    },
+    "entry.folder": {
+        "zh": "导入现有游戏目录",
+        "en": "Import an existing game folder"
+    },
+    "entry.folderNote": {
+        "zh": "选择 .minecraft 后检查识别出的版本、实际游戏目录和要复制的内容，再确认导入。PCL / HMCL 等启动器的目录布局需要逐项确认；未识别的配置不会直接执行。",
+        "en": "Choose .minecraft, then review the detected version, actual game folder and selected content before importing. Check layouts from launchers such as PCL / HMCL individually; unrecognized profiles are not executed."
+    },
+    "entry.pack": {
+        "zh": "导入本地整合包",
+        "en": "Import a local modpack"
+    },
+    "entry.packNote": {
+        "zh": "支持 Modrinth MRPACK 和受支持的内容 ZIP；先检查格式和文件清单。备份、模组清单及其他格式会显示各自的处理提示。",
+        "en": "Supports Modrinth MRPACK and supported content ZIP files. Review the detected format and file list first. Backups, mod lists and other formats receive their own guidance."
+    },
+    "entry.account": {
+        "zh": "账号、登录凭据不会随游戏目录导入。启动游戏仍需按当前版本的账号规则配置账号；导入可能需要下载缺少的游戏文件。",
+        "en": "Accounts and login credentials are not imported from game folders. Launching still requires an account under this edition’s rules; missing game files may need downloading."
+    },
+    "entry.later": {
+        "zh": "稍后导入",
+        "en": "Import later"
+    },
+    "feedback.title": {
+        "zh": "反馈问题",
+        "en": "Report a problem"
+    },
+    "feedback.intro": {
+        "zh": "描述你做了什么、希望发生什么以及实际遇到的问题。可以不提供诊断信息。",
+        "en": "Describe what you did, what you expected and what happened. Diagnostics are optional."
+    },
+    "feedback.start": {
+        "zh": "填写反馈",
+        "en": "Write feedback"
+    },
+    "feedback.hide": {
+        "zh": "收起反馈（本次草稿保留）",
+        "en": "Hide feedback (keep this draft)"
+    },
+    "feedback.steps": {
+        "zh": "操作步骤",
+        "en": "Steps to reproduce"
+    },
+    "feedback.expected": {
+        "zh": "预期结果",
+        "en": "Expected result"
+    },
+    "feedback.actual": {
+        "zh": "实际结果或错误",
+        "en": "Actual result or error"
+    },
+    "feedback.previewDiagnostics": {
+        "zh": "检查可选诊断摘要",
+        "en": "Inspect optional diagnostics"
+    },
+    "feedback.include": {
+        "zh": "附上上方已检查的诊断摘要",
+        "en": "Include the diagnostics inspected above"
+    },
+    "feedback.privacy": {
+        "zh": "诊断摘要不包含账号、令牌、实例名称、本地路径或原始日志。你填写的文字仍可能含有个人信息，请在分享前检查。",
+        "en": "Diagnostics exclude accounts, tokens, instance names, local paths and raw logs. Your own text may still contain personal information; review it before sharing."
+    },
+    "feedback.preview": {
+        "zh": "生成反馈预览",
+        "en": "Preview feedback"
+    },
+    "feedback.review": {
+        "zh": "请检查下面将复制的内容。只有你在 GitHub 上点击提交后，反馈才会公开发布。",
+        "en": "Review the content below before copying. Your feedback is published only when you submit it on GitHub."
+    },
+    "feedback.copy": {
+        "zh": "复制已检查的反馈",
+        "en": "Copy reviewed feedback"
+    },
+    "feedback.open": {
+        "zh": "打开 GitHub 问题页",
+        "en": "Open GitHub issue page"
+    },
+    "feedback.copied": {
+        "zh": "已复制。打开问题页后粘贴并补充标题；需要 GitHub 账号。打开失败时仍可保留这份文本。",
+        "en": "Copied. Paste into the issue page and add a title; a GitHub account is required. Keep this text if the page cannot open."
+    },
+    "entry.choose": {"zh":"选择你的开始方式","en":"Choose how to get started"},
+    "entry.chooseNote": {"zh":"可以创建新实例，也可以导入已有游戏或本地整合包。所有入口稍后仍可在实例管理中找到。","en":"Create a new instance or import an existing game or local modpack. These options remain available from instance management later."}
+,
+    "entry.resume": {"zh":"继续选择游戏：创建或导入","en":"Continue to create or import a game"},
+    "entry.resumeNote": {"zh":"首次引导尚未完成。账号准备好后，可继续创建实例或导入已有游戏；也可以稍后再设置账号。","en":"Setup is not finished. When your account is ready, continue to create an instance or import an existing game. You can also finish account setup later."}
 }

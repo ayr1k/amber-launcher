@@ -37,3 +37,14 @@
 .app .form-grid .check-setting{grid-column:1/-1;flex-direction:row}
 @media(max-width:700px){.desktop-app .sidebar .primary-nav{min-width:0;overflow-x:auto;overscroll-behavior-x:contain}.desktop-app .topbar{position:sticky;top:0;z-index:30;background:var(--surface)}}
 @media(min-width:1201px) and (max-width:1600px){.desktop-app.nav-top .topbar{flex-wrap:wrap;padding-top:8px}.desktop-app.nav-top .topbar>.primary-nav{order:4;flex-basis:100%;justify-content:center}.desktop-app.nav-top{grid-template-rows:auto minmax(0,1fr)}.desktop-app.nav-top .topbar .window-controls{align-self:flex-start}}
+
+.feedback-panel fieldset{border:0;padding:0;margin:20px 0;min-width:0;display:grid;gap:16px}
+.feedback-panel textarea{width:100%;min-height:90px;resize:vertical;box-sizing:border-box;color:var(--text);background:var(--surface);border:1px solid var(--line);padding:10px;font:inherit}
+.feedback-panel .field{display:grid;gap:8px}
+
+.existing-game-import .dialog-body>section{margin:20px 0}
+.existing-game-import h3{margin:0 0 8px}
+.existing-game-import section p{margin:0 0 12px}
+
+.onboarding-resume{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px 0;margin-bottom:24px;border-bottom:1px solid var(--line)}
+.onboarding-resume p{flex:1 1 280px;margin:0;line-height:1.6}
