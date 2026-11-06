@@ -12,10 +12,10 @@ export function StoragePanel({ onBusy }) {useLocale();
   async function move() {setBusy(true);onBusy?.(true);setError('');try {await api.moveStorage(target.token);} catch (e) {setError(e.message);setBusy(false);onBusy?.(false);}}
   return <section className="native-section storage-panel"><h2>{translateText("游戏数据位置")}</h2><p>{translateText("实例、存档、Java、下载缓存和备份集中保存在这里。")}</p>{info && <><code>{info.path}</code><p>{translateText("所在磁盘可用空间：")}{(info.freeBytes / 1073741824).toFixed(1)} GB</p></>}<ControlButton className="button secondary" disabled={busy} onClick={choose}>{translateText("选择新的空文件夹…")}</ControlButton>{target && <div className="content-feedback"><p>{translateText("新位置：")}<code>{target.path}</code></p><p>{translateText("复制并校验成功后自动重启。旧目录保留，不覆盖目标文件。请先退出所有游戏；迁移期间请勿修改数据目录。")}</p><ControlButton className="button" disabled={busy} onClick={move}>{busy ? translateText("正在复制并校验，请勿退出…") : translateText("迁移数据并重启 AMBER")}</ControlButton><ControlButton className="text-button" disabled={busy} onClick={() => setTarget(null)}>{translateText("取消")}</ControlButton></div>}{error && <p className="error" role="alert">{translateMessage(error)}</p>}</section>;
 }
-export function Onboarding({ onDone }) {useLocale();
+export function Onboarding({ onDone, initialStep = 0 }) {useLocale();
   const modal = useRef(null);useEffect(() => {modal.current?.showModal();}, []);
-  const [step, setStep] = useState(0),[name, setName] = useState(''),[busy, setBusy] = useState(false),[error, setError] = useState('');
-  async function finish(destination) {setBusy(true);try {await window.amberDesktop.completeOnboarding();onDone(destination);} catch (e) {setError(e.message);setBusy(false);}}
+  const [step, setStep] = useState(initialStep),[name, setName] = useState(''),[busy, setBusy] = useState(false),[error, setError] = useState('');
+  async function finish(destination) {setBusy(true);try {if(destination !== 'accounts') await window.amberDesktop.completeOnboarding();onDone(destination);} catch (e) {setError(e.message);setBusy(false);}}
   async function account() {setBusy(true);try {await window.amberDesktop.addOffline(name);localStorage.setItem('amber.offline-name', name);setStep(2);} catch (e) {setError(e.message);} finally {setBusy(false);}}
   useEffect(() => {modal.current?.querySelector('#welcome-title')?.focus();}, [step]);
   const validName = /^[A-Za-z0-9_]{3,16}$/.test(name);

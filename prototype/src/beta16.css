@@ -45,3 +45,6 @@
 .existing-game-import .dialog-body>section{margin:20px 0}
 .existing-game-import h3{margin:0 0 8px}
 .existing-game-import section p{margin:0 0 12px}
+
+.onboarding-resume{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px 0;margin-bottom:24px;border-bottom:1px solid var(--line)}
+.onboarding-resume p{flex:1 1 280px;margin:0;line-height:1.6}

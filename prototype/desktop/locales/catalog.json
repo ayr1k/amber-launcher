@@ -9877,4 +9877,7 @@
     },
     "entry.choose": {"zh":"选择你的开始方式","en":"Choose how to get started"},
     "entry.chooseNote": {"zh":"可以创建新实例，也可以导入已有游戏或本地整合包。所有入口稍后仍可在实例管理中找到。","en":"Create a new instance or import an existing game or local modpack. These options remain available from instance management later."}
+,
+    "entry.resume": {"zh":"继续选择游戏：创建或导入","en":"Continue to create or import a game"},
+    "entry.resumeNote": {"zh":"首次引导尚未完成。账号准备好后，可继续创建实例或导入已有游戏；也可以稍后再设置账号。","en":"Setup is not finished. When your account is ready, continue to create an instance or import an existing game. You can also finish account setup later."}
 }

@@ -12,6 +12,10 @@ Open the PR's **PR test installers** check, then download its `pr-test-installer
 
 ## Manual acceptance
 
+**Installation/data warning:** these test installers share the same application identity and user data as the corresponding stable edition (`io.github.ayr1k.amber` / `%APPDATA%/AMBER`, `io.github.ayr1k.ambere` / `%APPDATA%/AmberE`). Installing a test build may replace the stable installation. An alternative installation directory does not isolate data. The `local` channel only changes update-channel behavior; it is not a sandbox. The configured game library may live outside `%APPDATA%` and is reused. For isolated manual testing, use a separate Windows user and disposable game copies; otherwise back up both the edition's user-data directory and configured game library before installing. Packaged installers ignore `--qa-ui`; that isolation flag is only for the unpackaged QA runner.
+
+Choosing account setup on onboarding step 2 now temporarily leaves onboarding without marking it complete. A persistent “Continue to create or import a game” action on the account page returns directly to step 3, including after reloading/restarting. Test this path in both editions as well as skipping account setup. The optional `scripts/qa-onboarding-feedback.cjs` runner verifies this using isolated synthetic profiles; set `AMBER_PLAYWRIGHT` to a QA Playwright module and optionally `AMBER_QA_STAGE` to an unpackaged edition stage.
+
 1. Use Settings → Storage → onboarding to reopen onboarding, or use a fresh isolated test profile. On step 3 choose “I already play Minecraft”. Check both routes, cancellation and returning to normal instance management. Existing creation and skip options should still work.
 2. With a disposable supported `.minecraft` folder, inspect the detected version and actual game directory, select content, and import. Confirm the source remains unchanged and imported saves/settings are independent. Do not infer PCL/HMCL compatibility from a launcher name: inspect each actual layout. Their real-world layouts were not newly certified by this task.
 3. Try a supported MRPACK/content ZIP and an unsupported archive. Confirm the existing format guidance, file review and recovery remain available.
@@ -26,6 +30,10 @@ Local regression suite: 464 passed, 0 failed. Build, locale validation, source c
 ---
 
 # 现有游戏引导与反馈验收
+
+**安装与数据说明：测试包和同名正式版共享应用身份、安装识别和用户数据。** AMBER 使用 `io.github.ayr1k.amber` 与 `%APPDATA%/AMBER`，AmberE 使用 `io.github.ayr1k.ambere` 与 `%APPDATA%/AmberE`。测试安装可能替换正式安装；选择其他安装目录也不会隔离数据。`local` 仅表示测试更新渠道，并非沙箱；已配置到其他磁盘的游戏库仍会被使用。建议使用独立 Windows 用户和可丢弃的游戏副本验收；否则先备份对应版本的用户数据目录及实际游戏库。打包后的程序忽略 `--qa-ui`，该参数仅供未打包的隔离 QA 使用。
+
+第 2 步进入账号页现在只会暂时离开引导，不会标记完成。页面保留“继续选择游戏：创建或导入”，重启后仍可继续，点击后直接进入第 3 步。请在 AMBER 和 AmberE 中同时验证该路径及跳过账号的原路径。
 
 AMBER 与 AmberE 共用本次改动。首次引导第三步增加“我已经在玩 Minecraft”，可进入现有游戏目录或本地整合包导入。原文件保留，导入副本独立，账号规则保持各版本原有约束。
 
