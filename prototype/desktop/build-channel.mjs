@@ -1,1 +1,1 @@
-export const BUILD_CHANNEL='local';
+export const BUILD_CHANNEL='public';

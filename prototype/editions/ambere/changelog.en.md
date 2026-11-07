@@ -1,3 +1,11 @@
+## 1.5.4
+
+- Extend storage scanning to room synchronization data, server instances and server recycle storage. Deduplicate hardlinked file identities; show bounded logical bytes, reclaimable verified update files and protected activity without claiming allocated disk usage or guaranteed freed space.
+- Clean only complete updater downloads with valid receipts, matching SHA-256/size/product/filename and versions no newer than the installed version. Show exact files and consequences before confirmation; revalidate at execution and report cancellation, partial completion and failures. Keep old downloads without receipts, partial/newer/unknown files and protected recovery data.
+- Keep instances, worlds, backups, databases, shared runtimes, recycle bins and room recovery files protected. Active tasks or a ready update installer block update-cache cleanup. No automatic cleanup or general content/loader-cache deletion is added.
+- Clear installed-content selection when filters or instances change; select-all acts on available entries in the current filtered result, retaining the 200-item batch limit and existing confirmations. Fix explicit single-row removal of missing records and invalidate stale or delayed previews after filter changes.
+- Remember independent instance/content/task list density, add task name/phase search, align storage information columns, place shared-environment import below the instance heading, and prevent blank density-row space from opening selectors. Preserve keyboard controls, themed appearance and account policies.
+
 ## 1.5.3
 
 - Extend explicit room content selection to resource/shader ZIPs and nested text configuration alongside mods. ZIPs remain intact and are not automatically enabled. Preserve original-platform restrictions, host privacy/redistribution review and explicit guest confirmation.

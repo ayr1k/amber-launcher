@@ -1,3 +1,9 @@
+# 1.5.4 formal release
+
+PR #9 merged as `5265ddb05709b4d20301fb5bcb2ebed57d82fc0e`, accepted task head `0687c46e9f787438d5726b751259de7f8eab30de`. The user requested formal release on 2026-11-07. Official packages use **1.5.4/public**. Candidate restrictions and review requests below remain historical evidence, not the current authorization. Content review belongs to separate tasks and Dot and is not repeated here. RELEASE-ACCEPTANCE.md records formal release verification.
+
+PR #9 已合并且用户已授权完整正式发布；正式包为 **1.5.4/public**。下方候选限制与待审核描述保留历史归属；当前发布沿用既有独立任务／Dot 审核及用户验收。
+
 # AMBER / AmberE 1.5.4 task candidate
 
 Branch: `codex/1.5.4-storage-lists`. Base: `61d95e1` (published 1.5.3). Version 1.5.4, local test channel. This task does not authorize merging, stable Releases or Pages deployment. Both editions share these changes and retain their account, data and update identities.

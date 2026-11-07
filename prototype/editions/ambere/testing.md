@@ -1,3 +1,11 @@
+# 1.5.4 release verification
+
+Approved baseline: merged PR #9 (`5265ddb05709b4d20301fb5bcb2ebed57d82fc0e`), accepted task head `0687c46e9f787438d5726b751259de7f8eab30de`. Storage maintenance, filtered lists and accepted layout fixes remain unchanged. Existing independent task/Dot review and user acceptance are reused; this release adds no repeated content/UI review. Historical candidate restrictions below do not supersede the user's 2026-11-07 formal release instruction.
+
+The release run passed **659/659 regressions with zero skips**, four static-serving checks, 2,857 bilingual-message checks, production build and source/license checks. Formal verification covers clean build provenance, version 1.5.4/public, independent product identity, packaged Windows startup/IPC, all-platform archive consistency and runtime notices, complete source manifests, SHA-256 and public Release/Pages results. The final release commit adds the generated source manifest without changing the application build source. Existing acknowledgements retain their original 1.5.2 attribution; private test assets and injected credentials are excluded from public source.
+
+Task evidence covers isolated synthetic storage files, real temporary hardlinks/junctions, injected permission/task failures, missing-record confirmation and stale-preview rejection, filtered selections and layout/density controls. It is retained with its original revision attribution. No real personal library was cleaned, and synthetic checks do not certify real-world gameplay/accounts, every custom theme/DPI, actual upgrade installation, native non-Windows desktop or physical disk-space accounting. Cleanup only accepts complete receipt/hash/product/version-verified updater files; recovery data and uncertain caches stay protected. FreeBSD is experimental server/tools-only; packages remain unsigned and macOS is not notarized.
+
 # 1.5.3 release verification
 
 Approved baseline: merged PR #8 (`bc07ca5869f59c6bb29c323303b99f404644737e`), reviewed head `1ac4009c1a7c3e6bb7d2f9236850673f839f581b`. The expanded room sharing/recovery implementation is unchanged. Content/UI review relies on existing separate task/Dot evidence, without a new release-chat content gate. Candidate restrictions below remain historical records; formal 1.5.3/public publication was authorized on 2026-11-07.

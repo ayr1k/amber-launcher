@@ -95,3 +95,7 @@ Sharing is off by default. Enabling it exposes the explicitly selected snapshot 
 ## Persistent room recovery (1.5.3)
 
 Local revision history is bound to the room name and host public key; it stores no invitation token or account data. Verified caches, interrupted transfer fragments and preserved instances can remain on disk across restarts. They are not automatically cleaned up. Selected archives/configuration may contain personal information: hosts must inspect them before sharing. Revocation prevents further access, but cannot erase already received copies.
+
+## Update cleanup receipts (1.5.4)
+
+Verified application updates record local filename, size, SHA-256, version and product receipts. These small provenance records remain after eligible installer cleanup. Storage scans and cleanup stay local, require explicit action/confirmation, and do not upload file listings or delete accounts, worlds or protected recovery data.
