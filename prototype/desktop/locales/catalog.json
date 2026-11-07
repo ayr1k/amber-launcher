@@ -11430,5 +11430,185 @@
   "mf3ce7735a9a6": {
     "zh": "数据库仍在运行",
     "en": "Database still active"
+  },
+  "mef7fd7e4e4da": {
+    "zh": "导入已有 .minecraft",
+    "en": "Import existing .minecraft"
+  },
+  "m37e4dac6d5a3": {
+    "zh": "复制所选游戏数据到新实例，保留原目录。账号、登录凭据和自定义启动命令不会导入。",
+    "en": "Copy selected game data to a new instance, keeping the source. Accounts, credentials and custom launch commands are excluded."
+  },
+  "m1ff987df21f3": {
+    "zh": "选择 .minecraft 文件夹…",
+    "en": "Choose .minecraft folder…"
+  },
+  "mb15c63240e6b": {
+    "zh": "版本 / 启动配置",
+    "en": "Version / launcher profile"
+  },
+  "mb6596022eb48": {
+    "zh": "无可识别配置",
+    "en": "No recognized profiles"
+  },
+  "m42e0d42f7175": {
+    "zh": "无法识别的配置",
+    "en": "Unrecognized profiles"
+  },
+  "m42bdb08599da": {
+    "zh": "来源版本标识：",
+    "en": "Source version ID: "
+  },
+  "m716e70e1259b": {
+    "zh": "加载器：",
+    "en": "Loader: "
+  },
+  "m2b49a974c0db": {
+    "zh": "游戏数据来源",
+    "en": "Game data source"
+  },
+  "mda8b21cbca34": {
+    "zh": "请选择实际游戏目录",
+    "en": "Choose the actual game directory"
+  },
+  "m10afd8fdb819": {
+    "zh": "选择其他游戏数据目录…",
+    "en": "Choose another game data directory…"
+  },
+  "m2f03a4634a5f": {
+    "zh": "共享目录可能由多个启动配置共用。请核对来源和所选内容；不确定时选择实际使用的隔离目录。",
+    "en": "Several launcher profiles may share this directory. Check the source and selected content; if unsure, choose the isolated directory actually used by the game."
+  },
+  "m3b768aef42f0": {
+    "zh": "确认 Minecraft 基础版本",
+    "en": "Confirm the base Minecraft version"
+  },
+  "m681bf43d2290": {
+    "zh": "请根据原启动器确认版本",
+    "en": "Confirm the version using the original launcher"
+  },
+  "m8bfc11ae0863": {
+    "zh": "新实例名称",
+    "en": "New instance name"
+  },
+  "mf68acd0cfc1e": {
+    "zh": "复制的内容",
+    "en": "Content to copy"
+  },
+  "me6a0d77ad9c5": {
+    "zh": "正在检查版本与所选文件…",
+    "en": "Checking the version and selected files…"
+  },
+  "mcead88e5463e": {
+    "zh": "实际复制来源：",
+    "en": "Actual copy source: "
+  },
+  "med1e0bf09035": {
+    "zh": "检测到多个可能目录，请先选择实际游戏目录。",
+    "en": "Multiple possible directories were found. Choose the actual game directory first."
+  },
+  "med082db55f47": {
+    "zh": "所选内容中没有文件：可能未选择内容、目录尚未使用，或实际数据在其他位置。这不代表数据已完整迁移。",
+    "en": "No files were found in the selected content: nothing may be selected, the directory may be unused, or the data may be elsewhere. This does not mean your data has been fully migrated."
+  },
+  "m6f6045cd480f": {
+    "zh": "确认不复制游戏数据，仅创建运行环境",
+    "en": "Confirm: create the runtime without copying game data"
+  },
+  "m445cc97d36da": {
+    "zh": "已核对数据来源，原游戏已退出，导入期间不修改源文件。",
+    "en": "I have checked the source, closed the original game, and will leave source files unchanged during import."
+  },
+  "m088badb8c6f6": {
+    "zh": "重新预览",
+    "en": "Refresh preview"
+  },
+  "madec8f96b067": {
+    "zh": "仅创建运行环境",
+    "en": "Create runtime only"
+  },
+  "mcc1bbdc29d2e": {
+    "zh": "复制并安装",
+    "en": "Copy and install"
+  },
+  "m8c3c0371e391": {
+    "zh": "共享游戏目录",
+    "en": "Shared game directory"
+  },
+  "ma85d9e0bd6d1": {
+    "zh": "版本隔离目录",
+    "en": "Isolated version directory"
+  },
+  "m77bf7aa3f871": {
+    "zh": "配置指定目录",
+    "en": "Configured directory"
+  },
+  "mb1a556f9791b": {
+    "zh": "手动选择目录",
+    "en": "Selected directory"
+  },
+  "m4ab9ff658be3": {
+    "zh": "选择游戏数据目录",
+    "en": "Choose game data directory"
+  },
+  "m4f0e717acd59": {
+    "zh": "版本 JSON 无效或过大。",
+    "en": "The version JSON is invalid or too large."
+  },
+  "maf1a0b69eaf3": {
+    "zh": "版本元数据结构损坏。",
+    "en": "The version metadata structure is damaged."
+  },
+  "m44a9e4f2da3f": {
+    "zh": "加载器元数据冲突或无效。",
+    "en": "Loader metadata conflicts or is invalid."
+  },
+  "m05aceeb4a3bf": {
+    "zh": "游戏数据目录配置无效。",
+    "en": "The game data directory configuration is invalid."
+  },
+  "m90035cbf8eec": {
+    "zh": "无法连接官方版本目录，请检查网络后重试。",
+    "en": "The official version catalog could not be reached. Check the network and retry."
+  },
+  "m3cb7f9c1210f": {
+    "zh": "基础版本证据不足或冲突，请确认 Minecraft 版本。",
+    "en": "Base version evidence is missing or conflicting. Confirm the Minecraft version."
+  },
+  "ma8c32f3cd6e1": {
+    "zh": "无法连接加载器目录，请检查网络后重试。",
+    "en": "The loader catalog could not be reached. Check the network and retry."
+  },
+  "m2cc867e259f0": {
+    "zh": "所选基础版本与加载器组合不受支持。",
+    "en": "The selected base version and loader combination is unsupported."
+  },
+  "med0dfff60107": {
+    "zh": "源文件已变化，请重新预览。",
+    "en": "Source files changed. Refresh the preview."
+  },
+  "m7ee06c7ad026": {
+    "zh": "源版本配置已变化，请重新选择目录。",
+    "en": "Source version configuration changed. Choose the directory again."
+  },
+  "m1b2f2a155d01": {
+    "zh": "预览已失效，请重新预览。",
+    "en": "The preview expired. Refresh the preview."
+  },
+  "m51a83ee3af10": {
+    "zh": "请先确认游戏数据目录。",
+    "en": "Confirm the game data directory first."
+  },
+  "mab811b1087eb": {
+    "zh": "未找到所选内容，请确认仅创建运行环境。",
+    "en": "No selected content was found. Confirm that only the runtime should be created."
+  },
+  "md2a3b59966d0": {
+    "zh": "原配置的游戏数据目录不存在或已搬迁，请选择实际目录。",
+    "en": "The configured game data directory is missing or has moved. Choose the actual directory."
+  },
+  "m65cafd3210e7": {
+    "zh": "无法读取原配置的游戏数据目录，请检查权限或选择实际目录。",
+    "en": "The configured game data directory cannot be read. Check permissions or choose the actual directory."
   }
 }

@@ -220,6 +220,7 @@ app.whenReady().then(async () => {
   const minecraftImport=new MinecraftImport(core);
   handle('amber:minecraft-import',async(action,...args)=>{
    if(action==='pick'){const r=await dialog.showOpenDialog(window,{title:'选择原版 .minecraft / Select original .minecraft',properties:['openDirectory']});return r.canceled?null:minecraftImport.scan(r.filePaths[0]);}
+   if(action==='pick-data'){const r=await dialog.showOpenDialog(window,{title:translateMessage('选择游戏数据目录'),properties:['openDirectory']});return r.canceled?null:minecraftImport.chooseDirectory(args[0],args[1],r.filePaths[0]);}
    if(action==='preview')return minecraftImport.preview(...args);
    if(action==='create')return minecraftImport.create(...args);
    if(action==='status')return minecraftImport.status();
