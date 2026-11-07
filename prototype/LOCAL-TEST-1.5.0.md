@@ -1,3 +1,9 @@
+# 1.5.0 formal release
+
+PR #5 was merged as `9e5ee8facf4e1db933bb7713b9b545c958434bb7`, with reviewed task head `8c81d4da8f58cebd5f27f23307dbf3f86fe08c6d`. The user authorized the complete formal release on 2026-11-06. Official installers use **1.5.0 / public**. The task-candidate instructions below are historical evidence, not the current publication authorization or official installer provenance. Release checks are recorded in RELEASE-ACCEPTANCE.md. Content review and detailed database/UI acceptance rely on the existing independent task review and Dot records, including their explicitly reused evidence and limits.
+
+PR #5 已合并，用户已授权完整正式发布。正式包为 **1.5.0 / public**；下方任务候选说明保留为历史记录，不代表当前发布授权或正式包来源。发布验证见 RELEASE-ACCEPTANCE.md，内容、数据库与界面验收沿用独立任务及 Dot 的记录和边界。
+
 # 1.5.0 task test build / 任务测试包
 
 This task stops at a draft PR and test installers. It does not authorize merging, a stable Release, or GitHub Pages deployment. Final test evidence and installer hashes belong in the PR and its workflow artifacts; a versioned filename alone is not provenance. `desktop/build-provenance.json` records commit, dirty state, product, channel and workflow.

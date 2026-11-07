@@ -1,3 +1,12 @@
+## 1.5.0
+
+- Add instance port records and optional local MySQL Community 8.4.13. Share the verified program while keeping each instance's process, data, port and encrypted credentials separate. Provide initialization, start/stop, connection details, logs, stopped-database backups and recovery; download the Windows x64 database component on demand rather than bundling it.
+- Preserve independent database backups through instance deletion, migrate verified older backups safely, and restore orphaned backups into a stopped empty recovery instance. Recovery preserves replaced data and requires the original OS credential context; ordinary server snapshots/copies exclude databases.
+- Manage independent Sakura tunnel associations, logs and lifecycle; create/delete remote tunnels with explicit confirmation, provider capacity checks and reconciliation for uncertain results. Removing a local association and deleting a remote tunnel remain separate operations. Windows configuration replacement retries only transient EPERM/EBUSY errors within a bounded interval.
+- Add account details, independent 3D skin preview, supported user-initiated skin upload and locally observed play statistics. Offline renaming retains UUIDs; historical unattributed sessions are not reassigned. AmberE retains its separate account policy and contains no Microsoft sign-in, upload bridge or built-in Microsoft Client ID.
+- Add an offline enchantment-order calculator with a pinned data snapshot and retained licenses. It supports fresh Java-style survival equipment/books, at most ten enchantments and a 39-level per-operation limit; it does not model prior-work penalties, existing enchantments, repair/rename, Bedrock or modded rules.
+- Publish both products for Windows x64, macOS Intel/Apple Silicon, Linux x64 and experimental FreeBSD, with source and SHA-256. Native non-Windows desktop acceptance and real account uploads/Sakura remote operations remain outside verified scope; FreeBSD is server/tools-only.
+
 ## 1.4.8
 
 - Show a lightweight startup window before loading the main application. Status follows actual data-location checks, recovery, account/settings loading and interface preparation. Reveal the main window after initial data, locale and React commit are ready, without a minimum animation delay or waiting for hidden-window animation frames. Preserve existing recovery choices, error reporting and single-instance behavior.

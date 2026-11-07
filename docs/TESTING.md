@@ -1,3 +1,11 @@
+# 1.5.0 release verification
+
+The approved source is merged AMBER PR #5 (`9e5ee8facf4e1db933bb7713b9b545c958434bb7`), reviewed task head `8c81d4da8f58cebd5f27f23307dbf3f86fe08c6d`. Content, functional, database and UI review relies on the separate task/Dot acceptance and explicitly reused records in PR #5 and LOCAL-TEST-1.5.0.md; it is not repeated as another release gate. Release preparation changes documentation and source-export coverage only.
+
+This release run passed **570/570 regressions without skips**, four static-serving tests, 2,812 bilingual-message checks, production builds and source/license checks. Formal package validation checks clean build provenance, version 1.5.0, public channel, separate product identities and packaged Windows startup/IPC. Platform archives, runtime notices, source manifests, SHA-256 and public download links are verified before completing publication. Official package build-provenance.json identifies its clean source commit; the release commit may additionally update the generated source manifest without changing application code.
+
+Existing task evidence covers real isolated Oracle processes and database recovery, multi-theme desktop checks, account/skin/tools paths and synthetic provider operations. It remains attributed to its original revisions; this release does not claim to have repeated those content checks. No real Microsoft/third-party skin upload, production Sakura create/delete, provider-node or public TCP/UDP acceptance is claimed. Native non-Windows desktop execution, all GPUs/custom themes and the installer upgrade wizard remain outside verified scope. MySQL preparation supports Windows x64 and downloads Oracle's program on demand; it is not bundled. FreeBSD is experimental server/tools-only. Packages are unsigned and macOS is not notarized. Public source excludes injected credentials and private test assets.
+
 # 1.4.8 release verification
 
 Release baseline: merged AMBER PR #4 (`5426477ddd428175851946fae60506c0be50d4c7`), reviewed task head `2bec3e53c866920cfa53e1d7ab1717fe04dba6b9`. The release uses the accepted startup/download implementation unchanged. Content, UI, timing and benchmark acceptance is provided by the task reviewers and Dot, as recorded in LOCAL-TEST-1.4.8.md and docs/evidence; it is not repeated as an additional release gate.

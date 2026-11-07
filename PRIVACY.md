@@ -79,3 +79,7 @@ Task names, target server identifiers, frequency, console commands and last resu
 ## Startup appearance cache (1.4.8)
 
 The small local startup cache stores display preferences and localized loading labels only. It does not choose a game-library location and is not uploaded. Download ranges contact the selected existing download source; partial fragments remain local until assembly and cleanup.
+
+## Instance services and account tools (1.5.0)
+
+Optional MySQL preparation downloads the pinned program from Oracle. Database credentials remain encrypted locally; each instance binds only to localhost. Independent database backups retain encrypted credentials and may contain plugin/player data; permanent instance deletion does not delete those independent backups. Recovery needs the original OS credential context. Sakura requests contact the configured provider only for requested operations; remote deletion and local removal are distinct. Skin uploads are explicit and go to the corresponding supported account service. Account runtime statistics stay local, retain their original account association, and follow the history privacy switch. The enchantment calculator runs offline.
