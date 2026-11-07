@@ -8,8 +8,8 @@ const assert=require('node:assert/strict');
 (async()=>{
  const root=resolve(__dirname,'..'),stage=resolve(process.env.AMBER_QA_STAGE||root),data=await mkdtemp(join(tmpdir(),'amber-tray147-'));
  const env={...process.env,AMBER_SMOKE_ROOT:data};delete env.ELECTRON_RUN_AS_NODE;
- const app=await electron.launch({executablePath:process.env.AMBER_QA_ELECTRON||join(root,'node_modules/electron/dist/electron.exe'),args:[stage,'--qa-ui'],env});
- const child=app.process();
+ const app=await electron.launch({executablePath:process.env.AMBER_QA_ELECTRON||join(root,'node_modules/electron/dist/electron.exe'),args:process.env.AMBER_QA_PACKAGED?['--qa-ui']:[stage,'--qa-ui'],env});
+ const child=app.process();if(process.env.AMBER_QA_PACKAGED)assert.equal(await app.evaluate(({app})=>app.isPackaged),true);
  try{
   assert.equal(resolve(await app.evaluate(({app})=>app.getPath('userData'))),resolve(data));
   let page;for(let i=0;i<400;i++){page=app.windows().find(p=>p.url().startsWith('amber://app/'));if(page)break;await new Promise(r=>setTimeout(r,50));}if(!page)throw Error('Main window did not load');page.setDefaultTimeout(20000);

@@ -1,3 +1,7 @@
+import {providerSkinCapability150,uploadProviderSkin150} from './provider-skin150.mjs';
+import {MySQL150} from './mysql150.mjs';
+import {Ports150} from './ports150.mjs';
+import {Sakura150} from './sakura150.mjs';
 import {startup} from './startup148.mjs';
 import {ServerSchedules} from './server-schedules147.mjs';
 import {shouldHideToTray} from './tray147.mjs';
@@ -78,7 +82,7 @@ import { importBackground, backgroundPattern } from './backgrounds.mjs';
 const base = dirname(fileURLToPath(import.meta.url));
 const assets = resolve(base, '../dist/client');
 const smoke = process.argv.includes('--smoke-test');
-const qaUI = !app.isPackaged && process.argv.includes('--qa-ui');
+const qaUI = (!app.isPackaged||awaitBuildChannel==='local') && process.argv.includes('--qa-ui');
 let window,activatePending = false;
 let loaded = false,interfaceReady=false;
 const smokeChannels = new Set();
@@ -104,7 +108,7 @@ app.whenReady().then(async () => {
   session.defaultSession.setPermissionRequestHandler((_contents, _permission, callback) => callback(false));
   session.defaultSession.setPermissionCheckHandler(() => false);
   startup.stage('storage');
-  const storage = new Storage(app.getPath('userData'));let storageConfig;let storageBusy=false;
+  const storage = new Storage(app.getPath('userData'));let storageConfig;let storageBusy=false,exitBusy=false;
   while(!storageConfig){try{storageConfig=await storage.validateExisting();}catch(e){if(smoke||qaUI)throw e;const answer=await dialog.showMessageBox({type:'error',title:'游戏数据位置不可用 / Game data unavailable',message:'原数据位置无法读取，未创建空库。请连接原磁盘后重试，或重新选择原数据目录。 / Reconnect the original drive or locate your existing library. No empty library was created.',detail:redact(e.message),buttons:['重试 / Retry','选择原目录 / Locate library','退出 / Quit'],defaultId:0,cancelId:2});if(answer.response===2){app.quit();return;}if(answer.response===1){const pick=await dialog.showOpenDialog({properties:['openDirectory']});if(!pick.canceled)try{await storage.reconnect(pick.filePaths[0]);}catch(err){await dialog.showMessageBox({type:'error',message:redact(err.message)});}}}}
 
   const core = new VanillaLauncher(storageConfig.path);
@@ -129,6 +133,7 @@ app.whenReady().then(async () => {
     ipcMain.handle(channel, async (event, ...args) => {
       const source = new URL(event.senderFrame.url);
       if (event.sender !== window?.webContents || event.senderFrame !== window.webContents.mainFrame || source.protocol !== 'amber:' || source.host !== 'app') throw new Error('请求来源不受信任。');
+      if(exitBusy&&!['amber:window-action','amber:window-state'].includes(channel))throw Error('Launcher closing / 启动器正在退出');
       if (storageBusy && !['amber:info', 'amber:status', 'amber:setup-cancel', 'amber:window-action', 'amber:window-state'].includes(channel)) throw Error('数据目录正在迁移，请等待完成。');
       if (upgradeBusy && !['amber:info', 'amber:status', 'amber:app-update-state', 'amber:window-action', 'amber:window-state'].includes(channel)) throw Error('正在准备升级，请稍候。');
       let result;try {if(IS_AMBERE&&(channel.startsWith('amber:ms-')||channel.startsWith('amber:ownership-')||channel==='amber:account-configure'))accounts.requireMicrosoft();result = await fn(...args);} catch (e) {const problem=errorDescriptor(redact(e.message,accounts.secrets()));throw Error('[AMBER '+problem.code+'] '+problem.text);}result = redactFields(result, accounts.secrets());if (smoke) {smokeChannels.add(channel);finishSmoke();}return result;
@@ -154,10 +159,13 @@ app.whenReady().then(async () => {
   handle('amber:java-prepare', (id) => core.prepareJava(id));
   handle('amber:java-select', (id, path) => core.selectJava(id, path));
   handle('amber:java-browse', async () => {const result = await dialog.showOpenDialog(window, { title: translateMessage('选择 Java 可执行文件'), properties: ['openFile'], ...(process.platform==='win32'?{filters:[{name:'Java',extensions:['exe']}]}:{}) });return result.canceled ? null : core.addJava(result.filePaths[0]);});
-  const servers=await new Servers(core).init(),rooms=new Rooms(core,servers),sakura=new Sakura142(core,servers,credentialCodec(safeStorage));
+  const servers=await new Servers(core).init(),rooms=new Rooms(core,servers),ports150=new Ports150(servers),sakura=new Sakura150(core,servers,credentialCodec(safeStorage),ports150);
+  ports150.inUse=(id,portId)=>sakura.activeFor(id,portId);
+  const mysql150=new MySQL150(core,servers,credentialCodec(safeStorage));
+  mysql150.ports=ports150;servers.portAllocation150=ports150.allocation=fn=>mysql150.withAllocation(fn);ports150.reserved=()=>mysql150.databaseReservations();servers.validatePort150=async(id,port)=>{if((await ports150.conflicts(id,{protocol:'tcp',port},'main')).length)throw Error('Port conflicts with another instance / 端口与其他实例冲突');};await mysql150.recover();
   let schedules;
   const serverUpdates144=new ServerUpdates144(servers);
-  const serverTrash=new ServerTrash143(servers,{connected:id=>rooms.starting||sakura.busy||rooms.active&&rooms.current?.serverId===id||sakura.active&&sakura.current?.serverId===id});
+  const serverTrash=new ServerTrash143(servers,{database:mysql150,connected:id=>rooms.starting||rooms.active&&rooms.current?.serverId===id||sakura.activeFor(id)||mysql150.activeFor(id)});
   const serverEditor=new InstanceEditor({instancePath:id=>servers.dir(id)},{directories:['config','defaultconfigs','plugins','kubejs','scripts'],files:['server.properties','bukkit.yml','spigot.yml','paper.yml','permissions.yml']});
   const resourceTimer=setInterval(()=>servers.sample(),3000);resourceTimer.unref();
   handle('amber:server',async(action,...args)=>{
@@ -173,14 +181,27 @@ app.whenReady().then(async () => {
    if(action==='open'){const dir=await servers.dir(args[0]);return shell.openPath(dir);}
    if(action==='pickJava'){const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Java',extensions:['exe']}]});return r.canceled?null:(await core.addJava(r.filePaths[0]));}
    if(action==='importJar'||action==='importContent'){const r=await dialog.showOpenDialog(window,{properties:action==='importContent'?['openFile','multiSelections']:['openFile'],filters:[{name:'Java archive',extensions:['jar']}]});if(r.canceled)return null;return action==='importJar'?servers.importJar(args[0],r.filePaths[0]):servers.importContent(args[0],r.filePaths);}
+   const mysqlMethods={mysqlState:'state',mysqlInitialize:'initialize',mysqlStart:'start',mysqlStop:'stop',mysqlBackup:'backup',mysqlRestore:'restore',mysqlConnection:'connection',mysqlCancel:'cancel',mysqlResetPreparation:'resetPreparation'};if(Object.hasOwn(mysqlMethods,action))return mysql150[mysqlMethods[action]](...args);
+   if(action==='mysqlBackupLibrary')return mysql150.backupStore.library();
+   if(action==='mysqlRecoverOrphan')return mysql150.backupStore.recover(...args);
+   if(action==='portsList')return ports150.list(...args);
+   if(action==='portsSave')return ports150.save(...args);
+   if(action==='portsRemove')return ports150.remove(...args);
+   if(action==='sakuraToken')return sakura.saveToken(...args);
+   if(action==='sakuraCatalog')return sakura.remote.catalog();
+   if(action==='sakuraReconcile')return sakura.remote.reconcile();
+   if(action==='sakuraClearUncertain'){const answer=await dialog.showMessageBox(window,{type:'warning',message:translateMessage('已在 Sakura 控制台核对远端结果？'),detail:translateMessage('解除待确认状态不会撤销远端操作。再次创建可能产生重复隧道。'),buttons:[translateMessage('取消'),translateMessage('已核对，解除待确认状态')],defaultId:0,cancelId:0});if(answer.response!==1)return null;await sakura.remote.clearUncertain();return {feedback:'已解除待确认状态，请以服务商记录为准。'};}
+   if(action==='sakuraRemoteCreate'){const [id,input]=args,port=await ports150.resolve(id,input.portId);const answer=await dialog.showMessageBox(window,{type:'question',message:translateMessage('创建 Sakura 远端隧道？'),detail:translateMessage('将向 Sakura 提交名称、节点及本机端口，占用该账号的隧道额度。')+'\n'+input.name+' · '+port.protocol.toUpperCase()+' · 127.0.0.1:'+port.port,buttons:[translateMessage('取消'),translateMessage('确认创建远端隧道')],defaultId:0,cancelId:0});if(answer.response!==1)return null;return sakura.remote.create(id,input);}
+   if(action==='sakuraRemoteDelete'){const binding=(await sakura.config()).tunnels.find(t=>t.id===args[0]);if(!binding)throw Error('找不到隧道关联。');const answer=await dialog.showMessageBox(window,{type:'warning',message:translateMessage('永久删除 Sakura 远端隧道？'),detail:binding.name+' · '+binding.tunnel+'\n'+translateMessage('这是服务商端删除，不是仅移除本机关联。远端地址可能无法恢复，其他设备使用此隧道也会受到影响。'),buttons:[translateMessage('取消'),translateMessage('确认删除远端隧道')],defaultId:0,cancelId:0});if(answer.response!==1)return null;return sakura.remote.delete(args[0]);}
+   if(action==='sakuraRemove')return sakura.remove(...args);
    if(action==='sakuraState')return sakura.state(...args);
    if(action==='sakuraDiagnose')return sakura.diagnose(...args);
    if(action==='sakuraSave')return sakura.save(...args);
    if(action==='sakuraInstall')return sakura.install();
-   if(action==='sakuraStart')return servers.locks.run(args[0],()=>sakura.start(...args));
-   if(action==='sakuraStop')return sakura.stop();
+   if(action==='sakuraStart')return sakura.start(...args);
+   if(action==='sakuraStop')return sakura.stop(...args);
    if(action==='sakuraWebsite')return shell.openExternal('https://www.natfrp.com/tunnel/');
-   if(action==='sakuraCopy'){const run=(await sakura.state()).run,address=run?.address;if(!address||!run.connected||!run.targetRunning)throw Error('隧道尚未连通 / Tunnel is not connected');clipboard.writeText(address);return true;}
+   if(action==='sakuraCopy'){const run=(await sakura.state()).tunnels.find(t=>t.id===args[0])?.run,address=run?.address;if(!address||!run.connected||!run.targetRunning)throw Error('隧道尚未连通 / Tunnel is not connected');clipboard.writeText(address);return true;}
    if(action==='networkInstall')return rooms.install();
    if(action==='host')return servers.locks.run(args[0],()=>rooms.host(...args));
    if(action==='join')return rooms.join(...args);
@@ -300,6 +321,10 @@ app.whenReady().then(async () => {
   handle('amber:editor-list',id=>editor130.list(id));
   handle('amber:editor-read',(id,name)=>editor130.read(id,name));
   handle('amber:editor-save',(id,input)=>editor130.save(id,input));
+  handle('amber:provider-skin-capability',id=>providerSkinCapability150(accounts,id));
+  handle('amber:provider-upload-skin',async(id,model)=>{const capability=await providerSkinCapability150(accounts,id);if(!capability.supported)throw Error('服务商未声明支持此角色的皮肤上传。');const pick=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'PNG skin',extensions:['png']}]});if(pick.canceled)return null;const bytes=await readBoundedFile(pick.filePaths[0],1_000_000,{binary:true});skinDimensions(bytes);const image=nativeImage.createFromBuffer(bytes);if(image.isEmpty())throw Error('Invalid PNG skin');const confirm=await dialog.showMessageBox(window,{type:'question',message:translateMessage('将所选皮肤上传到此账号的服务商？')+'\n'+capability.origin,buttons:[translateMessage('取消'),translateMessage('上传')],defaultId:0,cancelId:0});if(confirm.response!==1)return null;const result=await uploadProviderSkin150(accounts,id,image.toPNG(),model);await accountSkin(accounts,id,true);return {...result,feedback:translateMessage('服务商已接受上传，已请求刷新皮肤。')};});
+  handle('amber:account-provider-site',id=>{const account=accounts.data.accounts.find(a=>a.id===id&&a.type==='yggdrasil');if(!account)throw Error('Third-party account not found');const url=new URL(account.server);if(url.protocol!=='https:'||url.username||url.password)throw Error('Invalid provider');return shell.openExternal(url.origin+'/');});
+  if(!IS_AMBERE)handle('amber:ms-upload-skin',async(id,model)=>{accounts.requireMicrosoft();if(!accounts.data.accounts.some(a=>a.id===id&&a.type==='microsoft'))throw Error('Microsoft account not found');const pick=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'PNG skin',extensions:['png']}]});if(pick.canceled)return null;const bytes=await readBoundedFile(pick.filePaths[0],1_000_000,{binary:true});skinDimensions(bytes);const image=nativeImage.createFromBuffer(bytes);if(image.isEmpty())throw Error('Invalid PNG skin');const confirm=await dialog.showMessageBox(window,{type:'question',message:translateMessage('将所选皮肤上传到此微软账号的 Minecraft 官方服务？'),buttons:[translateMessage('取消'),translateMessage('上传')],defaultId:0,cancelId:0});if(confirm.response!==1)return null;const {uploadMicrosoftSkin150}=await import('./microsoft-skin150.mjs');const result=await uploadMicrosoftSkin150(accounts,id,image.toPNG(),model);await accountSkin(accounts,id,true);return {...result,feedback:translateMessage('官方已接受皮肤上传，已刷新皮肤信息；公开贴图可能稍后更新。')};});
   handle('amber:account-skin',(id,refresh)=>accountSkin(accounts,id,refresh));
   handle('amber:screenshot-thumbnail',async token=>{const img=nativeImage.createFromBuffer((await screenshots.read(token)).bytes);if(img.isEmpty())throw Error('Image unavailable');return img.resize({width:360}).toDataURL();});
   handle('amber:screenshots',id=>screenshots.list(id));
@@ -327,14 +352,14 @@ app.whenReady().then(async () => {
   handle('amber:app-update-download', () => appUpdates.download());
   handle('amber:app-update-cancel', () => appUpdates.cancel());
   handle('amber:app-update-install', async () => {
-    if (servers.active || (rooms.active||sakura.active) || launching || storageBusy || workflows.active || core.jobs.some((j) => j.state === 'running')) throw Error('请等待游戏准备、安装或数据迁移结束后再升级。');
+    if (servers.active || (rooms.active||sakura.active||mysql150.active) || launching || storageBusy || workflows.active || core.jobs.some((j) => j.state === 'running')) throw Error('请等待游戏准备、安装或数据迁移结束后再升级。');
     upgradeBusy = true;
-    try {for (const item of await core.listInstances()) await core.requireStopped(await core.instancePath(item.id));
-      if (servers.active || (rooms.active||sakura.active) || launching || storageBusy || workflows.active || core.jobs.some((j) => j.state === 'running')) throw Error('有新任务开始，请等待结束后再升级。');
+    try {const installed=await mysql150.withQuiesced(async()=>{for (const item of await core.listInstances()) await core.requireStopped(await core.instancePath(item.id));
+      if (servers.active || (rooms.active||sakura.active||mysql150.active) || launching || storageBusy || workflows.active || core.jobs.some((j) => j.state === 'running')) throw Error('有新任务开始，请等待结束后再升级。');
       const file = await appUpdates.installer();const answer = await dialog.showMessageBox(window, { type: 'question', title: translateMessage('安装 AMBER 更新'), message: translateMessage('安装包已校验，是否退出 AMBER 并打开安装程序？'), detail: translateMessage('将保留游戏数据，并先备份账号和设置。请在安装向导中确认安装位置。'), buttons: [translateMessage('取消'), translateMessage('退出并安装')], defaultId: 0, cancelId: 0, noLink: true });if (answer.response !== 1) return false;
       await backupUpgradeConfig(app.getPath('userData'), core.root, app.getVersion());
       if(process.platform!=='win32'){const error=await shell.openPath(file);if(error)throw Error(error);}else await new Promise((resolve, reject) => {const child = spawn(file, [], { detached: true, stdio: 'ignore', windowsHide: false });child.once('error', reject);child.once('spawn', () => {child.unref();resolve();});});
-      app.quit();return true;
+      return true;});if(installed)app.quit();return installed;
     } finally {upgradeBusy = false;}
   });
   workflows.installPack = async (id, version) => {try {const r = JSON.parse(await readFile(join(await core.instancePath(id), 'modpack.json'), 'utf8'));if (r.versionId === version) return;} catch (e) {if (e.code !== 'ENOENT') throw e;}const p = await packs.preview(id, version);return workflows.wait(await packs.install(id, p.id));};
@@ -347,7 +372,7 @@ app.whenReady().then(async () => {
   handle('amber:storage-info', async () => {const r = await storage.get(),disk = await statfs(core.root);return { path: core.root, freeBytes: disk.bavail * disk.bsize, onboarded: r.onboarded || !smoke && (await core.listInstances()).length > 0 };});
   handle('amber:onboarding-complete', () => storage.complete());
   handle('amber:storage-pick', async () => {const r = await dialog.showOpenDialog(window, { title: translateMessage('选择新的空数据文件夹'), properties: ['openDirectory', 'createDirectory'] });if (r.canceled) return null;const token = randomUUID();selections.set(token, { kind: 'storage', value: r.filePaths[0] });return { token, path: r.filePaths[0] };});
-  handle('amber:storage-move', async (token) => {if(servers.active||(rooms.active||sakura.active))throw Error('Stop servers and leave the room before moving data / 迁移数据前请停止服务器并退出房间');const target = selection(token, 'storage');if (!target) throw Error('请先选择目标目录');return schedules.withPaused(()=>workflows.exclusive(async () => {for (const item of await core.listInstances()) await core.requireStopped(await core.instancePath(item.id));storageBusy = true;core.operation = { title: '复制并校验数据目录', state: 'running' };try {news.cancel();survey.cancel();await Promise.allSettled([journalObservation,journal.queue,homePrefs.queue,news.pending,survey.done,...news.details.values()].filter(Boolean));await storage.migrate(core, target);app.relaunch();app.exit(0);return true;} catch (e) {storageBusy = false;throw e;} finally {core.operation = null;}}));});
+  handle('amber:storage-move', async (token) => {if(servers.active||(rooms.active||sakura.active||mysql150.active))throw Error('Stop servers and leave the room before moving data / 迁移数据前请停止服务器并退出房间');const target = selection(token, 'storage');if (!target) throw Error('请先选择目标目录');return schedules.withPaused(()=>workflows.exclusive(async () => {for (const item of await core.listInstances()) await core.requireStopped(await core.instancePath(item.id));storageBusy = true;core.operation = { title: '复制并校验数据目录', state: 'running' };try {return await mysql150.withQuiesced(async()=>{if(mysql150.active)throw Error('Database still active / 数据库仍在运行');news.cancel();survey.cancel();await Promise.allSettled([journalObservation,journal.queue,homePrefs.queue,news.pending,survey.done,...news.details.values()].filter(Boolean));await storage.migrate(core, target);app.relaunch();app.exit(0);return true;});} catch (e) {storageBusy = false;throw e;} finally {core.operation = null;}}));});
   handle('amber:instance-icon', (id, icon) => management.setIcon(id, icon));
   handle('amber:instance-rename', (id, name) => management.rename(id, name));
   handle('amber:instance-remove', (id) => management.remove(id));
@@ -505,14 +530,14 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
           while(minecraftImport.busy||serverManagement140.backupBusy||workflows.active||core.jobs.some(j=>j.state==='running')||appUpdates.state.phase==='downloading')await new Promise(resolve=>setTimeout(resolve,150));
         }
         await schedules?.pause();pausedSchedules=true;
-        if(!smoke&&(servers.active||(rooms.active||sakura.active))){
+        if(!smoke&&(servers.active||(rooms.active||sakura.active||mysql150.active))){
           const answer=await dialog.showMessageBox(window,{type:'question',message:'服务端或联机连接仍在运行 / Servers or networking are still active',buttons:['最小化并继续 / Minimize and continue','停止服务端并退出 / Stop and quit','返回 / Back'],defaultId:0,cancelId:2,noLink:true});
           if(answer.response===0){window.minimize();return;}if(answer.response!==1)return;
-          try{await servers.shutdown();await rooms.leave();await sakura.stop();}catch(e){await dialog.showMessageBox(window,{type:'warning',message:e.message});return;}
+          exitBusy=true;try{await servers.shutdown();await rooms.leave();await sakura.stop();await mysql150.shutdown();}catch(e){await dialog.showMessageBox(window,{type:'warning',message:e.message});return;}
         }
-        clearTimeout(placementTimer);await savePlacement();exitApproved=true;closeAllowed=true;window.close();app.quit();
+        exitBusy=true;await mysql150.withQuiesced(async()=>{clearTimeout(placementTimer);await savePlacement();exitApproved=true;closeAllowed=true;window.close();app.quit();});
       }catch(e){restoreWindow();await dialog.showMessageBox(window,{type:'error',message:redact(e.message)});}
-      finally{closePrompt=false;explicitQuit=false;if(pausedSchedules&&!exitApproved)schedules?.start();}
+      finally{if(!exitApproved)exitBusy=false;closePrompt=false;explicitQuit=false;if(pausedSchedules&&!exitApproved)schedules?.start();}
     });
     window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
     window.webContents.on('will-navigate', (event, url) => {if (url !== 'amber://app/') event.preventDefault();});

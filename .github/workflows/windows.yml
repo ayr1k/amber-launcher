@@ -15,6 +15,8 @@ jobs:
         working-directory: prototype
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '24'
@@ -24,6 +26,7 @@ jobs:
           version: 11.25.0
           package_json_file: prototype/package.json
       - run: pnpm install --frozen-lockfile
+      - run: pnpm exec install-electron
       - name: Canonicalize Windows temporary directory
         shell: pwsh
         run: |
@@ -41,17 +44,21 @@ jobs:
       - run: pnpm test:sites
       - run: pnpm release:check
       - run: pnpm desktop:smoke
-      - run: pnpm package:all --public
+      - name: Build existing main platform artifacts
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        run: pnpm package:all --public
         env:
           AMBER_CURSEFORGE_API_KEY: ${{ secrets.AMBER_CURSEFORGE_API_KEY }}
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+      - if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: amber-all-platforms
           path: |
-            prototype/releases/1.4.8/*-Setup-x64.exe
-            prototype/releases/1.4.8/*.zip
-            prototype/releases/1.4.8/*.deb
-            prototype/releases/1.4.8/*.tar.gz
-            prototype/releases/1.4.8/*.sha256
-          retention-days: 7
+            prototype/releases/1.5.0/*-Setup-x64.exe
+            prototype/releases/1.5.0/*.zip
+            prototype/releases/1.5.0/*.deb
+            prototype/releases/1.5.0/*.tar.gz
+            prototype/releases/1.5.0/*.sha256
+            prototype/releases/1.5.0/*.provenance.json
+          retention-days: 30
           if-no-files-found: error

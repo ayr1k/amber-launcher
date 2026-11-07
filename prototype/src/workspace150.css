@@ -1,0 +1,23 @@
+.account-detail150 { min-width: 0; }
+.account-columns150 { display:grid; grid-template-columns:minmax(0,1fr) minmax(280px,1fr); gap:32px; align-items:start; }
+.account-columns150 > section { min-width:0; }
+.account-columns150 dd { margin:8px 0 20px; overflow-wrap:anywhere; }
+.account-statistics150 { margin-top:24px; }
+.account-statistics150 summary { cursor:pointer; font-weight:600; padding-block:12px; }
+.account-statistics150 li { margin-block:12px; overflow-wrap:anywhere; }
+.skin-stage150 { width:100%; min-height:260px; overflow:hidden; }
+.skin-stage150 canvas { display:block; max-width:100%; touch-action:none; }
+.skin-stage150.background-theme { background:var(--bg); }
+.skin-stage150.background-light { background:var(--preview-light); }
+.skin-stage150.background-dark { background:var(--preview-dark); }
+@media(max-width:1050px) { .account-columns150 { grid-template-columns:minmax(0,1fr); gap:24px; } }
+
+.workspace150 .select-trigger > span > span { white-space:normal; overflow:visible; text-overflow:clip; overflow-wrap:anywhere; }
+@media(max-width:1050px) { .workspace150 .form-grid { grid-template-columns:minmax(0,1fr); } }
+
+.sakura150 { padding-block-start:1lh; }
+.sakura150 > h2 + p { margin-block:12px; }
+.sakura-create150, .sakura-create150 > form { display:grid; gap:16px; }
+.sakura-create150 > h3, .sakura-create150 > p, .sakura-create150 > form > p { margin:0; }
+.sakura-create150 > button, .sakura-create150 > form > button { justify-self:start; }
+.sakura-create150 > form > .form-grid { margin-top:0; }

@@ -1,0 +1,6 @@
+{
+  "repository": "https://github.com/iamcal/enchant-order",
+  "commit": "9345bd097a300266e347d874feb46ef7e1bd4158",
+  "license": "MIT",
+  "changes": "data.js exported as module; worker parameters renamed for strict mode; message handler uses self.onmessage; text names copied into AMBER locale catalog; no upstream remote page or image assets"
+}

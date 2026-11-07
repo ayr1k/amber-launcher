@@ -29,6 +29,8 @@ jobs:
       - run: pnpm release:check
       - run: pnpm package:editions
         env:
+          AMBER_TASK_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+          AMBER_EVENT_SHA: ${{ github.sha }}
           AMBER_CURSEFORGE_API_KEY: ${{ secrets.AMBER_CURSEFORGE_API_KEY }}
       - name: Record tested revision
         shell: pwsh
@@ -43,5 +45,6 @@ jobs:
             prototype/releases/*/*-Setup-x64.exe
             prototype/releases/*/*-Setup-x64.exe.sha256
             prototype/releases/*/TEST-REVISION.txt
+            prototype/releases/*/*.provenance.json
           retention-days: 30
           if-no-files-found: error

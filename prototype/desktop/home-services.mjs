@@ -17,7 +17,7 @@ export class PlayJournal {
  observe(processes){return this.change(d=>{if(!d.enabled)return;const now=this.now(),seen=new Set();
   for(const p of processes){if(!p.instanceId||!p.id||!Number.isFinite(Date.parse(p.startedAt)))continue;const key=p.instanceId+':'+p.startedAt;seen.add(key);
    let s=d.sessions.find(s=>s.instanceId===p.instanceId&&s.startedAt===p.startedAt);
-   if(!s){if(p.state!=='running')continue;s={id:p.id,instanceId:p.instanceId,startedAt:p.startedAt,state:'running',segments:[],uncertain:now-Date.parse(p.startedAt)>90000};d.sessions.push(s);}
+   if(!s){if(p.state!=='running')continue;s={id:p.id,accountId:typeof p.accountId==='string'?p.accountId:null,instanceId:p.instanceId,startedAt:p.startedAt,state:'running',segments:[],uncertain:now-Date.parse(p.startedAt)>90000};d.sessions.push(s);}
    if(s.state==='historical')continue;
    if(s.lastSeen&&s.state==='running'){const end=p.finishedAt?Math.min(now,Date.parse(p.finishedAt)):now,elapsed=end-s.lastSeen;
     if(!this.suspended&&elapsed>=0&&elapsed<=90000){const last=s.segments.at(-1),start=Math.max(s.lastSeen,last?.[1]||0);if(end>start){if(last&&last[1]===start)last[1]=end;else s.segments.push([start,end]);}}else s.uncertain=true;
@@ -72,9 +72,9 @@ export class NewsFeed {
 export class HomePreferences {
  constructor(root){this.root=root;this.queue=Promise.resolve();}
  async file(){const p=join(this.root,'home-preferences.json');await ensureParents(this.root,p);return p;}
- async get(){try{const d={...this.defaults(),...JSON.parse(await readFile(await this.file(),'utf8'))};if(typeof d.newsAuto!=='boolean'||typeof d.calendarCompact!=='boolean'||!['all','release','snapshot','news'].includes(d.newsFilter)||!Array.isArray(d.toolFavorites)||d.toolFavorites.some(x=>!['java','logs','screenshots','editor','gradient','seedmap'].includes(x)))throw Error('Invalid home preferences / 首页偏好无法读取');return d;}catch(e){if(e.code!=='ENOENT')throw e;return this.defaults();}}
+ async get(){try{const d={...this.defaults(),...JSON.parse(await readFile(await this.file(),'utf8'))};if(typeof d.newsAuto!=='boolean'||typeof d.calendarCompact!=='boolean'||!['all','release','snapshot','news'].includes(d.newsFilter)||!Array.isArray(d.toolFavorites)||d.toolFavorites.some(x=>!['java','logs','screenshots','editor','gradient','seedmap','enchant'].includes(x)))throw Error('Invalid home preferences / 首页偏好无法读取');return d;}catch(e){if(e.code!=='ENOENT')throw e;return this.defaults();}}
  defaults(){return {newsAuto:false,newsFilter:'all',calendarCompact:false,toolFavorites:['java','logs','screenshots','editor','gradient']};}
- save(input){const task=this.queue.then(async()=>{const d={...await this.get(),...input};if(typeof d.newsAuto!=='boolean'||typeof d.calendarCompact!=='boolean'||!['all','release','snapshot','news'].includes(d.newsFilter)||!Array.isArray(d.toolFavorites)||d.toolFavorites.some(x=>!['java','logs','screenshots','editor','gradient','seedmap'].includes(x)))throw Error('Invalid home preferences');const clean=Object.fromEntries(Object.keys(this.defaults()).map(k=>[k,d[k]]));await atomicJson(await this.file(),clean);return clean;});this.queue=task.catch(()=>{});return task;}
+ save(input){const task=this.queue.then(async()=>{const d={...await this.get(),...input};if(typeof d.newsAuto!=='boolean'||typeof d.calendarCompact!=='boolean'||!['all','release','snapshot','news'].includes(d.newsFilter)||!Array.isArray(d.toolFavorites)||d.toolFavorites.some(x=>!['java','logs','screenshots','editor','gradient','seedmap','enchant'].includes(x)))throw Error('Invalid home preferences');const clean=Object.fromEntries(Object.keys(this.defaults()).map(k=>[k,d[k]]));await atomicJson(await this.file(),clean);return clean;});this.queue=task.catch(()=>{});return task;}
 }
 
 export class Screenshots {

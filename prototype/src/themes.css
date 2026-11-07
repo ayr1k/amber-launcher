@@ -104,3 +104,6 @@
 
 /* Derive legacy selection colors from the active theme, including old theme packages. */
 .app[data-theme-enabled=true]{--selected:color-mix(in srgb,var(--green) 18%,var(--surface));}
+
+/* Neutral preview surfaces follow the theme hue while retaining explicit luminance. */
+.app { --preview-light:color-mix(in srgb,var(--surface) 12%,white); --preview-dark:color-mix(in srgb,var(--surface) 12%,black); }
