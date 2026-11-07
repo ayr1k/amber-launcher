@@ -62,3 +62,32 @@ for(const provider of ['modrinth','curseforge'])test(provider+' official source:
  f.content.manifest=async()=>({files:provider==='curseforge'?[{relative:'mods/example.jar',projectId,versionId,hash:sha1}]:[]});f.content.api=async path=>path.startsWith('project/')?{client_side:'required',distribution:!restricted}:version();f.core.fetcher=async()=>{downloaded++;return new Response(bytes,{headers:{'Content-Length':String(bytes.length)}});};
  await publish(f,{paths:['mods/example.jar'],redistribution:false});const p=await f.guest.preview();assert.equal(p.manifest.files[0].source,provider);await f.guest.install(p.token);assert.ok(downloaded>0);restricted=true;await assert.rejects(publish(f,{paths:['mods/example.jar']}),/restricted|限制/);await assert.rejects(f.guest.install(p.token),/restricted|限制/);assert.equal(f.host.shared.manifest.files[0].source,provider);
 });
+
+test('real Workflows: completed room instances recover later content and download tasks, but invalid receipts stay blocked',async t=>{
+ const f=await fixture(t);(await f.core.metadata()).item.loader='vanilla';f.rooms.servers.list=async()=>[{id:'server',game:'1.21.1',type:'vanilla'}];await publish(f);
+ const root=join(f.root,'completed-library'),metadata=JSON.stringify({id:'1.21.1'}),sha1=createHash('sha1').update(metadata).digest('hex');
+ const makeCore=()=>{const c=new VanillaLauncher(root,{fetcher:async()=>new Response(metadata)});c.catalog=[{id:'1.21.1',url:'https://piston-meta.mojang.com/fixture.json',sha1}];c.prepareJava=async()=>{};c.install=async()=>{};return c;};
+ let core=makeCore(),flows=new Workflows(core,f.content);const guest=new RoomSync152(core,f.guestRooms,flows,f.content),preview=await guest.preview(),result=await guest.install(preview.token),id=result.instanceId,dir=await core.instancePath(id);
+ const setup=JSON.parse(await readFile(join(dir,'setup-report.json'),'utf8')),receipt=JSON.parse(await readFile(join(dir,'room-sync152.json'),'utf8'));assert.equal(setup.roomSync,true);assert.equal(setup.state,'done');assert.equal(receipt.state,'ready');
+ let behavior='success',installed=0;
+ const content={preview:async()=>({id:'preview'}),install:async()=>{if(behavior==='failed')throw Error('injected ordinary content failure');if(behavior==='cancelled'){flows.cancel(id);return;}installed++;await writeFile(join(dir,'mods','later.jar'),'ordinary content fixture');}};
+ for(const state of ['failed','cancelled']){
+  core=makeCore();flows=new Workflows(core,content);behavior=state;await assert.rejects(flows.startContent(id,{rootVersionId:'laterVersion'}));assert.equal(JSON.parse(await readFile(join(dir,'content-task.json'),'utf8')).state,state);
+  core=makeCore();flows=new Workflows(core,content);behavior='success';await flows.retry(id);assert.equal(JSON.parse(await readFile(join(dir,'content-task.json'),'utf8')).state,'done');await requireRoomSyncReady152(core,id);
+ }
+ assert.equal(installed,2);
+ for(const kind of ['install','java'])for(const state of ['failed','cancelled']){
+  core=makeCore();flows=new Workflows(core,content);const operation=async()=>core.startJob(id,kind,async(job)=>{if(state==='cancelled')core.cancel(job.id);throw Error('injected ordinary download failure');});
+  await assert.rejects(flows.wait(await operation()));assert.equal(JSON.parse(await readFile(join(dir,'download-task.json'),'utf8')).state,state);
+  core=makeCore();flows=new Workflows(core,content);const resume=async()=>core.startJob(id,kind,async()=>{});if(kind==='java')core.prepareJava=resume;else core.install=resume;
+  await flows.retry(id);assert.equal(JSON.parse(await readFile(join(dir,'download-task.json'),'utf8')).state,'done');
+ }
+ // A done setup record alone must not grant permission to recover or launch.
+ await atomicJson(join(dir,'content-task.json'),{schema:1,kind:'content',state:'failed',game:'1.21.1',loader:'vanilla',versionId:'laterVersion'});
+ for(const invalid of [null,'{broken',JSON.stringify({...receipt,state:'pending'}),JSON.stringify({state:'ready'})]){
+  if(invalid===null)await rm(join(dir,'room-sync152.json'));else await writeFile(join(dir,'room-sync152.json'),invalid);
+  core=makeCore();flows=new Workflows(core,content);await assert.rejects(flows.retry(id));await assert.rejects(requireRoomSyncReady152(core,id));assert.equal(installed,2);
+ }
+ await atomicJson(join(dir,'room-sync152.json'),receipt);await atomicJson(join(dir,'setup-report.json'),{...setup,state:'failed'});await assert.rejects(flows.retry(id),/room|房间/);
+ await atomicJson(join(dir,'setup-report.json'),setup);await flows.retry(id);assert.equal(installed,3);assert.equal(await readFile(join(dir,'config/display.json'),'utf8'),'{"distance":8}');
+});

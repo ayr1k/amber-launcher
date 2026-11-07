@@ -1,3 +1,4 @@
+import {requireRoomSyncReady152} from './room-sync152.mjs';
 import {quiltVersions,quiltProfile} from './quilt142.mjs';
 import {retainUpgrade140,applyUpgrade140} from './pack-upgrade140.mjs';
 // SPDX-License-Identifier: MPL-2.0
@@ -56,7 +57,8 @@ export class Workflows{
  checkCancelled(){if(this.cancelled)throw Error('Installation cancelled / 安装已取消');}
  state(key){const s=key?this.recentScopes.get(key):null;return key?{active:this.scopes.has(s),cancelled:s?.cancelled||false,instanceId:s?.instanceId||null}:{active:this.active,cancelled:this.cancelled,instanceId:this.lastSetup};}
  async retry(id){return this.exclusive(async()=>{this.lastSetup=id;const dir=await this.core.instancePath(id);await this.core.requireStopped(dir);let record=null;try{record=JSON.parse(await readFile(join(dir,'setup-report.json'),'utf8'));}catch(e){if(e.code!=='ENOENT')throw e;}
-  if(record?.roomSync)throw Error('Return to the room, preview and confirm synchronization again / 请返回房间重新预览并确认同步');
+  if(record?.roomSync&&record.state!=='done')throw Error('Return to the room, preview and confirm synchronization again / 请返回房间重新预览并确认同步');
+  await requireRoomSyncReady152(this.core,id);
   if(record&&record.state!=='done'){if(record.schema!==2||!record.input)throw Error('此旧版任务没有完整安装计划，请在版本设置中继续。');const resume=this.resumes.get(id);return resume?resume():this.runPlan(id,record);}
   try{const r=JSON.parse(await readFile(join(dir,'content-task.json'),'utf8'));if(!['done','dismissed'].includes(r.state))return this.runContent(id,r);}catch(e){if(e.code!=='ENOENT')throw e;}
   try{const r=JSON.parse(await readFile(join(dir,'download-task.json'),'utf8'));if(r.schema===1&&r.state!=='done'&&['install','java'].includes(r.kind))return this.wait(await (r.kind==='java'?this.core.prepareJava(id):this.core.install(id,{threads:this.core.downloadThreads||8})));}catch(e){if(e.code!=='ENOENT')throw e;}
