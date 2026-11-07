@@ -38,6 +38,7 @@ contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
   newsOpen:(id)=>ipcRenderer.invoke('amber:news-open',id),
   homePrefs:()=>ipcRenderer.invoke('amber:home-prefs'),
   homePrefsSave:(v)=>ipcRenderer.invoke('amber:home-prefs-save',v),
+  cleanupCancel:()=>ipcRenderer.invoke('amber:cleanup-cancel'),
   survey:()=>ipcRenderer.invoke('amber:survey'),
   surveyStart:()=>ipcRenderer.invoke('amber:survey-start'),
   surveyCancel:()=>ipcRenderer.invoke('amber:survey-cancel'),

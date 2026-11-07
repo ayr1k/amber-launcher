@@ -1,3 +1,4 @@
+import {previewUpdateCleanup,executeUpdateCleanup} from './maintenance154.mjs';
 import {RoomSync152,requireRoomSyncReady152} from './room-sync152.mjs';
 import {providerSkinCapability150,uploadProviderSkin150} from './provider-skin150.mjs';
 import {MySQL150} from './mysql150.mjs';
@@ -136,7 +137,7 @@ app.whenReady().then(async () => {
       if (event.sender !== window?.webContents || event.senderFrame !== window.webContents.mainFrame || source.protocol !== 'amber:' || source.host !== 'app') throw new Error('请求来源不受信任。');
       if(exitBusy&&!['amber:window-action','amber:window-state'].includes(channel))throw Error('Launcher closing / 启动器正在退出');
       if (storageBusy && !['amber:info', 'amber:status', 'amber:setup-cancel', 'amber:window-action', 'amber:window-state'].includes(channel)) throw Error('数据目录正在迁移，请等待完成。');
-      if (upgradeBusy && !['amber:info', 'amber:status', 'amber:app-update-state', 'amber:window-action', 'amber:window-state'].includes(channel)) throw Error('正在准备升级，请稍候。');
+      if (upgradeBusy && !['amber:info', 'amber:status', 'amber:app-update-state', 'amber:cleanup-cancel', 'amber:window-action', 'amber:window-state'].includes(channel)) throw Error('正在准备升级，请稍候。');
       let result;try {if(IS_AMBERE&&(channel.startsWith('amber:ms-')||channel.startsWith('amber:ownership-')||channel==='amber:account-configure'))accounts.requireMicrosoft();result = await fn(...args);} catch (e) {const problem=errorDescriptor(redact(e.message,accounts.secrets()));throw Error('[AMBER '+problem.code+'] '+problem.text);}result = redactFields(result, accounts.secrets());if (smoke) {smokeChannels.add(channel);finishSmoke();}return result;
     });
   }
@@ -308,7 +309,7 @@ app.whenReady().then(async () => {
   content.updates = modUpdates;
   const libraryState = new LibraryState(core),modImport = new ModImport(core, content, modUpdates),health = new InstanceHealth(core, content, workflows, accounts, launchPreferences, settings);
   handle('amber:copy-error', (text) => {if (typeof text !== 'string' || text.length > 100000) throw Error('错误详情过长，请手动选择文字复制。');clipboard.writeText(redact(text, accounts.secrets()));return true;});
-  const journal=new PlayJournal(core.root),news=new NewsFeed(core.root),homePrefs=new HomePreferences(core.root),screenshots=new Screenshots(core),survey=new StorageSurvey(core,app.getPath('userData'));
+  const journal=new PlayJournal(core.root),news=new NewsFeed(core.root),homePrefs=new HomePreferences(core.root),screenshots=new Screenshots(core),survey=new StorageSurvey(core,app.getPath('userData'),{current:app.getVersion(),product:PRODUCT_NAME});
   try{await journal.migrate((await libraryState.get()).history);await journal.recover();}catch{/* Preserve an unreadable journal; it must never prevent launching the application. */}
   await survey.init().catch(()=>{});
   let journalObservation=null;const observe=()=>{if(storageBusy||upgradeBusy)return Promise.resolve();if(journalObservation)return journalObservation;journalObservation=(async()=>{try{const processes=(await core.runtimeStatus()).processes;if(!storageBusy&&!upgradeBusy){await journal.observe(processes);await protection140.observe(processes);}}catch{}})().finally(()=>journalObservation=null);return journalObservation;};
@@ -394,7 +395,17 @@ app.whenReady().then(async () => {
   handle('amber:feedback-diagnostics',async()=>{feedbackDiagnosticPreview=localizeFields(await summary());return feedbackDiagnosticPreview;});
   const summary = async () => diagnosticSummary({ version: app.getVersion(), platform: process.platform, arch: process.arch, instances: await core.listInstances(), status: await core.runtimeStatus() });
   handle('amber:diagnostics-preview', async()=>{diagnosticPreview=localizeFields(await summary());return diagnosticPreview;});
-  handle('amber:privacy-cleanup',async kind=>{if(!['updates','upgrade-backups'].includes(kind))throw Error('不支持的清理目标。');if(upgradeBusy||storageBusy||launching||workflows.active||core.jobs.some(j=>j.state==='running')||['downloading','checking'].includes(appUpdates.state.phase))throw Error('请等待当前任务结束。');const usage=await measureDirectory(join(app.getPath('userData'),kind));if(!usage.complete)throw Error('清理预览不完整，请检查目录权限或链接。');const answer=await dialog.showMessageBox(window,{type:'warning',title:translateMessage('清理本地副本'),message:translateMessage(kind==='updates'?'删除下载的程序更新包？':'删除旧升级配置备份？'),detail:translateMessage('此操作不可撤销。不会删除活动账号、实例、存档或实例备份。旧配置备份可能包含加密的历史账号库。')+'\n'+join(app.getPath('userData'),kind)+'\n'+usage.files+' files · '+(usage.bytes/1048576).toFixed(1)+' MB',buttons:[translateMessage('取消'),translateMessage('确认清理')],defaultId:0,cancelId:0,noLink:true});if(answer.response!==1)return false;if(upgradeBusy||storageBusy||launching||workflows.active||core.jobs.some(j=>j.state==='running')||['downloading','checking'].includes(appUpdates.state.phase))throw Error('请等待当前任务结束。');upgradeBusy=true;try{await cleanupPrivateCopies(app.getPath('userData'),kind);if(kind==='updates'){appUpdates.candidate=null;appUpdates.state={phase:'idle'};}return true;}finally{upgradeBusy=false;}});
+  let cleanupController=null;
+  const cleanupCheck=()=>{if(storageBusy||launching||workflows.active||servers.active||rooms.active||sakura.active||mysql150.active||core.jobs.some(j=>j.state==='running')||['downloading','checking','ready'].includes(appUpdates.state.phase))throw Error('Wait for active tasks / 请先结束活动任务和更新安装');};
+  handle('amber:cleanup-cancel',()=>{cleanupController?.abort();return true;});
+  handle('amber:privacy-cleanup',async kind=>{
+   if(kind!=='updates')throw Error('Backups are protected / 备份受到保护');cleanupCheck();
+   const plan=await previewUpdateCleanup(app.getPath('userData'),app.getVersion(),PRODUCT_NAME);
+   if(!plan.rows.length)return {state:'done',removedBytes:0,results:[]};
+   const answer=await dialog.showMessageBox(window,{type:'warning',title:'清理更新缓存 / Clean update cache',message:'删除已安装版本及更旧版本的已校验更新包？ / Delete verified installers for installed or older versions?',detail:plan.rows.map(r=>r.name).join('\n')+'\n'+plan.rows.reduce((n,r)=>n+r.size,0)+' bytes\n不影响游戏任务恢复；再次使用这些安装包需要重新下载。备份、未知文件及下载片段保留。 / Game recovery is preserved. Reuse requires downloading again. Backups, unknown files and partial downloads stay.',buttons:['取消 / Cancel','确认清理 / Confirm'],defaultId:0,cancelId:0,noLink:true});
+   if(answer.response!==1)return {state:'cancelled',removedBytes:0,results:[]};cleanupCheck();if(upgradeBusy)throw Error('Maintenance already running');upgradeBusy=true;cleanupController=new AbortController();
+   try{return await executeUpdateCleanup(app.getPath('userData'),plan,app.getVersion(),PRODUCT_NAME,{signal:cleanupController.signal,check:cleanupCheck});}finally{cleanupController=null;upgradeBusy=false;}
+  });
 handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json'), data: core.root, upgrades: join(app.getPath('userData'), 'upgrade-backups') }));
   handle('amber:privacy-copy-path',key=>{const paths={accounts:join(core.root,'accounts.json'),data:core.root,upgrades:join(app.getPath('userData'),'upgrade-backups')};if(!Object.hasOwn(paths,key))throw Error('不支持的数据位置。');clipboard.writeText(paths[key]);return true;});
   handle('amber:diagnostics-export', async () => {if(!diagnosticPreview)throw Error('请先预览诊断摘要。');const snapshot=diagnosticPreview;const result = await dialog.showSaveDialog(window, { title: translateMessage('保存不含账号和日志的诊断摘要'), defaultPath: 'amber-diagnostics.json', filters: [{ name: 'JSON', extensions: ['json'] }] });if (result.canceled) return false;await writeFile(result.filePath, JSON.stringify(snapshot, null, 2));return true;});

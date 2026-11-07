@@ -45,7 +45,7 @@ export class AppUpdates{
     if(!this.candidate||['checking','downloading'].includes(this.state.phase))throw Error('请先检查更新，或等待当前下载结束。');
     const file=this.candidate;
     this.controller=new AbortController();this.state={phase:'downloading',release:file,transferred:0};
-    try{await mkdir(this.root,{recursive:true});await requireSpace(this.root,file.size*2);this.controller.signal.throwIfAborted();await download({...file,algorithm:'sha256',path:join(this.root,file.name)},{root:this.root,fetcher:this.fetcher,signal:this.controller.signal,onBytes:n=>{this.state.transferred+=n;}});this.state={phase:'ready',release:file};}
+    try{await mkdir(this.root,{recursive:true});await requireSpace(this.root,file.size*2);this.controller.signal.throwIfAborted();await download({...file,algorithm:'sha256',path:join(this.root,file.name)},{root:this.root,fetcher:this.fetcher,signal:this.controller.signal,onBytes:n=>{this.state.transferred+=n;}});await atomicJson(join(this.root,file.name+'.receipt.json'),{schema:1,product:PRODUCT_NAME,name:file.name,version:file.version,size:file.size,hash:file.hash});this.state={phase:'ready',release:file};}
     catch(e){this.state={phase:this.controller.signal.aborted?'cancelled':'failed',release:file,error:e.message};throw e;}
     finally{this.controller=null;}return this.state;
   }
