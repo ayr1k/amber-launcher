@@ -24,6 +24,15 @@ async function fixture(t){
 }
 async function publish(f,overrides={}){const c=await f.host.candidates('source');return f.host.publish({...selection,token:c.token,...overrides});}
 const selection={id:'source',paths:['config/display.json'],reviewed:true,redistribution:true};
+
+test('500-file publication/reception boundary includes configuration and rejects 501 without replacing snapshot',async t=>{
+ const f=await fixture(t),paths=Array.from({length:501},(_,i)=>'mods/m'+i+'.jar');await Promise.all(paths.map(path=>writeFile(join(f.dir,path),'synthetic '+path)));
+ const c=await f.host.candidates('source'),input={...selection,token:c.token,paths:paths.slice(0,500)};
+ await f.host.publish(input);assert.equal((await f.guest.remote()).files.length,500);let current=f.host.shared;
+ for(const chosen of [paths,[...paths.slice(0,500),'config/display.json']]){await assert.rejects(f.host.publish({...input,paths:chosen}),/500/);assert.equal(f.host.shared,current);}
+ await f.host.publish({...input,paths:[...paths.slice(0,499),'config/display.json']});const accepted=await f.guest.remote();assert.equal(accepted.files.length,500);assert.ok(accepted.files.some(x=>x.path==='config/display.json'));current=f.host.shared;
+ assert.throws(()=>validateSnapshot({...accepted,files:[...accepted.files,{...accepted.files[0],path:'mods/extra.jar'}]}));assert.equal(f.host.shared,current);
+});
 test('strict allowlist rejects private files and platform path tricks',()=>{
  for(const path of ['../x','mods/../config/a.json','mods/a.jar:stream','mods/CON.jar','mods/a.jar/','config//x.json','config/./x.json','config/token.json','config/auth.json','saves/x','logs/x','config/a.json\0','mods/a\\b.jar','config/../a.json'])assert.throws(()=>syncPath(path),path);
  assert.equal(syncPath('mods/example.jar'),'mods/example.jar');
