@@ -7,3 +7,16 @@
 .picker-swatch>[data-control-text]{min-width:0;white-space:nowrap;line-height:1.5}.picker-chip{flex-shrink:0}.desktop-app .picker-hue{appearance:none;border:0;border-radius:0}.picker-hue::-webkit-slider-thumb{appearance:none;width:17px;height:17px;border-radius:50%;background:transparent;border:2px solid white;box-shadow:0 0 0 1px #333}
 
 .gradient-position134 summary{cursor:pointer}.tools-page:has(:is(.gradient134,.seed134))>.tool-intro{margin-block:16px}.tools-page:has(:is(.gradient134,.seed134))>.tool-intro h2{font-size:22px}.tools-page:has(:is(.gradient134,.seed134))>.tool-intro p{margin-block:8px}
+
+/* Keep import actions reachable in short windows and at large text sizes. */
+.minecraft-import134[open]{display:flex;flex-direction:column;max-height:90vh;overflow:hidden}
+.minecraft-import134 .dialog-head,.minecraft-import134>.dialog-actions{flex:none}
+.minecraft-import134 .dialog-body{min-height:0;max-height:none;overflow:auto}
+.minecraft-import134>.dialog-actions{padding:16px 24px;flex-wrap:wrap;gap:12px}
+.minecraft-import134 .dialog-body>*{min-width:0}
+.minecraft-import134 .check131{display:flex;align-items:flex-start;gap:10px;line-height:1.6}
+.minecraft-import134 .check131 input{flex:none;margin-top:5px}
+.minecraft-import134 .select-trigger,.minecraft-import134 .select-option{white-space:normal;overflow-wrap:anywhere}
+.minecraft-import134 .import-summary151{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
+
+.minecraft-import134 .select-trigger>span{white-space:normal;overflow-wrap:anywhere}
