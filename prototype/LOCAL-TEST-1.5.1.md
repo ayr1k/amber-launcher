@@ -33,3 +33,5 @@ The user's real version JSON and directory structure have not been obtained. No 
 用户真实实例尚未验证。必要时由小岚请求最小样本：所选版本 JSON（及它实际引用的父版本 JSON）、删除个人路径信息后的相关 `lastVersionId`/`gameDir` 配置片段，以及只包含目录名的简短结构。不要索要整个 `.minecraft`、账号文件、访问令牌或存档内容。
 
 PR artifacts include `TEST-REVISION.txt`, per-installer provenance and SHA-256. The downloadable package must match the final PR head; file names alone are not provenance. GitHub Actions artifacts expire after the repository's current 30-day retention period.
+
+Independent review follow-up: missing, moved or unreadable configured game directories remain selectable when version metadata is valid. The original path and reason are shown and explicit directory correction is required, without fallback to shared/isolated data. Link rejection, approved-path selection and preview binding remain unchanged. / 独立审核修复：失效或无权限的显式游戏目录单独提示，保留有效版本的选择入口，必须明确重新选择数据来源，不静默回退；链接、路径与预览绑定保护保持。

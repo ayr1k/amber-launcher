@@ -6,7 +6,7 @@ import {tmpdir} from 'node:os';
 import {join,relative} from 'node:path';
 import {createHash} from 'node:crypto';
 import {MinecraftImport,scanMinecraft,resolveProfile,collectImportFiles} from '../desktop/minecraft134.mjs';
-import {validateImportVersion} from '../desktop/import-identify151.mjs';
+import {validateImportVersion,directoryChoices} from '../desktop/import-identify151.mjs';
 import {VanillaLauncher} from '../desktop/launcher.mjs';
 const sha=b=>createHash('sha1').update(b).digest('hex');
 const vanilla=id=>({id,mainClass:'net.minecraft.client.main.Main',libraries:[]});
@@ -56,3 +56,20 @@ test('junction boundaries and arbitrary IPC paths cannot select or traverse unre
 test('source containing destination is refused without writing to it',async t=>{const f=await fixture(t);await f.put('options.txt','keep');const {scan,input}=await ready(f);f.core.root=join(f.source,'library');const before=await snapshot(f.source);await assert.rejects(f.importer.create(scan.id,f.key,input),/contain/);assert.deepEqual(await snapshot(f.source),before)});
 
 test('execution requires a current validated preview, not only a scan token',async t=>{const f=await fixture(t);await f.put('options.txt','keep');const scan=await f.importer.scan(f.source);await assert.rejects(f.importer.create(scan.id,f.key,{name:'no preview',groups:['options.txt']}),/失效/);assert.equal((await f.core.listInstances()).length,0)});
+
+for(const origin of ['launcher profile','version JSON'])test(origin+' missing gameDir stays selectable without a fallback; corrected directory previews and copies unchanged source',async t=>{
+ const f=await fixture(t,origin==='version JSON'?{...vanilla('1.21.11'),gameDir:'missing-original'}:vanilla('1.21.11'));
+ if(origin==='launcher profile'){await f.put('launcher_profiles.json',{profiles:{moved:{name:'Moved',lastVersionId:'1.21.11',gameDir:'missing-original'}}});f.key='moved'}
+ await f.put('options.txt','shared must not copy');await f.put('versions/1.21.11/options.txt','isolated chosen');const before=await snapshot(f.source),scan=await f.importer.scan(f.source),row=scan.rows.find(r=>r.key===f.key);
+ assert.equal(row.supported,true);assert.equal(row.gameDir,null);assert.deepEqual(row.directories,[]);assert.equal(row.directoryIssues[0].path,join(f.source,'missing-original'));assert.match(row.directoryIssues[0].reason,/不存在/);
+ const pending=await f.importer.preview(scan.id,f.key,['options.txt']);assert.equal(pending.needsDirectory,true);assert.equal(pending.id,undefined);await assert.rejects(f.importer.preview(scan.id,f.key,['options.txt'],{gameDir:f.source}),/again/);
+ const selected=await f.importer.chooseDirectory(scan.id,f.key,join(f.source,'versions','1.21.11')),preview=await f.importer.preview(scan.id,f.key,['options.txt'],{gameDir:selected.path});assert.equal(preview.files,1);assert.equal(preview.gameDir,selected.path);
+ const result=await f.importer.create(scan.id,f.key,{name:'Corrected',groups:['options.txt'],previewId:preview.id});assert.equal(await readFile(join(await f.core.instancePath(result.instance.id),'options.txt'),'utf8'),'isolated chosen');assert.deepEqual(await snapshot(f.source),before);
+});
+test('inaccessible configured directory requires correction even alongside a valid configured candidate',async t=>{
+ const f=await fixture(t);await f.put('valid/options.txt','keep');const profile={versionId:'1.21.11',explicitGameDir:'denied',directories:['valid']};const result=await directoryChoices(f.source,profile,['options.txt'],async path=>{if(path===join(f.source,'denied'))throw Object.assign(Error('synthetic denied'),{code:'EACCES'})});
+ assert.equal(result.gameDir,null);assert.equal(result.directories.length,1);assert.match(result.directoryIssues[0].reason,/权限/);
+});
+test('configured junction remains blocked rather than becoming a recoverable missing-directory warning',async t=>{
+ const f=await fixture(t);await f.put('target/options.txt','keep');await symlink(join(f.source,'target'),join(f.source,'linked'),'junction');await f.put('launcher_profiles.json',{profiles:{p:{lastVersionId:'1.21.11',gameDir:'linked'}}});const before=await snapshot(f.source),row=(await scanMinecraft(f.source)).rows[0];assert.equal(row.supported,false);assert.match(row.reason,/link/i);assert.deepEqual(await snapshot(f.source),before);
+});

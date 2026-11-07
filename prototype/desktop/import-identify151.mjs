@@ -58,9 +58,14 @@ export async function identifyProfile(root,id,noLinks){
 }
 export async function directoryChoices(root,profile,groups,noLinks){
  const explicit=[...(profile.explicitGameDir?[profile.explicitGameDir]:[]),...profile.directories].map(p=>resolve(root,p));
- const choices=[];
- const add=async(path,kind)=>{await noLinks(path);if(!(await lstat(path)).isDirectory())fail('游戏数据目录配置无效。');if(!choices.some(c=>c.path===path))choices.push({path,kind});};
- if(explicit.length){for(const path of explicit)await add(path,'configured');}
+ const choices=[],directoryIssues=[];
+ const add=async(path,kind)=>{await noLinks(path);if(!(await lstat(path)).isDirectory())fail('游戏数据目录配置无效。');await readdir(path);if(!choices.some(c=>c.path===path))choices.push({path,kind});};
+ if(explicit.length){for(const path of [...new Set(explicit)])try{await add(path,'configured');}catch(e){
+  // A moved/inaccessible configured data path does not invalidate version evidence.
+  // Keep unsafe links and other unexpected failures blocked; never substitute a path.
+  if(!['ENOENT','ENOTDIR','EACCES','EPERM'].includes(e.code))throw e;
+  directoryIssues.push({path,reason:['ENOENT','ENOTDIR'].includes(e.code)?'原配置的游戏数据目录不存在或已搬迁，请选择实际目录。':'无法读取原配置的游戏数据目录，请检查权限或选择实际目录。'});
+ }}
  else{
   const isolated=safePath(root,`versions/${profile.versionId}`);
   const hasData=async path=>{await noLinks(path);const names=await readdir(path);return groups.some(g=>names.includes(g));};
@@ -68,7 +73,7 @@ export async function directoryChoices(root,profile,groups,noLinks){
   if(await hasData(isolated))await add(isolated,'isolated');
   if(!choices.length)await add(root,'shared');
  }
- return {directories:choices,gameDir:choices.length===1?choices[0].path:null};
+ return {directories:choices,directoryIssues,gameDir:!directoryIssues.length&&choices.length===1?choices[0].path:null};
 }
 export async function validateImportVersion(core,profile,choice){
  let catalog;try{await core.versions();catalog=core.catalog;}catch{return {state:'unavailable',reason:'无法连接官方版本目录，请检查网络后重试。'};}

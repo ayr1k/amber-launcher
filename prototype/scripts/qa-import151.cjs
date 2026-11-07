@@ -19,7 +19,7 @@ async function run(name,presets){
  const merged={id:'1.21.11-Fabric',mainClass:'net.fabricmc.loader.impl.launch.knot.KnotClient',libraries:[{name:'net.fabricmc:fabric-loader:0.18.0'},{name:'net.fabricmc:intermediary:1.21.11'}]};
  await put(join(isolated,'1.21.11-Fabric.json'),merged);await put(join(isolated,'options.txt'),'isolated data');await put(join(source,'options.txt'),'shared data');await put(join(source,'launcher_accounts.json'),'synthetic secret, must not copy');
  await put(join(source,'versions','uncertain','uncertain.json'),{...merged,id:'uncertain',libraries:[merged.libraries[0]]});
- await put(join(source,'launcher_profiles.json'),{profiles:{long:{name:'Long display name for a custom Fabric profile — synthetic import acceptance only',lastVersionId:merged.id},vanilla:{name:'Vanilla fixture',lastVersionId:base.id},unknown:{name:'Confirm base fixture',lastVersionId:'uncertain'}}});
+ await put(join(source,'launcher_profiles.json'),{profiles:{long:{name:'Long display name for a custom Fabric profile — synthetic import acceptance only',lastVersionId:merged.id},vanilla:{name:'Vanilla fixture',lastVersionId:base.id},unknown:{name:'Confirm base fixture',lastVersionId:'uncertain'},moved:{name:'Moved directory fixture',lastVersionId:base.id,gameDir:join(data,'missing-original-directory')}}});
  const before=await snapshot(source),packaged=process.env.AMBER_QA_UNPACKAGED!=='1',stage=process.env.AMBER_QA_APP_ROOT||join(root,'releases/1.5.1',name,'win-unpacked/resources/app');
  const executable=packaged?join(stage,'../../',name+'.exe'):join(root,'node_modules/electron/dist/electron.exe');
  const env={...process.env,AMBER_SMOKE_ROOT:data};delete env.ELECTRON_RUN_AS_NODE;
@@ -61,7 +61,7 @@ async function run(name,presets){
    const layout=await dialog.evaluate(el=>{const b=el.getBoundingClientRect(),body=el.querySelector('.dialog-body'),actions=el.querySelector('.dialog-actions').getBoundingClientRect();return {width:innerWidth,height:innerHeight,scroll:body.scrollHeight>body.clientHeight,overflow:el.scrollWidth>el.clientWidth+2,actionsBottom:actions.bottom,dialogBottom:b.bottom,font:getComputedStyle(el).fontSize}});
    assert.equal(layout.overflow,false);assert.ok(layout.actionsBottom<=layout.height&&layout.dialogBottom<=layout.height,'actions stay reachable');
    await choose('版本 / 启动配置',/Confirm base fixture/);await page.getByRole('combobox',{name:label('确认 Minecraft 基础版本'),exact:true}).waitFor();await choose('确认 Minecraft 基础版本',/^1\.21\.11$/);await dialog.locator('.import-summary151').filter({hasText:'0.18.0'}).waitFor();
-   await choose('版本 / 启动配置',/Vanilla fixture/);
+   await choose('版本 / 启动配置',/Moved directory fixture/);await page.getByText(label('原配置的游戏数据目录不存在或已搬迁，请选择实际目录。'),{exact:false}).waitFor();assert.ok(await button('复制并安装').isDisabled());
    await app.evaluate(({dialog},path)=>{dialog.showOpenDialog=async()=>({canceled:false,filePaths:[path]})},empty);await button('选择其他游戏数据目录…').click();
    await page.getByRole('checkbox',{name:label('确认不复制游戏数据，仅创建运行环境'),exact:true}).waitFor();
    assert.ok(await button('仅创建运行环境').isDisabled());
@@ -71,9 +71,9 @@ async function run(name,presets){
    if(theme==='classic'){
     await app.evaluate(({dialog},path)=>{dialog.showOpenDialog=async()=>({canceled:false,filePaths:[path]})},isolated);await button('选择其他游戏数据目录…').click();await dialog.locator('.import-summary151').filter({hasText:'vanilla'}).waitFor();
     await page.getByRole('checkbox',{name:label('已核对数据来源，原游戏已退出，导入期间不修改源文件。'),exact:true}).check();await button('复制并安装').click();await dialog.waitFor({state:'hidden'});
-    const instances=await page.evaluate(()=>window.amberDesktop.listInstances());const imported=instances.find(i=>i.name==='Vanilla fixture');assert.ok(imported);assert.equal(await readFile(join(library,'instances',imported.id,'options.txt'),'utf8'),'isolated data');
+    const instances=await page.evaluate(()=>window.amberDesktop.listInstances());const imported=instances.find(i=>i.name==='Moved directory fixture');assert.ok(imported);assert.equal(await readFile(join(library,'instances',imported.id,'options.txt'),'utf8'),'isolated data');
    }else await button('关闭').click();
-   report.checks.push({theme,locale,fontSize,motion,layout,checks:['ambiguous directory','isolated preview','long ID and path','manual base confirmation','directory switch','zero files opt-in',...(theme==='classic'?['copy success']:[])]});
+   report.checks.push({theme,locale,fontSize,motion,layout,checks:['missing configured directory correction','ambiguous directory','isolated preview','long ID and path','manual base confirmation','directory switch','zero files opt-in',...(theme==='classic'?['copy success']:[])]});
   }
   assert.deepEqual(await snapshot(source),before);assert.deepEqual(errors,[]);report.sourceUnchanged=true;report.rendererErrors=errors;
   if(packaged){report.provenance=JSON.parse(await readFile(join(stage,'desktop/build-provenance.json'),'utf8'));assert.equal(report.provenance.version,'1.5.1');assert.equal(report.provenance.channel,'local')}

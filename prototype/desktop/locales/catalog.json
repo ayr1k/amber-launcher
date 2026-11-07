@@ -11602,5 +11602,13 @@
   "mab811b1087eb": {
     "zh": "未找到所选内容，请确认仅创建运行环境。",
     "en": "No selected content was found. Confirm that only the runtime should be created."
+  },
+  "md2a3b59966d0": {
+    "zh": "原配置的游戏数据目录不存在或已搬迁，请选择实际目录。",
+    "en": "The configured game data directory is missing or has moved. Choose the actual directory."
+  },
+  "m65cafd3210e7": {
+    "zh": "无法读取原配置的游戏数据目录，请检查权限或选择实际目录。",
+    "en": "The configured game data directory cannot be read. Check permissions or choose the actual directory."
   }
 }

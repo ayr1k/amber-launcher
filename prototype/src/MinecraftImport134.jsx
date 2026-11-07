@@ -32,6 +32,7 @@ export function MinecraftImportDialog({onClose,onImported}){
     {scan.rows.some(p=>!p.supported)&&<details><summary>{translateText("无法识别的配置")}</summary>{scan.rows.filter(p=>!p.supported).map(p=><p className="import-path134" key={p.key}>{p.name}: {translateMessage(p.reason)}</p>)}</details>}
     {row&&<>
      <p className="import-path134">{translateText("来源版本标识：")}{row.versionId}<br/>{translateText("加载器：")}{row.loader} {row.version}</p>
+     {!gameDir&&row.directoryIssues?.map((issue,i)=><p className="import-path134" role="status" key={i}>{translateMessage(issue.reason)}<br/>{issue.path}</p>)}
      <label className="field">{translateText("游戏数据来源")}<Select disabled={busy} value={gameDir} onChange={e=>{setGameDir(e.target.value);setClosed(false)}}>
       <option value="">{translateText("请选择实际游戏目录")}</option>{row.directories.map(d=><option key={d.path} value={d.path}>{directoryLabel(d)} · {d.path}</option>)}
      </Select></label>
@@ -44,7 +45,7 @@ export function MinecraftImportDialog({onClose,onImported}){
      {current&&<div className="import-summary151" aria-live="polite">
       {current.gameDir&&<><p className="import-path134">{translateText("实际复制来源：")}{current.gameDir}</p><p>{current.files} {translateText("个文件")} · {(current.bytes/1048576).toFixed(1)} MB ({current.bytes.toLocaleString()} B)</p></>}
       {current.validation.state==='ready'?<p>Minecraft {current.validation.game} · {row.loader} {row.version}</p>:<p role="status">{translateMessage(current.validation.reason)}</p>}
-      {current.needsDirectory&&<p>{translateText("检测到多个可能目录，请先选择实际游戏目录。")}</p>}
+      {current.needsDirectory&&!row.directoryIssues?.length&&<p>{translateText("检测到多个可能目录，请先选择实际游戏目录。")}</p>}
       {current.files===0&&<><p>{translateText("所选内容中没有文件：可能未选择内容、目录尚未使用，或实际数据在其他位置。这不代表数据已完整迁移。")}</p><label className="check131"><input type="checkbox" disabled={busy} checked={allowEmpty} onChange={e=>setAllowEmpty(e.target.checked)}/><span>{translateText("确认不复制游戏数据，仅创建运行环境")}</span></label></>}
      </div>}
      <label className="check131"><input type="checkbox" disabled={busy} checked={closed} onChange={e=>setClosed(e.target.checked)}/><span>{translateText("已核对数据来源，原游戏已退出，导入期间不修改源文件。")}</span></label>
