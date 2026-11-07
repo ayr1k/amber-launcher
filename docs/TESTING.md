@@ -1,3 +1,13 @@
+# 1.5.2 release verification
+
+Approved baseline: merged PR #7 (`8d7be9337b6c1349668bfc159a348c668f497c6a`), task head `3880bb553bffff7aca9b2d438ecd734cb6bb5f0c`. Room synchronization implementation remains unchanged. Content/UI review uses the existing task/Dot workflow and its explicitly scoped evidence; it is not repeated by this release chat. Historical candidate restrictions and test counts remain attributed to their original revisions in LOCAL-TEST-1.5.2.md.
+
+This release run passed **637/637 regressions with zero skips**, four static-serving tests, 2,857 bilingual-message checks, production builds and source/license checks. Release validation checks clean build provenance, version 1.5.2/public, independent product identity, packaged Windows startup/IPC, all-platform archives, runtime notices, source manifests, SHA-256 and public download/deployment results. Official packages identify their clean source commit; the final release commit additionally records the generated source manifest without changing application code. Public source excludes injected credentials and private test assets.
+
+Existing task evidence includes isolated Electron host/player/list/limit checks and two real EasyTier processes on one Windows machine. It is not real two-machine cross-network, NAT/relay, actual game launch/join, real modpack, real-account or live CurseForge service/key acceptance. Common single loaders, selected mod JARs and top-level text config are supported within 500 total files (config included), 64 MiB per file and 1 GiB selected total. Complex loader combinations, resource/shader packs and nested config remain outside scope. Signed hashes do not prove mod safety; host privacy, compatibility and redistribution review remain required. Native non-Windows desktop and installer upgrade acceptance remain pending. FreeBSD is experimental server/tools-only; packages are unsigned and macOS is not notarized.
+
+Idea credit: Bilibili user **@北目宁游戏 (UID 391446396)**. Both product READMEs keep a permanent section for accepted user suggestions.
+
 # 1.5.1 release verification
 
 Approved baseline: merged AMBER PR #6 (`9c09b61b18566392f23a3515e6c40c4b52cb686f`), reviewed task head `31831aad326f3788db9ada17f97ce71d192e5ef7`. The import implementation is unchanged. Content, functional and UI acceptance uses the existing separate task/Dot review and packaged synthetic-fixture evidence from PR #6 and LOCAL-TEST-1.5.1.md; release work does not add another content review.

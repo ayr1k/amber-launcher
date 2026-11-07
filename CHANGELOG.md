@@ -1,8 +1,11 @@
-## 1.5.2 (task test build)
+## 1.5.2
 
-- Add opt-in EasyTier client environment snapshots with explicit host file selection and guest preview/consent. Signed room snapshots, original Modrinth downloads, permission-gated host transfer, verified cache reuse and independent client instances preserve existing games and data.
-- Keep game forwarding active when sharing is disabled; revoke synchronization access and cancel incomplete setup. Launch-and-join retains normal account authorization.
-- First implementation supports common single loaders and selected mod JARs/top-level text configuration; CurseForge uses the existing official route without bypassing download restrictions; complex loader combinations and other file categories remain excluded. See prototype/LOCAL-TEST-1.5.2.md for scope, security model, retry behavior and unverified real-world cases. No formal release or Pages deployment.
+- Add opt-in EasyTier room client environment synchronization. Hosts select a stopped client and review selected mods/top-level text configuration; guests preview signed versions, sources and content sizes and explicitly confirm. Each accepted revision creates a new independent instance, retaining existing games and personal data.
+- Use verified original Modrinth/CurseForge downloads where identified; unavailable or restricted platform downloads fail without host-transfer fallback. Unrecognized host-transferred files require explicit privacy, compatibility and redistribution review. Signed snapshots and hashes establish consistency, not mod safety.
+- Reuse verified caches, preserve incomplete instances and require fresh room preview/confirmation after interrupted setup. Completed instances retain ordinary task recovery. Revoking sharing disconnects synchronization and cancels unfinished setup while preserving game forwarding.
+- Refine host file selection, platform icons and narrow-window layout. Select all mods preserves chosen configuration and refuses the entire addition if it would exceed 500 total files; selected files remain removable at capacity. The limit includes configuration; do not omit required dependencies to fit.
+- Supports common single loaders, selected mod JARs and top-level text configuration; complex loader combinations, resource/shader packs and nested configuration remain unsupported. Real two-machine cross-network gameplay, NAT/relay combinations and actual modpack compatibility remain unverified.
+- Idea credit: **Bilibili user @北目宁游戏 (UID 391446396)**, who suggested a room where players confirm downloading the host's selected mods.
 
 ## 1.5.1
 

@@ -87,3 +87,7 @@ Optional MySQL preparation downloads the pinned program from Oracle. Database cr
 ## Existing installation import (1.5.1)
 
 Import previews read version metadata and hash selected local content to bind a later copy. These file manifests stay local; source files are not uploaded for identification. Official catalogs are contacted to verify game/loader versions. Source directories remain read-only, top-level account files are not copied as content, and failed/cancelled copies may retain selected files in the new local instance.
+
+## Room sharing (1.5.2)
+
+Sharing is off by default. Enabling it exposes the explicitly selected snapshot and allowed files to invitation holders through the room overlay. Invitations contain an access token and pinned host key; share them only with intended participants. The host must inspect selected configuration for private information. Known content/icons contact their original platforms; local paths, account stores and configuration are not sent for icon discovery. Disabling sharing revokes sync access but does not erase files already received by guests. Independent guest instances and verified caches remain local until removed.

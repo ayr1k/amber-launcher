@@ -8,7 +8,7 @@
 <p align="center"><strong>你的世界，由你掌握。</strong></p>
 
 <p align="center">
-  <a href="https://github.com/ayr1k/amber-launcher/releases/tag/v1.5.1"><img src="https://img.shields.io/badge/release-1.5.1-e9b53d?style=flat-square" alt="Release" /></a>
+  <a href="https://github.com/ayr1k/amber-launcher/releases/tag/v1.5.2"><img src="https://img.shields.io/badge/release-1.5.2-e9b53d?style=flat-square" alt="Release" /></a>
   <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MPL--2.0-527b68?style=flat-square" alt="License" /></a>
   <a href="https://github.com/ayr1k/amber-launcher/actions/workflows/windows.yml"><img src="https://github.com/ayr1k/amber-launcher/actions/workflows/windows.yml/badge.svg" alt="Build" /></a>
   <a href="https://ayr1k.github.io/"><img src="https://img.shields.io/badge/website-AMBER-527b68?style=flat-square" alt="Website" /></a>
@@ -28,19 +28,19 @@
   </tr>
 </table>
 
-截图来自公开的 AMBER 1.2.1 主题展示，使用演示数据；主题同样适用于 AmberE。点击可查看大图，当前功能与平台范围以 1.5.1 说明为准。
+截图来自公开的 AMBER 1.2.1 主题展示，使用演示数据；主题同样适用于 AmberE。点击可查看大图，当前功能与平台范围以 1.5.2 说明为准。
 
 ## 项目简介
 
 AMBER 是独立的 Minecraft Java 版启动器，将实例隔离、游戏安装、模组管理、恢复和启动设置集中在同一界面。项目自有源码采用 MPL-2.0。
 
-## 1.5.1
+## 1.5.2
 
-改进已有 .minecraft 导入：区分自定义名称、基础游戏与加载器版本，确认实际数据目录，支持修正失效路径，并在复制到新实例前核对绑定文件清单的预览。
+在 EasyTier 房间中分享选定的客户端环境：房主选择并复核文件，玩家预览确认后下载到独立实例。同步默认关闭，撤销分享不关闭游戏联机。
 
-Windows/macOS/Linux/FreeBSD 均提供 1.5.1；macOS/Linux 待对应真机验收，FreeBSD 仅实验性服务端/工具。
+Windows/macOS/Linux/FreeBSD 均提供 1.5.2；macOS/Linux 待对应真机验收，FreeBSD 仅实验性服务端/工具。
 
-提供 Windows x64 正式安装包及其他平台下载。[下载安装包、源码和校验文件](https://github.com/ayr1k/amber-launcher/releases/tag/v1.5.1)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
+提供 Windows x64 正式安装包及其他平台下载。[下载安装包、源码和校验文件](https://github.com/ayr1k/amber-launcher/releases/tag/v1.5.2)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
 
 - 一体化标题栏、独立窗口边框设置、窗口位置恢复与重新组织的隐私设置。
 
@@ -88,3 +88,9 @@ AMBER 非 Mojang 或微软官方产品。Minecraft、下载组件及第三方项
 Alloy、Nocturne、Harvest 与 Verdant 均为独立下载的免费官方主题，适用于 AMBER 和 AmberE 1.2.1 及以上版本，不预置在软件内。
 
 [服务端与联机指南](SERVERS.md)（异地房间为测试功能）。
+
+## 鸣谢
+
+本栏目长期用于感谢向项目提出建议且建议被采纳的用户，后续会持续补充。
+
+- **B 站用户 @北目宁游戏（UID 391446396）**：提出“房主选好模组，其他玩家进入房间后确认下载房主模组”的建议，启发了 1.5.2 的房间客户端环境同步功能。感谢提供创意！

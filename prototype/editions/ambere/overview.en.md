@@ -3,7 +3,7 @@
 <p align="center"><strong>Offline and third-party identities. Your own adventure.</strong></p>
 
 <p align="center">
-  <a href="https://github.com/ayr1k/AmberE/releases/tag/v1.5.1"><img src="https://img.shields.io/badge/release-1.5.1-e9b53d?style=flat-square" alt="Release" /></a>
+  <a href="https://github.com/ayr1k/AmberE/releases/tag/v1.5.2"><img src="https://img.shields.io/badge/release-1.5.2-e9b53d?style=flat-square" alt="Release" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MPL--2.0-527b68?style=flat-square" alt="License" /></a>
   <a href="https://github.com/ayr1k/AmberE/actions/workflows/windows.yml"><img src="https://github.com/ayr1k/AmberE/actions/workflows/windows.yml/badge.svg" alt="Build" /></a>
   <a href="https://ayr1k.github.io/"><img src="https://img.shields.io/badge/website-AMBER-527b68?style=flat-square" alt="Website" /></a>
@@ -23,19 +23,19 @@ An independent Minecraft: Java Edition launcher bringing instances, content, the
   </tr>
 </table>
 
-Public AMBER 1.2.1 theme previews using demonstration data; these themes also work with AmberE. Click to enlarge. See the 1.5.1 notes below for current features and platform availability.
+Public AMBER 1.2.1 theme previews using demonstration data; these themes also work with AmberE. Click to enlarge. See the 1.5.2 notes below for current features and platform availability.
 
 ## Overview
 
 AmberE is an independent distribution for Minecraft: Java Edition, providing offline and third-party accounts. It is maintained from the shared AMBER codebase under MPL-2.0, with its own application identity, data directory and update repository. It does not offer Microsoft sign-in or include a Microsoft application Client ID.
 
-## 1.5.1
+## 1.5.2
 
-Improve existing .minecraft imports: identify base game and loader versions separately from custom names, confirm the actual data directory, recover missing configured paths, and verify a file-bound preview before copying into a new instance.
+Share a selected client environment in an EasyTier room. Hosts choose and review files; guests preview and confirm before downloading into an independent instance. Sharing is off by default and can be revoked without closing game forwarding.
 
-Windows/macOS/Linux/FreeBSD packages share version 1.5.1. Native macOS/Linux acceptance is pending; FreeBSD is experimental server/tools-only.
+Windows/macOS/Linux/FreeBSD packages share version 1.5.2. Native macOS/Linux acceptance is pending; FreeBSD is experimental server/tools-only.
 
-Windows x64 release with additional platform downloads. [Download the installer, source and checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.5.1). Includes instance management, content recommendations, mod updates, backups and recovery.
+Windows x64 release with additional platform downloads. [Download the installer, source and checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.5.2). Includes instance management, content recommendations, mod updates, backups and recovery.
 
 - Offline identities and HTTPS third-party authentication, with system credential protection for saved credentials.
 - Isolated game instances; Java and loader installation; mod search, dependencies, updates and bulk management.
@@ -64,3 +64,9 @@ Windows x64: EXE; macOS Intel / Apple Silicon: separate ZIPs; Linux x64: DEB. ma
 Alloy, Nocturne, Harvest and Verdant are free official themes for AMBER and AmberE 1.2.1 or newer, available separately and not preinstalled.
 
 [Server and connection guide](docs/SERVERS.md) (remote rooms are a testing feature).
+
+## Acknowledgements
+
+This section thanks users whose suggestions have been accepted into the project. It will remain here for future accepted contributions of ideas and feedback.
+
+- **Bilibili user @北目宁游戏 (UID 391446396)** — proposed letting a host select a modded environment and letting players confirm downloading the host's mods after joining the room. This inspired the room client environment synchronization introduced in 1.5.2.

@@ -1,3 +1,9 @@
+# 1.5.2 formal release
+
+PR #7 merged as `8d7be9337b6c1349668bfc159a348c668f497c6a`, task head `3880bb553bffff7aca9b2d438ecd734cb6bb5f0c`. The user authorized formal release on 2026-11-07. Official packages use **1.5.2 / public**. Candidate restrictions and old test counts below are historical evidence; current release validation is in RELEASE-ACCEPTANCE.md. Content/UI review relies on the existing task/Dot workflow, without an additional release-chat review. Idea credit: Bilibili user **@北目宁游戏 (UID 391446396)**.
+
+PR #7 已合并，用户已授权正式发布。下方测试包限制和历史测试数字保留原归属，不代表当前发布授权或正式包；正式包为 1.5.2/public。创意来自 B 站用户 **@北目宁游戏（UID 391446396）**。
+
 # AMBER / AmberE 1.5.2 — room client synchronization test build
 
 This is a task test build, not a formal release. Do not merge or deploy Pages without the user's separate decision.
