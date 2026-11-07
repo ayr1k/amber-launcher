@@ -91,3 +91,7 @@ Import previews read version metadata and hash selected local content to bind a 
 ## Room sharing (1.5.2)
 
 Sharing is off by default. Enabling it exposes the explicitly selected snapshot and allowed files to invitation holders through the room overlay. Invitations contain an access token and pinned host key; share them only with intended participants. The host must inspect selected configuration for private information. Known content/icons contact their original platforms; local paths, account stores and configuration are not sent for icon discovery. Disabling sharing revokes sync access but does not erase files already received by guests. Independent guest instances and verified caches remain local until removed.
+
+## Persistent room recovery (1.5.3)
+
+Local revision history is bound to the room name and host public key; it stores no invitation token or account data. Verified caches, interrupted transfer fragments and preserved instances can remain on disk across restarts. They are not automatically cleaned up. Selected archives/configuration may contain personal information: hosts must inspect them before sharing. Revocation prevents further access, but cannot erase already received copies.

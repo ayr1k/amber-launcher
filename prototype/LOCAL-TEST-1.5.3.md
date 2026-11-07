@@ -1,3 +1,9 @@
+# 1.5.3 formal release
+
+PR #8 merged as `bc07ca5869f59c6bb29c323303b99f404644737e`, reviewed task head `1ac4009c1a7c3e6bb7d2f9236850673f839f581b`. The user requested formal release on 2026-11-07. Official packages use **1.5.3/public**. Candidate restrictions below remain historical evidence, not the current authorization or official build provenance. Release verification is recorded in RELEASE-ACCEPTANCE.md. Existing separate task/Dot content review is reused with its original scope.
+
+PR #8 已合并并获得用户正式发布授权；正式包为 **1.5.3/public**。下方任务限制保留原历史归属，不代表当前发布授权或正式包。内容审核沿用独立任务及 Dot 的结论，发布验证见 RELEASE-ACCEPTANCE.md。
+
 # AMBER / AmberE 1.5.3 task test build
 
 Unreleased, local update channel. Branch: `codex/1.5.3-room-sync-recovery`; baseline: `7e51b3c2d68328e44ebdaf2c2cc44ed35f2428e7` (published 1.5.2). Both products use the shared implementation and retain their separate account rules, storage and update repositories. No merge, stable Release or Pages deployment is authorized by this task.

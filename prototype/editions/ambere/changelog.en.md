@@ -1,9 +1,10 @@
-## 1.5.3 — task test build (unreleased)
+## 1.5.3
 
-- Share individually selected resource/shader ZIPs and nested text configuration alongside mods. Preserve original-platform restrictions, explicit host permission and guest confirmation.
-- Raise bounded synchronization to 2,000 files, 256 MiB per archive/mod and 4 GiB selected total; text configuration remains limited to 1 MiB and six nested folders. Validate the signed wire envelope before publication and on reception (4 MiB maximum).
-- Stream host files with verified range recovery. Persist room/host-bound revision history and continue an unchanged unfinished target after fresh authorization, including after restart. Local conflicts require explicitly creating a new independent instance; existing data is preserved. New revisions remain independent and show differences against the last completed environment.
-- See LOCAL-TEST-1.5.3.md for evidence and limits. This is not a formal release; actual modpack compatibility, two-machine/cross-network gameplay and native non-Windows acceptance are not claimed.
+- Extend explicit room content selection to resource/shader ZIPs and nested text configuration alongside mods. ZIPs remain intact and are not automatically enabled. Preserve original-platform restrictions, host privacy/redistribution review and explicit guest confirmation.
+- Apply consistent limits: 2,000 files, 256 MiB per file, 4 GiB selected content, 1 MiB text config and six nested folders. Bound the actual signed wire envelope to 4 MiB before publication and reception. Runtime/Java/loader downloads need additional space.
+- Stream host files with authenticated, checksum-verified range recovery. Retain cancelled partial downloads, but resume only after fresh confirmation of the current signed revision; verify full size/hash before installing.
+- Persist room/host-bound history and compare revisions against the last completed environment. After restart, resume the same unchanged unfinished target only when receipt, runtime and setup records agree. Conflicts require explicit preservation of the original and creation of a new independent instance; selected local edits are never silently overwritten.
+- New revisions still create independent instances and retain previous saves/edits. No automatic cleanup of instances, caches or snapshots. Real modpack/gameplay, cross-network/NAT/relay and live platform acceptance remain unverified; the 4 GiB limit is validated arithmetically, not by a full-size real modpack transfer.
 
 ## 1.5.2
 

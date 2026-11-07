@@ -8,7 +8,7 @@
 <p align="center"><strong>你的世界，由你掌握。</strong></p>
 
 <p align="center">
-  <a href="https://github.com/ayr1k/amber-launcher/releases/tag/v1.5.2"><img src="https://img.shields.io/badge/release-1.5.2-e9b53d?style=flat-square" alt="Release" /></a>
+  <a href="https://github.com/ayr1k/amber-launcher/releases/tag/v1.5.3"><img src="https://img.shields.io/badge/release-1.5.3-e9b53d?style=flat-square" alt="Release" /></a>
   <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MPL--2.0-527b68?style=flat-square" alt="License" /></a>
   <a href="https://github.com/ayr1k/amber-launcher/actions/workflows/windows.yml"><img src="https://github.com/ayr1k/amber-launcher/actions/workflows/windows.yml/badge.svg" alt="Build" /></a>
   <a href="https://ayr1k.github.io/"><img src="https://img.shields.io/badge/website-AMBER-527b68?style=flat-square" alt="Website" /></a>
@@ -28,19 +28,19 @@
   </tr>
 </table>
 
-截图来自公开的 AMBER 1.2.1 主题展示，使用演示数据；主题同样适用于 AmberE。点击可查看大图，当前功能与平台范围以 1.5.2 说明为准。
+截图来自公开的 AMBER 1.2.1 主题展示，使用演示数据；主题同样适用于 AmberE。点击可查看大图，当前功能与平台范围以 1.5.3 说明为准。
 
 ## 项目简介
 
 AMBER 是独立的 Minecraft Java 版启动器，将实例隔离、游戏安装、模组管理、恢复和启动设置集中在同一界面。项目自有源码采用 MPL-2.0。
 
-## 1.5.2
+## 1.5.3
 
-在 EasyTier 房间中分享选定的客户端环境：房主选择并复核文件，玩家预览确认后下载到独立实例。同步默认关闭，撤销分享不关闭游戏联机。
+房间同步新增选定资源包／光影 ZIP 与嵌套文本配置，支持更大的有界传输、校验续传、重启恢复，以及基于最近完成环境的持久差异记录。
 
-Windows/macOS/Linux/FreeBSD 均提供 1.5.2；macOS/Linux 待对应真机验收，FreeBSD 仅实验性服务端/工具。
+Windows/macOS/Linux/FreeBSD 均提供 1.5.3；macOS/Linux 待对应真机验收，FreeBSD 仅实验性服务端/工具。
 
-提供 Windows x64 正式安装包及其他平台下载。[下载安装包、源码和校验文件](https://github.com/ayr1k/amber-launcher/releases/tag/v1.5.2)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
+提供 Windows x64 正式安装包及其他平台下载。[下载安装包、源码和校验文件](https://github.com/ayr1k/amber-launcher/releases/tag/v1.5.3)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
 
 - 一体化标题栏、独立窗口边框设置、窗口位置恢复与重新组织的隐私设置。
 
