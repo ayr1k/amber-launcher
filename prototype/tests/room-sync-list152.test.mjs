@@ -29,24 +29,24 @@ test('select all appends eligible mods without selecting configuration or forbid
  assert.deepEqual(selectAllRoomMods152(['config/display.json','mods/b.jar'],files).paths,['config/display.json','mods/b.jar','mods/a.jar']);assert.deepEqual(selectAllRoomMods152([],files).paths,['mods/a.jar','mods/b.jar']);
 });
 const mods=count=>Array.from({length:count},(_,i)=>({path:'mods/m'+i+'.jar'}));
-for(const count of [500,501])for(const config of [false,true])test('select all '+count+' mods, '+(config?'with':'without')+' selected configuration respects total file limit',()=>{
+for(const count of [2000,2001])for(const config of [false,true])test('select all '+count+' mods, '+(config?'with':'without')+' selected configuration respects total file limit',()=>{
  const before=config?['config/display.json']:[],files=mods(count),result=selectAllRoomMods152(before,files),limited=count+before.length>ROOM_SYNC_MAX_FILES152;
- assert.equal(ROOM_SYNC_MAX_FILES152,500);assert.equal(result.limited,limited);assert.equal(result.pending,count);assert.deepEqual(result.paths,limited?before:files.map(f=>f.path));assert.deepEqual(before,config?['config/display.json']:[]);
+ assert.equal(ROOM_SYNC_MAX_FILES152,2000);assert.equal(result.limited,limited);assert.equal(result.pending,count);assert.deepEqual(result.paths,limited?before:files.map(f=>f.path));assert.deepEqual(before,config?['config/display.json']:[]);
  const again=selectAllRoomMods152(result.paths,files);assert.deepEqual(again.paths,result.paths);assert.equal(again.limited,limited);assert.equal(again.pending,limited?count:0);
 });
 test('select all preserves existing partial choices instead of truncating to remaining capacity',()=>{
- const files=mods(501),before=['config/display.json',files[4].path,files[8].path],result=selectAllRoomMods152(before,files);
- assert.equal(result.limited,true);assert.equal(result.pending,499);assert.deepEqual(result.paths,before);
- const fits=selectAllRoomMods152(['config/display.json'],mods(499));assert.equal(fits.limited,false);assert.equal(fits.paths.length,500);assert.equal(fits.paths[0],'config/display.json');
+ const files=mods(2001),before=['config/display.json',files[4].path,files[8].path],result=selectAllRoomMods152(before,files);
+ assert.equal(result.limited,true);assert.equal(result.pending,1999);assert.deepEqual(result.paths,before);
+ const fits=selectAllRoomMods152(['config/display.json'],mods(1999));assert.equal(fits.limited,false);assert.equal(fits.paths.length,2000);assert.equal(fits.paths[0],'config/display.json');
 });
-test('single add/remove and repeated all-selection keep the 500-file total including configuration',()=>{
- const files=mods(501);let selected=selectAllRoomMods152([],files.slice(0,500)).paths;
- for(const file of [files[500],{path:'config/display.json'}]){const result=toggleRoomFile152(selected,file,true);assert.equal(result.limited,true);assert.deepEqual(result.paths,selected);}
+test('single add/remove and repeated all-selection keep the 2000-file total including configuration',()=>{
+ const files=mods(2001);let selected=selectAllRoomMods152([],files.slice(0,2000)).paths;
+ for(const file of [files[2000],{path:'config/display.json'}]){const result=toggleRoomFile152(selected,file,true);assert.equal(result.limited,true);assert.deepEqual(result.paths,selected);}
  assert.deepEqual(toggleRoomFile152(selected,files[0],true).paths,selected);
- selected=toggleRoomFile152(selected,files[0],false).paths;assert.equal(selected.length,499);
- selected=toggleRoomFile152(selected,{path:'config/display.json'},true).paths;assert.equal(selected.length,500);assert.ok(selected.includes('config/display.json'));
+ selected=toggleRoomFile152(selected,files[0],false).paths;assert.equal(selected.length,1999);
+ selected=toggleRoomFile152(selected,{path:'config/display.json'},true).paths;assert.equal(selected.length,2000);assert.ok(selected.includes('config/display.json'));
  assert.equal(selectAllRoomMods152(selected,files).limited,true);assert.deepEqual(selectAllRoomMods152(selected,files).paths,selected);
- selected=toggleRoomFile152(selected,{path:'config/display.json'},false).paths;selected=toggleRoomFile152(selected,files[500],true).paths;assert.equal(selected.length,500);
+ selected=toggleRoomFile152(selected,{path:'config/display.json'},false).paths;selected=toggleRoomFile152(selected,files[2000],true).paths;assert.equal(selected.length,2000);
  const blocked={path:'mods/restricted.jar',blocked:'restricted'};assert.equal(toggleRoomFile152([],blocked,true).blocked,true);assert.deepEqual(toggleRoomFile152([],blocked,true).paths,[]);
 });
 test('inspection retains only unchanged eligible selections in the same instance',()=>{

@@ -1,3 +1,7 @@
+# 1.5.3 task build
+
+This is an unreleased local-channel test build for the 1.5.3 room synchronization task. The 1.5.2 evidence below is historical and does not certify this build. Current behavior, checks, limitations and PR installer provenance are recorded in LOCAL-TEST-1.5.3.md and the task PR. User acceptance governs merge; formal publication and Pages deployment require a separate release instruction.
+
 # 1.5.2 release verification
 
 Approved baseline: merged PR #7 (`8d7be9337b6c1349668bfc159a348c668f497c6a`), task head `3880bb553bffff7aca9b2d438ecd734cb6bb5f0c`. Room synchronization implementation remains unchanged. Content/UI review uses the existing task/Dot workflow and its explicitly scoped evidence; it is not repeated by this release chat. Historical candidate restrictions and test counts remain attributed to their original revisions in LOCAL-TEST-1.5.2.md.

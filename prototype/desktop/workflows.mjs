@@ -1,3 +1,4 @@
+import {conflicts153} from './room-sync-recovery153.mjs';
 import {requireRoomSyncReady152} from './room-sync152.mjs';
 import {quiltVersions,quiltProfile} from './quilt142.mjs';
 import {retainUpgrade140,applyUpgrade140} from './pack-upgrade140.mjs';
@@ -56,6 +57,11 @@ export class Workflows{
  cancel(id){for(const scope of this.scopes)if(!id||scope.instanceId===id||scope.key===id){scope.cancelled=true;for(const j of this.core.jobs.filter(j=>j.state==='running'&&j.instanceId===scope.instanceId))this.core.cancel(j.id);}}
  checkCancelled(){if(this.cancelled)throw Error('Installation cancelled / 安装已取消');}
  state(key){const s=key?this.recentScopes.get(key):null;return key?{active:this.scopes.has(s),cancelled:s?.cancelled||false,instanceId:s?.instanceId||null}:{active:this.active,cancelled:this.cancelled,instanceId:this.lastSetup};}
+ async resumeRoom153(id,manifest,afterSetup,signal){return this.exclusive(async()=>{
+  this.lastSetup=id;signal.throwIfAborted();const target=await conflicts153(this.core,id,manifest);if(target.conflicts.length)throw Error('Local file conflict: '+target.conflicts.join(', '));
+  const record=target.record;record.completed=(record.completed||[]).filter(step=>step!=='content');
+  return this.runPlan(id,record,async item=>{signal.throwIfAborted();await afterSetup(item);signal.throwIfAborted();});
+ },id);}
  async retry(id){return this.exclusive(async()=>{this.lastSetup=id;const dir=await this.core.instancePath(id);await this.core.requireStopped(dir);let record=null;try{record=JSON.parse(await readFile(join(dir,'setup-report.json'),'utf8'));}catch(e){if(e.code!=='ENOENT')throw e;}
   if(record?.roomSync&&record.state!=='done')throw Error('Return to the room, preview and confirm synchronization again / 请返回房间重新预览并确认同步');
   await requireRoomSyncReady152(this.core,id);
