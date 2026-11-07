@@ -1,0 +1,10 @@
+{
+  "checks": [
+    "shared storage columns and long-text overflow",
+    "import below instance heading; collapse and cancelled picker dispatch preserved",
+    "instances/content/tasks blank-click exclusion; short-label and control click; keyboard focus; remembered density",
+    "light square 1280x900 and dark rounded 860x700"
+  ],
+  "fixtures": "asserted temporary userData/library, synthetic cached survey and content, cancelled picker",
+  "result": "passed"
+}

@@ -43,3 +43,17 @@ The row action now carries its explicit relative path separately from bulk selec
 Scoped regression: `scripts/qa-missing154.cjs`, real Electron and real content preview/apply against asserted temporary userData/library. It verifies a missing enabled record's explicit preview and confirmation, completion of the actual content job, preservation of a second disabled missing record and an unrelated real file, select-all exclusion, polling-refresh retention, filter invalidation before and after a deliberately held real backend response, and disabled bulk removal after filtering away the selection. The same test fails waiting for confirmation against the clean baseline AMBER stage and passes against the fix. No real instance/account data is used. The earlier 9 storage-specific checks, wider theme/layout checks and package review retain their original revision attribution; they are not repeated as a new content-review gate. Existing PR workflows continue to run their configured checks automatically.
 
 中文：修复缺失记录的单项“移除…”被批量选择过滤为空的问题。单项目标独立传递，仍须当前可见且经过确认；全选继续排除缺失条目。切换筛选会同时撤销已显示和延迟返回的旧预览。定向隔离测试在旧包复现失败、修复版通过，只覆盖本次变更及相关筛选保护。最终新提交与新安装包校验值以 PR 的最新交付段落为准。
+
+## User acceptance layout corrections after 26c36a6
+
+Baseline: `26c36a61115a152532036f66696f3f51a608ce49`; the missing-record removal correction is preserved. This increment changes shared layout and placement only:
+
+- Storage category rows share grid columns, so the update-cleanup action cannot shift the information column. Container-width rules move the action below the information on narrow panels and stack fields at very small widths. Long names and explanations wrap; cleanup eligibility, confirmation and execution are unchanged.
+- The existing shared-environment import component is rendered in an `afterHeading` slot immediately below the instance-management heading. Its component, creation callback and picker logic are unchanged.
+- All three density controls retain the same themed Select and short native label. A non-label block owns the row whitespace; only the fit-content label/control activates the choice list. Keyboard semantics, focus and per-list storage are unchanged.
+
+Scoped verification: `scripts/qa-layout154.cjs` passed in real unpackaged Electron with asserted temporary userData/library, synthetic cached survey rows/content and an injected cancelled file-picker reply. Checks cover shared title/info x-coordinates, long unbroken explanation overflow, heading-before-import ordering, expand/collapse preservation through density changes, real picker dispatch/cancellation, blank clicks versus label/control clicks on instances/content/tasks, keyboard selection and focus restoration, persistence across reload, light/square 1280×900 and dark/rounded 860×700. No cleanup or real instance/account mutation was performed. Screenshots are `review/layout154-{storage,instances,content,tasks}-{light,dark}.png`; machine-readable scope is `review/layout154-checks.json`.
+
+Production build, locale/source checks are run for this increment. Previous storage/synchronization behavior review and missing-record regression results retain their original attribution; no unrelated full manual review is repeated. Existing PR CI runs its configured checks and builds both editions. The PR identifies the latest head, exact downloaded Windows installers, checksums and provenance; all older installers are superseded.
+
+中文：本轮只修复存储分类列对齐、联机环境清单入口在实例标题下方的位置，以及三个密度控件整行空白误触。隔离桌面验证覆盖深浅主题、宽窄窗口、长说明、导入折叠与选择器取消、空白／标签／框内点击、键盘焦点和记忆；未执行真实清理或导入，未改动存储安全及账号逻辑。此前审核结果保留原归属，以 PR 最新提交及新包为本轮交付。

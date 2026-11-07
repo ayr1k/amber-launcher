@@ -7,6 +7,21 @@
 section.compact > .task-entry{padding-block:10px;margin-block:8px}
 .content-installed-row:focus-within{outline:2px solid var(--green);outline-offset:-2px}
 
-.list-density{display:flex;align-items:center;gap:12px;margin-block:12px;flex-wrap:wrap}.list-density .amber-select{width:160px;max-width:100%}
+.list-density-row{margin-block:12px}.list-density-row>.list-density{display:inline-flex;inline-size:fit-content;max-inline-size:100%;align-items:center;gap:12px;flex-wrap:wrap;margin:0}.list-density .amber-select{width:160px;max-width:100%}
 
 .installed-split.comfortable .content-installed-row{padding-block:14px;min-height:60px}section.comfortable > .task-entry{padding-block:20px;margin-block:16px}section.comfortable .managed-instances article{padding-block:20px}
+
+/* Share column tracks across every category, including rows without an action. */
+.maintenance-panel{container-type:inline-size}
+.maintenance-panel .maintenance-rows{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.5fr) auto;column-gap:16px}
+.maintenance-panel .maintenance-rows>div{grid-column:1/-1;display:grid;grid-template-columns:subgrid;align-items:start;gap:16px;padding-block:16px}
+.maintenance-panel .maintenance-rows>div>strong,.maintenance-panel .maintenance-rows>div>span{min-width:0;overflow-wrap:anywhere}
+.maintenance-panel .maintenance-rows>div>button{grid-column:3;justify-self:start;max-width:100%;white-space:normal}
+@container(max-width:640px){
+ .maintenance-panel .maintenance-rows{grid-template-columns:minmax(0,.85fr) minmax(0,1.5fr)}
+ .maintenance-panel .maintenance-rows>div>button{grid-column:2}
+}
+@container(max-width:380px){
+ .maintenance-panel .maintenance-rows{grid-template-columns:minmax(0,1fr)}
+ .maintenance-panel .maintenance-rows>div>button{grid-column:1}
+}
