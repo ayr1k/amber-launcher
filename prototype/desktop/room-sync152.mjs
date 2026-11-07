@@ -5,11 +5,27 @@ import {createHash,randomBytes,randomUUID,generateKeyPairSync,sign,verify,create
 import {readFile,writeFile,readdir,lstat,mkdir,copyFile,rename} from 'node:fs/promises';
 import {join} from 'node:path';
 import {safePath,ensureParents,digest,download,verified} from './download.mjs';
+import {instanceLoaders} from './compatibility.mjs';
 import {atomicJson} from './core.mjs';
 
 const MAX_FILE=64*1024*1024,MAX_TOTAL=1024*1024*1024;
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const fail=()=>{throw Error('Invalid client snapshot / 客户端环境清单无效');};
+export async function requireRoomSyncReady152(core,id){
+ const {dir,item}=await core.metadata(id);let receipt,record;
+ for(const name of ['room-sync152.json','setup-report.json']){const path=join(dir,name);await ensureParents(dir,path);try{const value=JSON.parse(await readFile(path,'utf8'));if(name==='room-sync152.json')receipt=value;else record=value;}catch(e){if(e.code!=='ENOENT')throw e;}}
+ if(item.roomSyncRequired||record?.roomSync||receipt){if(receipt?.state!=='ready')throw Error('Room environment incomplete; return to the room and confirm synchronization again / 房间环境未完成，请返回房间重新确认同步');validateSnapshot(receipt);}
+}
+export async function platformFile152(content,f,m,signal,version,project){
+ const v=version||await content.api('version/'+f.versionId,{signal});
+ if(v.id!==f.versionId||!v.game_versions?.includes(m.game)||!instanceLoaders(m).some(l=>v.loaders?.includes(l)))throw Error('Platform version mismatch / 原平台版本不匹配');
+ if(f.source==='curseforge'&&v.project_id!==f.versionId.split('-').slice(0,2).join('-'))fail();
+ const p=project||await content.api('project/'+v.project_id,{signal});
+ if(p.client_side==='unsupported')throw Error('Server-only mod / 服务端专用模组');
+ const file=v.files?.find(x=>x.hashes?.sha1===f.sha1&&x.size===f.size);
+ if(!file?.url||f.source==='curseforge'&&p.distribution===false)throw Error('Original platform download unavailable or restricted; no host fallback / 原平台下载不可用或受限制，不会改由房主传输');
+ return file;
+}
 export function syncPath(value){
  if(typeof value!=='string'||value.length>200||! /^(mods\/[^/]+\.jar|config\/[a-zA-Z0-9_./-]+\.(json|toml|properties|cfg))$/.test(value)||value.split('/').some(x=>!x||x==='.')||/[\x00-\x1f\x7f]/.test(value)||/(account|token|secret|password|credential|session|auth|database|\.env|private|launcher)/i.test(value))fail();
  safePath(process.cwd(),value);return value;
@@ -18,7 +34,7 @@ export function validateSnapshot(m){
  if(m?.schema!==1||!/^amber-[a-f0-9]{24}$/.test(m.room)||! /^[a-f0-9-]{36}$/.test(m.revision)||typeof m.name!=='string'||m.name.length>60||! /^[\w.+-]{1,80}$/.test(m.game)||!['vanilla','fabric','quilt','forge','neoforge'].includes(m.loader)||m.loader!=='vanilla'&&! /^[\w.+-]{1,100}$/.test(m.version)||!Array.isArray(m.files)||m.files.length>500)fail();
  const seen=new Set();let total=0;
  for(const f of m.files){syncPath(f.path);const key=f.path.toLowerCase();if(seen.has(key)||! /^[a-f0-9]{64}$/.test(f.sha256)||!Number.isSafeInteger(f.size)||f.size<1||f.size>MAX_FILE)fail();seen.add(key);total+=f.size;
-  if(!['host','modrinth'].includes(f.source)||f.source==='modrinth'&&(!/^[a-zA-Z0-9]{1,64}$/.test(f.versionId)||! /^[a-f0-9]{40}$/.test(f.sha1)))fail();
+  if(!['host','modrinth','curseforge'].includes(f.source)||f.source!=='host'&&(!(f.source==='curseforge'?/^cf-\d+-\d+$/:/^[a-zA-Z0-9]{1,64}$/).test(f.versionId)||! /^[a-f0-9]{40}$/.test(f.sha1)))fail();
  }
  if(total>MAX_TOTAL)fail();return m;
 }
@@ -42,8 +58,8 @@ export class RoomSync152{
  }
  async publish(input){const r=this.current('host'),epoch=++this.epoch;if(!input?.reviewed||!Array.isArray(input.paths)||input.paths.length>500)throw Error('Review selected files and permissions / 请检查所选文件及再分发权限');const server=(await this.rooms.servers.list()).find(s=>s.id===r.serverId);const selectedItem=(await this.core.metadata(input.id)).item;if(!server||server.game!==selectedItem.game||['fabric','quilt'].includes(server.type)&&server.type!==selectedItem.loader)throw Error('Server/client game or loader mismatch / 服务端与客户端版本或加载器不匹配');const candidate=this.candidate;if(!candidate||candidate.id!==input.id||candidate.token!==input.token||candidate.game!==selectedItem.game||candidate.loader!==selectedItem.loader||candidate.version!==(selectedItem.loaderVersion||null))throw Error('Review candidate files again / 请重新检查候选文件');const {dir}=await this.core.metadata(input.id),installed=await this.content.manifest(dir),files=[],revision=randomUUID(),snapshotDir=join(this.root,'snapshots',revision);await ensureParents(this.root,join(snapshotDir,'.check'));
   for(const path of input.paths){const selected=candidate.files.find(f=>f.path===path);if(!selected)fail();const bytes=await bytesAt(dir,path);if(hash(bytes)!==selected.sha256)throw Error('Client changed; review again / 客户端已变化，请重新检查');const f={path,size:bytes.length,sha256:hash(bytes),source:'host'};
-   if(path.startsWith('mods/')){if(installed.files.some(f=>f.relative===path&&String(f.projectId).startsWith('cf-')))throw Error('CurseForge content requires its original platform; room sharing is not supported yet / CurseForge 内容须使用原平台，暂不支持房间同步');const sha1=createHash('sha1').update(bytes).digest('hex');let v;try{v=await this.content.api('version_file/'+sha1+'?algorithm=sha1');}catch(e){if(e.status!==404)throw Error('Cannot verify original platform; retry online / 无法核实原平台来源，请联网后重试');}
-    if(v){const project=await this.content.api('project/'+v.project_id);if(project.client_side==='unsupported')throw Error('Server-only mod / 服务端专用模组: '+path);if(!v.game_versions?.includes(candidate.game)||!v.loaders?.includes(candidate.loader))throw Error('Mod version mismatch / 模组版本不匹配: '+path);Object.assign(f,{source:'modrinth',versionId:v.id,sha1});}
+   if(path.startsWith('mods/')){const saved=installed.files.find(f=>f.relative===path&&String(f.projectId).startsWith('cf-'));const sha1=createHash('sha1').update(bytes).digest('hex');let v;if(saved){if(!/^cf-\d+-\d+$/.test(saved.versionId)||saved.hash!==sha1)throw Error('CurseForge provenance mismatch / CurseForge 来源记录与文件不符');v=await this.content.api('version/'+saved.versionId);}else try{v=await this.content.api('version_file/'+sha1+'?algorithm=sha1');}catch(e){if(e.status!==404)throw Error('Cannot verify original platform; retry online / 无法核实原平台来源，请联网后重试');}
+    if(v){const project=await this.content.api('project/'+v.project_id);if(project.client_side==='unsupported')throw Error('Server-only mod / 服务端专用模组: '+path);if(!v.game_versions?.includes(candidate.game)||!instanceLoaders(candidate).some(l=>v.loaders?.includes(l)))throw Error('Mod version mismatch / 模组版本不匹配: '+path);Object.assign(f,{source:saved?'curseforge':'modrinth',versionId:v.id,sha1});await platformFile152(this.content,f,candidate,undefined,v,project);}
    }
    if(f.source==='host'){if(!input.redistribution)throw Error('Host files require redistribution permission and privacy review / 房主文件须确认再分发许可与隐私检查');await writeFile(join(snapshotDir,f.sha256),bytes,{flag:'wx'}).catch(e=>{if(e.code!=='EEXIST')throw e;});}files.push(f);
   }
@@ -56,8 +72,8 @@ export class RoomSync152{
  get active(){return !!this.abort;}
  async install(token){if(this.active||!this.previewed||this.previewed.token!==token)throw Error('Review this environment first / 请先预览并确认环境');const plan=this.previewed,controller=new AbortController(),requestKey=randomUUID();let heartbeat;const watch=async()=>{try{const m=await this.remote(controller.signal);if(m.revision!==plan.manifest.revision)throw Error('Sharing changed; preview again / 分享已更新，请重新预览');}catch(e){controller.abort(e);this.workflows.cancel('new:'+requestKey);}};this.abort=controller;const signal=controller.signal;this.requestKey=requestKey;this.state={phase:'downloading'};
   try{const current=await this.remote(signal);if(JSON.stringify(current)!==JSON.stringify(plan.manifest))throw Error('Environment changed; preview and confirm again / 环境已更新，请重新预览并确认');const m=plan.manifest;let checking=false;heartbeat=setInterval(()=>{if(!checking){checking=true;watch().finally(()=>checking=false);}},2000);heartbeat.unref();
-   for(const f of m.files){signal.throwIfAborted();const path=join(this.root,'cache',f.sha256);await ensureParents(this.root,path);if(await verified({path,hash:f.sha256,algorithm:'sha256',size:f.size}))continue;
-    if(f.source==='modrinth'){const v=await this.content.api('version/'+f.versionId,{signal}),file=v.files?.find(x=>x.hashes?.sha1===f.sha1&&x.size===f.size);if(!file||!v.game_versions?.includes(m.game)||!v.loaders?.includes(m.loader))fail();const project=await this.content.api('project/'+v.project_id,{signal});if(project.client_side==='unsupported')fail();await download({path,url:file.url,hash:f.sha256,algorithm:'sha256',size:f.size},{root:this.root,signal,fetcher:this.core.fetcher});}
+   for(const f of m.files){signal.throwIfAborted();const path=join(this.root,'cache',f.sha256);await ensureParents(this.root,path);const original=f.source!=='host'?await platformFile152(this.content,f,m,signal):null;if(await verified({path,hash:f.sha256,algorithm:'sha256',size:f.size}))continue;
+    if(original){await download({path,url:original.url,hash:f.sha256,algorithm:'sha256',size:f.size},{root:this.root,signal,fetcher:this.core.fetcher});}
     else{const bytes=await this.request('/file/'+m.revision+'/'+f.sha256,f.size,signal);if(bytes.length!==f.size||hash(bytes)!==f.sha256)throw Error('File integrity check failed / 文件校验失败');if(f.path.startsWith('config/'))safeConfig(bytes);signal.throwIfAborted();const temp=path+'.'+randomUUID()+'.tmp';await writeFile(temp,bytes,{flag:'wx'});await rename(temp,path);}
    }
    signal.throwIfAborted();this.state.phase='installing';

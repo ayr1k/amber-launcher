@@ -52,7 +52,7 @@ export class LauncherCore {
     this.catalog = versions;
     return { latest: data.latest, versions: versions.map(({url,sha1,...v})=>v), fetchedAt: new Date().toISOString() };
   }
-  async createInstance(input) {
+  async createInstance(input, {roomSyncRequired=false} = {}) {
     if (!input || typeof input.name !== 'string' || !input.name.trim() || input.name.trim().length > 60) throw new Error('实例名称需要 1–60 个字符。');
     if (typeof input.game !== 'string' || !this.catalog?.some(v=>v.id===input.game)) throw new Error('请先从官方目录选择游戏版本。');
     const icon = validateIcon(input.icon);
@@ -66,7 +66,7 @@ export class LauncherCore {
     await this.init();
     const id = randomUUID(), dir = join(this.root, 'instances', id);
     await mkdir(dir);
-    const item = { schema: 1, id, icon, name: input.name.trim(), game: input.game, loader: 'vanilla', status: 'metadata-ready', createdAt: new Date().toISOString(), javaMajor: metadata.javaVersion?.majorVersion ?? null, metadataSha1: version.sha1 };
+    const item = { ...(roomSyncRequired?{roomSyncRequired:true}:{}), schema: 1, id, icon, name: input.name.trim(), game: input.game, loader: 'vanilla', status: 'metadata-ready', createdAt: new Date().toISOString(), javaMajor: metadata.javaVersion?.majorVersion ?? null, metadataSha1: version.sha1 };
     // Commit marker is written last. A failed operation is not listed as a usable instance.
     await Promise.all(['mods','config','saves','resourcepacks','shaderpacks'].map(p=>mkdir(join(dir,p))));
     await writeFile(join(dir, 'version.json'), bytes, { flag: 'wx' });

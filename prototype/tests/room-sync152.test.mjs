@@ -1,11 +1,14 @@
+import {VanillaLauncher} from '../desktop/launcher.mjs';
+import {Workflows} from '../desktop/workflows.mjs';
+import {atomicJson} from '../desktop/core.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,mkdir,writeFile,readFile,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {randomUUID} from 'node:crypto';
-import {RoomSync152,syncPath,validateSnapshot,snapshotDiff} from '../desktop/room-sync152.mjs';
+import {randomUUID,createHash} from 'node:crypto';
+import {RoomSync152,requireRoomSyncReady152,syncPath,validateSnapshot,snapshotDiff} from '../desktop/room-sync152.mjs';
 import {validateInvite} from '../desktop/rooms132.mjs';
 
 async function fixture(t){
@@ -37,3 +40,25 @@ test('server mismatch, host departure and arbitrary reads are rejected',async t=
 test('cancel during preparation never marks an instance ready; retry uses a new instance',async t=>{const f=await fixture(t);await publish(f);const p=await f.guest.preview();const original=f.workflows.create;f.workflows.create=async()=>{f.guest.cancel();throw Error('cancelled fixture');};await assert.rejects(f.guest.install(p.token));assert.equal(f.guest.state.phase,'cancelled');await assert.rejects(f.guest.launchAddress('source'));f.workflows.create=original;assert.equal((await f.guest.install(p.token)).phase,'ready');});
 test('host edits after candidate inspection require a new review',async t=>{const f=await fixture(t);const c=await f.host.candidates('source');await writeFile(join(f.dir,'config/display.json'),'changed');await assert.rejects(f.host.publish({...selection,token:c.token}),/changed|变化/);const next=await f.host.candidates('source');(await f.core.metadata()).item.loaderVersion='0.17.0';await assert.rejects(f.host.publish({...selection,token:next.token}),/Review|检查/);});
 test('official metadata rejects server-only content and known CurseForge is never retransmitted',async t=>{const f=await fixture(t);await writeFile(join(f.dir,'mods/example.jar'),'synthetic jar');f.content.api=async path=>path.startsWith('version_file/')?{project_id:'project',id:'version',game_versions:['1.21.1'],loaders:['fabric']}:{client_side:'unsupported'};await assert.rejects(publish(f,{paths:['mods/example.jar']}),/Server-only|服务端专用/);f.content.manifest=async()=>({files:[{relative:'mods/example.jar',projectId:'cf-123'}]});await assert.rejects(publish(f,{paths:['mods/example.jar']}),/CurseForge/);});
+
+for(const failedStep of ['java','loader','game'])test('real Workflows: '+failedStep+' failure, restart, guarded retry and reconfirmation',async t=>{
+ const f=await fixture(t);await publish(f);const root=join(f.root,'real-library');let failing=failedStep;
+ const metadata=JSON.stringify({id:'1.21.1',javaVersion:{majorVersion:21}}),sha1=createHash('sha1').update(metadata).digest('hex');
+ const makeCore=()=>{const core=new VanillaLauncher(root,{fetcher:async()=>new Response(metadata)});core.catalog=[{id:'1.21.1',url:'https://piston-meta.mojang.com/fixture.json',sha1}];
+ core.prepareJava=async id=>{const {dir,item}=await core.metadata(id);assert.equal(item.roomSyncRequired,true);assert.equal(JSON.parse(await readFile(join(dir,'room-sync152.json'),'utf8')).state,'pending');if(failing==='java')throw Error('injected Java failure');};
+ core.configureLoader=async(id,loader,version)=>{if(failing==='loader')throw Error('injected loader failure');const {dir,item}=await core.metadata(id);await atomicJson(join(dir,'instance.json'),{...item,loader,loaderVersion:version});};
+ core.install=async()=>{if(failing==='game')throw Error('injected game failure');};return core;};
+ const makeFlows=core=>{const flows=new Workflows(core,f.content);flows.choices=async()=>[{version:'0.16.0'}];return flows;};
+ let core=makeCore(),flows=makeFlows(core),guest=new RoomSync152(core,f.guestRooms,flows,f.content);const plan=await guest.preview();await assert.rejects(guest.install(plan.token),/injected/);const id=guest.state.instanceId;assert.ok(id);await requireRoomSyncReady152(core,id).then(()=>assert.fail('incomplete instance launchable'),()=>{});const dir=await core.instancePath(id);assert.equal(JSON.parse(await readFile(join(dir,'setup-report.json'),'utf8')).state,'failed');
+ // New objects have no in-memory resume/afterSetup callback, as after application restart.
+ core=makeCore();flows=makeFlows(core);assert.equal(flows.resumes.size,0);failing=null;await assert.rejects(flows.retry(id),/room|房间/);await assert.rejects(requireRoomSyncReady152(core,id),/incomplete|未完成/);
+ await rm(join(dir,'room-sync152.json'));await assert.rejects(requireRoomSyncReady152(core,id),/incomplete|未完成/);await rm(join(dir,'setup-report.json'));await assert.rejects(requireRoomSyncReady152(core,id),/incomplete|未完成/);
+ guest=new RoomSync152(core,f.guestRooms,flows,f.content);const next=await guest.preview(),result=await guest.install(next.token);assert.notEqual(result.instanceId,id);await requireRoomSyncReady152(core,result.instanceId);assert.equal(await readFile(join(await core.instancePath(result.instanceId),'config/display.json'),'utf8'),'{"distance":8}');
+});
+for(const provider of ['modrinth','curseforge'])test(provider+' official source: Quilt accepts Fabric on publish and receive; restricted files never become host transfers',async t=>{
+ const f=await fixture(t),bytes=Buffer.from('synthetic platform mod'),sha1=createHash('sha1').update(bytes).digest('hex');await writeFile(join(f.dir,'mods/example.jar'),bytes);(await f.core.metadata()).item.loader='quilt';f.rooms.servers.list=async()=>[{id:'server',game:'1.21.1',type:'quilt'}];
+ const versionId=provider==='curseforge'?'cf-123-456':'Version1',projectId=provider==='curseforge'?'cf-123':'Project1';let restricted=false,downloaded=0;
+ const version=()=>({id:versionId,project_id:projectId,game_versions:['1.21.1'],loaders:['fabric'],files:[{hashes:{sha1},size:bytes.length,url:restricted?null:'https://cdn.modrinth.com/fixture.jar'}]});
+ f.content.manifest=async()=>({files:provider==='curseforge'?[{relative:'mods/example.jar',projectId,versionId,hash:sha1}]:[]});f.content.api=async path=>path.startsWith('project/')?{client_side:'required',distribution:!restricted}:version();f.core.fetcher=async()=>{downloaded++;return new Response(bytes,{headers:{'Content-Length':String(bytes.length)}});};
+ await publish(f,{paths:['mods/example.jar'],redistribution:false});const p=await f.guest.preview();assert.equal(p.manifest.files[0].source,provider);await f.guest.install(p.token);assert.ok(downloaded>0);restricted=true;await assert.rejects(publish(f,{paths:['mods/example.jar']}),/restricted|限制/);await assert.rejects(f.guest.install(p.token),/restricted|限制/);assert.equal(f.host.shared.manifest.files[0].source,provider);
+});
