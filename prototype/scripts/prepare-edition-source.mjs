@@ -12,6 +12,12 @@ try{await access(target);throw Error('Edition export exists; preserve it before 
 await access(join(stage,'desktop/edition.mjs'));await cp(source,target,{recursive:true});await unlink(join(target,'SOURCE-MANIFEST.json'));
 for(const folder of ['desktop','public','build'])await cp(join(stage,folder),join(app,folder),{recursive:true,filter:path=>!path.endsWith('curseforge-build-key.json')});
 await unlink(join(app,'desktop/microsoft-skin150.mjs')).catch(e=>{if(e.code!=='ENOENT')throw e;});
+// Retain shared mock coverage without restoring Microsoft's bridge to the product.
+const microsoftSkinFixture=await readFile(join(root,'desktop/microsoft-skin150.mjs'),'utf8');
+await mkdir(join(app,'tests/fixtures'),{recursive:true});
+await writeFile(join(app,'tests/fixtures/microsoft-skin150.mjs'),microsoftSkinFixture.replaceAll("from './offline135.mjs'","from '../../desktop/offline135.mjs'").replaceAll("from './bounded-io.mjs'","from '../../desktop/bounded-io.mjs'"));
+const skinTests=await readFile(join(app,'tests/skin-upload150.test.mjs'),'utf8');
+await writeFile(join(app,'tests/skin-upload150.test.mjs'),skinTests.replace("from '../desktop/microsoft-skin150.mjs'","from './fixtures/microsoft-skin150.mjs'"));
 const metadata={...pkg,name:'ambere-launcher',description:'AmberE Minecraft Java launcher',scripts:{...pkg.scripts,'package:editions':'pnpm package:installer'}};
 await writeFile(join(app,'package.json'),JSON.stringify(metadata,null,2)+'\n');
 let config=await readFile(join(app,'electron-builder.yml'),'utf8');config=config.replace('io.github.ayr1k.amber','io.github.ayr1k.ambere').replaceAll('AMBER','AmberE');await writeFile(join(app,'electron-builder.yml'),config);
