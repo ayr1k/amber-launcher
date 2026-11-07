@@ -33,3 +33,13 @@ Not verified: real-world game/account data, actual upgrade wizard over an existi
 本版复用已有存储扫描／清理入口；清理只接受新版下载器留下凭据、校验一致、版本不高于当前版本的完整更新包。旧版没有凭据的安装包和所有下载片段保留，不根据文件年龄或名称推断可删除。备份、回收站、房间同步恢复数据和无法证明无引用的缓存不提供清理。确认前列出文件与预计字节数；执行中复核并报告部分成功、取消和失败，文件字节数不等于实际释放磁盘空间。
 
 内容筛选变化时清除选择，全选仅作用于当前筛选结果中的可用条目；实例、内容、任务分别记住密度，沿用主题控件。测试使用隔离合成数据；不代表真实游戏、账号或升级安装验收。测试包与同名正式产品共享安装身份和默认数据位置，手动验收宜使用独立 Windows 用户及可丢弃游戏副本。保持草稿 PR，交由小岚独立审核和用户验收，不合并、不正式发布、不部署官网。
+
+## Independent review correction: missing-record single removal
+
+Review baseline: `9efabcb2a6e99187236c8ec32a557ca271068b9e`. A row's explicit Remove action used the bulk-checkbox selection, which excludes missing entries. Consequently missing-record removal passed an empty selection to the backend and could not show its confirmation.
+
+The row action now carries its explicit relative path separately from bulk selection. Only a currently visible row can enter that preview, and missing entries remain eligible only for removal. Select-all still excludes missing entries. Preview validity includes instance, filter criteria, visible row identities/missing states and selection; a filter change invalidates both an existing preview and any delayed response. Execution retains the existing backend revalidation and confirmation.
+
+Scoped regression: `scripts/qa-missing154.cjs`, real Electron and real content preview/apply against asserted temporary userData/library. It verifies a missing enabled record's explicit preview and confirmation, completion of the actual content job, preservation of a second disabled missing record and an unrelated real file, select-all exclusion, polling-refresh retention, filter invalidation before and after a deliberately held real backend response, and disabled bulk removal after filtering away the selection. The same test fails waiting for confirmation against the clean baseline AMBER stage and passes against the fix. No real instance/account data is used. The earlier 9 storage-specific checks, wider theme/layout checks and package review retain their original revision attribution; they are not repeated as a new content-review gate. Existing PR workflows continue to run their configured checks automatically.
+
+中文：修复缺失记录的单项“移除…”被批量选择过滤为空的问题。单项目标独立传递，仍须当前可见且经过确认；全选继续排除缺失条目。切换筛选会同时撤销已显示和延迟返回的旧预览。定向隔离测试在旧包复现失败、修复版通过，只覆盖本次变更及相关筛选保护。最终新提交与新安装包校验值以 PR 的最新交付段落为准。
