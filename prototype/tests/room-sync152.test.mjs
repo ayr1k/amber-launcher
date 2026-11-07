@@ -41,6 +41,13 @@ test('cancel during preparation never marks an instance ready; retry uses a new 
 test('host edits after candidate inspection require a new review',async t=>{const f=await fixture(t);const c=await f.host.candidates('source');await writeFile(join(f.dir,'config/display.json'),'changed');await assert.rejects(f.host.publish({...selection,token:c.token}),/changed|变化/);const next=await f.host.candidates('source');(await f.core.metadata()).item.loaderVersion='0.17.0';await assert.rejects(f.host.publish({...selection,token:next.token}),/Review|检查/);});
 test('official metadata rejects server-only content and known CurseForge is never retransmitted',async t=>{const f=await fixture(t);await writeFile(join(f.dir,'mods/example.jar'),'synthetic jar');f.content.api=async path=>path.startsWith('version_file/')?{project_id:'project',id:'version',game_versions:['1.21.1'],loaders:['fabric']}:{client_side:'unsupported'};await assert.rejects(publish(f,{paths:['mods/example.jar']}),/Server-only|服务端专用/);f.content.manifest=async()=>({files:[{relative:'mods/example.jar',projectId:'cf-123'}]});await assert.rejects(publish(f,{paths:['mods/example.jar']}),/CurseForge/);});
 
+test('candidate display excludes private paths from requests and blocked mods cannot be published',async t=>{
+ const f=await fixture(t),bytes='synthetic server mod';await writeFile(join(f.dir,'mods/server.jar'),bytes);const calls=[];
+ f.content.manifest=async()=>({files:[{relative:'mods/server.jar',projectId:'Project1',hash:createHash('sha1').update(bytes).digest('hex')}]});f.content.api=async path=>{calls.push(path);return {id:'Project1',title:'Server mod',client_side:'unsupported',icon_url:'https://cdn.modrinth.com/icon.png'};};
+ const c=await f.host.candidates('source');assert.deepEqual(calls,['project/Project1']);assert.equal(c.files.find(x=>x.path==='mods/server.jar').blocked,'server-only');assert.equal(c.files.some(x=>x.path.includes('account')),false);
+ await assert.rejects(f.host.publish({...selection,token:c.token,paths:['mods/server.jar']}),/unavailable|不可/);assert.equal(f.host.shared,null);
+});
+
 for(const failedStep of ['java','loader','game'])test('real Workflows: '+failedStep+' failure, restart, guarded retry and reconfirmation',async t=>{
  const f=await fixture(t);await publish(f);const root=join(f.root,'real-library');let failing=failedStep;
  const metadata=JSON.stringify({id:'1.21.1',javaVersion:{majorVersion:21}}),sha1=createHash('sha1').update(metadata).digest('hex');

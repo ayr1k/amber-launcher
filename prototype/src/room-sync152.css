@@ -6,3 +6,21 @@
 .room-sync-files152 > * { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; padding-block: 8px; }
 .room-sync-files152 span { flex: 1 1 200px; min-width: 0; }
 .room-sync152 .server-check132 { align-items: flex-start; gap: 10px; }
+.room-file-toolbar152 { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+.room-host-files152 { max-height: 360px; overflow: auto; border-block: 1px solid var(--line); }
+.servers132 .room-sync152 label.room-file-row152 { display: grid; grid-template-columns: 18px 32px minmax(0,1fr) auto; align-items: center; gap: 10px; padding: 7px 10px; margin: 0; min-height: 54px; border: 1px solid transparent; border-radius: var(--room-file-radius152,var(--theme-radius,0px)); cursor: pointer; }
+.room-file-row152 + .room-file-row152 { border-top-color: var(--line); }
+.room-file-row152[data-selected=true] { background: color-mix(in srgb,var(--green) 10%,var(--surface)); border-color: var(--green); }
+.room-file-row152:focus-within { outline: 2px solid var(--green); outline-offset: -2px; }
+.room-file-row152[data-blocked=true] { cursor: default; }
+.room-sync152 .room-file-row152 > input { width: 16px; height: 16px; margin: 0; accent-color: var(--green); }
+.room-file-icon152 { display: grid; place-items: center; width: 32px; height: 32px; overflow: hidden; color: var(--muted); background: var(--surface); border: 1px solid var(--line); border-radius: var(--room-file-radius152,var(--theme-radius,0px)); }
+.room-file-icon152 img { width: 100%; height: 100%; object-fit: contain; }
+.room-file-icon152 svg { width: 22px; height: 22px; }
+.room-file-copy152 { min-width: 0; display: grid; gap: 2px; line-height: 1.3; }
+.room-file-title152 { font-weight: 600; }
+.room-file-copy152 small { color: var(--muted); font-size: 11px; }
+.room-file-size152 { white-space: nowrap; font-size: 11px; font-variant-numeric: tabular-nums; }
+@media(max-width:700px) { .servers132 .room-sync152 label.room-file-row152 { grid-template-columns: 18px 28px minmax(0,1fr) auto; gap: 7px; padding-inline: 6px; }.room-file-icon152 { width: 28px; height: 28px; } }
+
+.app[data-ui-style=rounded] .room-sync152 { --room-file-radius152: var(--theme-radius,8px); }
