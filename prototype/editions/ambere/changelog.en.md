@@ -1,3 +1,9 @@
+## 1.5.2 (task test build)
+
+- Add opt-in EasyTier client environment snapshots with explicit host file selection and guest preview/consent. Signed room snapshots, original Modrinth downloads, permission-gated host transfer, verified cache reuse and independent client instances preserve existing games and data.
+- Keep game forwarding active when sharing is disabled; revoke synchronization access and cancel incomplete setup. Launch-and-join retains normal account authorization.
+- First implementation supports common single loaders and selected mod JARs/top-level text configuration; CurseForge uses the existing official route without bypassing download restrictions; complex loader combinations and other file categories remain excluded. See prototype/LOCAL-TEST-1.5.2.md for scope, security model, retry behavior and unverified real-world cases. No formal release or Pages deployment.
+
 ## 1.5.1
 
 - Fix existing .minecraft imports that confused merged/custom profile IDs with official base game versions or selected shared data instead of isolated profile data. Identify the game and loader using recognized metadata and verify them against official catalogs; ask for an explicit official version when evidence is missing/conflicting. Unknown clients, damaged inheritance and conflicting loaders remain blocked.
