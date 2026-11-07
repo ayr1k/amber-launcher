@@ -1,0 +1,10 @@
+/* SPDX-License-Identifier: MPL-2.0 */
+.content-installed-row.selected-content{background:color-mix(in srgb,var(--green) 10%,var(--surface));box-shadow:inset 3px 0 var(--green)}
+.bulk-check{display:flex;align-items:center;justify-content:center;min-width:36px;min-height:36px;cursor:pointer}
+.bulk-check input,.bulk-toolbar input{width:18px;height:18px;accent-color:var(--green)}
+.content-description,.task-entry header>div{min-width:0;overflow-wrap:anywhere}
+.compact .content-installed-row{padding-block:6px;min-height:44px}
+.compact .task-entry{padding-block:10px;margin-block:8px}
+.content-installed-row:focus-within{outline:2px solid var(--green);outline-offset:-2px}
+
+.list-density{display:flex;align-items:center;gap:12px;margin-block:12px;flex-wrap:wrap}.list-density .amber-select{width:160px;max-width:100%}
