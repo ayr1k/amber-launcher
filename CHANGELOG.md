@@ -1,3 +1,10 @@
+## 1.5.3 — task test build (unreleased)
+
+- Share individually selected resource/shader ZIPs and nested text configuration alongside mods. Preserve original-platform restrictions, explicit host permission and guest confirmation.
+- Raise bounded synchronization to 2,000 files, 256 MiB per archive/mod and 4 GiB selected total; text configuration remains limited to 1 MiB and six nested folders. Validate the signed wire envelope before publication and on reception (4 MiB maximum).
+- Stream host files with verified range recovery. Persist room/host-bound revision history and continue an unchanged unfinished target after fresh authorization, including after restart. Local conflicts require explicitly creating a new independent instance; existing data is preserved. New revisions remain independent and show differences against the last completed environment.
+- See LOCAL-TEST-1.5.3.md for evidence and limits. This is not a formal release; actual modpack compatibility, two-machine/cross-network gameplay and native non-Windows acceptance are not claimed.
+
 ## 1.5.2
 
 - Add opt-in EasyTier room client environment synchronization. Hosts select a stopped client and review selected mods/top-level text configuration; guests preview signed versions, sources and content sizes and explicitly confirm. Each accepted revision creates a new independent instance, retaining existing games and personal data.

@@ -8,8 +8,11 @@ import {mkdtemp,mkdir,writeFile,readFile,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {randomUUID,createHash} from 'node:crypto';
-import {RoomSync152,requireRoomSyncReady152,syncPath,validateSnapshot,snapshotDiff} from '../desktop/room-sync152.mjs';
+import {RoomSync152,requireRoomSyncReady152,syncPath,validateSnapshot,snapshotDiff,snapshotEnvelope153} from '../desktop/room-sync152.mjs';
 import {validateInvite} from '../desktop/rooms132.mjs';
+import {ROOM_SYNC_MAX_FILE153,ROOM_SYNC_MAX_TOTAL153,ROOM_SYNC_MAX_MANIFEST153} from '../desktop/room-sync-limits152.mjs';
+import {inspect153,receiveFile153} from '../desktop/room-sync-io153.mjs';
+import {link,symlink,truncate} from 'node:fs/promises';
 
 async function fixture(t){
  const root=await mkdtemp(join(tmpdir(),'amber-sync152-'));const dir=join(root,'source');await mkdir(join(dir,'mods'),{recursive:true});await mkdir(join(dir,'config'));await writeFile(join(dir,'config','display.json'),'{"distance":8}');await writeFile(join(dir,'config','account.json'),'{"secret":"never export"}');await writeFile(join(dir,'saves.dat'),'preserved');
@@ -25,12 +28,87 @@ async function fixture(t){
 async function publish(f,overrides={}){const c=await f.host.candidates('source');return f.host.publish({...selection,token:c.token,...overrides});}
 const selection={id:'source',paths:['config/display.json'],reviewed:true,redistribution:true};
 
-test('500-file publication/reception boundary includes configuration and rejects 501 without replacing snapshot',async t=>{
- const f=await fixture(t),paths=Array.from({length:501},(_,i)=>'mods/m'+i+'.jar');await Promise.all(paths.map(path=>writeFile(join(f.dir,path),'synthetic '+path)));
- const c=await f.host.candidates('source'),input={...selection,token:c.token,paths:paths.slice(0,500)};
- await f.host.publish(input);assert.equal((await f.guest.remote()).files.length,500);let current=f.host.shared;
- for(const chosen of [paths,[...paths.slice(0,500),'config/display.json']]){await assert.rejects(f.host.publish({...input,paths:chosen}),/500/);assert.equal(f.host.shared,current);}
- await f.host.publish({...input,paths:[...paths.slice(0,499),'config/display.json']});const accepted=await f.guest.remote();assert.equal(accepted.files.length,500);assert.ok(accepted.files.some(x=>x.path==='config/display.json'));current=f.host.shared;
+test('1.5.3 nested configuration and resource/shader archives preserve source files',async t=>{
+ const f=await fixture(t);await mkdir(join(f.dir,'config','one','two'),{recursive:true});await mkdir(join(f.dir,'resourcepacks'));await mkdir(join(f.dir,'shaderpacks'));
+ const paths=['config/one/two/display.yaml','resourcepacks/Example.zip','shaderpacks/Example.zip'];
+ for(const path of paths)await writeFile(join(f.dir,path),path.endsWith('yaml')?'distance: 12':'PK synthetic archive '+path);
+ const c=await f.host.candidates('source');for(const path of paths)assert.ok(c.files.some(x=>x.path===path));await f.host.publish({...selection,token:c.token,paths});const plan=await f.guest.preview(),result=await f.guest.install(plan.token);
+ for(const path of paths)assert.deepEqual(await readFile(join(f.root,result.instanceId,path)),await readFile(join(f.dir,path)));
+ for(const path of ['config/a/b/c/d/e/f/g/x.json','resourcepacks/../a.zip','shaderpacks/a.zip:stream','config/a/private/x.cfg','resourcepacks/a.jar'])assert.throws(()=>syncPath(path));
+ assert.equal(syncPath('config/a/b/c/d/e/f/x.ini'),'config/a/b/c/d/e/f/x.ini');
+});
+test('1.5.3 count, file, configuration and aggregate limits remain bounded',async t=>{
+ const f=await fixture(t);await publish(f);const m=f.host.shared.manifest,file={...m.files[0],path:'resourcepacks/a.zip',size:ROOM_SYNC_MAX_FILE153};
+ assert.doesNotThrow(()=>validateSnapshot({...m,files:[file]}));assert.throws(()=>validateSnapshot({...m,files:[{...file,size:ROOM_SYNC_MAX_FILE153+1}]}));
+ const files=Array.from({length:16},(_,i)=>({...file,path:'resourcepacks/'+i+'.zip'}));assert.equal(files.reduce((n,f)=>n+f.size,0),ROOM_SYNC_MAX_TOTAL153);assert.doesNotThrow(()=>validateSnapshot({...m,files}));assert.throws(()=>validateSnapshot({...m,files:[...files,{...file,path:'resourcepacks/extra.zip',size:1}]}));
+ await mkdir(join(f.dir,'resourcepacks'));await writeFile(join(f.dir,'resourcepacks','large.zip'),'x');await truncate(join(f.dir,'resourcepacks','large.zip'),ROOM_SYNC_MAX_FILE153+1);await assert.rejects(inspect153(f.dir,'resourcepacks/large.zip'));
+ await writeFile(join(f.dir,'config','oversized.json'),Buffer.alloc(1024*1024+1,32));await assert.rejects(inspect153(f.dir,'config/oversized.json'));
+ await link(join(f.dir,'config','display.json'),join(f.dir,'config','linked.json'));await assert.rejects(inspect153(f.dir,'config/linked.json'));
+});
+for(const kind of ['resourcepack','shader'])test('1.5.3 '+kind+' original platform route and restrictions',async t=>{
+ const f=await fixture(t),folder=kind==='shader'?'shaderpacks':'resourcepacks',bytes=Buffer.from('PK platform fixture'),sha1=createHash('sha1').update(bytes).digest('hex');await mkdir(join(f.dir,folder));await writeFile(join(f.dir,folder,'p.zip'),bytes);
+ let category=kind;f.content.api=async path=>path.startsWith('project/')?{project_type:category,client_side:'required'}:{id:'Version1',project_id:'Project1',game_versions:['1.21.1'],loaders:[],files:[{hashes:{sha1},size:bytes.length,url:'https://cdn.modrinth.com/p.zip'}]};f.core.fetcher=async()=>new Response(bytes);
+ await publish(f,{paths:[folder+'/p.zip'],redistribution:false});const p=await f.guest.preview();assert.equal(p.manifest.files[0].source,'modrinth');await f.guest.install(p.token);category='mod';await assert.rejects(f.guest.install(p.token),/category/);
+});
+for(const step of ['java','loader','game'])test('1.5.3 actual workflow resumes '+step+' failure after restart into the same target',async t=>{
+ const f=await fixture(t);await publish(f);const root=join(f.root,'resume-library');let failing=step;
+ const metadata=JSON.stringify({id:'1.21.1',javaVersion:{majorVersion:21}}),sha1=createHash('sha1').update(metadata).digest('hex');
+ function runtime(){const core=new VanillaLauncher(root,{fetcher:async()=>new Response(metadata)});core.catalog=[{id:'1.21.1',url:'https://piston-meta.mojang.com/test.json',sha1}];core.prepareJava=async()=>{if(failing==='java')throw Error('injected failure');};core.configureLoader=async(id,loader,loaderVersion)=>{if(failing==='loader')throw Error('injected failure');const {dir,item}=await core.metadata(id);await atomicJson(join(dir,'instance.json'),{...item,loader,loaderVersion});};core.install=async()=>{if(failing==='game')throw Error('injected failure');};const flows=new Workflows(core,f.content);flows.choices=async()=>[{version:'0.16.0'}];return {core,flows,guest:new RoomSync152(core,f.guestRooms,flows,f.content)};}
+ let r=runtime(),p=await r.guest.preview();await assert.rejects(r.guest.install(p.token),/injected/);const id=r.guest.state.instanceId;await assert.rejects(r.flows.retry(id));await r.guest.close();failing=null;r=runtime();p=await r.guest.preview();assert.equal(p.recovery.instanceId,id);assert.equal(p.recovery.canResume,true);assert.equal(p.diff.added.length,0);
+ const ready=await r.guest.install(p.token);assert.equal(ready.instanceId,id);await requireRoomSyncReady152(r.core,id);assert.equal((await r.core.listInstances()).length,1);
+ // Changed revision is independent and preserves old user modifications.
+ const dir=await r.core.instancePath(id);await writeFile(join(dir,'config','display.json'),'personal');await writeFile(join(f.dir,'config','display.json'),'{"distance":16}');await publish(f);await r.guest.close();r=runtime();p=await r.guest.preview();assert.deepEqual(p.diff.changed,['config/display.json']);assert.equal(p.recovery,null);failing='game';await assert.rejects(r.guest.install(p.token),/injected/);const pending=r.guest.state.instanceId;await r.guest.close();failing=null;r=runtime();p=await r.guest.preview();assert.deepEqual(p.diff.changed,['config/display.json']);assert.equal(p.recovery.instanceId,pending);const next=await r.guest.install(p.token);assert.equal(next.instanceId,pending);assert.notEqual(next.instanceId,id);assert.equal(await readFile(join(dir,'config','display.json'),'utf8'),'personal');await r.guest.close();
+});
+test('1.5.3 local edits block resume and explicit new choice preserves the unfinished target',async t=>{
+ const f=await fixture(t);await publish(f);const root=join(f.root,'conflict-library'),metadata=JSON.stringify({id:'1.21.1'}),sha1=createHash('sha1').update(metadata).digest('hex');let failing=true;
+ const core=new VanillaLauncher(root,{fetcher:async()=>new Response(metadata)});core.catalog=[{id:'1.21.1',url:'https://piston-meta.mojang.com/test.json',sha1}];core.prepareJava=async()=>{if(failing)throw Error('injected failure');};core.configureLoader=async()=>{};core.install=async()=>{};const flows=new Workflows(core,f.content);flows.choices=async()=>[{version:'0.16.0'}];const guest=new RoomSync152(core,f.guestRooms,flows,f.content);
+ let p=await guest.preview();await assert.rejects(guest.install(p.token));const old=guest.state.instanceId,dir=await core.instancePath(old);await writeFile(join(dir,'config','display.json'),'personal');failing=false;p=await guest.preview();assert.equal(p.recovery.canResume,false);assert.deepEqual(p.recovery.conflicts,['config/display.json']);await assert.rejects(guest.install(p.token),/conflict/);const result=await guest.install(p.token,'new');assert.notEqual(result.instanceId,old);assert.equal(await readFile(join(dir,'config','display.json'),'utf8'),'personal');await guest.close();
+});
+test('1.5.3 partial host bytes resume only after full checksum verification',async t=>{
+ const f=await fixture(t),bytes=Buffer.alloc(3*1024*1024,42),sha256=createHash('sha256').update(bytes).digest('hex'),file={path:'resourcepacks/large.zip',size:bytes.length,sha256},path=join(f.root,'download');
+ await writeFile(path+'.part',bytes.subarray(0,1024*1024));let offset;
+ await receiveFile153(f.root,path,file,async n=>{offset=n;return new Response(bytes.subarray(n),{status:206,headers:{'Content-Range':`bytes ${n}-${bytes.length-1}/${bytes.length}`,'Content-Length':String(bytes.length-n)}});},new AbortController().signal);
+ assert.equal(offset,1024*1024);assert.deepEqual(await readFile(path),bytes);
+ await writeFile(path+'.part',Buffer.alloc(1024*1024,1));await assert.rejects(receiveFile153(f.root,path,file,async n=>new Response(bytes.subarray(n),{status:206,headers:{'Content-Range':`bytes ${n}-${bytes.length-1}/${bytes.length}`}}),new AbortController().signal),/integrity/);assert.deepEqual(await readFile(path),bytes);
+ await writeFile(path+'.part','');await receiveFile153(f.root,path,file,async n=>{assert.equal(n,0);return new Response(bytes);},new AbortController().signal);assert.deepEqual(await readFile(path),bytes);
+});
+test('1.5.3 real HTTP streams a 65 MiB archive, supports range resume and revokes access',async t=>{
+ const f=await fixture(t);await mkdir(join(f.dir,'resourcepacks'));const path='resourcepacks/large.zip';await writeFile(join(f.dir,path),'PK');await truncate(join(f.dir,path),65*1024*1024);await publish(f,{paths:[path]});const p=await f.guest.preview(),file=p.manifest.files[0];assert.equal(file.size,65*1024*1024);
+ const base=`http://127.0.0.1:${f.invite.sync.port}/file/${p.manifest.revision}/${file.sha256}`,headers={Authorization:'Bearer '+f.invite.sync.token};
+ const response=await fetch(base,{headers:{...headers,Range:'bytes=1048576-'}});assert.equal(response.status,206);assert.equal(response.headers.get('content-range'),`bytes 1048576-${file.size-1}/${file.size}`);let total=0;for await(const bytes of response.body)total+=bytes.length;assert.equal(total,file.size-1048576);
+ const invalid=await fetch(base,{headers:{...headers,Range:`bytes=${file.size}-`}});assert.equal(invalid.status,416);await invalid.arrayBuffer();
+ const result=await f.guest.install(p.token);assert.equal((await inspect153(join(f.root,result.instanceId),path)).sha256,file.sha256);
+ f.host.disable();await assert.rejects(f.guest.remote());
+});
+test('1.5.3 publication and signed preview at 2000 long Unicode paths with platform metadata',async t=>{
+ const f=await fixture(t),prefix='资'.repeat(165),paths=Array.from({length:2000},(_,i)=>'resourcepacks/'+prefix+String(i).padStart(4,'0')+'.zip');await mkdir(join(f.dir,'resourcepacks'));await Promise.all(paths.map(path=>writeFile(join(f.dir,path),'PK platform content')));
+ const bytes=Buffer.from('PK platform content'),sha1=createHash('sha1').update(bytes).digest('hex'),versionId='V'.repeat(64),projectId='P'.repeat(64);
+ f.content.api=async path=>path.startsWith('project/')?{id:projectId,project_type:'resourcepack',client_side:'required'}:{id:versionId,project_id:projectId,game_versions:['1.21.1'],loaders:[],files:[{hashes:{sha1},size:bytes.length,url:'https://cdn.modrinth.com/fixture.zip'}]};
+ const candidate=await f.host.candidates('source');await f.host.publish({...selection,token:candidate.token,paths,redistribution:false});
+ const wire=f.host.shared.envelope;assert.ok(wire.length>500000);assert.ok(wire.length<ROOM_SYNC_MAX_MANIFEST153);const preview=await f.guest.preview();assert.equal(preview.manifest.files.length,2000);assert.equal(preview.manifest.files[1999].path,paths[1999]);assert.equal(preview.manifest.files[0].versionId,versionId);assert.equal(preview.size,bytes.length*2000);
+});
+test('1.5.3 actual signed-envelope byte boundary agrees between serialization and HTTP reception',async t=>{
+ const f=await fixture(t);await publish(f);const base=f.host.shared.manifest;
+ let low=0,high=ROOM_SYNC_MAX_MANIFEST153;while(low<high){const n=Math.ceil((low+high)/2);try{snapshotEnvelope153({...base,padding:'x'.repeat(n)},f.host.privateKey);low=n;}catch{high=n-1;}}
+ const manifest={...base,padding:'x'.repeat(low)},envelope=snapshotEnvelope153(manifest,f.host.privateKey);assert.ok(ROOM_SYNC_MAX_MANIFEST153-envelope.length<4);assert.throws(()=>snapshotEnvelope153({...base,padding:'x'.repeat(low+1)},f.host.privateKey),/limit/);
+ f.host.shared={...f.host.shared,manifest,envelope};assert.equal((await f.guest.remote()).padding.length,low);
+ f.host.shared.envelope=Buffer.alloc(ROOM_SYNC_MAX_MANIFEST153+1,32);await assert.rejects(f.guest.remote());
+});
+test('1.5.3 interrupted streamed download retains bytes for reauthorized restart and rejects lying sizes',async t=>{
+ const f=await fixture(t),bytes=Buffer.alloc(2*1024*1024,7),file={path:'resourcepacks/cancel.zip',size:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')},path=join(f.root,'interrupted'),controller=new AbortController();
+ const stream=new ReadableStream({start(c){c.enqueue(bytes.subarray(0,1024*1024));setTimeout(()=>controller.abort(Error('cancel fixture')),50);}});
+ await assert.rejects(receiveFile153(f.root,path,file,async()=>new Response(stream),controller.signal));assert.equal((await readFile(path+'.part')).length,1024*1024);
+ await receiveFile153(f.root,path,file,async n=>new Response(bytes.subarray(n),{status:206,headers:{'Content-Range':`bytes ${n}-${bytes.length-1}/${bytes.length}`}}),new AbortController().signal);assert.deepEqual(await readFile(path),bytes);
+ await assert.rejects(receiveFile153(f.root,join(f.root,'lying'),{...file,size:1},async()=>new Response(bytes),new AbortController().signal),/size/);
+ await assert.rejects(receiveFile153(f.root,join(f.root,'bad-range'),file,async()=>new Response(bytes,{status:206,headers:{'Content-Range':'bytes 1-2/3'}}),new AbortController().signal),/resume/);
+});
+
+test('2000-file publication/reception boundary includes configuration and rejects 2001 without replacing snapshot',async t=>{
+ const f=await fixture(t),paths=Array.from({length:2001},(_,i)=>'mods/m'+i+'.jar');await Promise.all(paths.map(path=>writeFile(join(f.dir,path),'synthetic '+path)));
+ const c=await f.host.candidates('source'),input={...selection,token:c.token,paths:paths.slice(0,2000)};
+ await f.host.publish(input);assert.equal((await f.guest.remote()).files.length,2000);let current=f.host.shared;
+ for(const chosen of [paths,[...paths.slice(0,2000),'config/display.json']]){await assert.rejects(f.host.publish({...input,paths:chosen}),/2000/);assert.equal(f.host.shared,current);}
+ await f.host.publish({...input,paths:[...paths.slice(0,1999),'config/display.json']});const accepted=await f.guest.remote();assert.equal(accepted.files.length,2000);assert.ok(accepted.files.some(x=>x.path==='config/display.json'));current=f.host.shared;
  assert.throws(()=>validateSnapshot({...accepted,files:[...accepted.files,{...accepted.files[0],path:'mods/extra.jar'}]}));assert.equal(f.host.shared,current);
 });
 test('strict allowlist rejects private files and platform path tricks',()=>{
@@ -69,7 +147,7 @@ for(const failedStep of ['java','loader','game'])test('real Workflows: '+failedS
  // New objects have no in-memory resume/afterSetup callback, as after application restart.
  core=makeCore();flows=makeFlows(core);assert.equal(flows.resumes.size,0);failing=null;await assert.rejects(flows.retry(id),/room|房间/);await assert.rejects(requireRoomSyncReady152(core,id),/incomplete|未完成/);
  await rm(join(dir,'room-sync152.json'));await assert.rejects(requireRoomSyncReady152(core,id),/incomplete|未完成/);await rm(join(dir,'setup-report.json'));await assert.rejects(requireRoomSyncReady152(core,id),/incomplete|未完成/);
- guest=new RoomSync152(core,f.guestRooms,flows,f.content);const next=await guest.preview(),result=await guest.install(next.token);assert.notEqual(result.instanceId,id);await requireRoomSyncReady152(core,result.instanceId);assert.equal(await readFile(join(await core.instancePath(result.instanceId),'config/display.json'),'utf8'),'{"distance":8}');
+ guest=new RoomSync152(core,f.guestRooms,flows,f.content);const next=await guest.preview();assert.equal(next.recovery.canResume,false);const result=await guest.install(next.token,'new');assert.notEqual(result.instanceId,id);await requireRoomSyncReady152(core,result.instanceId);assert.equal(await readFile(join(await core.instancePath(result.instanceId),'config/display.json'),'utf8'),'{"distance":8}');
 });
 for(const provider of ['modrinth','curseforge'])test(provider+' official source: Quilt accepts Fabric on publish and receive; restricted files never become host transfers',async t=>{
  const f=await fixture(t),bytes=Buffer.from('synthetic platform mod'),sha1=createHash('sha1').update(bytes).digest('hex');await writeFile(join(f.dir,'mods/example.jar'),bytes);(await f.core.metadata()).item.loader='quilt';f.rooms.servers.list=async()=>[{id:'server',game:'1.21.1',type:'quilt'}];
