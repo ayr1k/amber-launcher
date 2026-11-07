@@ -1,0 +1,36 @@
+// SPDX-License-Identifier: MPL-2.0
+import {useEffect,useState} from 'react';
+import {getLocale} from '../desktop/localization.mjs';
+import {Select} from './Select';
+import {ControlButton as Button} from './ControlButton.mjs';
+import './room-sync152.css';
+const text=(zh,en)=>getLocale()==='en-US'?en:zh;
+const api=(...args)=>window.amberDesktop.server(...args);
+export function RoomSync152({room}){
+ const [clients,setClients]=useState([]),[client,setClient]=useState(''),[candidate,setCandidate]=useState(null),[paths,setPaths]=useState([]),[reviewed,setReviewed]=useState(false),[redistribution,setRedistribution]=useState(false),[plan,setPlan]=useState(null),[accounts,setAccounts]=useState([]),[account,setAccount]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
+ useEffect(()=>{let live=true;Promise.all([window.amberDesktop.listInstances(),window.amberDesktop.accounts()]).then(([c,a])=>{if(live){setClients(c);setAccounts(a.accounts);}}).catch(e=>live&&setError(e.message));return()=>{live=false;};},[]);
+ async function act(fn){setBusy(true);setError('');try{await fn();}catch(e){setError(e.message);}finally{setBusy(false);}}
+ const state=room.syncState||{},active=['downloading','installing'].includes(state.phase);
+ return <details className="room-sync152"><summary>{text('客户端环境同步','Client environment synchronization')} · {room.role==='guest'?text('预览后确认','Preview before accepting'):room.sharing?text('已开放','Sharing'):text('需房主开放','Host opt-in')}</summary>
+ <p>{text('只同步房主明确选定的客户端内容。模组会执行代码，请只接受可信房主。每次确认创建独立实例，原实例、存档和个人配置保留；未变化文件复用已校验缓存。','Only explicitly selected client files are shared. Mods execute code: trust the host before accepting. Each confirmation creates an independent instance, preserving existing instances, saves and preferences. Unchanged files reuse verified cache.')}</p>
+ <p>{text('文件大小不含游戏、加载器和 Java 的额外下载。中继和网络条件可能影响传输；不保证直连或速度。','Sizes exclude additional game, loader and Java downloads. Relay and network conditions affect transfers; direct connections and speed are not guaranteed.')}</p>
+ {room.role==='host'?<>
+ <div className="server-actions132"><strong>{text('开放客户端同步（默认关闭）','Share client environment (off by default)')}</strong><Button className="button secondary" disabled={!room.sharing} onClick={()=>act(async()=>{await api('syncDisable');setNotice(text('已关闭分享并断开在途文件传输；游戏联机继续。','Sharing disabled and active file transfers disconnected; game networking continues.'));})}>{text('关闭分享','Disable sharing')}</Button></div>
+ <label>{text('选择已有客户端实例','Choose an existing client instance')}<Select value={client} disabled={busy} onChange={e=>{setClient(e.target.value);setCandidate(null);setPaths([]);setReviewed(false);}}><option value="">—</option>{clients.map(c=><option value={c.id} key={c.id}>{c.name} · {c.game} / {c.loader}</option>)}</Select></label>
+ <Button className="button secondary" disabled={!client||busy} onClick={()=>act(async()=>{setCandidate(await api('syncCandidates',client));setPaths([]);setReviewed(false);})}>{text('检查可分享文件','Inspect shareable files')}</Button>
+ {candidate&&<><p>Minecraft {candidate.game} · {candidate.loader} {candidate.version}</p><p>{text('候选范围：mods 中的 JAR 和 config 顶层文本配置；其他内容和疑似私密配置不分享。无法可靠判断所有手动模组的客户端兼容性、依赖和许可；请逐项核对。CurseForge 内容暂不支持此同步流程，不能改由房主转传绕过限制。','Candidates: mod JARs and top-level text configuration. Other content and potentially private configuration are excluded. Manual mod compatibility, dependencies and licenses cannot all be inferred: review each file. CurseForge content is not supported by this flow and cannot be retransmitted to bypass restrictions.')}</p>
+ <div className="room-sync-files152">{candidate.files.map(f=><label key={f.path}><input type="checkbox" checked={paths.includes(f.path)} onChange={e=>{setPaths(p=>e.target.checked?[...p,f.path]:p.filter(x=>x!==f.path));setReviewed(false);}}/><span>{f.path}</span><small>{f.size.toLocaleString()} B</small></label>)}</div>
+ <label className="server-check132"><input type="checkbox" checked={reviewed} onChange={e=>setReviewed(e.target.checked)}/>{text('已核对客户端适用性、必要配置和依赖；所选文件无私密数据。','I reviewed client compatibility, necessary configuration and dependencies; selected files contain no private data.')}</label>
+ <label className="server-check132"><input type="checkbox" checked={redistribution} onChange={e=>setRedistribution(e.target.checked)}/>{text('需要房主传输的文件均有再分发许可（不含平台限制内容）。','I have redistribution permission for host-transferred files (excluding platform-restricted content).')}</label>
+ <Button className="button" disabled={busy||!reviewed} onClick={()=>act(async()=>{const result=await api('syncPublish',{id:client,token:candidate.token,paths,reviewed,redistribution});setNotice(text('已开放快照：','Snapshot shared: ')+result.manifest.revision);})}>{text('确认选定内容并开放分享','Confirm selection and enable sharing')}</Button></>}
+ </>:<>
+ <Button className="button secondary" disabled={busy||active||!room.syncSupported} onClick={()=>act(async()=>setPlan(await api('syncPreview')))}>{text('预览／检查环境更新','Preview / check environment updates')}</Button>
+ {plan&&<section className="server-review132"><h3>{plan.manifest.name}</h3><p>Minecraft {plan.manifest.game} · {plan.manifest.loader} {plan.manifest.version}</p><p>{text('选中文件总计：','Selected files total: ')}{plan.size.toLocaleString()} B · {text('快照','Snapshot')} {plan.manifest.revision}</p><p>{text('新增／变化／移除：','Added / changed / removed: ')}{plan.diff.added.length} / {plan.diff.changed.length} / {plan.diff.removed.length}{plan.diff.runtime?' · '+text('运行环境变化','Runtime changed'):''}</p>
+ <div className="room-sync-files152">{plan.manifest.files.map(f=><div key={f.path}><span>{f.path}</span><small>{f.source==='host'?text('房主传输（许可由房主确认）','Host transfer (permission affirmed by host)'):'Modrinth'} · {f.size.toLocaleString()} B</small></div>)}</div>
+ {plan.diff.removed.map(p=><p key={p}>{text('新快照不再包含：','No longer included: ')}{p}</p>)}
+ <div className="server-actions132"><Button className="button" disabled={busy||active} onClick={()=>act(async()=>{await api('syncInstall',plan.token);setNotice(text('环境已准备；选择账号后启动。','Environment ready; select an account to launch.'));})}>{text('确认下载并创建独立实例','Confirm download and create independent instance')}</Button><Button className="button secondary" onClick={()=>{setPlan(null);api('syncCancel').catch(e=>setError(e.message));}}>{text('取消','Cancel')}</Button></div></section>}
+ <p role="status">{state.phase||'idle'}{state.error?' · '+state.error:''}</p>{active&&<Button className="button secondary" onClick={()=>api('syncCancel').catch(e=>setError(e.message))}>{text('取消同步','Cancel synchronization')}</Button>}
+ {state.phase==='ready'&&<div className="server-actions132"><label>{text('使用账号','Account')}<Select value={account} onChange={e=>setAccount(e.target.value)}><option value="">—</option>{accounts.map(a=><option key={a.id} value={a.id}>{a.name||a.username}</option>)}</Select></label><Button className="button" disabled={!account||busy} onClick={()=>act(async()=>{const settings=await window.amberDesktop.settings();await window.amberDesktop.launch(state.instanceId,{accountId:account,memory:settings.memory,roomSync:true});})}>{text('启动并加入房间','Launch and join room')}</Button></div>}
+ </>}{notice&&<p role="status">{notice}</p>}{error&&<p className="error" role="alert">{error}</p>}
+ </details>;
+}

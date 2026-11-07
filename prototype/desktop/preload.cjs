@@ -222,6 +222,6 @@ contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
   prepareJava: id => ipcRenderer.invoke('amber:java-prepare',id),
   selectJava: (id,path) => ipcRenderer.invoke('amber:java-select',id,path),
   browseJava: () => ipcRenderer.invoke('amber:java-browse'),
-  launch: (id,options) => ipcRenderer.invoke('amber:launch',id,{username:options?.username,memory:options?.memory,accountId:options?.accountId,serverId:options?.serverId}),
+  launch: (id,options) => ipcRenderer.invoke('amber:launch',id,{username:options?.username,memory:options?.memory,accountId:options?.accountId,serverId:options?.serverId,roomSync:options?.roomSync===true}),
 }));
 

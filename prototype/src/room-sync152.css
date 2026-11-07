@@ -1,0 +1,8 @@
+.room-sync152 { margin-block: 16px; min-width: 0; }
+.room-sync152 > * { margin-block: 12px; }
+.room-sync152 summary { cursor: pointer; padding-block: 8px; }
+.room-sync152 p,.room-sync152 span,.room-sync152 small { overflow-wrap: anywhere; }
+.room-sync-files152 { max-height: 280px; overflow: auto; padding: 8px; }
+.room-sync-files152 > * { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; padding-block: 8px; }
+.room-sync-files152 span { flex: 1 1 200px; min-width: 0; }
+.room-sync152 .server-check132 { align-items: flex-start; gap: 10px; }

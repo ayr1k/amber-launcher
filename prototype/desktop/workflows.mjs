@@ -100,7 +100,7 @@ export class Workflows{
  }
  async wait(result){if(!result?.id||!result.state)return result;while(true){const job=this.core.jobs.find(j=>j.id===result.id);if(!job)throw Error('任务记录丢失。');if(job.state==='done')return job;if(job.state!=='running')throw Error(job.error||'任务已取消。');await new Promise(r=>setTimeout(r,150));}}
  async choices(game,type){if(!this.core.catalog)await this.core.versions();if(!this.core.catalog.some(v=>v.id===game))throw Error('未知 Minecraft 版本。');return type==='vanilla'||type==='optifine'?[]:type==='quilt'?quiltVersions(game,this.core.fetcher):type==='fabric'?fabricVersions(game,this.core.fetcher):type==='liteloader'?liteVersions(game,this.core.fetcher):loaderVersions(game,type,this.core.fetcher);}
- async create(input,optifinePath,manifest,afterSetup,guided,localPack){return this.exclusive(async()=>{this.lastSetup=null;
+ async create(input,optifinePath,manifest,afterSetup,guided,localPack,onCreated){return this.exclusive(async()=>{this.lastSetup=null;
   if(!this.core.catalog)await this.core.versions();
   if(!Number.isInteger(input.threads)||input.threads<1||input.threads>128)throw Error('并发数应为 1–128');
   if(!['vanilla','quilt','fabric','forge','neoforge','liteloader','optifine'].includes(input.loader))throw Error('不支持的加载器组合。');
