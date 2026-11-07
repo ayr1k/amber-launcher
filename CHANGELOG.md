@@ -1,3 +1,11 @@
+## 1.5.1
+
+- Fix existing .minecraft imports that confused merged/custom profile IDs with official base game versions or selected shared data instead of isolated profile data. Identify the game and loader using recognized metadata and verify them against official catalogs; ask for an explicit official version when evidence is missing/conflicting. Unknown clients, damaged inheritance and conflicting loaders remain blocked.
+- Consider configured, shared and selected-version data directories separately. Require a choice when ambiguous. Keep profiles with missing, moved or unreadable configured gameDir selectable and explain the original path; require explicit folder correction without silently selecting another source.
+- Show the actual source, source ID, resolved game/loader, content selection, file count and exact bytes. Empty content requires runtime-only consent. Bind execution to validated metadata and a hashed file manifest; recheck source hashes and destination bytes while copying into a new instance.
+- Preserve source files, path/link/junction safeguards, space/overlap checks and cancellation recovery. Failed or cancelled copies retain partial content in the new instance. No source scripts/JARs are executed for identification, and arbitrary original client/JVM modifications are not replayed.
+- Ship matching AMBER/AmberE public-channel packages with source, provenance and SHA-256. Existing desktop acceptance used isolated synthetic fixtures; the user's actual directory layout, very large real libraries, native non-Windows behavior and live gameplay remain unverified.
+
 ## 1.5.0
 
 - Add instance port records and optional local MySQL Community 8.4.13. Share the verified program while keeping each instance's process, data, port and encrypted credentials separate. Provide initialization, start/stop, connection details, logs, stopped-database backups and recovery; download the Windows x64 database component on demand rather than bundling it.

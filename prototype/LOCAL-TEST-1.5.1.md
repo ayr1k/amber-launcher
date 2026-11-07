@@ -1,3 +1,9 @@
+# 1.5.1 formal release
+
+PR #6 was merged as `9c09b61b18566392f23a3515e6c40c4b52cb686f`, with reviewed task head `31831aad326f3788db9ada17f97ce71d192e5ef7`. The user authorized formal publication on 2026-11-06. Official packages use **1.5.1 / public**. The candidate restrictions and local-channel descriptions below remain historical task evidence, not the current release authorization or official installer provenance. Release validation is recorded in RELEASE-ACCEPTANCE.md; content/UI/import acceptance relies on the existing separate task/Dot evidence and its limits.
+
+PR #6 已合并并获用户正式发布授权。正式包为 **1.5.1 / public**；下方任务限制与 local 渠道说明保留为历史记录，不代表当前授权或正式包。内容、界面与导入验收沿用独立任务及 Dot 的结论，发布验证见 RELEASE-ACCEPTANCE.md。
+
 # 1.5.1 task test build / 任务测试包
 
 This task fixes existing `.minecraft` import compatibility in AMBER and AmberE. It stops at a draft PR and paired Windows x64 test installers. No merge, stable Release or Pages deployment is authorized. Continue all fixes on `codex/1.5.1-minecraft-import` and its single PR.
