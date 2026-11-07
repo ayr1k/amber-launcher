@@ -309,7 +309,7 @@ app.whenReady().then(async () => {
   content.updates = modUpdates;
   const libraryState = new LibraryState(core),modImport = new ModImport(core, content, modUpdates),health = new InstanceHealth(core, content, workflows, accounts, launchPreferences, settings);
   handle('amber:copy-error', (text) => {if (typeof text !== 'string' || text.length > 100000) throw Error('错误详情过长，请手动选择文字复制。');clipboard.writeText(redact(text, accounts.secrets()));return true;});
-  const journal=new PlayJournal(core.root),news=new NewsFeed(core.root),homePrefs=new HomePreferences(core.root),screenshots=new Screenshots(core),survey=new StorageSurvey(core,app.getPath('userData'));
+  const journal=new PlayJournal(core.root),news=new NewsFeed(core.root),homePrefs=new HomePreferences(core.root),screenshots=new Screenshots(core),survey=new StorageSurvey(core,app.getPath('userData'),{current:app.getVersion(),product:PRODUCT_NAME});
   try{await journal.migrate((await libraryState.get()).history);await journal.recover();}catch{/* Preserve an unreadable journal; it must never prevent launching the application. */}
   await survey.init().catch(()=>{});
   let journalObservation=null;const observe=()=>{if(storageBusy||upgradeBusy)return Promise.resolve();if(journalObservation)return journalObservation;journalObservation=(async()=>{try{const processes=(await core.runtimeStatus()).processes;if(!storageBusy&&!upgradeBusy){await journal.observe(processes);await protection140.observe(processes);}}catch{}})().finally(()=>journalObservation=null);return journalObservation;};
