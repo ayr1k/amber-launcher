@@ -1,3 +1,4 @@
+import {startupDestination160} from '../desktop/preferences160.mjs';
 import {ExistingGameImport,entryText} from './ExistingGameImport';
 import {PackUpgrade140} from './PackUpgrade140';
 import {EnvironmentImport140} from './ServerManagement140';
@@ -69,7 +70,7 @@ export function DesktopApp() {useLocale();
   useEffect(() => {let live=true;Promise.allSettled([
     api.info().then(i=>{if(live){setBuildChannel(i.buildChannel||'local');if(i.themeRecovery)setError(i.themeRecovery);}}),
     api.storageInfo?.().then(i=>{if(live){setWelcome(!i.onboarded&&!resumeOnboarding);if(resumeOnboarding)setPage('accounts');}}),
-    api.settings?.().then(v=>{if(live)setSettings(v);}),
+    api.settings?.().then(v=>{if(live){setSettings(v);const destination=startupDestination160(v.startup160,resumeOnboarding);setMode(destination.mode);if(destination.mode==='online')setServerPage(destination.page);else setPage(destination.page);}}),
     Promise.all([api.listInstances(),api.libraryState()]).then(([v,l])=>{if(live){setInstances(v);setLibrary(l);}})
   ]).then(results=>{if(!live)return;const failure=results.find(r=>r.status==='rejected');if(failure)setError(failure.reason.message);setInitialReady(true);});
     const mq=matchMedia('(prefers-color-scheme: dark)'),change=e=>setSystemDark(e.matches);mq.addEventListener('change',change);return()=>{live=false;mq.removeEventListener('change',change);};}, []);

@@ -1,5 +1,9 @@
 ## 1.5.4
 
+## 1.6.0 — task candidate / 测试候选
+
+Shared startup preferences, per-instance manual service launch and Windows launcher-only Conservative/Aggressive memory optimization with confirmation. Defaults remain safe and off. See LOCAL-TEST-1.6.0.md for validation limits. AmberE retains separate data, authentication and update policy.
+
 - Extend storage scanning to room synchronization data, server instances and server recycle storage. Deduplicate hardlinked file identities; show bounded logical bytes, reclaimable verified update files and protected activity without claiming allocated disk usage or guaranteed freed space.
 - Clean only complete updater downloads with valid receipts, matching SHA-256/size/product/filename and versions no newer than the installed version. Show exact files and consequences before confirmation; revalidate at execution and report cancellation, partial completion and failures. Keep old downloads without receipts, partial/newer/unknown files and protected recovery data.
 - Keep instances, worlds, backups, databases, shared runtimes, recycle bins and room recovery files protected. Active tasks or a ready update installer block update-cache cleanup. No automatic cleanup or general content/loader-cache deletion is added.

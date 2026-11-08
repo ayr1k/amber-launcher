@@ -1,5 +1,13 @@
 ## 1.5.4
 
+## 1.6.0 — task candidate / 测试候选
+
+- Startup workspace/page preferences while preserving existing layout and list controls.
+- Per-instance manual MySQL/Sakura launch choices and evidence-based connection steps.
+- Manual Windows launcher-only memory optimization: Conservative/Aggressive, off by default, explicit native warnings and per-process results.
+- 开启与执行激进档均需确认；不清理游戏或其他应用、不提权、不自动循环清理。
+- Test scope and limitations: `prototype/LOCAL-TEST-1.6.0.md`. Not a formal release.
+
 - Extend storage scanning to room synchronization data, server instances and server recycle storage. Deduplicate hardlinked file identities; show bounded logical bytes, reclaimable verified update files and protected activity without claiming allocated disk usage or guaranteed freed space.
 - Clean only complete updater downloads with valid receipts, matching SHA-256/size/product/filename and versions no newer than the installed version. Show exact files and consequences before confirmation; revalidate at execution and report cancellation, partial completion and failures. Keep old downloads without receipts, partial/newer/unknown files and protected recovery data.
 - Keep instances, worlds, backups, databases, shared runtimes, recycle bins and room recovery files protected. Active tasks or a ready update installer block update-cache cleanup. No automatic cleanup or general content/loader-cache deletion is added.
