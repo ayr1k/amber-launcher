@@ -22,3 +22,6 @@
 .component-choices160{display:grid;gap:12px;margin:16px 0;min-width:0}.component-choices160 label{display:grid;gap:8px;margin:0}.component-choices160 p{margin:0}.component-choices160 .inline-actions{flex-wrap:wrap;margin:0}
 
 .servers132 .flow160 .plan-block160 > label + label{margin-top:12px}
+
+.desktop-app .component-choices160 .component-actions160{display:flex;align-items:center;gap:12px;margin:0;flex-wrap:wrap}
+.desktop-app .component-choices160 .component-actions160>button{display:inline-flex;align-items:center;justify-content:center;align-self:center;min-height:44px;margin:0}

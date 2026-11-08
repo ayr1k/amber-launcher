@@ -1,0 +1,9 @@
+/* SPDX-License-Identifier: MPL-2.0 */
+.desktop-app .task-activity160 .task-heading160{display:grid;gap:8px;margin:0 0 20px;min-width:0}
+.desktop-app .task-activity160 .task-heading160>small{display:block}
+.desktop-app .task-activity160 .task-heading160>h1,.desktop-app .task-activity160 .task-heading160>p{margin:0;min-width:0}
+.desktop-app .task-activity160 .task-toolbar160{display:flex;align-items:center;flex-wrap:wrap;gap:12px 20px;margin:0 0 20px;min-width:0}
+.desktop-app .task-activity160 .task-toolbar160>input{flex:1 1 240px;width:auto;min-width:0;max-width:100%;margin:0}
+.desktop-app .task-activity160 .task-toolbar160>.list-density-row{flex:0 1 auto;margin:0;max-width:100%}
+.desktop-app .task-activity160 .task-toolbar160 .list-density{display:inline-flex;align-items:center;gap:12px;margin:0}
+@media(max-width:900px){.desktop-app .task-activity160 .task-toolbar160>input{flex-basis:100%}}
