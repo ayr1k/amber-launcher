@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MPL-2.0
 import {useEffect,useRef,useState} from 'react';
 import {Select} from './Select';
+import {zoomCamera,reliefShade} from './seed-math161.mjs';
+import {resolveWorldVersion} from '../desktop/world-version161.mjs';
 import {ControlButton as B} from './ControlButton.mjs';
 import {getLocale} from '../desktop/localization.mjs';
 import './workspace134.css';
@@ -22,11 +24,11 @@ export function SeedMapTool(){
  useEffect(()=>{if(!catalog)return;const q=new LatestMapQueue(r=>api.seedMap('map',r),d=>{
   setDatasets(previous=>[...previous.filter(v=>sceneKey(v.request)===sceneKey(d.request)).slice(-2),d]);
  },e=>setError(e.message),setBusy);queue.current=q;return()=>q.dispose()},[catalog]);
- useEffect(()=>{if(!catalog)return;setError('');queue.current.enqueue(bufferedRequest(p,terrain));redraw();try{localStorage.setItem('amber-seed-map',JSON.stringify(p))}catch{}},[catalog,p,terrain]);
+ useEffect(()=>{if(!catalog)return;queue.current.enqueue(bufferedRequest(p,terrain));redraw();try{localStorage.setItem('amber-seed-map',JSON.stringify(p))}catch{}},[catalog,p,terrain]);
  function update(next){camera.current=next;setP(next);setDraft(next);redraw();}
  function commitCamera(){const next={...camera.current,x:Math.round(camera.current.x),z:Math.round(camera.current.z)};update(next);}
  function saveMarks(next){try{localStorage.setItem('amber-map-markers',JSON.stringify(next));setMarks(next)}catch{setError(tr('标记未保存：本地存储空间不足','Markers not saved: local storage is full'))}}
- function zoom(step){const next=scales[Math.max(0,Math.min(scales.length-1,scales.indexOf(p.scale)+step))];update({...p,scale:next});}
+ function zoom(step,event){const v=camera.current,next=scales[Math.max(0,Math.min(scales.length-1,scales.indexOf(v.scale)+step))];if(next===v.scale)return;const b=canvas.current.getBoundingClientRect();update(zoomCamera(v,next,event?event.clientX-b.left:b.width/2,event?event.clientY-b.top:b.height/2,b));}
  useEffect(()=>{
   const c=canvas.current;if(!catalog||!c)return;
   const palette=new Map(catalog.biomes.map(b=>[b.id,b.color])),key=sceneKey({...p,terrain});
@@ -35,7 +37,7 @@ export function SeedMapTool(){
    const small=document.createElement('canvas');small.width=r.width;small.height=r.height;
    const sc=small.getContext('2d'),im=sc.createImageData(r.width,r.height);
    d.biomes.forEach((id,i)=>{const rgb=palette.get(id)||[80,80,80];let shade=biome&&id!==Number(biome)?0.18:1;
-    if(d.heights.length){const k=Math.floor(Math.floor(i/r.width)/4)*Math.ceil(r.width/4)+Math.floor(i%r.width/4),h=d.heights[k],prev=d.heights[Math.max(0,k-1)];shade*=Math.max(.55,Math.min(1.35,1+(h-prev)*.025));}
+    if(d.heights.length){const k=Math.floor(Math.floor(i/r.width)/4)*Math.ceil(r.width/4)+Math.floor(i%r.width/4);shade*=reliefShade(d.heights,Math.ceil(r.width/4),k,r.scale*4);}
     for(let j=0;j<3;j++)im.data[i*4+j]=Math.min(255,rgb[j]*shade);im.data[i*4+3]=255;
    });sc.putImageData(im,0,0);return {image:small,r,d};
   });
@@ -52,7 +54,7 @@ export function SeedMapTool(){
    points.forEach(f=>{const x=(f.x-left)*ux,z=(f.z-top)*uz;if(x<0||z<0||x>c.width||z>c.height)return;ctx.beginPath();ctx.arc(x,z,f.custom?7:5,0,Math.PI*2);ctx.fillStyle=f.custom?'#ffcf63':'#fff';ctx.fill();ctx.strokeStyle='#111';ctx.lineWidth=2;ctx.stroke();if(f.custom||v.scale<=16&&points.length<50){ctx.strokeText(f.name,x+9,z-7);ctx.fillText(f.name,x+9,z-7)}});
   };redraw();
  },[datasets,catalog,marks,show,biome,slime,grid,p.seed,p.version,p.dimension,p.y,terrain]);
- useEffect(()=>{const c=canvas.current,fn=e=>{e.preventDefault();if(drag.current)return;zoom(e.deltaY>0?1:-1)};c.addEventListener('wheel',fn,{passive:false});return()=>c.removeEventListener('wheel',fn)},[p]);
+ useEffect(()=>{const c=canvas.current,fn=e=>{e.preventDefault();if(drag.current)return;if(e.deltaY!==0)zoom(e.deltaY>0?1:-1,e)};c.addEventListener('wheel',fn,{passive:false});return()=>c.removeEventListener('wheel',fn)},[p]);
  function position(e){if(!data)return null;const b=canvas.current.getBoundingClientRect();return mapPosition(camera.current,e.clientX-b.left,e.clientY-b.top,b);}
  function inspect(e){const pos=position(e);if(!pos)return;const v=camera.current,layer=datasets.findLast(({request:r})=>sceneKey(r)===sceneKey({...v,terrain})&&pos.x>=r.x&&pos.z>=r.z&&pos.x<r.x+r.width*r.scale&&pos.z<r.z+r.height*r.scale);let id,near;
   if(layer){const r=layer.request,ix=Math.floor((pos.x-r.x)/r.scale),iz=Math.floor((pos.z-r.z)/r.scale);id=layer.result.biomes[iz*r.width+ix];near=layer.result.features.filter(f=>show.includes(f.type)).find(f=>Math.hypot(f.x-pos.x,f.z-pos.z)<v.scale*3);}
@@ -70,7 +72,16 @@ export function SeedMapTool(){
   if(d.moved)commitCamera();else if(!cancelled&&markMode&&marks.length<500){const pos=position(e);if(pos)saveMarks([...marks,{...pos,seed:p.seed,dimension:p.dimension,name:markerName.trim()||tr('标记','Marker')+' '+(marks.length+1)}]);setMarkMode(false)}
   if(canvas.current.hasPointerCapture(e.pointerId))canvas.current.releasePointerCapture(e.pointerId);
  }
- async function readWorld(){try{const w=await api.seedMap('world');if(!w)return;const v=catalog.versions.find(v=>v.name===w.version);update({...p,seed:w.seed,x:w.x,z:w.z,y:Math.max(-64,Math.min(320,w.y)),...(v?{version:v.id}:{})});setError(v?'':tr('已读取种子，请核对并选择存档的生成版本。','Seed loaded. Check and select the world generation version.'))}catch(e){setError(e.message)}}
+ async function readWorld(){try{
+  const w=await api.seedMap('world');if(!w)return;
+  const version=resolveWorldVersion(w.version,catalog.versions);
+  const next={...camera.current,seed:w.seed,dimension:0,...(version?{version:version.id}:{}),...(w.spawnKnown?{x:w.x,z:w.z,y:w.y}:{x:0,z:0,y:64})};
+  setDraft(next);
+  if(!version){setError(tr('存档版本无法识别或不受支持。已填入种子，请选择生成版本并点击查看地图。','World version is unknown or unsupported. Seed filled in; select a generation version and choose View map.'));return;}
+  update(next);
+  setError([!version.exact?tr('使用同系列近似生成版本；升级过的区块可能不同。','Using an approximate generation version from the same series; upgraded chunks may differ.'):null,!w.spawnKnown?tr('存档未提供完整出生点；地图暂以原点为中心，原点不是已知出生点。','The save has no complete spawn coordinates; the map is centered on the origin, which is not a known spawn.'):null].filter(Boolean).join(' '));
+ }catch(e){setError(e.message)}}
+
  return <section className="seed134"><form className="seed-controls" onSubmit={e=>{e.preventDefault();if(valid({...draft,x:Number(draft.x),z:Number(draft.z),y:Number(draft.y)}))update({...draft,x:Number(draft.x),z:Number(draft.z),y:Number(draft.y)});else setError(tr('请检查坐标范围','Check coordinate ranges'))}}><label className="seed-input">{tr('种子','Seed')}<input value={draft.seed} maxLength={256} onChange={e=>setDraft({...draft,seed:e.target.value})}/></label><label>{tr('Java 生成版本','Java generation version')}<Select value={draft.version} onChange={e=>setDraft({...draft,version:Number(e.target.value)})}>{catalog?.versions.slice().reverse().map(v=><option key={v.id} value={v.id}>{v.name}</option>)}</Select></label><label>{tr('维度','Dimension')}<Select value={draft.dimension} onChange={e=>setDraft({...draft,dimension:Number(e.target.value)})}><option value="0">{tr('主世界','Overworld')}</option><option value="-1">{tr('下界','Nether')}</option><option value="1">{tr('末地','The End')}</option></Select></label>{['x','z','y'].map(k=><label key={k}>{k.toUpperCase()}{k==='y'?' · '+tr('高度','Height'):''}<input type="number" step="1" min={k==='y'?-64:-29899999} max={k==='y'?320:29899999} value={draft[k]} onChange={e=>setDraft({...draft,[k]:Number(e.target.value)})}/></label>)}<B className="button" type="submit">{tr('查看地图','View map')}</B><B type="button" className="button secondary" disabled={!catalog} onClick={readWorld}>{tr('读取 level.dat…','Read level.dat…')}</B></form>
  <div className="seed-toolbar"><B className="button secondary" aria-label={tr('放大','Zoom in')} disabled={p.scale===1} onClick={()=>zoom(-1)}>＋</B><B className="button secondary" aria-label={tr('缩小','Zoom out')} disabled={p.scale===4096} onClick={()=>zoom(1)}>−</B><B className="text-button" onClick={()=>update({...p,x:0,z:0})}>{tr('返回原点','Origin')}</B>{[[terrain,setTerrain,'估算地形阴影','Estimated relief'],[grid,setGrid,'网格','Grid'],[slime,setSlime,'史莱姆区块','Slime chunks']].map(([v,set,zh,en])=><label className="check131" key={en}><input type="checkbox" checked={v} onChange={e=>set(e.target.checked)}/><span>{tr(zh,en)}</span></label>)}<span role="status">{busy?tr('正在生成…','Generating…'):tr('离线地图','Offline map')}</span></div>
  <div className="seed-options"><div className="seed-filter"><label>{tr('高亮生物群系','Highlight biome')}<Select value={biome} onChange={e=>setBiome(e.target.value)}><option value="">{tr('全部','All')}</option>{catalog?.biomes.map(b=><option key={b.id} value={b.id}>{b.name.replaceAll('_',' ')}</option>)}</Select></label><details className="seed-structures"><summary>{tr('结构筛选','Structure filters')} · {show.length}/{Object.keys(names).length}</summary><div className="seed-structure-list"><B className="text-button" onClick={()=>setShow(show.length?[]:Object.keys(names))}>{show.length?tr('隐藏全部结构','Hide all structures'):tr('显示全部结构','Show all structures')}</B>{Object.entries(names).map(([id,label])=><label className="check131" key={id}><input type="checkbox" checked={show.includes(id)} onChange={e=>setShow(e.target.checked?[...show,id]:show.filter(k=>k!==id))}/><span>{tr(...label)}</span></label>)}</div></details></div><div className="seed-marker-controls"><label>{tr('标记名称','Marker name')}<input maxLength={80} value={markerName} onChange={e=>setMarkerName(e.target.value)}/></label><B className="button secondary" aria-pressed={markMode} onClick={()=>setMarkMode(!markMode)}>{markMode?tr('点击地图添加标记','Click map to mark'):tr('添加标记','Add marker')}</B><B className="button secondary" onClick={()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(marks,null,2)],{type:'application/json'}));a.download='amber-map-markers.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}}>{tr('导出标记','Export markers')}</B><B className="button secondary" onClick={()=>upload.current.click()}>{tr('导入标记','Import markers')}</B><input hidden type="file" accept=".json" ref={upload} onChange={async e=>{try{const f=e.target.files[0];if(!f)return;if(f.size>200000)throw Error('File too large');const rows=JSON.parse(await f.text());if(!validMarks(rows)||rows.length+marks.length>500)throw Error(tr('标记文件无效或超过 500 项','Invalid marker file or over 500 markers'));saveMarks([...marks,...rows])}catch(e){setError(e.message)}e.target.value=''}}/></div><details className="seed-saved-markers"><summary>{tr('已保存标记','Saved markers')} · {marks.filter(m=>m.seed===p.seed&&m.dimension===p.dimension).length}</summary>{marks.filter(m=>m.seed===p.seed&&m.dimension===p.dimension).map((m,i)=><div className="seed-marker" key={i}><B className="text-button" onClick={()=>update({...p,x:m.x,z:m.z})}>{m.name} · X {m.x} Z {m.z}</B><B className="text-button" onClick={()=>saveMarks(marks.filter(v=>v!==m))}>{tr('删除','Delete')}</B></div>)}</details></div>
