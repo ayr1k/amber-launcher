@@ -11778,5 +11778,33 @@
   "m193f229df3d9": {
     "zh": "已保存。",
     "en": "Saved."
+  },
+  "m4128bfc9d693": {
+    "zh": "已跳过：进程身份已变化",
+    "en": "Skipped: process identity changed"
+  },
+  "m409ddd790a7c": {
+    "zh": "已跳过：无法核验进程身份",
+    "en": "Skipped: process identity unavailable"
+  },
+  "m0c829caf502d": {
+    "zh": "已跳过：进程已退出",
+    "en": "Skipped: process exited"
+  },
+  "mba41bad83d94": {
+    "zh": "已跳过：权限不足",
+    "en": "Skipped: access denied"
+  },
+  "m258e3cd547d9": {
+    "zh": "无法打开进程",
+    "en": "Unable to open process"
+  },
+  "m268e46724e40": {
+    "zh": "工作集整理失败",
+    "en": "Working-set trim failed"
+  },
+  "m887da4977eb1": {
+    "zh": "未能整理",
+    "en": "Unable to trim"
   }
 }

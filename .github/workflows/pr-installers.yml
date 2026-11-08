@@ -26,6 +26,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec install-electron
       - run: pnpm build
+      - run: node scripts/qa-memory-identity160.cjs
       - run: pnpm release:check
       - run: pnpm package:editions
         env:

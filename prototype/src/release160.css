@@ -1,1 +1,12 @@
-.flow160{padding:20px;min-width:0}.flow-grid160{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 24px}.flow-grid160 section{min-width:0}.flow160 p{overflow-wrap:anywhere}.flow160 .check-setting{display:flex;align-items:flex-start;gap:12px;margin:16px 0}.flow160 .check-setting>span{min-width:0;display:grid;gap:6px}.flow160 .check-setting input{flex:none;margin-top:4px}@media(max-width:760px){.flow-grid160{grid-template-columns:minmax(0,1fr)}}
+.modal145>.modal-body145.flow160{padding:20px;min-width:0}
+.flow-grid160{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 24px}
+.flow-grid160 section{min-width:0}
+.flow160 p{overflow-wrap:anywhere}
+/* Override the server workspace's label:not(.server-check132) form grid. */
+.servers132 .flow160 label.check-setting{display:flex;flex-direction:row;align-items:flex-start;gap:12px;margin:16px 0}
+.flow160 .check-setting>span{min-width:0;display:grid;gap:6px}
+.flow160 .check-setting input{flex:none;margin-top:4px}
+.flow-actions160{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin:20px 0 12px}
+@media(max-width:760px){.flow-grid160{grid-template-columns:minmax(0,1fr)}}
+
+.memory-controls160>.button{align-self:end;min-height:44px;height:44px;margin-bottom:18px}

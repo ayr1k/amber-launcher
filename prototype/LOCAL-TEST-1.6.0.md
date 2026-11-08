@@ -13,7 +13,7 @@ This is a local-channel test build, not a formal release. **It uses the same ins
 
 ## Memory design references
 
-The PCL project is an interaction reference, not a claim that its private or current native implementation has been reproduced: https://github.com/Meloong-Git/PCL . The operation here uses Windows `EmptyWorkingSet`, with `PROCESS_QUERY_LIMITED_INFORMATION | PROCESS_SET_QUOTA`: https://learn.microsoft.com/en-us/windows/win32/api/psapi/nf-psapi-emptyworkingset . Working-set pages may be faulted back immediately. This is not JVM heap reclamation, a memory-leak repair, permanent RAM savings or an FPS guarantee. Aggressive mode can temporarily stutter the launcher's UI and increase disk I/O or paging pressure. Access-denied and exited-process failures are reported without elevation.
+The PCL project is an interaction reference, not a claim that its private or current native implementation has been reproduced: https://github.com/Meloong-Git/PCL . The operation here uses Windows `EmptyWorkingSet`, with `SYNCHRONIZE | PROCESS_QUERY_LIMITED_INFORMATION | PROCESS_SET_QUOTA`: https://learn.microsoft.com/en-us/windows/win32/api/psapi/nf-psapi-emptyworkingset . Working-set pages may be faulted back immediately. This is not JVM heap reclamation, a memory-leak repair, permanent RAM savings or an FPS guarantee. Aggressive mode can temporarily stutter the launcher's UI and increase disk I/O or paging pressure. Access-denied and exited-process failures are reported without elevation.
 
 ## Verification and limits
 
@@ -28,3 +28,11 @@ The PCL project is an interaction reference, not a claim that its private or cur
 2. In Settings, cancel Aggressive and verify it stays off; accept only after reading the scope. Cancel execution and verify no operation runs. Conservative should report one launcher PID. Turn Off to disable manual execution.
 3. On a disposable server, save service choices. Try missing/unprepared database, stale tunnel and provider failure paths. Verify errors stay specific, no foreign instance's tunnel starts, and surviving services are visible.
 4. Independently test actual supported loader sessions, remote player joins, interrupted synchronization recovery and stable-overwrite installation. Record the environment and results rather than interpreting process state as acceptance.
+
+## Review corrections and evidence
+
+- Memory targets carry Electron creation times, not only numeric PIDs. The native helper opens each process once, checks its exact creation time and live state on that handle, then trims that same handle. Missing/conflicting identity, PID reuse, exited processes and access denial fail closed with distinct results. See Electron ProcessMetric creationTime and Windows GetProcessTimes documentation.
+- `tests/memory-identity160.test.mjs` covers conservative/aggressive target boundaries, conflicting identity, partial success and invalid helper results. Together with `tests/release160.test.mjs`, 16 targeted checks pass. The earlier 671-check suite remains baseline evidence for commit 1cc43e1; it is not represented as a full rerun of this correction.
+- `scripts/qa-memory-identity160.cjs` runs seven injected native handle tests and a newly spawned, windowless Electron fixture: a changed timestamp is skipped; only the exact owned fixture is trimmed. This check also runs before PR installer packaging. No user application is targeted.
+- `scripts/qa-flow-layout160.cjs` checks eight English/Chinese, light/dark and wide/narrow cases for settings heading hierarchy, spacing, horizontal overflow, modal padding, checkbox/text alignment and footer clearance. Screenshots and measured results are under `.qa/flow-layout160/`.
+- Installers made from 1cc43e1 predate these corrections. Use only the new PR-head CI artifact, checking its TEST-REVISION.txt, .sha256 and provenance files. Generated binaries and screenshots remain outside source commits.
