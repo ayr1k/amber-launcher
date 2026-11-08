@@ -11610,5 +11610,205 @@
   "m65cafd3210e7": {
     "zh": "无法读取原配置的游戏数据目录，请检查权限或选择实际目录。",
     "en": "The configured game data directory cannot be read. Check permissions or choose the actual directory."
+  },
+  "m7b5263de4214": {
+    "zh": "操作与内存",
+    "en": "Operation & memory"
+  },
+  "mebad043edb7a": {
+    "zh": "启动与常用入口",
+    "en": "Startup & shortcuts"
+  },
+  "ma9ac7e02c7e5": {
+    "zh": "下次打开启动器时生效，不会自动启动游戏或联机服务。现有主页编辑和列表密度继续独立保留。常用工具也可通过 Ctrl K 搜索打开。",
+    "en": "Applies next time the launcher opens; does not start games or services. Existing home layout and list density remain independent. Use Ctrl K to find common tools."
+  },
+  "mef75d1777534": {
+    "zh": "默认工作模式",
+    "en": "Default workspace"
+  },
+  "m65f48cd6c8c2": {
+    "zh": "启动页面",
+    "en": "Startup page"
+  },
+  "m4834db16788b": {
+    "zh": "Windows 内存整理",
+    "en": "Windows memory optimization"
+  },
+  "me318f004e19a": {
+    "zh": "仅手动执行，重启启动器后恢复关闭。保守档仅整理启动器主进程；激进档整理当前启动器的主进程和 Electron 子进程。不会整理游戏、服务端、数据库或其他应用，不定时清理系统缓存。",
+    "en": "Manual only; resets to Off when the launcher restarts. Conservative trims the launcher main process; Aggressive includes its Electron child processes. Games, servers, databases and other apps are excluded. No periodic system-cache cleanup."
+  },
+  "m82e9ed523046": {
+    "zh": "工作集可能立即回升；这不减少游戏内存上限、不修复 JVM 泄漏，也不保证提高帧率。可能产生缺页、卡顿及额外磁盘读取。",
+    "en": "Working sets may grow back immediately. This does not lower the game heap limit, fix JVM leaks or guarantee higher FPS. Page faults, stutters and extra disk reads are possible."
+  },
+  "me09bed76bb14": {
+    "zh": "当前平台或界面预览不支持此操作。仅 Windows 桌面版可用。",
+    "en": "Unavailable on this platform or UI preview. Requires the Windows desktop app."
+  },
+  "me5d74dae0040": {
+    "zh": "整理档位",
+    "en": "Optimization mode"
+  },
+  "m22b569a627b5": {
+    "zh": "关闭（默认）",
+    "en": "Off (default)"
+  },
+  "m013dc0500cf7": {
+    "zh": "激进（先确认风险）",
+    "en": "Aggressive (confirmation required)"
+  },
+  "m6f5e96d658dc": {
+    "zh": "立即整理一次",
+    "en": "Optimize once"
+  },
+  "m3e0c2bcf63be": {
+    "zh": "最近执行：",
+    "en": "Last attempt: "
+  },
+  "md34ed5f32098": {
+    "zh": "已请求整理；不代表永久释放",
+    "en": "Trim requested; not permanent reclamation"
+  },
+  "mb0f2a1347907": {
+    "zh": "未能整理，Windows 错误 ",
+    "en": "Unable to trim, Windows error "
+  },
+  "m60d76d0c097a": {
+    "zh": "错误 5 通常表示权限不足；进程退出也可能失败。不自动提权或重试受保护进程。",
+    "en": "Error 5 usually means access denied; an exited process can also fail. Protected processes are not elevated or retried automatically."
+  },
+  "m921da144d34b": {
+    "zh": "联机步骤与启动联动",
+    "en": "Connection steps & launch services"
+  },
+  "m5a9f86a9adbb": {
+    "zh": "1 · 服务端",
+    "en": "1 · Server"
+  },
+  "m120087ad7c31": {
+    "zh": "服务端已报告启动完成；公网可达性未验证。",
+    "en": "Server reported startup complete; public reachability is unverified."
+  },
+  "m0a9a0a880ff4": {
+    "zh": "进程启动中，尚未报告就绪。",
+    "en": "Process starting; readiness not reported yet."
+  },
+  "mc1b071f13fdf": {
+    "zh": "2 · 隧道与房间",
+    "en": "2 · Tunnels & room"
+  },
+  "m1da47c7a5a53": {
+    "zh": "服务商报告连接建立，外部游戏连接未验证",
+    "en": "Provider reported a connection; external gameplay unverified"
+  },
+  "mc737e2d0e1a8": {
+    "zh": "本地进程运行；远端连接未验证",
+    "en": "Local process running; remote connection unverified"
+  },
+  "mfa66283d32da": {
+    "zh": "当前实例没有 EasyTier 房间。",
+    "en": "No EasyTier room for this instance."
+  },
+  "m102fcde3aa60": {
+    "zh": "请让异地玩家实际加入；进程、节点连接和游戏可达是不同状态。",
+    "en": "Ask a remote player to join. Process startup, provider connection and game reachability are separate states."
+  },
+  "m5841ee98e6ea": {
+    "zh": "3 · 环境同步",
+    "en": "3 · Environment sync"
+  },
+  "m6093119b5f26": {
+    "zh": "已开启分享；不代表玩家已安装完成。",
+    "en": "Sharing enabled; does not mean guests finished installation."
+  },
+  "m7e748679ca33": {
+    "zh": "未开启当前房间分享。可在联机连接页配置。",
+    "en": "Not sharing this room. Configure under Connections."
+  },
+  "m3efd05341eda": {
+    "zh": "客户端完成同步后仍需真实启动游戏验证兼容性。",
+    "en": "Clients still need a real game launch to verify compatibility after synchronization."
+  },
+  "m06b87f3b4bf2": {
+    "zh": "4 · 玩家加入",
+    "en": "4 · Players joining"
+  },
+  "m2d90e0b86d60": {
+    "zh": "最近查询在线人数：",
+    "en": "Last queried online count: "
+  },
+  "m180e0adc1bc5": {
+    "zh": "尚未取得有效在线玩家列表，不推断已有人加入。",
+    "en": "No valid online roster yet; no player join is inferred."
+  },
+  "mb8dd3a6ee874": {
+    "zh": "查询当前玩家",
+    "en": "Query players now"
+  },
+  "m2b5e7a5217ee": {
+    "zh": "手动启动此实例时",
+    "en": "When manually starting this instance"
+  },
+  "me30e7d7c6c14": {
+    "zh": "默认全部关闭。数据库先启动，再启动服务端与所选 Sakura 隧道。不会自动创建 EasyTier 房间；计划重启不重复启动配套服务。停止服务端不会自动停止这些服务，请在对应页面停止。",
+    "en": "All off by default. Start the database first, then the server and selected Sakura tunnels. No automatic EasyTier rooms; scheduled restarts do not restart companion services. Stopping the server leaves these services running; stop them on their respective pages."
+  },
+  "m8ac864246bc5": {
+    "zh": "同时启动已准备的本地 MySQL",
+    "en": "Start the prepared local MySQL database"
+  },
+  "m352fdf638633": {
+    "zh": "先到实例的“端口与数据库”完成准备。",
+    "en": "Prepare it under the instance’s Ports & database tab first."
+  },
+  "mb3f7d8551183": {
+    "zh": "启动此 Sakura 隧道",
+    "en": "Start this Sakura tunnel"
+  },
+  "mb1d2f9012672": {
+    "zh": "有已失效的隧道选择；保存时将移除。",
+    "en": "A selected tunnel is missing; saving removes it."
+  },
+  "mf98a6edfba86": {
+    "zh": "保存启动联动",
+    "en": "Save launch services"
+  },
+  "m193f229df3d9": {
+    "zh": "已保存。",
+    "en": "Saved."
+  },
+  "m4128bfc9d693": {
+    "zh": "已跳过：进程身份已变化",
+    "en": "Skipped: process identity changed"
+  },
+  "m409ddd790a7c": {
+    "zh": "已跳过：无法核验进程身份",
+    "en": "Skipped: process identity unavailable"
+  },
+  "m0c829caf502d": {
+    "zh": "已跳过：进程已退出",
+    "en": "Skipped: process exited"
+  },
+  "mba41bad83d94": {
+    "zh": "已跳过：权限不足",
+    "en": "Skipped: access denied"
+  },
+  "m258e3cd547d9": {
+    "zh": "无法打开进程",
+    "en": "Unable to open process"
+  },
+  "m268e46724e40": {
+    "zh": "工作集整理失败",
+    "en": "Working-set trim failed"
+  },
+  "m887da4977eb1": {
+    "zh": "未能整理",
+    "en": "Unable to trim"
+  },
+  "m0eb75ca5e767": {
+    "zh": "服务端或联机运行时进入托盘，否则退出",
+    "en": "Use tray while servers or networking are active; otherwise quit"
   }
 }

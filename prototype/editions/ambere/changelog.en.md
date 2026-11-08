@@ -1,3 +1,15 @@
+#- Launch-plan readiness/stop waits have per-module 1–3600-second timeouts (default 120). A timeout skips later steps, preserves started services and never resumes or replays operations on later readiness.
+- Auxiliary version choices: independently install and switch verified official EasyTier releases after capability checks; new databases can choose verified MySQL 8.4.13 / 8.4.11 while existing data and backups retain the creation version. Sakura historical catalog remains unverified and is explicitly identified in the UI.
+# 1.6.0 — task candidate
+
+- Default close uses the tray while servers or networking are active, and quits when neither is active. Custom policies remain; explicit exit cleans up owned resources and reports failures honestly.
+
+- Per-instance graphical launch plans: ordered tunnel, MySQL, server readiness, wait, one-line command and normal-stop verified-backup modules. Existing service choices migrate; step status and safe cancellation are visible.
+- Tunnels may start before servers; provider connection, target readiness and real game reachability remain distinct.
+- Server downloads recommend a default while allowing other upstream game versions, Paper builds, Fabric Loader/Installer and Quilt Loader versions.
+- Startup-page preferences and manual Windows launcher-only memory optimization, off by default with aggressive enable/run warnings.
+- Not a formal release. Preserve separate edition accounts, data and update policies. Validation and limits: `prototype/LOCAL-TEST-1.6.0.md`.
+
 ## 1.5.4
 
 - Extend storage scanning to room synchronization data, server instances and server recycle storage. Deduplicate hardlinked file identities; show bounded logical bytes, reclaimable verified update files and protected activity without claiming allocated disk usage or guaranteed freed space.

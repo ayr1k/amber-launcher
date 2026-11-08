@@ -45,6 +45,11 @@ test('Sakura strips inherited credential targets case-insensitively and rejects 
  for(const value of ['{}','<html>failure</html>',config+'\0',config+'a'.repeat(16001)])assert.throws(()=>sakuraEnvironment(value,{}),/Invalid or oversized/);
 });
 
+test('Sakura can connect before target startup without claiming target readiness',async t=>{
+ const {manager,spawned}=await fixture(t);manager.servers.runs.clear();await manager.start('qa');assert.equal(spawned.length,1);spawned[0].child.stdout.write('start proxy success\n');
+ const state=await Sakura142.prototype.state.call(manager,'qa');assert.equal(state.run.connected,true);assert.equal(state.run.targetRunning,false);manager.servers.runs.set('qa',{state:'starting'});assert.equal((await Sakura142.prototype.state.call(manager,'qa')).run.targetRunning,false);
+});
+
 test('Sakura recognizes fragmented UTF-8 Chinese success and later disconnect/reconnect without stale success',async t=>{
  const {manager,spawned}=await fixture(t);await manager.start('qa');const child=spawned[0].child;
  child.stdout.write('[I] 连接节点成功, 运行 ID [qa]\n');assert.equal(manager.current.connected,false);

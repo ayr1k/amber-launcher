@@ -1,8 +1,13 @@
+import {AsyncLocalStorage} from 'node:async_hooks';
 // SPDX-License-Identifier: MPL-2.0
 // FIFO admission; cancellation never belongs to another caller.
 export class TaskQueue {
+ context=new AsyncLocalStorage();
+ owns(key){const lease=this.context.getStore();return lease?.active&&lease.key===key;}
+ async scoped(key,fn){return this.tryRun(key,async()=>{const lease={key,active:true};try{return await this.context.run(lease,fn);}finally{lease.active=false;}});}
  constructor(limit=2){this.limit=limit;this.active=new Set();this.waiting=[];}
  async tryRun(key,fn){
+  if(this.owns(key))return fn();
   // Scheduled work must not sit behind user operations and execute much later.
   if(this.active.size>=this.limit||[...this.active,...this.waiting].some(t=>t.key===key)){
    const error=Error('Instance is busy / 实例正在执行其他操作');error.code='TASK_QUEUE_BUSY';throw error;
@@ -11,6 +16,7 @@ export class TaskQueue {
   try{return await fn();}finally{this.active.delete(ticket);this.pump();}
  }
  async run(key,fn,{signal,onWaiting=()=>{}}={}){
+  if(this.owns(key)){signal?.throwIfAborted();return fn();}
   signal?.throwIfAborted();
   const ticket={key};
   await new Promise((resolve,reject)=>{

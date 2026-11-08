@@ -52,7 +52,7 @@ test('invitations enforce bounded validity, structured peers and no injected arg
 });
 test('network component can be queued again after cancellation before execution',async()=>{
  const core={root:tmpdir(),jobs:[],startJob(instanceId,kind){const j={instanceId,kind,state:'running'};this.jobs.push(j);return j;}},rooms=new Rooms(core,{});
- await rooms.install();await assert.rejects(rooms.install(),/already queued/);core.jobs[0].state='cancelled';await rooms.install();assert.equal(core.jobs.length,2);
+ rooms.versions160.choices=async()=>[{version:'2.6.4'}];await rooms.install();await assert.rejects(rooms.install(),/already queued/);core.jobs[0].state='cancelled';await rooms.install();assert.equal(core.jobs.length,2);
 });
 test('server catalog shares filters, pagination, trusted icons and stable-first versions',async()=>{
  const root=await mkdtemp(join(tmpdir(),'amber-catalog-')),m=await new Servers(new VanillaLauncher(root)).init(),s=await m.create({name:'Catalog',type:'paper',game:'1.21.1'});let search;
