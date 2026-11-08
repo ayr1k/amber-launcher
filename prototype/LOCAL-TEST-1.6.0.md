@@ -1,3 +1,9 @@
+# 1.6.0 formal release
+
+PR #10 merged as `4ca2d459cfdc48a7486ce69a896dcd558855df7e`, accepted task head `2fef90c672a5d210a029738af5b951402c6b2e88`. The user requested formal release on 2026-11-08. Official packages use **1.6.0/public**. Candidate restrictions and review requests below are historical evidence, not the current authorization. Existing separate task/Dot review and user acceptance are reused without a repeat content review. RELEASE-ACCEPTANCE.md records formal release checks.
+
+PR #10 已合并，用户已授权完整正式发布；正式包为 **1.6.0/public**。下方候选限制保留历史归属，当前沿用既有独立任务／Dot 审核及用户验收。内存优化建议来自 B 站用户 @萨拉赫蒙-十恶不赦（UID 2003495984）。
+
 # AMBER / AmberE 1.6.0 task candidate
 
 This is a local-channel test build, not a formal release. **The installers share installation identity and data directories with the corresponding stable editions and may replace those applications. Back up your data first.** No merge, Release or Pages deployment is authorized here.

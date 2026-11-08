@@ -99,3 +99,7 @@ Local revision history is bound to the room name and host public key; it stores 
 ## Update cleanup receipts (1.5.4)
 
 Verified application updates record local filename, size, SHA-256, version and product receipts. These small provenance records remain after eligible installer cleanup. Storage scans and cleanup stay local, require explicit action/confirmation, and do not upload file listings or delete accounts, worlds or protected recovery data.
+
+## Launch preferences and memory (1.6.0)
+
+Startup preferences and per-instance plans are stored locally. Manual Windows memory optimization uses owned Electron process IDs and creation times to check identity; it does not enumerate or target unrelated applications, upload process information or persist an enabled mode across restarts. Launch modules may use the existing selected external services under their established privacy behavior.
