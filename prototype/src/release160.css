@@ -20,3 +20,5 @@
 .modal-body145>.core-choices160:first-child{margin-top:0;padding-top:0;border-top:0}
 
 .component-choices160{display:grid;gap:12px;margin:16px 0;min-width:0}.component-choices160 label{display:grid;gap:8px;margin:0}.component-choices160 p{margin:0}.component-choices160 .inline-actions{flex-wrap:wrap;margin:0}
+
+.servers132 .flow160 .plan-block160 > label + label{margin-top:12px}
