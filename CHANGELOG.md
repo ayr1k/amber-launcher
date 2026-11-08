@@ -1,12 +1,14 @@
+## 1.6.0 — task candidate
+
+- Default close uses the tray while servers or networking are active, and quits when neither is active. Custom policies remain; explicit exit cleans up owned resources and reports failures honestly.
+
+- Per-instance graphical launch plans: ordered tunnel, MySQL, server readiness, wait, one-line command and normal-stop verified-backup modules. Existing service choices migrate; step status and safe cancellation are visible.
+- Tunnels may start before servers; provider connection, target readiness and real game reachability remain distinct.
+- Server downloads recommend a default while allowing other upstream game versions, Paper builds, Fabric Loader/Installer and Quilt Loader versions.
+- Startup-page preferences and manual Windows launcher-only memory optimization, off by default with aggressive enable/run warnings.
+- Not a formal release. Preserve separate edition accounts, data and update policies. Validation and limits: `prototype/LOCAL-TEST-1.6.0.md`.
+
 ## 1.5.4
-
-## 1.6.0 — task candidate / 测试候选
-
-- Startup workspace/page preferences while preserving existing layout and list controls.
-- Per-instance manual MySQL/Sakura launch choices and evidence-based connection steps.
-- Manual Windows launcher-only memory optimization: Conservative/Aggressive, off by default, explicit native warnings and per-process results.
-- 开启与执行激进档均需确认；不清理游戏或其他应用、不提权、不自动循环清理。
-- Test scope and limitations: `prototype/LOCAL-TEST-1.6.0.md`. Not a formal release.
 
 - Extend storage scanning to room synchronization data, server instances and server recycle storage. Deduplicate hardlinked file identities; show bounded logical bytes, reclaimable verified update files and protected activity without claiming allocated disk usage or guaranteed freed space.
 - Clean only complete updater downloads with valid receipts, matching SHA-256/size/product/filename and versions no newer than the installed version. Show exact files and consequences before confirmation; revalidate at execution and report cancellation, partial completion and failures. Keep old downloads without receipts, partial/newer/unknown files and protected recovery data.

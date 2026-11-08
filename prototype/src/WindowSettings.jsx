@@ -17,5 +17,5 @@ export function WindowSettings({value,busy,change}) {
 }
 
 export function CloseBehaviorSettings({value,busy,change}){useLocale();return (
-<SettingRow title={translateText("关闭窗口时")} description={translateText("进入托盘后服务端与定时任务继续运行；退出 AMBER 或电脑睡眠时不会执行定时任务。Linux 保留任务栏入口。")}><Select aria-label={translateText("关闭窗口时")} disabled={busy} value={value.closeBehavior||'server'} onChange={e=>change('closeBehavior',e.target.value)}><option value="server">{translateText("服务端运行时进入托盘，否则退出")}</option><option value="tray">{translateText("总是进入托盘")}</option><option value="quit">{translateText("退出 AMBER")}</option></Select></SettingRow>
+<SettingRow title={translateText("关闭窗口时")} description={translateText("进入托盘后服务端与定时任务继续运行；退出 AMBER 或电脑睡眠时不会执行定时任务。Linux 保留任务栏入口。")}><Select aria-label={translateText("关闭窗口时")} disabled={busy} value={value.closeBehavior||'server'} onChange={e=>change('closeBehavior',e.target.value)}><option value="server">{translateText("服务端或联机运行时进入托盘，否则退出")}</option><option value="tray">{translateText("总是进入托盘")}</option><option value="quit">{translateText("退出 AMBER")}</option></Select></SettingRow>
 );}

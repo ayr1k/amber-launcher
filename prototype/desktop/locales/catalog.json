@@ -11806,5 +11806,9 @@
   "m887da4977eb1": {
     "zh": "未能整理",
     "en": "Unable to trim"
+  },
+  "m0eb75ca5e767": {
+    "zh": "服务端或联机运行时进入托盘，否则退出",
+    "en": "Use tray while servers or networking are active; otherwise quit"
   }
 }

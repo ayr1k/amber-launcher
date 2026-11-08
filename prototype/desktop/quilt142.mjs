@@ -12,8 +12,8 @@ export async function quiltProfile(game,version,fetcher=fetch,signal,side='clien
  for(const lib of p.libraries){if(!/^[\w.\-]+:[\w.\-]+:[\w.+\-]+$/.test(lib.name)||!['https://maven.quiltmc.org/repository/release/','https://maven.fabricmc.net/','https://libraries.minecraft.net/'].includes(lib.url))throw Error('Unsupported Quilt library');const [g,n,v]=lib.name.split(':');lib.path=`${g.replaceAll('.','/')}/${n}/${v}/${n}-${v}.jar`;lib.sha1||=(await(await officialFetch(lib.url+lib.path+'.sha1',{fetcher,signal})).text()).trim();if(!/^[a-f0-9]{40}$/i.test(lib.sha1))throw Error('Quilt library checksum missing');}return p;
 }
 
-export async function installQuiltServer(core,dir,game,signal){
- const version=(await quiltVersions(game,core.fetcher)).find(v=>v.stable)?.version;if(!version)throw Error('No stable Quilt loader / 暂无稳定 Quilt 版本');
+export async function installQuiltServer(core,dir,game,signal,selected){
+ const choices=await quiltVersions(game,core.fetcher),version=selected||(choices.find(v=>v.stable)||choices[0])?.version;if(!choices.some(v=>v.version===version))throw Error('Selected Quilt loader unavailable / 所选 Quilt 版本不可用');
  const profile=await quiltProfile(game,version,core.fetcher,signal,'server');const files=[];
  for(const lib of profile.libraries){const relative='.quilt142/libraries/'+lib.path,path=safePath(dir,relative);await download({url:lib.url+lib.path,hash:lib.sha1,algorithm:'sha1',path,label:lib.name},{root:core.root,fetcher:core.fetcher,signal});files.push({relative,hash:lib.sha1});}
  await atomicJson(join(dir,'.quilt142','launch.json'),{version,files});return version;

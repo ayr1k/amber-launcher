@@ -12,7 +12,7 @@ export function validateServices160(value={mysql:false,tunnels:[]}){
  if(new Set(value.tunnels).size!==value.tunnels.length)throw Error('Duplicate tunnel selection / 不可重复选择同一隧道');
  return {mysql:value.mysql,tunnels:[...value.tunnels]};
 }
-function selectedBinding160(bindings,key,id){
+export function selectedBinding160(bindings,key,id){
  const matches=bindings.filter(b=>b.id===key),binding=matches[0];
  if(!binding)throw Error('Selected tunnel is missing or removed / 所选隧道绑定不存在或已移除');
  if(matches.length!==1||binding.invalid)throw Error('Selected tunnel binding is invalid / 所选隧道绑定记录无效');

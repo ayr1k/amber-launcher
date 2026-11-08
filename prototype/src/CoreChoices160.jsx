@@ -1,0 +1,11 @@
+// SPDX-License-Identifier: MPL-2.0
+import {useEffect,useState} from 'react';
+import {Select} from './Select';
+import {ControlButton as Button} from './ControlButton.mjs';
+import {getLocale} from '../desktop/localization.mjs';
+const st=(zh,en)=>getLocale()==='en-US'?en:zh;
+export function CoreChoices160({type,game,value,onChange,disabled,onReady}){
+ const [groups,setGroups]=useState(null),[error,setError]=useState(''),[retry,setRetry]=useState(0);
+ useEffect(()=>{let live=true;setGroups(null);setError('');onReady?.(false);if(!game)return;window.amberDesktop.server('coreChoices',type,game).then(rows=>{if(live){setGroups(rows);onReady?.(rows.every(g=>g.rows.length>0));}}).catch(e=>live&&setError(e.message));return()=>{live=false;};},[type,game,retry,onReady]);
+ return <section className="core-choices160"><h3>{st('下载版本','Download versions')}</h3><p>{st('默认采用启动器优先选择，可切换上游提供的其他发行版。预发布或实验构建可能不稳定，请先用独立实例验证。','The launcher’s preferred versions are the default. Choose other upstream releases below. Prerelease or experimental builds may be unstable; test in a separate instance first.')}</p>{groups===null&&!error&&<p>{st('读取上游版本…','Loading upstream versions…')}</p>}{groups?.map(g=><label key={g.key}>{g.title}<Select disabled={disabled||!g.rows.length} value={value?.[g.key]||''} onChange={e=>{const next={...value};if(e.target.value)next[g.key]=e.target.value;else delete next[g.key];onChange(next);}}><option value="">{st('启动器默认：','Launcher default: ')}{g.rows.find(r=>r.recommended)?.version||st('无可用版本','No available release')}</option>{value?.[g.key]&&!g.rows.some(r=>r.version===value[g.key])&&<option value={value[g.key]}>{value[g.key]} · {st('已不可用，请重新选择','Unavailable; choose another')}</option>}{g.rows.map(r=><option value={r.version} key={r.version}>{r.version} · {r.kind}{r.recommended?' · '+st('启动器默认','Launcher default'):''}</option>)}</Select>{!g.rows.length&&<span>{st('上游未提供此游戏版本的发行版。','Upstream provides no release for this game version.')}</span>}</label>)}{groups?.length===0&&<p>{st('核心与所选 Minecraft 版本对应；如需其他游戏版本，请创建新实例或复制升级。','The core matches the selected Minecraft version. Create or copy an instance for a different game version.')}</p>}{error&&<p role="alert">{error} <Button className="text-button" onClick={()=>setRetry(n=>n+1)}>{st('重试','Retry')}</Button></p>}</section>;
+}

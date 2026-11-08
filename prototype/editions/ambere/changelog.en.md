@@ -1,8 +1,14 @@
+## 1.6.0 — task candidate
+
+- Default close uses the tray while servers or networking are active, and quits when neither is active. Custom policies remain; explicit exit cleans up owned resources and reports failures honestly.
+
+- Per-instance graphical launch plans: ordered tunnel, MySQL, server readiness, wait, one-line command and normal-stop verified-backup modules. Existing service choices migrate; step status and safe cancellation are visible.
+- Tunnels may start before servers; provider connection, target readiness and real game reachability remain distinct.
+- Server downloads recommend a default while allowing other upstream game versions, Paper builds, Fabric Loader/Installer and Quilt Loader versions.
+- Startup-page preferences and manual Windows launcher-only memory optimization, off by default with aggressive enable/run warnings.
+- Not a formal release. Preserve separate edition accounts, data and update policies. Validation and limits: `prototype/LOCAL-TEST-1.6.0.md`.
+
 ## 1.5.4
-
-## 1.6.0 — task candidate / 测试候选
-
-Shared startup preferences, per-instance manual service launch and Windows launcher-only Conservative/Aggressive memory optimization with confirmation. Defaults remain safe and off. See LOCAL-TEST-1.6.0.md for validation limits. AmberE retains separate data, authentication and update policy.
 
 - Extend storage scanning to room synchronization data, server instances and server recycle storage. Deduplicate hardlinked file identities; show bounded logical bytes, reclaimable verified update files and protected activity without claiming allocated disk usage or guaranteed freed space.
 - Clean only complete updater downloads with valid receipts, matching SHA-256/size/product/filename and versions no newer than the installed version. Show exact files and consequences before confirmation; revalidate at execution and report cancellation, partial completion and failures. Keep old downloads without receipts, partial/newer/unknown files and protected recovery data.

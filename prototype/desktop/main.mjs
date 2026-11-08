@@ -1,4 +1,4 @@
-import {Services160} from './services160.mjs';
+import {LaunchPlan160} from './launch-plan160.mjs';
 import {Memory160} from './memory160.mjs';
 import {previewUpdateCleanup,executeUpdateCleanup} from './maintenance154.mjs';
 import {RoomSync152,requireRoomSyncReady152} from './room-sync152.mjs';
@@ -8,7 +8,7 @@ import {Ports150} from './ports150.mjs';
 import {Sakura150} from './sakura150.mjs';
 import {startup} from './startup148.mjs';
 import {ServerSchedules} from './server-schedules147.mjs';
-import {shouldHideToTray} from './tray147.mjs';
+import {closeToTray160,shutdownOwned160} from './close160.mjs';
 import {feedbackDraft,feedbackUrl} from './feedback.mjs';
 import {ServerUpdates144} from './server-updates144.mjs';
 import {Performance144} from './performance144.mjs';
@@ -167,19 +167,23 @@ app.whenReady().then(async () => {
   ports150.inUse=(id,portId)=>sakura.activeFor(id,portId);
   const mysql150=new MySQL150(core,servers,credentialCodec(safeStorage));
   mysql150.ports=ports150;servers.portAllocation150=ports150.allocation=fn=>mysql150.withAllocation(fn);ports150.reserved=()=>mysql150.databaseReservations();servers.validatePort150=async(id,port)=>{if((await ports150.conflicts(id,{protocol:'tcp',port},'main')).length)throw Error('Port conflicts with another instance / 端口与其他实例冲突');};await mysql150.recover();
-  const services160=new Services160(servers,mysql150,sakura);
+  const services160=new LaunchPlan160(servers,mysql150,sakura);
   let schedules;
   const serverUpdates144=new ServerUpdates144(servers);
   const serverTrash=new ServerTrash143(servers,{database:mysql150,connected:id=>services160.pending.has(id)||rooms.starting||rooms.active&&rooms.current?.serverId===id||sakura.activeFor(id)||mysql150.activeFor(id)});
   const serverEditor=new InstanceEditor({instancePath:id=>servers.dir(id)},{directories:['config','defaultconfigs','plugins','kubejs','scripts'],files:['server.properties','bukkit.yml','spigot.yml','paper.yml','permissions.yml']});
   const resourceTimer=setInterval(()=>servers.sample(),3000);resourceTimer.unref();
   handle('amber:server',async(action,...args)=>{
+   if(exitBusy)throw Error('Exit cleanup in progress / 正在安全退出');
+   if(services160.pending.has(args[0])&&!['flow160','start','planCancel160','planSave160'].includes(action))throw Error('Launch plan running; cancel it before another operation / 启动规划正在执行，请先取消再操作');
    const updateMethods={updateScan:'scan',updateLock:'lock',updatePreview:'preview',updateInstall:'install',updateHistory:'history',updateRestore:'restore'};if(Object.hasOwn(updateMethods,action))return serverUpdates144[updateMethods[action]](...args);
    const trashMethods={trashList:'list',trashDetails:'details',trashRemove:'remove',trashRestore:'restore',trashPurge:'purge'};if(Object.hasOwn(trashMethods,action))return serverTrash[trashMethods[action]](...args);
+   if(action==='planCancel160')return services160.cancel(args[0]);
+   if(action==='planSave160')return services160.savePlan(...args);
    if(action==='servicesSave160')return services160.save(...args);
    if(action==='flow160'){const network=await rooms.state();return {services:await services160.state(args[0]),room:rooms.current?.serverId===args[0]?network.room:null};}
    if(action==='start'){if(storageBusy||upgradeBusy||exitBusy)throw Error('Wait for storage, upgrade or shutdown / 请等待数据迁移、升级或退出完成');return services160.start(...args);}
-   const methods=['versions','create','install','launchSettings','properties','saveProperties','backups','restoreConfig','start','stop','command','copy','content','toggleContent','removeContent','contentHistory','restoreContent','search','categories','contentVersions','previewContent','installContent'];
+   const methods=['gameChoices','coreChoices','versions','create','install','launchSettings','properties','saveProperties','backups','restoreConfig','start','stop','command','copy','content','toggleContent','removeContent','contentHistory','restoreContent','search','categories','contentVersions','previewContent','installContent'];
    if(methods.includes(action))return servers[action](...args);
    if(['editorList','editorRead','editorHistory','editorBackup'].includes(action))return serverEditor[action.slice(6).toLowerCase()](...args);
    if(action==='editorSave')return servers.locks.run(args[0],async()=>{await servers.stopped(args[0]);return serverEditor.save(...args);});
@@ -195,6 +199,7 @@ app.whenReady().then(async () => {
    if(action==='portsList')return ports150.list(...args);
    if(action==='portsSave')return ports150.save(...args);
    if(action==='portsRemove')return ports150.remove(...args);
+   if(['sakuraStart','sakuraStop','sakuraRemove','sakuraRemoteDelete'].includes(action)){const binding=(await sakura.state()).tunnels.find(b=>b.id===args[0]);if(binding?services160.pending.has(binding.serverId):services160.pending.size>0)throw Error('Cancel the launch plan before changing its tunnel / 请先取消启动规划再操作其隧道');}
    if(action==='sakuraToken')return sakura.saveToken(...args);
    if(action==='sakuraCatalog')return sakura.remote.catalog();
    if(action==='sakuraReconcile')return sakura.remote.reconcile();
@@ -209,7 +214,7 @@ app.whenReady().then(async () => {
    if(action==='sakuraStart')return sakura.start(...args);
    if(action==='sakuraStop')return sakura.stop(...args);
    if(action==='sakuraWebsite')return shell.openExternal('https://www.natfrp.com/tunnel/');
-   if(action==='sakuraCopy'){const run=(await sakura.state()).tunnels.find(t=>t.id===args[0])?.run,address=run?.address;if(!address||!run.connected||!run.targetRunning)throw Error('隧道尚未连通 / Tunnel is not connected');clipboard.writeText(address);return true;}
+   if(action==='sakuraCopy'){const run=(await sakura.state()).tunnels.find(t=>t.id===args[0])?.run,address=run?.address;if(!address||!run.connected)throw Error('隧道尚未连通 / Tunnel is not connected');clipboard.writeText(address);return true;}
    if(action==='syncCandidates')return rooms.sync.candidates(...args);
    if(action==='syncPublish')return rooms.sync.publish(...args);
    if(action==='syncDisable')return rooms.sync.disable();
@@ -305,9 +310,10 @@ app.whenReady().then(async () => {
   handle('amber:language-remove', async () => {await languages.remove();const value = await settings.get();if (value.language.startsWith('x-')) await settings.save({ ...value, language: 'en-US' });return refreshLocale();});
   const management = new InstanceManagement(core, workflows),backups = new Backups(core, workflows);
   const serverManagement140=new ServerManagement140(core,servers),environment140=new Environment140(core,servers,content,workflows);
+  services160.backup=id=>serverManagement140.snapshot(id,'manual');
   const performance144=new Performance144(servers);const performanceTimer=setInterval(()=>performance144.sample().catch(()=>{}),3000);performanceTimer.unref();
   handle('amber:performance144',async(action,id)=>{if(action==='state')return performance144.state(id);if(action==='collect')return performance144.collect(id);if(action==='export'){const state=await performance144.state(id);if(!state.report)throw Error('Collect a report first / 请先采集报告');const out=await dialog.showSaveDialog(window,{defaultPath:'server-performance.json',filters:[{name:'JSON',extensions:['json']}]});if(out.canceled)return null;await writeFile(out.filePath,JSON.stringify(state.report,null,2));return true;}throw Error('Invalid action');});
-  handle('amber:server-management',async(action,id,input)=>{if(['roster','skin','installBridge','players','player','commands','backups','backup','restore','policy','savePolicy','pinBackup'].includes(action))return serverManagement140[action](id,input);if(action==='command')return serverManagement140.consoleResult(id,input);if(action==='link')return environment140.links(id,input);if(action==='compare')return environment140.compare(id,input);if(action==='previewInstall')return environment140.previewInstall(id,input.localId,input.versionId);if(action==='install')return environment140.install(id);if(action==='export'){const r=await environment140.requirements(id);const out=await dialog.showSaveDialog(window,{defaultPath:'server-environment.json',filters:[{name:'Environment',extensions:['json']}]});if(out.canceled)return null;await writeFile(out.filePath,JSON.stringify(r.manifest,null,2));return {unknown:r.unknown,optional:r.optional};}if(action==='import'){const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Environment',extensions:['json']}]});if(r.canceled)return null;const st=await lstat(r.filePaths[0]);if(!st.isFile()||st.size>2000000)throw Error('Invalid environment file');return environment140.previewImport(JSON.parse(await readFile(r.filePaths[0],'utf8')));}if(action==='create')return environment140.create(id,input);throw Error('Invalid action');});
+  handle('amber:server-management',async(action,id,input)=>{if(services160.pending.has(id))throw Error('Launch plan running / 启动规划正在执行');if(['roster','skin','installBridge','players','player','commands','backups','backup','restore','policy','savePolicy','pinBackup'].includes(action))return serverManagement140[action](id,input);if(action==='command')return serverManagement140.consoleResult(id,input);if(action==='link')return environment140.links(id,input);if(action==='compare')return environment140.compare(id,input);if(action==='previewInstall')return environment140.previewInstall(id,input.localId,input.versionId);if(action==='install')return environment140.install(id);if(action==='export'){const r=await environment140.requirements(id);const out=await dialog.showSaveDialog(window,{defaultPath:'server-environment.json',filters:[{name:'Environment',extensions:['json']}]});if(out.canceled)return null;await writeFile(out.filePath,JSON.stringify(r.manifest,null,2));return {unknown:r.unknown,optional:r.optional};}if(action==='import'){const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Environment',extensions:['json']}]});if(r.canceled)return null;const st=await lstat(r.filePaths[0]);if(!st.isFile()||st.size>2000000)throw Error('Invalid environment file');return environment140.previewImport(JSON.parse(await readFile(r.filePaths[0],'utf8')));}if(action==='create')return environment140.create(id,input);throw Error('Invalid action');});
   const protection140=new Protection140(core,backups);
   handle('amber:protection', (action,id,value)=>{if(action==='state')return protection140.state(id);if(action==='save')return protection140.save(id,value);if(action==='pin')return backups.pin(id,value);throw Error('Invalid action');});
   const modUpdates = new ModUpdates(core, content);
@@ -548,7 +554,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
       let pausedSchedules=false;
       try {
         const prefs=await settings.get();
-        if(!smoke&&shouldHideToTray(prefs.closeBehavior,servers.active,explicitQuit)){await savePlacement();hideToTray();return;}
+        if(!smoke&&closeToTray160(prefs.closeBehavior,{serverActive:servers.active,networkActive:!!(services160.pending.size||rooms.starting||rooms.active||sakura.active||mysql150.active)},explicitQuit)){await savePlacement();hideToTray();return;}
         if(!smoke&&skinRuns.size){const answer=await dialog.showMessageBox(window,{type:'question',message:'离线游戏仍在使用本地皮肤 / Offline game is using a local skin',detail:'最小化可继续提供皮肤；退出后尚未缓存的皮肤可能无法加载。 / Minimize to keep serving skins; quitting may prevent uncached skins from loading.',buttons:['最小化 / Minimize','退出 / Quit','返回 / Back'],defaultId:0,cancelId:2});if(answer.response===0){window.minimize();return;}if(answer.response!==1)return;}
         if(storageBusy){await dialog.showMessageBox(window,{type:'info',message:translateMessage('数据目录正在迁移，请等待完成。'),buttons:[translateMessage('确定')]});return;}
         if(!smoke&&(minecraftImport.busy||serverManagement140.backupBusy||workflows.active||core.jobs.some(j=>j.state==='running')||appUpdates.state.phase==='downloading')){
@@ -557,16 +563,12 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
           appUpdates.cancel();minecraftImport.cancel();workflows.cancel();for(const j of core.jobs.filter(j=>j.state==='running'))core.controllers.get(j.id)?.abort(Error('用户取消任务并退出。'));
           while(minecraftImport.busy||serverManagement140.backupBusy||workflows.active||core.jobs.some(j=>j.state==='running')||appUpdates.state.phase==='downloading')await new Promise(resolve=>setTimeout(resolve,150));
         }
-        if(services160.pending.size)throw Error('Wait for launch services to finish before quitting / 请等待启动联动完成后再退出');
+        if(services160.pending.size)throw Error('Cancel the launch plan and wait for safe completion before quitting / 请取消启动规划并等待安全结束后退出');
         await schedules?.pause();pausedSchedules=true;
-        if(!smoke&&(servers.active||(services160.pending.size||rooms.active||sakura.active||mysql150.active))){
-          const answer=await dialog.showMessageBox(window,{type:'question',message:'服务端或联机连接仍在运行 / Servers or networking are still active',buttons:['最小化并继续 / Minimize and continue','停止服务端并退出 / Stop and quit','返回 / Back'],defaultId:0,cancelId:2,noLink:true});
-          if(answer.response===0){window.minimize();return;}if(answer.response!==1)return;
-          exitBusy=true;try{await servers.shutdown();await rooms.leave();await sakura.stop();await mysql150.shutdown();}catch(e){await dialog.showMessageBox(window,{type:'warning',message:e.message});return;}
-        }
+        exitBusy=true;if(!smoke)await shutdownOwned160({servers,rooms,sakura,mysql:mysql150});
         exitBusy=true;await mysql150.withQuiesced(async()=>{clearTimeout(placementTimer);await savePlacement();exitApproved=true;closeAllowed=true;window.close();app.quit();});
       }catch(e){restoreWindow();await dialog.showMessageBox(window,{type:'error',message:redact(e.message)});}
-      finally{if(!exitApproved)exitBusy=false;closePrompt=false;explicitQuit=false;if(pausedSchedules&&!exitApproved)schedules?.start();}
+      finally{if(!exitApproved){exitBusy=false;rooms.closing=false;}closePrompt=false;explicitQuit=false;if(pausedSchedules&&!exitApproved)schedules?.start();}
     });
     window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
     window.webContents.on('will-navigate', (event, url) => {if (url !== 'amber://app/') event.preventDefault();});
