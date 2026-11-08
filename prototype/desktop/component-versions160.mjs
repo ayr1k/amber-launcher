@@ -36,6 +36,6 @@ export class EasyTierVersions160 {
    const exe=await rooms.findExecutable(root);if(!exe)throw Error('EasyTier executable missing');if(process.platform!=='win32')await chmod(exe,0o755);
    const binaryHash=await digest(exe,'sha256');const result=await execute(exe,['--help'],{windowsHide:true,timeout:15000,maxBuffer:1_000_000,cwd:root,signal});checkEasyTierHelp160(result.stdout+result.stderr);signal.throwIfAborted();
    const component={...selected,binaryHash};await atomicJson(this.pointer,{schema:1,directory,component});rooms.root=root;rooms.component=component;
-  }finally{rooms.installing=false;}});rooms.componentJob160=job;return job;
+  }finally{rooms.installing=false;}});rooms.installing=false;return job;
  }catch(e){rooms.installing=false;throw e;}}
 }

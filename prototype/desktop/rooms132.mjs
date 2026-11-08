@@ -13,8 +13,8 @@ export function validateInvite(code){if(typeof code!=='string'||code.length>3000
 export function validatePeer(value){let u;try{u=new URL(value);}catch{throw Error('Invalid peer address');}if(!['tcp:','udp:','ws:','wss:'].includes(u.protocol)||!u.hostname||u.username||u.password||!u.port||u.hash||u.search||!['','/'].includes(u.pathname)||value.length>250)throw Error('Peer must be tcp/udp/ws/wss host:port / 节点地址必须是协议、主机和端口');return value;}
 export class Rooms {
  constructor(core,servers){this.core=core;this.servers=servers;this.current=null;this.starting=false;this.installing=false;this.component=process.platform==='win32'&&process.arch==='x64'?{...EASYTIER,binaryHash:'da7eb2d24b5416f3d3407636949e964a0750e3f9dc53a828cb6799a57ead445d'}:components[process.platform+'-'+process.arch];this.versions160=new EasyTierVersions160(this);this.root=join(core.root,'network-components','easytier-'+EASYTIER.version+(process.platform==='win32'?'':'-'+process.platform+'-'+process.arch));}
- get installing(){return !!this.preparingComponent160&&(!this.componentJob160?.state||['running','queued'].includes(this.componentJob160.state));}
- set installing(value){this.preparingComponent160=value;if(value)this.componentJob160=null;}
+ get installing(){return !!this.preparingComponent160||!!this.core.jobs?.some(j=>j.instanceId==='network-component'&&j.state==='running');}
+ set installing(value){this.preparingComponent160=value;}
  async executable(){await this.versions160.load();return this.findExecutable(this.root);}
  async findExecutable(root){const find=async(dir,depth)=>{let entries;try{entries=await readdir(dir,{withFileTypes:true});}catch{return null;}for(const e of entries){if(e.isSymbolicLink())continue;const p=join(dir,e.name);if(e.isFile()&&e.name===(process.platform==='win32'?'easytier-core.exe':'easytier-core'))return p;if(e.isDirectory()&&depth){const f=await find(p,depth-1);if(f)return f;}}return null;};return find(root,2);}
  async install(version=this.component?.version||EASYTIER.version){return this.versions160.install(version);}
