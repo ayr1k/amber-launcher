@@ -193,6 +193,7 @@ app.whenReady().then(async () => {
    if(action==='open'){const dir=await servers.dir(args[0]);return shell.openPath(dir);}
    if(action==='pickJava'){const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Java',extensions:['exe']}]});return r.canceled?null:(await core.addJava(r.filePaths[0]));}
    if(action==='importJar'||action==='importContent'){const r=await dialog.showOpenDialog(window,{properties:action==='importContent'?['openFile','multiSelections']:['openFile'],filters:[{name:'Java archive',extensions:['jar']}]});if(r.canceled)return null;return action==='importJar'?servers.importJar(args[0],r.filePaths[0]):servers.importContent(args[0],r.filePaths);}
+   if(action==='mysqlChoices160')return mysql150.choices();
    const mysqlMethods={mysqlState:'state',mysqlInitialize:'initialize',mysqlStart:'start',mysqlStop:'stop',mysqlBackup:'backup',mysqlRestore:'restore',mysqlConnection:'connection',mysqlCancel:'cancel',mysqlResetPreparation:'resetPreparation'};if(Object.hasOwn(mysqlMethods,action))return mysql150[mysqlMethods[action]](...args);
    if(action==='mysqlBackupLibrary')return mysql150.backupStore.library();
    if(action==='mysqlRecoverOrphan')return mysql150.backupStore.recover(...args);
@@ -221,7 +222,8 @@ app.whenReady().then(async () => {
    if(action==='syncPreview')return rooms.sync.preview();
    if(action==='syncInstall')return rooms.sync.install(...args);
    if(action==='syncCancel')return rooms.sync.cancel();
-   if(action==='networkInstall')return rooms.install();
+   if(action==='networkChoices160')return rooms.versions160.choices();
+   if(action==='networkInstall')return rooms.install(args[0]);
    if(action==='host')return servers.locks.run(args[0],()=>rooms.host(...args));
    if(action==='join')return rooms.join(...args);
    if(action==='leave')return rooms.leave();

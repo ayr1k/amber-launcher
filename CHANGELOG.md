@@ -1,4 +1,5 @@
-## 1.6.0 — task candidate
+#- Auxiliary version choices: independently install and switch verified official EasyTier releases after capability checks; new databases can choose verified MySQL 8.4.13 / 8.4.11 while existing data and backups retain the creation version. Sakura historical catalog remains unverified and is explicitly identified in the UI.
+# 1.6.0 — task candidate
 
 - Default close uses the tray while servers or networking are active, and quits when neither is active. Custom policies remain; explicit exit cleans up owned resources and reports failures honestly.
 

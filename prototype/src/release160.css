@@ -18,3 +18,5 @@
 [data-ui-style=rounded] .plan-block160{border-radius:10px}
 
 .modal-body145>.core-choices160:first-child{margin-top:0;padding-top:0;border-top:0}
+
+.component-choices160{display:grid;gap:12px;margin:16px 0;min-width:0}.component-choices160 label{display:grid;gap:8px;margin:0}.component-choices160 p{margin:0}.component-choices160 .inline-actions{flex-wrap:wrap;margin:0}
