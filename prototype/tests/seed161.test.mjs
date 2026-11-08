@@ -5,6 +5,34 @@ import {zoomCamera,reliefShade} from '../src/seed-math161.mjs';
 import {mapPosition} from '../src/seed-view134.mjs';
 import {resolveWorldVersion} from '../desktop/world-version161.mjs';
 import {readWorldNBT} from '../desktop/seed134.mjs';
+import {visibleStructures,supportedStructures} from '../src/seed-results161.mjs';
+import {bufferedRequest} from '../src/seed-view134.mjs';
+test('structure capability filters separate dimensions and unsupported versions',()=>{
+ assert.deepEqual(supportedStructures({version:35,dimension:-1}),['fortress','bastion','nether_portal']);
+ assert.deepEqual(supportedStructures({version:35,dimension:1}),['end_city']);
+ assert.equal(supportedStructures({version:10,dimension:0}).includes('igloo'),false);
+ assert.equal(supportedStructures({version:25,dimension:0}).includes('trial_chambers'),false);
+ assert.equal(supportedStructures({version:34,dimension:0}).includes('abandoned_camp'),false);
+ assert.equal(supportedStructures({version:35,dimension:0}).includes('abandoned_camp'),true);
+ assert.deepEqual(supportedStructures({version:36,dimension:0}),[]);
+});
+test('structure results exclude stale scenes, hidden types and offscreen points; deduplicate and cap by distance',()=>{
+ const camera={seed:'1',version:35,dimension:0,y:64,x:0,z:0,scale:1},request=bufferedRequest(camera,false);
+ const features=Array.from({length:110},(_,i)=>({type:'village',x:i-55,z:0}));
+ const layers=[{request,result:{features:[...features,{type:'igloo',x:0,z:0},{type:'village',x:1000,z:0}]}},{request,result:{features}},{request:{...request,seed:'2'},result:{features:[{type:'village',x:1,z:1}]}}];
+ const result=visibleStructures(layers,camera,false,['village']);
+ assert.equal(result.covered,true);assert.equal(result.total,110);assert.equal(result.rows.length,100);assert.equal(result.rows[0].distance,0);
+ assert.ok(result.rows.every(f=>f.z===0&&f.type==='village'));
+ assert.equal(visibleStructures(layers,{...camera,dimension:1},false,['village']).total,0);
+ assert.equal(visibleStructures(layers,{...camera,x:10000},false,['village']).covered,false);
+ assert.equal(visibleStructures(layers,camera,false,[]).total,0);
+});
+test('hiding all structures disables native searching and does not report full structure coverage',()=>{
+ const camera={seed:'1',version:35,dimension:0,y:64,x:0,z:0,scale:16};
+ const request=bufferedRequest(camera,false,false);assert.equal(request.structures,false);
+ assert.equal(visibleStructures([{request,result:{features:[]}}],camera,false,['village']).covered,false);
+ assert.equal(bufferedRequest(camera,false).structures,true);
+});
 test('wheel zoom anchors the world point under the pointer and respects world bounds',()=>{
  const camera={x:128,z:-256,scale:16},bounds={width:1200,height:720};
  for(const point of [[0,0],[600,360],[300,450],[1200,720]]){

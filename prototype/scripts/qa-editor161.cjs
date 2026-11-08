@@ -19,7 +19,7 @@ const assert=require('node:assert/strict');
   let page;for(let i=0;i<400;i++){page=app.windows().find(p=>p.url().startsWith('amber://app/'));if(page)break;await new Promise(r=>setTimeout(r,50));}
   assert.ok(page);await page.waitForFunction(()=>!!window.amberDesktop);assert.equal(resolve((await page.evaluate(()=>window.amberDesktop.storageInfo())).path),library);
   const results=[];
-  for(const [language,theme,width,height] of [['en-US','light',1280,900],['zh-CN','dark',1600,1000],['en-US','dark',1024,768],['zh-CN','light',800,900]]){
+  for(const [language,theme,width,height] of (process.env.AMBER_QA_MAP_ONLY?[]:[['en-US','light',1280,900],['zh-CN','dark',1600,1000],['en-US','dark',1024,768],['zh-CN','light',800,900]])){
    await page.evaluate(async ({language,theme})=>{const s=await window.amberDesktop.settings();await window.amberDesktop.saveSettings({...s,language,theme});},{language,theme});
    await page.reload();await page.waitForFunction(()=>!!window.amberDesktop);
    await app.evaluate(({BrowserWindow},size)=>BrowserWindow.getAllWindows().find(w=>w.webContents.getURL().startsWith('amber://app/')).setSize(...size),[width,height]);
@@ -30,6 +30,20 @@ const assert=require('node:assert/strict');
    if(width>=1280)assert.ok(sizes.bottom<=sizes.viewport-40,JSON.stringify(sizes));
    await page.screenshot({path:join(out,`editor-${language}-${theme}-${width}.png`)});results.push({language,theme,windowWidth:width,windowHeight:height,...sizes});
   }
-  await writeFile(join(out,'editor-checks.json'),JSON.stringify({data,library,isolated:true,results},null,2));console.log('EDITOR161_UI_OK');
+  await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows().find(w=>w.webContents.getURL().startsWith('amber://app/')).setSize(1280,900));
+  await page.getByRole('button',{name:'实用工具',exact:true}).first().click();await page.getByRole('button',{name:'种子地图',exact:true}).click();
+  await page.locator('.seed-results161 summary').click();
+  await page.waitForFunction(()=>document.querySelectorAll('.seed-results161 .seed-marker').length>0,{},{timeout:30000});
+  const match=page.locator('.seed-results161 .seed-marker button').first();
+  const selected=await match.textContent(),coords=/X (-?\d+) Z (-?\d+)/.exec(selected);assert.ok(coords);
+  await match.click();
+  await page.waitForFunction(([x,z])=>{const p=JSON.parse(localStorage.getItem('amber-seed-map'));return p.x===x&&p.z===z;},coords.slice(1).map(Number));
+  await page.locator('.seed-structures summary').click();await page.getByRole('button',{name:'隐藏全部结构',exact:true}).click();
+  await page.waitForFunction(()=>document.querySelectorAll('.seed-results161 .seed-marker').length===0);
+  assert.ok((await page.locator('.seed-results161').textContent()).includes('没有启用当前版本和维度支持的结构'));
+  await writeFile(join(out,process.env.AMBER_QA_MAP_ONLY?'map-checks.json':'editor-checks.json'),JSON.stringify({data,library,isolated:true,results,mapChecks:{selected,focus:true,hideAll:true}},null,2));
+  try{await page.locator('.seed-results161').screenshot({path:join(out,'seed-results-hidden.png'),timeout:15000});}
+  catch(error){await writeFile(join(out,'map-screenshot-limitation.txt'),String(error));console.warn('MAP_SCREENSHOT_NOT_VERIFIED: '+error.message);}
+  console.log('EDITOR161_UI_AND_MAP_RESULT_ASSERTIONS_OK');
  }finally{await app.evaluate(({app})=>app.exit(0)).catch(()=>{});await app.close().catch(()=>{});}
 })().catch(e=>{console.error(e);process.exitCode=1;});

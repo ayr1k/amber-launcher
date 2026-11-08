@@ -8,9 +8,9 @@ export function panCamera(start,dx,dy,bounds){
 export function mapPosition(camera,x,y,bounds){
  return {x:Math.floor(camera.x+(x/bounds.width-.5)*viewWidth*camera.scale),z:Math.floor(camera.z+(y/bounds.height-.5)*viewHeight*camera.scale)};
 }
-export function bufferedRequest(p,terrain){
+export function bufferedRequest(p,terrain,structures=true){
  const step=p.scale*16;
- return {...p,width:256,height:192,x:Math.max(-29900000,Math.floor((p.x-128*p.scale)/step)*step),z:Math.max(-29900000,Math.floor((p.z-96*p.scale)/step)*step),terrain,structures:true};
+ return {...p,width:256,height:192,x:Math.max(-29900000,Math.floor((p.x-128*p.scale)/step)*step),z:Math.max(-29900000,Math.floor((p.z-96*p.scale)/step)*step),terrain,structures};
 }
 // One native calculation at a time; pointer movement replaces only the queued job.
 // In-flight results remain useful as map coverage while the next area is generated.
