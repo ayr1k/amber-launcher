@@ -18,7 +18,7 @@ Validation / 验证：
 - Frontend build, four static-site tests, 2907 locale checks and source checks passed.
 - Isolated unpackaged Electron editor checks passed at 1280×900 English/light, 1600×1000 Chinese/dark, 1024×768 English/dark and 800×900 Chinese/light. User-data and library isolation are asserted before interaction. Small windows retain page scrolling.
 - No personal world was opened or modified. No real-game generation acceptance is claimed.
-- Native UI interaction assertions verified a predicted village at X 192 / Z 16, clicking to center and hiding all structure results. Map screenshot capture repeatedly timed out waiting for rendering/stability; map visual acceptance is still outstanding. 原生地图交互断言通过，但地图截图重复超时，不能视为地图视觉验收通过。
+- Native UI interaction assertions verified a predicted village at X 192 / Z 16, clicking to center and hiding all structure results. The hidden-window screenshot limitation was resolved in QA by using the existing `--qa-visible` mode and native Electron `capturePage`. Five actual 1280×900 captures were inspected: Chinese/light map, structure list and hidden state; English/dark estimated relief and unsupported filters. Each capture has four identical geometry samples, visible/non-minimized window state and asserted temporary data isolation. This covers current map changes only, not the pending reference layouts or full edition/theme matrix. 隔离可见窗口原生截图已成功并实际检查五张画面；当前地图改动的局部视觉验证通过，不代表待办布局或完整双版本／主题矩阵验收。
 - Three local native samples with structure search enabled took 100.0 / 93.9 / 93.3 ms; disabled took 93.9 / 91.7 / 91.0 ms, with identical biome arrays. This is a small local sample, not a general speed/FPS guarantee. 三组本机样本仅证明跳过搜索后结果一致、耗时略降，不代表普遍性能承诺。
 
 Outstanding / 待完成：

@@ -13,7 +13,7 @@ const assert=require('node:assert/strict');
  await writeFile(join(dir,'config','layout.json'),JSON.stringify({fixture:true,lines:Array.from({length:200},(_,i)=>i)},null,2));
  await writeFile(join(data,'storage.json'),JSON.stringify({schema:1,path:library,onboarded:true}));
  const env={...process.env,AMBER_SMOKE_ROOT:data};delete env.ELECTRON_RUN_AS_NODE;
- const app=await electron.launch({executablePath:join(root,'node_modules/electron/dist/electron.exe'),args:[root,'--qa-ui','--disable-gpu'],env});
+ const app=await electron.launch({executablePath:join(root,'node_modules/electron/dist/electron.exe'),args:[root,'--qa-ui','--qa-visible','--disable-gpu'],env});
  try{
   assert.equal(resolve(await app.evaluate(({app})=>app.getPath('userData'))),data);
   let page;for(let i=0;i<400;i++){page=app.windows().find(p=>p.url().startsWith('amber://app/'));if(page)break;await new Promise(r=>setTimeout(r,50));}
@@ -42,8 +42,31 @@ const assert=require('node:assert/strict');
   await page.waitForFunction(()=>document.querySelectorAll('.seed-results161 .seed-marker').length===0);
   assert.ok((await page.locator('.seed-results161').textContent()).includes('没有启用当前版本和维度支持的结构'));
   await writeFile(join(out,process.env.AMBER_QA_MAP_ONLY?'map-checks.json':'editor-checks.json'),JSON.stringify({data,library,isolated:true,results,mapChecks:{selected,focus:true,hideAll:true}},null,2));
-  try{await page.locator('.seed-results161').screenshot({path:join(out,'seed-results-hidden.png'),timeout:15000});}
-  catch(error){await writeFile(join(out,'map-screenshot-limitation.txt'),String(error));console.warn('MAP_SCREENSHOT_NOT_VERIFIED: '+error.message);}
+  // Capture the actual Electron surface after explicit scrolling. Do not rely on
+  // locator.screenshot's animation-frame stability wait in a hidden QA window.
+  async function captureMap(name,selector){
+   await page.locator(selector).evaluate(el=>el.scrollIntoView({block:'center',behavior:'instant'}));
+   const samples=[];for(let i=0;i<4;i++){await page.waitForTimeout(250);samples.push(await page.locator(selector).evaluate(el=>{const r=el.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,visibility:document.visibilityState,scrollTop:el.closest('.workspace-scroll')?.scrollTop};}));}
+   const capture=await app.evaluate(async({BrowserWindow})=>{const w=BrowserWindow.getAllWindows().find(w=>w.webContents.getURL().startsWith('amber://app/'));const image=await w.webContents.capturePage();return {visible:w.isVisible(),minimized:w.isMinimized(),size:image.getSize(),png:image.toPNG().toString('base64')};});
+   assert.ok(capture.size.width>0&&capture.size.height>0);await writeFile(join(out,name+'.png'),Buffer.from(capture.png,'base64'));
+   const {png,...window}=capture;return {name,window,samples};
+  }
+  const captures=[await captureMap('seed-results-hidden','.seed-results161')];
+  await page.getByRole('button',{name:'显示全部结构',exact:true}).click();
+  await page.waitForFunction(()=>document.querySelectorAll('.seed-results161 .seed-marker').length>0,{},{timeout:30000});
+  await page.locator('.seed-structures summary').click();
+  captures.push(await captureMap('seed-results-visible','.seed-results161'));
+  captures.push(await captureMap('seed-map-native','.seed-map-wrap'));
+  await page.evaluate(async()=>{const s=await window.amberDesktop.settings();await window.amberDesktop.saveSettings({...s,language:'en-US',theme:'dark'});});
+  await page.reload();await page.waitForFunction(()=>!!window.amberDesktop);
+  await page.getByRole('button',{name:'Tools',exact:true}).first().click();await page.getByRole('button',{name:'Seed map',exact:true}).click();
+  await page.getByLabel('Estimated relief',{exact:true}).check();
+  await page.waitForFunction(()=>document.querySelector('.seed-toolbar [role="status"]')?.textContent==='Offline map',{},{timeout:30000});
+  captures.push(await captureMap('seed-relief-en-dark','.seed-map-wrap'));
+  await page.locator('.seed-structures summary').click();
+  assert.ok(await page.getByLabel('Nether fortress · Unsupported',{exact:true}).isDisabled());
+  captures.push(await captureMap('seed-capabilities-en-dark','.seed-structures'));
+  await writeFile(join(out,'map-capture-diagnostics.json'),JSON.stringify({data,library,isolated:true,captures},null,2));
   console.log('EDITOR161_UI_AND_MAP_RESULT_ASSERTIONS_OK');
  }finally{await app.evaluate(({app})=>app.exit(0)).catch(()=>{});await app.close().catch(()=>{});}
 })().catch(e=>{console.error(e);process.exitCode=1;});
