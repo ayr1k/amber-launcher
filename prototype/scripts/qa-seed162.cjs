@@ -42,9 +42,47 @@ const assert=require('node:assert/strict');
    await app.evaluate(({BrowserWindow},size)=>BrowserWindow.getAllWindows().find(w=>w.webContents.getURL().startsWith('amber://app/')).setSize(...size),[w,h]);await open(base,language,theme);await idle();await page.locator('.seed-biome-legend162 summary').click();
    const overflow=await page.evaluate(()=>{const el=document.querySelector('.tools-page').closest('.workspace-scroll');return {width:el.clientWidth,scrollWidth:el.scrollWidth};});assert.ok(overflow.scrollWidth<=overflow.width+2,JSON.stringify(overflow));await capture(`native-map-${language}-${theme}-${w}`);await page.locator('.seed-results161 .text-button').first().click();await page.locator('.seed-detail162').scrollIntoViewIfNeeded();await capture(`native-detail-${language}-${theme}-${w}`);results.push({case:'layout',language,theme,w,h,overflow,passed:true});
   }
+  // Actual native output at both camera edges: copying and marker navigation.
+  await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows().find(w=>w.webContents.getURL().startsWith('amber://app/')).setSize(1440,960));
+  for(const sign of [-1,1]){
+   await open({...base,x:sign*29899998,z:sign<0?8000:0});await idle();
+   const rows=page.locator('.seed-results161 .text-button');const texts=await rows.allTextContents();
+   const index=texts.findIndex(text=>{const match=/X (-?\d+)/.exec(text);return match&&Math.abs(Number(match[1]))>29899999;});assert.ok(index>=0,'native visible boundary row');
+   await rows.nth(index).click();const coordinate=await page.locator('.seed-coordinate162').textContent(),match=/X (-?\d+).*Z (-?\d+)/.exec(coordinate);assert.ok(match);
+   const prior=await app.evaluate(({clipboard})=>clipboard.readText());
+   try{await page.getByRole('button',{name:'Copy coordinates',exact:true}).click();await page.waitForTimeout(100);assert.equal(await app.evaluate(({clipboard})=>clipboard.readText()),`${match[1]} ${match[2]}`);}finally{await app.evaluate(({clipboard},value)=>clipboard.writeText(value),prior);}
+   await page.getByRole('button',{name:'Save marker',exact:true}).click();await page.getByRole('button',{name:'Center',exact:true}).click();await idle();
+   let p=await page.evaluate(()=>JSON.parse(localStorage.getItem('amber-seed-map')));assert.equal(p.x,sign*29899999);assert.match(await page.locator('.seed-display161>.seed-note').textContent(),/nearest safe map center/);
+   await page.locator('.seed-saved-markers summary').click();await page.locator('.seed-saved-markers .text-button').filter({hasText:`X ${match[1]} Z ${match[2]}`}).first().click();await idle();
+   p=await page.evaluate(()=>JSON.parse(localStorage.getItem('amber-seed-map')));assert.equal(p.x,sign*29899999);
+   await open(p);await idle();assert.equal((await page.evaluate(()=>JSON.parse(localStorage.getItem('amber-seed-map')))).x,sign*29899999);
+   assert.ok((await page.evaluate(()=>JSON.parse(localStorage.getItem('amber-map-markers')))).some(m=>m.x===Number(match[1])&&m.z===Number(match[2])));
+   await capture(`native-coordinate-boundary-${sign}`);results.push({case:'native edge copy, detail center, saved-marker navigation and reload',sign,coordinates:[Number(match[1]),Number(match[2])],camera:p,passed:true});
+  }
+  const paths=await import('../src/seed-icons162.mjs');
+  for(const width of [1100,1600]){
+   await app.evaluate(({BrowserWindow},width)=>BrowserWindow.getAllWindows().find(w=>w.webContents.getURL().startsWith('amber://app/')).setSize(width,720),width);await open(base);await idle();
+   await page.locator('.seed-structures summary').click();await page.getByRole('button',{name:'Hide all structures',exact:true}).click();
+   for(const name of ['Desert pyramid','Abandoned camp','Village','Swamp hut'])await page.getByRole('checkbox',{name,exact:true}).check();await idle();
+   const icons=await page.locator('[data-structure-icon]').evaluateAll(els=>els.map(el=>({type:el.dataset.structureIcon,path:el.querySelector('path').getAttribute('d')})));
+   for(const icon of icons)assert.equal(icon.path,paths.structurePaths[icon.type]);
+   assert.ok(await page.locator('.seed-results161').getByText('Desert pyramid',{exact:false}).count());assert.ok(await page.locator('.seed-results161').getByText('Abandoned camp',{exact:false}).count());
+   await page.locator('.seed-structures summary').click();await page.locator('.seed-results161').scrollIntoViewIfNeeded();await capture(`native-distinct-icons-${width}`);
+   results.push({case:'native same-view distinct vector icons and shared SVG paths',width,passed:true});
+  }
   // Controlled IPC responses below exercise state handling only, never real-world generation.
   await app.evaluate(({ipcMain},catalog)=>{globalThis.seedFixture162={mode:'normal',catalog};ipcMain.removeHandler('amber:seed-map');ipcMain.handle('amber:seed-map',async(_event,action,input)=>{if(action==='catalog')return globalThis.seedFixture162.catalog;if(action!=='map')return true;const mode=globalThis.seedFixture162.mode;if(mode==='delayed')await new Promise(r=>setTimeout(r,900));if(mode==='failure')throw Error('Synthetic map failure');const features=mode==='empty'?[]:[{type:'stronghold',x:input.x+128*input.scale,z:input.z+96*input.scale},{type:'village',x:input.x+128*input.scale,z:input.z+96*input.scale}];return {biomes:Array(input.width*input.height).fill(1),heights:[],slime:[],features,structureStatus:['stronghold','village','desert_pyramid','jungle_temple','swamp_hut','igloo','monument','mansion','outpost','ocean_ruin','shipwreck','ruined_portal','ancient_city','treasure','trail_ruins','trial_chambers','abandoned_camp'].map(type=>({type,status:mode==='truncated'?(type==='village'?'region_limit':type==='stronghold'?'feature_limit':'complete'):'complete'}))};});},nativeCatalog);
   async function mode(value){await app.evaluate((_,value)=>{globalThis.seedFixture162.mode=value},value);await open({...base,x:0,z:0});}
+  for(const width of [1100,1600]){
+   await app.evaluate(({BrowserWindow},width)=>BrowserWindow.getAllWindows().find(w=>w.webContents.getURL().startsWith('amber://app/')).setSize(width,720),width);await mode('normal');await idle();
+   const canvas=page.locator('.seed-map-wrap canvas');
+   for(const offset of [0,9,-9,11]){
+    const box=await canvas.boundingBox();await canvas.click({position:{x:box.width/2+offset,y:box.height/2}});
+    if(offset===11)assert.equal(await page.locator('.seed-detail162').count(),0);
+    else {assert.match(await page.locator('.seed-detail162 h3').textContent(),/Stronghold/);assert.equal(await page.locator('.seed-detail162 .text-button').count(),2);}
+   }
+   await capture(`synthetic-icon-hit-${width}`);results.push({case:'synthetic exact overlapping centers, +/-9px edges and 11px outside',width,passed:true});
+  }
   await mode('truncated');await idle();assert.match(await page.locator('.seed-limits162').textContent(),/1600/);assert.match(await page.locator('.seed-limits162').textContent(),/1200/);await capture('synthetic-truncation');
   await mode('empty');await idle();assert.equal(await page.locator('.seed-limits162').count(),0);assert.match(await page.locator('.seed-status162').textContent(),/No selected structure predictions/);
   await page.locator('.seed-structures summary').click();await page.getByRole('button',{name:'Hide all structures',exact:true}).click();await idle();assert.match(await page.locator('.seed-status162').textContent(),/No available structures/);await page.getByRole('button',{name:'Show all structures',exact:true}).click();await idle();await page.locator('.seed-structures summary').click();

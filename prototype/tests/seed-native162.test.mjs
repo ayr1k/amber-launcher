@@ -4,11 +4,28 @@ import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
-import {SeedMap} from '../desktop/seed134.mjs';
+import {SeedMap,coordinateText,mapRequest} from '../desktop/seed134.mjs';
+import {bufferedRequest} from '../src/seed-view134.mjs';
+import {visibleStructures,supportedStructures} from '../src/seed-results161.mjs';
+import {addFeatureMarker,validMarks} from '../src/seed-details162.mjs';
+import {boundedCamera,CAMERA_LIMIT} from '../desktop/seed-coordinates162.mjs';
 const binary=fileURLToPath(new URL(process.platform==='win32'?'../desktop/bin/seed-engine.exe':`../desktop/bin/seed-engine-${process.platform}-${process.arch}`,import.meta.url));
 const defaults={seed:0,version:35,dimension:0,x:-32768,z:-32768,scale:4096,width:16,height:16,y:64,terrain:0,structures:1};
 function run(overrides={}){const p={...defaults,...overrides};return JSON.parse(execFileSync(binary,['seed','version','dimension','x','z','scale','width','height','y','terrain','structures'].map(k=>String(p[k])),{timeout:25000,maxBuffer:4*1024*1024}));}
 const status=(d,type)=>d.structureStatus.find(s=>s.type===type);
+test('actual native edge structures remain copyable and saved while center/marker navigation stays valid',()=>{
+ for(const sign of [-1,1]){
+  const camera={seed:'0',version:35,dimension:0,x:sign*29899998,z:sign<0?8000:0,y:64,scale:16};
+  const request=bufferedRequest(camera,false),result=run({...request,terrain:0,structures:1});
+  const rows=visibleStructures([{request,result}],camera,false,supportedStructures(camera),Infinity).rows.filter(f=>Math.abs(f.x)>CAMERA_LIMIT);
+  assert.ok(rows.length>0,'native fixture must contain visible points beyond camera limits');
+  for(const f of rows){
+   assert.equal(coordinateText(f),`${f.x} ${f.z}`);
+   const marks=addFeatureMarker([],f,camera,f.type);assert.equal(validMarks(JSON.parse(JSON.stringify(marks))),true);
+   for(const target of [f,marks[0]]){const next=boundedCamera({...camera,x:target.x,z:target.z});assert.equal(next.x,sign*CAMERA_LIMIT);assert.doesNotThrow(()=>mapRequest(bufferedRequest(next,false)));assert.equal(target.x,f.x);}
+  }
+ }
+});
 test('native region budget reports exactly 1600 processed versus over-budget skipped, never empty-as-complete',()=>{
  const at=run({version:10,x:0,z:0,scale:256,width:78,height:78});
  assert.equal(status(at,'village').regions,1600);assert.equal(status(at,'village').scanned,1600);assert.equal(status(at,'village').status,'complete');

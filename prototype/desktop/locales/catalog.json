@@ -12563,6 +12563,10 @@
     "zh": "已定位最近要塞的楼梯区块预测坐标，不代表末地传送门房间。",
     "en": "Located the nearest predicted stronghold staircase chunk, not the portal room."
   },
+  "seed162.cameraBoundary": {
+    "zh": "已移至最接近目标的安全地图中心；目标坐标保持不变。",
+    "en": "Moved to the nearest safe map center; target coordinates are unchanged."
+  },
   "m664311bd5c97": {
     "zh": "定位最近要塞",
     "en": "Locate nearest stronghold"

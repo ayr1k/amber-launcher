@@ -3,13 +3,14 @@ import {execFile} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import {readFile,stat} from 'node:fs/promises';
 import {gunzipSync} from 'node:zlib';
+import {validPredictionCoordinate} from './seed-coordinates162.mjs';
 export function normalizeSeed(value){
  const s=String(value??'').trim();if(!s||s.length>256)throw Error('请输入种子 / Enter a seed');
  if(/^[+-]?\d+$/.test(s)){const n=BigInt(s);if(n<-(1n<<63n)||n>=(1n<<63n))throw Error('种子超出 64 位范围 / Seed exceeds signed 64-bit range');return n.toString();}
  let hash=0;for(let i=0;i<s.length;i++)hash=(Math.imul(hash,31)+s.charCodeAt(i))|0;return String(hash);
 }
 const integer=(n,min,max)=>Number.isInteger(n)&&n>=min&&n<=max;
-export function coordinateText(p){if(!p||!integer(p.x,-29899999,29899999)||!integer(p.z,-29899999,29899999))throw Error('Invalid coordinates / 坐标无效');return `${p.x} ${p.z}`;}
+export function coordinateText(p){if(!p||!validPredictionCoordinate(p.x)||!validPredictionCoordinate(p.z))throw Error('Invalid coordinates / 坐标无效');return `${p.x} ${p.z}`;}
 export function mapRequest(p){
  if(!p||!integer(p.version,10,35)||![-1,0,1].includes(p.dimension)||!integer(p.x,-29900000,29900000)||!integer(p.z,-29900000,29900000)||![1,4,16,64,256,1024,4096].includes(p.scale)||!integer(p.width,1,256)||!integer(p.height,1,256)||!integer(p.y,-64,320))throw Error('地图参数无效 / Invalid map parameters');
  return [normalizeSeed(p.seed),p.version,p.dimension,p.x,p.z,p.scale,p.width,p.height,p.y,p.terrain?1:0,p.structures?1:0].map(String);

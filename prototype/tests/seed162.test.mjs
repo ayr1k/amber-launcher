@@ -4,10 +4,41 @@ import assert from 'node:assert/strict';
 import {structureCoverage,markerMatches,legacyMarkerMatches,validMarks,addFeatureMarker,nearbyFeatures,biomeChinese} from '../src/seed-details162.mjs';
 import {LatestMapQueue,bufferedRequest} from '../src/seed-view134.mjs';
 import {coordinateText} from '../desktop/seed134.mjs';
+import {boundedCamera,CAMERA_LIMIT,PREDICTION_LIMIT} from '../desktop/seed-coordinates162.mjs';
+import {coordinateDraft} from '../src/seed-math161.mjs';
+import {featuresAtPointer} from '../src/seed-details162.mjs';
+import {structurePaths} from '../src/seed-icons162.mjs';
+import {supportedStructures} from '../src/seed-results161.mjs';
 const camera={seed:'1',version:35,dimension:0,x:0,z:0,y:64,scale:16};
+test('every supported structure has an original unique font-independent vector path',()=>{
+ const types=[...new Set([-1,0,1].flatMap(dimension=>supportedStructures({version:35,dimension})))];
+ assert.equal(types.length,21);assert.equal(new Set(types.map(type=>structurePaths[type])).size,types.length);
+ for(const type of types)assert.match(structurePaths[type],/^M[\d .A-Z-]+$/);
+});
+test('structure hit geometry matches ten CSS pixel icons at narrow and wide sizes with stable overlaps',()=>{
+ const rows=[{type:'village',x:0,z:0},{type:'stronghold',x:0,z:0}];
+ for(const width of [320,398.4,768,1200])for(const scale of [1,16,4096]){
+  const bounds={width,height:width*.6},p={...camera,scale};
+  for(const offset of [0,9,9.99])assert.deepEqual(featuresAtPointer(rows,p,width/2+offset,bounds.height/2,bounds).map(f=>f.type),['stronghold','village']);
+  assert.deepEqual(featuresAtPointer(rows,p,width/2+10.1,bounds.height/2,bounds),[]);
+  assert.equal(featuresAtPointer(rows,p,width/2,bounds.height/2+9.99,bounds).length,2);
+  assert.equal(featuresAtPointer(rows,p,width/2,bounds.height/2+10.1,bounds).length,0);
+ }
+});
 test('clipboard coordinate contract accepts bounded integers only',()=>{
  assert.equal(coordinateText({x:-204,z:-1692} ),'-204 -1692');
- for(const value of [null,{}, {x:NaN,z:0},{x:1.5,z:0},{x:'1',z:0},{x:30000000,z:0},{x:0,z:Infinity}])assert.throws(()=>coordinateText(value),/Invalid coordinates/);
+ for(const value of [null,{}, {x:NaN,z:0},{x:1.5,z:0},{x:'1',z:0},{x:PREDICTION_LIMIT+1,z:0},{x:0,z:Infinity}])assert.throws(()=>coordinateText(value),/Invalid coordinates/);
+});
+test('prediction coordinates survive copy/marker round trip while every navigation target bounds the camera',()=>{
+ for(const sign of [-1,1])for(const distance of [29900000,30000000,30300000,PREDICTION_LIMIT]){
+  const f={x:sign*distance,z:-sign*distance};assert.equal(coordinateText(f),`${f.x} ${f.z}`);
+  const marks=addFeatureMarker([],f,camera,'Boundary');assert.equal(validMarks(JSON.parse(JSON.stringify(marks))),true);
+  const centered=boundedCamera({...camera,...marks[0]});assert.equal(centered.x,sign*CAMERA_LIMIT);assert.equal(centered.z,-sign*CAMERA_LIMIT);
+  assert.deepEqual(coordinateDraft(centered),centered);assert.deepEqual(JSON.parse(JSON.stringify(centered)),centered);
+  assert.equal(marks[0].x,f.x);assert.equal(marks[0].z,f.z);
+ }
+ assert.equal(boundedCamera({...camera,x:1.92}).x,1.92);
+ assert.throws(()=>boundedCamera({...camera,x:NaN}),/Invalid/);
 });
 test('completeness is specific to current context, coverage and enabled types',()=>{
  const request=bufferedRequest(camera,false),result={structureStatus:[{type:'village',status:'complete'},{type:'treasure',status:'region_limit'},{type:'mansion',status:'feature_limit'}]};

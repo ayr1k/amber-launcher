@@ -19,6 +19,9 @@ Use a disposable Windows profile/VM and copied fixtures for manual acceptance. A
 
 ## Validation and limits
 
+- Review follow-up: prediction coordinates can exceed the camera-center envelope. Copy/export/markers retain bounded native coordinates (up to +/-31,000,000); all navigation clamps only the camera to +/-29,899,999 and explains the adjustment. Predictions beyond Minecraft's world border are not a promise that structures can generate there. Positive/negative native edge fixtures cover copy, saved-marker round trips, navigation and reload.
+- Unix helpers have executable Git modes. A clean Ubuntu CI checkout runs the native/map regression tests without chmod workarounds or skipped tests. macOS helpers remain cross-compiled only.
+
 - Regression tests cover current-context completeness, legacy/versioned markers, repeated save, overlapping points, latest-scene queue behavior and bounded coordinate-copy IPC.
 - Native tests cover the 1600-region boundary, actual 1200-result truncation, unsupported/disabled/empty statuses, cancellation followed by retry, and all stronghold positions for representative Java generation versions 1.7, 1.19 and 26.3 against direct pinned-Cubiomes reference vectors. The nearest navigation array is verified even when all strongholds are outside the viewport.
 - `scripts/qa-seed162.cjs` uses an isolated desktop session for actual native maps and screenshots. Injected loading/failure/empty/truncated states are explicitly identified as synthetic evidence. See the PR for the final run outcome; test code alone is not proof of execution.
@@ -26,7 +29,7 @@ Use a disposable Windows profile/VM and copied fixtures for manual acceptance. A
 - These are Cubiomes predictions, not a real Minecraft generation comparison. Terrain, world upgrades, mods and datapacks can change actual structures. Newer/snapshot biome names use descriptive Chinese labels where the engine catalog has new entries. Estimated relief is not block geometry.
 - Spawn estimation, 3D underground views, ore and chest-loot predictions are deferred. This task does not implement 1.6.3, 1.6.4 or 1.7.0.
 
-Existing MIT Cubiomes licensing and project MPL-2.0 notices remain. No Axolotl code or artwork is copied; structure symbols use text glyphs rendered by the app.
+Existing MIT Cubiomes licensing and project MPL-2.0 notices remain. No Axolotl code or artwork is copied; structure icons are original vector paths shared by canvas and SVG, independent of fonts.
 
 ---
 
@@ -45,8 +48,14 @@ Existing MIT Cubiomes licensing and project MPL-2.0 notices remain. No Axolotl c
 
 ## 安装风险与验证边界
 
+审核修正：预测坐标与相机中心采用不同边界。复制、导出和标记保留原生引擎返回的有界坐标（±31,000,000）；定位仅将相机限制在 ±29,899,999，并明确提示目标坐标未改变。这不保证世界边界外能够实际生成。正负边界均覆盖原生输出、复制、标记往返、定位与重载测试。Unix 引擎已记录可执行文件模式，Ubuntu CI 从干净检出直接执行地图测试，无跳过或临时 chmod。
+
 测试包保留两款产品各自的正式安装标识和数据目录，可能替换已安装的同款产品并读取原数据，**不是独立并存的测试版**。安装包为 `local` 渠道；AMBER 与 AmberE 之间依然独立。建议在可丢弃的 Windows 用户／虚拟机及复制数据中验收。自动化测试只使用临时隔离目录；不操作真实账号、实例和存档。
 
 原生测试包含上限、取消重试、代表版本的全部要塞坐标对照及视野外定位数据。桌面脚本区分真实原生地图交互与人工注入状态；截图不代表真实世界生成验证。四个平台引擎均已重建，但仅 Windows 执行验证；其他平台只验证交叉编译和校验值。正式执行结果以 PR 记录为准。
 
 地形、升级区块、模组和数据包可能导致实际生成不同；新版本／快照群系采用描述性中文名称。出生点估算、3D 地下、矿物与箱子战利品预测暂缓。未提前实现 1.6.3、1.6.4、1.7.0。保留 Cubiomes MIT 和项目 MPL-2.0 声明，未复制 Axolotl 代码或图片。
+
+Review follow-up: all 21 structure icons have distinct original vector paths. Canvas and SVG use the same paths; pointer geometry uses the same 10 CSS-pixel radius as the visible icon, including narrow/wide layouts. Regression screenshots cover seed 0 / 26.3 desert pyramids and abandoned camps in the same view, plus center/edge/outside and overlapping-point clicks.
+
+审核修正：21 类结构使用各不相同的自制矢量路径，地图与筛选／列表共用，不依赖字体或外部游戏图片。命中范围按画布显示尺寸换算，与图标 10 CSS 像素可见半径一致；覆盖窄宽窗口、中心／边缘／外侧／重叠点，以及同图沙漠神殿和废弃营地的辨识截图。

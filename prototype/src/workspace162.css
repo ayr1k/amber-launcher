@@ -14,3 +14,5 @@
 .seed162 [aria-pressed=true]{color:var(--accent)}
 .seed-results161 .seed-marker .text-button{text-align:left;white-space:normal;overflow-wrap:anywhere;min-height:40px;width:100%}
 .seed-saved-markers p{font-size:12px;line-height:1.6}.seed-saved-markers .seed-marker{flex-wrap:wrap}
+
+.seed-icon162{display:inline-block;width:20px;height:20px;vertical-align:middle;flex-shrink:0;margin-right:6px}
