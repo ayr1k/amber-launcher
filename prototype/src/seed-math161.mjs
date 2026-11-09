@@ -2,6 +2,8 @@
 // Original camera and relief calculations; no reference-app code is used.
 import {viewWidth,viewHeight} from './seed-view134.mjs';
 const bound=n=>Math.max(-29899999,Math.min(29899999,n));
+// Keep sub-block camera precision separate from integer-only coordinate inputs.
+export function coordinateDraft(camera){return {...camera,x:bound(Math.round(camera.x)),z:bound(Math.round(camera.z))};}
 export function keyboardPanCamera(camera,key){
  const delta={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]}[key];
  if(!delta)return camera;

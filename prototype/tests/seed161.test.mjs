@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MPL-2.0
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {zoomCamera,reliefShade,keyboardPanCamera} from '../src/seed-math161.mjs';
+import {zoomCamera,reliefShade,keyboardPanCamera,coordinateDraft} from '../src/seed-math161.mjs';
 import {mapPosition} from '../src/seed-view134.mjs';
 import {resolveWorldVersion} from '../desktop/world-version161.mjs';
 import {readWorldNBT} from '../desktop/seed134.mjs';
@@ -80,4 +80,12 @@ test('keyboard pan clamps every edge at every scale and remains recoverable afte
   const restored=keyboardPanCamera(camera,reverse);assert.equal(restored[axis],sign*(29899999-scale*40));
  }
  const center={x:0,z:0,scale:16};assert.deepEqual(keyboardPanCamera(center,'ArrowRight'),{...center,x:640});assert.equal(keyboardPanCamera(center,'Enter'),center);
+});
+
+test('integer edit drafts preserve precise anchored cameras and clamp rounded edge values',()=>{
+ const camera=zoomCamera({seed:'1',version:35,dimension:0,y:64,x:0,z:0,scale:16},4,601,361,{width:1200,height:720});
+ const draft=coordinateDraft(camera);assert.equal(draft.x,2);assert.equal(draft.z,2);assert.ok(Math.abs(camera.x-1.92)<1e-9);assert.ok(Math.abs(camera.z-1.92)<1e-9);assert.equal(draft.seed,camera.seed);assert.equal(draft.scale,4);
+ for(const n of [-29899999.9,-29899999,-1.92,0,1.92,29899999,29899999.9]){
+  const p={...camera,x:n,z:n},d=coordinateDraft(p);assert.ok(Number.isInteger(d.x)&&Number.isInteger(d.z));assert.ok(Math.abs(d.x)<29900000&&Math.abs(d.z)<29900000);assert.equal(p.x,n);assert.equal(d.y,p.y);
+ }
 });

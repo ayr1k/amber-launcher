@@ -2,7 +2,7 @@
 import {useEffect,useRef,useState} from 'react';
 import {Select} from './Select';
 import {visibleStructures,supportedStructures} from './seed-results161.mjs';
-import {zoomCamera,reliefShade,keyboardPanCamera} from './seed-math161.mjs';
+import {zoomCamera,reliefShade,keyboardPanCamera,coordinateDraft} from './seed-math161.mjs';
 import {resolveWorldVersion} from '../desktop/world-version161.mjs';
 import {ControlButton as B} from './ControlButton.mjs';
 import {getLocale} from '../desktop/localization.mjs';
@@ -20,7 +20,7 @@ function validMarks(rows){return Array.isArray(rows)&&rows.length<=500&&rows.eve
 function marksSaved(){try{const p=JSON.parse(localStorage.getItem('amber-map-markers'));return validMarks(p)?p:[]}catch{return []}}
 export function SeedMapTool(){
  const layout=useCatalogHeight(true);
- const [p,setP]=useState(saved),[draft,setDraft]=useState(saved),[catalog,setCatalog]=useState(null),[datasets,setDatasets]=useState([]),[error,setError]=useState(''),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false),[terrain,setTerrain]=useState(false),[grid,setGrid]=useState(false),[slime,setSlime]=useState(false),[show,setShow]=useState(Object.keys(names)),[biome,setBiome]=useState(''),[marks,setMarks]=useState(marksSaved),[cursor,setCursor]=useState(null),[markerName,setMarkerName]=useState(''),[markMode,setMarkMode]=useState(false);
+ const [p,setP]=useState(saved),[draft,setDraft]=useState(()=>coordinateDraft(saved())),[catalog,setCatalog]=useState(null),[datasets,setDatasets]=useState([]),[error,setError]=useState(''),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false),[terrain,setTerrain]=useState(false),[grid,setGrid]=useState(false),[slime,setSlime]=useState(false),[show,setShow]=useState(Object.keys(names)),[biome,setBiome]=useState(''),[marks,setMarks]=useState(marksSaved),[cursor,setCursor]=useState(null),[markerName,setMarkerName]=useState(''),[markMode,setMarkMode]=useState(false);
  const canvas=useRef(null),drag=useRef(null),upload=useRef(null),camera=useRef(p),paint=useRef(()=>{}),frame=useRef(0),panTimer=useRef(null),queue=useRef(null),api=window.amberDesktop;
  const supported=supportedStructures(p),activeTypes=show.filter(type=>supported.includes(type));
  const data=datasets.at(-1),structuresEnabled=activeTypes.length>0;
@@ -32,7 +32,7 @@ export function SeedMapTool(){
   setDatasets(previous=>[...previous.filter(v=>sceneKey(v.request)===sceneKey(d.request)).slice(-2),d]);
  },e=>setError(e.message),setBusy);queue.current=q;return()=>q.dispose()},[catalog]);
  useEffect(()=>{if(!catalog)return;setError('');queue.current.enqueue(bufferedRequest(p,terrain,structuresEnabled));redraw();try{localStorage.setItem('amber-seed-map',JSON.stringify(p))}catch{}},[catalog,p,terrain,structuresEnabled]);
- function update(next){if(sceneKey(next)!==sceneKey(camera.current))setNotice('');camera.current=next;setP(next);setDraft(next);redraw();}
+ function update(next){if(sceneKey(next)!==sceneKey(camera.current))setNotice('');camera.current=next;setP(next);setDraft(coordinateDraft(next));redraw();}
  function commitCamera(){const next={...camera.current,x:Math.round(camera.current.x),z:Math.round(camera.current.z)};update(next);}
  function saveMarks(next){try{localStorage.setItem('amber-map-markers',JSON.stringify(next));setMarks(next)}catch{setError(tr('标记未保存：本地存储空间不足','Markers not saved: local storage is full'))}}
  function zoom(step,event){const v=camera.current,next=scales[Math.max(0,Math.min(scales.length-1,scales.indexOf(v.scale)+step))];if(next===v.scale)return;const b=canvas.current.getBoundingClientRect();update(zoomCamera(v,next,event?event.clientX-b.left:b.width/2,event?event.clientY-b.top:b.height/2,b));}
@@ -71,7 +71,7 @@ export function SeedMapTool(){
  function movePointer(e){const d=drag.current;if(!d||e.pointerId!==d.id){inspect(e);return;}
   const dx=e.clientX-d.x,dy=e.clientY-d.y;if(!d.moved&&Math.hypot(dx,dy)<=5)return;d.moved=true;
   camera.current=panCamera(d.start,dx,dy,d.bounds);redraw();
-  const publish=()=>{panTimer.current=null;d.last=performance.now();const next={...camera.current,x:Math.round(camera.current.x),z:Math.round(camera.current.z)};setP(next);setDraft(next)};
+  const publish=()=>{panTimer.current=null;d.last=performance.now();const next={...camera.current,x:Math.round(camera.current.x),z:Math.round(camera.current.z)};setP(next);setDraft(coordinateDraft(next))};
   if(performance.now()-d.last>=120){clearTimeout(panTimer.current);publish();inspect(e)}
   else if(!panTimer.current)panTimer.current=setTimeout(publish,120-(performance.now()-d.last));
  }
@@ -84,7 +84,7 @@ export function SeedMapTool(){
   const w=await api.seedMap('world');if(!w)return;
   const version=resolveWorldVersion(w.version,catalog.versions);
   const next={...camera.current,seed:w.seed,dimension:0,...(version?{version:version.id}:{}),...(w.spawnKnown?{x:w.x,z:w.z,y:w.y}:{x:0,z:0,y:64})};
-  setDraft(next);
+  setDraft(coordinateDraft(next));
   if(!version){setError(tr('存档版本无法识别或不受支持。已填入种子，请选择生成版本并点击查看地图。','World version is unknown or unsupported. Seed filled in; select a generation version and choose View map.'));return;}
   update(next);
   setNotice([!version.exact?tr('使用同系列近似生成版本；升级过的区块可能不同。','Using an approximate generation version from the same series; upgraded chunks may differ.'):null,!w.spawnKnown?tr('存档未提供完整出生点；地图暂以原点为中心，原点不是已知出生点。','The save has no complete spawn coordinates; the map is centered on the origin, which is not a known spawn.'):null].filter(Boolean).join(' '));

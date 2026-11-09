@@ -1,7 +1,7 @@
 # 1.6.1 task progress / 开发进度
 
 This is a development draft pending independent review and user acceptance, not a formal release.
-本任务尚未完成，不是用户验收候选版，也不是正式发行。
+开发实现待独立复审和用户验收，不是正式发行。
 
 Implemented / 已实现：
 
@@ -14,7 +14,7 @@ Implemented / 已实现：
 
 Validation / 验证：
 
-- 720 regression tests passed, zero skips (includes eight seed-map tests).
+- 721 regression tests passed, zero skips (includes nine seed-map tests).
 - Frontend build, four static-site tests, 2907 locale checks and source checks passed.
 - Isolated unpackaged Electron editor checks passed at 1280×900 English/light, 1600×1000 Chinese/dark, 1024×768 English/dark and 800×900 Chinese/light. User-data and library isolation are asserted before interaction. Small windows retain page scrolling.
 - No personal world was opened or modified. No real-game generation acceptance is claimed.
@@ -39,3 +39,5 @@ Only public feature descriptions and licensing notices were consulted for Axolot
 ## Keyboard edge follow-up
 
 Keyboard arrows now use `keyboardPanCamera` and the immediate camera ref, clamping to the same integer center boundary as pointer panning. Manual input validation is unchanged (absolute center coordinates strictly below 29,900,000); native request origins retain their existing inclusive bounds. Tests cover all seven scales and 100 repeats on each positive/negative X/Z boundary, valid buffered request origins, unchanged ordinary steps and reverse recovery. Isolated Electron checks additionally completed native map generation after 20 repeated keys at each edge at scale 4096, then reversed successfully with no map error. Evidence: `review161/keyboard-boundary-checks.json`; reproducible script: `scripts/qa-boundary161.cjs`.
+
+The independent-review coordinate-draft and compressed-gradient-band findings were reproduced and corrected; see the follow-up section of `QA-1.6.1-LAYOUT.md`. Earlier installer revisions are superseded by the subsequent PR head.
