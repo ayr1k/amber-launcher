@@ -25,7 +25,7 @@ Use a disposable Windows profile/VM and copied fixtures for manual acceptance. A
 - Regression tests cover current-context completeness, legacy/versioned markers, repeated save, overlapping points, latest-scene queue behavior and bounded coordinate-copy IPC.
 - Native tests cover the 1600-region boundary, actual 1200-result truncation, unsupported/disabled/empty statuses, cancellation followed by retry, and all stronghold positions for representative Java generation versions 1.7, 1.19 and 26.3 against direct pinned-Cubiomes reference vectors. The nearest navigation array is verified even when all strongholds are outside the viewport.
 - `scripts/qa-seed162.cjs` uses an isolated desktop session for actual native maps and screenshots. Injected loading/failure/empty/truncated states are explicitly identified as synthetic evidence. See the PR for the final run outcome; test code alone is not proof of execution.
-- All four native helpers are rebuilt and hash-linked to the C source. Windows execution is tested; Linux/macOS helpers are cross-compiled, not runtime-tested on those platforms.
+- All four native helpers are rebuilt and hash-linked to the C source. Windows execution is tested; Ubuntu CI executes the Linux helper and map regressions from a clean checkout. macOS helpers remain cross-compiled without native execution. Linux helper tests are not full Linux desktop acceptance.
 - These are Cubiomes predictions, not a real Minecraft generation comparison. Terrain, world upgrades, mods and datapacks can change actual structures. Newer/snapshot biome names use descriptive Chinese labels where the engine catalog has new entries. Estimated relief is not block geometry.
 - Spawn estimation, 3D underground views, ore and chest-loot predictions are deferred. This task does not implement 1.6.3, 1.6.4 or 1.7.0.
 
@@ -52,7 +52,7 @@ Existing MIT Cubiomes licensing and project MPL-2.0 notices remain. No Axolotl c
 
 测试包保留两款产品各自的正式安装标识和数据目录，可能替换已安装的同款产品并读取原数据，**不是独立并存的测试版**。安装包为 `local` 渠道；AMBER 与 AmberE 之间依然独立。建议在可丢弃的 Windows 用户／虚拟机及复制数据中验收。自动化测试只使用临时隔离目录；不操作真实账号、实例和存档。
 
-原生测试包含上限、取消重试、代表版本的全部要塞坐标对照及视野外定位数据。桌面脚本区分真实原生地图交互与人工注入状态；截图不代表真实世界生成验证。四个平台引擎均已重建，但仅 Windows 执行验证；其他平台只验证交叉编译和校验值。正式执行结果以 PR 记录为准。
+原生测试包含上限、取消重试、代表版本的全部要塞坐标对照及视野外定位数据。桌面脚本区分真实原生地图交互与人工注入状态；截图不代表真实世界生成验证。四个平台引擎均已重建；Windows 已执行验证，Ubuntu CI 从干净检出执行 Linux 引擎及地图回归，macOS 仅验证交叉编译和校验值。Linux 引擎测试不代表完整 Linux 桌面验收。正式执行结果以 PR 记录为准。
 
 地形、升级区块、模组和数据包可能导致实际生成不同；新版本／快照群系采用描述性中文名称。出生点估算、3D 地下、矿物与箱子战利品预测暂缓。未提前实现 1.6.3、1.6.4、1.7.0。保留 Cubiomes MIT 和项目 MPL-2.0 声明，未复制 Axolotl 代码或图片。
 
