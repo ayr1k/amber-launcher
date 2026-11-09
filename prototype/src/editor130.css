@@ -3,4 +3,8 @@
 .desktop-app .editor-studio{--edit-string:color-mix(in srgb,var(--text) 65%,#17b978);--edit-number:color-mix(in srgb,var(--text) 65%,#eb8b23);--edit-keyword:color-mix(in srgb,var(--text) 65%,#ad54e9);--edit-property:color-mix(in srgb,var(--text) 65%,#3795ed)}
 
 /* Fit the existing two-column editor to the remaining workspace. */
-@media(min-width:651px){.edit-layout{height:var(--catalog-height,65vh);min-height:320px}.tools-page:has(.editor-studio){max-width:none}}
+.edit-jump163{display:flex;gap:6px;align-items:center}.desktop-app .edit-jump163 input{width:76px;min-height:34px;padding:4px 8px}.edit-notice163{padding:8px 14px;margin:0;font-size:12px;overflow-wrap:anywhere}.edit-comparison163{border:1px solid var(--line);padding:16px;min-width:0}.edit-comparison163 h3{overflow-wrap:anywhere}.edit-compare-columns163{display:grid;grid-template-columns:1fr 1fr;gap:16px}.edit-compare-columns163 label{display:grid;gap:8px;min-width:0}.desktop-app .edit-compare-columns163 textarea{width:100%;height:240px;resize:vertical;box-sizing:border-box;font:13px/1.6 Consolas,monospace;background:var(--surface);color:var(--text);border:1px solid var(--line);white-space:pre;overflow:auto}.edit-compare-actions163{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.edit-main footer{flex-wrap:wrap}.edit-tabs [role=tab]{max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}@media(max-width:800px){.edit-compare-columns163{grid-template-columns:1fr}.edit-compare-columns163 textarea{height:160px}}
+/* The viewport budget is a minimum, not a clipping height: wrapped controls,
+   the editor's 160px minimum and footer must all participate in grid sizing. */
+@media(min-width:651px){.edit-layout{height:auto;min-height:clamp(320px,55vh,900px)}.edit-code,.edit-sidebar{contain:size}.tools-page:has(.editor-studio){max-width:none}}
+.edit-comparison163,.edit-comparison163 h3,.edit-comparison163 p,.edit-compare-actions163{scroll-margin-top:80px}
