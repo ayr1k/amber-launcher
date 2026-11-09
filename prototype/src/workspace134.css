@@ -20,3 +20,5 @@
 .minecraft-import134 .import-summary151{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
 
 .minecraft-import134 .select-trigger>span{white-space:normal;overflow-wrap:anywhere}
+
+.seed-results161{min-width:0;max-height:280px;overflow:auto;border-top:1px solid var(--line);padding-top:12px}.seed-results161 summary{cursor:pointer;font-weight:600}.seed-results161 p{color:var(--muted);overflow-wrap:anywhere}.seed-results161 .seed-marker{overflow-wrap:anywhere}

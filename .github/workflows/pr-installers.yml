@@ -33,6 +33,9 @@ jobs:
           AMBER_TASK_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
           AMBER_EVENT_SHA: ${{ github.sha }}
           AMBER_CURSEFORGE_API_KEY: ${{ secrets.AMBER_CURSEFORGE_API_KEY }}
+      - name: Installer checksums
+        shell: pwsh
+        run: Get-Content releases/*/*-Setup-x64.exe.sha256
       - name: Record tested revision
         shell: pwsh
         run: |
