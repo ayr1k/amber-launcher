@@ -44,7 +44,19 @@ export class InstanceEditor {
    throw e;
   }finally{await unlink(tmp).catch(e=>{if(e.code!=='ENOENT')console.warn('Editor temporary file retained:',tmp,e.code);});}
  });this.queue=task.catch(()=>{});return task;}
- async history(id,name){const p=await this.path(id,name),prefix=basename(p)+'.amber-edit-',rows=[];for(const token of await readdir(dirname(p))){if(!token.startsWith(prefix)||!/^\d+(?:-[a-f0-9-]{36})?\.bak$/.test(token.slice(prefix.length)))continue;const file=join(dirname(p),token);await ensureParents(await this.core.instancePath(id),file);const st=await lstat(file);if(st.isFile()&&!st.isSymbolicLink()&&st.size<=2_000_000)rows.push({token,date:st.mtime.toISOString(),bytes:st.size})}return rows.sort((a,b)=>b.date.localeCompare(a.date)).slice(0,100);}
+ async history(id,name){
+  const p=await this.path(id,name),prefix=basename(p)+'.amber-edit-',rows=[];
+  for(const token of await readdir(dirname(p))){
+   if(!token.startsWith(prefix))continue;
+   const match=/^(\d+)(?:-[a-f0-9-]{36})?\.bak$/.exec(token.slice(prefix.length));
+   if(!match)continue;
+   const created=Number(match[1]);if(!Number.isSafeInteger(created)||created>8_640_000_000_000_000)continue;
+   const file=join(dirname(p),token);await ensureParents(await this.core.instancePath(id),file);const st=await lstat(file);
+   // rename preserves the source mtime; the token records when this backup was created.
+   if(st.isFile()&&!st.isSymbolicLink()&&st.size<=2_000_000)rows.push({token,date:new Date(created).toISOString(),bytes:st.size});
+  }
+  return rows.sort((a,b)=>Date.parse(b.date)-Date.parse(a.date)||b.token.localeCompare(a.token)).slice(0,100);
+ }
  async backup(id,name,token){const rows=await this.history(id,name);if(!rows.some(r=>r.token===token))throw Error('Backup unavailable / 备份不可用');const p=join(dirname(await this.path(id,name)),token);await ensureParents(await this.core.instancePath(id),p);const st=await lstat(p);if(st.isSymbolicLink()||!st.isFile())throw Error('Invalid backup');const b=await readFile(p);if(b.length>2_000_000||b.includes(0))throw Error('Invalid backup');const text=new TextDecoder('utf-8',{fatal:true,ignoreBOM:true}).decode(b);return {text,...textMetadata(text)};}
 
 }

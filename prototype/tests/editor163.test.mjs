@@ -6,6 +6,21 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {InstanceEditor,textMetadata} from '../desktop/editor130.mjs';
 import {EditorRequests,tabLabel,firstDifference} from '../src/editor-session163.mjs';
+test('163 newly created backup survives the 100-entry limit with old source mtime',()=>fixture(async({core,p,root})=>{
+ const oldTime=new Date('2000-01-01T00:00:00Z'),legacyTime=new Date('2025-01-01T00:00:00Z');
+ await fs.writeFile(p,'CURRENT IMPORTANT CONTENT');await fs.utimes(p,oldTime,oldTime);
+ const legacy=[];for(let i=0;i<100;i++){const token='sample.txt.amber-edit-'+(Date.parse('2024-01-01T00:00:00Z')+i)+'.bak',path=join(root,'config',token);await fs.writeFile(path,'legacy '+i);await fs.utimes(path,legacyTime,legacyTime);legacy.push({path,text:'legacy '+i});}
+ const e=new InstanceEditor(core),d=await e.read('synthetic','config/sample.txt'),before=Date.now();await e.save('synthetic',{...d,text:'new content'});const after=Date.now();
+ const token=(await fs.readdir(join(root,'config'))).find(n=>/^sample\.txt\.amber-edit-\d+-[a-f0-9-]{36}\.bak$/.test(n));assert.ok(token);
+ const rows=await e.history('synthetic',d.name);assert.equal(rows.length,100);assert.equal(rows[0].token,token);assert.ok(Date.parse(rows[0].date)>=before&&Date.parse(rows[0].date)<=after);
+ assert.equal((await e.backup('synthetic',d.name,token)).text,'CURRENT IMPORTANT CONTENT');assert.equal((await fs.stat(join(root,'config',token))).mtime.getTime(),oldTime.getTime());assert.equal(await fs.readFile(p,'utf8'),'new content');
+ for(const item of legacy){assert.equal(await fs.readFile(item.path,'utf8'),item.text);assert.equal((await fs.stat(item.path)).mtime.getTime(),legacyTime.getTime());}
+}));
+test('163 legacy and UUID backup dates use token creation time; invalid dates are ignored',()=>fixture(async({core,p,root})=>{
+ const e=new InstanceEditor(core),name='config/sample.txt',stamp=Date.parse('2024-06-01T12:00:00Z'),old='sample.txt.amber-edit-'+stamp+'.bak',newer='sample.txt.amber-edit-'+(stamp+1)+'-12345678-1234-1234-1234-123456789abc.bak';
+ for(const [token,mtime] of [[old,new Date('2025-01-01')],[newer,new Date('2000-01-01')],['sample.txt.amber-edit-999999999999999999999.bak',new Date()]]){const path=join(root,'config',token);await fs.writeFile(path,token);await fs.utimes(path,mtime,mtime);}
+ const rows=await e.history('synthetic',name);assert.deepEqual(rows.map(x=>x.token),[newer,old]);assert.equal(rows[1].date,new Date(stamp).toISOString());assert.equal((await e.backup('synthetic',name,old)).text,old);assert.equal(await fs.readFile(p,'utf8'),'original');
+}));
 async function fixture(run){const root=await fs.mkdtemp(join(tmpdir(),'amber163-test-'));try{await fs.mkdir(join(root,'config'));const p=join(root,'config','sample.txt');await fs.writeFile(p,'original');await run({root,p,core:{instancePath:async id=>{assert.equal(id,'synthetic');return root}}});}finally{await fs.rm(root,{recursive:true,force:true})}}
 test('163 reverse reads, A-B-A, repeated previews and cancel invalidate old responses',()=>{const r=new EditorRequests();const a=r.begin('open');r.select();const b=r.begin('open');assert.equal(a(),false);assert.equal(b(),true);r.select();const first=r.begin('preview'),second=r.begin('preview');assert.equal(first(),false);assert.equal(second(),true);r.select();assert.equal(second(),false)});
 test('163 same-name tabs distinguish paths; comparison reports first changed line',()=>{assert.equal(tabLabel('config/a.txt',['config/a.txt','scripts/a.txt']),'config/a.txt');assert.equal(tabLabel('config/a.txt',['config/a.txt']),'a.txt');assert.deepEqual(firstDifference('a\r\nb','a\r\nc'),{line:2,offset:3});assert.equal(firstDifference('same','same'),null)});
