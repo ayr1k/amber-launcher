@@ -21,7 +21,7 @@ const {mkdtemp,mkdir,writeFile}=require('node:fs/promises'),{tmpdir}=require('no
    ipcMain.handle('amber:editor-history',()=>[{token:'backup',date:new Date().toISOString(),bytes:12}]);
    ipcMain.handle('amber:editor-backup',()=>new Promise(resolve=>globalThis.editorFixture.backup=()=>resolve({text:'BACKUP A'})));
   });
-  await page.reload();await page.getByRole('button',{name:'Tools',exact:true}).first().click();await page.getByRole('button',{name:'File editor',exact:true}).click();
+  await page.reload().catch(e=>{if(!e.message.includes('ERR_ABORTED'))throw e;});await page.getByRole('button',{name:'Tools',exact:true}).first().click();await page.getByRole('button',{name:'File editor',exact:true}).click();
   async function release(name){await app.evaluate((_,name)=>globalThis.editorFixture.pending.get(name)(),name);await page.waitForTimeout(150);}
   await page.getByRole('button',{name:'a.txt',exact:true}).click();await page.getByRole('button',{name:'b.txt',exact:true}).click();await release('config/b.txt');await release('config/a.txt');
   const focused=await page.locator('[role=tab][aria-selected=true]').textContent();

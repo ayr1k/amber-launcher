@@ -26,7 +26,7 @@ function Tree({files,onOpen,active,prefix=''}){const groups=new Map();for(const 
 import {textMetadata} from '../desktop/editor-text163.mjs';
 import {EditorRequests,tabLabel,firstDifference} from './editor-session163.mjs';
 export function FileEditor({instances,editorApi}){
- const layout=useCatalogHeight(true),api=()=>editorApi||window.amberDesktop;
+ const layout=useCatalogHeight(true,{resetScroll:false}),api=()=>editorApi||window.amberDesktop;
  const [id,setId]=useState(instances[0]?.id||''),[files,setFiles]=useState([]),[tabs,setTabs]=useState([]),[active,setActive]=useState(''),[query,setQuery]=useState(''),[message,setMessage]=useState(''),[busy,setBusy]=useState(false),[history,setHistory]=useState(null),[comparison,setComparison]=useState(null),[lineDraft,setLineDraft]=useState('1'),[cursor,setCursor]=useState({line:1,column:1,lines:1});
  const comparisonHost=useRef(),historyHost=useRef(),host=useRef(),view=useRef(),docs=useRef(new Map()),current=useRef(''),saving=useRef(false),epoch=useRef(0),requests=useRef(new EditorRequests()),saveRef=useRef();
  useEffect(()=>{if(comparison){comparisonHost.current?.scrollIntoView({block:'nearest',behavior:'instant'});comparisonHost.current?.focus({preventScroll:true})}},[comparison]);

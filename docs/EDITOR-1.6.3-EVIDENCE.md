@@ -16,4 +16,6 @@ The task starts from published main `912b90b33b24810c8bfc9f6463eacae6dade4848`, 
 
 ## Guarantees and residual risks
 
+Final screenshot inspection identified a shared sizing observer resetting scroll after comparison opened. The editor now opts out of that reset and measures its unscrolled position; other consumers retain the existing default. The UI runner asserts the complete comparison panel remains visible after layout settles. Dark-mode cases also use rounded controls, disabled app motion and reduced-motion media. Installers from the earlier `c45f739` head are superseded by the final follow-up commit; use only the final provenance described in the delivery.
+
 See [bilingual test guide](../prototype/LOCAL-TEST-1.6.3.md). Preserving the actual displaced entry addresses the demonstrated final-check overwrite window; exclusive creation avoids clobbering a recreated target. A failed commit attempts exclusive copy recovery and retains the recovery filename. There is still a brief missing-target interval and no crash journal, universal filesystem locking or power-loss durability guarantee. The UI has session-only previous-draft recovery, explicit confirmations, metadata and stale-response checks. Real OS IME, full install/upgrade and non-Windows desktop acceptance remain separate.
