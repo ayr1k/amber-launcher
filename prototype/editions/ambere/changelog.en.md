@@ -1,3 +1,12 @@
+## 1.6.3
+
+- Compare the current instance-file draft with disk or a saved backup in two selectable text panes, with the first differing line identified. Reload and backup loading require confirmation; cancel preserves edits. Loaded backups are not written until Save. There is no force overwrite or automatic merge.
+- Recover a replaced draft within the current editor session. Show full path, unsaved state, UTF-8/BOM and line-ending information; distinguish same-name tabs, refresh the file list without replacing edits, and jump to a line. Mixed line endings remain view-only.
+- Prevent stale reads from stealing focus or applying one tab's backup to another. Save checks conflicts and preserves the actual displaced file before exclusively creating the destination; failures retain recovery copies. This is not an absolute cross-process lock or a power-loss transaction: a brief missing-target interval remains, and a crash can require manual recovery from the adjacent backup.
+- Sort backup history by validated creation timestamps in legacy and UUID names, including the 100-entry boundary, without changing older backup contents or modification times.
+- Let the editor layout grow with wrapped toolbars so disk, conflict and backup comparisons remain accessible in narrow or zoomed windows. Preserve existing UTF-8, allowed-path, 2 MB and running-instance protections.
+- Preserve product/account/data/update policies, native helper permissions, existing theme packages and community acknowledgements. Actual OS IME, full install/upgrade, abrupt power failure and non-Windows desktop acceptance remain unverified.
+
 ## 1.6.2
 
 - Inspect structure details, copy predicted coordinates, center the map and save markers. Overlapping icons offer a choice; all 21 structure types have distinct original vector icons shared across map, filters and details.

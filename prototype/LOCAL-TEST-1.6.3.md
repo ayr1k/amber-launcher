@@ -1,3 +1,9 @@
+# 1.6.3 formal release / 正式发布
+
+PR #13 merged as `5634598eec5e5daf0b1f0b0528fbea6a5f974b34`; accepted final head: `795cefa7ceaa9b913fbc9c3fa7bb40102bff781e`. The user confirmed the merge and requested the complete formal release on 2026-11-09 (America/New_York). Official packages use **1.6.3/public**. The independent targeted COMMENT review submitted on 2026-11-09 at 21:00:18 UTC passed backup-boundary and comparison-layout checks for this head, retaining earlier valid evidence. It is not represented as full user/installer acceptance. The user's subsequent merge and release instruction govern publication. Earlier candidate/local-channel/pending-review language below records its historical stage. This release chat does not repeat content review; see RELEASE-ACCEPTANCE.md for formal verification.
+
+PR #13 已合并并获用户明确正式发布授权。最终提交的独立定向复审通过；保留此前有效证据与原验收范围，不把它扩大为完整安装验收。下方测试阶段的 local 渠道、待审核及禁止发布等描述保留历史归属，本次正式发行使用 1.6.3/public，不新增内容审核。
+
 # AMBER / AmberE 1.6.3 — instance file editor test
 
 This is a local-channel task build, not a stable release. Both installers use the normal product identities and data locations. They can replace an existing installation of the same product and read its existing data. Use a disposable Windows profile or VM and copied synthetic fixtures. They are **not** isolated side-by-side test editions. Back up existing data before installation. AMBER and AmberE retain separate accounts, identities, data and update repositories.
