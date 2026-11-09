@@ -1,0 +1,2 @@
+.prelaunch164{position:fixed;z-index:1200;bottom:16px;left:50%;transform:translateX(-50%);width:min(720px,calc(100% - 32px));max-height:calc(100vh - 80px);overflow:auto;padding:16px;background:var(--surface,#f5f3ea);color:var(--text,#263e34);border:1px solid var(--line,#859286);box-shadow:0 4px 16px #0002;font-size:14px;overflow-wrap:anywhere}
+.prelaunch164 p{margin:8px 0}.prelaunch164-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.prelaunch164-actions button{white-space:normal;min-height:36px}

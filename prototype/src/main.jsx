@@ -1,3 +1,4 @@
+import './memory164.css';
 import {defaults as guideDefaults} from '../desktop/guided-model.mjs';
 import {VERSION} from '../desktop/product.mjs';
 import {MICROSOFT_CLIENT_ID} from '../desktop/microsoft-config.mjs';

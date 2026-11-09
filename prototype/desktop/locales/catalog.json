@@ -12570,5 +12570,101 @@
   "m664311bd5c97": {
     "zh": "定位最近要塞",
     "en": "Locate nearest stronghold"
+  },
+  "mb1278846c1a1": {
+    "zh": "启动前内存整理",
+    "en": "Prelaunch memory trimming"
+  },
+  "mfbec7dde15b3": {
+    "zh": "启动 Minecraft 前自动保守整理",
+    "en": "Trim conservatively before Minecraft starts"
+  },
+  "mb20059eaa500": {
+    "zh": "默认关闭，保存后对下次启动生效。只整理当前启动器主进程的 Windows 工作集，不触及游戏、服务端、其他应用或系统缓存；不改变 Java 堆。",
+    "en": "Off by default; saved for the next launch. Trims only this launcher main process’s Windows working set, excluding games, servers, other apps and system caches. Does not change the Java heap."
+  },
+  "m09169e5871a3": {
+    "zh": "每次启动最多一次，冷却 30 秒，最多等待 3 秒。失败或不支持时继续启动；可跳过整理，也可取消整个启动。工作集可能立即回弹，可能增加缺页和磁盘读取，尚无游戏帧率收益证据。激进档仍须手动确认。",
+    "en": "At most once per launch, with a 30-second cooldown and a 3-second wait limit. Failure or unsupported platforms do not block launch. Skip trimming or cancel the whole launch separately. Working sets can rebound immediately; page faults and disk reads may increase. No game FPS benefit has been established. Aggressive mode still requires manual confirmation."
+  },
+  "m3cffa9757b69": {
+    "zh": "未开启",
+    "en": "Disabled"
+  },
+  "mfee33c28e528": {
+    "zh": "当前平台不支持，继续启动",
+    "en": "Unsupported platform; continuing"
+  },
+  "mb66af0ede9f6": {
+    "zh": "已有整理正在执行，跳过",
+    "en": "Another trim is active; skipped"
+  },
+  "m02c3614387d2": {
+    "zh": "30 秒冷却中，跳过",
+    "en": "30-second cooldown; skipped"
+  },
+  "mdab47a32d599": {
+    "zh": "无法读取设置，跳过",
+    "en": "Settings unavailable; skipped"
+  },
+  "m0bc14141b339": {
+    "zh": "已请求整理；不代表永久释放或性能提升",
+    "en": "Trim requested; not permanent reclamation or a performance gain"
+  },
+  "mc805de18bbc0": {
+    "zh": "未能整理，继续启动",
+    "en": "Unable to trim; continuing"
+  },
+  "mb6d03bcccb3c": {
+    "zh": "整理失败，继续启动",
+    "en": "Trim failed; continuing"
+  },
+  "mb6bce3513ed3": {
+    "zh": "整理超时，继续启动",
+    "en": "Trim timed out; continuing"
+  },
+  "m95db34f35d7e": {
+    "zh": "已跳过整理，继续启动",
+    "en": "Trimming skipped; continuing"
+  },
+  "mc7b21989c428": {
+    "zh": "整个启动已取消",
+    "en": "Whole launch cancelled"
+  },
+  "m33037aadf043": {
+    "zh": "等待结果",
+    "en": "Waiting for result"
+  },
+  "m2ba4dce6e4db": {
+    "zh": "游戏启动状态",
+    "en": "Game launch status"
+  },
+  "me9e7420873f6": {
+    "zh": "正在整理启动器内存…",
+    "en": "Trimming launcher memory…"
+  },
+  "ma80945b2973b": {
+    "zh": "正在准备游戏启动…",
+    "en": "Preparing game launch…"
+  },
+  "mf28e30cff622": {
+    "zh": "跳过整理，继续启动",
+    "en": "Skip trim, continue launch"
+  },
+  "m337e64697e20": {
+    "zh": "取消整个启动",
+    "en": "Cancel entire launch"
+  },
+  "m9ae3bd17eaea": {
+    "zh": "以下手动档位重启后恢复关闭；自动启动前整理由独立开关控制。保守档仅整理启动器主进程；激进档包括其 Electron 子进程。不整理游戏、服务端、数据库或其他应用，不定时清理系统缓存。",
+    "en": "These manual controls reset to Off when the launcher restarts. Automatic prelaunch trimming is configured separately. Conservative trims the launcher main process; Aggressive includes its Electron child processes. Games, servers, databases and other apps are excluded. No periodic system-cache cleanup."
+  },
+  "mf5724fd918cc": {
+    "zh": "已取消游戏启动",
+    "en": "Game launch cancelled"
+  },
+  "md681702f9778": {
+    "zh": "本次启动已在创建游戏进程前取消。已完成的内存整理无法撤销；此操作不会终止已经运行的游戏。需要时可重新启动。",
+    "en": "This launch was cancelled before creating the game process. Any completed memory trim cannot be undone; this action does not stop an already running game. Launch again when ready."
   }
 }

@@ -80,7 +80,7 @@ export class VanillaLauncher extends LauncherCore {
  async prepareJava(id){const {dir,item,meta}=await this.metadata(id);await this.requireStopped(dir);return this.startJob(id,'java',async(job,signal)=>{const major=requiredJava(meta);const existing=(await this.scanJava()).find(j=>j.major===major);const java=existing||await withFileLock('java-install-'+major,()=>installJava(this.root,major,job,signal,this.fetcher),signal);item.javaPath=java.path;item.javaMajor=major;this.javaCandidates.set(java.path,java);await atomicJson(join(dir,'instance.json'),item);job.phase=`Java ${java.version} 已就绪`;});}
  async selectJava(id,path){if(!this.javaCandidates.has(path))throw new Error('请先检测 Java 或通过文件选择器添加。');const {dir,item,meta}=await this.metadata(id);await this.requireStopped(dir);const java=await inspectJava(path);if(java.major!==requiredJava(meta))throw new Error(`此版本需要 Java ${requiredJava(meta)}。`);item.javaPath=java.path;await atomicJson(join(dir,'instance.json'),item);return java;}
  async resolveGameJava(id){const {item,meta}=await this.runtimeMetadata(id);const java=item.javaPath?await inspectJava(item.javaPath):(await this.scanJava()).find(j=>j.major===requiredJava(meta));if(!java||java.major!==requiredJava(meta))throw new Error(`请先准备 Java ${requiredJava(meta)}。`);return java;}
- async launch(id,{username='Player',memory=4,identity=null,extraJvm=[],joinServer=null}={}){
+ async launch(id,{username='Player',memory=4,identity=null,extraJvm=[],joinServer=null,launchAttempt=null}={}){
   if(process.platform==='freebsd')throw Error('FreeBSD 实验包仅支持服务端与工具，尚不支持游戏客户端 / FreeBSD experimental bundle supports servers and utilities only');
   requireLaunchGrant(identity);
   if(this.jobs.some(j=>j.instanceId===id&&j.state==='running'))throw new Error('请等待安装任务完成。');
@@ -94,10 +94,15 @@ export class VanillaLauncher extends LauncherCore {
   await mkdir(join(dir,'logs'),{recursive:true});const logPath=join(dir,'logs',`amber-${Date.now()}.log`);
   // Keep arguments as an array: names and filesystem paths never enter a shell.
   requireLaunchGrant(identity,true);
+  await this.prelaunchMemory?.(launchAttempt);
+  launchAttempt?.controller.signal.throwIfAborted();
   const lockPath=join(dir,'.amber-session.json'),sessionId=randomUUID();
   try{await writeFile(lockPath,JSON.stringify({id:sessionId,pid:process.pid,game:false}),{flag:'wx'});}catch(e){if(e.code!=='EEXIST')throw e;await this.requireStopped(dir);await rm(lockPath,{force:true});await writeFile(lockPath,JSON.stringify({id:sessionId,pid:process.pid,game:false}),{flag:'wx'});}
   let graphics={state:'system',mode:'system'};try{graphics=await this.beforeJavaLaunch?.(java.path)||graphics;}catch{graphics={state:'failed',mode:'unknown'};}
+  if(launchAttempt?.controller.signal.aborted){try{const lock=JSON.parse(await readFile(lockPath,'utf8'));if(lock.id===sessionId)await rm(lockPath,{force:true});}catch{}launchAttempt.controller.signal.throwIfAborted();}
   const logFile=await open(logPath,'wx');
+  if(launchAttempt?.controller.signal.aborted){await logFile.close();try{const lock=JSON.parse(await readFile(lockPath,'utf8'));if(lock.id===sessionId)await rm(lockPath,{force:true});}catch{}launchAttempt.controller.signal.throwIfAborted();}
+  if(launchAttempt)launchAttempt.phase='launched';
   const child=spawn(java.path,args,{cwd:dir,shell:false,windowsHide:true,detached:true,stdio:['ignore',logFile.fd,logFile.fd],env:{...process.env,JAVA_TOOL_OPTIONS:'',_JAVA_OPTIONS:'',JDK_JAVA_OPTIONS:''}});
   const record={id:sessionId,accountId:identity.accountId||null,instanceId:id,child,pid:child.pid,state:'running',startedAt:new Date().toISOString(),logPath,tail:'',username,javaPath:java.path,javaVersion:java.version,memory,graphics,renderer:null};this.processes.set(record.id,record);
   const logTimer=setInterval(async()=>{record.tail=await logTail(logPath);record.renderer=rendererFromLog(record.tail)||record.renderer;},1200);logTimer.unref();

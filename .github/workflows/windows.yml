@@ -20,7 +20,7 @@ jobs:
           package-manager-cache: false
       - run: test -x prototype/desktop/bin/seed-engine-linux-x64
       - run: node --test prototype/tests/seed-native162.test.mjs prototype/tests/seed162.test.mjs prototype/tests/seed161.test.mjs
-      - run: node --test prototype/tests/editor163.test.mjs
+      - run: node --test prototype/tests/editor163.test.mjs prototype/tests/memory164.test.mjs
   desktop:
     runs-on: windows-latest
     timeout-minutes: 40
