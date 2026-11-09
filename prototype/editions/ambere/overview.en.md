@@ -3,7 +3,7 @@
 <p align="center"><strong>Offline and third-party identities. Your own adventure.</strong></p>
 
 <p align="center">
-  <a href="https://github.com/ayr1k/AmberE/releases/tag/v1.6.0"><img src="https://img.shields.io/badge/release-1.6.0-e9b53d?style=flat-square" alt="Release" /></a>
+  <a href="https://github.com/ayr1k/AmberE/releases/tag/v1.6.1"><img src="https://img.shields.io/badge/release-1.6.1-e9b53d?style=flat-square" alt="Release" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MPL--2.0-527b68?style=flat-square" alt="License" /></a>
   <a href="https://github.com/ayr1k/AmberE/actions/workflows/windows.yml"><img src="https://github.com/ayr1k/AmberE/actions/workflows/windows.yml/badge.svg" alt="Build" /></a>
   <a href="https://ayr1k.github.io/"><img src="https://img.shields.io/badge/website-AMBER-527b68?style=flat-square" alt="Website" /></a>
@@ -23,19 +23,19 @@ An independent Minecraft: Java Edition launcher bringing instances, content, the
   </tr>
 </table>
 
-Public AMBER 1.2.1 theme previews using demonstration data; these themes also work with AmberE. Click to enlarge. See the 1.6.0 notes below for current features and platform availability.
+Public AMBER 1.2.1 theme previews using demonstration data; these themes also work with AmberE. Click to enlarge. See the 1.6.1 notes below for current features and platform availability.
 
 ## Overview
 
 AmberE is an independent distribution for Minecraft: Java Edition, providing offline and third-party accounts. It is maintained from the shared AMBER codebase under MPL-2.0, with its own application identity, data directory and update repository. It does not offer Microsoft sign-in or include a Microsoft application Client ID.
 
-## 1.6.0
+## 1.6.1
 
-Add startup preferences, per-instance graphical launch plans with configurable waits and safe stop-and-backup, broader verified component choices, and manual Windows launcher-only memory optimization.
+Improve seed-map zoom, relief, imported-world metadata and structure results; adapt map, gradient-text and file-editor workspaces, and fix zoomed coordinate drafts and the gradient overview strip.
 
-Windows/macOS/Linux/FreeBSD packages share version 1.6.0. Native macOS/Linux acceptance is pending; FreeBSD is experimental server/tools-only.
+Windows/macOS/Linux/FreeBSD packages share version 1.6.1. Native macOS/Linux acceptance is pending; FreeBSD is experimental server/tools-only.
 
-Windows x64 release with additional platform downloads. [Download the installer, source and checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.6.0). Includes instance management, content recommendations, mod updates, backups and recovery.
+Windows x64 release with additional platform downloads. [Download the installer, source and checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.6.1). Includes instance management, content recommendations, mod updates, backups and recovery.
 
 - Offline identities and HTTPS third-party authentication, with system credential protection for saved credentials.
 - Isolated game instances; Java and loader installation; mod search, dependencies, updates and bulk management.

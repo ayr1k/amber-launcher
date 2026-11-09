@@ -3,7 +3,7 @@
 <p align="center"><strong>离线与第三方身份，独立的冒险空间。</strong></p>
 
 <p align="center">
-  <a href="https://github.com/ayr1k/AmberE/releases/tag/v1.6.0"><img src="https://img.shields.io/badge/release-1.6.0-e9b53d?style=flat-square" alt="Release" /></a>
+  <a href="https://github.com/ayr1k/AmberE/releases/tag/v1.6.1"><img src="https://img.shields.io/badge/release-1.6.1-e9b53d?style=flat-square" alt="Release" /></a>
   <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MPL--2.0-527b68?style=flat-square" alt="License" /></a>
   <a href="https://github.com/ayr1k/AmberE/actions/workflows/windows.yml"><img src="https://github.com/ayr1k/AmberE/actions/workflows/windows.yml/badge.svg" alt="Build" /></a>
   <a href="https://ayr1k.github.io/"><img src="https://img.shields.io/badge/website-AMBER-527b68?style=flat-square" alt="Website" /></a>
@@ -23,19 +23,19 @@
   </tr>
 </table>
 
-截图来自公开的 AMBER 1.2.1 主题展示，使用演示数据；主题同样适用于 AmberE。点击可查看大图，当前功能与平台范围以 1.6.0 说明为准。
+截图来自公开的 AMBER 1.2.1 主题展示，使用演示数据；主题同样适用于 AmberE。点击可查看大图，当前功能与平台范围以 1.6.1 说明为准。
 
 ## 项目简介
 
 AmberE 是面向 Minecraft Java 版的独立发行项目，提供离线和第三方账号。基于 AMBER 共用代码维护，采用 MPL-2.0，并使用独立应用身份、数据目录和更新仓库。不提供微软登录，不内置微软应用 Client ID。
 
-## 1.6.0
+## 1.6.1
 
-新增启动偏好、按实例保存的图形化启动规划与可配置等待、安全停服备份、更多已验证组件版本选择，以及仅作用于启动器自身的手动 Windows 内存整理。
+改进种子地图缩放、地形阴影、存档元数据读取及结构结果，适配地图、渐变文字和文件编辑器工作区，并修复缩放后的坐标输入及渐变预览条。
 
-Windows/macOS/Linux/FreeBSD 均提供 1.6.0；macOS/Linux 待对应真机验收，FreeBSD 仅实验性服务端/工具。
+Windows/macOS/Linux/FreeBSD 均提供 1.6.1；macOS/Linux 待对应真机验收，FreeBSD 仅实验性服务端/工具。
 
-提供 Windows x64 正式安装包及其他平台下载。[下载安装包、源码和校验文件](https://github.com/ayr1k/AmberE/releases/tag/v1.6.0)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
+提供 Windows x64 正式安装包及其他平台下载。[下载安装包、源码和校验文件](https://github.com/ayr1k/AmberE/releases/tag/v1.6.1)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
 
 - 离线身份与 HTTPS 第三方认证，保存的凭据由系统密钥库保护。
 - 独立游戏实例、Java 与加载器安装、模组搜索、依赖选择、更新和批量管理。

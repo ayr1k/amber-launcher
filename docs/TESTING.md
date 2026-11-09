@@ -1,3 +1,11 @@
+# 1.6.1 release verification
+
+Approved baseline: merged PR #11 (`e4208982346f708cb91defa0826f0cc3e7fd1bb1`), reviewed head `d3fbfd7bb26514447e4f1e2c615e5e572df9d2aa`. Existing independent task/Dot review and the user's approved merge/formal-release instruction on 2026-11-08 (America/New_York) are reused without another content/UI review. Historical candidate restrictions below are not current authorization. The final targeted COMMENT review reports original-image comparison complete and retains earlier valid checks.
+
+This release run passed **721/721 regressions with zero skips**, four static-serving checks, 2,907 bilingual-message checks, production build and source/license checks. Formal verification covers clean build provenance, 1.6.1/public, independent product identity, packaged Windows startup/IPC, all-platform content/runtime notices, complete source manifests, SHA-256 and public Release/Pages results. Final source commits add generated manifests without changing the application build source. Public source excludes injected credentials/private assets. Both permanent community acknowledgements retain their original 1.5.2 and 1.6.0 attribution.
+
+Existing evidence includes map math/coordinate drafts, world import metadata, version/dimension filters, result focus/hiding, edge navigation and scoped gradient/editor layout checks. Its original revision and independent-versus-developer attribution are retained. No personal world was opened or modified. Terrain/structures are predictions, not actual saved-world scans. Small local timing samples do not establish general performance/FPS gains. Real-world generation, multiplayer, installer-over-stable migration and native non-Windows desktop remain unverified. Cubiomes MIT notices remain intact; no Axolotl GPL application code/assets were copied. FreeBSD is experimental server/tools-only; packages are unsigned and macOS is not notarized.
+
 # 1.6.0 release verification
 
 Approved baseline: merged PR #10 (`4ca2d459cfdc48a7486ce69a896dcd558855df7e`), accepted task head `2fef90c672a5d210a029738af5b951402c6b2e88`. Existing separate task/Dot review and user acceptance are reused without repeated functional, implementation or UI review. The user's 2026-11-08 formal release instruction supersedes the historical candidate restrictions below.

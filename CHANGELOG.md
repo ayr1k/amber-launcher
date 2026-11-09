@@ -1,3 +1,12 @@
+## 1.6.1
+
+- Anchor wheel zoom to the pointer while keeping toolbar zoom centered. Keyboard panning uses the latest camera and clamps world edges; integer coordinate edit drafts preserve fractional camera precision and remain valid after zoom, seed or version changes.
+- Correct relief shading with two-dimensional, distance-normalized height differences without sampling across rows. Compute shading once per height sample and skip native structure searches when all supported filters are disabled. Local measurements are not a general performance or FPS guarantee.
+- Preserve imported spawn Y=0, distinguish missing coordinates, switch imported worlds to the Overworld, label approximate version matches and require manual selection for unsupported versions.
+- Respect structure support by version/dimension. Deduplicate current-scene results, sort by distance, display at most 100 rows and center the map on click. Empty or incomplete results do not prove structures are absent; terrain/structure output remains prediction, not a scan of actual saved terrain.
+- Put map basics across the top with responsive map/settings areas; arrange gradient format beside its title and keep editing/preview/local color separate from base gradient/output. Narrow windows stack and scroll. Restore the non-shrinking 16px gradient overview strip and keep validation notices clear of output. File editor retains its arrangement while adapting to available height.
+- Retain Cubiomes MIT notices and existing product/account/data/update policies. No Axolotl GPL application source or assets are copied. Existing community acknowledgements retain their original 1.5.2/1.6.0 attribution.
+
 ## 1.6.0
 
 - Save default Local/Online workspace and startup page, while preserving onboarding recovery.
