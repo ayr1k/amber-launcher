@@ -7,6 +7,19 @@ on:
 permissions:
   contents: read
 jobs:
+  linux-seed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - run: test -x prototype/desktop/bin/seed-engine-linux-x64
+      - run: node --test prototype/tests/seed-native162.test.mjs prototype/tests/seed162.test.mjs prototype/tests/seed161.test.mjs
   desktop:
     runs-on: windows-latest
     timeout-minutes: 40

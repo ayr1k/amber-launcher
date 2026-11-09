@@ -1,0 +1,95 @@
+// SPDX-License-Identifier: MPL-2.0
+// Isolated Electron UI/native-engine checks; synthetic states are labeled explicitly.
+const {_electron:electron}=require(process.env.AMBER_PLAYWRIGHT||'playwright');
+const {mkdtemp,mkdir,writeFile}=require('node:fs/promises');
+const {tmpdir}=require('node:os');
+const {join,resolve}=require('node:path');
+const assert=require('node:assert/strict');
+(async()=>{
+ const root=resolve(__dirname,'..'),data=await mkdtemp(join(tmpdir(),'amber162-map-')),library=join(data,'library'),out=join(root,'review162');
+ await mkdir(library,{recursive:true});await mkdir(out,{recursive:true});await writeFile(join(data,'storage.json'),JSON.stringify({schema:1,path:library,onboarded:true}));
+ const env={...process.env,AMBER_SMOKE_ROOT:data};delete env.ELECTRON_RUN_AS_NODE;
+ const app=await electron.launch({executablePath:join(root,'node_modules/electron/dist/electron.exe'),args:[root,'--qa-ui','--qa-visible','--disable-gpu'],env});
+ let page;const results=[],errors=[];
+ try{
+  assert.equal(resolve(await app.evaluate(({app})=>app.getPath('userData'))),data);
+  for(let i=0;i<400;i++){page=app.windows().find(p=>p.url().startsWith('amber://app/'));if(page)break;await new Promise(r=>setTimeout(r,50));}
+  assert.ok(page);page.setDefaultTimeout(15000);page.on('pageerror',e=>errors.push(e.message));await page.waitForFunction(()=>!!window.amberDesktop);await page.locator('.desktop-app').waitFor();
+  assert.equal(resolve((await page.evaluate(()=>window.amberDesktop.storageInfo())).path),library);
+  const nativeCatalog=await page.evaluate(()=>window.amberDesktop.seedMap('catalog'));
+  const base={seed:'0',version:35,dimension:0,x:-204,z:-1692,y:64,scale:16};
+  async function open(camera=base,language='en-US',theme='light'){
+   await page.evaluate(async({camera,language,theme})=>{await window.amberDesktop.saveSettings({...await window.amberDesktop.settings(),language,theme});localStorage.setItem('amber-seed-map',JSON.stringify(camera));},{camera,language,theme});
+   await page.reload().catch(e=>{if(!e.message.includes('ERR_ABORTED'))throw e;});await page.waitForFunction(()=>!!window.amberDesktop);await page.getByRole('button',{name:language==='zh-CN'?'实用工具':'Tools',exact:true}).first().click();await page.getByRole('button',{name:language==='zh-CN'?'种子地图':'Seed map',exact:true}).click();
+  }
+  async function idle(){await page.waitForFunction(()=>/Offline map|离线地图/.test(document.querySelector('.seed-toolbar [role=status]')?.textContent||''),{},{timeout:30000});assert.equal(await page.locator('.seed-display161 .error').count(),0);}
+  async function capture(name){await page.screenshot({path:join(out,name+'.png')});}
+  await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows().find(w=>w.webContents.getURL().startsWith('amber://app/')).setSize(1440,960));
+  await open();await idle();
+  const stronghold=page.locator('.seed-results161 .text-button').filter({hasText:'Stronghold'}).first();await stronghold.click();await page.locator('.seed-detail162').waitFor();assert.match(await page.locator('.seed-detail162').textContent(),/X -204.*Z -1692/);
+  await page.getByRole('button',{name:'Save marker',exact:true}).click();await page.getByRole('button',{name:'Save marker',exact:true}).click();const markers=await page.evaluate(()=>JSON.parse(localStorage.getItem('amber-map-markers')));assert.equal(markers.length,1);assert.equal(markers[0].version,35);assert.match(await page.locator('.seed-detail162 [role=status]').textContent(),/already saved/);
+  const priorClipboard=await app.evaluate(({clipboard})=>clipboard.readText());
+  try{await page.getByRole('button',{name:'Copy coordinates',exact:true}).click();await page.waitForTimeout(200);assert.equal(await app.evaluate(({clipboard})=>clipboard.readText()),'-204 -1692');}finally{await app.evaluate(({clipboard},value)=>clipboard.writeText(value),priorClipboard);}
+  await capture('native-stronghold-details-light');
+  await page.getByRole('button',{name:'Center',exact:true}).click();assert.equal(await page.locator('.seed-detail162').count(),0);await idle();
+  await stronghold.focus();await page.keyboard.press('Enter');await page.locator('.seed-detail162').waitFor();
+  await page.getByRole('combobox',{name:'Dimension',exact:true}).click();await page.getByRole('option',{name:'Nether',exact:true}).click();await page.getByRole('button',{name:'View map',exact:true}).click();assert.equal(await page.locator('.seed-detail162').count(),0);await idle();assert.equal(await page.locator('.seed-results161').getByText('Stronghold',{exact:false}).count(),0);assert.equal(await page.locator('.seed-limits162').count(),0);
+  results.push({case:'native selection keyboard repeated-save center dimension change',passed:true,copyValidated:true});
+  await open();await idle();await page.getByRole('button',{name:'Origin',exact:true}).click();await idle();await page.getByRole('button',{name:'Locate nearest stronghold',exact:true}).click();await idle();const located=await page.evaluate(()=>JSON.parse(localStorage.getItem('amber-seed-map')));assert.equal(located.x,-204);assert.equal(located.z,-1692);
+  await page.locator('.seed-results161 .text-button').filter({hasText:'Stronghold'}).first().click();await page.getByRole('combobox',{name:'Java generation version',exact:true}).click();await page.getByRole('option',{name:'1.20.6',exact:true}).click();await page.getByRole('button',{name:'View map',exact:true}).click();assert.equal(await page.locator('.seed-detail162').count(),0);await idle();assert.match(await page.locator('.seed-saved-markers summary').textContent(),/0$/);results.push({case:'native nearest stronghold and version-scoped markers',passed:true});
+  await page.evaluate(()=>localStorage.setItem('amber-map-markers',JSON.stringify([{name:'Legacy fixture',seed:'0',dimension:0,x:4,z:8}])));await open();await idle();await page.locator('.seed-saved-markers summary').click();assert.match(await page.locator('.seed-saved-markers').textContent(),/unknown version/);await page.getByRole('button',{name:'Link current version',exact:true}).click();assert.equal((await page.evaluate(()=>JSON.parse(localStorage.getItem('amber-map-markers'))))[0].version,35);results.push({case:'legacy marker retained and explicit version link',passed:true});
+  for(const [language,theme,w,h] of [['en-US','dark',1440,960],['zh-CN','light',900,1000]]){
+   await app.evaluate(({BrowserWindow},size)=>BrowserWindow.getAllWindows().find(w=>w.webContents.getURL().startsWith('amber://app/')).setSize(...size),[w,h]);await open(base,language,theme);await idle();await page.locator('.seed-biome-legend162 summary').click();
+   const overflow=await page.evaluate(()=>{const el=document.querySelector('.tools-page').closest('.workspace-scroll');return {width:el.clientWidth,scrollWidth:el.scrollWidth};});assert.ok(overflow.scrollWidth<=overflow.width+2,JSON.stringify(overflow));await capture(`native-map-${language}-${theme}-${w}`);await page.locator('.seed-results161 .text-button').first().click();await page.locator('.seed-detail162').scrollIntoViewIfNeeded();await capture(`native-detail-${language}-${theme}-${w}`);results.push({case:'layout',language,theme,w,h,overflow,passed:true});
+  }
+  // Actual native output at both camera edges: copying and marker navigation.
+  await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows().find(w=>w.webContents.getURL().startsWith('amber://app/')).setSize(1440,960));
+  for(const sign of [-1,1]){
+   await open({...base,x:sign*29899998,z:sign<0?8000:0});await idle();
+   const rows=page.locator('.seed-results161 .text-button');const texts=await rows.allTextContents();
+   const index=texts.findIndex(text=>{const match=/X (-?\d+)/.exec(text);return match&&Math.abs(Number(match[1]))>29899999;});assert.ok(index>=0,'native visible boundary row');
+   await rows.nth(index).click();const coordinate=await page.locator('.seed-coordinate162').textContent(),match=/X (-?\d+).*Z (-?\d+)/.exec(coordinate);assert.ok(match);
+   const prior=await app.evaluate(({clipboard})=>clipboard.readText());
+   try{await page.getByRole('button',{name:'Copy coordinates',exact:true}).click();await page.waitForTimeout(100);assert.equal(await app.evaluate(({clipboard})=>clipboard.readText()),`${match[1]} ${match[2]}`);}finally{await app.evaluate(({clipboard},value)=>clipboard.writeText(value),prior);}
+   await page.getByRole('button',{name:'Save marker',exact:true}).click();await page.getByRole('button',{name:'Center',exact:true}).click();await idle();
+   let p=await page.evaluate(()=>JSON.parse(localStorage.getItem('amber-seed-map')));assert.equal(p.x,sign*29899999);assert.match(await page.locator('.seed-display161>.seed-note').textContent(),/nearest safe map center/);
+   await page.locator('.seed-saved-markers summary').click();await page.locator('.seed-saved-markers .text-button').filter({hasText:`X ${match[1]} Z ${match[2]}`}).first().click();await idle();
+   p=await page.evaluate(()=>JSON.parse(localStorage.getItem('amber-seed-map')));assert.equal(p.x,sign*29899999);
+   await open(p);await idle();assert.equal((await page.evaluate(()=>JSON.parse(localStorage.getItem('amber-seed-map')))).x,sign*29899999);
+   assert.ok((await page.evaluate(()=>JSON.parse(localStorage.getItem('amber-map-markers')))).some(m=>m.x===Number(match[1])&&m.z===Number(match[2])));
+   await capture(`native-coordinate-boundary-${sign}`);results.push({case:'native edge copy, detail center, saved-marker navigation and reload',sign,coordinates:[Number(match[1]),Number(match[2])],camera:p,passed:true});
+  }
+  const paths=await import('../src/seed-icons162.mjs');
+  for(const width of [1100,1600]){
+   await app.evaluate(({BrowserWindow},width)=>BrowserWindow.getAllWindows().find(w=>w.webContents.getURL().startsWith('amber://app/')).setSize(width,720),width);await open(base);await idle();
+   await page.locator('.seed-structures summary').click();await page.getByRole('button',{name:'Hide all structures',exact:true}).click();
+   for(const name of ['Desert pyramid','Abandoned camp','Village','Swamp hut'])await page.getByRole('checkbox',{name,exact:true}).check();await idle();
+   const icons=await page.locator('[data-structure-icon]').evaluateAll(els=>els.map(el=>({type:el.dataset.structureIcon,path:el.querySelector('path').getAttribute('d')})));
+   for(const icon of icons)assert.equal(icon.path,paths.structurePaths[icon.type]);
+   assert.ok(await page.locator('.seed-results161').getByText('Desert pyramid',{exact:false}).count());assert.ok(await page.locator('.seed-results161').getByText('Abandoned camp',{exact:false}).count());
+   await page.locator('.seed-structures summary').click();await page.locator('.seed-results161').scrollIntoViewIfNeeded();await capture(`native-distinct-icons-${width}`);
+   results.push({case:'native same-view distinct vector icons and shared SVG paths',width,passed:true});
+  }
+  // Controlled IPC responses below exercise state handling only, never real-world generation.
+  await app.evaluate(({ipcMain},catalog)=>{globalThis.seedFixture162={mode:'normal',catalog};ipcMain.removeHandler('amber:seed-map');ipcMain.handle('amber:seed-map',async(_event,action,input)=>{if(action==='catalog')return globalThis.seedFixture162.catalog;if(action!=='map')return true;const mode=globalThis.seedFixture162.mode;if(mode==='delayed')await new Promise(r=>setTimeout(r,900));if(mode==='failure')throw Error('Synthetic map failure');const features=mode==='empty'?[]:[{type:'stronghold',x:input.x+128*input.scale,z:input.z+96*input.scale},{type:'village',x:input.x+128*input.scale,z:input.z+96*input.scale}];return {biomes:Array(input.width*input.height).fill(1),heights:[],slime:[],features,structureStatus:['stronghold','village','desert_pyramid','jungle_temple','swamp_hut','igloo','monument','mansion','outpost','ocean_ruin','shipwreck','ruined_portal','ancient_city','treasure','trail_ruins','trial_chambers','abandoned_camp'].map(type=>({type,status:mode==='truncated'?(type==='village'?'region_limit':type==='stronghold'?'feature_limit':'complete'):'complete'}))};});},nativeCatalog);
+  async function mode(value){await app.evaluate((_,value)=>{globalThis.seedFixture162.mode=value},value);await open({...base,x:0,z:0});}
+  for(const width of [1100,1600]){
+   await app.evaluate(({BrowserWindow},width)=>BrowserWindow.getAllWindows().find(w=>w.webContents.getURL().startsWith('amber://app/')).setSize(width,720),width);await mode('normal');await idle();
+   const canvas=page.locator('.seed-map-wrap canvas');
+   for(const offset of [0,9,-9,11]){
+    const box=await canvas.boundingBox();await canvas.click({position:{x:box.width/2+offset,y:box.height/2}});
+    if(offset===11)assert.equal(await page.locator('.seed-detail162').count(),0);
+    else {assert.match(await page.locator('.seed-detail162 h3').textContent(),/Stronghold/);assert.equal(await page.locator('.seed-detail162 .text-button').count(),2);}
+   }
+   await capture(`synthetic-icon-hit-${width}`);results.push({case:'synthetic exact overlapping centers, +/-9px edges and 11px outside',width,passed:true});
+  }
+  await mode('truncated');await idle();assert.match(await page.locator('.seed-limits162').textContent(),/1600/);assert.match(await page.locator('.seed-limits162').textContent(),/1200/);await capture('synthetic-truncation');
+  await mode('empty');await idle();assert.equal(await page.locator('.seed-limits162').count(),0);assert.match(await page.locator('.seed-status162').textContent(),/No selected structure predictions/);
+  await page.locator('.seed-structures summary').click();await page.getByRole('button',{name:'Hide all structures',exact:true}).click();await idle();assert.match(await page.locator('.seed-status162').textContent(),/No available structures/);await page.getByRole('button',{name:'Show all structures',exact:true}).click();await idle();await page.locator('.seed-structures summary').click();
+  await mode('failure');await page.locator('.seed-display161 .error').waitFor();assert.match(await page.locator('.seed-status162').textContent(),/Calculation failed/);await app.evaluate(()=>{globalThis.seedFixture162.mode='normal'});await page.getByRole('button',{name:'Retry map',exact:true}).click();await idle();assert.equal(await page.locator('.seed-display161 .error').count(),0);
+  await mode('normal');await idle();const canvas=page.locator('.seed-map-wrap canvas'),box=await canvas.boundingBox();await canvas.click({position:{x:box.width/2,y:box.height/2}});assert.match(await page.locator('.seed-detail162').textContent(),/overlapping/);await page.locator('.seed-detail162 .text-button').filter({hasText:'Village'}).click();assert.match(await page.locator('.seed-detail162 h3').textContent(),/Village/);
+  await mode('delayed');assert.match(await page.locator('.seed-status162').textContent(),/Calculating/);const seedInput=page.locator('.seed-input input');await seedInput.fill('11');await page.getByRole('button',{name:'View map',exact:true}).click();await seedInput.fill('12');await page.getByRole('button',{name:'View map',exact:true}).click();await idle();assert.equal((await page.evaluate(()=>JSON.parse(localStorage.getItem('amber-seed-map')))).seed,'12');assert.equal(await page.locator('.seed-detail162').count(),0);
+  results.push({case:'synthetic states only: truncation empty failure retry overlap delayed latest request',passed:true});
+  assert.deepEqual(errors,[]);await writeFile(join(out,'seed162-ui-checks.json'),JSON.stringify({data,library,isolated:true,results,errors,limitations:'No Minecraft world-generation verification; synthetic IPC cases explicitly labeled.'},null,2));console.log('SEED162_UI_OK');
+ }catch(error){if(page)await page.screenshot({path:join(out,'failure.png')}).catch(()=>{});await writeFile(join(out,'failure.json'),JSON.stringify({error:String(error),stack:error.stack,results,errors},null,2));throw error;}finally{await app.evaluate(({app})=>app.exit(0)).catch(()=>{});await app.close().catch(()=>{});}
+})().catch(e=>{console.error(e);process.exitCode=1});
