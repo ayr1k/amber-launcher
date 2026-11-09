@@ -1,3 +1,9 @@
+# 1.6.4 formal release / 正式发布
+
+PR #14 merged as `5efd3b0822b4eeac50bdaedbbe9c3ced4b66e7b7`; accepted final head: `14c2f8920bf739524f00bde8d664cc301b6394a6`. The user requested complete formal publication on 2026-11-09 (America/New_York). Official packages use **1.6.4/public**. The independent targeted COMMENT review at 22:37:33 UTC passed 55 affected tests and cancellation/UI checks, retaining the minor temporary preparing/cancelled label mismatch and all performance/acceptance limits. It is not represented as full game or installer acceptance. The subsequent user-approved merge and release instruction govern publication. Candidate/local-channel/pending-review wording below records earlier stages; this chat reuses existing content review. Final formal checks are recorded in RELEASE-ACCEPTANCE.md.
+
+PR #14 已批准合并并获正式发布授权。沿用最终提交的独立定向复核，保留轻微取消文案差异及性能／验收边界，不扩大为真实游戏或完整安装验收。下方 local 渠道、待复核及禁止发布等表述保留历史归属；本次正式版使用 1.6.4/public。
+
 # AMBER / AmberE 1.6.4 — prelaunch memory test
 
 Task build, local update channel; not a formal release. Base: `e9da357978438792fb8ed03979d533031dfed3af` (published 1.6.3). Branch: `task/1.6.4-prelaunch-memory`. Exact head, source dirty state and installer digests are in the PR artifact's `TEST-REVISION.txt`, `.provenance.json` and `.sha256` files. Installers must be built from the final clean commit. No merge, Release or Pages deployment is authorized by this delivery.

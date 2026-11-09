@@ -1,3 +1,12 @@
+## 1.6.4
+
+- Add a persistent, default-off “Trim conservatively before Minecraft starts” setting for both new and upgraded installations. On Windows it trims only this launcher's main-process working set after game validation and before Java spawn. It does not reclaim Java heap, touch game/server/other-app processes, purge system caches, terminate processes or elevate privileges.
+- Attempt at most once per launch, wait at most 3 seconds, and share the manual operation's busy guard and 30-second cooldown. Failure, insufficient permission, unsupported platforms, skipping or timeout continue normal launch. Preserve the graphics-preference hook and separate aggressive manual confirmations.
+- Separate “Skip trim, continue launch” from “Cancel entire launch”. Whole-launch cancellation prevents Java spawn during preparation and later graphics/log-open waits, records the current attempt immediately and rejects stale updates. Completed trimming cannot be undone; the action does not stop an already running game.
+- Provide distinct bilingual game-launch cancellation guidance while retaining download/installation cancellation explanations. Known minor limitation: while the graphics hook is still returning, the upper status may briefly say “preparing” while the lower result already says cancelled; cancellation still prevents spawn.
+- Keep the feature off by default: three scoped launcher-hook samples took about 381–415 ms, and working sets rebounded. These samples do not establish Minecraft loading, FPS or frame-time improvement, Java heap recovery or leak repair. Real-game, full installation/upgrade and native non-Windows acceptance remain unverified.
+- Preserve separate product/account/data/update policies, existing themes, artist attribution and permanent community acknowledgements.
+
 ## 1.6.3
 
 - Compare the current instance-file draft with disk or a saved backup in two selectable text panes, with the first differing line identified. Reload and backup loading require confirmation; cancel preserves edits. Loaded backups are not written until Save. There is no force overwrite or automatic merge.
