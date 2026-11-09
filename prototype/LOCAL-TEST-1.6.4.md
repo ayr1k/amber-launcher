@@ -43,3 +43,13 @@ For manual acceptance, use an authorized disposable game instance: check the swi
 每次启动最多整理一次，共享 30 秒冷却和并发保护，最多等待 3 秒。失败、权限不足、超时或不支持平台均继续正常启动。“跳过整理，继续启动”和“取消整个启动”是不同操作：后者在 Java 创建前阻止本次启动，前者仅取消等待整理。已完成的工作集操作不能撤销，已经启动的游戏不能通过这个按钮停止。
 
 三轮隔离启动器实测整理钩子增加约 381–415 毫秒，工作集迅速下降后在 1 秒、5 秒采样中回弹，系统可用内存变化不一致。因此保持默认关闭，不宣称提升 FPS、释放 Java 堆或修复内存泄漏。未进行真实 Minecraft 启动、帧时间、完整安装升级或长时间游戏验收；没有绕过账号或所有权验证。完整回归 760 项、静态测试 4 项、构建、语言/发行检查、桌面冒烟和原生身份检查通过。中英、深浅、窄窗、125% 缩放和键盘已检查；取消按钮展示使用明确标注的模拟状态。最终成品启动和 CI 证据随 PR 交付，独立审查与用户验收仍待完成。
+
+## Cancellation-feedback review fix
+
+The initial implementation passed 760 full regressions. Independent review then identified stale global feedback after whole-launch cancellation outside the native trim wait. The follow-up records cancellation immediately against the current attempt, retains completed trim rows and prior trim status, clears the previous attempt result on begin, and prevents late async writes or stale finish/cancel calls from overwriting a newer attempt. A completed trim cannot be undone.
+
+The affected suite now passes 55 tests (47 prior + 8 new behavior tests). New cases cover preparation, successful/failed settings reads, late completion after a new attempt, trim/timeout/cooldown outcomes, skip followed by whole-launch cancellation, and actual production launch-method execution with isolated I/O stubs at the graphics and log-open boundaries. Both boundary cases assert zero spawn, own-lock cleanup and final global cancellation. These fixture tests do not launch Minecraft or bypass real account validation. Exact-head full CI and rebuilt installer evidence are linked in the PR; the initial 7089153 package checksums and attachment IDs are superseded.
+
+独立审核指出原实现仅在等待原生整理时正确更新全局取消结果。修复后，整个启动取消会立即绑定本次 attempt；保留已经完成的整理记录，启动新 attempt 时清除旧结果，旧异步任务或迟到取消不能覆盖新任务。受影响的 55 项回归通过，其中新增 8 项行为测试。显卡和日志打开阶段执行实际启动方法体的隔离测试均验证零 Java 创建、本次锁清理和全局最终取消。旧 7089153 安装包校验值和附件身份已被新交付替代，请以 PR 新 head 的成品及检查为准。
+
+Launch cancellation now has a dedicated bilingual problem explanation before the generic installation-cancellation rule. The native UI fixture verifies LaunchHome error/retry and persistent global cancellation after navigating to Settings, in both languages. Existing download/installation cancellation explanations are unchanged. / 启动取消使用独立中英文说明，安装与下载取消解释保留。隔离 UI 验证启动页错误、重试以及切到设置后仍准确显示全局取消。

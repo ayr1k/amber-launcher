@@ -12658,5 +12658,13 @@
   "m9ae3bd17eaea": {
     "zh": "以下手动档位重启后恢复关闭；自动启动前整理由独立开关控制。保守档仅整理启动器主进程；激进档包括其 Electron 子进程。不整理游戏、服务端、数据库或其他应用，不定时清理系统缓存。",
     "en": "These manual controls reset to Off when the launcher restarts. Automatic prelaunch trimming is configured separately. Conservative trims the launcher main process; Aggressive includes its Electron child processes. Games, servers, databases and other apps are excluded. No periodic system-cache cleanup."
+  },
+  "mf5724fd918cc": {
+    "zh": "已取消游戏启动",
+    "en": "Game launch cancelled"
+  },
+  "md681702f9778": {
+    "zh": "本次启动已在创建游戏进程前取消。已完成的内存整理无法撤销；此操作不会终止已经运行的游戏。需要时可重新启动。",
+    "en": "This launch was cancelled before creating the game process. Any completed memory trim cannot be undone; this action does not stop an already running game. Launch again when ready."
   }
 }
