@@ -21,16 +21,18 @@
 .tools-page:has(.gradient161)>.tool-intro{align-items:center;flex-wrap:wrap}.tools-page:has(.gradient161)>.tool-intro>.theme-check{align-self:center}
 .desktop-app .gradient131.gradient134.gradient161{height:var(--catalog-height,560px);min-height:460px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:16px 24px;align-items:stretch}
 .gradient-left161,.gradient-right161{display:grid;min-height:0;min-width:0;gap:14px}
-.gradient-left161{grid-template-rows:minmax(190px,1fr) minmax(110px,.6fr) auto}.gradient-right161{grid-template-rows:minmax(275px,1.4fr) minmax(170px,1fr)}
+.gradient-left161{grid-template-rows:minmax(190px,1fr) minmax(110px,.6fr) auto}.gradient-right161{grid-template-rows:minmax(240px,1.2fr) minmax(200px,1fr)}
 .gradient161 .gradient-input{grid-column:auto;grid-row:auto;display:flex;flex-direction:column;gap:10px;min-height:0;overflow:auto}
 .gradient161 .gradient-heading{gap:8px}.gradient161 h3{font-size:16px}.gradient161 .format-buttons{gap:4px}.desktop-app .gradient161 .format-buttons>button{min-height:32px;min-width:32px;padding:4px 8px}
 .gradient161 .gradient-editor{flex:1;min-height:90px;overflow:hidden}.gradient161 .gradient-editor .cm-editor{height:100%;max-height:none}.gradient161 .gradient-editor .cm-content{min-height:100%!important;padding:12px!important}
 .gradient161 .gradient-selection{flex:none;gap:6px}.gradient161 .selection-color{padding:10px 0;gap:8px;min-width:0}.gradient161 .selection-color .button{min-height:34px;padding:6px 10px;font-size:12px}
 .gradient-preview161{display:flex;flex-direction:column;gap:8px;min-height:0;overflow:auto}.gradient161 .gradient131-preview{min-height:60px;flex:1;overflow:auto;padding:12px;font-size:22px}.gradient-preview161 p{margin:0;font-size:12px;color:var(--muted);line-height:1.5}
 .gradient161 .gradient-palette134{grid-row:auto;grid-column:auto;display:flex;flex-direction:column;gap:12px;min-height:0;overflow:auto;padding-right:8px;scrollbar-gutter:stable}
-.gradient161 .picker134{gap:12px;grid-template-columns:minmax(120px,1fr) minmax(140px,1fr)}.gradient161 .picker-sv{height:140px}.gradient161 .picker-hue{margin-top:10px}.gradient161 .picker-colors{gap:6px}.gradient161 .picker-swatch{min-height:34px;padding:5px}
+.gradient161 .picker134{gap:12px;grid-template-columns:minmax(120px,1fr) minmax(140px,1fr)}.gradient161 .picker-sv{height:110px}.gradient161 .picker-hue{margin-top:10px}.gradient161 .picker-colors{gap:6px}.gradient161 .picker-swatch{min-height:34px;padding:5px}
 .gradient161 .gradient-output{grid-column:auto;grid-row:auto;display:flex;flex-direction:column;min-height:0;gap:8px;overflow:auto}.gradient-output-actions161{order:1}.gradient161 .gradient-output>h3{order:0;min-height:0}.gradient161 .gradient-output>textarea{order:2;flex:1;width:100%;height:auto!important;min-height:70px!important;resize:none}.gradient161 .gradient-output>p{order:3;font-size:12px;line-height:1.5}.gradient161 .gradient-export .button{min-height:34px;padding:6px 10px;font-size:12px}.gradient161 .gradient-notice{min-height:0}.gradient161 .gradient-notice:empty{display:none}
 @container(max-width:740px){.seed161{height:auto;min-height:0}.seed-body161{grid-template-columns:1fr}.seed161 .seed-map-wrap{height:360px;flex:none}.seed-settings161{max-height:none;overflow:visible}.seed-basics161{grid-template-columns:1fr 1fr}.seed-basics161>.seed-input{grid-column:1/-1}.desktop-app .gradient131.gradient134.gradient161{height:auto;min-height:0;grid-template-columns:1fr;grid-template-rows:auto}.gradient-left161{grid-template-rows:300px 180px auto}.gradient-right161{grid-template-rows:auto 260px}.gradient161 .gradient-palette134{overflow:visible}.gradient-format-host161{margin-left:0;max-width:none;flex:1 1 220px}}
 @media(max-height:720px) and (min-width:1100px){.seed161{min-height:420px}.desktop-app .gradient131.gradient134.gradient161{min-height:440px}}
 
 .gradient161 .gradient-output>h3,.gradient161 .gradient-output>p,.gradient-output-actions161,.gradient161 .gradient-palette134>.gradient-heading{flex-shrink:0}
+
+@container(max-width:740px){.gradient161 .picker-sv{height:140px}}

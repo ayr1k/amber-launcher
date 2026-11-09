@@ -13,7 +13,7 @@ const assert=require('node:assert/strict');
  await writeFile(join(dir,'config','layout.json'),JSON.stringify({fixture:true,lines:Array.from({length:200},(_,i)=>i)},null,2));
  await writeFile(join(data,'storage.json'),JSON.stringify({schema:1,path:library,onboarded:true}));
  const env={...process.env,AMBER_SMOKE_ROOT:data};delete env.ELECTRON_RUN_AS_NODE;
- const app=await electron.launch({executablePath:join(root,'node_modules/electron/dist/electron.exe'),args:[stage,'--qa-ui','--qa-visible','--disable-gpu'],env});
+ const app=await electron.launch({executablePath:process.env.AMBER_QA_ELECTRON||join(root,'node_modules/electron/dist/electron.exe'),args:[...(process.env.AMBER_QA_ELECTRON?[]:[stage]),'--qa-ui','--qa-visible','--disable-gpu'],env});
  try{
   assert.equal(resolve(await app.evaluate(({app})=>app.getPath('userData'))),data);
   let page;for(let i=0;i<400;i++){page=app.windows().find(p=>p.url().startsWith('amber://app/'));if(page)break;await new Promise(r=>setTimeout(r,50));}
@@ -58,6 +58,6 @@ const assert=require('node:assert/strict');
     const name=`${process.env.AMBER_QA_NAME||'AMBER'}-${tool}-${language}-${theme}-${width}x${height}`;await capture(name);results.push({tool,language,theme,width,height,overflow,name});
    }
   }
-  assert.deepEqual(errors,[]);await writeFile(join(out,(process.env.AMBER_QA_NAME||'AMBER')+'-layout-checks.json'),JSON.stringify({data,library,stage,isolated:true,results,errors},null,2));console.log('LAYOUT161_OK');
+  assert.deepEqual(errors,[]);await writeFile(join(out,(process.env.AMBER_QA_NAME||'AMBER')+'-layout-checks.json'),JSON.stringify({data,library,stage,executable:process.env.AMBER_QA_ELECTRON||null,packaged:await app.evaluate(({app})=>app.isPackaged),isolated:true,results,errors},null,2));console.log('LAYOUT161_OK');
  }finally{await app.evaluate(({app})=>app.exit(0)).catch(()=>{});await app.close().catch(()=>{});}
 })().catch(e=>{console.error(e);process.exitCode=1;});
