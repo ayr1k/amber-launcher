@@ -54,11 +54,11 @@ jobs:
         with:
           name: amber-all-platforms
           path: |
-            prototype/releases/1.6.0/*-Setup-x64.exe
-            prototype/releases/1.6.0/*.zip
-            prototype/releases/1.6.0/*.deb
-            prototype/releases/1.6.0/*.tar.gz
-            prototype/releases/1.6.0/*.sha256
-            prototype/releases/1.6.0/*.provenance.json
+            prototype/releases/*/*-Setup-x64.exe
+            prototype/releases/*/*.zip
+            prototype/releases/*/*.deb
+            prototype/releases/*/*.tar.gz
+            prototype/releases/*/*.sha256
+            prototype/releases/*/*.provenance.json
           retention-days: 30
           if-no-files-found: error
