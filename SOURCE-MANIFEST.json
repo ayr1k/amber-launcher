@@ -1,5 +1,5 @@
 {
-  "version": "1.6.1",
+  "version": "1.6.2",
   "repository": "https://github.com/ayr1k/amber-launcher",
   "files": [
     {
@@ -19,23 +19,23 @@
     },
     {
       "path": ".github/workflows/pr-installers.yml",
-      "bytes": 2178,
-      "sha256": "f60a5033ad259c90f97531831507a4e9ab3d6f06299c949f2271bf8c161307c6"
+      "bytes": 2461,
+      "sha256": "0adc0c10f6ee063312b30bbdf3bde2d6f54744f72d6acf6b6b6318fa92008474"
     },
     {
       "path": ".github/workflows/windows.yml",
-      "bytes": 2858,
-      "sha256": "9d00e8157e0172b6f48d429f63eea38e61f3df422137b6de17dfe5f498f427fd"
+      "bytes": 3456,
+      "sha256": "850e0cef4a1ee8a4983e992ab933414e154e398155e3eda84a692e130198652e"
     },
     {
       "path": ".gitignore",
-      "bytes": 419,
-      "sha256": "c9c0426d0a01c54a4e244313d37214b64aebc7f92414408c84ed7bfef03bfff9"
+      "bytes": 462,
+      "sha256": "fdb9f24f502259fbf8b431eccbac0618b041002924c75cc71a53ca52dd14bd1e"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 51506,
-      "sha256": "ea8f6ee14fb2f1dea9f81c8251f563ebde0296d44cf9b9c0337e24541d1e740d"
+      "bytes": 52601,
+      "sha256": "75856027b663e4a22985c67689aea7fd0f5209b1a367921634753c7aae740453"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -54,8 +54,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 7906,
-      "sha256": "f08300ea3e0fddef58304a34e5c34cc2aceaa3f799baac7574c7c9ddfe098490"
+      "bytes": 7800,
+      "sha256": "204c967d3f0437f92e0182374933828970bae92ad0d0344a4645b76b51c308b9"
     },
     {
       "path": "SECURITY.md",
@@ -139,8 +139,8 @@
     },
     {
       "path": "docs/TESTING.md",
-      "bytes": 35249,
-      "sha256": "2c146ae8e12d3615da9dd8548d120f629050a91614f8363c33dd4d17945f3ebb"
+      "bytes": 37144,
+      "sha256": "cf346b6592edb388dd81a72d12fc10c416b6616086e7f8d9682c3c1476afc98c"
     },
     {
       "path": "docs/THEMES.md",
@@ -149,8 +149,8 @@
     },
     {
       "path": "docs/USER-GUIDE.md",
-      "bytes": 56527,
-      "sha256": "f9cd6705f40abbd9f1480ce75c7c408295778a66333fbc3f8e4105966c6ac43a"
+      "bytes": 57895,
+      "sha256": "c366228ee3be4466a1f47d70e6f5772848b29b3a9066dc1ac07f4d87d51ef9e3"
     },
     {
       "path": "docs/evidence/amber-custom-small-downloads.png",
@@ -379,8 +379,8 @@
     },
     {
       "path": "docs/zh-CN/CHANGELOG.md",
-      "bytes": 56259,
-      "sha256": "88876843318bb59892cd18351df2691ad6d2a67d607b1950356d0d2801bac31b"
+      "bytes": 57025,
+      "sha256": "47100314064797a8b31440d0c81b0e90efe5acdfc696765b83195f9be5f6189e"
     },
     {
       "path": "docs/zh-CN/CONTRIBUTING.md",
@@ -399,8 +399,8 @@
     },
     {
       "path": "docs/zh-CN/README.md",
-      "bytes": 6675,
-      "sha256": "b25bf0f548a62e2c790d14d12f599afafd261f6b8bd893c41de16c225cffb408"
+      "bytes": 6563,
+      "sha256": "0ae18cafe706728c165a43be357eb46780144efc1b3a198d4bb82118f01b0bbe"
     },
     {
       "path": "docs/zh-CN/ROLLBACK.md",
@@ -424,8 +424,8 @@
     },
     {
       "path": "docs/zh-CN/TESTING.md",
-      "bytes": 23719,
-      "sha256": "975978a547e1abed3d6bb4ef3037f27ddc6bae690add16ff634bfe7d7ceee3ce"
+      "bytes": 25217,
+      "sha256": "4f1f44e476a9da87ddceaf5cd65eff5e2fb465d3f64125cafca998643c28dcfd"
     },
     {
       "path": "docs/zh-CN/THEMES.md",
@@ -439,8 +439,8 @@
     },
     {
       "path": "docs/zh-CN/USER-GUIDE.md",
-      "bytes": 47867,
-      "sha256": "9aaf804130695dbcc24ef238e9e962303d18aa6d8e032259e24feb1706eae9c6"
+      "bytes": 48941,
+      "sha256": "d70f439fd8a7edb382e00560d1176550893c56411d13b2b635900bcb050d8674"
     },
     {
       "path": "prototype/.npmrc",
@@ -508,19 +508,24 @@
       "sha256": "9f4e1b216d98885813d72a18a82dd6befa2a5f863557350229a2d7eb839a8109"
     },
     {
+      "path": "prototype/LOCAL-TEST-1.6.2.md",
+      "bytes": 10028,
+      "sha256": "9ac83b0f6f9b338e5d973e4af0fe779b23d975df32f178461099decb6bc3efc4"
+    },
+    {
       "path": "prototype/PLATFORMS-1.3.5.md",
       "bytes": 5102,
       "sha256": "7f2a697f4909abf27c0d8f47055d765e6892484e812446d114cc82d94c39f04a"
     },
     {
       "path": "prototype/README.md",
-      "bytes": 1633,
-      "sha256": "2023e12d77a41377763ad614c591df0371524a174803d5cda8bf4a1555acbb08"
+      "bytes": 1620,
+      "sha256": "9b09a81b2e135c084ddbc0f21985dc44fa3211a8f2ae65e008b25c9ccdc67b28"
     },
     {
       "path": "prototype/RELEASE-ACCEPTANCE.md",
-      "bytes": 35960,
-      "sha256": "b95b49fc1e27805049ceb65fa7e8b79ad1ccf04bd2bd9c967d4853115f8b5b59"
+      "bytes": 37849,
+      "sha256": "082ec67098f77ff8da74d38cff792bef066809e974ea0b02072cdd1d5e69eec1"
     },
     {
       "path": "prototype/THIRD_PARTY_NOTICES.md",
@@ -605,32 +610,32 @@
     {
       "path": "prototype/desktop/bin/platform-engines.json",
       "bytes": 367,
-      "sha256": "4528c01b605550512452cc8735150d8ff2b6e30078ee979a40f50f93534cfe9f"
+      "sha256": "604d844130121cf4920188e38aabaa1f8b1b6470aeb8fab236583e8fb534295f"
     },
     {
       "path": "prototype/desktop/bin/seed-engine-darwin-arm64",
-      "bytes": 751592,
-      "sha256": "b58e251b5c04e70bf2a08b449f2f1635819ef817745972c3c45ff4f548aa7f66"
+      "bytes": 751880,
+      "sha256": "be50c1044176c460f61206451911b2ef656f20b20085c41fad970ae34294565d"
     },
     {
       "path": "prototype/desktop/bin/seed-engine-darwin-x64",
-      "bytes": 730939,
-      "sha256": "85c7bfe5eba57b76c75c66d78231a335ff4468deb29d987b18031f0cc5efa73f"
+      "bytes": 735324,
+      "sha256": "814567758f3864d0b71f42385861e3afbc6d649118db8d86b1e0b99ce7ed9b06"
     },
     {
       "path": "prototype/desktop/bin/seed-engine-linux-x64",
-      "bytes": 1514080,
-      "sha256": "e2bf889082d022ffaeb3eb70fef27f83660b175942e3bcf0297582c8837acc70"
+      "bytes": 1515296,
+      "sha256": "0da1090f758dbd83f1ea75f8d5ba4f36d93e58ca7a89c0a2e72c1d26744e3c82"
     },
     {
       "path": "prototype/desktop/bin/seed-engine.exe",
-      "bytes": 1872896,
-      "sha256": "fac50fb0605ea4c4f07ead3a37b9692a8cb80d653687960a4f228f0bd1e58dbb"
+      "bytes": 1888768,
+      "sha256": "52f06e5502a6eaa19eee627bcc2ce3ccf776ee2f791114b794a0349e2adcabfb"
     },
     {
       "path": "prototype/desktop/bin/seed-engine.json",
       "bytes": 237,
-      "sha256": "38a928305ccbc50cf007cd55d474515c635e8bcb7893e527bf384f1f1fc3b83f"
+      "sha256": "76097a664e44594aa8faf47ac37d9e51e00a75edeebf88815ecbed8f33a5c076"
     },
     {
       "path": "prototype/desktop/bootstrap148.mjs",
@@ -964,8 +969,8 @@
     },
     {
       "path": "prototype/desktop/locales/catalog.json",
-      "bytes": 386851,
-      "sha256": "f88b08e2a6c2ae9b0ff53c5ac2f99e1094d2abcbab771a16075433ba61139cb2"
+      "bytes": 406312,
+      "sha256": "bf87d0df9ed108987287f91d9aa1a05a53e169f549f6dba298352a8aef082c0e"
     },
     {
       "path": "prototype/desktop/localization.mjs",
@@ -979,8 +984,8 @@
     },
     {
       "path": "prototype/desktop/main.mjs",
-      "bytes": 82267,
-      "sha256": "afbc22cd724bc3a2a87fcfd951463bf54da5f882c196087c27df425ec79838cc"
+      "bytes": 82375,
+      "sha256": "f7799dadf9035469e9579c05cad2f0b81007883349fc7f19deebbee5493c3f14"
     },
     {
       "path": "prototype/desktop/maintenance.mjs",
@@ -1218,14 +1223,19 @@
       "sha256": "93b1740b671a515b520431f55fb693ff2a134a3501f13de9d59db8b438ffc67a"
     },
     {
+      "path": "prototype/desktop/seed-coordinates162.mjs",
+      "bytes": 683,
+      "sha256": "6a7adefc91055655a72fddb1e181e28e3878a56753d5ce68fb8e5f55d304504b"
+    },
+    {
       "path": "prototype/desktop/seed-engine134.c",
-      "bytes": 3609,
-      "sha256": "d9f5193a595d773b64f1299df47ac68b0c570cae56eb93d40ebcef08ec01c922"
+      "bytes": 5005,
+      "sha256": "332e459be455a05ba9dbf544230abe9ec9a73e1792f97986ed7465fce707c536"
     },
     {
       "path": "prototype/desktop/seed134.mjs",
-      "bytes": 4733,
-      "sha256": "15f2c94f6876a29a7e6b99fcf5751a1b91c3ce5c951b04ad5a62093d660ffbd1"
+      "bytes": 4985,
+      "sha256": "cabe0e42e54fbb98b09984df5a34e1079d78700cfc9a4909da9a0360062ef6e2"
     },
     {
       "path": "prototype/desktop/server-download160.mjs",
@@ -2434,28 +2444,28 @@
     },
     {
       "path": "prototype/editions/ambere/changelog.en.md",
-      "bytes": 44786,
-      "sha256": "08f8af7164fa320038a5ae5bde81fd4a8164a1abbc4c0f9edb3033d467f3fcb8"
+      "bytes": 45931,
+      "sha256": "668e3dd4b324db85026a200f903fcb2a2c0b85a82b3e9f02e3b5120eb5f646ab"
     },
     {
       "path": "prototype/editions/ambere/changelog.zh.md",
-      "bytes": 38848,
-      "sha256": "5d40cffa2820a32e085d16a24022b2ef04ec6bd3683b734981f9dc06ded558c7"
+      "bytes": 39797,
+      "sha256": "9f9309670f1b16672867e7c81da0a02b9a891166d54f5b426dea50e5683f2752"
     },
     {
       "path": "prototype/editions/ambere/overview.en.md",
-      "bytes": 5660,
-      "sha256": "4b3239347df1fe872696e3c1725cd5e493d97a11aa5202de199b8aa66a982dbd"
+      "bytes": 5585,
+      "sha256": "45b7c0cd72d43de269c6fb2b42dc3e3789b5b7fe2160bfbd4b7778977aecffec"
     },
     {
       "path": "prototype/editions/ambere/overview.zh.md",
-      "bytes": 5177,
-      "sha256": "4ba07bccec4dfa5190b4cc660dcecb1293c112b3910b1456233996839ec356d5"
+      "bytes": 5089,
+      "sha256": "abc53f2daf7172c7ae15eab6fa7c92d443b050a601ec51cecfc846c54035406e"
     },
     {
       "path": "prototype/editions/ambere/testing.md",
-      "bytes": 35960,
-      "sha256": "b95b49fc1e27805049ceb65fa7e8b79ad1ccf04bd2bd9c967d4853115f8b5b59"
+      "bytes": 37849,
+      "sha256": "082ec67098f77ff8da74d38cff792bef066809e974ea0b02072cdd1d5e69eec1"
     },
     {
       "path": "prototype/electron-builder.yml",
@@ -2469,8 +2479,8 @@
     },
     {
       "path": "prototype/package.json",
-      "bytes": 3391,
-      "sha256": "86113c0f8f6b4fc6e18128e772010a1b574a21d9fa006e172b8976738d4ea6d8"
+      "bytes": 3444,
+      "sha256": "94a6256e60cf409343ad075b045099e23bd443a508b7f85f1d8b14acce9864df"
     },
     {
       "path": "prototype/pnpm-lock.yaml",
@@ -2825,7 +2835,7 @@
     {
       "path": "prototype/scripts/package-editions.mjs",
       "bytes": 7598,
-      "sha256": "78a44e1aa96c46a68d976d046a58958c17f5ff79908968cdbb736389bebaa572"
+      "sha256": "5ba28720aa2a9ee8e683be6ef9585792a3a2981d3732558d71ad5ea1b7514bee"
     },
     {
       "path": "prototype/scripts/package-platforms135.py",
@@ -2839,8 +2849,8 @@
     },
     {
       "path": "prototype/scripts/prepare-github.mjs",
-      "bytes": 4565,
-      "sha256": "b0ab8effbec2c811ac01646e4fb4f485e219bc30f73b3e5465e3c660d5b095d0"
+      "bytes": 4598,
+      "sha256": "0be9f7c943d98689ec69d114f7f4355937a47c6e520d5ba5bc60edcc71265989"
     },
     {
       "path": "prototype/scripts/prepare-sites-build.mjs",
@@ -2988,9 +2998,19 @@
       "sha256": "9853bc96690d8b1813d7bf9876384b7b8ed66478ed5390c0099e175c4738a9f6"
     },
     {
+      "path": "prototype/scripts/qa-seed162.cjs",
+      "bytes": 15977,
+      "sha256": "151eb4813d91b5f5ee1e470df0d76f15ce0fe4668656b41fe295546a023dbea8"
+    },
+    {
       "path": "prototype/scripts/qa-smoke150.cjs",
       "bytes": 2619,
       "sha256": "5cd1c51b8e838fd79c68cfa0906a989069f56e6a1d6e15cca9e094d432badd98"
+    },
+    {
+      "path": "prototype/scripts/qa-smoke162.cjs",
+      "bytes": 2651,
+      "sha256": "b4b31d54c0b1c5efd984aa9e5ec1f33c2da75c9033bd2682446aeca8f3db7f0a"
     },
     {
       "path": "prototype/scripts/qa-startup-failures148.cjs",
@@ -3459,8 +3479,13 @@
     },
     {
       "path": "prototype/src/SeedMap134.jsx",
-      "bytes": 21021,
-      "sha256": "1eaff7e3ec34196fb80f1fa55262888111bebe878570af8284a1f5589e779bb6"
+      "bytes": 29985,
+      "sha256": "bf95131298376133f059889c12308415fa8a5e91d3b11996c611350ce702061d"
+    },
+    {
+      "path": "prototype/src/SeedStructureIcon162.jsx",
+      "bytes": 371,
+      "sha256": "5d108c4ea287717cfca7061a90e3d7145645822837e8fb03261d04b5c7c76dea"
     },
     {
       "path": "prototype/src/Select.jsx",
@@ -3763,19 +3788,29 @@
       "sha256": "f63ac227cc1632d86891211f02ca20a1b8247da8263813e8724ac4b6a55e9500"
     },
     {
+      "path": "prototype/src/seed-details162.mjs",
+      "bytes": 5959,
+      "sha256": "fca61dfd400acb06a00cfe39502537cd2f65af6ce3d6253e81fc680427c14913"
+    },
+    {
+      "path": "prototype/src/seed-icons162.mjs",
+      "bytes": 1767,
+      "sha256": "af759a41ddc8fef12ea4f57c8af0cfaa8321a225d1e960995d05ebc674c4364f"
+    },
+    {
       "path": "prototype/src/seed-math161.mjs",
       "bytes": 1737,
       "sha256": "5337fdd97626cfe20f5629e1f603184de111d6599b5245e547e95687662cca29"
     },
     {
       "path": "prototype/src/seed-results161.mjs",
-      "bytes": 1882,
-      "sha256": "acc612c31e3f8e86eff7b3f4ffd2de2958f2325f665cbf27148641b6fb44b4ca"
+      "bytes": 1900,
+      "sha256": "2206abc2475a1f42c1d8e8f445a892d7810ce8c1c6599b921ea222241b230d5d"
     },
     {
       "path": "prototype/src/seed-view134.mjs",
-      "bytes": 1882,
-      "sha256": "30487e89d3d41ed5f4df02df788f380f5cd8cbf433f5ae698ad240e0fe5c63f2"
+      "bytes": 1963,
+      "sha256": "a7d24a822c06157f4852ea5b170000f288009550ac38d1382aafc7953f2f4829"
     },
     {
       "path": "prototype/src/skin-preview150.mjs",
@@ -3891,6 +3926,11 @@
       "path": "prototype/src/workspace161.css",
       "bytes": 6251,
       "sha256": "85c68ed04fd7611625761c906f92b4d4fffc55a9916fafc8568ee1a8314dc37d"
+    },
+    {
+      "path": "prototype/src/workspace162.css",
+      "bytes": 1567,
+      "sha256": "3e8aa2260b4471106c6d3196c4b433dcf15f43d5cbebe7fd7b414319791c1983"
     },
     {
       "path": "prototype/tests/accounts-fabric.test.mjs",
@@ -4123,9 +4163,19 @@
       "sha256": "c1d08128cf4a68ee554a1156bfc79a29bb6e1e933b23e6ee0021b017ddc942a3"
     },
     {
+      "path": "prototype/tests/seed-native162.test.mjs",
+      "bytes": 6317,
+      "sha256": "fca43087eb434dfe4aa58af1e801c7a82e62badeb492fdfd3a154e3757bda06f"
+    },
+    {
       "path": "prototype/tests/seed161.test.mjs",
       "bytes": 6931,
       "sha256": "bae4b6e1c6807db39a9a600ccbbdcd5087e7c8ee56d10ea1a351de62affb5382"
+    },
+    {
+      "path": "prototype/tests/seed162.test.mjs",
+      "bytes": 6275,
+      "sha256": "24131bc9511691cdd4fcf01c12f1f928e650fa501be49c26cf4a149d39bd335f"
     },
     {
       "path": "prototype/tests/servers132.test.mjs",
