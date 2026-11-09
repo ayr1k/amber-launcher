@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MPL-2.0
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {zoomCamera,reliefShade} from '../src/seed-math161.mjs';
+import {zoomCamera,reliefShade,keyboardPanCamera} from '../src/seed-math161.mjs';
 import {mapPosition} from '../src/seed-view134.mjs';
 import {resolveWorldVersion} from '../desktop/world-version161.mjs';
 import {readWorldNBT} from '../desktop/seed134.mjs';
@@ -67,4 +67,17 @@ test('NBT distinguishes missing spawn from actual origin and preserves zero heig
  assert.equal(origin.spawnKnown,true);assert.equal(origin.y,0);assert.equal(origin.seed,'-9223372036854775808');
  const missing=readWorldNBT(world({}));assert.equal(missing.spawnKnown,false);assert.equal(missing.x,null);assert.equal(missing.y,null);
  assert.equal(readWorldNBT(world({SpawnX:30000000,SpawnY:64,SpawnZ:0})).spawnKnown,false);
+});
+
+test('keyboard pan clamps every edge at every scale and remains recoverable after repeat',()=>{
+ for(const scale of [1,4,16,64,256,1024,4096])for(const [key,reverse,axis,sign] of [['ArrowLeft','ArrowRight','x',-1],['ArrowRight','ArrowLeft','x',1],['ArrowUp','ArrowDown','z',-1],['ArrowDown','ArrowUp','z',1]]){
+  let camera={seed:'1',version:35,dimension:0,y:64,x:0,z:0,scale,[axis]:sign*29899998};
+  for(let i=0;i<100;i++){
+   camera=keyboardPanCamera(camera,key);assert.equal(camera[axis],sign*29899999);
+   assert.ok(Math.abs(camera.x)<29900000&&Math.abs(camera.z)<29900000);
+   const request=bufferedRequest(camera,false);assert.ok(Math.abs(request.x)<=29900000&&Math.abs(request.z)<=29900000);
+  }
+  const restored=keyboardPanCamera(camera,reverse);assert.equal(restored[axis],sign*(29899999-scale*40));
+ }
+ const center={x:0,z:0,scale:16};assert.deepEqual(keyboardPanCamera(center,'ArrowRight'),{...center,x:640});assert.equal(keyboardPanCamera(center,'Enter'),center);
 });

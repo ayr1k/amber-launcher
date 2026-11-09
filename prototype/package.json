@@ -1,6 +1,6 @@
 {
   "name": "amber-launcher",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "license": "MPL-2.0",
   "main": "desktop/bootstrap148.mjs",
   "private": true,

@@ -2,6 +2,11 @@
 // Original camera and relief calculations; no reference-app code is used.
 import {viewWidth,viewHeight} from './seed-view134.mjs';
 const bound=n=>Math.max(-29899999,Math.min(29899999,n));
+export function keyboardPanCamera(camera,key){
+ const delta={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]}[key];
+ if(!delta)return camera;
+ return {...camera,x:bound(camera.x+delta[0]*camera.scale*40),z:bound(camera.z+delta[1]*camera.scale*40)};
+}
 export function zoomCamera(camera,scale,x,y,bounds){
  if(!bounds||bounds.width<=0||bounds.height<=0)return {...camera,scale};
  return {...camera,scale,
