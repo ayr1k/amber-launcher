@@ -11,14 +11,14 @@ export function memoryTargets160(mode,pid,creationTime,metrics=[]){
  if(mode==='aggressive')for(const row of metrics){if(!Number.isSafeInteger(row.pid)||row.pid<=0||row.pid===pid)continue;const previous=byPid.get(row.pid);byPid.set(row.pid,{pid:row.pid,creationTime:previous&&previous.creationTime!==row.creationTime?null:row.creationTime});}
  return [...byPid.values()];
 }
-export async function trimWorkingSets160(targets,{execute=exec}={}){
+export async function trimWorkingSets160(targets,{execute=exec,signal,timeout=30000}={}){
  if(!Array.isArray(targets)||!targets.length||targets.length>256||targets.some(t=>!Number.isSafeInteger(t.pid)||t.pid<=0)||new Set(targets.map(t=>t.pid)).size!==targets.length)throw Error('Invalid process list');
  const verified=targets.filter(t=>validCreation(t.creationTime));
  if(!verified.length)return targets.map(t=>({pid:t.pid,ok:false,error:0,status:'identity-unavailable'}));
  const source=await readFile(new URL('./memory-native160.cs',import.meta.url),'utf8');
  const calls=verified.map(t=>`[AmberMemory160]::Trim(${t.pid},[double]::Parse('${t.creationTime}',[Globalization.CultureInfo]::InvariantCulture))`).join('\n');
  const script=`$ErrorActionPreference='Stop'\nAdd-Type -TypeDefinition @'\n${source}\n'@\n$rows=@(\n${calls}\n)\nConvertTo-Json -InputObject $rows -Compress`;
- const {stdout}=await execute(join(process.env.SystemRoot||'C:\\Windows','System32','WindowsPowerShell','v1.0','powershell.exe'),['-NoLogo','-NoProfile','-NonInteractive','-EncodedCommand',Buffer.from(script,'utf16le').toString('base64')],{windowsHide:true,timeout:30000,maxBuffer:128000});
+ const {stdout}=await execute(join(process.env.SystemRoot||'C:\\Windows','System32','WindowsPowerShell','v1.0','powershell.exe'),['-NoLogo','-NoProfile','-NonInteractive','-EncodedCommand',Buffer.from(script,'utf16le').toString('base64')],{windowsHide:true,signal,timeout,maxBuffer:128000});
  const rows=JSON.parse(stdout.trim()),statuses=['trimmed','identity-unavailable','identity-mismatch','exited','access-denied','open-failed','trim-failed'];
  if(!Array.isArray(rows)||rows.length!==verified.length||new Set(rows.map(r=>r.pid)).size!==rows.length||rows.some(r=>!verified.some(t=>t.pid===r.pid)||typeof r.ok!=='boolean'||!Number.isInteger(r.error)||!statuses.includes(r.status)||r.ok!==(r.status==='trimmed')))throw Error('Invalid native memory result');
  return targets.map(t=>rows.find(r=>r.pid===t.pid)||{pid:t.pid,ok:false,error:0,status:'identity-unavailable'});

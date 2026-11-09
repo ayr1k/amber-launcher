@@ -1,0 +1,207 @@
+{
+  "scope": "Isolated unpackaged launcher, real native main-process trim. Hook timing only; no Minecraft launched, no FPS or frame-time measurement.",
+  "results": [
+    {
+      "language": "en-US",
+      "theme": "light",
+      "width": 1440,
+      "height": 960,
+      "scale": 1,
+      "keyboardToggle": true,
+      "persisted": true
+    },
+    {
+      "language": "zh-CN",
+      "theme": "dark",
+      "width": 1000,
+      "height": 720,
+      "scale": 1.25,
+      "keyboardToggle": true,
+      "persisted": true
+    },
+    {
+      "syntheticStatus": true,
+      "distinctCancelButtons": true,
+      "viewportBounds": true
+    }
+  ],
+  "measurements": [
+    {
+      "trial": 0,
+      "result": {
+        "id": 1,
+        "status": "trimmed",
+        "rows": [
+          {
+            "pid": 82620,
+            "ok": true,
+            "error": 0,
+            "status": "trimmed"
+          }
+        ],
+        "elapsedMs": 379,
+        "at": "2026-11-09T22:04:06.824Z"
+      },
+      "chainDelayMs": 381.01009999999997,
+      "disabledDelayMs": 0.09200000000055297,
+      "before": {
+        "at": 1794261846444,
+        "main": {
+          "workingSetSize": 139004,
+          "peakWorkingSetSize": 229424,
+          "privateBytes": 94684
+        },
+        "rssBytes": 142413824,
+        "systemFreeBytes": 34127097856
+      },
+      "immediate": {
+        "at": 1794261846828,
+        "main": {
+          "workingSetSize": 4196,
+          "peakWorkingSetSize": 229424,
+          "privateBytes": 94696
+        },
+        "rssBytes": 4861952,
+        "systemFreeBytes": 34120339456
+      },
+      "after1s": {
+        "at": 1794261847832,
+        "main": {
+          "workingSetSize": 13628,
+          "peakWorkingSetSize": 229424,
+          "privateBytes": 94696
+        },
+        "rssBytes": 13959168,
+        "systemFreeBytes": 34136403968
+      },
+      "after5s": {
+        "at": 1794261851845,
+        "main": {
+          "workingSetSize": 19308,
+          "peakWorkingSetSize": 229424,
+          "privateBytes": 94732
+        },
+        "rssBytes": 19771392,
+        "systemFreeBytes": 34241531904
+      }
+    },
+    {
+      "trial": 1,
+      "result": {
+        "id": 1,
+        "status": "trimmed",
+        "rows": [
+          {
+            "pid": 59064,
+            "ok": true,
+            "error": 0,
+            "status": "trimmed"
+          }
+        ],
+        "elapsedMs": 380,
+        "at": "2026-11-09T22:04:14.174Z"
+      },
+      "chainDelayMs": 380.8639999999996,
+      "disabledDelayMs": 0.026799999999639113,
+      "before": {
+        "at": 1794261853794,
+        "main": {
+          "workingSetSize": 158032,
+          "peakWorkingSetSize": 190084,
+          "privateBytes": 113948
+        },
+        "rssBytes": 161890304,
+        "systemFreeBytes": 34272612352
+      },
+      "immediate": {
+        "at": 1794261854177,
+        "main": {
+          "workingSetSize": 4372,
+          "peakWorkingSetSize": 190084,
+          "privateBytes": 113968
+        },
+        "rssBytes": 5029888,
+        "systemFreeBytes": 34291736576
+      },
+      "after1s": {
+        "at": 1794261855191,
+        "main": {
+          "workingSetSize": 15152,
+          "peakWorkingSetSize": 190084,
+          "privateBytes": 113968
+        },
+        "rssBytes": 15515648,
+        "systemFreeBytes": 34323578880
+      },
+      "after5s": {
+        "at": 1794261859207,
+        "main": {
+          "workingSetSize": 20344,
+          "peakWorkingSetSize": 190084,
+          "privateBytes": 114064
+        },
+        "rssBytes": 20832256,
+        "systemFreeBytes": 34353115136
+      }
+    },
+    {
+      "trial": 2,
+      "result": {
+        "id": 1,
+        "status": "trimmed",
+        "rows": [
+          {
+            "pid": 76108,
+            "ok": true,
+            "error": 0,
+            "status": "trimmed"
+          }
+        ],
+        "elapsedMs": 415,
+        "at": "2026-11-09T22:04:21.096Z"
+      },
+      "chainDelayMs": 415.35849999999846,
+      "disabledDelayMs": 0.05640000000130385,
+      "before": {
+        "at": 1794261860681,
+        "main": {
+          "workingSetSize": 155808,
+          "peakWorkingSetSize": 192848,
+          "privateBytes": 111736
+        },
+        "rssBytes": 159612928,
+        "systemFreeBytes": 34344407040
+      },
+      "immediate": {
+        "at": 1794261861098,
+        "main": {
+          "workingSetSize": 4204,
+          "peakWorkingSetSize": 192848,
+          "privateBytes": 111732
+        },
+        "rssBytes": 4878336,
+        "systemFreeBytes": 34247663616
+      },
+      "after1s": {
+        "at": 1794261862103,
+        "main": {
+          "workingSetSize": 17816,
+          "peakWorkingSetSize": 192848,
+          "privateBytes": 111732
+        },
+        "rssBytes": 18243584,
+        "systemFreeBytes": 34285633536
+      },
+      "after5s": {
+        "at": 1794261866114,
+        "main": {
+          "workingSetSize": 22040,
+          "peakWorkingSetSize": 192848,
+          "privateBytes": 111836
+        },
+        "rssBytes": 22568960,
+        "systemFreeBytes": 34341699584
+      }
+    }
+  ]
+}
