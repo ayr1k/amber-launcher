@@ -1,6 +1,6 @@
 {
   "compiler": "Zig 0.14.1",
   "target": "x86_64-windows-gnu",
-  "sourceSha256": "01e0bf902ed2f8aeedee3c41b4039eb898639dfb0e6470fbd32ee0f533b54766",
-  "binarySha256": "fac50fb0605ea4c4f07ead3a37b9692a8cb80d653687960a4f228f0bd1e58dbb"
+  "sourceSha256": "b99bf9198bd79f7a25d97033396e1ac75fdf6a5dac339231393853582b9c7f7b",
+  "binarySha256": "52f06e5502a6eaa19eee627bcc2ce3ccf776ee2f791114b794a0349e2adcabfb"
 }

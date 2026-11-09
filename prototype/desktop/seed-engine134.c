@@ -25,9 +25,43 @@ int main(int argc,char **argv){
  printf("{\"biomes\":[");for(int i=0;i<n;i++)printf("%s%d",i?",":"",ids[i]);free(ids);printf("],\"heights\":[");
  if(terrain&&dim==0&&mc>=MC_1_18){for(int j=0;j<h;j+=4)for(int i=0;i<w;i+=4){float height;mapApproxHeight(&height,NULL,&g,NULL,(int)floor((x+i*s)/4.0),(int)floor((z+j*s)/4.0),1,1);printf("%s%.1f",i||j?",":"",height);}}
  printf("],\"features\":[");int count=0;
- if(structures){for(int t=0;t<(int)(sizeof(types)/sizeof(types[0]));t++){StructureConfig cfg;if(!getStructureConfig(types[t],mc,&cfg)||cfg.dim!=dim)continue;int size=cfg.regionSize*16;if(size<1)continue;int a=(int)floor((double)x/size),b=(int)floor((double)z/size),c=(int)floor((double)(x+w*s)/size),d=(int)floor((double)(z+h*s)/size);if((c-a+1)*(double)(d-b+1)>1600)continue;
-  for(int rz=b;rz<=d&&count<1200;rz++)for(int rx=a;rx<=c&&count<1200;rx++){Pos p;if(getStructurePos(types[t],mc,seed,rx,rz,&p)&&p.x>=x&&p.z>=z&&p.x<x+w*s&&p.z<z+h*s&&isViableStructurePos(types[t],&g,p.x,p.z,0)){printf("%s{\"type\":\"%s\",\"x\":%d,\"z\":%d}",count?",":"",names[t],p.x,p.z);count++;}}
+ Pos strongholds[128];int strongholdCount=0;
+ const int nt=(int)(sizeof(types)/sizeof(types[0]));
+ const char *status[21];double regions[21]={0};int scanned[21]={0},emitted[21]={0};
+ for(int t=0;t<=nt;t++)status[t]=structures?"unsupported":"disabled";
+ // Strongholds are a sequential, biome-validated search, not a region structure.
+ // Iterate before the feature cap so this sparse, useful layer is never starved.
+ if(structures&&dim==0){
+  StrongholdIter sh;initFirstStronghold(&sh,mc,seed);
+  int total=mc>=MC_1_9?128:3;regions[nt]=total;status[nt]="complete";
+  for(int i=0;i<total;i++){
+   nextStronghold(&sh,&g);scanned[nt]++;
+   Pos p=sh.pos;strongholds[strongholdCount++]=p;
+   if(p.x>=x&&p.z>=z&&p.x<x+w*s&&p.z<z+h*s){
+    printf("%s{\"type\":\"stronghold\",\"x\":%d,\"z\":%d}",count?",":"",p.x,p.z);count++;emitted[nt]++;
+   }
+  }
+ }
+ if(structures){for(int t=0;t<nt;t++){
+  StructureConfig cfg;if(!getStructureConfig(types[t],mc,&cfg)||cfg.dim!=dim)continue;
+  int size=cfg.regionSize*16;if(size<1)continue;
+  int a=(int)floor((double)x/size),b=(int)floor((double)z/size),c=(int)floor((double)(x+w*s)/size),d=(int)floor((double)(z+h*s)/size);
+  regions[t]=(c-a+1)*(double)(d-b+1);
+  if(regions[t]>1600){status[t]="region_limit";continue;}
+  status[t]="complete";
+  for(int rz=b;rz<=d;rz++)for(int rx=a;rx<=c;rx++){
+   if(count>=1200){status[t]="feature_limit";goto next_type;}
+   scanned[t]++;Pos p;
+   if(getStructurePos(types[t],mc,seed,rx,rz,&p)&&p.x>=x&&p.z>=z&&p.x<x+w*s&&p.z<z+h*s&&isViableStructurePos(types[t],&g,p.x,p.z,0)){
+    printf("%s{\"type\":\"%s\",\"x\":%d,\"z\":%d}",count?",":"",names[t],p.x,p.z);count++;emitted[t]++;
+   }
+  }
+  next_type:;
  }}
+ printf("],\"strongholds\":[");
+ for(int i=0;i<strongholdCount;i++)printf("%s{\"type\":\"stronghold\",\"x\":%d,\"z\":%d}",i?",":"",strongholds[i].x,strongholds[i].z);
+ printf("],\"structureStatus\":[");
+ for(int t=0;t<=nt;t++)printf("%s{\"type\":\"%s\",\"status\":\"%s\",\"regions\":%.0f,\"scanned\":%d,\"count\":%d}",t?",":"",t==nt?"stronghold":names[t],status[t],regions[t],scanned[t],emitted[t]);
  printf("],\"slime\":[");int slime=0;if(dim==0&&s<=16){for(int cz=(int)floor(z/16.0);cz<=(z+h*s)/16;cz++)for(int cx=(int)floor(x/16.0);cx<=(x+w*s)/16;cx++)if(isSlimeChunk(seed,cx,cz)){printf("%s[%d,%d]",slime?",":"",cx,cz);slime++;}}
  printf("]}");return 0;
 }

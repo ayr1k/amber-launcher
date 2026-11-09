@@ -18,12 +18,12 @@ export class LatestMapQueue {
  constructor(run,receive,fail,status){Object.assign(this,{run,receive,fail,status});this.closed=false;this.running=false;this.pending=null;this.lastKey='';}
  enqueue(request){
   const key=JSON.stringify(request);if(this.closed||key===this.lastKey)return;
-  this.lastKey=key;this.pending={request,key};this.pump();
+  this.lastKey=key;this.latestRequest=request;this.pending={request,key};this.pump();
  }
  async pump(){
   if(this.running||this.closed)return;this.running=true;this.status(true);
   while(this.pending&&!this.closed){const job=this.pending;this.pending=null;
-   try{const result=await this.run(job.request);if(!this.closed)this.receive({request:job.request,result});}
+   try{const result=await this.run(job.request);if(!this.closed&&sceneKey(job.request)===sceneKey(this.latestRequest))this.receive({request:job.request,result});}
    catch(error){if(!this.closed&&job.key===this.lastKey){this.lastKey='';this.fail(error);}}
   }
   this.running=false;if(!this.closed)this.status(false);

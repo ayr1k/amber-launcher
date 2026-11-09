@@ -1,0 +1,16 @@
+/* SPDX-License-Identifier: MPL-2.0 */
+.seed-status162{padding:12px 0;border-top:1px solid var(--line);font-size:12px;line-height:1.6}
+.seed-limits162{padding-left:20px;font-size:12px;line-height:1.6}
+.seed-detail162{border-block:1px solid var(--line);padding:14px 0;margin:12px 0}
+.seed-detail162 h3{margin:0 0 10px;font-size:16px}.seed-detail162 p{font-size:12px;line-height:1.6;margin:8px 0}
+.seed-detail162 .seed-coordinate162{user-select:text;font-size:15px;font-variant-numeric:tabular-nums}
+.seed-detail-actions162{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.seed-detail-actions162 .button{flex:1 1 auto;min-height:40px}
+.seed-detail162 [role=status]{font-size:12px}.seed-detail162>.text-button{display:block}
+.seed-biome-legend162{margin:12px 0}.seed-biome-legend162 p{font-size:12px;line-height:1.5}
+.seed-biome-legend162>div{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));max-height:210px;overflow:auto;gap:4px}
+.seed-biome-legend162 .text-button{display:flex;align-items:center;gap:8px;text-align:left;min-height:36px}
+.seed-biome-legend162 i{display:inline-block;width:14px;height:14px;flex-shrink:0;border:1px solid var(--line)}
+.seed162 [aria-pressed=true]{color:var(--accent)}
+.seed-results161 .seed-marker .text-button{text-align:left;white-space:normal;overflow-wrap:anywhere;min-height:40px;width:100%}
+.seed-saved-markers p{font-size:12px;line-height:1.6}.seed-saved-markers .seed-marker{flex-wrap:wrap}

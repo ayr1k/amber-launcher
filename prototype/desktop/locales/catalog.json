@@ -11810,5 +11810,761 @@
   "m0eb75ca5e767": {
     "zh": "服务端或联机运行时进入托盘，否则退出",
     "en": "Use tray while servers or networking are active; otherwise quit"
+  },
+  "m5ec7f9ec424e": {
+    "zh": "要塞",
+    "en": "Stronghold"
+  },
+  "m71580f54ce84": {
+    "zh": "村庄",
+    "en": "Village"
+  },
+  "m2d664bcb11b7": {
+    "zh": "沙漠神殿",
+    "en": "Desert pyramid"
+  },
+  "ma8414bc228a3": {
+    "zh": "丛林神庙",
+    "en": "Jungle temple"
+  },
+  "m45984c0ca975": {
+    "zh": "沼泽小屋",
+    "en": "Swamp hut"
+  },
+  "mca579eb36905": {
+    "zh": "雪屋",
+    "en": "Igloo"
+  },
+  "m12c873246826": {
+    "zh": "海底神殿",
+    "en": "Monument"
+  },
+  "m8dd9dc7002bc": {
+    "zh": "林地府邸",
+    "en": "Mansion"
+  },
+  "mf153ce9faa29": {
+    "zh": "掠夺者前哨站",
+    "en": "Outpost"
+  },
+  "maa1b7c23fbf8": {
+    "zh": "海底废墟",
+    "en": "Ocean ruin"
+  },
+  "m90181c3fa3bf": {
+    "zh": "沉船",
+    "en": "Shipwreck"
+  },
+  "m485db2719822": {
+    "zh": "废弃传送门",
+    "en": "Ruined portal"
+  },
+  "m4231177e5f08": {
+    "zh": "远古城市",
+    "en": "Ancient city"
+  },
+  "mdfa8bcd2dff3": {
+    "zh": "埋藏的宝藏",
+    "en": "Buried treasure"
+  },
+  "m4764d4598030": {
+    "zh": "古迹废墟",
+    "en": "Trail ruins"
+  },
+  "m0949de05b9c2": {
+    "zh": "试炼密室",
+    "en": "Trial chambers"
+  },
+  "m88c4d990eac8": {
+    "zh": "废弃营地",
+    "en": "Abandoned camp"
+  },
+  "mfa91fb4c225b": {
+    "zh": "下界要塞",
+    "en": "Nether fortress"
+  },
+  "m7e04115d7fb1": {
+    "zh": "堡垒遗迹",
+    "en": "Bastion"
+  },
+  "mbc42ab436049": {
+    "zh": "下界废弃传送门",
+    "en": "Nether ruined portal"
+  },
+  "m26adb6e29e04": {
+    "zh": "末地城",
+    "en": "End city"
+  },
+  "mc514939265ad": {
+    "zh": "坐标已复制",
+    "en": "Coordinates copied"
+  },
+  "mc28effac2fc9": {
+    "zh": "复制失败，请手动选择坐标复制",
+    "en": "Copy failed; select the coordinates to copy manually"
+  },
+  "m5f1327b661e6": {
+    "zh": "该标记已保存",
+    "en": "Marker already saved"
+  },
+  "m9b44fde4df06": {
+    "zh": "标记已保存",
+    "en": "Marker saved"
+  },
+  "m72be6ea8a40b": {
+    "zh": "标记未保存：本地存储空间不足",
+    "en": "Markers not saved: local storage is full"
+  },
+  "m269635727321": {
+    "zh": "标记",
+    "en": "Marker"
+  },
+  "mf98a11e68935": {
+    "zh": "存档版本无法识别或不受支持。已填入种子，请选择生成版本并点击查看地图。",
+    "en": "World version is unknown or unsupported. Seed filled in; select a generation version and choose View map."
+  },
+  "m5fa631582248": {
+    "zh": "使用同系列近似生成版本；升级过的区块可能不同。",
+    "en": "Using an approximate generation version from the same series; upgraded chunks may differ."
+  },
+  "mfbd96d9b2b32": {
+    "zh": "存档未提供完整出生点；地图暂以原点为中心，原点不是已知出生点。",
+    "en": "The save has no complete spawn coordinates; the map is centered on the origin, which is not a known spawn."
+  },
+  "m5e20fc223736": {
+    "zh": "种子",
+    "en": "Seed"
+  },
+  "m0cf98d1601cc": {
+    "zh": "Java 生成版本",
+    "en": "Java generation version"
+  },
+  "m4fa164bacd53": {
+    "zh": "维度",
+    "en": "Dimension"
+  },
+  "m8496d8bc1660": {
+    "zh": "主世界",
+    "en": "Overworld"
+  },
+  "m9cf91eab4384": {
+    "zh": "下界",
+    "en": "Nether"
+  },
+  "m3c31f09360cb": {
+    "zh": "末地",
+    "en": "The End"
+  },
+  "m80f8fbcfa011": {
+    "zh": "放大",
+    "en": "Zoom in"
+  },
+  "m290f68030501": {
+    "zh": "缩小",
+    "en": "Zoom out"
+  },
+  "m21f2da967532": {
+    "zh": "返回原点",
+    "en": "Origin"
+  },
+  "m07238d2c6808": {
+    "zh": "估算地形阴影",
+    "en": "Estimated relief"
+  },
+  "ma3430f10b5dd": {
+    "zh": "史莱姆区块",
+    "en": "Slime chunks"
+  },
+  "ma8b8730c9611": {
+    "zh": "正在生成…",
+    "en": "Generating…"
+  },
+  "m2c07a378a96e": {
+    "zh": "离线地图",
+    "en": "Offline map"
+  },
+  "mcbfd9ab8afb6": {
+    "zh": "种子地图，方向键移动，加减键缩放",
+    "en": "Seed map: arrows to pan, plus/minus to zoom"
+  },
+  "m06f2f8e0a8f4": {
+    "zh": "格",
+    "en": "blocks"
+  },
+  "m47b793c74bf9": {
+    "zh": "拖动移动；滚轮缩放。",
+    "en": "Drag to pan; scroll to zoom."
+  },
+  "m3d20ee1c809a": {
+    "zh": "请检查坐标范围",
+    "en": "Check coordinate ranges"
+  },
+  "m968dd036cbb1": {
+    "zh": "高度",
+    "en": "Height"
+  },
+  "m4739048374a9": {
+    "zh": "查看地图",
+    "en": "View map"
+  },
+  "m6d81a4e539cc": {
+    "zh": "读取 level.dat…",
+    "en": "Read level.dat…"
+  },
+  "m3dc0c661ea3e": {
+    "zh": "高亮生物群系",
+    "en": "Highlight biome"
+  },
+  "m56831285179c": {
+    "zh": "已加载群系图例",
+    "en": "Loaded biome legend"
+  },
+  "m4e39144b6b1f": {
+    "zh": "采样图例，可能省略小型群系；亮色为当前高亮项。",
+    "en": "Sampled legend; small biomes may be omitted. The selected biome stays bright."
+  },
+  "m779f37b9ec62": {
+    "zh": "隐藏全部结构",
+    "en": "Hide all structures"
+  },
+  "mbc8de1a7d2c9": {
+    "zh": "显示全部结构",
+    "en": "Show all structures"
+  },
+  "m76c497c5df2e": {
+    "zh": "当前版本或维度不支持",
+    "en": "Unsupported in this version or dimension"
+  },
+  "m7c5378606570": {
+    "zh": "不支持",
+    "en": "Unsupported"
+  },
+  "m4fa94f8eab2d": {
+    "zh": "标记名称",
+    "en": "Marker name"
+  },
+  "mdbb54e705349": {
+    "zh": "点击地图添加标记",
+    "en": "Click map to mark"
+  },
+  "m2b62bd0be524": {
+    "zh": "添加标记",
+    "en": "Add marker"
+  },
+  "mcfbdf3fde013": {
+    "zh": "导出标记",
+    "en": "Export markers"
+  },
+  "m78879bedde4b": {
+    "zh": "导入标记",
+    "en": "Import markers"
+  },
+  "mac4f2968eb15": {
+    "zh": "标记文件无效或超过 500 项",
+    "en": "Invalid marker file or over 500 markers"
+  },
+  "m44c0a90d0517": {
+    "zh": "已保存标记",
+    "en": "Saved markers"
+  },
+  "ma789d2b48587": {
+    "zh": "旧标记版本未知，不显示在地图上。确认适用当前版本后可关联。",
+    "en": "Legacy markers have an unknown version and are hidden on the map. Link only after checking compatibility."
+  },
+  "mdbb870dbeacf": {
+    "zh": "关联当前版本",
+    "en": "Link current version"
+  },
+  "mdb7ca415a3c8": {
+    "zh": "正在计算当前条件，结果尚未完整。",
+    "en": "Calculating current conditions; results are not complete yet."
+  },
+  "mc46a0a146b67": {
+    "zh": "计算失败；结果不完整，请重试。",
+    "en": "Calculation failed; results are incomplete. Retry."
+  },
+  "m2736766a6caf": {
+    "zh": "未启用可用结构。",
+    "en": "No available structures enabled."
+  },
+  "mc9b149db8b14": {
+    "zh": "当前视野尚未完整加载。",
+    "en": "Current view is not fully loaded."
+  },
+  "m0bbd886f312e": {
+    "zh": "部分结构结果不完整，详见下方原因。",
+    "en": "Some structure results are incomplete; see reasons below."
+  },
+  "m116189704762": {
+    "zh": "当前视野未找到所选结构预测。这不保证实际世界没有结构。",
+    "en": "No selected structure predictions in this view. This does not guarantee absence in the world."
+  },
+  "mb8a1566b62ab": {
+    "zh": "当前视野的所选结构扫描完成；仍属于生成预测。",
+    "en": "Selected structure scans cover this view; positions remain generation predictions."
+  },
+  "mb90e7c330037": {
+    "zh": "重试地图",
+    "en": "Retry map"
+  },
+  "mb76626c14a19": {
+    "zh": "超过 1600 个区域，已跳过；请放大地图。",
+    "en": "Over 1600 regions; skipped. Zoom in."
+  },
+  "m565659013440": {
+    "zh": "达到 1200 项总上限，已截断；请放大地图。",
+    "en": "1200 total feature limit reached; truncated. Zoom in."
+  },
+  "m780782bc8e4f": {
+    "zh": "当前版本或维度不支持。",
+    "en": "Unsupported version or dimension."
+  },
+  "me0824af891ac": {
+    "zh": "完整性未知，请重新加载。",
+    "en": "Completeness unknown; reload the map."
+  },
+  "m79bb440b6598": {
+    "zh": "结构详情",
+    "en": "Structure details"
+  },
+  "m627107e1bd36": {
+    "zh": "距地图中心",
+    "en": "From map center"
+  },
+  "me5a985b9ab1b": {
+    "zh": "Java 原版生成预测，不保证实际世界生成；地形、升级区块、模组和数据包可能影响结果。",
+    "en": "Java vanilla generation prediction, not a generation guarantee. Terrain, upgraded chunks, mods and datapacks can affect the result."
+  },
+  "m57078e009e43": {
+    "zh": "复制坐标",
+    "en": "Copy coordinates"
+  },
+  "m4cc3885c182e": {
+    "zh": "居中",
+    "en": "Center"
+  },
+  "mc7a38e203144": {
+    "zh": "保存标记",
+    "en": "Save marker"
+  },
+  "med28a394a916": {
+    "zh": "附近重叠结构",
+    "en": "Nearby overlapping structures"
+  },
+  "mfa2b3f69fec4": {
+    "zh": "当前视野结构预测",
+    "en": "Structure predictions in view"
+  },
+  "m16df6d99249e": {
+    "zh": "按距地图中心的直线距离排列。仅列出已加载区域的预测；缩小地图时密集结构可能省略，空列表不代表不存在结构。",
+    "en": "Sorted by straight-line distance from map center. Loaded-area predictions only; dense structures may be omitted when zoomed out. An empty list does not prove absence."
+  },
+  "m2f722a2e7822": {
+    "zh": "没有启用当前版本和维度支持的结构。开启适用的结构筛选后恢复查找。",
+    "en": "No supported structures are enabled for this version and dimension. Enable an available structure filter to resume searching."
+  },
+  "m52c03ba952a0": {
+    "zh": "当前视野尚未完整加载；结果可能不完整。",
+    "en": "The current view is not fully loaded; results may be incomplete."
+  },
+  "m3f7413fbe968": {
+    "zh": "仅显示最近 100 项；放大或使用结构筛选缩小范围。",
+    "en": "Showing the nearest 100 matches; zoom in or filter structures to narrow the results."
+  },
+  "mf72b1a70ff54": {
+    "zh": "Java 原版生成预测。结构位置可能受地形影响；阴影为估算高度，不是逐方块地形。旧存档跨版本生成区域、模组及数据包可能与预测不同。史莱姆区块需放大查看，缩小时密集结构会省略。",
+    "en": "Java vanilla generation prediction. Terrain may affect structures; relief uses estimated heights, not block-accurate terrain. Mixed-version worlds, mods and datapacks may differ. Zoom in for slime chunks and dense structures."
+  },
+  "m44467431f287": {
+    "zh": "海洋",
+    "en": "ocean"
+  },
+  "ma29f9749a487": {
+    "zh": "平原",
+    "en": "plains"
+  },
+  "m4fbf406572d5": {
+    "zh": "沙漠",
+    "en": "desert"
+  },
+  "ma5c0023b3b44": {
+    "zh": "风袭丘陵",
+    "en": "windswept hills"
+  },
+  "m3bfbf21e2f00": {
+    "zh": "森林",
+    "en": "forest"
+  },
+  "mb1a9b3376700": {
+    "zh": "针叶林",
+    "en": "taiga"
+  },
+  "m5a04af801ae6": {
+    "zh": "沼泽",
+    "en": "swamp"
+  },
+  "meebe4a446561": {
+    "zh": "河流",
+    "en": "river"
+  },
+  "m95412be1943e": {
+    "zh": "下界荒地",
+    "en": "nether wastes"
+  },
+  "m91f841b0edad": {
+    "zh": "冻洋",
+    "en": "frozen ocean"
+  },
+  "m77caae98c893": {
+    "zh": "冻河",
+    "en": "frozen river"
+  },
+  "m7d9949f09e9b": {
+    "zh": "雪原",
+    "en": "snowy plains"
+  },
+  "mc3bb797acf2a": {
+    "zh": "雪山",
+    "en": "snowy mountains"
+  },
+  "m484cab61a169": {
+    "zh": "蘑菇岛",
+    "en": "mushroom fields"
+  },
+  "m86ccd1813889": {
+    "zh": "蘑菇岛岸",
+    "en": "mushroom field shore"
+  },
+  "mcdae730e9989": {
+    "zh": "沙滩",
+    "en": "beach"
+  },
+  "m5775950ff60a": {
+    "zh": "沙漠丘陵",
+    "en": "desert hills"
+  },
+  "m8056b9c27fb4": {
+    "zh": "繁茂的丘陵",
+    "en": "wooded hills"
+  },
+  "m2aed0a99d37a": {
+    "zh": "针叶林丘陵",
+    "en": "taiga hills"
+  },
+  "me08539185662": {
+    "zh": "山地边缘",
+    "en": "mountain edge"
+  },
+  "maf322392f203": {
+    "zh": "丛林",
+    "en": "jungle"
+  },
+  "m0c022c5be4fb": {
+    "zh": "丛林丘陵",
+    "en": "jungle hills"
+  },
+  "m369495630383": {
+    "zh": "稀疏的丛林",
+    "en": "sparse jungle"
+  },
+  "md16725cb6347": {
+    "zh": "深海",
+    "en": "deep ocean"
+  },
+  "m326b4225eb2c": {
+    "zh": "石岸",
+    "en": "stony shore"
+  },
+  "mbf89ecc447a5": {
+    "zh": "积雪的沙滩",
+    "en": "snowy beach"
+  },
+  "m24ecbc7c5690": {
+    "zh": "白桦林",
+    "en": "birch forest"
+  },
+  "maa3c041729e1": {
+    "zh": "白桦林丘陵",
+    "en": "birch forest hills"
+  },
+  "m870193fb6bbd": {
+    "zh": "黑森林",
+    "en": "dark forest"
+  },
+  "m4de221a37316": {
+    "zh": "积雪的针叶林",
+    "en": "snowy taiga"
+  },
+  "mded0148dcde8": {
+    "zh": "积雪的针叶林丘陵",
+    "en": "snowy taiga hills"
+  },
+  "m4fad98f5410d": {
+    "zh": "原始松木针叶林",
+    "en": "old growth pine taiga"
+  },
+  "m1e7bfc809aaf": {
+    "zh": "巨型针叶林丘陵",
+    "en": "giant tree taiga hills"
+  },
+  "md507320c2019": {
+    "zh": "风袭森林",
+    "en": "windswept forest"
+  },
+  "mc8564a1d9acf": {
+    "zh": "热带草原",
+    "en": "savanna"
+  },
+  "m1741694d62e9": {
+    "zh": "热带高原",
+    "en": "savanna plateau"
+  },
+  "md1acea0e0fb5": {
+    "zh": "恶地",
+    "en": "badlands"
+  },
+  "maf4e578f10e5": {
+    "zh": "繁茂的恶地",
+    "en": "wooded badlands"
+  },
+  "m41bd38913fdc": {
+    "zh": "恶地高原",
+    "en": "badlands plateau"
+  },
+  "m7e9c9cfc9d85": {
+    "zh": "末地小型岛屿",
+    "en": "small end islands"
+  },
+  "m379bd3391c60": {
+    "zh": "末地内陆",
+    "en": "end midlands"
+  },
+  "m71fa74aa6669": {
+    "zh": "末地高地",
+    "en": "end highlands"
+  },
+  "m3c9c5015a2ae": {
+    "zh": "末地荒地",
+    "en": "end barrens"
+  },
+  "m9cf1ebe56eb8": {
+    "zh": "暖水海洋",
+    "en": "warm ocean"
+  },
+  "m6619582d671a": {
+    "zh": "温水海洋",
+    "en": "lukewarm ocean"
+  },
+  "mf95e02d286bc": {
+    "zh": "冷水海洋",
+    "en": "cold ocean"
+  },
+  "m9d5e5fc00a2d": {
+    "zh": "暖水深海",
+    "en": "deep warm ocean"
+  },
+  "me9afc7624a35": {
+    "zh": "温水深海",
+    "en": "deep lukewarm ocean"
+  },
+  "mf18562552213": {
+    "zh": "冷水深海",
+    "en": "deep cold ocean"
+  },
+  "m161a4472e959": {
+    "zh": "冰冻深海",
+    "en": "deep frozen ocean"
+  },
+  "m4c317fd6345d": {
+    "zh": "季节性森林",
+    "en": "seasonal forest"
+  },
+  "m6a3962b716a1": {
+    "zh": "雨林",
+    "en": "rainforest"
+  },
+  "m822fbee569e4": {
+    "zh": "灌木丛",
+    "en": "shrubland"
+  },
+  "m3a03ee9252ea": {
+    "zh": "虚空",
+    "en": "the void"
+  },
+  "m3fa6846cf591": {
+    "zh": "向日葵平原",
+    "en": "sunflower plains"
+  },
+  "m757e935ae375": {
+    "zh": "沙漠湖泊",
+    "en": "desert lakes"
+  },
+  "m1803dc64e6a6": {
+    "zh": "风袭沙砾丘陵",
+    "en": "windswept gravelly hills"
+  },
+  "mc3fbdba8c71f": {
+    "zh": "繁花森林",
+    "en": "flower forest"
+  },
+  "m1b638ccc2fa2": {
+    "zh": "针叶林山地",
+    "en": "taiga mountains"
+  },
+  "ma9f6f05f85ea": {
+    "zh": "沼泽丘陵",
+    "en": "swamp hills"
+  },
+  "m35b13521157c": {
+    "zh": "冰刺之地",
+    "en": "ice spikes"
+  },
+  "mae5a797c27b4": {
+    "zh": "变种丛林",
+    "en": "modified jungle"
+  },
+  "m55091edd9b8d": {
+    "zh": "变种丛林边缘",
+    "en": "modified jungle edge"
+  },
+  "m7812e20e3562": {
+    "zh": "原始白桦林",
+    "en": "old growth birch forest"
+  },
+  "m8d9575c4fefe": {
+    "zh": "高大白桦丘陵",
+    "en": "tall birch hills"
+  },
+  "mf0676cdbf5f4": {
+    "zh": "黑森林丘陵",
+    "en": "dark forest hills"
+  },
+  "m949788b5d640": {
+    "zh": "积雪的针叶林山地",
+    "en": "snowy taiga mountains"
+  },
+  "m9734b6a4348b": {
+    "zh": "原始云杉针叶林",
+    "en": "old growth spruce taiga"
+  },
+  "mb35897e1adf9": {
+    "zh": "巨型云杉针叶林丘陵",
+    "en": "giant spruce taiga hills"
+  },
+  "m98e8b36503f6": {
+    "zh": "沙砾山地变种",
+    "en": "modified gravelly mountains"
+  },
+  "m8d69f4b003c0": {
+    "zh": "风袭热带草原",
+    "en": "windswept savanna"
+  },
+  "mf4ec2e1556d4": {
+    "zh": "破碎的热带高原",
+    "en": "shattered savanna plateau"
+  },
+  "ma957f814690e": {
+    "zh": "风蚀恶地",
+    "en": "eroded badlands"
+  },
+  "maedc5d8465f7": {
+    "zh": "繁茂的恶地高原变种",
+    "en": "modified wooded badlands plateau"
+  },
+  "m118af24f4eb0": {
+    "zh": "恶地高原变种",
+    "en": "modified badlands plateau"
+  },
+  "mcdc9fdcc767a": {
+    "zh": "竹林",
+    "en": "bamboo jungle"
+  },
+  "m44f0b2f9d9f5": {
+    "zh": "竹林丘陵",
+    "en": "bamboo jungle hills"
+  },
+  "ma012badf090b": {
+    "zh": "灵魂沙峡谷",
+    "en": "soul sand valley"
+  },
+  "m0ee94fa6cb76": {
+    "zh": "绯红森林",
+    "en": "crimson forest"
+  },
+  "m56cbd70e342a": {
+    "zh": "诡异森林",
+    "en": "warped forest"
+  },
+  "ma4993a4127cc": {
+    "zh": "玄武岩三角洲",
+    "en": "basalt deltas"
+  },
+  "mcd631d52e0ad": {
+    "zh": "溶洞",
+    "en": "dripstone caves"
+  },
+  "m26e070af47bd": {
+    "zh": "繁茂洞穴",
+    "en": "lush caves"
+  },
+  "mdbd1a7f404d3": {
+    "zh": "草甸",
+    "en": "meadow"
+  },
+  "mb87e3406d097": {
+    "zh": "雪林",
+    "en": "grove"
+  },
+  "m69d884c00259": {
+    "zh": "积雪的山坡",
+    "en": "snowy slopes"
+  },
+  "m79e335c840c2": {
+    "zh": "尖峭山峰",
+    "en": "jagged peaks"
+  },
+  "mc004669d300a": {
+    "zh": "冰封山峰",
+    "en": "frozen peaks"
+  },
+  "m323def237a69": {
+    "zh": "裸岩山峰",
+    "en": "stony peaks"
+  },
+  "md867f4ef96e9": {
+    "zh": "深暗之域",
+    "en": "deep dark"
+  },
+  "m23656a3236ce": {
+    "zh": "红树林沼泽",
+    "en": "mangrove swamp"
+  },
+  "mec56baaf677d": {
+    "zh": "樱花树林",
+    "en": "cherry grove"
+  },
+  "mc86c3b0750d8": {
+    "zh": "苍白之园",
+    "en": "pale garden"
+  },
+  "m8e59f8d9ede2": {
+    "zh": "硫磺洞穴",
+    "en": "sulfur caves"
+  },
+  "mbcd9be8f5296": {
+    "zh": "斑驳森林",
+    "en": "dappled forest"
+  },
+  "mda78cb4116cc": {
+    "zh": "当前种子、版本下距地图中心最近的要塞预测。需要启用结构计算。",
+    "en": "Nearest predicted stronghold to the map center for this seed and version. Requires structure calculation."
+  },
+  "m936c63817e20": {
+    "zh": "已定位最近要塞的楼梯区块预测坐标，不代表末地传送门房间。",
+    "en": "Located the nearest predicted stronghold staircase chunk, not the portal room."
+  },
+  "m664311bd5c97": {
+    "zh": "定位最近要塞",
+    "en": "Locate nearest stronghold"
   }
 }

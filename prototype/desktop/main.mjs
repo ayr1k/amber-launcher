@@ -22,7 +22,7 @@ import {collectCrashLogs} from './crash-files136.mjs';
 import {redact as redactCrashLog} from './privacy.mjs';
 import {readBoundedFile} from './bounded-io.mjs';
 import {configureTransferBudget} from './task-queue132.mjs';
-import {SeedMap,readWorldFile} from './seed134.mjs';
+import {SeedMap,readWorldFile,coordinateText} from './seed134.mjs';
 import {MinecraftImport} from './minecraft134.mjs';
 import {Servers} from './servers132.mjs';
 import {Rooms} from './rooms132.mjs';
@@ -120,6 +120,7 @@ app.whenReady().then(async () => {
   const seedMap=new SeedMap();
   app.on('before-quit',()=>seedMap.cancel());
   handle('amber:seed-map',async(action,input)=>{
+   if(action==='copy-coordinates'){clipboard.writeText(coordinateText(input));return true;}
    if(action==='catalog')return seedMap.catalog();
    if(action==='map')return seedMap.map(input);
    if(action==='cancel'){seedMap.cancel();return true;}
