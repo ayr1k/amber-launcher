@@ -1,5 +1,5 @@
 {
-  "version": "1.6.3",
+  "version": "1.6.4",
   "repository": "https://github.com/ayr1k/amber-launcher",
   "files": [
     {
@@ -20,22 +20,22 @@
     {
       "path": ".github/workflows/pr-installers.yml",
       "bytes": 2461,
-      "sha256": "60a0c094a6750628841bf25c1ad4e7f53df41f141ad45bbc1d56ba37daf9b82a"
+      "sha256": "12f72a51eaa411f1f7a4dbd789778ffb12fa30f566c72ed38c9ae2a0061009cb"
     },
     {
       "path": ".github/workflows/windows.yml",
-      "bytes": 3517,
-      "sha256": "788efdd2429cddf9c952c528d8f62cd944aea7494e0e823ec3db7ea54c46d7e0"
+      "bytes": 3552,
+      "sha256": "1a830d88c003cfeab6e04e0e61b36e9ba4e074be3d8f3041b8fe9c5c867b7444"
     },
     {
       "path": ".gitignore",
-      "bytes": 484,
-      "sha256": "867a075aa68e4bdc7cfd75a4f046fc46cbcf3e639e3a6ff74d726d33059d2094"
+      "bytes": 506,
+      "sha256": "111d9b1ede4a64ca89bcc31f5bfc94dc23060fc2de42ed5a3cdbf6cdd3e189f9"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 54221,
-      "sha256": "2d317bf9572787e1d75f2023b5f3ece4475493ee2c3741f0c1699b1f05dc66b6"
+      "bytes": 56043,
+      "sha256": "1bcb5aa5370cba369c1377a95b08feebc1120e49ffd324bb051bfa306447f035"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -54,8 +54,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 7802,
-      "sha256": "ae4d47527ee3965958b587d7cda50e44bbb3b797c325c20812574876a3b77d09"
+      "bytes": 7799,
+      "sha256": "47c47a80446596a48d2a4e14042758853ffa7b1b0bb3ab6c393af7d72771f396"
     },
     {
       "path": "SECURITY.md",
@@ -144,8 +144,8 @@
     },
     {
       "path": "docs/TESTING.md",
-      "bytes": 39619,
-      "sha256": "d76267af4986c7bffe8ef57031910ceef80d7815027c7199294d9097a936053c"
+      "bytes": 42023,
+      "sha256": "674b2c4634f4b5d847aa3573fafd6889d14ecab9424e9aa96d2c8f13e506c1fd"
     },
     {
       "path": "docs/THEMES.md",
@@ -154,8 +154,8 @@
     },
     {
       "path": "docs/USER-GUIDE.md",
-      "bytes": 59864,
-      "sha256": "60c2867c914ff4bddbf973b86404914efb05f6aa3322514d09ae038a47b07e1b"
+      "bytes": 61771,
+      "sha256": "daed899654d5816c880237650ea35bacb335e49aa0231307fc3929a806829741"
     },
     {
       "path": "docs/evidence/amber-custom-small-downloads.png",
@@ -368,6 +368,11 @@
       "sha256": "0ff07d187ef42e06546a6c803e7d9e836cfc92118143d6bb6d422fb606f04ec2"
     },
     {
+      "path": "docs/qa-1.6.4-memory.json",
+      "bytes": 5069,
+      "sha256": "bd08ec5745fedf2602005f6aec7fb3fe9dd5350f065f011d7209210bf723958e"
+    },
+    {
       "path": "docs/theme-example.json",
       "bytes": 1805,
       "sha256": "45cf7df7d3788de87301a0520cfab988a5f9041e0f67cb695348d4807269e6d5"
@@ -384,8 +389,8 @@
     },
     {
       "path": "docs/zh-CN/CHANGELOG.md",
-      "bytes": 58372,
-      "sha256": "a878061b6f978f6725e994e3e5f6e75a34488bd3acca944d4cf41289bef6609a"
+      "bytes": 59890,
+      "sha256": "d9d223d37075148976b55cb8fa98d66c357a3facf991f7531125723397ca1536"
     },
     {
       "path": "docs/zh-CN/CONTRIBUTING.md",
@@ -404,8 +409,8 @@
     },
     {
       "path": "docs/zh-CN/README.md",
-      "bytes": 6560,
-      "sha256": "c27ba7003667f9ffeb94987dc936bc6db16700c69e6e4047b58232b96cc9a151"
+      "bytes": 6557,
+      "sha256": "97b0e142fdc28a18d7b78255e0653681f9910b1e4b786d9643f54c7563671be5"
     },
     {
       "path": "docs/zh-CN/ROLLBACK.md",
@@ -429,8 +434,8 @@
     },
     {
       "path": "docs/zh-CN/TESTING.md",
-      "bytes": 27111,
-      "sha256": "bc13c3ae3b0ddb8deb40df851b22769861b3c586572b73bd9dd485586c1fb8a5"
+      "bytes": 29037,
+      "sha256": "f3a741cdc307e422fb915b297b687bb57897486386d2316ad96bdfaab883f348"
     },
     {
       "path": "docs/zh-CN/THEMES.md",
@@ -444,8 +449,8 @@
     },
     {
       "path": "docs/zh-CN/USER-GUIDE.md",
-      "bytes": 50574,
-      "sha256": "0444a842e9d496f9b8ee393b9c6c55a7112a4d11ad462315eee94bfaf18438fd"
+      "bytes": 52197,
+      "sha256": "cb0f39ede8478a8be2345b4132d395ce762cd43ccc35511809046e9bd64feeff"
     },
     {
       "path": "prototype/.npmrc",
@@ -523,6 +528,11 @@
       "sha256": "f0e927fda7c9a0b156a6e627beb255ba9050d20ffe54e26046524af2fe8c6f75"
     },
     {
+      "path": "prototype/LOCAL-TEST-1.6.4.md",
+      "bytes": 10478,
+      "sha256": "008839e7c881ffcd7c56ae2aaee61392087d714ab25057447d378bde65c0d3f1"
+    },
+    {
       "path": "prototype/PLATFORMS-1.3.5.md",
       "bytes": 5102,
       "sha256": "7f2a697f4909abf27c0d8f47055d765e6892484e812446d114cc82d94c39f04a"
@@ -530,12 +540,12 @@
     {
       "path": "prototype/README.md",
       "bytes": 1620,
-      "sha256": "7d5f9f054a764a8800bb87189f909e8dbd0e60e480e572dda31a7968a71a7f6a"
+      "sha256": "99e67bad89346019a325d8eb889144b8b50d1743fb3760d9daf2fe0d19ddb7a7"
     },
     {
       "path": "prototype/RELEASE-ACCEPTANCE.md",
-      "bytes": 40324,
-      "sha256": "e6ade96c97c10b738f653e9f63eea8fe83a5d8226dafe8f4a840debd12689a6c"
+      "bytes": 42728,
+      "sha256": "ab7c07e3b252098749ece58c1bbad0feef5b35ddf017ad1940fcdcfb3384a699"
     },
     {
       "path": "prototype/THIRD_PARTY_NOTICES.md",
@@ -944,8 +954,8 @@
     },
     {
       "path": "prototype/desktop/launcher.mjs",
-      "bytes": 18194,
-      "sha256": "61dfd79be4206006beaf0e9fb66c32306e1c440f343a6e62d468a8ce9ccc3704"
+      "bytes": 18826,
+      "sha256": "a3129d287c3ea80d28968b3a427d0b5e706c03e61475c0bcae03d348b7f47269"
     },
     {
       "path": "prototype/desktop/layout-schema.mjs",
@@ -984,8 +994,8 @@
     },
     {
       "path": "prototype/desktop/locales/catalog.json",
-      "bytes": 406312,
-      "sha256": "bf87d0df9ed108987287f91d9aa1a05a53e169f549f6dba298352a8aef082c0e"
+      "bytes": 410646,
+      "sha256": "cab2ef85fe94a431f7dbc36ac3d7a564e15149e872ed7b46ee4cb241db509e79"
     },
     {
       "path": "prototype/desktop/localization.mjs",
@@ -999,8 +1009,8 @@
     },
     {
       "path": "prototype/desktop/main.mjs",
-      "bytes": 82375,
-      "sha256": "f7799dadf9035469e9579c05cad2f0b81007883349fc7f19deebbee5493c3f14"
+      "bytes": 82908,
+      "sha256": "478e703485c7d3690c689f4177c0775e0ca7a68353eaac135e894f13d096211a"
     },
     {
       "path": "prototype/desktop/maintenance.mjs",
@@ -1019,8 +1029,8 @@
     },
     {
       "path": "prototype/desktop/memory160.mjs",
-      "bytes": 4135,
-      "sha256": "dc605c89c2ac1e1e1b82eb2c9fbfeead159ce61599cc0eb76aaec5d56bb0919b"
+      "bytes": 4157,
+      "sha256": "d3aad0b88d220795271df1ef9ebb53d5cd729d4e5799af8811917d19bf58a696"
     },
     {
       "path": "prototype/desktop/microsoft-config.mjs",
@@ -1118,9 +1128,14 @@
       "sha256": "423aee48a6dd04f1960c2e217c9cf4f24aba7041b3316928f0cbc04db53a02c0"
     },
     {
+      "path": "prototype/desktop/prelaunch-memory164.mjs",
+      "bytes": 3959,
+      "sha256": "6b0cbafe6829658c0fad90a1ebfad242b4f4e2c68a618f4b58df0624ae965ba8"
+    },
+    {
       "path": "prototype/desktop/preload.cjs",
-      "bytes": 17088,
-      "sha256": "b097d2a7a4399022e9e5cb9ee5405dc1510dd0f51411adff8ea271433eab7b04"
+      "bytes": 17178,
+      "sha256": "33758bbb5dc5b20703a0478c4ffa94f17b44e05167e794bc1f4fb748c0b87468"
     },
     {
       "path": "prototype/desktop/privacy-cleanup.mjs",
@@ -1134,8 +1149,8 @@
     },
     {
       "path": "prototype/desktop/problems.mjs",
-      "bytes": 3078,
-      "sha256": "e8e799bfea6280130e83a8588b13b17b5d0edf23395cb4f6cc07cae3d36e50d5"
+      "bytes": 3317,
+      "sha256": "e2244cf6f94455eb637d21a7c61cbfa055ef437f0995900a9c011fc7bfcc4062"
     },
     {
       "path": "prototype/desktop/process-session.mjs",
@@ -2449,8 +2464,8 @@
     },
     {
       "path": "prototype/desktop/workflows.mjs",
-      "bytes": 24908,
-      "sha256": "8c842be9d8bf42edc5b7d928afe816c7723f70c3d2fc7cfac2f946095e926dad"
+      "bytes": 25029,
+      "sha256": "4e2c6903186e2c3f867c343b9ab2eed0531813b37ecfb1876dd5402ce7ae9d4d"
     },
     {
       "path": "prototype/desktop/world-version161.mjs",
@@ -2459,28 +2474,28 @@
     },
     {
       "path": "prototype/editions/ambere/changelog.en.md",
-      "bytes": 47551,
-      "sha256": "fb2b2ff71305dbab7ebaa358ddb21d3e1659c20c8b64738e74e04583007d7513"
+      "bytes": 49373,
+      "sha256": "8abb433cf0c2d70cc86a8076619b8fbe64a1e6899412ded1eda870b2bab53f62"
     },
     {
       "path": "prototype/editions/ambere/changelog.zh.md",
-      "bytes": 41144,
-      "sha256": "4e6bacb31b2a35360ca85cff62516bdd045f2e4005335b003b4137ff63bbcdc0"
+      "bytes": 42662,
+      "sha256": "379625e63d82ebfc3ca80d1ad71329e1a296ee6d6df0f6a2e493536ed8f4e465"
     },
     {
       "path": "prototype/editions/ambere/overview.en.md",
-      "bytes": 5587,
-      "sha256": "a2a2591c975d33933a35d1618b87ca13495b67c465c3297763609c2dc3c2bc50"
+      "bytes": 5584,
+      "sha256": "7a450787d188f8fd4626340b4a81ef6ca97980669d32bc759e8be20551a17e13"
     },
     {
       "path": "prototype/editions/ambere/overview.zh.md",
-      "bytes": 5086,
-      "sha256": "c89c5cf3afdeb6f79ec010b97a0b8e4d7e202565a5d8aa4ca0016b95e4611884"
+      "bytes": 5083,
+      "sha256": "1b13d2140b9e766c99b037519c3581414b66f47272083796cf640748382f92ad"
     },
     {
       "path": "prototype/editions/ambere/testing.md",
-      "bytes": 40324,
-      "sha256": "e6ade96c97c10b738f653e9f63eea8fe83a5d8226dafe8f4a840debd12689a6c"
+      "bytes": 42728,
+      "sha256": "ab7c07e3b252098749ece58c1bbad0feef5b35ddf017ad1940fcdcfb3384a699"
     },
     {
       "path": "prototype/electron-builder.yml",
@@ -2494,8 +2509,8 @@
     },
     {
       "path": "prototype/package.json",
-      "bytes": 3469,
-      "sha256": "18357e1c1ad413dd966b03076efd223941ad399650d403240ec4a8c484dbf2b1"
+      "bytes": 3494,
+      "sha256": "028975e355dbe4af668335c04d39441bbc0219527b08b38242e0a6a1da377451"
     },
     {
       "path": "prototype/pnpm-lock.yaml",
@@ -2849,8 +2864,8 @@
     },
     {
       "path": "prototype/scripts/package-editions.mjs",
-      "bytes": 7598,
-      "sha256": "d915272d4ca68d88c40b2c910c3cea33c364336cac07a01113402250ebabdbaf"
+      "bytes": 7723,
+      "sha256": "89f40dbd7c414c7426b0a7d149dfdb82256baaa13023400a0cb9f3bc0f27752a"
     },
     {
       "path": "prototype/scripts/package-platforms135.py",
@@ -2864,8 +2879,8 @@
     },
     {
       "path": "prototype/scripts/prepare-github.mjs",
-      "bytes": 4734,
-      "sha256": "f4d8ff1a8ee95b539fdbb5d7b42ab678a7f110c960530984e8b5d794ae46e4d8"
+      "bytes": 4812,
+      "sha256": "04919f066c93de0c7eca8a0257ddca65ca79d83772596d0bc99a315c88e153e1"
     },
     {
       "path": "prototype/scripts/prepare-sites-build.mjs",
@@ -2876,6 +2891,11 @@
       "path": "prototype/scripts/qa-boundary161.cjs",
       "bytes": 4055,
       "sha256": "b00933885688547235cac3bd0dace4bd42393a9c0c2cbeb2a0368fb886daa167"
+    },
+    {
+      "path": "prototype/scripts/qa-cancel164.cjs",
+      "bytes": 4527,
+      "sha256": "3cde12a0f7ff0698a4bde920a08c8d2fba71615c6afe972df9a906e24fb1f892"
     },
     {
       "path": "prototype/scripts/qa-components160.cjs",
@@ -2968,6 +2988,11 @@
       "sha256": "9081892e3c6dfad39b6bcef516a182d4c74c05f0023be70994dffd831407dcaf"
     },
     {
+      "path": "prototype/scripts/qa-memory164.cjs",
+      "bytes": 5877,
+      "sha256": "b0d0e067e2e164eb7456f0edb0be176febce58f49e62d397538f21b0e4004b2e"
+    },
+    {
       "path": "prototype/scripts/qa-missing154.cjs",
       "bytes": 6248,
       "sha256": "33525167919aa237c32dde83bef68e4ad065ff9513b211af80ea767296987676"
@@ -3046,6 +3071,11 @@
       "path": "prototype/scripts/qa-smoke163.cjs",
       "bytes": 2651,
       "sha256": "bc17f20dbe1d03badff1bea8931ee65d51daea4f98ae8e967ce6b509cc5686f7"
+    },
+    {
+      "path": "prototype/scripts/qa-smoke164.cjs",
+      "bytes": 2651,
+      "sha256": "4300496b3ca6ddf12e87e59de56cc25a97ad44de63927ec5a4c1448d50be7854"
     },
     {
       "path": "prototype/scripts/qa-startup-failures148.cjs",
@@ -3269,8 +3299,8 @@
     },
     {
       "path": "prototype/src/DesktopApp.jsx",
-      "bytes": 23533,
-      "sha256": "3e86e3574cc9e2c19f33a424dfaf9a4bfbc522c473556d0fce3eb0714243364d"
+      "bytes": 23611,
+      "sha256": "fe36da70e9d91aacbfc532b20411c284d44610f705f567dfc399b32ae0ea3612"
     },
     {
       "path": "prototype/src/Enchant150.jsx",
@@ -3464,13 +3494,18 @@
     },
     {
       "path": "prototype/src/Preferences.jsx",
-      "bytes": 9461,
-      "sha256": "7d613ab37bf2fd9137a7f5e8322e3fd5ded842285a072da61822d28edf011275"
+      "bytes": 9611,
+      "sha256": "b868e3b40fa00176f87e5a2866978f274307344b3442719662dae62aa71261a2"
     },
     {
       "path": "prototype/src/Preferences160.jsx",
-      "bytes": 5229,
-      "sha256": "a4057e5a559afd359cf10a413838dd4009ce4cdafc2819ea91f98a69326a9df6"
+      "bytes": 5305,
+      "sha256": "79a90ced7cb8254a62d5e034661ef32d5304f5a48f33d6fdc68f12d0b27203b6"
+    },
+    {
+      "path": "prototype/src/PrelaunchMemory164.jsx",
+      "bytes": 4570,
+      "sha256": "84ca9a363f4a2ba89c643749b2c779b79bec56d889941322d365bca5c4769828"
     },
     {
       "path": "prototype/src/PrivacyPanel.jsx",
@@ -3774,13 +3809,18 @@
     },
     {
       "path": "prototype/src/main.jsx",
-      "bytes": 20391,
-      "sha256": "1ba1cfa830f129254c86f6dc67a0c503aa3b64f48dc4531fa663acf0c6cd3e6a"
+      "bytes": 20417,
+      "sha256": "eb5dbe160fca822982ece869150060aebe8852eb56610c3d428a283dc5c7f9ac"
     },
     {
       "path": "prototype/src/maintenance154.css",
       "bytes": 2176,
       "sha256": "cdb6395fcda9ecd4c9b797607adc9df4998b0c052dc9a86b25386af76ff4b9a4"
+    },
+    {
+      "path": "prototype/src/memory164.css",
+      "bytes": 514,
+      "sha256": "b250f2ec6595feb51a2f81d674534db35fd8a47857be483613b41770b68832ec"
     },
     {
       "path": "prototype/src/model.js",
@@ -4121,6 +4161,11 @@
       "path": "prototype/tests/memory-native160-tests.cs",
       "bytes": 2460,
       "sha256": "5779a119b97ab9d94a159d84752cf8014935e11157fc26794bb6d763c9815b71"
+    },
+    {
+      "path": "prototype/tests/memory164.test.mjs",
+      "bytes": 12391,
+      "sha256": "4d77a1561bde2c6ba68554375944c1549fee7fc7084f8983062b4f81eea4cbf7"
     },
     {
       "path": "prototype/tests/model.test.mjs",
