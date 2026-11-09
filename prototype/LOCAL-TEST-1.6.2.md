@@ -1,3 +1,9 @@
+# 1.6.2 formal release / 正式发布
+
+PR #12 merged as `9a30c1fd66e8e3ab1de44db7e00c0736596485fc`; accepted final task head: `7c18cd8a7ad25c96ae97836983010e1609113d0e`. The user requested the complete formal release on 2026-11-09 (America/New_York). Official packages use **1.6.2/public**. The candidate-only/local-channel/awaiting-acceptance wording below records the earlier task stage and is superseded for this formal release. Existing separate review, final-head CI and user acceptance are reused without another content review. Formal verification is recorded in RELEASE-ACCEPTANCE.md.
+
+PR #12 已批准合并，用户已授权正式发布。以下“测试版／local 渠道／待验收”等描述保留任务阶段历史；本次正式包使用 1.6.2/public，沿用既有审核与验收，不重复内容审核。
+
 # AMBER / AmberE 1.6.2 task test guide
 
 This is a development test build, not a formal release. Both editions use the same map implementation. The PR records the tested commit, CI run, installer downloads and SHA-256 checksums. User acceptance and explicit merge approval are still required.

@@ -1,3 +1,12 @@
+## 1.6.2
+
+- Inspect structure details, copy predicted coordinates, center the map and save markers. Overlapping icons offer a choice; all 21 structure types have distinct original vector icons shared across map, filters and details.
+- Locate the nearest biome-validated stronghold staircase chunk from the supported generation version's full set (3 before Java 1.9, 128 thereafter). This is not a portal-room location; at least one structure filter must be enabled.
+- Read bilingual biome names and a sampled color legend; select a biome to highlight it. Small biomes can be absent from the sampled legend.
+- Distinguish loading, failed calculation, unsupported types, incomplete coverage, empty scans and truncation. Preserve the 1600-region and 1200-feature limits; the results list separately displays up to 100 nearest matches. Empty results do not prove absence.
+- Bind new markers to seed, generation version and dimension. Keep legacy markers saved with explicit version linking. Ignore stale scene results. Copy and markers preserve native coordinates up to ±31,000,000; navigation clamps only the camera to ±29,899,999 with an explanation. Predictions outside the world border are not a generation guarantee.
+- Preserve executable Linux/macOS helper modes. Linux native/map tests run from a clean checkout; macOS runtime and full non-Windows desktop acceptance remain unverified. Existing product policies, theme assets and community acknowledgements remain unchanged.
+
 ## 1.6.1
 
 - Anchor wheel zoom to the pointer while keeping toolbar zoom centered. Keyboard panning uses the latest camera and clamps world edges; integer coordinate edit drafts preserve fractional camera precision and remain valid after zoom, seed or version changes.

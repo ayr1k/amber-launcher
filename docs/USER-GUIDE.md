@@ -310,3 +310,13 @@ Structure filters depend on generation version and dimension; unsupported choice
 Map basics span the top; wide windows place the map beside internally scrolling settings. Gradient output format sits beside the title, with editing/preview/local color left and base gradient/output right. The overview band remains 16px high, and notices remain separate from output. Narrow windows stack and scroll to preserve access. The file editor retains its existing arrangement, adapting to remaining height with minimum usable space and scrolling.
 
 Existing task review and scoped evidence are retained without another content review. No personal world was opened or modified in those checks; real-world generation, multiplayer, installer-over-stable migration and native non-Windows runtime are not established. Cubiomes keeps its MIT notices; no Axolotl GPL application code/assets were copied. See [task evidence](../prototype/LOCAL-TEST-1.6.1.md) and [layout evidence](QA-1.6.1-LAYOUT.md).
+
+## 1.6.2: structure navigation and saved map markers
+
+Select a structure icon or a keyboard-accessible result to view details, copy its coordinates, center the map or save a marker. Overlapping points offer a choice. Coordinates are predictions, not scans of saved terrain. Copy/export and saved markers preserve native coordinates up to ±31,000,000; map navigation alone clamps the camera to ±29,899,999 and explains the adjustment. Actual borders, terrain, mods and datapacks can differ.
+
+In the Overworld, Locate nearest stronghold chooses the nearest biome-validated staircase chunk from all 3 pre-1.9 or 128 newer-version candidates, including candidates outside the viewport. It does not locate the portal room. Enable at least one structure filter for calculation. Click a sampled biome legend entry to highlight it, and click again to clear; small biomes may not appear in the sample.
+
+Read each structure type's status before interpreting results. A region grid above 1600 is skipped, and reaching 1200 total features truncates remaining scans. Loading, failure, incomplete coverage, unsupported types and completed empty scans are distinct. The visible list separately caps at 100 nearest matches. None of the incomplete states proves absence.
+
+New markers belong to a seed, generation version and dimension. Switching context hides unrelated markers without deleting them. Legacy markers stay saved but require explicit linking to a version before map display; export them before linking if you need the original metadata. Repeatedly saving the same named point is idempotent. See [the task guide](../prototype/LOCAL-TEST-1.6.2.md) for original evidence and limits.
