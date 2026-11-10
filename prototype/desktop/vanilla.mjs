@@ -56,5 +56,6 @@ export function launchArguments(meta,plan,{dir,root,natives,username,memory=4,id
  const logging=plan.logging?[meta.logging.client.argument.replace('${path}',plan.logging.path)]:[];
  const expandedJvm=expandArguments(jvm,vars,gameEnvironment(platform,arch));
  if(platform==='darwin'&&!expandedJvm.includes('-XstartOnFirstThread'))expandedJvm.unshift('-XstartOnFirstThread');
- return ['-Xms512M',`-Xmx${memory}G`,'-Dfile.encoding=UTF-8',...extraJvm,...expandedJvm,...logging,meta.mainClass,...expandArguments(game,vars,gameEnvironment(platform,arch))];
+ const expandedGame=expandArguments(game,vars,gameEnvironment(platform,arch));plan.validateGameArguments?.(expandedGame,vars);
+ return ['-Xms512M',`-Xmx${memory}G`,'-Dfile.encoding=UTF-8',...extraJvm,...expandedJvm,...logging,meta.mainClass,...expandedGame];
 }

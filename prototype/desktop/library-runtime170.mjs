@@ -12,6 +12,10 @@ import {identifier} from './import-identify151.mjs';
 const mainClasses=new Set(['net.minecraft.client.main.Main','net.minecraft.launchwrapper.Launch','net.fabricmc.loader.impl.launch.knot.KnotClient','net.fabricmc.loader.launch.knot.KnotClient','org.quiltmc.loader.impl.launch.knot.KnotClient']);
 const tweaks=new Set(['net.minecraftforge.fml.common.launcher.FMLTweaker','cpw.mods.fml.common.launcher.FMLTweaker','optifine.OptiFineTweaker','optifine.OptiFineForgeTweaker','com.mumfrey.liteloader.launch.LiteLoaderTweaker']);
 function maven(name,classifier){const p=name.split(':');if(p.length<3||p.length>4||p.some(s=>!/^[-\w.+]+$/.test(s)))throw Error('Invalid library coordinate / 依赖坐标无效');return `${p[0].replaceAll('.','/')}/${p[1]}/${p[2]}/${p[1]}-${p[2]}${classifier||p[3]?'-'+(classifier||p[3]):''}.jar`;}
+export function validateGameValues170(values,vars){
+ for(let i=0;i<values.length;i++){if(values[i]==='--tweakClass'&&!tweaks.has(values[i+1]))throw Error('Unknown tweak class / 未识别的启动扩展');if(/^--(?:tweakClass|gameDir|assetsDir|assetIndex|username|uuid|accessToken|userProperties|xuid|clientId)=/.test(values[i]))throw Error('Ambiguous protected argument / 受保护参数有歧义');}
+ for(const [option,value] of [['--gameDir',vars?.game_directory??'${game_directory}'],['--assetsDir',vars?.assets_root??'${assets_root}'],['--accessToken',vars?.auth_access_token??'${auth_access_token}'],['--uuid',vars?.auth_uuid??'${auth_uuid}'],['--username',vars?.auth_player_name??'${auth_player_name}']]){const positions=values.flatMap((v,i)=>v===option?[i]:[]);if(positions.length>1||positions.some(i=>values[i+1]!==value))throw Error('Unsafe protected argument / 不安全的受保护启动参数');}
+}
 export function safeArguments170(meta,env=gameEnvironment()){
  if(!mainClasses.has(meta.mainClass))throw Error('This launch entry is not supported yet; use the original launcher / 此启动入口尚不支持，请使用原启动器');
  const legacy=meta.minecraftArguments?.match(/"[^"]*"|\S+/g)?.map(s=>s.replace(/^"|"$/g,''));
@@ -22,8 +26,7 @@ export function safeArguments170(meta,env=gameEnvironment()){
  // Persist only strings in this in-memory plan, so later expansion cannot change adjacency.
  const values=effectiveArguments(game,env);
  if(allValues.some(v=>typeof v!=='string'||v.length>10000||/[\x00-\x1f]/.test(v)))throw Error('Invalid game arguments / 游戏参数无效');
- for(let i=0;i<values.length;i++){if(values[i]==='--tweakClass'&&!tweaks.has(values[i+1]))throw Error('Unknown tweak class / 未识别的启动扩展');if(/^--(?:tweakClass|gameDir|assetsDir|assetIndex|username|uuid|accessToken|userProperties|xuid|clientId)=/.test(values[i]))throw Error('Ambiguous protected argument / 受保护参数有歧义');}
- for(const [option,value] of [['--gameDir','${game_directory}'],['--assetsDir','${assets_root}'],['--accessToken','${auth_access_token}'],['--uuid','${auth_uuid}'],['--username','${auth_player_name}']]){const positions=values.flatMap((v,i)=>v===option?[i]:[]);if(positions.length>1||positions.some(i=>values[i+1]!==value))throw Error('Unsafe protected argument / 不安全的受保护启动参数');}
+ validateGameValues170(values);
  // External JVM flags, agents, wrappers and shell commands are never adopted.
  const jvm=meta.arguments?.jvm||[];
  const allowed=new Set(['-Djava.library.path=${natives_directory}','-Dminecraft.launcher.brand=${launcher_name}','-Dminecraft.launcher.version=${launcher_version}','-cp','${classpath}','-XstartOnFirstThread','-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump','-Dos.name=Windows 10','-Dos.version=10.0']);
@@ -60,7 +63,7 @@ export async function localPlan170(root,profile,env=gameEnvironment()){
  if(!meta.logging?.client&&(meta.libraries||[]).some(l=>l.name?.startsWith('org.apache.logging.log4j:log4j-core:'))){const old=/^1\.(?:[0-9]|10|11)(?:\.|$)/.test(profile.game),id=old?'client-1.7.xml':'client-1.12.xml';meta.logging={client:{argument:'-Dlog4j.configurationFile=${path}',type:'log4j2-xml',file:{id,sha1:old?'50c9cc4af6d853d9fc137c84bcd153e2bd3a9a82':'bd65e7d2e3c237be76cfbef4c2405033d7f91521',size:old?966:888}}};}
 
  if(meta.logging?.client){const c=meta.logging.client,f=c.file;if(c.argument!=='-Dlog4j.configurationFile=${path}'||c.type!=='log4j2-xml'||!identifier(f?.id)||!/^client.*\.xml$/.test(f.id)||!['bd65e7d2e3c237be76cfbef4c2405033d7f91521','50c9cc4af6d853d9fc137c84bcd153e2bd3a9a82'].includes(f.sha1))throw Error('Unsupported logging configuration; repair using the original launcher / 不支持的日志安全配置，请使用原启动器修复');logging={path:await add('assets/log_configs/'+f.id,f)};}
- return {meta,plan:{files,classpath,natives,index:{path:index},logging}};
+ return {meta,plan:{files,classpath,natives,index:{path:index},logging,validateGameArguments:(values,vars)=>validateGameValues170(values,{...vars,game_directory:profile.gameDir??vars.game_directory,assets_root:join(root,'assets')})}};
 }
 export class LibraryRuntime170 extends VanillaLauncher {
  constructor(registry,entry,stateRoot){super(entry.path);this.registry=registry;this.libraryId=entry.id;this.stateRoot=stateRoot;}
