@@ -21,6 +21,18 @@ This feedback round supersedes the fc49e5c installers. It remains Draft PR #15, 
 
 ## Data boundaries
 
+Review correction: f42939d packages are superseded. Running sessions now persist the canonical launch directory and filesystem identity; recovered sessions protect that directory even if the original launcher changes or removes the version profile. A live legacy session without verifiable directory identity blocks writes until stopped. Bulk, catalog, update and local-import plans bind the directory and profile fingerprint and recheck under the shared operation lock. Environment creation, graphics Java inspection/copy and floating task feedback follow the selected library. The eight drift/scope regressions use synthetic files and controlled Node sessions, not real games. Desktop task/graphics regressions use controlled IPC responses and do not modify the clipboard.
+
+### Remaining implementation, not fulfilled parity
+
+These restrictions also apply to ordinary supported HMCL/PCL profiles, not only unusual launchers. Native component replacement and repair depend on AMBER installation receipts, ownership and loader-install transactions; external inherited profiles lack those receipts and may share loader libraries with other versions. Reusing the native writer would risk replacing shared files or rewriting another launcher's configuration. There is currently no explicit external component-replacement or missing-launch-file repair transaction; the supported path remains the original launcher. Completing these features requires an external ownership/dependency model, verified repair plans and rollback without rewriting unrelated profiles.
+
+Whole-pack replacement similarly needs a verified original pack receipt and file-ownership diff to distinguish pack files from user saves/configuration. That external transaction is not implemented; individual content installation/update/removal is available. Independent full backup additionally needs a verified closure of the inheritance chain and shared launch resources, with a standalone restore recipe. Current restore is an isolated child version and still depends on the original chain; it is not disaster recovery after deleting the source library. These are substantive remaining capabilities requiring user acceptance or further development.
+
+本轮审查修复使运行会话固定记录启动时的真实目录和文件系统身份；重启或原启动器修改配置后仍保护原目录，无法核实的旧会话先阻止写入。批量、目录安装、更新及本地导入预览绑定目录与配置指纹，环境导入、任务反馈和 Java 信息跟随所选库。f42939d 安装包已过时。
+
+仍未完成的功能同样影响普通受支持 HMCL/PCL 实例：外部组件替换、缺失启动文件修复缺少 AMBER 原生安装凭据与共享文件所有权，不能直接复用原生写入流程；尚无对应外部安全事务，需要补齐依赖、来源校验、预览和回滚。整包替换尚缺原整合包文件所有权清单及差异事务，当前可使用单项内容管理。独立完整备份还需收集并校验继承链及共享启动资源并生成独立恢复方案；当前备份恢复依赖原继承链，不是删除原库后的灾难恢复。这些是实质剩余工作，不以禁用入口宣称等价。
+
 Renderer requests capture a library ID. Async service graphs retain that identity through completion. Switching remounts instance pages and invalidates stale plans. Accounts, application preferences and update channels remain product-specific. Additional managed libraries use the same native service graph.
 
 External launch/session state stays in library-state170/<library-id>/<version-id>. Actual game files are separate from AMBER metadata. Content state, locks and history use the confirmed ordinary game directory, shared by versions using that directory. Original JSON and HMCL/PCL configuration are not rewritten for names or scans. Restored backups create an isolated version inheriting the unchanged source.

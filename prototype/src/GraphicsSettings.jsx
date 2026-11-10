@@ -1,3 +1,4 @@
+import {useLibraryApi170} from './LibraryContext170';
 import {ControlButton} from './ControlButton.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import {useEffect,useState} from 'react';
@@ -7,8 +8,8 @@ import {Select} from './Select';
 import {SettingRow} from './SettingRow';
 export function graphicsLabel(mode){return mode==='unknown'?translateText("未知"):mode==='high-performance'?translateText("优先高性能显卡"):mode==='power-saving'?translateText("优先节能显卡"):translateText("跟随系统");}
 export function GraphicsSettings({instance,value,onChange,compact=false}){useLocale();
- const api=window.amberDesktop,[info,setInfo]=useState(null),[error,setError]=useState(''),[busy,setBusy]=useState(false),[notice,setNotice]=useState(''),[retry,setRetry]=useState(0);
- useEffect(()=>{let live=true;setInfo(null);api.graphicsInfo(instance?.id).then(v=>live&&setInfo(v)).catch(e=>live&&setError(e.message));return()=>{live=false;};},[instance?.id,retry]);
+ const api=useLibraryApi170(),[info,setInfo]=useState(null),[error,setError]=useState(''),[busy,setBusy]=useState(false),[notice,setNotice]=useState(''),[retry,setRetry]=useState(0);
+ useEffect(()=>{let live=true;setInfo(null);api.graphicsInfo(instance?.id).then(v=>live&&setInfo(v)).catch(e=>live&&setError(e.message));return()=>{live=false;};},[api,instance?.id,retry]);
  async function change(mode){setBusy(true);setError('');try{const current=await api.settings(),saved=await api.saveSettings({...current,graphicsMode:mode});onChange?.(saved);window.dispatchEvent(new Event('amber-settings-changed'));setNotice(translateText("显卡偏好已保存，下次启动游戏时应用。"));}catch(e){setError(e.message);}finally{setBusy(false);}}
  async function open(){try{await api.openGraphicsSettings();}catch(e){setError(e.message);}}
  async function restore(){setBusy(true);setError('');try{await api.restoreGraphics();const saved=await api.settings();onChange?.(saved);window.dispatchEvent(new Event('amber-settings-changed'));setNotice(translateText("已恢复 AMBER 修改的显卡偏好；你在系统中另作的修改会保留。"));}catch(e){setError(e.message);}finally{setBusy(false);}}

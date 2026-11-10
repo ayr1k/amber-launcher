@@ -1,3 +1,4 @@
+import {contentTarget170,assertContentTarget170} from './content-target170.mjs';
 import {CurseForge141,cfProject} from './curseforge141.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import {instanceLoaders,compareContentVersions} from './compatibility.mjs';
@@ -31,7 +32,7 @@ export class Modrinth {
  async manifest(dir){try{return JSON.parse(await readFile(join(dir,'content.json'),'utf8'));}catch(e){if(e.code==='ENOENT')return {schema:1,files:[]};throw e;}}
  async preview(instanceId,versionId,selectedOptional=[],excludedRequired=[],interactive=false){
   if(!Array.isArray(selectedOptional)||selectedOptional.length>100||selectedOptional.some(k=>typeof k!=='string'||k.length>220))throw Error('可选依赖选择无效');if(!Array.isArray(excludedRequired)||excludedRequired.length>100||excludedRequired.some(k=>typeof k!=='string'||k.length>220))throw Error('必需依赖选择无效');const selected=new Set(selectedOptional),excluded=new Set(excludedRequired),optional=[],required=[],blockers=[];
-  const {item,dir}=await this.core.metadata(instanceId),installed=await this.manifest(dir),chosen=new Map(),warnings=[],incompatible=[];
+  const metadata=await this.core.metadata(instanceId),{item,dir}=metadata,target170=await contentTarget170(this.core,instanceId,metadata),installed=await this.manifest(dir),chosen=new Map(),warnings=[],incompatible=[];
   const visit=async(version,expected)=>{
    const v=await this.api('version/'+id(version));if(expected&&v.project_id!==expected)throw Error('依赖项目与版本不匹配。');
    if(chosen.has(v.project_id)){if(chosen.get(v.project_id).versionId!==v.id)throw Error('依赖要求冲突：同一项目需要两个不同版本。');return;}
@@ -73,14 +74,14 @@ export class Modrinth {
   for(const d of incompatible){const conflict=[...files,...installed.files.filter(f=>f.enabled!==false)].find(f=>d.version_id?f.versionId===d.version_id:f.projectId===d.project_id);if(conflict){const message=`「${d.owner}」与「${conflict.title}」声明不兼容。请到已安装内容停用其中一个，再重新检查依赖。`;if(!interactive)throw Error(message);blockers.push(message);}}
   const paths=new Set();for(const f of files){const key=f.relative.toLowerCase();if(paths.has(key))throw Error('依赖文件名冲突。');paths.add(key);}
   warnings.push('兼容性来自作者声明；无法保证所有模组组合均可运行。光影需要 Iris 或 OptiFine 等对应支持。');
-  const plan={id:randomUUID(),rootVersionId:versionId,selectedOptional:[...selected],excludedRequired:[...excluded],required,blockers,compatible:!blockers.length,instanceId,manifestStamp:manifestStamp(installed),game:item.game,loader:item.loader,loaderVersion:item.loaderVersion,loaderSha1:item.loaderSha1,files,warnings,optional,expiresAt:Date.now()+600000};this.plans.set(plan.id,plan);for(const [key,v]of this.plans)if(v.expiresAt<Date.now())this.plans.delete(key);return plan;
+  const plan={id:randomUUID(),rootVersionId:versionId,selectedOptional:[...selected],excludedRequired:[...excluded],required,blockers,compatible:!blockers.length,instanceId,manifestStamp:manifestStamp(installed),game:item.game,loader:item.loader,loaderVersion:item.loaderVersion,loaderSha1:item.loaderSha1,files,warnings,optional,expiresAt:Date.now()+600000};await assertContentTarget170(this.core,instanceId,target170);plan.target170=target170;this.plans.set(plan.id,plan);for(const [key,v]of this.plans)if(v.expiresAt<Date.now())this.plans.delete(key);return plan;
  }
  async install(instanceId,planId){
   const plan=this.plans.get(planId);if(!plan||plan.instanceId!==instanceId||plan.expiresAt<Date.now())throw Error('安装预览已过期，请重新预览。');
   if(plan.compatible===false)throw Error('依赖检查尚未通过，请调整勾选项目：'+plan.blockers.join('；'));
   const {item,dir}=await this.core.metadata(instanceId);await this.core.requireStopped(dir);
   if(item.game!==plan.game||item.loader!==plan.loader||item.loaderVersion!==plan.loaderVersion||item.loaderSha1!==plan.loaderSha1)throw Error('实例加载器已更改，请重新预览。');
-  return this.core.startJob(instanceId,'content',async(job,signal)=>{
+  await assertContentTarget170(this.core,instanceId,plan.target170);return this.core.startJob(instanceId,'content',async(job,signal)=>{
    const manifest=await this.manifest(dir),before=structuredClone(manifest),pending=[],reactivate=[];
    if(manifestStamp(manifest)!==plan.manifestStamp)throw Error('已安装内容发生变化，请重新检查依赖后安装。');
    for(const f of plan.files){const path=safePath(dir,f.relative);await ensureParents(dir,path);const old=manifest.files.find(x=>x.projectId===f.projectId);if(old){const current=safePath(dir,old.relative+(old.enabled===false?'.disabled':''));if(old.versionId===f.versionId&&await verified({...old,path:current})){old.ignoredRequired=f.ignoredRequired||[];if(old.enabled===false){reactivate.push({old,current,target:path});}continue;}throw Error(`${f.title} 的现有文件已更改或缺失，请先整理实例。`);}try{await lstat(path);throw Error(`已有同名文件：${f.relative}，请先在实例目录处理。`);}catch(e){if(e.code!=='ENOENT')throw e;}pending.push(f);}
@@ -92,7 +93,7 @@ export class Modrinth {
    const created=[];try{for(const r of reactivate){await copyFile(r.current,r.target,constants.COPYFILE_EXCL);created.push(r.target);r.old.enabled=true;}for(const f of downloads){const target=safePath(dir,f.relative);await ensureParents(dir,target);await copyFile(f.path,target,constants.COPYFILE_EXCL);created.push(target);}await atomicJson(join(dir,'content.json'),{schema:1,transactionId:tx.id,files:[...manifest.files,...pending.map(f=>({...f,enabled:true}))]});}catch(e){await recoverInstance(dir).catch(()=>{});throw e;}
    for(const r of reactivate)await unlink(r.current).catch(()=>{});
    await finishTransaction(dir);this.plans.delete(planId);
-  });
+  },plan.target170);
  }
  async validateLaunch(instanceId){const {dir}=await this.core.metadata(instanceId),manifest=await this.manifest(dir);for(const file of manifest.files.filter(f=>f.type==='mod'&&f.enabled!==false)){await this.checkToggle(dir,manifest,file,true);try{const info=await lstat(safePath(dir,file.relative));if(!info.isFile()||info.isSymbolicLink())throw Error();}catch{throw Error(`模组「${file.title}」的文件缺失，请在模组管理中移除记录并重新安装。`);}}}
  async list(instanceId){const {dir}=await this.core.metadata(instanceId),manifest=await this.manifest(dir),rows=[];for(const [type,folder]of Object.entries(folders)){for(const entry of await readdir(join(dir,folder),{withFileTypes:true}).catch(e=>{if(e.code==='ENOENT')return [];throw e;})){if(!entry.isFile()||! /\.(jar|litemod|zip)(\.disabled)?$/i.test(entry.name))continue;const relative=folder+'/'+entry.name,enabled=!entry.name.endsWith('.disabled'),base=enabled?relative:relative.slice(0,-9),saved=manifest.files.find(f=>f.relative===base);rows.push({relative,title:saved?.title||entry.name,version:saved?.version,type,enabled,managed:!!saved,ignoredRequired:saved?.ignoredRequired||[],dependencies:saved?.dependencies||[],projectId:saved?.projectId,versionId:saved?.versionId});}}for(const f of manifest.files){if(!rows.some(r=>r.relative===f.relative||r.relative===f.relative+'.disabled'))rows.push({...f,relative:f.relative+(f.enabled===false?'.disabled':''),managed:true,missing:true});}return rows;}

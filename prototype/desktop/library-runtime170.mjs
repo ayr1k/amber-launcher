@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
-import {mkdir,lstat} from 'node:fs/promises';
+import {mkdir,lstat,readdir} from 'node:fs/promises';
 import {join} from 'node:path';
 import {VanillaLauncher} from './launcher.mjs';
 import {atomicJson} from './core.mjs';
@@ -8,6 +8,7 @@ import {rulesAllow,requiredJava,effectiveArguments} from './vanilla.mjs';
 import {gameEnvironment} from './platform135.mjs';
 import {ordinary170,json170} from './library-paths170.mjs';
 import {identifier} from './import-identify151.mjs';
+import {sessionAlive} from './process-session.mjs';
 
 const mainClasses=new Set(['net.minecraft.client.main.Main','net.minecraft.launchwrapper.Launch','net.fabricmc.loader.impl.launch.knot.KnotClient','net.fabricmc.loader.launch.knot.KnotClient','org.quiltmc.loader.impl.launch.knot.KnotClient']);
 const tweaks=new Set(['net.minecraftforge.fml.common.launcher.FMLTweaker','cpw.mods.fml.common.launcher.FMLTweaker','optifine.OptiFineTweaker','optifine.OptiFineForgeTweaker','com.mumfrey.liteloader.launch.LiteLoaderTweaker']);
@@ -71,6 +72,7 @@ export async function localPlan170(root,profile,env=gameEnvironment()){
  return {meta,plan:{files,classpath,natives,index:{path:index},logging,validateGameArguments:(values,vars)=>validateGameValues170(values,{...vars,game_directory:profile.gameDir??vars.game_directory,assets_root:join(root,'assets')})}};
 }
 export class LibraryRuntime170 extends VanillaLauncher {
+ async runningSessions170(){const rows=[...this.processes.values()].filter(r=>r.state==='running');await ordinary170(this.stateRoot,{missing:true});for(const entry of await readdir(this.stateRoot,{withFileTypes:true}).catch(e=>{if(e.code==='ENOENT')return [];throw e;})){if(!entry.isDirectory())continue;const session=await json170(join(this.stateRoot,entry.name,'.amber-session.json'),{optional:true});if(session&&await sessionAlive(session)&&!rows.some(r=>r.id===session.id))rows.push({...session,instanceId:entry.name,state:'running'});}return rows;}
  constructor(registry,entry,stateRoot){super(entry.path);this.registry=registry;this.libraryId=entry.id;this.stateRoot=stateRoot;}
  async init(){await ordinary170(this.root);await ordinary170(this.stateRoot,{missing:true});await mkdir(this.stateRoot,{recursive:true});}
  async listInstances(){const rows=(await this.registry.scan(this.libraryId)).rows.filter(r=>!r.error);return Promise.all(rows.map(async r=>{const stored=await json170(join(this.stateRoot,r.id,'instance.json'),{optional:true});return {...r,...stored,id:r.id,name:stored?.name||r.id,icon:stored?.icon||'grass',status:'installed',external:true,createdAt:'',javaMajor:r.game?.startsWith('1.16')?8:null};}));}

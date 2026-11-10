@@ -9,6 +9,7 @@ function libraryApi170(scope){const invoke=(channel,...args)=>ipcRenderer.invoke
   performance144:(action,id)=>invoke('amber:performance144',action,id),
   transferStatus144:()=>invoke('amber:transfer-status144'),
   prioritizeDownload144:id=>invoke('amber:transfer-priority144',id),
+  environmentImport:(action,id,input)=>invoke('amber:environment-import',action,id,input),
   serverManagement:(action,...args)=>invoke('amber:server-management',action,...args),
   packUpgrade:(action,...args)=>invoke('amber:pack-upgrade',action,...args),
   protection:(action,...args)=>invoke('amber:protection',action,...args),

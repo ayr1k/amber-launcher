@@ -1,3 +1,4 @@
+import {contentTarget170,assertContentTarget170} from './content-target170.mjs';
 import {contentState170} from './content-state170.mjs';
 import {compareContentVersions} from './compatibility.mjs';
 // SPDX-License-Identifier: MPL-2.0
@@ -64,7 +65,7 @@ export class ModUpdates{
   async preview(instanceId,selections,optional=[],excluded=[]){
     if(!Array.isArray(selections)||!selections.length||selections.length>100||new Set(selections.map(s=>s?.projectId)).size!==selections.length)throw Error('请选择 1–100 个不同模组。');
     if(selections.some(s=>!s||! /^[a-zA-Z0-9_-]{1,100}$/.test(s.projectId)||! /^[a-zA-Z0-9_-]{1,100}$/.test(s.versionId)))throw Error('所选模组标识无效，请刷新列表。');
-    const {dir,item}=await this.core.metadata(instanceId),before=await this.content.manifest(dir);
+    const metadata=await this.core.metadata(instanceId),{dir,item}=metadata,target170=await contentTarget170(this.core,instanceId,metadata),before=await this.content.manifest(dir);
     const selected=new Map(selections.map(s=>[s.projectId,s.versionId]));
     for(const s of selections){const f=before.files.find(f=>f.projectId===s.projectId);if(!f||f.type!=='mod'||f.updateLocked)throw Error('所选模组不存在或已锁定，请刷新列表。');const v=await this.content.api('version/'+s.versionId);if(v.project_id!==s.projectId||!this.content.compatible(v,item,'mod'))throw Error('所选更新不兼容当前实例。');}
     const virtual=Object.create(this.content);virtual.plans=new Map();virtual.manifest=async()=>({...before,files:before.files.filter(f=>!selected.has(f.projectId))});
@@ -78,14 +79,14 @@ export class ModUpdates{
     const touched=next.filter(f=>{const old=before.files.find(x=>x.projectId===f.projectId);return !old||old.versionId!==f.versionId||old.hash!==f.hash;});
     if(!touched.length)blockers.push('没有需要替换的文件，请重新检查更新。');
     const plan={id:randomUUID(),instanceId,stamp:contentStamp(before),game:item.game,loader:item.loader,loaderVersion:item.loaderVersion,liteVersion:item.liteVersion,loaderSha1:item.loaderSha1,liteBaseSha1:item.liteBaseSha1,before,after,files:touched,required:[...required.values()],optional:[...optionals.values()],warnings:[...warnings],blockers:[...new Set(blockers)],expiresAt:Date.now()+600000};
-    this.plans.set(plan.id,plan);for(const [id,p]of this.plans)if(p.expiresAt<Date.now())this.plans.delete(id);
+    await assertContentTarget170(this.core,instanceId,target170);plan.target170=target170;this.plans.set(plan.id,plan);for(const [id,p]of this.plans)if(p.expiresAt<Date.now())this.plans.delete(id);
     return {...plan,files:plan.files.map(f=>({...f,previous:before.files.find(x=>x.projectId===f.projectId)?.version||null})),before:undefined,after:undefined};
   }
   async install(instanceId,planId){
     const p=this.plans.get(planId);if(!p||p.instanceId!==instanceId||p.expiresAt<Date.now())throw Error('更新预览过期，请重新检查。');if(p.blockers.length)throw Error('请先解决更新依赖冲突。');
     const {dir,item}=await this.core.metadata(instanceId);await this.core.requireStopped(dir);
     for(const k of ['game','loader','loaderVersion','liteVersion','loaderSha1','liteBaseSha1'])if(item[k]!==p[k])throw Error('实例配置已改变，请重新检查更新。');
-    return this.core.startJob(instanceId,'content-update',async(job,signal)=>{
+    await assertContentTarget170(this.core,instanceId,p.target170);return this.core.startJob(instanceId,'content-update',async(job,signal)=>{
       await recoverModUpdate(dir,await contentState170(this.core,dir));const before=await this.content.manifest(dir);if(contentStamp(before)!==p.stamp)throw Error('模组列表已改变，请重新检查更新。');
       const old=before.files.filter(f=>p.files.some(n=>n.projectId===f.projectId));
       for(const f of old){if(f.updateLocked)throw Error('模组已锁定。');await checked(dir,f);}
@@ -95,7 +96,7 @@ export class ModUpdates{
       await downloadPool(downloads,{root:this.core.root,fetcher:this.core.fetcher,signal,threads:this.core.downloadThreads||8,onBytes:n=>job.transferred+=n,onFile:()=>job.completed++});signal.throwIfAborted();
       await this.replace(dir,before,p.after,old,p.files,f=>safePath(this.core.root,'content-cache/'+f.hash),signal,job);
       this.plans.delete(planId);
-    });
+    },p.target170);
   }
   async replace(dir,before,after,old,next,source,signal,job){
     if(!await exists(join(await contentState170(this.core,dir),'content.json')))await atomicJson(join(await contentState170(this.core,dir),'content.json'),before);

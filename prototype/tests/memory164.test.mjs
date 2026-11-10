@@ -34,7 +34,7 @@ for(const boundary of ['graphics','log-open'])test(`actual launch body: cancel d
   readFile:async path=>JSON.stringify(path.endsWith('installation.json')?{metadataSha1:'hash',files:[]}:{id:'fixture-session'}),
   writeFile:async()=>{locked=true;},rm:async()=>{locked=false;removed++;},mkdir:async()=>{},join:(...p)=>p.join('/'),randomUUID:()=> 'fixture-session',
   planFiles:()=>({natives:[]}),launchArguments:()=>[],open:async()=>{if(boundary==='log-open')runner.cancel(a.id,'launch');return {fd:42,close:async()=>closed++};},
-  spawn:()=>{spawned++;throw Error('Must never spawn');},
+  realpath:async path=>path,lstat:async()=>({dev:1,ino:2}),spawn:()=>{spawned++;throw Error('Must never spawn');},
  });
  const core={jobs:[],processes:new Map(),root:'/synthetic',runtimeMetadata:async()=>({dir:'/synthetic/instance',item:{status:'installed',game:'1.21.1'},meta:{}}),requireStopped:async()=>{},resolveGameJava:async()=>({path:'/never-executed-java'}),prelaunchMemory:attempt=>runner.run(attempt),beforeJavaLaunch:async()=>{if(boundary==='graphics')runner.cancel(a.id,'launch');return {state:'system'};}};
  await assert.rejects(launch.call(core,'fixture',{identity:{},launchAttempt:a}),/Launch cancelled/);runner.finish(a);
