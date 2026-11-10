@@ -4,7 +4,7 @@ import {join} from 'node:path';
 import {VanillaLauncher} from './launcher.mjs';
 import {atomicJson} from './core.mjs';
 import {safePath,digest,verified} from './download.mjs';
-import {rulesAllow,requiredJava} from './vanilla.mjs';
+import {rulesAllow,requiredJava,effectiveArguments} from './vanilla.mjs';
 import {gameEnvironment} from './platform135.mjs';
 import {ordinary170,json170} from './library-paths170.mjs';
 import {identifier} from './import-identify151.mjs';
@@ -12,13 +12,16 @@ import {identifier} from './import-identify151.mjs';
 const mainClasses=new Set(['net.minecraft.client.main.Main','net.minecraft.launchwrapper.Launch','net.fabricmc.loader.impl.launch.knot.KnotClient','net.fabricmc.loader.launch.knot.KnotClient','org.quiltmc.loader.impl.launch.knot.KnotClient']);
 const tweaks=new Set(['net.minecraftforge.fml.common.launcher.FMLTweaker','cpw.mods.fml.common.launcher.FMLTweaker','optifine.OptiFineTweaker','optifine.OptiFineForgeTweaker','com.mumfrey.liteloader.launch.LiteLoaderTweaker']);
 function maven(name,classifier){const p=name.split(':');if(p.length<3||p.length>4||p.some(s=>!/^[-\w.+]+$/.test(s)))throw Error('Invalid library coordinate / 依赖坐标无效');return `${p[0].replaceAll('.','/')}/${p[1]}/${p[2]}/${p[1]}-${p[2]}${classifier||p[3]?'-'+(classifier||p[3]):''}.jar`;}
-export function safeArguments170(meta){
+export function safeArguments170(meta,env=gameEnvironment()){
  if(!mainClasses.has(meta.mainClass))throw Error('This launch entry is not supported yet; use the original launcher / 此启动入口尚不支持，请使用原启动器');
  const legacy=meta.minecraftArguments?.match(/"[^"]*"|\S+/g)?.map(s=>s.replace(/^"|"$/g,''));
  const game=legacy?[...legacy,...(meta.arguments?.game||[])]:meta.arguments?.game;
  if(!Array.isArray(game))throw Error('Missing game arguments / 缺少游戏启动参数');
- const values=game.flatMap(v=>typeof v==='string'?[v]:Array.isArray(v?.value)?v.value:[v?.value]);
- if(values.some(v=>typeof v!=='string'||v.length>10000||/[\x00-\x1f]/.test(v)))throw Error('Invalid game arguments / 游戏参数无效');
+ const allValues=game.flatMap(v=>typeof v==='string'?[v]:Array.isArray(v?.value)?v.value:[v?.value]);
+ // Validate the same ordered tokens the launcher will use, after OS/feature filtering.
+ // Persist only strings in this in-memory plan, so later expansion cannot change adjacency.
+ const values=effectiveArguments(game,env);
+ if(allValues.some(v=>typeof v!=='string'||v.length>10000||/[\x00-\x1f]/.test(v)))throw Error('Invalid game arguments / 游戏参数无效');
  for(let i=0;i<values.length;i++){if(values[i]==='--tweakClass'&&!tweaks.has(values[i+1]))throw Error('Unknown tweak class / 未识别的启动扩展');if(/^--(?:tweakClass|gameDir|assetsDir|assetIndex|username|uuid|accessToken|userProperties|xuid|clientId)=/.test(values[i]))throw Error('Ambiguous protected argument / 受保护参数有歧义');}
  for(const [option,value] of [['--gameDir','${game_directory}'],['--assetsDir','${assets_root}'],['--accessToken','${auth_access_token}'],['--uuid','${auth_uuid}'],['--username','${auth_player_name}']]){const positions=values.flatMap((v,i)=>v===option?[i]:[]);if(positions.length>1||positions.some(i=>values[i+1]!==value))throw Error('Unsafe protected argument / 不安全的受保护启动参数');}
  // External JVM flags, agents, wrappers and shell commands are never adopted.
@@ -26,15 +29,15 @@ export function safeArguments170(meta){
  const allowed=new Set(['-Djava.library.path=${natives_directory}','-Dminecraft.launcher.brand=${launcher_name}','-Dminecraft.launcher.version=${launcher_version}','-cp','${classpath}','-XstartOnFirstThread','-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump','-Dos.name=Windows 10','-Dos.version=10.0']);
  allowed.add('-Xss1M');
  for(const row of jvm){for(const v of typeof row==='string'?[row]:[row.value].flat())if(!allowed.has(v))throw Error('Custom JVM arguments are not adopted; use the original launcher / 不接管自定义 JVM 参数，请使用原启动器');}
- return {...meta,arguments:{game,jvm:['-Djava.library.path=${natives_directory}','-cp','${classpath}']}};
+ return {...meta,arguments:{game:values,jvm:['-Djava.library.path=${natives_directory}','-cp','${classpath}']}};
 }
 export function prioritizedLibraries170(meta){
  const patches=meta.patches||[];if(!Array.isArray(patches))throw Error('Invalid components');
  const priority=new Map();for(const p of patches){if(!Number.isSafeInteger(p.priority)||!Array.isArray(p.libraries))continue;for(const l of p.libraries)if(typeof l.name==='string')priority.set(l.name,Math.max(priority.get(l.name)??-Infinity,p.priority));}
  return [...(meta.libraries||[])].sort((a,b)=>(priority.get(b.name)||0)-(priority.get(a.name)||0));
 }
-export async function localPlan170(root,profile){
- const meta=safeArguments170(profile.meta),files=[],classpath=[],natives=[],env=gameEnvironment();
+export async function localPlan170(root,profile,env=gameEnvironment()){
+ const meta=safeArguments170(profile.meta,env),files=[],classpath=[],natives=[];
  // LaunchWrapper Forge must receive the Forge-aware OptiFine adapter. HMCL's
  // persisted supplemental argument can still name the standalone adapter.
  if(profile.loader==='forge'&&profile.optifine&&meta.mainClass==='net.minecraft.launchwrapper.Launch')meta.arguments.game=meta.arguments.game.map((value,index,all)=>index>0&&all[index-1]==='--tweakClass'&&value==='optifine.OptiFineTweaker'?'optifine.OptiFineForgeTweaker':value);
