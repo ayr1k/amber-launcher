@@ -27,7 +27,7 @@ for(const edition of editions){
   await rm(stage,{recursive:true});
  }catch(e){if(e.code!=='ENOENT')throw e;}
  await mkdir(stage,{recursive:true});
- for(const entry of ['src','desktop','public','build','index.html','vite.config.mjs','LICENSE','THIRD_PARTY_NOTICES.md','RELEASE-ACCEPTANCE.md','LOCAL-TEST-1.6.4.md'])await cp(join(root,entry),join(stage,entry),{recursive:true});
+ for(const entry of ['src','desktop','public','build','index.html','vite.config.mjs','LICENSE','THIRD_PARTY_NOTICES.md','RELEASE-ACCEPTANCE.md','LOCAL-TEST-1.7.0.md'])await cp(join(root,entry),join(stage,entry),{recursive:true});
  await copyFile(join(root,'..','CHANGELOG.md'),join(stage,'CHANGELOG.md'));
  const metadata={...pkg,name:edition==='ambere'?'ambere-launcher':pkg.name,description:name+' Minecraft Java launcher',dependencies:{},devDependencies:{}};
  await writeFile(join(stage,'package.json'),JSON.stringify(metadata,null,2));
@@ -45,7 +45,7 @@ for(const edition of editions){
   await copyFile(join(root,'build/ambere.png'),join(stage,'public/brand/app-icon.png'));
   for(const file of ['build/installer.nsh','build/installer-preflight.ps1','index.html']){const text=await readFile(join(stage,file),'utf8');await writeFile(join(stage,file),text.replaceAll('AMBER','AmberE').replaceAll('amber-launcher','ambere-launcher'));}
  }
- if(!process.argv.includes('--public'))await copyFile(join(root,'LOCAL-TEST-1.6.4.md'),join(stage,'RELEASE-ACCEPTANCE.md'));
+ if(!process.argv.includes('--public'))await copyFile(join(root,'LOCAL-TEST-1.7.0.md'),join(stage,'RELEASE-ACCEPTANCE.md'));
  try{const key=process.env.AMBER_CURSEFORGE_API_KEY||JSON.parse(await readFile(join(root,'../.qa/curseforge-key.json'),'utf8')).key;await writeFile(join(stage,'desktop/curseforge-build-key.json'),JSON.stringify({key}));}catch(e){if(e.code!=='ENOENT')throw e;}
  await run(process.execPath,[join(root,'node_modules/vite/bin/vite.js'),'build','--config',join(stage,'vite.config.mjs')],stage);
  const config={appId:'io.github.ayr1k.'+edition,productName:name,asar:false,npmRebuild:false,electronVersion:pkg.devDependencies.electron,electronDist:join(root,'node_modules/electron/dist'),directories:{output:out,buildResources:join(stage,'build')},files:['desktop/**/*','dist/client/**/*','package.json','LICENSE','THIRD_PARTY_NOTICES.md','!node_modules/**','!desktop/bin/seed-engine-linux-*','!desktop/bin/seed-engine-darwin-*','!desktop/bin/seed-engine-freebsd-*','!**/*.ttf','!dist/client/assets/sodium.png','!dist/client/assets/lithium.png','!dist/client/assets/iris.png','!dist/client/assets/modmenu.png','!dist/client/assets/fabric-api.png'],extraFiles:[{from:join(root,'PLATFORMS-1.3.5.md'),to:'PLATFORMS-1.3.5.md'},{from:join(stage,'CHANGELOG.md'),to:'CHANGELOG.md'},{from:join(stage,'RELEASE-ACCEPTANCE.md'),to:'RELEASE-ACCEPTANCE.md'}],win:{target:[{target:'nsis',arch:['x64']}],executableName:name,icon:join(stage,'build/icon.ico'),signAndEditExecutable:true},nsis:{oneClick:false,perMachine:false,allowElevation:false,allowToChangeInstallationDirectory:true,createDesktopShortcut:true,createStartMenuShortcut:true,shortcutName:name,deleteAppDataOnUninstall:false,runAfterFinish:false,installerLanguages:['zh_CN','en_US'],displayLanguageSelector:true,include:join(stage,'build/installer.nsh'),installerIcon:join(stage,'build/icon.ico'),uninstallerIcon:join(stage,'build/icon.ico'),artifactName:name+'-${version}-Setup-${arch}.exe'}};

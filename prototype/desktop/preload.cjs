@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MPL-2.0
 const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('amberDesktop', Object.freeze({
+  libraries170:(action,id,input)=>ipcRenderer.invoke('amber:libraries170',action,id,input),
   prelaunch164:(action,id,kind)=>ipcRenderer.invoke('amber:prelaunch164',action,id,kind),
   memory160:(action,value)=>ipcRenderer.invoke('amber:memory160',action,value),
   startupReady:()=>ipcRenderer.invoke('amber:startup-ready'),

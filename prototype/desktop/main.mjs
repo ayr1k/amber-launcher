@@ -1,3 +1,6 @@
+import {Libraries170} from './libraries170.mjs';
+import {needsInitialLocation170,setInitialLocation170} from './initial-storage170.mjs';
+import {LibraryRuntime170} from './library-runtime170.mjs';
 import {PrelaunchMemory164} from './prelaunch-memory164.mjs';
 import {LaunchPlan160} from './launch-plan160.mjs';
 import {Memory160} from './memory160.mjs';
@@ -114,6 +117,10 @@ app.whenReady().then(async () => {
   session.defaultSession.setPermissionCheckHandler(() => false);
   startup.stage('storage');
   const storage = new Storage(app.getPath('userData'));let storageConfig;let storageBusy=false,exitBusy=false;
+  if(!smoke&&!qaUI&&await needsInitialLocation170(storage)){
+   let chosen=false;
+   while(!chosen){const pick=await dialog.showMessageBox({type:'question',title:'AMBER 数据位置 / Data location',message:'选择首次数据位置 / Choose the initial data location',detail:'AMBER 的账号、设置、缓存和自建实例写入所选位置。选择外部 .minecraft 时，AMBER 状态仍保存在 AppData，外部游戏目录不会被复制。现有数据不会自动覆盖。 / Accounts, settings, caches and managed instances use this location. When selecting an external .minecraft, AMBER state stays in AppData and game data is used in place.',buttons:['程序目录下 / Beside program','AppData（默认 / default）','自选 / Choose folder','退出 / Quit'],defaultId:1,cancelId:3});if(pick.response===3){app.quit();return;}let path=pick.response===0?join(dirname(app.getPath('exe')),PRODUCT_NAME):(await storage.get()).path;if(pick.response===2){const folder=await dialog.showOpenDialog({properties:['openDirectory','createDirectory']});if(folder.canceled)continue;path=folder.filePaths[0];}try{await setInitialLocation170(storage,path,{edition:EDITION});chosen=true;}catch(e){await dialog.showMessageBox({type:'error',title:'位置不可用 / Location unavailable',message:redact(e.message),detail:'未切换到其他位置，请选择可写目录或修复权限。 / No fallback location was selected. Choose a writable location or fix permissions.'});}}
+  }
   while(!storageConfig){try{storageConfig=await storage.validateExisting();}catch(e){if(smoke||qaUI)throw e;const answer=await dialog.showMessageBox({type:'error',title:'游戏数据位置不可用 / Game data unavailable',message:'原数据位置无法读取，未创建空库。请连接原磁盘后重试，或重新选择原数据目录。 / Reconnect the original drive or locate your existing library. No empty library was created.',detail:redact(e.message),buttons:['重试 / Retry','选择原目录 / Locate library','退出 / Quit'],defaultId:0,cancelId:2});if(answer.response===2){app.quit();return;}if(answer.response===1){const pick=await dialog.showOpenDialog({properties:['openDirectory']});if(!pick.canceled)try{await storage.reconnect(pick.filePaths[0]);}catch(err){await dialog.showMessageBox({type:'error',message:redact(err.message)});}}}}
 
   const core = new VanillaLauncher(storageConfig.path);
@@ -140,6 +147,7 @@ app.whenReady().then(async () => {
       const source = new URL(event.senderFrame.url);
       if (event.sender !== window?.webContents || event.senderFrame !== window.webContents.mainFrame || source.protocol !== 'amber:' || source.host !== 'app') throw new Error('请求来源不受信任。');
       if(exitBusy&&!['amber:window-action','amber:window-state'].includes(channel))throw Error('Launcher closing / 启动器正在退出');
+      if(['amber:storage-move','amber:app-update-install'].includes(channel))await libraries170.requireAllStopped();
       if (storageBusy && !['amber:info', 'amber:status', 'amber:setup-cancel', 'amber:window-action', 'amber:window-state'].includes(channel)) throw Error('数据目录正在迁移，请等待完成。');
       if (upgradeBusy && !['amber:info', 'amber:status', 'amber:app-update-state', 'amber:cleanup-cancel', 'amber:window-action', 'amber:window-state'].includes(channel)) throw Error('正在准备升级，请稍候。');
       let result;try {if(IS_AMBERE&&(channel.startsWith('amber:ms-')||channel.startsWith('amber:ownership-')||channel==='amber:account-configure'))accounts.requireMicrosoft();result = await fn(...args);} catch (e) {const problem=errorDescriptor(redact(e.message,accounts.secrets()));throw Error('[AMBER '+problem.code+'] '+problem.text);}result = redactFields(result, accounts.secrets());if (smoke) {smokeChannels.add(channel);finishSmoke();}return result;
@@ -509,6 +517,50 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   let launching = false;
   handle('amber:launch', async (id, options) => {if (launching) throw Error('正在准备启动。');launching = true;const launchAttempt=prelaunch164.begin();try {core.workflowGuard?.(id);if((await core.runtimeStatus()).processes.some(p=>p.instanceId===id&&p.state==='running'))throw Error('此实例已经在运行。');if (core.jobs.some((j) => j.instanceId===id&&j.state === 'running')) throw Error('请等待此实例安装或更新结束后启动游戏。');await recoverModUpdate(await core.instancePath(id));if ((await workflows.pending()).some((p) => p.instanceId === id)) throw Error('实例安装尚未完成，请先在任务中心继续安装。');await requireRoomSyncReady152(core,id);await content.validateLaunch(id);const launchPrefs = await launchPreferences.get(id);options = { ...options, accountId: launchPrefs.accountId ?? options.accountId, memory: launchPrefs.memory ?? options.memory };const identity = await accounts.authorizeLaunch(options.accountId,options.username);await protection140.before(id,'daily');const skinBridge=identity.localSkin?await startSkinBridge(identity,identity.localSkin):null;let run;try{const extraJvm = identity?.server||skinBridge ? [`-javaagent:${await authAgent(core.root,fetch,{preferCache:!!skinBridge})}=${identity.server||skinBridge.url}`] : [];if(skinBridge)extraJvm.push('-Dminecraft.api.discovery.host='+skinBridge.url+'discovery');launchAttempt.controller.signal.throwIfAborted();run = await core.launch(id, { launchAttempt, username: options.username, memory: options.memory, identity, extraJvm,joinServer:options.roomSync?await rooms.sync.launchAddress(id):options.serverId?await (async()=>{const link=await environment140.links(options.serverId);if(link.localId!==id)throw Error('Select the linked client / 请选择关联客户端');const run=servers.runs.get(options.serverId);if(run?.state!=='running')throw Error('Start the server first / 请先启动服务端');return '127.0.0.1:'+run.port;})():null });if(skinBridge){const child=core.processes.get(run.id)?.child;if(child){skinRuns.add(run.id);const stopSkin=()=>{skinBridge.close();skinRuns.delete(run.id);};child.once('close',stopSkin);child.once('error',stopSkin);}else skinBridge.close();}}catch(e){skinBridge?.close();throw e;}await libraryState.launched(id, run).catch(() => {});await observe();return run;} finally {prelaunch164.finish(launchAttempt);launching = false;}});
   handle('amber:open-instance', async (id) => {const error = await shell.openPath(await core.instancePath(id));if (error) throw new Error(error);});
+  const libraryRunners170=new Map();
+  const libraryPending170=new Set();
+  const libraries170=new Libraries170(core.root,{edition:EDITION,active:id=>{const c=libraryRunners170.get(id);return libraryPending170.has(id)||!!c&&(c.jobs.some(j=>j.state==='running')||[...c.processes.values()].some(p=>p.state==='running'));}});
+  if(storageConfig.initialExternal170&&!(await libraries170.list()).libraries.some(l=>l.path===storageConfig.initialExternal170)){
+   try{const preview=await libraries170.preview(storageConfig.initialExternal170);const warning=preview.isolation==='shared'||preview.isolation==='mixed'?'此库未开启版本隔离，请自行核对模组冲突风险':'无法可靠确定此库的版本隔离模式，请逐版本核对游戏目录和模组冲突风险。 / Isolation is undetermined; confirm each game directory and mod conflicts.';
+   const answer=await dialog.showMessageBox({type:'warning',message:warning,buttons:['添加库 / Add library','暂不添加 / Later'],defaultId:1,cancelId:1});if(answer.response===0)await libraries170.add(preview.token,'Minecraft',true);
+   }catch(error){await dialog.showMessageBox({type:'warning',message:'无法添加实例库 / Unable to add library',detail:error.message+'\n应用会继续启动，请在实例页重新添加目录。 / Continue to the app and retry or choose another directory from Instances.',buttons:['继续 / Continue']});}
+   delete storageConfig.initialExternal170;await import('./core.mjs').then(({atomicJson})=>atomicJson(storage.config,storageConfig));
+  }
+  async function libraryRunner170(id){const entry=await libraries170.entry(id);if(id==='default')throw Error('Use the main library actions / 请使用默认库操作');if(!libraryRunners170.has(id)){const runner=entry.kind==='minecraft'?new LibraryRuntime170(libraries170,entry,join(core.root,'library-state170',id)):new VanillaLauncher(entry.path);await runner.init();runner.prelaunchMemory=core.prelaunchMemory;runner.beforeJavaLaunch=core.beforeJavaLaunch;libraryRunners170.set(id,runner);}return libraryRunners170.get(id);}
+  handle('amber:libraries170',async(action,id,input)=>{
+   if(['choose','delete','restore'].includes(action)){const runner=await libraryRunner170(id);if(libraryPending170.has(id)||(await runner.runtimeStatus()).processes.some(p=>p.state==='running')||runner.jobs.some(j=>j.state==='running'))throw Error('Library is busy / 实例库正在使用');}
+   if(action==='remove'&&libraryPending170.has(id))throw Error('Library is busy / 实例库正在使用');
+   if(action==='list')return libraries170.list();
+   if(action==='pick'){const pick=await dialog.showOpenDialog(window,{title:'实例库目录 / Instance library directory',properties:['openDirectory','createDirectory']});return pick.canceled?null:libraries170.preview(pick.filePaths[0],{create:input?.create===true,kind:'managed'});}
+   if(action==='add')return libraries170.add(input.token,input.name,input.acknowledged);
+   if(action==='select')return libraries170.select(id);
+   if(action==='rename')return libraries170.rename(id,input.name);
+   if(action==='remove')return libraries170.remove(id);
+   if(action==='choose')return libraries170.choose(id,input.version,input.path);
+   const entry=await libraries170.entry(id);
+   if(action==='rows')return entry.kind==='minecraft'?libraries170.scan(id):{rows:await (await libraryRunner170(id)).listInstances(),isolation:'isolated'};
+   if(action==='trash')return entry.kind==='minecraft'?libraries170.trash(id):new InstanceManagement(await libraryRunner170(id),{exclusive:fn=>libraries170.transaction(fn)}).list();
+   if(action==='delete')return entry.kind==='minecraft'?libraries170.trashVersion(id,input.version):new InstanceManagement(await libraryRunner170(id),{exclusive:fn=>libraries170.transaction(fn)}).remove(input.version);
+   if(action==='restore')return entry.kind==='minecraft'?libraries170.restore(id,input.ticket):new InstanceManagement(await libraryRunner170(id),{exclusive:fn=>libraries170.transaction(fn)}).restore(input.ticket);
+   if(action==='open'){const path=entry.kind==='minecraft'?(await libraries170.profile(id,input.version)).gameDir:await (await libraryRunner170(id)).instancePath(input.version);if(!path)throw Error('Confirm game directory / 请先确认游戏目录');const error=await shell.openPath(path);if(error)throw Error(error);return true;}
+   const runner=await libraryRunner170(id);
+   if(action==='status')return runner.runtimeStatus();
+   if(action==='versions')return runner.versions();
+   if(action==='create'){if(entry.kind!=='managed')throw Error('Use the original launcher to add external versions / 请使用原启动器添加外部版本');return runner.createInstance(input);}
+   if(action==='install')return runner.install(input.version);
+   if(action==='loader-versions'){if(entry.kind!=='managed')throw Error('External library components are read-only');return runner.loaderVersions(input.version,input.type);}
+   if(action==='loader-configure'){if(entry.kind!=='managed')throw Error('External library components are read-only');return runner.configureLoader(input.version,input.type,input.loaderVersion);}
+   if(action==='java-prepare')return runner.prepareJava(input.version);
+   if(action==='optifine-install'||action==='optifine-forge'){if(entry.kind!=='managed')throw Error('Use the original launcher to change external components / 请使用原启动器修改外部组件');const pick=await dialog.showOpenDialog(window,{title:'选择从 OptiFine 官网下载的 JAR / Select an official OptiFine JAR',properties:['openFile'],filters:[{name:'OptiFine',extensions:['jar']}]});if(pick.canceled)return null;return action==='optifine-install'?installOptifine(runner,input.version,pick.filePaths[0]):importOptifine(runner,input.version,pick.filePaths[0]);}
+   if(action==='cancel')return runner.cancel(input.jobId);
+   if(action==='java'){const pick=await dialog.showOpenDialog(window,{title:'选择 Java / Select Java',properties:['openFile']});if(pick.canceled)return null;const java=await runner.addJava(pick.filePaths[0]);return runner.selectJava(input.version,java.path);}
+   if(action==='launch'){
+    if(entry.kind==='minecraft'){const selected=await libraries170.profile(id,input.version);for(const run of (await runner.runtimeStatus()).processes.filter(p=>p.state==='running')){const existing=await libraries170.profile(id,run.instanceId);if(existing.gameDir===selected.gameDir)throw Error('Another version is using this shared game directory / 其他版本正在使用此共享游戏目录');}}
+    if(launching)throw Error('Launch is being prepared / 正在准备启动');launching=true;libraryPending170.add(id);const attempt=prelaunch164.begin();
+    try{const prefs=await settings.get(),identity=await accounts.authorizeLaunch(input.accountId,input.username);const extraJvm=identity.server?[`-javaagent:${await authAgent(core.root,fetch)}=${identity.server}`]:[];attempt.controller.signal.throwIfAborted();return await runner.launch(input.version,{identity,extraJvm,username:input.username,memory:input.memory||prefs.memory,launchAttempt:attempt});}finally{prelaunch164.finish(attempt);launching=false;libraryPending170.delete(id);}
+   }
+   throw Error('Unknown library action');
+  });
   const placement=new WindowStateStore(app.getPath('userData'));
   let initialCorners='system',placementTimer,placementMaximized=false;
   const windowInfo=()=>({maximized:window?.isMaximized()||false,focused:window?.isFocused()||false,corners:initialCorners,cornersSupported:supportsWindowCorners(process.platform,osRelease())});
@@ -564,6 +616,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
         if(!smoke&&closeToTray160(prefs.closeBehavior,{serverActive:servers.active,networkActive:!!(services160.pending.size||rooms.starting||rooms.active||sakura.active||mysql150.active)},explicitQuit)){await savePlacement();hideToTray();return;}
         if(!smoke&&skinRuns.size){const answer=await dialog.showMessageBox(window,{type:'question',message:'离线游戏仍在使用本地皮肤 / Offline game is using a local skin',detail:'最小化可继续提供皮肤；退出后尚未缓存的皮肤可能无法加载。 / Minimize to keep serving skins; quitting may prevent uncached skins from loading.',buttons:['最小化 / Minimize','退出 / Quit','返回 / Back'],defaultId:0,cancelId:2});if(answer.response===0){window.minimize();return;}if(answer.response!==1)return;}
         if(storageBusy){await dialog.showMessageBox(window,{type:'info',message:translateMessage('数据目录正在迁移，请等待完成。'),buttons:[translateMessage('确定')]});return;}
+        if(libraryPending170.size||[...libraryRunners170.values()].some(c=>c.jobs.some(j=>j.state==='running'))){await dialog.showMessageBox(window,{type:'info',message:'请先取消或等待实例库任务完成。 / Cancel or wait for library tasks before quitting.',buttons:['确定 / OK']});return;}
         if(!smoke&&(minecraftImport.busy||serverManagement140.backupBusy||workflows.active||core.jobs.some(j=>j.state==='running')||appUpdates.state.phase==='downloading')){
           const answer=await dialog.showMessageBox(window,{type:'warning',title:translateMessage('安装还未结束'),message:translateMessage('退出会中断当前下载或实例配置。'),detail:translateMessage('已完成的文件会保留，建议等待任务结束。实例安装可在任务中心继续；程序更新可在关于页重新下载。'),buttons:[translateMessage('继续等待'),translateMessage('取消任务并退出')],defaultId:0,cancelId:0,noLink:true});
           if(answer.response!==1)return;

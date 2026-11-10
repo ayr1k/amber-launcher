@@ -85,16 +85,19 @@ export class VanillaLauncher extends LauncherCore {
   requireLaunchGrant(identity);
   if(this.jobs.some(j=>j.instanceId===id&&j.state==='running'))throw new Error('请等待安装任务完成。');
   if([...this.processes.values()].some(p=>p.instanceId===id&&p.state==='running'))throw new Error('此实例已经在运行。');
-  const {dir,item,meta}=await this.runtimeMetadata(id);await this.requireStopped(dir);await this.workbench?.recover(dir);if(item.status!=='installed')throw new Error('请先完成游戏安装。');
+  const runtime=await this.runtimeMetadata(id),{dir,item,meta}=runtime;await this.requireStopped(dir);await this.workbench?.recover(dir);if(item.status!=='installed')throw new Error('请先完成游戏安装。');
+  if(!runtime.external){
   const receipt=JSON.parse(await readFile(join(dir,'installation.json'),'utf8'));if((receipt.loaderSha1||null)!==(item.loaderSha1||null))throw Error('加载器配置已变更，请重新安装。');if(receipt.metadataSha1!==await digest(join(dir,'version.json')))throw new Error('版本元数据校验失败。');
   for(const f of receipt.files)if(!await verified({...f,path:safePath(this.root,f.relative)}))throw new Error('游戏文件缺失或损坏，请点击“校验 / 修复”：'+f.label);
+  }
   const java=await this.resolveGameJava(id);
-  const plan=planFiles(meta,this.root);for(const archive of plan.natives)await extractZip(archive.path,join(dir,'natives'),{exclude:archive.exclude,onlyNative:true});const args=launchArguments(meta,plan,{dir,root:this.root,natives:join(dir,'natives'),username,memory,identity,extraJvm});
+  const plan=runtime.plan||planFiles(meta,this.root);for(const archive of plan.natives)await extractZip(archive.path,join(dir,'natives'),{exclude:archive.exclude,onlyNative:true});const args=launchArguments(meta,plan,{dir:runtime.gameDirectory||dir,root:this.root,natives:join(dir,'natives'),username,memory,identity,extraJvm});
   if(joinServer){if(!/^127\.0\.0\.1:\d{4,5}$/.test(joinServer))throw Error('Invalid join address');const modern=/^(2[6-9]|[3-9]\d)\./.test(item.game)||/^1\.(2[0-9]|[3-9]\d)(?:\.|$)/.test(item.game);args.push(...(modern?['--quickPlayMultiplayer',joinServer]:['--server','127.0.0.1','--port',joinServer.split(':')[1]]));}
   await mkdir(join(dir,'logs'),{recursive:true});const logPath=join(dir,'logs',`amber-${Date.now()}.log`);
   // Keep arguments as an array: names and filesystem paths never enter a shell.
   requireLaunchGrant(identity,true);
   await this.prelaunchMemory?.(launchAttempt);
+  await this.validateExternalBeforeSpawn?.(id,runtime);
   launchAttempt?.controller.signal.throwIfAborted();
   const lockPath=join(dir,'.amber-session.json'),sessionId=randomUUID();
   try{await writeFile(lockPath,JSON.stringify({id:sessionId,pid:process.pid,game:false}),{flag:'wx'});}catch(e){if(e.code!=='EEXIST')throw e;await this.requireStopped(dir);await rm(lockPath,{force:true});await writeFile(lockPath,JSON.stringify({id:sessionId,pid:process.pid,game:false}),{flag:'wx'});}
@@ -103,7 +106,7 @@ export class VanillaLauncher extends LauncherCore {
   const logFile=await open(logPath,'wx');
   if(launchAttempt?.controller.signal.aborted){await logFile.close();try{const lock=JSON.parse(await readFile(lockPath,'utf8'));if(lock.id===sessionId)await rm(lockPath,{force:true});}catch{}launchAttempt.controller.signal.throwIfAborted();}
   if(launchAttempt)launchAttempt.phase='launched';
-  const child=spawn(java.path,args,{cwd:dir,shell:false,windowsHide:true,detached:true,stdio:['ignore',logFile.fd,logFile.fd],env:{...process.env,JAVA_TOOL_OPTIONS:'',_JAVA_OPTIONS:'',JDK_JAVA_OPTIONS:''}});
+  const child=spawn(java.path,args,{cwd:runtime.gameDirectory||dir,shell:false,windowsHide:true,detached:true,stdio:['ignore',logFile.fd,logFile.fd],env:{...process.env,JAVA_TOOL_OPTIONS:'',_JAVA_OPTIONS:'',JDK_JAVA_OPTIONS:''}});
   const record={id:sessionId,accountId:identity.accountId||null,instanceId:id,child,pid:child.pid,state:'running',startedAt:new Date().toISOString(),logPath,tail:'',username,javaPath:java.path,javaVersion:java.version,memory,graphics,renderer:null};this.processes.set(record.id,record);
   const logTimer=setInterval(async()=>{record.tail=await logTail(logPath);record.renderer=rendererFromLog(record.tail)||record.renderer;},1200);logTimer.unref();
   child.on('error',error=>{record.state='failed';record.error=error.message;});
