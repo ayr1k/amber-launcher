@@ -1,0 +1,16 @@
+// SPDX-License-Identifier: MPL-2.0
+import {mkdir,rename,lstat} from 'node:fs/promises';
+import {join} from 'node:path';
+import {randomUUID} from 'node:crypto';
+import {ordinary170,json170} from './library-paths170.mjs';
+import {treeFiles,copyVerified,requireSpace} from './safe-copy.mjs';
+import {atomicJson} from './core.mjs';
+import {libraryServices170} from './library-services170.mjs';
+
+// Both paths come from explicit directory pickers. A new, empty library is the
+// destination; no source-library registration or surviving profile is required.
+export async function importExternalBackup170(registry,backupPath,target,options={}){
+ await ordinary170(backupPath);const record=await json170(join(backupPath,'backup.json'),{max:64000000});if(record.schema!==1||record.external170?.format!==2||!Array.isArray(record.files)||!record.files.length||record.files.length>200000||typeof record.name!=='string'||record.name.length>200)throw Error('Select a complete external backup / 请选择完整外部备份');if(record.external170.platform!==process.platform||record.external170.arch!==process.arch)throw Error('Backup platform differs from this launcher');const seen=new Set();for(const f of record.files){if(typeof f.relative!=='string'||! /^(?:game\/|runtime\/|launch\.json$)/.test(f.relative)||seen.has(f.relative.toLowerCase())||!Number.isSafeInteger(f.size)||f.size<0||!/^[a-f0-9]{64}$/.test(f.hash))throw Error('Invalid backup manifest');seen.add(f.relative.toLowerCase());}await treeFiles(join(backupPath,'files'));
+ const preview=await registry.preview(target,{create:true,kind:'minecraft'}),id=randomUUID(),stage=join(registry.root,'restore-preparations170',id),bytes=record.files.reduce((n,f)=>n+f.size,0);if(!Number.isSafeInteger(bytes))throw Error('Invalid backup size');await requireSpace(registry.root,bytes);await ordinary170(stage,{missing:true});await mkdir(stage,{recursive:true});await copyVerified(join(backupPath,'files'),join(stage,'files'),record.files);
+ const previous=(await registry.get()).selected;let entry;try{entry=await registry.add(preview.token,(record.name+' / restored library').slice(0,80),true);const graph=await libraryServices170(registry,entry,options);await mkdir(graph.backups.root,{recursive:true});const transferred={schema:1,id,sourceId:'independent-restore',name:record.name.slice(0,60),mode:'full',reason:'independent-import',pinned:true,createdAt:new Date().toISOString(),bytes,files:record.files,external170:{format:2,pack:record.external170.pack===true,libraryId:entry.id,offline:true,platform:process.platform,arch:process.arch}};await atomicJson(join(stage,'backup.json'),transferred);const destination=join(graph.backups.root,id);await ordinary170(destination,{missing:true});if(await lstat(destination).catch(e=>{if(e.code==='ENOENT')return null;throw e;}))throw Error('Backup transfer destination already exists');await rename(stage,destination);const item=await graph.backups.restore(id);return {libraryId:entry.id,item};}catch(error){if(entry&&(await registry.get()).selected===entry.id)await registry.select(previous).catch(()=>registry.select('default'));throw Error('Independent restore failed; prepared backup and new library are retained for retry / 独立恢复失败，已保留准备备份与新库供重试： '+error.message,{cause:error});}
+}

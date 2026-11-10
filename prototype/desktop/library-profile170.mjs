@@ -23,6 +23,7 @@ export async function profile170(root,id,{directoryChoice=null}={}){
  const base=patches.find(p=>p.id==='game')?.version||chain.at(-1).id;
  const names=(meta.libraries||[]).map(l=>l?.name);if(names.some(n=>typeof n!=='string'))bad();
  const loader=names.some(n=>n.startsWith('net.fabricmc:fabric-loader:'))?'fabric':names.some(n=>n.startsWith('org.quiltmc:quilt-loader:'))?'quilt':names.some(n=>n.startsWith('net.minecraftforge:forge:'))?'forge':names.some(n=>n.startsWith('net.neoforged:neoforge:'))?'neoforge':'vanilla';
+ const loaderPrefixes={fabric:'net.fabricmc:fabric-loader:',quilt:'org.quiltmc:quilt-loader:',forge:'net.minecraftforge:forge:',neoforge:'net.neoforged:neoforge:'},loaderVersion=names.find(n=>loaderPrefixes[loader]&&n.startsWith(loaderPrefixes[loader]))?.split(':')[2]||null;
  const optifine=names.some(n=>/^optifine:|^net\.optifine:/.test(n))||patches.some(p=>p.id==='optifine');
  const versionDir=safePath(root,`versions/${id}`),explicit=chain.flatMap(m=>[...(m.gameDir?[m.gameDir]:[]),...values(m,'--gameDir')]).filter(p=>p!=='${game_directory}');
  const launcher=await json170(join(root,'launcher_profiles.json'),{optional:true});
@@ -40,10 +41,10 @@ export async function profile170(root,id,{directoryChoice=null}={}){
  if(directoryChoice&&!candidates.some(c=>c.path===directoryChoice)&&!paths.includes(directoryChoice))bad();
  const gameDir=directoryChoice||paths[0]||null;
  if(gameDir){await ordinary170(gameDir);for(const name of dataNames)await ordinary170(join(gameDir,name),{missing:true});}
- return {id,name:id,game:base,loader,optifine,versionDir,gameDir,isolation:gameDir?(gameDir===root?'shared':'isolated'):'unknown',directorySource:directoryChoice?'user':evidence[0]?.source||'unknown',candidates,chain:chain.map(m=>m.id),fingerprints,meta};
+ return {id,name:id,game:base,loader,loaderVersion,optifine,versionDir,gameDir,isolation:gameDir?(gameDir===root?'shared':'isolated'):'unknown',directorySource:directoryChoice?'user':evidence[0]?.source||'unknown',candidates,chain:chain.map(m=>m.id),fingerprints,meta};
 }
 export async function scan170(root,choices={}){
  await ordinary170(root);await ordinary170(join(root,'versions'));const rows=[];
- for(const entry of await readdir(join(root,'versions'),{withFileTypes:true})){if(!entry.isDirectory()&&!entry.isSymbolicLink())continue;try{const {meta,...row}=await profile170(root,entry.name,{directoryChoice:choices[entry.name]});rows.push(row);}catch(e){rows.push({id:entry.name,name:entry.name,error:e.message,isolation:'unknown'});}}
+ for(const entry of await readdir(join(root,'versions'),{withFileTypes:true})){if(/^\.AMBER-restore-[a-f0-9-]{36}$/.test(entry.name))continue;if(!entry.isDirectory()&&!entry.isSymbolicLink())continue;try{const {meta,...row}=await profile170(root,entry.name,{directoryChoice:choices[entry.name]});rows.push(row);}catch(e){rows.push({id:entry.name,name:entry.name,error:e.message,isolation:'unknown'});}}
  const modes=new Set(rows.map(r=>r.isolation));return {root,rows,isolation:modes.size===1?[...modes][0]||'unknown':modes.has('unknown')?'unknown':'mixed'};
 }

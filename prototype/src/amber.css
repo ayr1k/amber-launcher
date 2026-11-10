@@ -72,3 +72,5 @@
 
 .layout-editor input[type=range]{accent-color:var(--green)}
 
+
+.external-maintenance170{min-width:0;max-width:100%;overflow-wrap:anywhere}.external-maintenance170 .form-grid{grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr))}.external-maintenance170 .button{white-space:normal;max-width:100%}

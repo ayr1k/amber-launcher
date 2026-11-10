@@ -24,11 +24,11 @@ export function externalCore170(runner,stateRoot,index){
   async runtimeStatus(){return runner.runtimeStatus();},
   async runtimeMetadata(id){const r=await runner.runtimeMetadata(id);return {...r,dir:(await this.metadata(id)).dir};},
   startJob(id,kind,fn,expectedTarget){return runner.startJob(id,kind,async(job,signal)=>{const {dir}=await this.metadata(id),state=await stateDirectory(dir);return withFileLock(join(state,'operation'),async()=>{await this.requireStopped(dir);if(expectedTarget!==undefined&&expectedTarget!==await this.contentTargetIdentity170(id))throw Error('Game directory or launch profile changed; preview again / 游戏目录或启动配置已变化，请重新预览');const result=await (this.workbench&&kind.startsWith('content')?this.workbench.record(id,kind,()=>fn(job,signal),signal):fn(job,signal));if(kind.startsWith('content'))await index.refreshLocal(dir);return result;},signal);});},
-  async launch(id,options){const {dir}=await this.metadata(id),state=await stateDirectory(dir);return withFileLock(join(state,'operation'),async()=>{await this.requireStopped(dir);return runner.launch(id,options);});},
+  async launch(id,options){const {dir}=await this.metadata(id),state=await stateDirectory(dir);return withFileLock(join(state,'operation'),async()=>{await this.requireStopped(dir);return withFileLock(join(stateRoot,'maintenance-library'),()=>runner.launch(id,options));});},
   async selectJava(id,path){const {dir}=await this.metadata(id);await this.requireStopped(dir);return runner.selectJava(id,path);},
   async prepareJava(id){const {dir,stateDir,item,meta}=await this.metadata(id);await this.requireStopped(dir);return this.startJob(id,'external-java',async(job,signal)=>{const major=requiredJava(meta),existing=(await this.scanJava()).find(j=>j.major===major),java=existing||await withFileLock('java-install-'+major,()=>installJava(this.root,major,job,signal,this.fetcher),signal);item.javaPath=java.path;item.javaMajor=major;this.javaCandidates.set(java.path,java);await atomicJson(join(stateDir,'instance.json'),item);job.phase='Java ready / Java 已准备';});},
   async createInstance(){throw Error('External version creation requires a launcher-specific profile; create a managed library or use the original launcher / 新外部版本需要对应启动器配置，请创建 AMBER 库或使用原启动器');},
-  async configureLoader(){throw Error('Changing this external inheritance chain is not supported safely / 暂不能安全改写此外部版本的组件继承链');},
+  async configureLoader(){throw Error('Open Launch settings → External components and repair to preview and confirm a component transaction / 请在启动设置 → 外部版本组件与修复中预览并确认组件事务');},
   async configureFabric(){return this.configureLoader();}
  });
  return facade;

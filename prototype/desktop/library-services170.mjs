@@ -1,3 +1,6 @@
+import {withFileLock} from './task-queue132.mjs';
+import {ExternalPackUpgrade170} from './library-pack170.mjs';
+import {ExternalMaintenance170} from './library-maintenance170.mjs';
 import {Environment140} from './environment140.mjs';
 import {json170} from './library-paths170.mjs';
 // SPDX-License-Identifier: MPL-2.0
@@ -43,7 +46,7 @@ export async function libraryServices170(registry,entry,{runner,fetcher,accounts
  if(external)runner.workflowGuard=core.workflowGuard;
  const management=new InstanceManagement(core,workflows);
  if(external){
-  const originalBackupRestore=backups.restore.bind(backups);backups.restore=async ticket=>{if(!(await backups.list()).some(r=>r.id===ticket))throw Error('Backup unavailable');const record=await json170(join(backups.root,ticket,'backup.json'),{max:16000000});return core.withGameDirectory170(record.sourceId,()=>originalBackupRestore(ticket));};
+  const originalBackupRestore=backups.restore.bind(backups);backups.restore=async ticket=>{if(!(await backups.list()).some(r=>r.id===ticket))throw Error('Backup unavailable');const record=await json170(join(backups.root,ticket,'backup.json'),{max:16000000});return record.external170?.format===2?withFileLock(join(core.root,'maintenance-library'),()=>originalBackupRestore(ticket)):core.withGameDirectory170(record.sourceId,()=>originalBackupRestore(ticket));};
   const originalBackupCreate=backups.create.bind(backups);backups.create=(id,...args)=>core.withGameDirectory170(id,()=>originalBackupCreate(id,...args));
   const change=(id,fn)=>workflows.exclusive(async()=>{const {dir,item,stateDir}=await core.metadata(id);await core.requireStopped(dir);fn(item);await atomicJson(join(stateDir,'instance.json'),item);return item;});
   management.setIcon=(id,icon)=>change(id,item=>item.icon=validateIcon(icon));management.rename=(id,name)=>change(id,item=>{if(typeof name!=='string'||!name.trim()||name.length>60)throw Error('Name must contain 1–60 characters / 名称应为 1–60 个字符');item.name=name.trim();});
@@ -57,11 +60,11 @@ export async function libraryServices170(registry,entry,{runner,fetcher,accounts
   workbench.createTrial=async(id,{saves=false,name}={})=>{const {dir,item}=await core.metadata(id);await core.requireStopped(dir);const baseline=await workbench.scan(dir),backup=await backups.create(id,saves?'full':'configuration'),trial=await backups.restore(backup.id),state=await runner.instancePath(trial.id);await atomicJson(join(state,'trial.json'),{schema:1,sourceId:id,sourceName:item.name,baseline,saves,createdAt:new Date().toISOString()});if(name)await management.rename(trial.id,name);return (await core.metadata(trial.id)).item;};
  }
  const graph={core,runner,index,content,workflows,modUpdates,bulkContent,backups,launchPreferences,workbench,management,modImport:new ModImport(core,content,modUpdates),libraryState:new LibraryState(core),editor130:external?new ExternalEditor170(core):new InstanceEditor(core),dependency130:new DependencyMetadata(core),journal:new PlayJournal(core.root),screenshots:new Screenshots(external?{root:runner.root,instancePath:id=>core.instancePath(id)}:core),gameDirectories:new Set(external?(await registry.scan(entry.id)).rows.filter(r=>r.gameDir).map(r=>directoryKey170(r.gameDir)):[])};
- graph.environment140=new Environment140(core,null,content,workflows);graph.protection140=new Protection140(core,backups);graph.health=new InstanceHealth(core,content,workflows,accounts,launchPreferences,settings);graph.guided=new GuidedCreation(core,content,workflows);graph.packs=new Modpacks(core,content);graph.localPacks=new LocalPacks(core,graph.packs,workflows);workflows.localPacks=graph.localPacks;graph.packUpgrade140=new PackUpgrade140(core,graph.packs,graph.localPacks,workflows);
+ graph.maintenance170=external?new ExternalMaintenance170(core):null;graph.environment140=new Environment140(core,null,content,workflows);graph.protection140=new Protection140(core,backups);graph.health=new InstanceHealth(core,content,workflows,accounts,launchPreferences,settings);graph.guided=new GuidedCreation(core,content,workflows);graph.packs=new Modpacks(core,content);graph.localPacks=new LocalPacks(core,graph.packs,workflows);workflows.localPacks=graph.localPacks;graph.packUpgrade140=new PackUpgrade140(core,graph.packs,graph.localPacks,workflows);
  if(external){
   const trashScreenshot=graph.screenshots.trash.bind(graph.screenshots);graph.screenshots.trash=async(token,move)=>{const {path}=await graph.screenshots.read(token),rows=(await registry.scan(entry.id)).rows,owner=rows.find(r=>r.gameDir&&directoryKey170(join(r.gameDir,'screenshots'))===directoryKey170(dirname(path)));if(!owner)throw Error('Screenshot directory is no longer confirmed');return core.withGameDirectory170(owner.id,()=>trashScreenshot(token,move));};
-  const unsupportedPack=async()=>{throw Error('This external version has no AMBER pack installation receipt. Create a separate managed instance to install or upgrade a whole pack; individual content remains available / 此外部版本没有 AMBER 整合包安装记录。安装或升级整个整合包请创建独立托管实例；单项内容仍可管理');};
-  graph.packs.install=unsupportedPack;workflows.installPack=unsupportedPack;graph.packUpgrade140.preview=unsupportedPack;graph.packUpgrade140.apply=unsupportedPack;graph.packUpgrade140.versions=async()=>({current:null,versions:[],reason:'External launcher pack metadata is not an AMBER installation receipt / 外部启动器整合包元数据不是 AMBER 安装记录'});
+  const unsupportedPack=async()=>{throw Error('Use Instance overview → whole-pack upgrade to review an explicit target pack and create a new isolated version in this library / 请在实例概览的整包升级中明确选择目标包、审阅冲突，并在本库创建新的隔离版本');};
+  graph.packs.install=unsupportedPack;workflows.installPack=unsupportedPack;graph.packUpgrade140=new ExternalPackUpgrade170(core,graph.packs,graph.localPacks,workflows,backups);
  }
  return graph;
 }

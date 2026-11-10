@@ -12995,5 +12995,73 @@
   "library170.ed2b2d2f6842": {
     "zh": "列表密度",
     "en": "List density"
+  },
+  "m1a50da4350c8": {
+    "zh": "外部版本组件与修复",
+    "en": "External components and repair"
+  },
+  "mc416b1775ca2": {
+    "zh": "预览后明确确认才修改原库。替换仅针对所选版本；不删除共享模组、存档或第三方依赖。",
+    "en": "Changes require a reviewed plan. Replacement targets the selected version and never deletes shared mods, saves or third-party dependencies."
+  },
+  "m47e0ad128b26": {
+    "zh": "导入官方 OptiFine JAR 为 Forge 模组",
+    "en": "Import official OptiFine JAR as a Forge mod"
+  },
+  "m7b05809cf523": {
+    "zh": "准确的加载器版本",
+    "en": "Exact loader version"
+  },
+  "meceabc61075f": {
+    "zh": "创建新的启动版本，明确共用当前游戏目录",
+    "en": "Create a new launch version explicitly sharing this game directory"
+  },
+  "m1cc0263b4e0e": {
+    "zh": "预览组件替换",
+    "en": "Preview component replacement"
+  },
+  "m7abb6573cebb": {
+    "zh": "预览缺失文件修复",
+    "en": "Preview missing-file repair"
+  },
+  "mb47054de7d4b": {
+    "zh": "查看事务与恢复",
+    "en": "Transactions and recovery"
+  },
+  "m472eec00dd85": {
+    "zh": "正在校验或执行，可在任务中心取消已开始的任务。",
+    "en": "Verifying or applying. Started jobs can be cancelled in the task center."
+  },
+  "m6cc02c069b67": {
+    "zh": "此库未开启版本隔离，请自行核对模组冲突风险",
+    "en": "This library uses a shared game directory. Check mod conflicts before proceeding."
+  },
+  "m75182acb954a": {
+    "zh": "确切文件计划",
+    "en": "Exact file plan"
+  },
+  "meca008d45fed": {
+    "zh": "已有不同内容的共享依赖，当前计划不会覆盖：",
+    "en": "Existing shared dependencies differ; this plan will not overwrite:"
+  },
+  "m46c755de7368": {
+    "zh": "我已核对版本、真实目录和文件清单",
+    "en": "I reviewed the version, actual directory and file list"
+  },
+  "m37102cf2a902": {
+    "zh": "应用已确认的计划",
+    "en": "Apply confirmed plan"
+  },
+  "m7968b6549cf1": {
+    "zh": "撤销此事务（文件变化时拒绝覆盖）",
+    "en": "Undo transaction (refuses changed files)"
+  },
+  "mc6c0643c4caf": {
+    "zh": "选择完整外部备份，恢复到新空库（原库可不存在）",
+    "en": "Choose complete external backup and restore to a new empty library (source library may be gone)"
+  },
+  "m8eccf6d06240": {
+    "zh": "完整备份保存当前平台已校验的启动依赖和游戏内容，可脱离原版本离线恢复；不包含 Java、启动器账号和日志。模组配置可能自行保存凭据，备份与分享前请检查。仅配置/存档备份仍依赖原启动配置。",
+    "en": "Full backup captures verified launch dependencies for this platform and game content for independent offline restore. Java, launcher accounts and logs are excluded. Mod configuration may contain credentials: inspect before backup or sharing. Settings/world-only backups still depend on the original launch profile."
   }
 }

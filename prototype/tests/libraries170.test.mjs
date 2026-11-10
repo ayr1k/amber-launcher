@@ -7,6 +7,7 @@ import {join} from 'node:path';
 import {Libraries170} from '../desktop/libraries170.mjs';
 import {profile170,scan170} from '../desktop/library-profile170.mjs';
 import {safeArguments170} from '../desktop/library-runtime170.mjs';
+test('Fabric official process marker is exact, entry-scoped and one JVM token',()=>{const marker='-DFabricMcEmu= net.minecraft.client.main.Main ',base={mainClass:'net.fabricmc.loader.impl.launch.knot.KnotClient',arguments:{game:[],jvm:[marker]}};assert.equal(safeArguments170(base).arguments.jvm.at(-1),marker);for(const value of ['-DFabricMcEmu= evil.Main ',marker+' -javaagent:evil.jar',marker.trim()])assert.throws(()=>safeArguments170({...base,arguments:{game:[],jvm:[value]}}),/Custom JVM/);assert.throws(()=>safeArguments170({...base,mainClass:'net.minecraft.client.main.Main'}),/Custom JVM/);});
 import {localPlan170} from '../desktop/library-runtime170.mjs';
 import {Storage} from '../desktop/storage.mjs';
 import {needsInitialLocation170,setInitialLocation170} from '../desktop/initial-storage170.mjs';
