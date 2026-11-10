@@ -1,11 +1,12 @@
+import {useLibraryApi170} from './LibraryContext170';
 import {PackProvenance} from './LocalPackImport';
 import {ControlButton} from './ControlButton.mjs';
 import {TrialDialog,wb} from './Workbench';
 import { useLocale } from "./Locale";import { t as translateText, translateMessage, getLocale } from "../desktop/localization.mjs"; // SPDX-License-Identifier: MPL-2.0
 import { ChangePreview } from './ChangePreview';
 import { useState, useEffect, useRef } from 'react';
-export function ModUpdatesPanel({ instance, blocked, onChanged, onCreated, showHistory = true }) {useLocale();
-  const [trial,setTrial]=useState(false);const api = window.amberDesktop,[rows, setRows] = useState(null),[history, setHistory] = useState([]),[selected, setSelected] = useState([]),[pre, setPre] = useState(false),[busy, setBusy] = useState(false),[checking, setChecking] = useState(false),[error, setError] = useState(''),[notice, setNotice] = useState(''),[plan, setPlan] = useState(null),[optional, setOptional] = useState([]),[excluded, setExcluded] = useState([]),[confirmRestore, setConfirmRestore] = useState(null);
+export function ModUpdatesPanel({ instance, blocked, onChanged, onCreated, showHistory = true }) {const libraryApi170=useLibraryApi170();useLocale();
+  const [trial,setTrial]=useState(false);const api = libraryApi170,[rows, setRows] = useState(null),[history, setHistory] = useState([]),[selected, setSelected] = useState([]),[pre, setPre] = useState(false),[busy, setBusy] = useState(false),[checking, setChecking] = useState(false),[error, setError] = useState(''),[notice, setNotice] = useState(''),[plan, setPlan] = useState(null),[optional, setOptional] = useState([]),[excluded, setExcluded] = useState([]),[confirmRestore, setConfirmRestore] = useState(null);
   const generation = useRef(0);
   useEffect(() => {generation.current++;setRows(null);setPlan(null);setSelected([]);setHistory([]);setOptional([]);setExcluded([]);setError('');setNotice('');setConfirmRestore(null);if (api.modUpdateHistory) api.modUpdateHistory(instance.id).then(setHistory).catch((e) => setError(e.message));}, [instance.id]);
   useEffect(() => {if (!selected.length) {setPlan(null);setChecking(false);return;}const token = ++generation.current;setChecking(true);setPlan(null);setError('');api.modUpdatePreview(instance.id, selected, optional, excluded).then((p) => {if (token === generation.current) setPlan(p);}).catch((e) => {if (token === generation.current) setError(clean(e));}).finally(() => {if (token === generation.current) setChecking(false);});return () => {generation.current++;};}, [instance.id, selected, optional, excluded]);

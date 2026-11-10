@@ -1,3 +1,7 @@
+import {directoryKey170} from './library-mod-index170.mjs';
+import {LibraryScope170,libraryChannel170} from './library-scope170.mjs';
+import {libraryServices170} from './library-services170.mjs';
+import {contentState170} from './content-state170.mjs';
 import {Libraries170} from './libraries170.mjs';
 import {needsInitialLocation170,setInitialLocation170} from './initial-storage170.mjs';
 import {LibraryRuntime170} from './library-runtime170.mjs';
@@ -123,7 +127,9 @@ app.whenReady().then(async () => {
   }
   while(!storageConfig){try{storageConfig=await storage.validateExisting();}catch(e){if(smoke||qaUI)throw e;const answer=await dialog.showMessageBox({type:'error',title:'游戏数据位置不可用 / Game data unavailable',message:'原数据位置无法读取，未创建空库。请连接原磁盘后重试，或重新选择原数据目录。 / Reconnect the original drive or locate your existing library. No empty library was created.',detail:redact(e.message),buttons:['重试 / Retry','选择原目录 / Locate library','退出 / Quit'],defaultId:0,cancelId:2});if(answer.response===2){app.quit();return;}if(answer.response===1){const pick=await dialog.showOpenDialog({properties:['openDirectory']});if(!pick.canceled)try{await storage.reconnect(pick.filePaths[0]);}catch(err){await dialog.showMessageBox({type:'error',message:redact(err.message)});}}}}
 
-  const core = new VanillaLauncher(storageConfig.path);
+  const scopes170=new LibraryScope170();
+  const libraryGraphs170=new Map(),libraryRequests170=new Map();
+  const core = scopes170.wrap('core',new VanillaLauncher(storageConfig.path));
   await core.init();
   const seedMap=new SeedMap();
   app.on('before-quit',()=>seedMap.cancel());
@@ -150,7 +156,7 @@ app.whenReady().then(async () => {
       if(['amber:storage-move','amber:app-update-install'].includes(channel))await libraries170.requireAllStopped();
       if (storageBusy && !['amber:info', 'amber:status', 'amber:setup-cancel', 'amber:window-action', 'amber:window-state'].includes(channel)) throw Error('数据目录正在迁移，请等待完成。');
       if (upgradeBusy && !['amber:info', 'amber:status', 'amber:app-update-state', 'amber:cleanup-cancel', 'amber:window-action', 'amber:window-state'].includes(channel)) throw Error('正在准备升级，请稍候。');
-      let result;try {if(IS_AMBERE&&(channel.startsWith('amber:ms-')||channel.startsWith('amber:ownership-')||channel==='amber:account-configure'))accounts.requireMicrosoft();result = await fn(...args);} catch (e) {const problem=errorDescriptor(redact(e.message,accounts.secrets()));throw Error('[AMBER '+problem.code+'] '+problem.text);}result = redactFields(result, accounts.secrets());if (smoke) {smokeChannels.add(channel);finishSmoke();}return result;
+      let result;try {if(IS_AMBERE&&(channel.startsWith('amber:ms-')||channel.startsWith('amber:ownership-')||channel==='amber:account-configure'))accounts.requireMicrosoft();const envelope=args[0]?.__libraryScope170;if(envelope!==undefined)args.shift();if(envelope!==undefined&&libraryChannel170(channel)&&(await libraries170.list()).selected!==envelope)throw Error('Library selection changed; reopen this action / 实例库已切换，请重新打开此操作'+(qaUI?' ('+envelope+' -> '+(await libraries170.list()).selected+')':''));const graph=envelope&&envelope!=='default'&&libraryChannel170(channel)?await libraryGraph170(envelope):null;result = graph?await invokeLibrary170(envelope,graph,()=>graph.core.external&&['amber:world-import','amber:optifine-import','amber:instance-icon','amber:instance-rename','amber:launch-preferences-save'].includes(channel)?graph.core.withGameDirectory170(args[0],()=>fn(...args)):fn(...args)):await fn(...args);} catch (e) {const problem=errorDescriptor(redact(e.message,accounts.secrets()));throw Error('[AMBER '+problem.code+'] '+problem.text);}result = redactFields(result, accounts.secrets());if (smoke) {smokeChannels.add(channel);finishSmoke();}return result;
     });
   }
   handle('amber:info', () => ({ version: app.getVersion(), buildChannel: (awaitBuildChannel), edition:EDITION, productName:PRODUCT_NAME, dataPath: core.root, platform: process.platform, recovery, themeRecovery:settings.recovery||themes.recovery||null }));
@@ -242,12 +248,12 @@ app.whenReady().then(async () => {
    if(action==='buildtools')return shell.openExternal('https://www.spigotmc.org/wiki/buildtools/');
    throw Error('Unknown server action');
   });
-  const content = new Modrinth(core);
-  const packs = new Modpacks(core, content);
-  const workflows = new Workflows(core, content),settings = new Settings(core.root),selections = new Map();
+  const content = scopes170.wrap('content',new Modrinth(core));
+  const packs = scopes170.wrap('packs',new Modpacks(core, content));
+  const workflows = scopes170.wrap('workflows',new Workflows(core, content)),settings = new Settings(core.root),selections = scopes170.wrap('selections',new Map());
   rooms.sync=new RoomSync152(core,rooms,workflows,content);
-  const localPacks=new LocalPacks(core,packs,workflows);workflows.localPacks=localPacks;
-  const packUpgrade140=new PackUpgrade140(core,packs,localPacks,workflows);
+  const localPacks=scopes170.wrap('localPacks',new LocalPacks(core,packs,workflows));workflows.localPacks=localPacks;
+  const packUpgrade140=scopes170.wrap('packUpgrade140',new PackUpgrade140(core,packs,localPacks,workflows));
   handle('amber:pack-upgrade',async(action,id,input)=>{if(action==='versions')return packUpgrade140.versions(id);if(action==='diff')return packUpgrade140.diff(id,input);if(action==='apply')return packUpgrade140.apply(id,input);if(action==='preview'){if(input)return packUpgrade140.preview(id,{version:input});const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Modrinth pack',extensions:['mrpack']}]});return r.canceled?null:packUpgrade140.preview(id,{path:r.filePaths[0]});}throw Error('Invalid action');});
   const minecraftImport=new MinecraftImport(core);
   handle('amber:minecraft-import',async(action,...args)=>{
@@ -275,8 +281,8 @@ app.whenReady().then(async () => {
   function applyAppearance(v){startup.preferences(v,translateMessage).catch(()=>{});if(window&&!window.isDestroyed()){window.setOpacity(v.appearance?.enabled?(v.appearance.windowOpacity/100):1);window.webContents.setZoomFactor(v.appearance?.enabled?v.appearance.scale/100:1);window.webContents.send('amber:theme-changed');}}
   themes.onChanged=applyAppearance;
 
-  const guided=new GuidedCreation(core,content,workflows);
-  const workbench=new InstanceWorkbench(core,workflows);core.workbench=workbench;
+  const guided=scopes170.wrap('guided',new GuidedCreation(core,content,workflows));
+  const workbench=scopes170.wrap('workbench',new InstanceWorkbench(core,workflows));core.workbench=workbench;
   startup.stage('library');
   for(const i of await core.listInstances()){try{const dir=await core.instancePath(i.id);await core.requireStopped(dir);await workbench.recover(dir);}catch(e){recovery.push({name:i.name,error:e.message});}}
   handle('amber:workbench',id=>workbench.inspect(id));
@@ -320,24 +326,24 @@ app.whenReady().then(async () => {
   handle('amber:language-import', async () => {const r = await dialog.showOpenDialog(window, { title: translateMessage('导入语言包'), properties: ['openFile'], filters: [{ name: 'AMBER JSON', extensions: ['json'] }] });if (r.canceled) return false;const pack = await languages.preview(r.filePaths[0]);const answer = await dialog.showMessageBox(window, { type: 'question', title: translateMessage('导入语言包'), message: pack.name, detail: translateMessage('将替换当前自定义语言包。只导入可信来源；文字可能改变提示的含义。'), buttons: [translateMessage('取消'), translateMessage('导入')], defaultId: 0, cancelId: 0, noLink: true });if (answer.response !== 1) return false;await languages.save(pack);await refreshLocale();return true;});
   handle('amber:language-export', async () => {const r = await dialog.showSaveDialog(window, { title: translateMessage('导出语言包模板'), defaultPath: 'amber-language.json', filters: [{ name: 'JSON', extensions: ['json'] }] });if (r.canceled) return false;await writeFile(r.filePath, JSON.stringify(languageTemplate(), null, 2));return true;});
   handle('amber:language-remove', async () => {await languages.remove();const value = await settings.get();if (value.language.startsWith('x-')) await settings.save({ ...value, language: 'en-US' });return refreshLocale();});
-  const management = new InstanceManagement(core, workflows),backups = new Backups(core, workflows);
+  const management = scopes170.wrap('management',new InstanceManagement(core, workflows)),backups = scopes170.wrap('backups',new Backups(core, workflows));
   const serverManagement140=new ServerManagement140(core,servers),environment140=new Environment140(core,servers,content,workflows);
   services160.backup=id=>serverManagement140.snapshot(id,'manual');
   const performance144=new Performance144(servers);const performanceTimer=setInterval(()=>performance144.sample().catch(()=>{}),3000);performanceTimer.unref();
   handle('amber:performance144',async(action,id)=>{if(action==='state')return performance144.state(id);if(action==='collect')return performance144.collect(id);if(action==='export'){const state=await performance144.state(id);if(!state.report)throw Error('Collect a report first / 请先采集报告');const out=await dialog.showSaveDialog(window,{defaultPath:'server-performance.json',filters:[{name:'JSON',extensions:['json']}]});if(out.canceled)return null;await writeFile(out.filePath,JSON.stringify(state.report,null,2));return true;}throw Error('Invalid action');});
   handle('amber:server-management',async(action,id,input)=>{if(services160.pending.has(id))throw Error('Launch plan running / 启动规划正在执行');if(['roster','skin','installBridge','players','player','commands','backups','backup','restore','policy','savePolicy','pinBackup'].includes(action))return serverManagement140[action](id,input);if(action==='command')return serverManagement140.consoleResult(id,input);if(action==='link')return environment140.links(id,input);if(action==='compare')return environment140.compare(id,input);if(action==='previewInstall')return environment140.previewInstall(id,input.localId,input.versionId);if(action==='install')return environment140.install(id);if(action==='export'){const r=await environment140.requirements(id);const out=await dialog.showSaveDialog(window,{defaultPath:'server-environment.json',filters:[{name:'Environment',extensions:['json']}]});if(out.canceled)return null;await writeFile(out.filePath,JSON.stringify(r.manifest,null,2));return {unknown:r.unknown,optional:r.optional};}if(action==='import'){const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Environment',extensions:['json']}]});if(r.canceled)return null;const st=await lstat(r.filePaths[0]);if(!st.isFile()||st.size>2000000)throw Error('Invalid environment file');return environment140.previewImport(JSON.parse(await readFile(r.filePaths[0],'utf8')));}if(action==='create')return environment140.create(id,input);throw Error('Invalid action');});
-  const protection140=new Protection140(core,backups);
+  const protection140=scopes170.wrap('protection140',new Protection140(core,backups));
   handle('amber:protection', (action,id,value)=>{if(action==='state')return protection140.state(id);if(action==='save')return protection140.save(id,value);if(action==='pin')return backups.pin(id,value);throw Error('Invalid action');});
-  const modUpdates = new ModUpdates(core, content);
-  const bulkContent = new BulkContent(core, content, modUpdates),launchPreferences = new LaunchPreferences(core);
+  const modUpdates = scopes170.wrap('modUpdates',new ModUpdates(core, content));
+  const bulkContent = scopes170.wrap('bulkContent',new BulkContent(core, content, modUpdates)),launchPreferences = scopes170.wrap('launchPreferences',new LaunchPreferences(core));
   content.updates = modUpdates;
-  const libraryState = new LibraryState(core),modImport = new ModImport(core, content, modUpdates),health = new InstanceHealth(core, content, workflows, accounts, launchPreferences, settings);
+  const libraryState = scopes170.wrap('libraryState',new LibraryState(core)),modImport = scopes170.wrap('modImport',new ModImport(core, content, modUpdates)),health = scopes170.wrap('health',new InstanceHealth(core, content, workflows, accounts, launchPreferences, settings));
   handle('amber:copy-error', (text) => {if (typeof text !== 'string' || text.length > 100000) throw Error('错误详情过长，请手动选择文字复制。');clipboard.writeText(redact(text, accounts.secrets()));return true;});
-  const journal=new PlayJournal(core.root),news=new NewsFeed(core.root),homePrefs=new HomePreferences(core.root),screenshots=new Screenshots(core),survey=new StorageSurvey(core,app.getPath('userData'),{current:app.getVersion(),product:PRODUCT_NAME});
+  const journal=scopes170.wrap('journal',new PlayJournal(core.root)),news=new NewsFeed(core.root),homePrefs=new HomePreferences(core.root),screenshots=scopes170.wrap('screenshots',new Screenshots(core)),survey=new StorageSurvey(core,app.getPath('userData'),{current:app.getVersion(),product:PRODUCT_NAME});
   try{await journal.migrate((await libraryState.get()).history);await journal.recover();}catch{/* Preserve an unreadable journal; it must never prevent launching the application. */}
   await survey.init().catch(()=>{});
   let journalObservation=null;const observe=()=>{if(storageBusy||upgradeBusy)return Promise.resolve();if(journalObservation)return journalObservation;journalObservation=(async()=>{try{const processes=(await core.runtimeStatus()).processes;if(!storageBusy&&!upgradeBusy){await journal.observe(processes);await protection140.observe(processes);}}catch{}})().finally(()=>journalObservation=null);return journalObservation;};
-  core.onSessionChanged=observe;await observe();const journalTimer=setInterval(observe,30000);journalTimer.unref();
+  core.onSessionChanged=observe;await observe();const journalTimer=setInterval(()=>{observe();for(const pending of libraryGraphs170.values())pending.graph?.observe();},30000);journalTimer.unref();
   powerMonitor.on('suspend',()=>{if(!storageBusy)journal.suspend().catch(()=>{});});powerMonitor.on('resume',()=>{journal.resume();observe();});
   handle('amber:journal',()=>journal.get());
   handle('amber:journal-enable',v=>journal.enable(v));
@@ -347,9 +353,9 @@ app.whenReady().then(async () => {
   handle('amber:news-open',async id=>shell.openExternal(await news.link(id)));handle('amber:news-detail',id=>news.detail(id));
   handle('amber:home-prefs',()=>homePrefs.get());handle('amber:home-prefs-save',v=>homePrefs.save(v));
   handle('amber:survey',()=>survey.get());handle('amber:survey-start',()=>survey.start());handle('amber:survey-cancel',()=>survey.cancel());
-  const dependency130=new DependencyMetadata(core);
+  const dependency130=scopes170.wrap('dependency130',new DependencyMetadata(core));
   handle('amber:dependency-metadata',async id=>dependency130.read(id,await content.list(id)));
-  const editor130=new InstanceEditor(core);
+  const editor130=scopes170.wrap('editor130',new InstanceEditor(core));
   handle('amber:editor-history',(id,name)=>editor130.history(id,name));
   handle('amber:editor-backup',(id,name,token)=>editor130.backup(id,name,token));
   handle('amber:editor-list',id=>editor130.list(id));
@@ -434,7 +440,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   handle('amber:privacy-copy-path',key=>{const paths={accounts:join(core.root,'accounts.json'),data:core.root,upgrades:join(app.getPath('userData'),'upgrade-backups')};if(!Object.hasOwn(paths,key))throw Error('不支持的数据位置。');clipboard.writeText(paths[key]);return true;});
   handle('amber:diagnostics-export', async () => {if(!diagnosticPreview)throw Error('请先预览诊断摘要。');const snapshot=diagnosticPreview;const result = await dialog.showSaveDialog(window, { title: translateMessage('保存不含账号和日志的诊断摘要'), defaultPath: 'amber-diagnostics.json', filters: [{ name: 'JSON', extensions: ['json'] }] });if (result.canceled) return false;await writeFile(result.filePath, JSON.stringify(snapshot, null, 2));return true;});
   handle('amber:instance-restore', (id) => management.restore(id));
-  handle('amber:lite-overlay', (id, v) => configureLiteOverlay(core, id, v));
+  handle('amber:lite-overlay', (id, v) => {if(core.external)throw Error('External component inheritance cannot be rewritten safely / 无法安全改写外部组件继承链');return configureLiteOverlay(core,id,v);});
   handle('amber:layout-export', async () => {const value = { format: 'amber-layout', schema: 1, layout: (await settings.get()).layout };const result = await dialog.showSaveDialog(window, { title: translateMessage('导出布局'), defaultPath: 'amber-layout.json', filters: [{ name: 'AMBER layout', extensions: ['json'] }] });if (result.canceled) return false;await writeFile(result.filePath, JSON.stringify(value, null, 2));return true;});
   handle('amber:layout-import', async () => {const result = await dialog.showOpenDialog(window, { title: translateMessage('导入布局'), properties: ['openFile'], filters: [{ name: 'AMBER layout', extensions: ['json'] }] });if (result.canceled) return null;const path = result.filePaths[0];if ((await stat(path)).size > 64000) throw Error('布局文件过大');const data = JSON.parse(await readFile(path, 'utf8'));if (data.format !== 'amber-layout' || data.schema !== 1) throw Error('不是 AMBER 布局文件');return settings.save({ ...(await settings.get()), layout: validateLayout(data.layout) });});
   core.downloadThreads = (await settings.get()).threads;configureTransferBudget(core.downloadThreads);
@@ -491,7 +497,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   handle('amber:content-toggle', (id, p) => content.toggle(id, p));
   handle('amber:world-import', async (id) => {const result = await dialog.showOpenDialog(window, { title: translateMessage('导入地图 ZIP（保留原文件，创建独立存档）'), properties: ['openFile'], filters: [{ name: 'Minecraft world ZIP', extensions: ['zip'] }] });return result.canceled ? null : importWorld(core, id, result.filePaths[0]);});
   handle('amber:optifine-import', async (id) => {const result = await dialog.showOpenDialog(window, { title: translateMessage('选择与当前 Minecraft 和 Forge 兼容的 OptiFine 官方 JAR'), properties: ['openFile'], filters: [{ name: 'OptiFine', extensions: ['jar'] }] });return result.canceled ? null : importOptifine(core, id, result.filePaths[0]);});
-  handle('amber:optifine-install', async (id) => {const result = await dialog.showOpenDialog(window, { title: translateMessage('选择 OptiFine 官方安装器 JAR（独立安装，替换当前加载器）'), properties: ['openFile'], filters: [{ name: 'OptiFine', extensions: ['jar'] }] });return result.canceled ? null : installOptifine(core, id, result.filePaths[0]);});
+  handle('amber:optifine-install', async (id) => {if(core.external)throw Error('Standalone OptiFine changes the external launch profile; use its original launcher / 独立 OptiFine 会改写外部启动配置，请使用其原启动器');const result = await dialog.showOpenDialog(window, { title: translateMessage('选择 OptiFine 官方安装器 JAR（独立安装，替换当前加载器）'), properties: ['openFile'], filters: [{ name: 'OptiFine', extensions: ['jar'] }] });return result.canceled ? null : installOptifine(core, id, result.filePaths[0]);});
   handle('amber:optifine-site', () => shell.openExternal('https://optifine.net/downloads'));
   handle('amber:loader-versions', (id, type) => core.loaderVersions(id, type));
   handle('amber:loader-configure', async (id, type, v) => {await protection140.before(id,'updates');return core.configureLoader(id,type,v);});
@@ -515,11 +521,15 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   handle('amber:ms-open', () => shell.openExternal(pendingCode(accounts).url));
   const skinRuns=new Set();
   let launching = false;
-  handle('amber:launch', async (id, options) => {if (launching) throw Error('正在准备启动。');launching = true;const launchAttempt=prelaunch164.begin();try {core.workflowGuard?.(id);if((await core.runtimeStatus()).processes.some(p=>p.instanceId===id&&p.state==='running'))throw Error('此实例已经在运行。');if (core.jobs.some((j) => j.instanceId===id&&j.state === 'running')) throw Error('请等待此实例安装或更新结束后启动游戏。');await recoverModUpdate(await core.instancePath(id));if ((await workflows.pending()).some((p) => p.instanceId === id)) throw Error('实例安装尚未完成，请先在任务中心继续安装。');await requireRoomSyncReady152(core,id);await content.validateLaunch(id);const launchPrefs = await launchPreferences.get(id);options = { ...options, accountId: launchPrefs.accountId ?? options.accountId, memory: launchPrefs.memory ?? options.memory };const identity = await accounts.authorizeLaunch(options.accountId,options.username);await protection140.before(id,'daily');const skinBridge=identity.localSkin?await startSkinBridge(identity,identity.localSkin):null;let run;try{const extraJvm = identity?.server||skinBridge ? [`-javaagent:${await authAgent(core.root,fetch,{preferCache:!!skinBridge})}=${identity.server||skinBridge.url}`] : [];if(skinBridge)extraJvm.push('-Dminecraft.api.discovery.host='+skinBridge.url+'discovery');launchAttempt.controller.signal.throwIfAborted();run = await core.launch(id, { launchAttempt, username: options.username, memory: options.memory, identity, extraJvm,joinServer:options.roomSync?await rooms.sync.launchAddress(id):options.serverId?await (async()=>{const link=await environment140.links(options.serverId);if(link.localId!==id)throw Error('Select the linked client / 请选择关联客户端');const run=servers.runs.get(options.serverId);if(run?.state!=='running')throw Error('Start the server first / 请先启动服务端');return '127.0.0.1:'+run.port;})():null });if(skinBridge){const child=core.processes.get(run.id)?.child;if(child){skinRuns.add(run.id);const stopSkin=()=>{skinBridge.close();skinRuns.delete(run.id);};child.once('close',stopSkin);child.once('error',stopSkin);}else skinBridge.close();}}catch(e){skinBridge?.close();throw e;}await libraryState.launched(id, run).catch(() => {});await observe();return run;} finally {prelaunch164.finish(launchAttempt);launching = false;}});
+  handle('amber:launch', async (id, options) => {if (launching) throw Error('正在准备启动。');launching = true;const launchAttempt=prelaunch164.begin();try {core.workflowGuard?.(id);if((await core.runtimeStatus()).processes.some(p=>p.instanceId===id&&p.state==='running'))throw Error('此实例已经在运行。');if (core.jobs.some((j) => j.instanceId===id&&j.state === 'running')) throw Error('请等待此实例安装或更新结束后启动游戏。');await recoverModUpdate(await core.instancePath(id),await contentState170(core,await core.instancePath(id)));if ((await workflows.pending()).some((p) => p.instanceId === id)) throw Error('实例安装尚未完成，请先在任务中心继续安装。');if(!core.external)await requireRoomSyncReady152(core,id);else if(options?.serverId||options?.roomSync)throw Error('External client linking requires an explicit library identity / 外部客户端联机绑定需要明确的实例库身份');await content.validateLaunch(id);const launchPrefs = await launchPreferences.get(id);options = { ...options, accountId: launchPrefs.accountId ?? options.accountId, memory: launchPrefs.memory ?? options.memory };const identity = await accounts.authorizeLaunch(options.accountId,options.username);await protection140.before(id,'daily');const skinBridge=identity.localSkin?await startSkinBridge(identity,identity.localSkin):null;let run;try{const extraJvm = identity?.server||skinBridge ? [`-javaagent:${await authAgent(core.root,fetch,{preferCache:!!skinBridge})}=${identity.server||skinBridge.url}`] : [];if(skinBridge)extraJvm.push('-Dminecraft.api.discovery.host='+skinBridge.url+'discovery');launchAttempt.controller.signal.throwIfAborted();run = await core.launch(id, { launchAttempt, username: options.username, memory: options.memory, identity, extraJvm,joinServer:options.roomSync?await rooms.sync.launchAddress(id):options.serverId?await (async()=>{const link=await environment140.links(options.serverId);if(link.localId!==id)throw Error('Select the linked client / 请选择关联客户端');const run=servers.runs.get(options.serverId);if(run?.state!=='running')throw Error('Start the server first / 请先启动服务端');return '127.0.0.1:'+run.port;})():null });if(skinBridge){const child=core.processes.get(run.id)?.child;if(child){skinRuns.add(run.id);const stopSkin=()=>{skinBridge.close();skinRuns.delete(run.id);};child.once('close',stopSkin);child.once('error',stopSkin);}else skinBridge.close();}}catch(e){skinBridge?.close();throw e;}await libraryState.launched(id, run).catch(() => {});await observe();return run;} finally {prelaunch164.finish(launchAttempt);launching = false;}});
   handle('amber:open-instance', async (id) => {const error = await shell.openPath(await core.instancePath(id));if (error) throw new Error(error);});
+
+  async function invokeLibrary170(id,graph,fn){libraryRequests170.set(id,(libraryRequests170.get(id)||0)+1);try{return await scopes170.run(graph,fn);}finally{const count=libraryRequests170.get(id)-1;if(count)libraryRequests170.set(id,count);else libraryRequests170.delete(id);}}
+
+  async function libraryGraph170(id){await libraries170.entry(id);if(!libraryGraphs170.has(id)){const pending=(async()=>{const entry=await libraries170.entry(id),runner=await libraryRunner170(id),graph=await libraryServices170(libraries170,entry,{runner,fetcher:network.request,accounts,settings});graph.selections=new Map();let observing=null;graph.observe=()=>observing||=(async()=>{try{const status=await runner.runtimeStatus();await graph.journal.observe(status.processes);await graph.protection140.observe(status.processes);}catch{}})().finally(()=>observing=null);runner.onSessionChanged=graph.observe;await graph.journal.recover().catch(()=>{});libraryGraphs170.get(id).graph=graph;return graph;})();libraryGraphs170.set(id,pending);pending.catch(()=>libraryGraphs170.delete(id));}return libraryGraphs170.get(id);}
   const libraryRunners170=new Map();
   const libraryPending170=new Set();
-  const libraries170=new Libraries170(core.root,{edition:EDITION,active:id=>{const c=libraryRunners170.get(id);return libraryPending170.has(id)||!!c&&(c.jobs.some(j=>j.state==='running')||[...c.processes.values()].some(p=>p.state==='running'));}});
+  const libraries170=new Libraries170(core.root,{edition:EDITION,active:id=>{const c=libraryRunners170.get(id),g=libraryGraphs170.get(id)?.graph,own=g&&scopes170.context.getStore()===g;return libraryPending170.has(id)||!own&&libraryRequests170.has(id)||!!g&&[...g.gameDirectories].some(key=>g.index.running.has(key))||!own&&!!g?.workflows.active||!!c&&(c.jobs.some(j=>j.state==='running')||[...c.processes.values()].some(p=>p.state==='running'));}});
   if(storageConfig.initialExternal170&&!(await libraries170.list()).libraries.some(l=>l.path===storageConfig.initialExternal170)){
    try{const preview=await libraries170.preview(storageConfig.initialExternal170);const warning=preview.isolation==='shared'||preview.isolation==='mixed'?'此库未开启版本隔离，请自行核对模组冲突风险':'无法可靠确定此库的版本隔离模式，请逐版本核对游戏目录和模组冲突风险。 / Isolation is undetermined; confirm each game directory and mod conflicts.';
    const answer=await dialog.showMessageBox({type:'warning',message:warning,buttons:['添加库 / Add library','暂不添加 / Later'],defaultId:1,cancelId:1});if(answer.response===0)await libraries170.add(preview.token,'Minecraft',true);
@@ -527,16 +537,18 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
    delete storageConfig.initialExternal170;await import('./core.mjs').then(({atomicJson})=>atomicJson(storage.config,storageConfig));
   }
   async function libraryRunner170(id){const entry=await libraries170.entry(id);if(id==='default')throw Error('Use the main library actions / 请使用默认库操作');if(!libraryRunners170.has(id)){const runner=entry.kind==='minecraft'?new LibraryRuntime170(libraries170,entry,join(core.root,'library-state170',id)):new VanillaLauncher(entry.path);await runner.init();runner.prelaunchMemory=core.prelaunchMemory;runner.beforeJavaLaunch=core.beforeJavaLaunch;libraryRunners170.set(id,runner);}return libraryRunners170.get(id);}
+  async function scanLibrary170(id,action){const graph=await libraryGraph170(id),scan=await libraries170.scan(id),groups=new Map();for(const row of scan.rows){if(!row.gameDir||row.error)continue;const versions=groups.get(row.gameDir)||[];versions.push(row.id);groups.set(row.gameDir,versions);}graph.gameDirectories=new Set([...groups.keys()].map(directoryKey170));const directories=[];for(const [dir,versions]of groups){if(action==='start')graph.index.start(dir).catch(()=>{});if(action==='cancel')graph.index.cancel(dir);let state=graph.index.state(dir);if(state.state==='idle')state=await graph.index.read(dir);directories.push({key:versions[0],versions,state:state.state,completed:state.completed||0,total:state.total||0,error:state.error,matched:state.rows.filter(r=>r.match==='matched').length,unmatched:state.rows.filter(r=>r.match==='unmatched').length,failed:state.rows.filter(r=>r.match==='failed').length});}return {versions:scan.rows,directories};}
   handle('amber:libraries170',async(action,id,input)=>{
    if(['choose','delete','restore'].includes(action)){const runner=await libraryRunner170(id);if(libraryPending170.has(id)||(await runner.runtimeStatus()).processes.some(p=>p.state==='running')||runner.jobs.some(j=>j.state==='running'))throw Error('Library is busy / 实例库正在使用');}
    if(action==='remove'&&libraryPending170.has(id))throw Error('Library is busy / 实例库正在使用');
    if(action==='list')return libraries170.list();
    if(action==='pick'){const pick=await dialog.showOpenDialog(window,{title:'实例库目录 / Instance library directory',properties:['openDirectory','createDirectory']});return pick.canceled?null:libraries170.preview(pick.filePaths[0],{create:input?.create===true,kind:'managed'});}
-   if(action==='add')return libraries170.add(input.token,input.name,input.acknowledged);
-   if(action==='select')return libraries170.select(id);
+   if(action==='add'){const entry=await libraries170.add(input.token,input.name,input.acknowledged);if(entry.kind==='minecraft')await scanLibrary170(entry.id,'start');return entry;}
+   if(action==='select'){const result=await libraries170.select(id);for(const pending of libraryGraphs170.values()){const graph=pending.graph;if(graph){for(const service of Object.values(graph))service?.plans?.clear?.();graph.selections.clear();}}return result;}
    if(action==='rename')return libraries170.rename(id,input.name);
    if(action==='remove')return libraries170.remove(id);
-   if(action==='choose')return libraries170.choose(id,input.version,input.path);
+   if(action==='choose'){const graph=await libraryGraph170(id);if((await graph.workflows.pending()).length)throw Error('Resolve pending library tasks before changing a game directory / 更改游戏目录前请处理库中未完成的任务');for(const service of Object.values(graph))service?.plans?.clear?.();graph.selections.clear();const result=await libraries170.choose(id,input.version,input.path);await scanLibrary170(id,'start');return result;}
+   if(action==='scans'||action==='scan-start'||action==='scan-cancel')return scanLibrary170(id,action==='scans'?'state':action==='scan-start'?'start':'cancel');
    const entry=await libraries170.entry(id);
    if(action==='rows')return entry.kind==='minecraft'?libraries170.scan(id):{rows:await (await libraryRunner170(id)).listInstances(),isolation:'isolated'};
    if(action==='trash')return entry.kind==='minecraft'?libraries170.trash(id):new InstanceManagement(await libraryRunner170(id),{exclusive:fn=>libraries170.transaction(fn)}).list();
@@ -557,7 +569,7 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
    if(action==='launch'){
     if(entry.kind==='minecraft'){const selected=await libraries170.profile(id,input.version);for(const run of (await runner.runtimeStatus()).processes.filter(p=>p.state==='running')){const existing=await libraries170.profile(id,run.instanceId);if(existing.gameDir===selected.gameDir)throw Error('Another version is using this shared game directory / 其他版本正在使用此共享游戏目录');}}
     if(launching)throw Error('Launch is being prepared / 正在准备启动');launching=true;libraryPending170.add(id);const attempt=prelaunch164.begin();
-    try{const prefs=await settings.get(),identity=await accounts.authorizeLaunch(input.accountId,input.username);const extraJvm=identity.server?[`-javaagent:${await authAgent(core.root,fetch)}=${identity.server}`]:[];attempt.controller.signal.throwIfAborted();return await runner.launch(input.version,{identity,extraJvm,username:input.username,memory:input.memory||prefs.memory,launchAttempt:attempt});}finally{prelaunch164.finish(attempt);launching=false;libraryPending170.delete(id);}
+    try{const prefs=await settings.get(),identity=await accounts.authorizeLaunch(input.accountId,input.username);const extraJvm=identity.server?[`-javaagent:${await authAgent(core.root,fetch)}=${identity.server}`]:[];attempt.controller.signal.throwIfAborted();return await (await libraryGraph170(id)).core.launch(input.version,{identity,extraJvm,username:input.username,memory:input.memory||prefs.memory,launchAttempt:attempt});}finally{prelaunch164.finish(attempt);launching=false;libraryPending170.delete(id);}
    }
    throw Error('Unknown library action');
   });

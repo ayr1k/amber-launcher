@@ -1,3 +1,4 @@
+import {useLibraryApi170} from './LibraryContext170';
 import {PlayCalendar,MinecraftNews,StorageSummary,QuickTools} from './HomeModules';
 import {ControlButton} from './ControlButton.mjs';
 import {ThemeCanvas,replaceNode,th} from './ThemeCanvas';
@@ -12,10 +13,10 @@ import { useEffect, useState } from 'react';
 import { ProblemNotice } from './ProblemNotice';
 import { InstanceIcon } from './InstanceIcon';
 import { componentLabel } from '../desktop/compatibility.mjs';
-export function LaunchHome({ instance, settings, onCreate, onNavigate,instances=[],library={favorites:[],history:[]},onSelect }) {useLocale();
+export function LaunchHome({ instance, settings, onCreate, onNavigate,instances=[],library={favorites:[],history:[]},onSelect }) {const libraryApi170=useLibraryApi170();useLocale();
   const [room,setRoom]=useState(()=>window.matchMedia('(min-width:1000px) and (min-height:640px)').matches);
   useEffect(()=>{const q=window.matchMedia('(min-width:1000px) and (min-height:640px)'),change=()=>setRoom(q.matches);q.addEventListener('change',change);return()=>q.removeEventListener('change',change);},[]);
-  const api = window.amberDesktop,[accounts, setAccounts] = useState([]),[accountsLoaded, setAccountsLoaded] = useState(false),[prefs, setPrefs] = useState({ accountId: null, memory: null }),[loaded, setLoaded] = useState(false),[username, setUsername] = useState(() => localStorage.getItem('amber.offline-name') || 'AmberPlayer'),[status, setStatus] = useState({ jobs: [], processes: [] }),[busy, setBusy] = useState(false),[error, setError] = useState(''),[saved,setSaved]=useState(false);
+  const api = libraryApi170,[accounts, setAccounts] = useState([]),[accountsLoaded, setAccountsLoaded] = useState(false),[prefs, setPrefs] = useState({ accountId: null, memory: null }),[loaded, setLoaded] = useState(false),[username, setUsername] = useState(() => localStorage.getItem('amber.offline-name') || 'AmberPlayer'),[status, setStatus] = useState({ jobs: [], processes: [] }),[busy, setBusy] = useState(false),[error, setError] = useState(''),[saved,setSaved]=useState(false);
   useEffect(() => {let live = true;api.accounts().then((d) => {if (live) {setAccounts(d.accounts);setAccountsLoaded(true);}}).catch((e) => live && setError(e.message));const refresh = () => api.status().then((s) => live && setStatus(s)).catch((e) => live && setError(e.message));refresh();const timer = setInterval(refresh, 1000);return () => {live = false;clearInterval(timer);};}, []);
   useEffect(() => {let live = true;setLoaded(false);if (!instance) {setLoaded(true);return;}api.launchPreferences(instance.id).then((v) => {if (live) {setPrefs(v);setLoaded(true);}}).catch((e) => live && setError(e.message));return () => {live = false;};}, [instance?.id]);
   const account = prefs.accountId ?? settings.defaultAccountId ?? localStorage.getItem('amber.account') ?? '',memory = prefs.memory ?? settings.memory;

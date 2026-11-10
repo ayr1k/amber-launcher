@@ -1,3 +1,4 @@
+import {useLibraryApi170} from './LibraryContext170';
 // SPDX-License-Identifier: MPL-2.0
 import {useEffect,useRef,useState} from 'react';
 import {X} from '@phosphor-icons/react';
@@ -9,8 +10,8 @@ import {DialogWindowBar} from './WindowControls';
 import {ProblemNotice} from './ProblemNotice';
 export const lp=key=>message('pack123.'+key);
 const mb=n=>(n/1048576).toFixed(1)+' MB';
-export function LocalPackImport({onClose,onCreated,onNavigate}){
- useLocale();const api=window.amberDesktop,dialog=useRef(null),latest=useRef(null),alive=useRef(true);
+export function LocalPackImport({onClose,onCreated,onNavigate}){const libraryApi170=useLibraryApi170();
+ useLocale();const api=libraryApi170,dialog=useRef(null),latest=useRef(null),alive=useRef(true);
  const requestKey=useRef(crypto.randomUUID());
  const [plan,setPlan]=useState(null),[name,setName]=useState(''),[game,setGame]=useState(''),[loader,setLoader]=useState('fabric'),[version,setVersion]=useState(''),[optional,setOptional]=useState([]),[catalog,setCatalog]=useState([]),[choices,setChoices]=useState([]),[busy,setBusy]=useState(false),[catalogLoading,setCatalogLoading]=useState(false),[loaderLoading,setLoaderLoading]=useState(false),[error,setError]=useState(''),[installing,setInstalling]=useState(false),[status,setStatus]=useState(null),[failedId,setFailedId]=useState(null),[created,setCreated]=useState(null),[retry,setRetry]=useState(0),[ack,setAck]=useState(false),[cancelling,setCancelling]=useState(false);
  useEffect(()=>{const focus=document.activeElement;alive.current=true;dialog.current.showModal();return()=>{alive.current=false;if(latest.current)api.localPackForget(latest.current).catch(()=>{});focus?.focus();};},[]);
@@ -40,8 +41,8 @@ export function LocalPackImport({onClose,onCreated,onNavigate}){
  {failedId&&!busy&&<section className="pack-recovery"><p>{lp('retained')}</p><div className="inline-actions"><Button className="button" onClick={()=>install(true)}>{lp('resume')}</Button><Button className="button secondary" onClick={openFailed}>{lp('tasks')}</Button><Button className="text-button" onClick={()=>act(()=>api.openInstance(failedId))}>{lp('folder')}</Button></div></section>}
  </div><footer className="setup-footer"><Button className="text-button" disabled={busy} onClick={onClose}>{lp('close')}</Button>{created?<div className="inline-actions"><Button className="button secondary" onClick={()=>onCreated(created,'manage')}>{lp('report')}</Button><Button className="button" onClick={()=>onCreated(created,'home')}>{lp('launch')}</Button></div>:<Button className="button" disabled={busy||!!failedId||!ready} onClick={()=>install()}>{busy?lp('working'):lp('create')}</Button>}</footer></dialog>;
 }
-export function PackProvenance({instance,compact=false}){
- useLocale();const [data,setData]=useState(null),[error,setError]=useState('');useEffect(()=>{let live=true;setData(null);window.amberDesktop.packReport?.(instance.id).then(v=>live&&setData(v)).catch(e=>live&&setError(e.message));return()=>{live=false;};},[instance.id]);
+export function PackProvenance({instance,compact=false}){const libraryApi170=useLibraryApi170();
+ useLocale();const [data,setData]=useState(null),[error,setError]=useState('');useEffect(()=>{let live=true;setData(null);libraryApi170.packReport?.(instance.id).then(v=>live&&setData(v)).catch(e=>live&&setError(e.message));return()=>{live=false;};},[instance.id]);
  if(error)return <p className="error">{error}</p>;if(!data)return null;
  return <section className="pack-provenance"><strong>{lp('origin')} · {data.title}</strong>{compact?<p>{lp('updateWarning')}</p>:<><p>{data.source==='local'?lp('localSource'):'Modrinth'}{data.packVersion?' · '+data.packVersion:''}{data.importedAt?' · '+new Date(data.importedAt).toLocaleString(getLocale()):''}</p><p>{data.source==='local'?lp('noAutoUpdate'):lp('updateWarning')}</p><details><summary>{lp('report')} · {data.files?.length||0}</summary>{data.warnings?.length?data.warnings.map((w,i)=><p key={i}>{w}</p>):<p>{lp('noNotes')}</p>}<ul>{data.files?.slice(0,200).map(f=><li key={f.relative}><code>{f.relative}</code></li>)}</ul>{data.files?.length>200&&<p>{lp('first200')}</p>}</details></>}</section>;
 }

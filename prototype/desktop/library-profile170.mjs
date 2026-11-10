@@ -19,7 +19,7 @@ export async function profile170(root,id,{directoryChoice=null}={}){
  while(next){if(!identifier(next)||seen.has(next)||chain.length===16)bad();seen.add(next);const file=safePath(root,`versions/${next}/${next}.json`),meta=await json170(file);if(meta.id!==next||meta.libraries&&!Array.isArray(meta.libraries))bad();chain.push(meta);fingerprints.push({path:file,sha256:await digest(file,'sha256')});next=meta.inheritsFrom;}
  let meta={};for(const entry of [...chain].reverse())meta=merge(meta,entry);
  // HMCL writes a resolved profile as well as patches. Never append patches again.
- const patches=chain[0].patches||[];if(!Array.isArray(patches)||patches.length>32)bad();
+ const patches=meta.patches||[];if(!Array.isArray(patches)||patches.length>32)bad();
  const base=patches.find(p=>p.id==='game')?.version||chain.at(-1).id;
  const names=(meta.libraries||[]).map(l=>l?.name);if(names.some(n=>typeof n!=='string'))bad();
  const loader=names.some(n=>n.startsWith('net.fabricmc:fabric-loader:'))?'fabric':names.some(n=>n.startsWith('org.quiltmc:quilt-loader:'))?'quilt':names.some(n=>n.startsWith('net.minecraftforge:forge:'))?'forge':names.some(n=>n.startsWith('net.neoforged:neoforge:'))?'neoforge':'vanilla';

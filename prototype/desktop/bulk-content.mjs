@@ -1,3 +1,4 @@
+import {contentState170} from './content-state170.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import {mkdir,copyFile,lstat,unlink} from 'node:fs/promises';
 import {join} from 'node:path';
@@ -35,9 +36,9 @@ export class BulkContent{
  async preview(id,paths,action){const s=await this.snapshot(id,paths,action),key=randomUUID();for(const [k,p]of this.plans)if(p.expires<Date.now())this.plans.delete(k);if(this.plans.size>=40)this.plans.delete(this.plans.keys().next().value);this.plans.set(key,{instanceId:id,paths,action,stamp:s.stamp,expires:Date.now()+600000});return {id:key,action,rows:s.selected.map(f=>({relative:f.relative,title:f.title,unchanged:f.unchanged})),blockers:s.blockers,warnings:s.selected.some(f=>!f.projectId)?['手动导入的内容缺少依赖信息，AMBER 无法检查其全部兼容性。']:[]};}
  async apply(id,key){const p=this.plans.get(key);if(!p||p.instanceId!==id||p.expires<Date.now())throw Error('批量操作预览已过期，请重新选择。');const {dir}=await this.core.metadata(id);await this.core.requireStopped(dir);
   return this.core.startJob(id,'content-bulk',async(job,signal)=>{let staged=[];try{
-   await recoverModUpdate(dir);const s=await this.snapshot(id,p.paths,p.action);if(s.stamp!==p.stamp)throw Error('内容已变化，请重新预览后再操作。');if(s.blockers.length)throw Error(s.blockers.join('\n'));
+   await recoverModUpdate(dir,await contentState170(this.core,dir));const s=await this.snapshot(id,p.paths,p.action);if(s.stamp!==p.stamp)throw Error('内容已变化，请重新预览后再操作。');if(s.blockers.length)throw Error(s.blockers.join('\n'));
    job.operation=p.action;job.total=s.selected.length;job.phase='校验并备份所选内容';job.results=s.selected.map(f=>({relative:actual(f),title:f.title,state:f.unchanged?'skipped':'pending'}));
-   if(s.old.length||s.selected.some(f=>f.missing)){await requireSpace(dir,s.old.reduce((n,f)=>n+f.size,0)*3);const cache=join(dir,'content-bulk-cache',randomUUID());await ensureParents(dir,cache);await mkdir(cache,{recursive:true});
+   if(s.old.length||s.selected.some(f=>f.missing)){await requireSpace(dir,s.old.reduce((n,f)=>n+f.size,0)*3);const cache=join(await contentState170(this.core,dir),'content-bulk-cache',randomUUID());await ensureParents(await contentState170(this.core,dir),cache);await mkdir(cache,{recursive:true});
     for(const f of s.next){signal.throwIfAborted();const original=s.old.find(o=>o.relative===f.relative),to=safePath(cache,f.relative);await ensureParents(cache,to);await copyFile(safePath(dir,actual(original)),to);staged.push(to);}
     await this.updates.replace(dir,s.before,s.after,s.old,s.next,f=>safePath(cache,f.relative),signal,job);
    }

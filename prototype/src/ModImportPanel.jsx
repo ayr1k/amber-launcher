@@ -1,12 +1,13 @@
+import {useLibraryApi170} from './LibraryContext170';
 import {LocalPackImport,lp} from './LocalPackImport';
 import {ControlButton} from './ControlButton.mjs';
 import { useLocale } from "./Locale";import { t as translateText, translateMessage, getLocale } from "../desktop/localization.mjs"; // SPDX-License-Identifier: MPL-2.0
 import { useEffect, useState } from 'react';
 import { ChangePreview } from './ChangePreview';
 import { ProblemNotice } from './ProblemNotice';
-export function ModImportPanel({ instance, blocked, onJob, onCreated, onNavigate }) {useLocale();
+export function ModImportPanel({ instance, blocked, onJob, onCreated, onNavigate }) {const libraryApi170=useLibraryApi170();useLocale();
   const [pack,setPack]=useState(false);
-  const api = window.amberDesktop,[lookup, setLookup] = useState(true),[plan, setPlan] = useState(null),[keys, setKeys] = useState([]),[enabled, setEnabled] = useState(true),[busy, setBusy] = useState(false),[checking, setChecking] = useState(false),[error, setError] = useState(''),[blockers, setBlockers] = useState([]);
+  const api = libraryApi170,[lookup, setLookup] = useState(true),[plan, setPlan] = useState(null),[keys, setKeys] = useState([]),[enabled, setEnabled] = useState(true),[busy, setBusy] = useState(false),[checking, setChecking] = useState(false),[error, setError] = useState(''),[blockers, setBlockers] = useState([]);
   useEffect(() => {if (!plan) return;let live = true;setChecking(true);setBlockers([]);api.validateModImport(instance.id, plan.id, keys, enabled).then((v) => {if (live) setBlockers(v.blockers);}).catch((e) => live && setBlockers([e.message])).finally(() => live && setChecking(false));return () => {live = false;};}, [plan, keys, enabled, instance.id]);
   async function pick() {setBusy(true);setError('');try {const p = await api.pickMods(instance.id, lookup);if (p) {setPlan(p);setEnabled(true);setKeys(p.rows.filter((r) => !r.blockers.length).map((r) => r.key));}} catch (e) {setError(e.message);} finally {setBusy(false);}}
   async function apply() {setBusy(true);setError('');try {onJob(await api.applyModImport(instance.id, plan.id, keys, enabled));setPlan(null);} catch (e) {setError(e.message);} finally {setBusy(false);}}

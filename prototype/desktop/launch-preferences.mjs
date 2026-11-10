@@ -1,3 +1,4 @@
+import {instanceState170} from './content-state170.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import {readFile} from 'node:fs/promises';
 import {join} from 'node:path';
@@ -11,6 +12,6 @@ export function validateLaunchPreferences(input){
 }
 export class LaunchPreferences{
  constructor(core){this.core=core;}
- async get(id){const dir=await this.core.instancePath(id);try{return validateLaunchPreferences(JSON.parse(await readFile(join(dir,'launch-preferences.json'),'utf8')));}catch(e){if(e.code==='ENOENT')return {...launchDefaults};throw e;}}
- async save(id,input){const dir=await this.core.instancePath(id);this.core.workflowGuard?.();const value=validateLaunchPreferences(input);await atomicJson(join(dir,'launch-preferences.json'),value);return value;}
+ async get(id){const dir=await instanceState170(this.core,id);try{return validateLaunchPreferences(JSON.parse(await readFile(join(dir,'launch-preferences.json'),'utf8')));}catch(e){if(e.code==='ENOENT')return {...launchDefaults};throw e;}}
+ async save(id,input){const dir=await instanceState170(this.core,id);this.core.workflowGuard?.();const value=validateLaunchPreferences(input);await atomicJson(join(dir,'launch-preferences.json'),value);return value;}
 }

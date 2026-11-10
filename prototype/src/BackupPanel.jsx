@@ -1,10 +1,11 @@
+import {useLibraryApi170} from './LibraryContext170';
 import {Protection140,text140} from './Protection140';
 import {ControlButton} from './ControlButton.mjs';
 import { useLocale } from "./Locale";import { t as translateText, translateMessage, getLocale } from "../desktop/localization.mjs";import { Select } from './Select';
 // SPDX-License-Identifier: MPL-2.0
 import { useEffect, useState } from 'react';
-export function BackupPanel({ instance, onRestored }) {useLocale();
-  const api = window.amberDesktop,[rows, setRows] = useState([]),[mode, setMode] = useState('full'),[busy, setBusy] = useState(false),[error, setError] = useState(''),[message, setMessage] = useState(''),[confirm, setConfirm] = useState(null);
+export function BackupPanel({ instance, onRestored }) {const libraryApi170=useLibraryApi170();useLocale();
+  const api = libraryApi170,[rows, setRows] = useState([]),[mode, setMode] = useState('full'),[busy, setBusy] = useState(false),[error, setError] = useState(''),[message, setMessage] = useState(''),[confirm, setConfirm] = useState(null);
   async function refresh() {setRows(await api.backups());}
   useEffect(() => {refresh().catch((e) => setError(e.message));}, [instance?.id]);
   async function act(fn) {setBusy(true);setError('');setMessage('');try {await fn();await refresh();} catch (e) {setError(e.message);} finally {setBusy(false);}}

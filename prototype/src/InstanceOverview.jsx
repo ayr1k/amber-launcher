@@ -1,3 +1,4 @@
+import {useLibraryApi170} from './LibraryContext170';
 import {PackProvenance} from './LocalPackImport';
 import {ControlButton} from './ControlButton.mjs';
 import {Workbench,wb} from './Workbench';
@@ -8,8 +9,8 @@ import { useLocale } from "./Locale";import { t as translateText, translateMessa
 import { useEffect, useState } from 'react';
 import { ProblemNotice } from './ProblemNotice';
 import { instanceState } from './instance-status.mjs';
-export function InstanceOverview({ instance, onNavigate, onCreated }) {useLocale();
-  const [report, setReport] = useState(null),[busy, setBusy] = useState(false),[error, setError] = useState('');const api = window.amberDesktop;
+export function InstanceOverview({ instance, onNavigate, onCreated }) {const libraryApi170=useLibraryApi170();useLocale();
+  const [report, setReport] = useState(null),[busy, setBusy] = useState(false),[error, setError] = useState('');const api = libraryApi170;
   const [guide,setGuide]=useState(null),[adding,setAdding]=useState(false);
   useEffect(()=>{let live=true;api.guidedReport(instance.id).then(v=>live&&setGuide(v)).catch(e=>live&&setError(e.message));return()=>{live=false;};},[instance.id]);
   async function scan() {setBusy(true);setError('');setReport(null);try {setReport(await api.instanceHealth(instance.id));} catch (e) {setError(e.message);} finally {setBusy(false);}}

@@ -13,7 +13,7 @@ export function optifineGame(bytes){
 }
 // OptiFine is supplied by the user from its official download page; never redistributed.
 export async function importOptifine(core,id,path){
- const {dir,item}=await core.metadata(id);await core.requireStopped(dir);
+ const {dir,item,stateDir}=await core.metadata(id);await core.requireStopped(dir);
  if(item.loader!=='forge')throw Error('此版本仅支持将 OptiFine 作为 Forge 模组导入；请先安装与 OptiFine 官方兼容列表一致的 Forge。');
  if(core.jobs.some(j=>j.state==='running'))throw Error('请先等待安装任务完成。');
  const info=await stat(path);if(info.size>100_000_000)throw Error('OptiFine 文件过大。');
@@ -22,7 +22,7 @@ export async function importOptifine(core,id,path){
  if(!installer||!forge)throw Error('未识别为支持 Forge 的 OptiFine 官方 JAR。');
  if(optifineGame(bytes)!==item.game)throw Error('OptiFine 与当前 Minecraft 版本不匹配。');
  const name=basename(path);if(!name.toLowerCase().endsWith('.jar'))throw Error('请选择 OptiFine JAR 文件。');
- const target=safePath(dir,'mods/'+name);await ensureParents(dir,target);await copyFile(path,target,constants.COPYFILE_EXCL);item.optifineVersion=name.replace(/^OptiFine_|\.jar$/g,'');await atomicJson(join(dir,'instance.json'),item);return {name,path:join('mods',name)};
+ const target=safePath(dir,'mods/'+name);await ensureParents(dir,target);await copyFile(path,target,constants.COPYFILE_EXCL);item.optifineVersion=name.replace(/^OptiFine_|\.jar$/g,'');await atomicJson(join(stateDir||dir,'instance.json'),item);return {name,path:join('mods',name)};
 }
 export function worldEntries(bytes,root){
  let total=0;const entries=unzipSync(bytes,{filter:f=>{safePath(root,f.name.replace(/\/$/,''));if(f.name.endsWith('/'))return false;total+=f.originalSize;if(total>1_000_000_000||f.originalSize>200_000_000)throw Error('地图解压大小超过限制。');return true;}});

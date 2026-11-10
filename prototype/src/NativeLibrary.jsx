@@ -1,3 +1,4 @@
+import {useLibraryApi170} from './LibraryContext170';
 import {DOWNLOAD_OPTIONS} from '../desktop/download-limits143.mjs';
 import {ControlButton} from './ControlButton.mjs';
 import {IS_AMBERE} from '../desktop/edition.mjs';
@@ -9,11 +10,11 @@ import { ArrowRight, FolderOpen, ArrowClockwise, Info, Play, DownloadSimple, X }
 
 const stateLabel = { get installed() {return translateText("已安装");}, get installing() {return translateText("安装中");}, get incomplete() {return translateText("未完成，可继续安装");}, get 'metadata-ready'() {return translateText("等待安装");} };
 const jobLabel = { get running() {return translateText("处理中");}, get done() {return translateText("已完成");}, get failed() {return translateText("失败");}, get cancelled() {return translateText("已取消");} };
-export function LocalLibrary({ selected, onSelect, onCreate, settings, managementOnly = false, focusLogs = false, onNavigate } = {}) {useLocale();
+export function LocalLibrary({ selected, onSelect, onCreate, settings, managementOnly = false, focusLogs = false, onNavigate } = {}) {const libraryApi170=useLibraryApi170();useLocale();
   const logSection = useRef(null),scrolledLog = useRef(false);
   const [loaderLoading, setLoaderLoading] = useState(false),[loaderError, setLoaderError] = useState(''),[loaderRetry, setLoaderRetry] = useState(0),[accounts, setAccounts] = useState([]),[accountId, setAccountId] = useState(''),[loaders, setLoaders] = useState([]),[loader, setLoader] = useState(''),[loaderType, setLoaderType] = useState('fabric');
   useEffect(() => {if (selected) setActive(selected);setLoaders([]);setLoader('');}, [selected]);
-  const api = window.amberDesktop;
+  const api = libraryApi170;
   const [instances, setInstances] = useState([]),[active, setActive] = useState(''),[catalog, setCatalog] = useState(null),[name, setName] = useState(translateText("新的冒险")),[game, setGame] = useState(''),[query, setQuery] = useState(''),[type, setType] = useState('release');
   const [busy, setBusy] = useState(false),[error, setError] = useState(''),[info, setInfo] = useState(null),[message, setMessage] = useState(''),[status, setStatus] = useState({ jobs: [], processes: [] }),[javas, setJavas] = useState([]),[username, setUsername] = useState('AmberPlayer'),[memory, setMemory] = useState(settings?.memory || 4),[threads, setThreads] = useState(settings?.threads || 8);
   useEffect(() => {if (!api) return;let disposed = false;

@@ -1,3 +1,4 @@
+import {useLibraryApi170} from './LibraryContext170';
 import {ControlButton} from './ControlButton.mjs';
 import {DialogWindowBar} from './WindowControls';
 import { useLocale } from "./Locale";import { t as translateText, translateMessage, getLocale } from "../desktop/localization.mjs";import { Select } from './Select';
@@ -10,9 +11,9 @@ import { defaultInstanceName } from '../desktop/appearance.mjs';
 import { IconPicker, InstanceIcon } from './InstanceIcon';
 const types = ['forge', 'neoforge', 'quilt', 'fabric', 'liteloader', 'optifine'];
 const labels = { forge: 'Forge', neoforge: 'NeoForge', quilt: 'Quilt', fabric: 'Fabric', liteloader: 'LiteLoader', optifine: 'OptiFine' };
-export function SetupDialog({ onClose, onCreated, settings }) {useLocale();
+export function SetupDialog({ onClose, onCreated, settings }) {const libraryApi170=useLibraryApi170();useLocale();
   const requestKey=useRef(crypto.randomUUID());
-  const api = window.amberDesktop,dialog = useRef(null),[step, setStep] = useState(1),[icon, setIcon] = useState('grass'),[created, setCreated] = useState(null),[retry, setRetry] = useState(0),[catalogRetry, setCatalogRetry] = useState(0),[catalog, setCatalog] = useState([]),[game, setGame] = useState(''),[query, setQuery] = useState(''),[expanded, setExpanded] = useState({ release: false, snapshot: false, historical: false }),[catalogLoading, setCatalogLoading] = useState(true),[customName, setCustomName] = useState(null),[selected, setSelected] = useState([]),[versions, setVersions] = useState({}),[choices, setChoices] = useState({}),[busy, setBusy] = useState(false),[error, setError] = useState(''),[optifine, setOptifine] = useState(null),[manifest, setManifest] = useState(null),[status, setStatus] = useState(null);
+  const api = libraryApi170,dialog = useRef(null),[step, setStep] = useState(1),[icon, setIcon] = useState('grass'),[created, setCreated] = useState(null),[retry, setRetry] = useState(0),[catalogRetry, setCatalogRetry] = useState(0),[catalog, setCatalog] = useState([]),[game, setGame] = useState(''),[query, setQuery] = useState(''),[expanded, setExpanded] = useState({ release: false, snapshot: false, historical: false }),[catalogLoading, setCatalogLoading] = useState(true),[customName, setCustomName] = useState(null),[selected, setSelected] = useState([]),[versions, setVersions] = useState({}),[choices, setChoices] = useState({}),[busy, setBusy] = useState(false),[error, setError] = useState(''),[optifine, setOptifine] = useState(null),[manifest, setManifest] = useState(null),[status, setStatus] = useState(null);
   useEffect(() => {const previous = document.activeElement;dialog.current.showModal();return () => previous?.focus?.();}, []);
   useEffect(() => {dialog.current?.querySelector('#setup-title')?.focus();}, [step, created]);
   useEffect(() => {let live = true;setError('');setCatalogLoading(true);api.versions().then((c) => {if (live) {setCatalog(c.versions);setGame((g) => g || c.latest.release);}}).catch((e) => live && setError(e.message)).finally(() => live && setCatalogLoading(false));return () => {live = false;};}, [catalogRetry]);

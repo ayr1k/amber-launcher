@@ -12895,5 +12895,105 @@
   "library170.componentNote": {
     "zh": "组件更改后请安装 / 修复游戏文件。OptiFine 以官网对应版本为准。",
     "en": "Install / repair game files after changing components. Match OptiFine versions to its official compatibility table."
+  },
+  "library170.db556f0799eb": {
+    "zh": "Modrinth 文件哈希精确匹配",
+    "en": "Exact Modrinth file-hash match"
+  },
+  "library170.ffad73211edc": {
+    "zh": "Modrinth 无匹配，保留本地信息",
+    "en": "No Modrinth match; local information retained"
+  },
+  "library170.8db12a9e2aae": {
+    "zh": "来源查询失败，可重新扫描",
+    "en": "Source lookup failed; rescan to retry"
+  },
+  "library170.03d0cd8911bf": {
+    "zh": "仅本地信息，未联网查询",
+    "en": "Local information only; no online lookup"
+  },
+  "library170.86079c2d83ed": {
+    "zh": "文件异常，未查询来源",
+    "en": "File unavailable; no source lookup"
+  },
+  "library170.bd428fd32d75": {
+    "zh": "等待来源查询",
+    "en": "Source lookup pending"
+  },
+  "library170.0a4af99253ca": {
+    "zh": "精确匹配的版本未声明支持此 Minecraft / 加载器组合",
+    "en": "The matched version does not declare support for this Minecraft / loader combination"
+  },
+  "library170.9e77fe1ffcc9": {
+    "zh": "本地元数据异常",
+    "en": "Invalid local metadata"
+  },
+  "library170.7523c03e0733": {
+    "zh": "未找到可识别的本地元数据",
+    "en": "No recognized local metadata"
+  },
+  "library170.f83384c1ba9e": {
+    "zh": "发现重复内容或模组标识，请核对",
+    "en": "Duplicate file content or mod IDs; check before enabling"
+  },
+  "library170.c551a05649c2": {
+    "zh": "模组索引",
+    "en": "Mod index"
+  },
+  "library170.91d8fd888cbc": {
+    "zh": "扫描 / 重试",
+    "en": "Scan / retry"
+  },
+  "library170.17539d64f1d2": {
+    "zh": "扫描详情与游戏目录",
+    "en": "Scan details and game directories"
+  },
+  "library170.2d434064e402": {
+    "zh": "只读取本地模组；联网匹配仅发送文件哈希。共享游戏目录只扫描一次。",
+    "en": "Reads local mods; online matching sends only file hashes. Shared game directories are scanned once."
+  },
+  "library170.69722e50abcb": {
+    "zh": "等待扫描",
+    "en": "Waiting"
+  },
+  "library170.407dd16f938f": {
+    "zh": "读取文件",
+    "en": "Reading files"
+  },
+  "library170.218a03cda4c8": {
+    "zh": "匹配来源",
+    "en": "Matching"
+  },
+  "library170.cb460fcb403b": {
+    "zh": "扫描完成",
+    "en": "Scanned"
+  },
+  "library170.b1ca0741b05c": {
+    "zh": "扫描失败",
+    "en": "Failed"
+  },
+  "library170.391fe725d014": {
+    "zh": "精确匹配",
+    "en": "Exact matches"
+  },
+  "library170.1c6022b7f4e7": {
+    "zh": "未匹配",
+    "en": "Unmatched"
+  },
+  "library170.bf4cedf76a4e": {
+    "zh": "查询失败",
+    "en": "Lookup failed"
+  },
+  "library170.d9c19bb4fed2": {
+    "zh": "扫描待确认：选择实际游戏目录",
+    "en": "Scan pending: confirm the game directory"
+  },
+  "library170.d202ae551b3b": {
+    "zh": "更改游戏目录",
+    "en": "Change game directory"
+  },
+  "library170.ed2b2d2f6842": {
+    "zh": "列表密度",
+    "en": "List density"
   }
 }

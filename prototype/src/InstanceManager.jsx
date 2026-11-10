@@ -1,3 +1,4 @@
+import {useLibraryApi170} from './LibraryContext170';
 import {ListDensity,useListDensity} from './ListDensity154';
 import {ControlButton} from './ControlButton.mjs';
 import {DialogWindowBar} from './WindowControls';
@@ -8,9 +9,9 @@ import { instanceState } from './instance-status.mjs';
 import { useEffect, useRef, useState } from 'react';
 import { InstanceIcon, IconPicker } from './InstanceIcon';
 import { componentLabel } from '../desktop/compatibility.mjs';
-export function InstanceManager({ instances, settings, onCreate, onSelect, onManage, onRefresh, onBackups, afterHeading, library = { favorites: [], sort: 'created', history: [] }, onLibrary }) {useLocale();
+export function InstanceManager({ instances, settings, onCreate, onSelect, onManage, onRefresh, onBackups, afterHeading, library = { favorites: [], sort: 'created', history: [] }, onLibrary }) {const libraryApi170=useLibraryApi170();useLocale();
   const [listDensity,setListDensity]=useListDensity('instances');
-  const [importing,setImporting]=useState(false);const api = window.amberDesktop,[onlyFavorites, setOnlyFavorites] = useState(false),[query, setQuery] = useState(''),[trash, setTrash] = useState(false),[deleted, setDeleted] = useState([]),[action, setAction] = useState(null),[message, setMessage] = useState(''),[confirmation, setConfirmation] = useState(''),[name, setName] = useState(''),[icon, setIcon] = useState('grass'),[busy, setBusy] = useState(false),[error, setError] = useState('');const dialog = useRef(null);
+  const [importing,setImporting]=useState(false);const api = libraryApi170,[onlyFavorites, setOnlyFavorites] = useState(false),[query, setQuery] = useState(''),[trash, setTrash] = useState(false),[deleted, setDeleted] = useState([]),[action, setAction] = useState(null),[message, setMessage] = useState(''),[confirmation, setConfirmation] = useState(''),[name, setName] = useState(''),[icon, setIcon] = useState('grass'),[busy, setBusy] = useState(false),[error, setError] = useState('');const dialog = useRef(null);
   async function act(fn) {setBusy(true);setError('');try {await fn();await onRefresh();setDeleted(await api.trashInstances());} catch (e) {setError(e.message);} finally {setBusy(false);}}
   useEffect(() => {api.trashInstances().then(setDeleted).catch((e) => setError(e.message));}, []);
   useEffect(() => {if (action) dialog.current?.showModal();}, [action]);
