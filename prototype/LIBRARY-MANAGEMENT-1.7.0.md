@@ -1,6 +1,6 @@
 # External library management: behavior and evidence
 
-This capability completion round supersedes the fc49e5c, f42939d and 9cb370b installers. It remains Draft PR #15, not a release or merge. TEST-REVISION.txt and artifact provenance identify the exact packaged source. Full equivalence with arbitrary external launchers is not claimed.
+This capability completion round supersedes the fc49e5c, f42939d, 9cb370b and 6241c6e installers. It remains Draft PR #15, not a release or merge. TEST-REVISION.txt and artifact provenance identify the exact packaged source. Full equivalence with arbitrary external launchers is not claimed.
 
 | Native capability | External behavior | Evidence / limits |
 | --- | --- | --- |
@@ -71,3 +71,13 @@ The supported Library helper could not materialize the two reference screenshots
 原生内容安装、依赖检查、启停删除、更新锁定、历史回滚、编辑器、截图、备份及工作台入口已贯通。完整备份可脱离原库恢复到新隔离版本，不覆盖共享存档；Java 需另行准备，配置／存档单独备份仍依赖原配置。组件、修复与整包升级使用上文明确的预览、可信来源和事务边界；不支持的现代模块加载器及未知自定义配置仍有具体限制，不能宣称任意外部库完全等价。
 
 真实桌面和行为测试使用隔离数据，真实游戏测试只操作已核验私有副本。Java 运行与初始化日志不等于可见菜单、世界游玩或安装升级已验收。原始 8,980 个文件保持一致。测试包沿用产品正常安装身份与默认位置，请备份并使用隔离 Windows 用户或虚拟机；合并仍由用户决定。
+
+## Review regression boundaries
+
+The 6241c6e packages are intermediate and superseded. The dedicated library-review170 regressions exercise source account exclusion throughout a shared-library clone and its prepared backup, legitimate incoming root configuration, ancestor-client repair/undo and directory identity changes, cancellation before/during/after publication, and independent restoration of a sanitized pack baseline after source deletion. Existing-source retention and incoming-package eligibility are intentionally separate. The backup management schema only retains necessary title/version identity and relative file hashes/sizes; it never copies arbitrary sidecar objects or absolute source bindings.
+
+`versions/<ancestor>/<ancestor>.jar` is an authorized repair target only when recorded against the resolved current client owner, filesystem identity and affected profiles. Its exact target is revalidated during apply and undo. The atomic new-version directory rename is the pack commit point: before it, cancellation rolls back this operation’s writes; after it, cancellation cannot undo publication and the task reports completion. Post-publication state errors explicitly report that a version has already been published.
+
+中文：6241c6e 为已过时中间包。本轮回归区分外部源安全保留与合法 incoming 文件，排除启动器账号等状态，验证祖先客户端精确撤销、发布取消边界及脱离原库后的整包身份恢复。备份仅保存必要且清洗后的管理字段；修复不扩大任意版本路径写入权限。新版本目录原子发布是提交点，提交后不假称取消。
+
+Existing backups are not silently deleted or rewritten. An older intermediate pack backup containing disallowed launcher/private-state entries is refused on restoration; do not distribute such a backup. / 不会静默删除或改写已有备份。旧中间包产生的备份若包含禁止的启动器／私有状态条目，恢复会被拒绝；请勿分发这类备份。

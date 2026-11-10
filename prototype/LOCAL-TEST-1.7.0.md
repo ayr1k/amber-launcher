@@ -48,7 +48,7 @@ Configuration-format evidence was consulted from upstream HMCL `VersionSetting` 
 
 Original HMCL samples are never launched or changed. Before testing, all 8,980 original files were hashed, copied into a private isolated QA directory and the copy verified. Original hashes matched afterward. The six copied versions yielded local launch plans after explicit QA directory confirmation: 1.12.2 Forge + OptiFine (53 classpath entries / 3 native archives), 1.16.4 Fabric (42 / 8). This is not itself real-game acceptance. Sample contents, private logs, account stores and file-level integrity manifests are excluded from the PR and installers.
 
-Final complete local regression: 826 passed, no skips, including 58 library/location boundary tests; Sites tests: 4 passed. Build, release:check (3,158 bilingual messages / 478 source files), and isolated desktop smoke passed. Electron IPC/UI tests cover switching same-name versions, recycle/restore, unchanged shared saves, cancel, English/light and Chinese/dark at 125% zoom; inner workspace overflow is checked and bottom controls are exercised. CI and packaged provenance results are recorded in the PR delivery. Build retains the existing large-bundle warning. Full installer upgrade acceptance, long-running multi-launcher concurrency and native non-Windows acceptance remain separate from mocked/synthetic UI checks.
+Historical intermediate candidate `6241c6e52a14cd888fffd3866b93b5f16cb5c2bb` (superseded; four subsequent capability-review regressions exposed defects): 876 repository tests and 4 Sites tests passed; build, release:check (3,200 bilingual messages / 503 source files), isolated desktop smoke and both packaged-product smoke/provenance checks passed. These numbers describe that exact reviewed candidate, not any subsequent working-tree revision; the PR delivery identifies the current tested head and artifacts. Electron IPC/UI tests cover same-name library switching, scoped content operations, official repair previews, confirmation and stale-plan invalidation, English/light and Chinese/dark at 125% zoom; inner workspace overflow and reachable bottom controls are checked. Task/graphics routing fixtures are explicitly distinguished from real IPC operations. Private-copy normal-home launches verified Forge + OptiFine, Fabric, an independently restored version, and a replaced Fabric configuration followed by exact-profile rollback. Java/resource/audio initialization is not visible game-menu or gameplay acceptance. Build retains the existing large-bundle warning. Actual installer upgrade, long-running multi-launcher concurrency and native non-Windows acceptance remain unverified. Earlier test totals are superseded and are not current acceptance evidence.
 
 ## 中文说明
 
@@ -56,7 +56,9 @@ Final complete local regression: 826 passed, no skips, including 58 library/loca
 
 首次运行可选程序目录下产品文件夹、AppData 或自选位置。选择外部 `.minecraft` 时，应用状态留在产品自己的 AppData，游戏数据就地使用；明确写入路径，不可写时停止，不静默回退。升级保留既有数据；不新增便携版。
 
-默认库保留完整旧管理功能；额外自建库目前提供原版创建、安装修复、Java 选择、启动和回收恢复。外部库提供目录确认、就地启动和回收恢复，修复或修改组件请使用原启动器。全局快速切换、内容工具和备份页仍面向默认库。现代 Forge/NeoForge 的外部模块启动入口、自定义主类/JVM 参数和库外游戏目录暂不接管。无法确定隔离模式时明确提示并要求逐版本确认，不按文件夹名推断，不搬走共享模组。
+额外托管库复用原生管理服务；所选实例库已贯通全局快速切换、启动页、内容工具、设置和备份页。受支持的外部版本可直接启动并管理实际游戏目录中的内容；组件替换和可信缺失文件修复使用明确预览、校验、共享依赖保护与事务回滚。整包升级允许明确选择目标 MRPACK，在所选外部库创建新隔离版本，不要求已有 AMBER 安装记录。完整备份可在原库删除后恢复到新空库，限定已验证的当前平台依赖且不包含 Java；配置／存档单独备份仍依赖原配置。现代 Forge/NeoForge 的外部模块启动入口、未知自定义主类/JVM 参数或补丁归属、库外游戏目录仍有限制，具体见能力矩阵。无法确定隔离模式时明确提示并要求逐版本确认，不按文件夹名推断，不搬走共享模组。
+
+历史中间候选 `6241c6e` 的测试记录为（不代表后续四项能力审查通过，该包已过时）：876 项仓库测试、4 项 Sites 测试、3,200 条双语消息及 503 个源码文件检查通过，双产品成品启动与来源一致。后续修改不能沿用该候选的验收结论，当前交付 head、安装包及检查结果以 PR 为准。旧的测试总数不再作为当前最终结果。
 
 OptiFine 从官网在浏览器下载后，使用本地 JAR 安装流程；不打包再分发，不使用不可信镜像。按官网匹配 Minecraft 与 Forge；不宣称全版本、全加载器兼容。独立安装增加 Minecraft 版本一致性校验。六份测试副本已通过本地启动计划检查，原始 8,980 个文件前后完整性一致；计划检查不代表真实游戏成功。最终测试、成品、CI 和游戏验收结果以 PR 交付记录为准。
 
@@ -83,3 +85,11 @@ The final validator also rejects every non-canonical prefix of protected jopt-si
 The `fc49e5c` packages predate this feedback and are superseded by the replacement exact-head packages linked in PR #15. The selected-library context now reaches all native instance pages. Adding a confirmed external directory starts read-only local metadata discovery and official Modrinth batch-hash matching; disabled, invalid, duplicate, offline, failed and unmatched states remain distinct. Scanning can be cancelled/retried and stale library requests are rejected. The original sample files remain untouched. The matrix documents behavior tests separately from live Java, UI and installer acceptance.
 
 本轮替换包包含切库贯通与外部内容管理；`fc49e5c` 及更早测试包不包含这些反馈修复。初次扫描只读文件，联网仅发送必要哈希，不发送路径或 JAR。外部备份恢复创建新隔离版本；目录共享时使用同一内容锁和事务状态。原始样本保持不变，完整兼容性与实际安装验收仍由用户确认。
+
+## Capability review corrections / 能力复审修正
+
+External source retention now uses an explicit game-content allowlist and excludes launcher accounts, session/token stores and global launcher state before file hashing, preview or copying. Incoming pack rules remain separate so legitimate declared root game configuration is still supported. Full backups preserve only a schema-versioned, sanitized pack baseline in their management state; restoration writes it to the new sidecar, without source paths, account/session objects, URLs or arbitrary metadata. Known private-state filenames are excluded even if a baseline lists them. Inspect legitimate mod configurations for private values before sharing.
+
+Inherited-client repair records the exact authorized ancestor JAR, its directory filesystem identity and affected profile fingerprints. Undo revalidates those targets and dependents under the write lock, rather than accepting arbitrary version paths. Pack publication forwards the job AbortSignal into restoration. Cancellation before the atomic version-directory rename removes newly created verified files and the private partial version; after that commit point the operation completes registration and reports publication instead of claiming cancellation.
+
+外部源保留采用明确的游戏内容范围，账号、session／token 及启动器全局状态在哈希、预览、复制前排除；incoming 新包保留独立规则，合法根目录游戏配置仍可使用。完整备份以版本化、清洗后的管理状态保留整包身份和文件基线，恢复到新 sidecar，不携带源路径、账号、session、URL 或任意字段。祖先客户端修复记录精确目标、目录身份及受影响版本，撤销时在锁内重新核验。发布前取消会清理本次新增内容；原子发布之后如实完成登记，不假称已取消。当前修正的精确 head、回归与安装包结果以 PR 交付表为准。

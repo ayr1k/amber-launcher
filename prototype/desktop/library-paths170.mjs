@@ -12,5 +12,5 @@ export async function ordinary170(path,{missing=false}={}){
  return full;
 }
 export async function json170(path,{optional=false,max=16000000}={}){
- try{await ordinary170(path);const st=await lstat(path);if(!st.isFile()||st.size>max)throw libraryError('Invalid configuration file / 配置文件无效或过大');const value=JSON.parse(await readFile(path,'utf8'));if(!value||typeof value!=='object'||Array.isArray(value))throw libraryError('Invalid configuration / 配置无效');return value;}catch(e){if(optional&&e.code==='ENOENT')return null;throw e;}
+ try{await ordinary170(path);const st=await lstat(path);if(!st.isFile()||st.size>max)throw libraryError('Invalid configuration file / 配置文件无效或过大');let value;try{value=JSON.parse(await readFile(path,'utf8'));}catch(error){if(error instanceof SyntaxError)throw libraryError('Invalid configuration JSON / 配置 JSON 无效');throw error;}if(!value||typeof value!=='object'||Array.isArray(value))throw libraryError('Invalid configuration / 配置无效');return value;}catch(e){if(optional&&e.code==='ENOENT')return null;throw e;}
 }

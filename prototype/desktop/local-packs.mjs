@@ -1,4 +1,4 @@
-import {instanceState170} from './content-state170.mjs';
+import {instanceState170,contentState170} from './content-state170.mjs';
 import {instanceLoaders} from './compatibility.mjs';
 // SPDX-License-Identifier: MPL-2.0
 // Local archives never supply executable launcher settings or filesystem destinations.
@@ -129,5 +129,5 @@ export class LocalPacks{
   try{const saved=JSON.parse(await readFile(join(dir,'modpack.json'),'utf8'));if(saved.versionId===plan.versionId)return;}catch(e){if(e.code!=='ENOENT')throw e;}
   this.packs.plans.set(key,plan);return this.workflows.wait(await this.packs.install(id,key));
  }
- async report(id){const dir=await instanceState170(this.core,id);try{const m=JSON.parse(await readFile(join(dir,'modpack.json'),'utf8'));return m.localReport||{source:'modrinth',title:m.title,packVersion:m.versionId,importedAt:null,warnings:m.warnings||[],files:[]};}catch(e){if(e.code==='ENOENT')return null;throw e;}}
+ async report(id){const dir=await contentState170(this.core,await this.core.instancePath(id));try{const m=JSON.parse(await readFile(join(dir,'modpack.json'),'utf8'));return m.localReport||{source:'modrinth',title:m.title,packVersion:m.versionId,importedAt:null,warnings:m.warnings||[],files:[]};}catch(e){if(e.code==='ENOENT')return null;throw e;}}
 }
