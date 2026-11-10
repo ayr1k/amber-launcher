@@ -12,7 +12,12 @@ import {identifier} from './import-identify151.mjs';
 const mainClasses=new Set(['net.minecraft.client.main.Main','net.minecraft.launchwrapper.Launch','net.fabricmc.loader.impl.launch.knot.KnotClient','net.fabricmc.loader.launch.knot.KnotClient','org.quiltmc.loader.impl.launch.knot.KnotClient']);
 const tweaks=new Set(['net.minecraftforge.fml.common.launcher.FMLTweaker','cpw.mods.fml.common.launcher.FMLTweaker','optifine.OptiFineTweaker','optifine.OptiFineForgeTweaker','com.mumfrey.liteloader.launch.LiteLoaderTweaker']);
 function maven(name,classifier){const p=name.split(':');if(p.length<3||p.length>4||p.some(s=>!/^[-\w.+]+$/.test(s)))throw Error('Invalid library coordinate / 依赖坐标无效');return `${p[0].replaceAll('.','/')}/${p[1]}/${p[2]}/${p[1]}-${p[2]}${classifier||p[3]?'-'+(classifier||p[3]):''}.jar`;}
+const protectedOptions170=['tweakClass','gameDir','assetsDir','assetIndex','username','uuid','accessToken','userProperties','xuid','clientId'];
 export function validateGameValues170(values,vars){
+ // jopt-simple accepts unambiguous abbreviations and single-dash long options.
+ // Require canonical spelling for every prefix of a protected option, including
+ // ambiguous prefixes and equals forms, both before and after substitution.
+ for(const token of values){if(!token.startsWith('-'))continue;if(!token.startsWith('--')&&!/^-\d+(?:\.\d+)?$/.test(token))throw Error('Non-canonical protected option / 不接受单横线游戏参数');const option=token.replace(/^-+/,'').split('=')[0];if(protectedOptions170.some(name=>name.startsWith(option))&&!protectedOptions170.some(name=>token==='--'+name))throw Error('Non-canonical protected option / 受保护选项必须使用完整规范形式');}
  for(let i=0;i<values.length;i++){if(values[i]==='--tweakClass'&&!tweaks.has(values[i+1]))throw Error('Unknown tweak class / 未识别的启动扩展');if(/^--(?:tweakClass|gameDir|assetsDir|assetIndex|username|uuid|accessToken|userProperties|xuid|clientId)=/.test(values[i]))throw Error('Ambiguous protected argument / 受保护参数有歧义');}
  for(const [option,value] of [['--gameDir',vars?.game_directory??'${game_directory}'],['--assetsDir',vars?.assets_root??'${assets_root}'],['--accessToken',vars?.auth_access_token??'${auth_access_token}'],['--uuid',vars?.auth_uuid??'${auth_uuid}'],['--username',vars?.auth_player_name??'${auth_player_name}']]){const positions=values.flatMap((v,i)=>v===option?[i]:[]);if(positions.length>1||positions.some(i=>values[i+1]!==value))throw Error('Unsafe protected argument / 不安全的受保护启动参数');}
 }
