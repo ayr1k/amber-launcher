@@ -6,3 +6,11 @@
 .library170-content>.library170-optifine{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}.library170-content>section,.library170-content .page-heading>div{min-width:0;max-width:100%}.library170-content .library170-path{white-space:normal!important;overflow-wrap:anywhere;max-width:100%}.library170-content .page-heading{min-width:0}
 
 .desktop-app[data-page=instances] .desktop-content{width:100%;min-width:0;box-sizing:border-box}.libraries170{width:100%;min-width:0}.library170-optifine small{min-width:0;overflow-wrap:anywhere}.library170-content .library-toolbar{flex-wrap:wrap}.library170-content .library-toolbar>*{min-width:0;max-width:100%}.library170-content select{max-width:100%}
+
+/* Component controls share one label/control rhythm; check rows wrap as a unit. */
+.external-maintenance170 .component-fields171{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
+.external-maintenance170 .component-fields171>label{display:flex;flex-direction:column;gap:8px;min-width:0}
+.external-maintenance170 .component-fields171>label>input,.external-maintenance170 .component-fields171>label>.amber-select{margin:0;width:100%}
+.external-maintenance170 .maintenance-check171{display:flex;align-items:baseline;gap:10px;margin:16px 0;line-height:1.6;overflow-wrap:anywhere}
+.external-maintenance170 .maintenance-check171>input{align-self:flex-start;margin:3px 0 0;flex:0 0 19px}
+@media(max-width:900px){.external-maintenance170 .component-fields171{grid-template-columns:1fr}}

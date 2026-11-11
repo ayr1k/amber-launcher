@@ -37,9 +37,9 @@ jobs:
         shell: pwsh
         run: Get-Content releases/*/*-Setup-x64.exe.sha256
       - name: Verify packaged startup and provenance
-        run: node scripts/qa-smoke170.cjs
+        run: node scripts/qa-smoke171.cjs
         env:
-          AMBER_QA_OUTPUT: ${{ github.workspace }}/prototype/review170/packaged
+          AMBER_QA_OUTPUT: ${{ github.workspace }}/prototype/review171/packaged
       - name: Record tested revision
         shell: pwsh
         run: |
@@ -54,7 +54,7 @@ jobs:
             prototype/releases/*/*-Setup-x64.exe.sha256
             prototype/releases/*/TEST-REVISION.txt
             prototype/releases/*/*.provenance.json
-            prototype/LOCAL-TEST-1.7.0.md
-            prototype/review170/packaged/result.json
+            prototype/LOCAL-TEST-1.7.1.md
+            prototype/review171/packaged/result.json
           retention-days: 30
           if-no-files-found: error

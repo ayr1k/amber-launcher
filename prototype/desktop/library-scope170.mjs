@@ -9,8 +9,11 @@ export const libraryChannel170=channel=>{const name=channel.replace(/^amber:/,''
 export class LibraryScope170 {
  constructor(){this.context=new AsyncLocalStorage();}
  run(graph,fn){return this.context.run(graph,fn);}
- wrap(name,fallback){return new Proxy(fallback,{
+ wrap(name,fallback){const proxy=new Proxy(fallback,{
   get:(_target,key)=>{const graph=this.context.getStore(),target=graph?graph[name]:fallback;if(!target)throw Error('Library service unavailable: '+name);const value=Reflect.get(target,key,target);return typeof value==='function'?value.bind(target):value;},
-  set:(_target,key,value)=>{const graph=this.context.getStore(),target=graph?graph[name]:fallback;if(!target)throw Error('Library service unavailable: '+name);return Reflect.set(target,key,value,target);}
- });}
+  set:(_target,key,value,receiver)=>{const graph=this.context.getStore(),target=graph?graph[name]:fallback;if(!target)throw Error('Library service unavailable: '+name);
+   // Adapters inheriting this proxy own their overrides. Writing through their
+   // prototype must never replace the selected library's client methods.
+   return Reflect.set(target,key,value,receiver===proxy?target:receiver);}
+ });return proxy;}
 }
