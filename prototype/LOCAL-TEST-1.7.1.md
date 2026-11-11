@@ -1,3 +1,9 @@
+# 1.7.1 formal release / 正式发布
+
+PR #16 merged as `ffff2b3e40f207753aaa12111b693879dc5ecda4`; accepted task head: `67b320ecb7b2a5667dcc6f683fb3b67437194cd4`. The user authorized complete formal publication on 2026-11-11 (America/New_York). Official packages use **1.7.1/public**. The final PR delivery records successful CI runs 43105938367 / 43105941465, verified test installers and parent independent review. The parent subsequently viewed all five original reference images, closing the preparation-time image gap below. Developer, independent-review and user-acceptance scopes remain distinct. Installer installation/upgrade, actual gameplay and native non-Windows acceptance were not performed for this change. This main chat uses the approved merge and existing task/Dot review without repeating content review.
+
+用户已批准合并 PR #16 并明确授权 1.7.1 正式发布。下方候选／不得发布及准备阶段参考图限制保留历史语境；最终 PR 交付记录已补充 CI、测试包核验与独立复核，父会话随后查看了全部五张原始参考图。本次保留安装覆盖升级、真实游戏及非 Windows 原生验收限制，不重复内容审核。正式验证见 RELEASE-ACCEPTANCE.md。
+
 # 1.7.1 task test build / 任务测试版本
 
 This is a development candidate, not an approved release. The previous 1.7.0 test records do not establish acceptance of this candidate.

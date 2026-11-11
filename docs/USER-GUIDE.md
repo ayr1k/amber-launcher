@@ -356,3 +356,7 @@ External recycle moves only the chosen version into the library's product-specif
 The Windows game-window fix applies only to the real game spawn. Initialization/audio and visible-window metadata are distinct from rendered menu/world acceptance; the latter remains unverified, as do complete installer upgrades, real Microsoft-account gameplay and native non-Windows runtime. See [capability matrix](../prototype/LIBRARY-MANAGEMENT-1.7.0.md) and [task evidence](../prototype/LOCAL-TEST-1.7.0.md) for supported profiles and evidence tied to each revision.
 
 The broader .minecraft game-library management support and related 1.7.0 features, including data-location choices, external-library management and recovery, were inspired by Bilibili user @岩熵 (UID 1616300586).
+
+## 1.7.1: native-library content recovery
+
+If native-library content or search in 1.7.0 reports a missing `servers/<client ID>` path, update to 1.7.1 to correct client/server scope routing. Keep the existing data path; do not clear, rebuild or migrate the library to work around this regression. This was not a loss of content in external `.minecraft` libraries. Component fields, checkboxes and dialog backdrops are also corrected.

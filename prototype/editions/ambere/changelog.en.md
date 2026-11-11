@@ -1,3 +1,9 @@
+## 1.7.1
+
+- Fix native AMBER libraries resolving client instances under `servers/<client ID>`, restoring content browsing, search and installation in the selected client library. Preserve inherited server-adapter behavior without replacing client methods. No library migration, clearing or rebuilding is required; external libraries were not the affected path for this regression.
+- Keep instance-page headings above scan and error status. Align external component fields and checkbox rows, with narrow-window stacking. Replace hardcoded green dialog backdrops with neutral dimming while preserving the selected theme.
+- AMBER and AmberE share these fixes while retaining their separate account policies, application data and update channels.
+
 ## 1.7.0
 
 - Choose a product-named directory beside the program, the usual AppData location or a custom location on first launch. Keep existing data on upgrade; unavailable/unwritable choices show an error. Selecting an existing `.minecraft` offers external-library registration while keeping launcher state separate. This does not create a portable distribution.
