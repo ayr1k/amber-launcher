@@ -1,5 +1,5 @@
 {
-  "version": "1.7.0",
+  "version": "1.7.1",
   "repository": "https://github.com/ayr1k/amber-launcher",
   "files": [
     {
@@ -20,7 +20,7 @@
     {
       "path": ".github/workflows/pr-installers.yml",
       "bytes": 2461,
-      "sha256": "7cd3981dc8f3db5dd0ba11d75f1ef64afcdb64890212bbc59a68cf2f5e66dc06"
+      "sha256": "3f0820359daa9370e1a4e183029c9cf0ee52378a473901c9fbff350b512eb1ca"
     },
     {
       "path": ".github/workflows/windows.yml",
@@ -34,8 +34,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 58460,
-      "sha256": "b37dadbbb11633131f5d339e1afcc82dfd9d1179ba62f1469895dfca09410ec3"
+      "bytes": 59204,
+      "sha256": "4f53cf098b97ac411f5a81d49b5df1599c26f1d4bc1113e9e1f8d86b7769e06b"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -54,8 +54,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 8071,
-      "sha256": "a0560806d95a6022a7f4e9f51e4e01bb01e2cc0e02bd96bcbac81bcb8f0271fb"
+      "bytes": 8047,
+      "sha256": "184ccbba5bf89a7b8ab96f554246c4ea25170870ca3baed2fea3d57114611882"
     },
     {
       "path": "SECURITY.md",
@@ -144,8 +144,8 @@
     },
     {
       "path": "docs/TESTING.md",
-      "bytes": 44704,
-      "sha256": "9ea72d14e14f5148d93f50b4b992809f67b3d5b0ada898ca06ac170d4aed4a74"
+      "bytes": 46628,
+      "sha256": "c64e8feecc855700ae2ad2d3988119bd93fa83a15e68157ced75cd3c93b507b6"
     },
     {
       "path": "docs/THEMES.md",
@@ -154,8 +154,8 @@
     },
     {
       "path": "docs/USER-GUIDE.md",
-      "bytes": 65249,
-      "sha256": "247a0a54f1b9911697c7c1bd2bb8bbf101c53fd9a0e4bfe8521924ec09c33acc"
+      "bytes": 65683,
+      "sha256": "47027b380fedc2c1fb4d710d12a38bd05d523b5184c1aee835345b9d4d414e3b"
     },
     {
       "path": "docs/evidence/amber-custom-small-downloads.png",
@@ -389,8 +389,8 @@
     },
     {
       "path": "docs/zh-CN/CHANGELOG.md",
-      "bytes": 61956,
-      "sha256": "96d4b1d3b0ad43d9e1e01da83e7e5163328bb7e9182195b7fd8e80bc11d00e69"
+      "bytes": 62575,
+      "sha256": "521846abc6ad1d736232715decbe3cf9cada07732e12071b8e6010891c86ea0f"
     },
     {
       "path": "docs/zh-CN/CONTRIBUTING.md",
@@ -409,8 +409,8 @@
     },
     {
       "path": "docs/zh-CN/README.md",
-      "bytes": 6826,
-      "sha256": "5c2f8845bde612b50d11547dd48cec7da04edab33eee79030ec76a47aac921bc"
+      "bytes": 6769,
+      "sha256": "e9b8f520942bc3a1de8cb466780d1553f90bc9817936d470ca96ce6cb5279680"
     },
     {
       "path": "docs/zh-CN/ROLLBACK.md",
@@ -434,8 +434,8 @@
     },
     {
       "path": "docs/zh-CN/TESTING.md",
-      "bytes": 31145,
-      "sha256": "8a7a986cfb126665d311855d44c1e39ca058d5300178f15f7cf0973efc4de568"
+      "bytes": 32673,
+      "sha256": "74ddc66a9340d43db1118e1bf3b70f63d83fd9486ba881bf14ead47b92ee08db"
     },
     {
       "path": "docs/zh-CN/THEMES.md",
@@ -449,8 +449,8 @@
     },
     {
       "path": "docs/zh-CN/USER-GUIDE.md",
-      "bytes": 54976,
-      "sha256": "34e008bf8dc08587bbe4b09ee03cee2e8c0957dfa11ca968f776b08fdf8ade3b"
+      "bytes": 55348,
+      "sha256": "f47aa0e49c08ab19a852af199afa2461365606da8e3419bb9aa7806c6b8fe746"
     },
     {
       "path": "prototype/.npmrc",
@@ -543,6 +543,11 @@
       "sha256": "a66526039fa28653cb9d1a66f6e9fd725f05a2c3c238b9efd34b99691c60b29e"
     },
     {
+      "path": "prototype/LOCAL-TEST-1.7.1.md",
+      "bytes": 5449,
+      "sha256": "a88869658fdf6ab7c4a291beca5f7977d7c4312d292da984e409f1bc9a67879b"
+    },
+    {
       "path": "prototype/PLATFORMS-1.3.5.md",
       "bytes": 5102,
       "sha256": "7f2a697f4909abf27c0d8f47055d765e6892484e812446d114cc82d94c39f04a"
@@ -550,12 +555,12 @@
     {
       "path": "prototype/README.md",
       "bytes": 1620,
-      "sha256": "092571a0cd3644d2ea89111318941b14f3705f73126ffcbdf13672d7431cf3d9"
+      "sha256": "1f6891b421c471e412dc13f5e236ed72d323d9691c17971649fee4f77e845740"
     },
     {
       "path": "prototype/RELEASE-ACCEPTANCE.md",
-      "bytes": 45409,
-      "sha256": "72d2245e953773cd93410d78d598150987b9a07ed519fd2b79676e2a814864d6"
+      "bytes": 47333,
+      "sha256": "91ea184e12984cb8ac0c82412b23b6643794b4002ce83be3d936834ce791ea07"
     },
     {
       "path": "prototype/THIRD_PARTY_NOTICES.md",
@@ -1064,8 +1069,8 @@
     },
     {
       "path": "prototype/desktop/library-scope170.mjs",
-      "bytes": 1629,
-      "sha256": "527baa4b79de06852217259aa457a4f5ab60ce2f06c004f8ac6d2e43a14f6b6a"
+      "bytes": 1840,
+      "sha256": "16dede54f29215e34109e5b14e9f797b0c5d25d0ea1af4238ba71873038ec10f"
     },
     {
       "path": "prototype/desktop/library-services170.mjs",
@@ -2584,28 +2589,28 @@
     },
     {
       "path": "prototype/editions/ambere/changelog.en.md",
-      "bytes": 51790,
-      "sha256": "8d56eb5a790204a35da4a99b41411d56eccc98ce9d767f9f505a3a0bbd15fe8d"
+      "bytes": 52534,
+      "sha256": "1f5db5d5e9c85063817d6eda11982663119fb247b3f018815617523c84574f65"
     },
     {
       "path": "prototype/editions/ambere/changelog.zh.md",
-      "bytes": 44728,
-      "sha256": "16378dc7f2ac3575012f19c875b1efc57b09d4b20a3eb464a7634b35275cc495"
+      "bytes": 45347,
+      "sha256": "c4bffbfc28e1ba3e5280b80d2430f902d236f786dac6f3ddda1b34917d4a204b"
     },
     {
       "path": "prototype/editions/ambere/overview.en.md",
-      "bytes": 5856,
-      "sha256": "47e90903d279fcc040105300183d1c66e04226308df1e35ef24a3640d62a8a0d"
+      "bytes": 5832,
+      "sha256": "5ae69bd23501effad720fe2861b3200eaeb6173e73af9ab504fed2ba5a4e964a"
     },
     {
       "path": "prototype/editions/ambere/overview.zh.md",
-      "bytes": 5352,
-      "sha256": "46ed0168e742353b07779a8d73f6494e68485193ab6389dca2ff85b5e1b59058"
+      "bytes": 5295,
+      "sha256": "fac0fd4511637f10493b2c8340e50966509ce8701e3d98fdb75e52496bb9aacd"
     },
     {
       "path": "prototype/editions/ambere/testing.md",
-      "bytes": 45409,
-      "sha256": "72d2245e953773cd93410d78d598150987b9a07ed519fd2b79676e2a814864d6"
+      "bytes": 47333,
+      "sha256": "91ea184e12984cb8ac0c82412b23b6643794b4002ce83be3d936834ce791ea07"
     },
     {
       "path": "prototype/electron-builder.yml",
@@ -2619,8 +2624,8 @@
     },
     {
       "path": "prototype/package.json",
-      "bytes": 3795,
-      "sha256": "e03dc531aa262b1a4ba9ac94910e1167ba5497e5bd40bec45cbc9650ac1d2b3c"
+      "bytes": 3827,
+      "sha256": "15989da26c213ecd3dadf3d8d3c55bf9bb69d82f2f045f4de77074742f26fc27"
     },
     {
       "path": "prototype/pnpm-lock.yaml",
@@ -2974,8 +2979,8 @@
     },
     {
       "path": "prototype/scripts/package-editions.mjs",
-      "bytes": 7723,
-      "sha256": "4b0ff79c7572b09c868d2a15e6d48f16e0d236b394d04be780cf286ca7906248"
+      "bytes": 7724,
+      "sha256": "1d59c8e3ce0e81924ffc09158e405fe55d612c0537d7800058289872dc71d385"
     },
     {
       "path": "prototype/scripts/package-platforms135.py",
@@ -2989,8 +2994,8 @@
     },
     {
       "path": "prototype/scripts/prepare-github.mjs",
-      "bytes": 5034,
-      "sha256": "2e71605bb7217b70ecfe9f579c264feb683d87baef406afbad2d7016b821ab65"
+      "bytes": 5093,
+      "sha256": "a4c88e48f7010d972663bce2f9d7360ac8b9247a50f8ff118073bd9a90367b45"
     },
     {
       "path": "prototype/scripts/prepare-sites-build.mjs",
@@ -3096,6 +3101,11 @@
       "path": "prototype/scripts/qa-layout161.cjs",
       "bytes": 9016,
       "sha256": "e5f558cfc16c9a1fa178b7ea375a12dd7472460a8860a7e93ced2a4620415e5f"
+    },
+    {
+      "path": "prototype/scripts/qa-layout171.cjs",
+      "bytes": 6277,
+      "sha256": "72ce80559553b67677f96d5c87228bb6be36ced24829f36c4d940e95d8ed1255"
     },
     {
       "path": "prototype/scripts/qa-libraries170.cjs",
@@ -3221,6 +3231,11 @@
       "path": "prototype/scripts/qa-smoke170.cjs",
       "bytes": 2777,
       "sha256": "d44896ef2b86c5d886c5afccfccb5a189fba7dde319216da2117e7597f0fcf04"
+    },
+    {
+      "path": "prototype/scripts/qa-smoke171.cjs",
+      "bytes": 2785,
+      "sha256": "7a6ac92d069eb5baf2dbdaa24f97a0acc9956e9fb28d7030b3f44051e7d26a84"
     },
     {
       "path": "prototype/scripts/qa-startup-failures148.cjs",
@@ -3444,8 +3459,8 @@
     },
     {
       "path": "prototype/src/DesktopApp.jsx",
-      "bytes": 24989,
-      "sha256": "e25a8998fe3fafd31fb481cc8cf9b5af285508eb0c2231bc436ba125d929e517"
+      "bytes": 25012,
+      "sha256": "c8fb878916acc341d9b98a21f2c353b0a4bb3ff9f5eb5f0f202427bb14aed8af"
     },
     {
       "path": "prototype/src/Enchant150.jsx",
@@ -3459,8 +3474,8 @@
     },
     {
       "path": "prototype/src/ExternalMaintenance170.jsx",
-      "bytes": 6417,
-      "sha256": "ac3eed2834c81a0c77586c130421dafe7e89891d1326891e7b0e8f3850987a11"
+      "bytes": 6503,
+      "sha256": "951e58ec7f4ae8cebfc1a325304b108aa62b5606c6eca7bf99e8bbb876e62b9a"
     },
     {
       "path": "prototype/src/FeedbackPanel.jsx",
@@ -3544,8 +3559,8 @@
     },
     {
       "path": "prototype/src/Libraries170.jsx",
-      "bytes": 5638,
-      "sha256": "7e2e5d124b0665022165e7d086887c92ad47497fb24e9de4acc8407f7c3c71a9"
+      "bytes": 5644,
+      "sha256": "717f5403a6ab9dafbd2a8ae48bfaaa7ab965786ef0c9538b8e48d6d5208359b4"
     },
     {
       "path": "prototype/src/LibraryContext170.jsx",
@@ -3849,8 +3864,8 @@
     },
     {
       "path": "prototype/src/amber.css",
-      "bytes": 34399,
-      "sha256": "447dfeb37e3b29eee4d13d3b9cbbff81cfdda6b7b411e38e5d5b8541325424fb"
+      "bytes": 34403,
+      "sha256": "7b1f1d26985f51c95224909f2b6c31f4c805438a9f5085c8c26612e6e8163ba9"
     },
     {
       "path": "prototype/src/beta11.css",
@@ -3874,8 +3889,8 @@
     },
     {
       "path": "prototype/src/beta13.css",
-      "bytes": 4757,
-      "sha256": "a5d7278639e7d5ad7f145dd514ccec77e4462bfe3fcbe9bddc79f5d4068d4a76"
+      "bytes": 4784,
+      "sha256": "7169c21f60fbda42eb7141cb79ad69b703f3283742657d0cd13ed46709f229fc"
     },
     {
       "path": "prototype/src/beta14.css",
@@ -3969,8 +3984,8 @@
     },
     {
       "path": "prototype/src/libraries170.css",
-      "bytes": 3034,
-      "sha256": "fa73700b9d411f4830d8776c2a0744c7745f9fd7f11c0f2cb0e1742dfc748b89"
+      "bytes": 3839,
+      "sha256": "8c05ec1a398a78084993d79f0ff0db4958f217406ace65c0072003006ca3654b"
     },
     {
       "path": "prototype/src/library-order.mjs",
@@ -4361,6 +4376,11 @@
       "path": "prototype/tests/library-review170.test.mjs",
       "bytes": 15771,
       "sha256": "c3fa9834fa84c21d47b3133ce0cdf29407b7740537a989a7761f366f746a1e63"
+    },
+    {
+      "path": "prototype/tests/library-scope171.test.mjs",
+      "bytes": 5721,
+      "sha256": "a18bc52613741e0a0517eda5df88b6b642c9cef054b09d1838e0eac16c161f26"
     },
     {
       "path": "prototype/tests/library-services170.test.mjs",
