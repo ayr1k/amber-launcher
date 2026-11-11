@@ -81,3 +81,5 @@ The 6241c6e packages are intermediate and superseded. The dedicated library-revi
 中文：6241c6e 为已过时中间包。本轮回归区分外部源安全保留与合法 incoming 文件，排除启动器账号等状态，验证祖先客户端精确撤销、发布取消边界及脱离原库后的整包身份恢复。备份仅保存必要且清洗后的管理字段；修复不扩大任意版本路径写入权限。新版本目录原子发布是提交点，提交后不假称取消。
 
 Existing backups are not silently deleted or rewritten. An older intermediate pack backup containing disallowed launcher/private-state entries is refused on restoration; do not distribute such a backup. / 不会静默删除或改写已有备份。旧中间包产生的备份若包含禁止的启动器／私有状态条目，恢复会被拒绝；请勿分发这类备份。
+
+Known pack-owned root game files from the validated, sanitized baseline participate in upgrade conflict previews and explicit local retention. The same captured baseline governs source snapshots and retained copies; baseline drift requires a new preview. Private names are always excluded, even when listed in baseline metadata. Unknown root files remain excluded. / 经验证并清洗的整包 baseline 所属根游戏配置参与升级冲突比较和本地保留；源快照及复制使用同一记录，记录变化须重新预览。私密名称始终排除，未知根文件不会因此放行。
