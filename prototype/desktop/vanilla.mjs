@@ -44,7 +44,8 @@ export async function extractZip(path,target,{exclude=[],onlyNative=false}={}){
  for(const [name,bytes] of Object.entries(entries)){const out=safePath(target,name);await ensureParents(target,out);await writeFile(out,bytes);}
 }
 export function offlineUUID(name){const bytes=createHash('md5').update('OfflinePlayer:'+name).digest();bytes[6]=(bytes[6]&15)|48;bytes[8]=(bytes[8]&63)|128;return bytes.toString('hex');}
-export function expandArguments(values,vars,env){return values.flatMap(entry=>typeof entry==='string'?[entry]:rulesAllow(entry.rules,env)?[entry.value].flat():[]).map(value=>value.replace(/\$\{([^}]+)\}/g,(_,key)=>{if(!(key in vars))throw new Error('未知启动参数：'+key);return String(vars[key]);}));}
+export function effectiveArguments(values,env=gameEnvironment()){return values.flatMap(entry=>typeof entry==='string'?[entry]:rulesAllow(entry.rules,env)?[entry.value].flat():[]);}
+export function expandArguments(values,vars,env){return effectiveArguments(values,env).map(value=>value.replace(/\$\{([^}]+)\}/g,(_,key)=>{if(!(key in vars))throw new Error('未知启动参数：'+key);return String(vars[key]);}));}
 export function launchArguments(meta,plan,{dir,root,natives,username,memory=4,identity=null,extraJvm=[],platform=process.platform,arch=process.arch}){
  if(!identity&&!/^[A-Za-z0-9_]{3,16}$/.test(username))throw new Error('离线玩家名称需要 3–16 个英文字母、数字或下划线。');
  if(!Number.isInteger(memory)||memory<1||memory>32)throw new Error('内存需要在 1–32 GB 范围内。');
@@ -55,5 +56,6 @@ export function launchArguments(meta,plan,{dir,root,natives,username,memory=4,id
  const logging=plan.logging?[meta.logging.client.argument.replace('${path}',plan.logging.path)]:[];
  const expandedJvm=expandArguments(jvm,vars,gameEnvironment(platform,arch));
  if(platform==='darwin'&&!expandedJvm.includes('-XstartOnFirstThread'))expandedJvm.unshift('-XstartOnFirstThread');
- return ['-Xms512M',`-Xmx${memory}G`,'-Dfile.encoding=UTF-8',...extraJvm,...expandedJvm,...logging,meta.mainClass,...expandArguments(game,vars,gameEnvironment(platform,arch))];
+ const expandedGame=expandArguments(game,vars,gameEnvironment(platform,arch));plan.validateGameArguments?.(expandedGame,vars);
+ return ['-Xms512M',`-Xmx${memory}G`,'-Dfile.encoding=UTF-8',...extraJvm,...expandedJvm,...logging,meta.mainClass,...expandedGame];
 }

@@ -1,3 +1,4 @@
+import {instanceState170} from './content-state170.mjs';
 import {instanceLoaders,compareContentVersions} from './compatibility.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import {g} from './guided-text.mjs';
@@ -98,7 +99,7 @@ export class GuidedCreation {
     // Validate every existing destination before writing. Resume accepts identical bytes only.
     for(const [relative,body]of writes){const path=safePath(dir,relative);await ensureParents(dir,path);try{if(await readBoundedFile(path,32000)!==body)failure('visualSettingsExist');}catch(e){if(e.code!=='ENOENT')throw e;}}
     for(const [relative,body]of writes){const path=safePath(dir,relative);try{await writeFile(path,body,{flag:'wx'});}catch(e){if(e.code!=='EEXIST')throw e;if(await readBoundedFile(path,32000)!==body)failure('visualSettingsExist');}}
-    p.visual.configured=true;await atomicJson(join(dir,'guided-plan.json'),p);
+    p.visual.configured=true;await atomicJson(join(await instanceState170(this.core,id),'guided-plan.json'),p);
   }
   async addonSnapshot(id){
     const {dir,item}=await this.core.metadata(id);await this.core.requireStopped(dir);
@@ -141,13 +142,13 @@ export class GuidedCreation {
       const instanceId=p.existing.id;if((await this.workflows.pending()).some(r=>r.instanceId===instanceId))failure('addonNotReady');
       const {dir}=await this.core.metadata(instanceId);await this.core.requireStopped(dir);await this.recheck(p);
       const record={schema:1,kind:'guided-addon',state:'running',step:'content',guided:p,completed:[],startedAt:new Date().toISOString()};
-      await atomicJson(join(dir,'content-task.json'),record);return this.runAddon(instanceId,record);
+      await atomicJson(join(await instanceState170(this.core,instanceId),'content-task.json'),record);return this.runAddon(instanceId,record);
     });
   }
   async runAddon(id,record){
     const {dir,item}=await this.core.metadata(id);await this.core.requireStopped(dir);this.workflows.lastSetup=id;
     const p=this.validateSaved(record.guided);if(p.existing?.id!==id||item.game!==p.target.game||item.loader!==p.target.loader||(item.loaderVersion||null)!==(p.target.version||null))failure('changedTarget');
-    record.state='running';delete record.error;await atomicJson(join(dir,'content-task.json'),record);
+    record.state='running';delete record.error;await atomicJson(join(await instanceState170(this.core,id),'content-task.json'),record);
     try{
       this.workflows.checkCancelled();await this.recheck(p);
       const manifest=await this.content.manifest(dir);
@@ -158,13 +159,13 @@ export class GuidedCreation {
       }else{
         const review=await this.reviewAddon(p);if(review.issues.errors.length||review.blockers.length)failure('notCompatible');
         const newFiles=p.files.filter(f=>!manifest.files.some(x=>x.projectId===f.projectId));
-        record.afterStamp=stamp([...manifest.files,...newFiles.map(f=>({...f,enabled:true}))]);await atomicJson(join(dir,'content-task.json'),record);
+        record.afterStamp=stamp([...manifest.files,...newFiles.map(f=>({...f,enabled:true}))]);await atomicJson(join(await instanceState170(this.core,id),'content-task.json'),record);
         const plan={id:randomUUID(),instanceId:id,game:item.game,loader:item.loader,loaderVersion:item.loaderVersion,loaderSha1:item.loaderSha1,manifestStamp:stamp(manifest.files),files:newFiles,compatible:true,expiresAt:Date.now()+600000};
         this.content.plans.set(plan.id,plan);await this.workflows.wait(await this.content.install(id,plan.id));
       }
-      record.state='done';record.completed=['content'];await atomicJson(join(dir,'guided-addon.json'),p);return item;
+      record.state='done';record.completed=['content'];await atomicJson(join(await instanceState170(this.core,id),'guided-addon.json'),p);return item;
     }catch(e){record.state=this.workflows.cancelled?'cancelled':'failed';record.error=e.message;throw e;}
-    finally{record.finishedAt=new Date().toISOString();await atomicJson(join(dir,'content-task.json'),record);}
+    finally{record.finishedAt=new Date().toISOString();await atomicJson(join(await instanceState170(this.core,id),'content-task.json'),record);}
   }
   async edit(id,selection){
     const p=this.get(id);if(!selection||!Array.isArray(selection.roots)||selection.roots.some(v=>!(p.availableRoots||p.roots).some(r=>r.versionId===v))||p.roots.some(r=>r.must&&!selection.roots.includes(r.versionId)))failure('invalidSelection');
@@ -197,6 +198,6 @@ export class GuidedCreation {
     const manifest=await this.content.manifest(dir);const plan={id:randomUUID(),instanceId:id,game:item.game,loader:item.loader,loaderVersion:item.loaderVersion,loaderSha1:item.loaderSha1,manifestStamp:stamp(manifest.files),files,compatible:true,expiresAt:Date.now()+600000};
     this.content.plans.set(plan.id,plan);return this.content.install(id,plan.id);
   }
-  async report(id){const dir=await this.core.instancePath(id);for(const file of ['guided-addon.json','guided-plan.json']){try{return this.validateSaved(JSON.parse(await readBoundedFile(join(dir,file),2000000)));}catch(e){if(e.code!=='ENOENT')throw e;}}return null;}
-  async skipVisuals(id){return this.workflows.exclusive(async()=>{const {dir}=await this.core.metadata(id);await this.core.requireStopped(dir);const record=JSON.parse(await readBoundedFile(join(dir,'setup-report.json'),3000000));if(!record.guided||record.state==='done'||!['resources','shaders','visualSettings'].includes(record.step))failure('cannotSkip');const p=this.validateSaved(record.guided);const removed=p.files.filter(f=>f.type!=='mod').map(f=>f.versionId);const remaining=p.files.filter(f=>f.type==='mod');if(planIssues(remaining,p.target,p.answers).errors.length)failure('cannotSkip');p.files=remaining;p.roots=p.roots.filter(r=>!removed.includes(r.versionId));p.skippedVisuals=true;if(p.visual)p.visual={...p.visual,profile:'off'};p.issues=planIssues(p.files,p.target,p.answers);record.guided=p;await atomicJson(join(dir,'guided-plan.json'),p);await atomicJson(join(dir,'setup-report.json'),record);this.workflows.resumes.delete(id);this.workflows.lastSetup=id;return this.workflows.runPlan(id,record);});}
+  async report(id){const dir=await instanceState170(this.core,id);for(const file of ['guided-addon.json','guided-plan.json']){try{return this.validateSaved(JSON.parse(await readBoundedFile(join(dir,file),2000000)));}catch(e){if(e.code!=='ENOENT')throw e;}}return null;}
+  async skipVisuals(id){return this.workflows.exclusive(async()=>{const {dir}=await this.core.metadata(id);await this.core.requireStopped(dir);const record=JSON.parse(await readBoundedFile(join(await instanceState170(this.core,id),'setup-report.json'),3000000));if(!record.guided||record.state==='done'||!['resources','shaders','visualSettings'].includes(record.step))failure('cannotSkip');const p=this.validateSaved(record.guided);const removed=p.files.filter(f=>f.type!=='mod').map(f=>f.versionId);const remaining=p.files.filter(f=>f.type==='mod');if(planIssues(remaining,p.target,p.answers).errors.length)failure('cannotSkip');p.files=remaining;p.roots=p.roots.filter(r=>!removed.includes(r.versionId));p.skippedVisuals=true;if(p.visual)p.visual={...p.visual,profile:'off'};p.issues=planIssues(p.files,p.target,p.answers);record.guided=p;await atomicJson(join(await instanceState170(this.core,id),'guided-plan.json'),p);await atomicJson(join(await instanceState170(this.core,id),'setup-report.json'),record);this.workflows.resumes.delete(id);this.workflows.lastSetup=id;return this.workflows.runPlan(id,record);});}
 }

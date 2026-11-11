@@ -1,0 +1,17 @@
+// SPDX-License-Identifier: MPL-2.0
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {mkdir,writeFile,readFile,access} from 'node:fs/promises';
+import {join} from 'node:path';
+import {createRequire} from 'node:module';
+import {fixture} from './library-fixture170.mjs';
+import {VanillaLauncher} from '../desktop/launcher.mjs';
+const {zipSync,strToU8}=createRequire(import.meta.url)('../desktop/vendor/fflate.cjs');
+test('external pack preview binds the source directory and preserves both targets on drift',async t=>{const g=await fixture(t),archive=join(g.core.root,'target.mrpack');await writeFile(archive,zipSync({'modrinth.index.json':strToU8(JSON.stringify({formatVersion:1,game:'minecraft',versionId:'2',name:'Target pack',files:[],dependencies:{minecraft:'1.16.4'}}))}));const p=await g.packUpgrade140.preview('one',{path:archive}),other=join(g.game,'other');await mkdir(other);const metaPath=join(g.dir,'one.json'),meta=JSON.parse(await readFile(metaPath,'utf8'));await writeFile(metaPath,JSON.stringify({...meta,gameDir:other}));await assert.rejects(g.packUpgrade140.apply(p.token,{name:'Upgrade',worlds:false,choices:{}}),/changed/);assert.equal(await readFile(join(g.dir,'mods','keep.jar'),'utf8'),'user bytes');assert.equal((await g.runner.registry.scan(g.runner.libraryId)).rows.length,1);});
+test('explicit MRPACK without an old receipt creates a new isolated external version and retains chosen local files',async t=>{
+ const g=await fixture(t);await mkdir(join(g.dir,'config'));await writeFile(join(g.dir,'config','keep.json'),'local value');await mkdir(join(g.dir,'saves'));await writeFile(join(g.dir,'saves','world.txt'),'world');const archive=join(g.core.root,'target.mrpack');await writeFile(archive,zipSync({'modrinth.index.json':strToU8(JSON.stringify({formatVersion:1,game:'minecraft',versionId:'2',name:'Target pack',files:[],dependencies:{minecraft:'1.16.4'}})),'overrides/config/keep.json':strToU8('pack value'),'overrides/config/new.json':strToU8('new pack value')}));
+ // Only Java acquisition is stubbed. Real parsing, upstream resolution, downloads,
+ // staging, native pack install, conflict selection and external publication execute.
+ const original=VanillaLauncher.prototype.prepareJava;VanillaLauncher.prototype.prepareJava=function(id){return this.startJob(id,'java',async()=>{});};t.after(()=>{VanillaLauncher.prototype.prepareJava=original;});
+ const p=await g.packUpgrade140.preview('one',{path:archive});assert.ok(p.rows.find(r=>r.relative==='config/keep.json').conflict);const source=await readFile(join(g.dir,'one.json'));const item=await g.packUpgrade140.apply(p.token,{name:'Upgraded pack',worlds:true,choices:{'config/keep.json':'local'}});assert.notEqual(item.id,'one');const dir=await g.core.instancePath(item.id);assert.equal(await readFile(join(dir,'config','keep.json'),'utf8'),'local value');assert.equal(await readFile(join(dir,'config','new.json'),'utf8'),'new pack value');assert.equal(await readFile(join(dir,'saves','world.txt'),'utf8'),'world');assert.equal(await readFile(join(g.dir,'config','keep.json'),'utf8'),'local value');await assert.rejects(access(join(g.dir,'config','new.json')));assert.deepEqual(await readFile(join(g.dir,'one.json')),source);await g.runner.runtimeMetadata(item.id);const baseline=JSON.parse(await readFile(join(await g.core.contentStateDirectory(dir),'modpack.json'),'utf8'));assert.equal(baseline.localReport.packVersion,'2');
+});

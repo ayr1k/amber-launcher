@@ -1,3 +1,4 @@
+import {optifineGame} from './local-content.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import {readFile,mkdir,writeFile,copyFile,stat} from 'node:fs/promises';
 import {join,dirname} from 'node:path';
@@ -12,7 +13,8 @@ const {unzipSync}=createRequire(import.meta.url)('./vendor/fflate.cjs');
 export async function installOptifine(core,id,path){
  const {dir,item,meta}=await core.metadata(id);await core.requireStopped(dir);
  if((await stat(path)).size>100_000_000)throw Error('OptiFine JAR 超过大小限制。');
- let valid=false;unzipSync(await readFile(path),{filter:f=>{if(f.name==='optifine/Installer.class')valid=true;return false;}});if(!valid)throw Error('请选择从 OptiFine 官网下载的安装器 JAR。');
+ const bytes=await readFile(path);if(optifineGame(bytes)!==meta.id)throw Error('OptiFine 与当前 Minecraft 版本不匹配。');
+ let valid=false;unzipSync(bytes,{filter:f=>{if(f.name==='optifine/Installer.class')valid=true;return false;}});if(!valid)throw Error('请选择从 OptiFine 官网下载的安装器 JAR。');
  const java=item.javaPath?await inspectJava(item.javaPath):(await core.scanJava()).find(j=>j.major===requiredJava(meta));if(!java)throw Error('请先准备 Java。');
  return core.startJob(id,'loader',async(job,signal)=>{
   job.phase='准备 OptiFine 独立安装';const work=safePath(core.root,'loader-work/'+randomUUID());await mkdir(work,{recursive:true});const installer=join(work,'optifine-installer.jar');await copyFile(path,installer);

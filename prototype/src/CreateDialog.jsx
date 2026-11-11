@@ -1,3 +1,4 @@
+import {useLibraryApi170} from './LibraryContext170';
 import {ControlButton} from './ControlButton.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import {LocalPackImport,lp} from './LocalPackImport';
@@ -20,7 +21,7 @@ import {translateMessage,getLocale} from '../desktop/localization.mjs';
 const GB=1073741824;
 function Choice({title,value,onChange,options}){return <label className="guide-field"><span>{title}</span><Select value={value} onChange={e=>onChange(e.target.value)}>{options.map(([id,key])=><option key={id} value={id}>{g(key)}</option>)}</Select></label>;}
 function NumberField({title,value,onChange,max=100000}){return <label className="guide-field"><span>{title}</span><input type="number" min="0" max={max} step="1" value={value} onChange={e=>onChange(Math.max(0,Math.min(max,Number(e.target.value))))}/></label>;}
-export function GuideDetails({plan,readOnly=false,onEdit,busy=false}){
+export function GuideDetails({plan,readOnly=false,onEdit,busy=false}){const libraryApi170=useLibraryApi170();
  const [roots,setRoots]=useState(plan.roots.map(r=>r.versionId)),[optional,setOptional]=useState(plan.selectedOptional||[]),[excluded,setExcluded]=useState(plan.excludedRequired||[]);
  useEffect(()=>{setRoots(plan.roots.map(r=>r.versionId));setOptional(plan.selectedOptional||[]);setExcluded(plan.excludedRequired||[]);},[plan.id]);
  const toggle=(xs,v)=>xs.includes(v)?xs.filter(x=>x!==v):[...xs,v];
@@ -28,14 +29,14 @@ export function GuideDetails({plan,readOnly=false,onEdit,busy=false}){
  const editRef=useRef(onEdit);editRef.current=onEdit;
  useEffect(()=>{if(readOnly||busy)return;const unchanged=JSON.stringify([roots,optional,excluded])===JSON.stringify([plan.roots.map(r=>r.versionId),plan.selectedOptional||[],plan.excludedRequired||[]]);if(unchanged)return;const timer=setTimeout(()=>editRef.current?.({roots,optional,excluded}),450);return()=>clearTimeout(timer);},[roots,optional,excluded,readOnly]);
  return <div className="guide-details"><p className="native-note">{g('metadata')}</p><div className="guide-file-list">
- {['performance','utility','visual','gameplay'].map(group=><section key={group} className="guide-category">{candidates.some(r=>(r.group||'visual')===group)&&<h3>{g(group==='performance'?'performanceGroup':group==='visual'?'visualGroup':group)}</h3>}{candidates.filter(r=>(r.group||'visual')===group).map(r=><div className="guide-file" key={r.versionId}><label><input type="checkbox" disabled={readOnly||busy||r.must} checked={roots.includes(r.versionId)} onChange={()=>setRoots(toggle(roots,r.versionId))}/>{r.icon&&/^https:\/\//.test(r.icon)&&<img src={r.icon} alt="" loading="lazy" referrerPolicy="no-referrer"/>}<strong>{r.title}</strong>{r.must&&<small>{g('reasonRequired')}</small>}</label><small>{plan.files.find(f=>f.projectId===r.projectId)?.version}</small><p>{g(r.reason)}</p><ControlButton type="button" className="text-button" onClick={()=>window.amberDesktop.openProject(r.projectId).catch(()=>{})}>{g('projectPage')} ↗</ControlButton></div>)}</section>)}
+ {['performance','utility','visual','gameplay'].map(group=><section key={group} className="guide-category">{candidates.some(r=>(r.group||'visual')===group)&&<h3>{g(group==='performance'?'performanceGroup':group==='visual'?'visualGroup':group)}</h3>}{candidates.filter(r=>(r.group||'visual')===group).map(r=><div className="guide-file" key={r.versionId}><label><input type="checkbox" disabled={readOnly||busy||r.must} checked={roots.includes(r.versionId)} onChange={()=>setRoots(toggle(roots,r.versionId))}/>{r.icon&&/^https:\/\//.test(r.icon)&&<img src={r.icon} alt="" loading="lazy" referrerPolicy="no-referrer"/>}<strong>{r.title}</strong>{r.must&&<small>{g('reasonRequired')}</small>}</label><small>{plan.files.find(f=>f.projectId===r.projectId)?.version}</small><p>{g(r.reason)}</p><ControlButton type="button" className="text-button" onClick={()=>libraryApi170.openProject(r.projectId).catch(()=>{})}>{g('projectPage')} ↗</ControlButton></div>)}</section>)}
  {plan.files.filter(f=>!candidates.some(r=>r.projectId===f.projectId)).map(f=><div className="guide-file" key={f.versionId}><strong>{f.title}</strong><small>{g('dependency')} · {f.version}</small></div>)}
  </div>{!readOnly&&<><p className="native-note">{g('autoChecking')}</p><div className="guide-dependencies">{[['required',plan.required||[]],['optional',plan.optional||[]]].map(([kind,rows])=>rows.length>0&&<fieldset key={kind} disabled={busy}><legend>{g(kind)}</legend>{rows.map(row=><div key={row.key}><label><input type="checkbox" checked={kind==='required'?!excluded.includes(row.key):optional.includes(row.key)} disabled={kind==='optional'&&!row.available} onChange={()=>kind==='required'?setExcluded(toggle(excluded,row.key)):setOptional(toggle(optional,row.key))}/><span>{row.title} <small>← {row.owner}</small></span></label>{row.reason&&<p className="error">{translateMessage(row.reason)}</p>}</div>)}</fieldset>)}</div><ControlButton type="button" className="button secondary" disabled={busy} onClick={()=>onEdit({roots,optional,excluded})}>{busy?g('checking'):g('fewer')}</ControlButton></>}
  {plan.blockers?.map((e,i)=><p className="error" key={'b'+i}>{translateMessage(e)}</p>)}{plan.issues?.errors.map(e=><p className="error" key={e}>{g(e)}</p>)}{plan.issues?.warnings.map(e=><p className="content-feedback" key={e}>{g(e)}</p>)}
  </div>;
 }
-export function CreateDialog({settings,onClose,onCreated,instance=null,onManage,onNavigate}){useLocale();
- const api=window.amberDesktop,[mode,setMode]=useState(instance?'guided':'choose');
+export function CreateDialog({settings,onClose,onCreated,instance=null,onManage,onNavigate}){const libraryApi170=useLibraryApi170();useLocale();
+ const api=libraryApi170,[mode,setMode]=useState(instance?'guided':'choose');
  if(mode==='local')return <LocalPackImport onClose={onClose} onCreated={onCreated} onNavigate={onNavigate}/>;
  if(mode==='manual')return <SetupDialog settings={settings} onClose={onClose} onCreated={onCreated}/>;
  return <GuidedDialog key={mode} api={api} mode={mode} setMode={setMode} settings={settings} onClose={onClose} onCreated={onCreated} instance={instance} onManage={onManage}/>;

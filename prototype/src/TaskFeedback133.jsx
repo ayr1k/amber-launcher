@@ -1,3 +1,4 @@
+import {useLibraryApi170} from './LibraryContext170';
 // SPDX-License-Identifier: MPL-2.0
 import {useCallback,useEffect,useRef,useState} from 'react';
 import {ControlButton as Button} from './ControlButton.mjs';
@@ -6,17 +7,17 @@ import {jobStage} from './job-stage.mjs';
 import {th} from './ThemeCanvas';
 import {useLocale} from './Locale';
 import {activeTask,observeTasks,mayDismissTasks} from './task-feedback133.mjs';
-export function TaskFeedback({instances,hidden,onTasks,onInstance}) {
+export function TaskFeedback({instances,hidden,onTasks,onInstance}) {const libraryApi170=useLibraryApi170();
  useLocale();const [jobs,setJobs]=useState([]),[expanded,setExpanded]=useState(false),[revision,setRevision]=useState(0),[error,setError]=useState(''),[held,setHeld]=useState(false);
  const seen=useRef(null),tracked=useRef(new Set());
  const [closing,setClosing]=useState(false);
  const dismiss=useCallback(()=>setClosing(true),[]);
  useEffect(()=>{if(!closing)return;const timer=setTimeout(()=>{tracked.current.clear();setJobs([]);setExpanded(false);setHeld(false);setError('');setClosing(false);},180);return()=>clearTimeout(timer);},[closing]);
- useEffect(()=>{let live=true,busy=false;const tick=async()=>{if(busy)return;busy=true;try{const status=await window.amberDesktop.status();if(!live)return;const next=observeTasks(seen.current,status.jobs||[]);seen.current=next.seen;if(next.changed.length){setClosing(false);next.changed.forEach(j=>tracked.current.add(j.id));setExpanded(true);setRevision(v=>v+1);}setJobs((status.jobs||[]).filter(j=>tracked.current.has(j.id)).slice().reverse());}catch{}finally{busy=false;}};tick();const timer=setInterval(tick,700);return()=>{live=false;clearInterval(timer);};},[]);
+ useEffect(()=>{seen.current=null;tracked.current.clear();setJobs([]);setExpanded(false);setError('');setHeld(false);setClosing(false);let live=true,busy=false;const tick=async()=>{if(busy)return;busy=true;try{const status=await libraryApi170.status();if(!live)return;const next=observeTasks(seen.current,status.jobs||[]);seen.current=next.seen;if(next.changed.length){setClosing(false);next.changed.forEach(j=>tracked.current.add(j.id));setExpanded(true);setRevision(v=>v+1);}setJobs((status.jobs||[]).filter(j=>tracked.current.has(j.id)).slice().reverse());}catch{}finally{busy=false;}};tick();const timer=setInterval(tick,700);return()=>{live=false;clearInterval(timer);};},[libraryApi170]);
  const dismissible=mayDismissTasks(jobs);
  useEffect(()=>{if(!expanded)setHeld(false);},[expanded]);
  useEffect(()=>{if(!dismissible||held)return;const timer=setTimeout(dismiss,5000);return()=>clearTimeout(timer);},[dismissible,held,revision,dismiss]);
- async function cancel(id){try{await window.amberDesktop.cancel(id);setError('');}catch(e){setError(e.message);}}
+ async function cancel(id){try{await libraryApi170.cancel(id);setError('');}catch(e){setError(e.message);}}
  if(!jobs.length)return null;
  const running=jobs.filter(activeTask).length,issues=jobs.filter(j=>['failed','cancelled'].includes(j.state)).length;
  return <aside className={'task-feedback133'+(closing?' is-closing':'')} hidden={hidden} aria-label={th('下载任务','Download tasks')}>

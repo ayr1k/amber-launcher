@@ -1,3 +1,4 @@
+import {useLibraryApi170} from './LibraryContext170';
 // SPDX-License-Identifier: MPL-2.0
 import {useEffect,useRef,useState} from 'react';
 import {basicSetup} from 'codemirror';
@@ -16,7 +17,7 @@ import {getLocale} from '../desktop/localization.mjs';
 import {Select} from './Select';
 import {ControlButton as B} from './ControlButton.mjs';
 import './editor130.css';
-const t=(zh,en)=>getLocale().startsWith('zh')?zh:en,api=()=>window.amberDesktop;
+const t=(zh,en)=>getLocale().startsWith('zh')?zh:en;
 const language=name=>/\.json$/.test(name)?json():/\.(js|json5|zs)$/.test(name)?javascript():/\.toml$/.test(name)?StreamLanguage.define(toml):/\.ya?ml$/.test(name)?StreamLanguage.define(yaml):/\.(cfg|conf|ini|properties|txt)$/.test(name)?StreamLanguage.define(properties):[];
 const highlight=HighlightStyle.define([{tag:[tags.string,tags.special(tags.string)],color:'var(--edit-string)'},{tag:[tags.number,tags.bool,tags.null],color:'var(--edit-number)'},{tag:[tags.keyword,tags.operator],color:'var(--edit-keyword)'},{tag:[tags.propertyName,tags.definition(tags.variableName)],color:'var(--edit-property)'},{tag:tags.comment,color:'var(--muted)',fontStyle:'italic'}]);
 const theme=EditorView.theme({'&':{height:'100%',color:'var(--text)',backgroundColor:'var(--surface)'},'.cm-scroller':{overflow:'auto',fontFamily:'Consolas, monospace',fontSize:'14px',lineHeight:'1.65'},'.cm-content':{caretColor:'var(--text)',padding:'12px 0'},'.cm-line':{padding:'0 14px'},'.cm-gutters':{backgroundColor:'var(--surface)',color:'var(--muted)',borderRight:'1px solid var(--line)'},'.cm-activeLine,.cm-activeLineGutter':{backgroundColor:'color-mix(in srgb,var(--accent,var(--green)) 12%,transparent)'},'.cm-cursor':{borderLeftColor:'var(--text)'},'.cm-selectionBackground,&.cm-focused .cm-selectionBackground':{backgroundColor:'color-mix(in srgb,var(--accent,var(--green)) 30%,transparent)'},'.cm-panels':{backgroundColor:'var(--surface)',color:'var(--text)'},'.cm-searchMatch':{backgroundColor:'color-mix(in srgb,var(--accent,var(--green)) 30%,transparent)',outline:'1px solid var(--accent,var(--green))'}});
@@ -24,8 +25,8 @@ function Tree({files,onOpen,active,prefix=''}){const groups=new Map();for(const 
 
 import {textMetadata} from '../desktop/editor-text163.mjs';
 import {EditorRequests,tabLabel,firstDifference} from './editor-session163.mjs';
-export function FileEditor({instances,editorApi}){
- const layout=useRef(null),api=()=>editorApi||window.amberDesktop;
+export function FileEditor({instances,editorApi}){const libraryApi170=useLibraryApi170();
+ const layout=useRef(null),api=()=>editorApi||libraryApi170;
  const [id,setId]=useState(instances[0]?.id||''),[files,setFiles]=useState([]),[tabs,setTabs]=useState([]),[active,setActive]=useState(''),[query,setQuery]=useState(''),[message,setMessage]=useState(''),[busy,setBusy]=useState(false),[history,setHistory]=useState(null),[comparison,setComparison]=useState(null),[lineDraft,setLineDraft]=useState('1'),[cursor,setCursor]=useState({line:1,column:1,lines:1});
  const comparisonHost=useRef(),historyHost=useRef(),host=useRef(),view=useRef(),docs=useRef(new Map()),current=useRef(''),saving=useRef(false),epoch=useRef(0),requests=useRef(new EditorRequests()),saveRef=useRef();
  useEffect(()=>{if(comparison){comparisonHost.current?.scrollIntoView({block:'start',behavior:'instant'});comparisonHost.current?.focus({preventScroll:true})}},[comparison]);

@@ -4,7 +4,7 @@ import {ControlButton as B} from './ControlButton.mjs';
 import './workspace130.css';
 import {Select} from './Select';
 export const label=(zh,en)=>getLocale().startsWith('zh')?zh:en;
-const api=()=>window.amberDesktop;
+
 export {GradientTool} from './Gradient130';
 export {FileEditor} from './FileEditor130';
 export {ScreenshotGallery} from './ScreenshotGallery145';

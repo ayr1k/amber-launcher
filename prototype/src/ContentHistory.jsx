@@ -1,11 +1,12 @@
+import {useLibraryApi170} from './LibraryContext170';
 import {ControlButton} from './ControlButton.mjs';
 import { useLocale } from "./Locale";import { t as translateText, translateMessage, getLocale } from "../desktop/localization.mjs"; // SPDX-License-Identifier: MPL-2.0
 import { useEffect, useState } from 'react';
 import { ChangePreview } from './ChangePreview';
 import { ProblemNotice } from './ProblemNotice';
 const verbs = { get install() {return translateText("安装内容");}, get import() {return translateText("导入模组");}, get update() {return translateText("更新内容");}, get enable() {return translateText("启用内容");}, get disable() {return translateText("停用内容");}, get remove() {return translateText("移除内容");}, get restore() {return translateText("恢复内容");} };
-export function ContentHistory({ instance, blocked, onJob }) {useLocale();
-  const api = window.amberDesktop,[rows, setRows] = useState([]),[busy, setBusy] = useState(false),[error, setError] = useState(''),[selected, setSelected] = useState(null);
+export function ContentHistory({ instance, blocked, onJob }) {const libraryApi170=useLibraryApi170();useLocale();
+  const api = libraryApi170,[rows, setRows] = useState([]),[busy, setBusy] = useState(false),[error, setError] = useState(''),[selected, setSelected] = useState(null);
   async function refresh() {setBusy(true);setError('');try {setRows(await api.modUpdateHistory(instance.id));setSelected(null);} catch (e) {setError(e.message);} finally {setBusy(false);}}
   useEffect(() => {let live = true;setBusy(true);api.modUpdateHistory(instance.id).then((v) => live && setRows(v)).catch((e) => live && setError(e.message)).finally(() => live && setBusy(false));return () => {live = false;};}, [instance.id]);
   async function restore() {setBusy(true);setError('');try {onJob(await api.modUpdateRestore(instance.id, selected.id));setSelected(null);} catch (e) {setError(e.message);} finally {setBusy(false);}}

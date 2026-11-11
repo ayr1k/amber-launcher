@@ -1,3 +1,5 @@
+import {contentTarget170,assertContentTarget170} from './content-target170.mjs';
+import {contentState170} from './content-state170.mjs';
 import {compareContentVersions} from './compatibility.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import {readFile,writeFile,mkdir,copyFile,unlink,readdir,lstat,constants} from 'node:fs/promises';
@@ -21,27 +23,27 @@ function validFile(f){if(!f||!/^sha1$/.test(f.algorithm||'sha1')||!/^([a-f0-9]{4
 async function exists(path){try{await lstat(path);return true;}catch(e){if(e.code==='ENOENT')return false;throw e;}}
 async function checked(dir,f){const path=safePath(dir,actual(f));await ensureParents(dir,path);if(!await verified({...f,path}))throw Error(`「${f.title}」的文件已被修改或缺失，请先修复内容，未覆盖现有文件。`);return path;}
 // Journal precedes replacement. Backups survive successful updates and process crashes.
-export async function recoverModUpdate(dir){
-  const path=join(dir,'content-update.json');if(!await exists(path))return null;
+export async function recoverModUpdate(dir,state=dir){
+  const path=join(state,'content-update.json');if(!await exists(path))return null;
   if((await lstat(path)).isSymbolicLink())throw Error('模组更新日志不可使用链接。');
   const tx=JSON.parse(await readFile(path,'utf8'));
   if(tx.schema!==1||! /^[a-f0-9-]{36}$/.test(tx.id)||!Array.isArray(tx.old)||!Array.isArray(tx.next)||tx.old.length>200||tx.next.length>200)throw Error('模组更新恢复记录无效。');
   for(const f of [...tx.old,...tx.next]){validFile(f);safePath(dir,actual(f));}
-  const manifest=JSON.parse(await readFile(join(dir,'content.json'),'utf8'));
+  const manifest=JSON.parse(await readFile(join(state,'content.json'),'utf8'));
   const committed=manifest.updateId===tx.id;
   if(!committed){
     // Verify all backup sources before touching any current file.
-    for(const f of tx.old)await checked(join(dir,'content-updates',tx.id,'files'),f);
+    for(const f of tx.old)await checked(join(state,'content-updates',tx.id,'files'),f);
     for(const f of tx.next){const p=safePath(dir,actual(f));await ensureParents(dir,p);if(await exists(p)){
       const old=tx.old.find(x=>actual(x).toLowerCase()===actual(f).toLowerCase());
       if(old&&await verified({...old,path:p}))continue;
       if(!await verified({...f,path:p}))throw Error('更新恢复发现外部修改，请保留文件并打开实例目录检查：'+actual(f));
       await unlink(p);
     }}
-    for(const f of tx.old){const target=safePath(dir,actual(f));await ensureParents(dir,target);if(await exists(target)){if(!await verified({...f,path:target}))throw Error('无法覆盖更新期间被修改的文件：'+actual(f));}else await copyFile(safePath(join(dir,'content-updates',tx.id,'files'),actual(f)),target,constants.COPYFILE_EXCL);}
+    for(const f of tx.old){const target=safePath(dir,actual(f));await ensureParents(dir,target);if(await exists(target)){if(!await verified({...f,path:target}))throw Error('无法覆盖更新期间被修改的文件：'+actual(f));}else await copyFile(safePath(join(state,'content-updates',tx.id,'files'),actual(f)),target,constants.COPYFILE_EXCL);}
   }
-  await ensureParents(dir,join(dir,'content-updates',tx.id,'record.json'));
-  await atomicJson(join(dir,'content-updates',tx.id,'record.json'),{...tx,state:committed?'done':'recovered'});
+  await ensureParents(state,join(state,'content-updates',tx.id,'record.json'));
+  await atomicJson(join(state,'content-updates',tx.id,'record.json'),{...tx,state:committed?'done':'recovered'});
   await unlink(path);return {id:tx.id,committed};
 }
 export class ModUpdates{
@@ -58,12 +60,12 @@ export class ModUpdates{
   }
   async lock(instanceId,projectId,value){
     if(typeof value!=='boolean')throw Error('锁定选项无效。');const {dir}=await this.core.metadata(instanceId);await this.core.requireStopped(dir);
-    return this.core.startJob(instanceId,'content-update',async()=>{await recoverModUpdate(dir);const m=await this.content.manifest(dir),f=m.files.find(f=>f.projectId===projectId);if(!f)throw Error('模组记录不存在。');f.updateLocked=value;await atomicJson(join(dir,'content.json'),m);});
+    return this.core.startJob(instanceId,'content-update',async()=>{await recoverModUpdate(dir,await contentState170(this.core,dir));const m=await this.content.manifest(dir),f=m.files.find(f=>f.projectId===projectId);if(!f)throw Error('模组记录不存在。');f.updateLocked=value;await atomicJson(join(await contentState170(this.core,dir),'content.json'),m);});
   }
   async preview(instanceId,selections,optional=[],excluded=[]){
     if(!Array.isArray(selections)||!selections.length||selections.length>100||new Set(selections.map(s=>s?.projectId)).size!==selections.length)throw Error('请选择 1–100 个不同模组。');
     if(selections.some(s=>!s||! /^[a-zA-Z0-9_-]{1,100}$/.test(s.projectId)||! /^[a-zA-Z0-9_-]{1,100}$/.test(s.versionId)))throw Error('所选模组标识无效，请刷新列表。');
-    const {dir,item}=await this.core.metadata(instanceId),before=await this.content.manifest(dir);
+    const metadata=await this.core.metadata(instanceId),{dir,item}=metadata,target170=await contentTarget170(this.core,instanceId,metadata),before=await this.content.manifest(dir);
     const selected=new Map(selections.map(s=>[s.projectId,s.versionId]));
     for(const s of selections){const f=before.files.find(f=>f.projectId===s.projectId);if(!f||f.type!=='mod'||f.updateLocked)throw Error('所选模组不存在或已锁定，请刷新列表。');const v=await this.content.api('version/'+s.versionId);if(v.project_id!==s.projectId||!this.content.compatible(v,item,'mod'))throw Error('所选更新不兼容当前实例。');}
     const virtual=Object.create(this.content);virtual.plans=new Map();virtual.manifest=async()=>({...before,files:before.files.filter(f=>!selected.has(f.projectId))});
@@ -77,15 +79,15 @@ export class ModUpdates{
     const touched=next.filter(f=>{const old=before.files.find(x=>x.projectId===f.projectId);return !old||old.versionId!==f.versionId||old.hash!==f.hash;});
     if(!touched.length)blockers.push('没有需要替换的文件，请重新检查更新。');
     const plan={id:randomUUID(),instanceId,stamp:contentStamp(before),game:item.game,loader:item.loader,loaderVersion:item.loaderVersion,liteVersion:item.liteVersion,loaderSha1:item.loaderSha1,liteBaseSha1:item.liteBaseSha1,before,after,files:touched,required:[...required.values()],optional:[...optionals.values()],warnings:[...warnings],blockers:[...new Set(blockers)],expiresAt:Date.now()+600000};
-    this.plans.set(plan.id,plan);for(const [id,p]of this.plans)if(p.expiresAt<Date.now())this.plans.delete(id);
+    await assertContentTarget170(this.core,instanceId,target170);plan.target170=target170;this.plans.set(plan.id,plan);for(const [id,p]of this.plans)if(p.expiresAt<Date.now())this.plans.delete(id);
     return {...plan,files:plan.files.map(f=>({...f,previous:before.files.find(x=>x.projectId===f.projectId)?.version||null})),before:undefined,after:undefined};
   }
   async install(instanceId,planId){
     const p=this.plans.get(planId);if(!p||p.instanceId!==instanceId||p.expiresAt<Date.now())throw Error('更新预览过期，请重新检查。');if(p.blockers.length)throw Error('请先解决更新依赖冲突。');
     const {dir,item}=await this.core.metadata(instanceId);await this.core.requireStopped(dir);
     for(const k of ['game','loader','loaderVersion','liteVersion','loaderSha1','liteBaseSha1'])if(item[k]!==p[k])throw Error('实例配置已改变，请重新检查更新。');
-    return this.core.startJob(instanceId,'content-update',async(job,signal)=>{
-      await recoverModUpdate(dir);const before=await this.content.manifest(dir);if(contentStamp(before)!==p.stamp)throw Error('模组列表已改变，请重新检查更新。');
+    await assertContentTarget170(this.core,instanceId,p.target170);return this.core.startJob(instanceId,'content-update',async(job,signal)=>{
+      await recoverModUpdate(dir,await contentState170(this.core,dir));const before=await this.content.manifest(dir);if(contentStamp(before)!==p.stamp)throw Error('模组列表已改变，请重新检查更新。');
       const old=before.files.filter(f=>p.files.some(n=>n.projectId===f.projectId));
       for(const f of old){if(f.updateLocked)throw Error('模组已锁定。');await checked(dir,f);}
       await requireSpace(dir,[...old,...p.files].reduce((n,f)=>n+f.size,0)*2);
@@ -94,30 +96,30 @@ export class ModUpdates{
       await downloadPool(downloads,{root:this.core.root,fetcher:this.core.fetcher,signal,threads:this.core.downloadThreads||8,onBytes:n=>job.transferred+=n,onFile:()=>job.completed++});signal.throwIfAborted();
       await this.replace(dir,before,p.after,old,p.files,f=>safePath(this.core.root,'content-cache/'+f.hash),signal,job);
       this.plans.delete(planId);
-    });
+    },p.target170);
   }
   async replace(dir,before,after,old,next,source,signal,job){
-    if(!await exists(join(dir,'content.json')))await atomicJson(join(dir,'content.json'),before);
+    if(!await exists(join(await contentState170(this.core,dir),'content.json')))await atomicJson(join(await contentState170(this.core,dir),'content.json'),before);
     for(const f of [...old,...next])validFile(f);
     for(const f of old)await checked(dir,f);
     for(const f of next){const path=safePath(dir,actual(f));await ensureParents(dir,path);if(await exists(path)&&!old.some(x=>actual(x).toLowerCase()===actual(f).toLowerCase()))throw Error('已有同名文件，未覆盖：'+actual(f));if(!await verified({...f,path:source(f)}))throw Error('更新来源文件校验失败。');}
     const tx={schema:1,id:randomUUID(),createdAt:new Date().toISOString(),operation:job.operation||'update',before,after,old,next};
-    const backup=join(dir,'content-updates',tx.id,'files');await ensureParents(dir,backup);await mkdir(backup,{recursive:true});
+    const backup=join(await contentState170(this.core,dir),'content-updates',tx.id,'files');await ensureParents(await contentState170(this.core,dir),backup);await mkdir(backup,{recursive:true});
     for(const f of old){const from=await checked(dir,f),to=safePath(backup,actual(f));await ensureParents(backup,to);await copyFile(from,to,constants.COPYFILE_EXCL);await checked(backup,f);}
-    signal?.throwIfAborted();await writeFile(join(dir,'content-update.json'),JSON.stringify(tx),{flag:'wx'});
+    signal?.throwIfAborted();await writeFile(join(await contentState170(this.core,dir),'content-update.json'),JSON.stringify(tx),{flag:'wx'});
     try{job.phase='替换文件并保留可恢复副本';for(const f of old){signal?.throwIfAborted();await unlink(await checked(dir,f));}for(const f of next){signal?.throwIfAborted();const to=safePath(dir,actual(f));await ensureParents(dir,to);await copyFile(source(f),to,constants.COPYFILE_EXCL);await checked(dir,f);}
-      signal?.throwIfAborted();await atomicJson(join(dir,'content.json'),{...after,updateId:tx.id});
-    }catch(e){await recoverModUpdate(dir);throw e;}
-    await recoverModUpdate(dir);
+      signal?.throwIfAborted();await atomicJson(join(await contentState170(this.core,dir),'content.json'),{...after,updateId:tx.id});
+    }catch(e){await recoverModUpdate(dir,await contentState170(this.core,dir));throw e;}
+    await recoverModUpdate(dir,await contentState170(this.core,dir));
   }
-  async history(instanceId){const {dir}=await this.core.metadata(instanceId);let names;try{names=await readdir(join(dir,'content-updates'));}catch(e){if(e.code==='ENOENT')return [];throw e;}const list=[];
-    for(const name of names.filter(n=>/^[a-f0-9-]{36}$/.test(n))){try{const record=join(dir,'content-updates',name,'record.json');await ensureParents(dir,record);const r=JSON.parse(await readFile(record,'utf8'));if(['done','recovered'].includes(r.state))list.push({id:name,operation:r.operation||'update',state:r.state,createdAt:r.createdAt,titles:(r.next.length?r.next:r.old.length?r.old:r.before.files.filter(f=>!r.after.files.some(n=>n.relative===f.relative))).map(f=>f.title),changes:r.next.map(f=>({title:f.title,from:r.old.find(o=>o.relative===f.relative||o.projectId&&o.projectId===f.projectId)?.version||'',to:f.version||'',enabled:f.enabled!==false})),restorable:r.state==='done'&&contentStamp(await this.content.manifest(dir))===contentStamp(r.after)});}catch{}}
+  async history(instanceId){const {dir}=await this.core.metadata(instanceId);let names;try{names=await readdir(join(await contentState170(this.core,dir),'content-updates'));}catch(e){if(e.code==='ENOENT')return [];throw e;}const list=[];
+    for(const name of names.filter(n=>/^[a-f0-9-]{36}$/.test(n))){try{const record=join(await contentState170(this.core,dir),'content-updates',name,'record.json');await ensureParents(await contentState170(this.core,dir),record);const r=JSON.parse(await readFile(record,'utf8'));if(['done','recovered'].includes(r.state))list.push({id:name,operation:r.operation||'update',state:r.state,createdAt:r.createdAt,titles:(r.next.length?r.next:r.old.length?r.old:r.before.files.filter(f=>!r.after.files.some(n=>n.relative===f.relative))).map(f=>f.title),changes:r.next.map(f=>({title:f.title,from:r.old.find(o=>o.relative===f.relative||o.projectId&&o.projectId===f.projectId)?.version||'',to:f.version||'',enabled:f.enabled!==false})),restorable:r.state==='done'&&contentStamp(await this.content.manifest(dir))===contentStamp(r.after)});}catch{}}
     return list.sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
   }
   async restore(instanceId,id){if(!/^[a-f0-9-]{36}$/.test(id))throw Error('无效更新记录。');const {dir}=await this.core.metadata(instanceId);await this.core.requireStopped(dir);
-    return this.core.startJob(instanceId,'content-update',async(job,signal)=>{await recoverModUpdate(dir);const recordPath=join(dir,'content-updates',id,'record.json');await ensureParents(dir,recordPath);const r=JSON.parse(await readFile(recordPath,'utf8')),current=await this.content.manifest(dir);
+    return this.core.startJob(instanceId,'content-update',async(job,signal)=>{await recoverModUpdate(dir,await contentState170(this.core,dir));const recordPath=join(await contentState170(this.core,dir),'content-updates',id,'record.json');await ensureParents(await contentState170(this.core,dir),recordPath);const r=JSON.parse(await readFile(recordPath,'utf8')),current=await this.content.manifest(dir);
       if(r.id!==id||r.state!=='done'||contentStamp(current)!==contentStamp(r.after))throw Error('更新后内容已改变，不能直接恢复。请先备份实例并手动处理。');validateUpdateGraph(r.before.files);
-      job.operation='restore';await this.replace(dir,current,r.before,r.next,r.old,f=>safePath(join(dir,'content-updates',id,'files'),actual(f)),signal,job);
+      const state=await contentState170(this.core,dir);job.operation='restore';await this.replace(dir,current,r.before,r.next,r.old,f=>safePath(join(state,'content-updates',id,'files'),actual(f)),signal,job);
     });
   }
 }

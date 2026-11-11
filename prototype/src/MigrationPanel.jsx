@@ -1,9 +1,10 @@
+import {useLibraryApi170} from './LibraryContext170';
 import {lp} from './LocalPackImport';
 import {ControlButton} from './ControlButton.mjs';
 import { useLocale } from "./Locale";import { t as translateText, translateMessage, getLocale } from "../desktop/localization.mjs"; // SPDX-License-Identifier: MPL-2.0
 import { useEffect, useState } from 'react';
-export function MigrationPanel({ instance }) {useLocale();
-  const api = window.amberDesktop,[report, setReport] = useState(null),[busy, setBusy] = useState(false),[message, setMessage] = useState(''),[file, setFile] = useState(null),[job, setJob] = useState(null);
+export function MigrationPanel({ instance }) {const libraryApi170=useLibraryApi170();useLocale();
+  const api = libraryApi170,[report, setReport] = useState(null),[busy, setBusy] = useState(false),[message, setMessage] = useState(''),[file, setFile] = useState(null),[job, setJob] = useState(null);
   useEffect(() => {let live = true;setReport(null);setFile(null);if (instance) api.migrationReport?.(instance.id).then((r) => live && setReport(r)).catch((e) => live && setMessage(e.message));return () => {live = false;};}, [instance?.id]);
   useEffect(() => {if (!busy) return;let live = true;const timer = setInterval(() => api.status().then((s) => live && setJob(s.jobs.at(-1))).catch(() => {}), 800);return () => {live = false;clearInterval(timer);};}, [busy]);
   async function act(fn) {setBusy(true);setMessage('');try {await fn();} catch (e) {setMessage(e.message);} finally {setBusy(false);}}
