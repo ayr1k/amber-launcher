@@ -8,7 +8,7 @@
 <p align="center"><strong>你的世界，由你掌握。</strong></p>
 
 <p align="center">
-  <a href="https://github.com/ayr1k/amber-launcher/releases/tag/v1.6.4"><img src="https://img.shields.io/badge/release-1.6.4-e9b53d?style=flat-square" alt="Release" /></a>
+  <a href="https://github.com/ayr1k/amber-launcher/releases/tag/v1.7.0"><img src="https://img.shields.io/badge/release-1.7.0-e9b53d?style=flat-square" alt="Release" /></a>
   <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MPL--2.0-527b68?style=flat-square" alt="License" /></a>
   <a href="https://github.com/ayr1k/amber-launcher/actions/workflows/windows.yml"><img src="https://github.com/ayr1k/amber-launcher/actions/workflows/windows.yml/badge.svg" alt="Build" /></a>
   <a href="https://ayr1k.github.io/"><img src="https://img.shields.io/badge/website-AMBER-527b68?style=flat-square" alt="Website" /></a>
@@ -28,19 +28,19 @@
   </tr>
 </table>
 
-截图来自公开的 AMBER 1.2.1 主题展示，使用演示数据；主题同样适用于 AmberE。点击可查看大图，当前功能与平台范围以 1.6.4 说明为准。
+截图来自公开的 AMBER 1.2.1 主题展示，使用演示数据；主题同样适用于 AmberE。点击可查看大图，当前功能与平台范围以 1.7.0 说明为准。
 
 ## 项目简介
 
 AMBER 是独立的 Minecraft Java 版启动器，将实例隔离、游戏安装、模组管理、恢复和启动设置集中在同一界面。项目自有源码采用 MPL-2.0。
 
-## 1.6.4
+## 1.7.0
 
-新增默认关闭的启动前保守内存整理，仅作用于启动器主进程，提供等待上限、共享冷却及跳过整理／取消整个启动的独立反馈。
+支持首次启动选择数据位置、统一管理多个原生或受支持的外部游戏库，以及有明确范围的组件修复、整包升级和完整备份独立恢复，并修复 Windows 游戏窗口隐藏问题。
 
-Windows/macOS/Linux/FreeBSD 均提供 1.6.4；macOS/Linux 待对应真机验收，FreeBSD 仅实验性服务端/工具。
+Windows/macOS/Linux/FreeBSD 均提供 1.7.0；macOS/Linux 待对应真机验收，FreeBSD 仅实验性服务端/工具。
 
-提供 Windows x64 正式安装包及其他平台下载。[下载安装包、源码和校验文件](https://github.com/ayr1k/amber-launcher/releases/tag/v1.6.4)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
+提供 Windows x64 正式安装包及其他平台下载。[下载安装包、源码和校验文件](https://github.com/ayr1k/amber-launcher/releases/tag/v1.7.0)。支持实例管理、内容推荐、模组更新、备份与异常恢复。
 
 - 一体化标题栏、独立窗口边框设置、窗口位置恢复与重新组织的隐私设置。
 
@@ -95,3 +95,4 @@ Alloy、Nocturne、Harvest 与 Verdant 均为独立下载的免费官方主题�
 
 - **B 站用户 @北目宁游戏（UID 391446396）**：提出“房主选好模组，其他玩家进入房间后确认下载房主模组”的建议，启发了 1.5.2 的房间客户端环境同步功能。感谢提供创意！
 - **B 站用户 @萨拉赫蒙-十恶不赦（UID 2003495984）**：提出内存优化建议，启发了 1.6.0 的启动器手动内存整理功能。感谢提供创意！
+- **Bilibili 用户 @岩熵（UID 1616300586）** — 其建议启发了 1.7.0 对 .minecraft 游戏库的全面管理支持及相关功能，包括数据位置选择、外部库管理与恢复。感谢提供创意！

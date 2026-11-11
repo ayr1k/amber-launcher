@@ -1,3 +1,9 @@
+# 1.7.0 formal release / 正式发布
+
+PR #15 merged as `db50abef2d74b50bcd8e220163c6fb8f297a6daa`; accepted merged task head: `6f567e9b11875a40f0910bb7c9e28d57a6c0184e`. The user explicitly requested formal publication on 2026-11-11 (America/New_York). Official packages use **1.7.0/public**. Earlier independent COMMENT review applies to `fc49e5c5ce6c03a2b9edbfedf78a82c1a1fcabe5`; it is not described as independent review of later changes. Final-head CI/developer/coordinator evidence retains its own scope. User-approved merging and this release instruction govern publication; candidate/local-only/no-publication language below is historical. This main chat does not repeat content review. Rendered menu/world pixel acceptance was not completed after application screenshot approval timed out; visible-window metadata is not substituted for that acceptance. All other recorded limits remain. See RELEASE-ACCEPTANCE.md for formal checks.
+
+PR #15 已合并并获用户明确正式发布授权。独立复核仅归属于其原提交，后续最终提交的 CI／开发／协调证据保留各自范围，不冒称已完成新的独立审核。下方 Draft、本地渠道、不得发布等为历史阶段描述；本次使用 1.7.0/public。菜单／世界像素画面因截图批准超时未完成验收，不以窗口属性代替；本会话按已批准合并执行发布，不重复内容审核。
+
 # AMBER / AmberE 1.7.0 task builds
 
 This is a development PR, **not a formal release**. Base main: `3069b969ce416ba40173d1681b505b554e262361`. The final PR head and CI `TEST-REVISION.txt` identify the tested source; each installer has its own byte count, SHA-256 and provenance. No merge, Release publication or Pages deployment is part of this task.
