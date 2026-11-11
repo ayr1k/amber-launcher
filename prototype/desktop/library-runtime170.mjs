@@ -8,6 +8,7 @@ import {rulesAllow,requiredJava,effectiveArguments} from './vanilla.mjs';
 import {gameEnvironment} from './platform135.mjs';
 import {ordinary170,json170} from './library-paths170.mjs';
 import {identifier} from './import-identify151.mjs';
+import {loggingFile170} from './library-logging170.mjs';
 import {sessionAlive} from './process-session.mjs';
 
 const mainClasses=new Set(['net.minecraft.client.main.Main','net.minecraft.launchwrapper.Launch','net.fabricmc.loader.impl.launch.knot.KnotClient','net.fabricmc.loader.launch.knot.KnotClient','org.quiltmc.loader.impl.launch.knot.KnotClient']);
@@ -49,7 +50,7 @@ export function prioritizedLibraries170(meta){
  const priority=new Map();for(const p of patches){if(!Number.isSafeInteger(p.priority)||!Array.isArray(p.libraries))continue;for(const l of p.libraries)if(typeof l.name==='string')priority.set(l.name,Math.max(priority.get(l.name)??-Infinity,p.priority));}
  return [...(meta.libraries||[])].sort((a,b)=>(priority.get(b.name)||0)-(priority.get(a.name)||0));
 }
-export async function localPlan170(root,profile,env=gameEnvironment()){
+export async function localPlan170(root,profile,env=gameEnvironment(),options={}){
  const meta=safeArguments170(profile.meta,env),files=[],classpath=[],natives=[];
  // LaunchWrapper Forge must receive the Forge-aware OptiFine adapter. HMCL's
  // persisted supplemental argument can still name the standalone adapter.
@@ -72,7 +73,7 @@ export async function localPlan170(root,profile,env=gameEnvironment()){
  let logging=null;
  if(!meta.logging?.client&&(meta.libraries||[]).some(l=>l.name?.startsWith('org.apache.logging.log4j:log4j-core:'))){const old=/^1\.(?:[0-9]|10|11)(?:\.|$)/.test(profile.game),id=old?'client-1.7.xml':'client-1.12.xml';meta.logging={client:{argument:'-Dlog4j.configurationFile=${path}',type:'log4j2-xml',file:{id,sha1:old?'50c9cc4af6d853d9fc137c84bcd153e2bd3a9a82':'bd65e7d2e3c237be76cfbef4c2405033d7f91521',size:old?966:888}}};}
 
- if(meta.logging?.client){const c=meta.logging.client,f=c.file;if(c.argument!=='-Dlog4j.configurationFile=${path}'||c.type!=='log4j2-xml'||!identifier(f?.id)||!/^client.*\.xml$/.test(f.id)||!['bd65e7d2e3c237be76cfbef4c2405033d7f91521','50c9cc4af6d853d9fc137c84bcd153e2bd3a9a82'].includes(f.sha1))throw Error('Unsupported logging configuration; repair using the original launcher / 不支持的日志安全配置，请使用原启动器修复');logging={path:await add('assets/log_configs/'+f.id,f)};}
+ if(meta.logging?.client){const path=await loggingFile170(root,meta.logging.client,options);logging={path};files.push({path,hash:meta.logging.client.file.sha1,size:meta.logging.client.file.size,algorithm:'sha1'});}
  return {meta,plan:{files,classpath,natives,index:{path:index},logging,validateGameArguments:(values,vars)=>validateGameValues170(values,{...vars,game_directory:profile.gameDir??vars.game_directory,assets_root:join(root,'assets')})}};
 }
 export class LibraryRuntime170 extends VanillaLauncher {
@@ -82,7 +83,7 @@ export class LibraryRuntime170 extends VanillaLauncher {
  async listInstances(){const rows=(await this.registry.scan(this.libraryId)).rows.filter(r=>!r.error);return Promise.all(rows.map(async r=>{const stored=await json170(join(this.stateRoot,r.id,'instance.json'),{optional:true});return {...r,...stored,id:r.id,game:r.game,loader:r.loader,loaderVersion:r.loaderVersion,name:stored?.name||r.id,icon:stored?.icon||'grass',status:'installed',external:true,createdAt:'',javaMajor:r.game?.startsWith('1.16')?8:null};}));}
  async instancePath(id){if(!identifier(id))throw Error('Invalid version');await this.registry.profile(this.libraryId,id);await this.init();const path=safePath(this.stateRoot,id);await ordinary170(path,{missing:true});await mkdir(path,{recursive:true});return path;}
  async metadata(id){const profile=await this.registry.profile(this.libraryId,id),dir=await this.instancePath(id);const stored=await json170(join(dir,'instance.json'),{optional:true});const item={...stored,id,name:stored?.name||id,icon:stored?.icon||'grass',game:profile.game,status:'installed',loader:profile.loader,loaderVersion:profile.loaderVersion};return {profile,dir,item,meta:{...profile.meta,id:profile.game}};}
- async runtimeMetadata(id){const result=await this.metadata(id);if(!result.profile.gameDir)throw Error('Confirm this version’s game directory first / 请先确认此版本的游戏目录');const runtime=await localPlan170(this.root,result.profile);return {...result,...runtime,gameDirectory:result.profile.gameDir,external:true};}
+ async runtimeMetadata(id){const result=await this.metadata(id);if(!result.profile.gameDir)throw Error('Confirm this version’s game directory first / 请先确认此版本的游戏目录');const runtime=await localPlan170(this.root,result.profile,undefined,{loggingRoot:join(this.stateRoot,'logging170'),fetcher:this.fetcher});return {...result,...runtime,gameDirectory:result.profile.gameDir,external:true};}
  async validateExternalBeforeSpawn(id,runtime){const current=await this.registry.profile(this.libraryId,id);if(current.gameDir!==runtime.gameDirectory||JSON.stringify(current.fingerprints)!==JSON.stringify(runtime.profile.fingerprints))throw Error('Library changed during launch preparation / 启动准备期间实例库发生变化');for(const f of runtime.plan.files){await ordinary170(f.path);if(!await verified(f))throw Error('Game files changed during launch preparation / 启动准备期间游戏文件发生变化');}}
  async install(){throw Error('Open Launch settings → External components and repair → Preview missing-file repair to review and confirm the exact file plan / 请在启动设置 → 外部版本组件与修复 → 预览缺失文件修复中审阅并确认文件计划');}
  async prepareJava(){throw Error('Select an existing Java runtime for external versions / 请为外部版本选择已有 Java');}

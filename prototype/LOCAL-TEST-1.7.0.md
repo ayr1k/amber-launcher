@@ -95,3 +95,11 @@ Inherited-client repair records the exact authorized ancestor JAR, its directory
 外部源保留采用明确的游戏内容范围，账号、session／token 及启动器全局状态在哈希、预览、复制前排除；incoming 新包保留独立规则，合法根目录游戏配置仍可使用。完整备份以版本化、清洗后的管理状态保留整包身份和文件基线，恢复到新 sidecar，不携带源路径、账号、session、URL 或任意字段。祖先客户端修复记录精确目标、目录身份及受影响版本，撤销时在锁内重新核验。发布前取消会清理本次新增内容；原子发布之后如实完成登记，不假称已取消。当前修正的精确 head、回归与安装包结果以 PR 交付表为准。
 
 Known pack-owned root game files from the validated, sanitized baseline participate in upgrade conflict previews and explicit local retention. The same captured baseline governs source snapshots and retained copies; baseline drift requires a new preview. Private names are always excluded, even when listed in baseline metadata. Unknown root files remain excluded. / 经验证并清洗的整包 baseline 所属根游戏配置参与升级冲突比较和本地保留；源快照及复制使用同一记录，记录变化须重新预览。私密名称始终排除，未知根文件不会因此放行。
+
+## HMCL logging-layout compatibility
+
+Missing assets/log_configs in an HMCL library is supported. AMBER validates existing canonical files when present; otherwise it downloads the pinned Mojang security XML into its own library-state170/<library-id>/logging170 cache. Only the fixed argument template, matching filename, size and approved SHA-1 are accepted; metadata URLs and per-version custom log4j2.xml are not adopted. No original library file is created or overwritten. Existing linked/corrupt canonical or cache files fail closed. Initial cache preparation requires network access; a verified cache works offline and is rechecked before spawn. Full backups capture the verified private XML so offline recovery remains independent.
+
+Official pinned sources: [client-1.12.xml](https://piston-data.mojang.com/v1/objects/bd65e7d2e3c237be76cfbef4c2405033d7f91521/client-1.12.xml), 888 bytes; [client-1.7.xml](https://piston-data.mojang.com/v1/objects/50c9cc4af6d853d9fc137c84bcd153e2bd3a9a82/client-1.7.xml), 966 bytes. Exact test-only payloads exercise checksum enforcement; production downloads through the existing trusted-source/checksum mechanism.
+
+中文：HMCL 库缺少 assets/log_configs 不再直接导致 ENOENT。AMBER 将官方固定哈希的安全日志配置存入自身私有缓存，首次准备需要联网，已校验缓存可离线使用；不采用任意 HMCL XML，也不创建或覆盖原库文件。链接、损坏及不受支持的描述仍会被拒绝，启动前再次校验；完整备份会收集该配置。
