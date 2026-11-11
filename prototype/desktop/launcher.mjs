@@ -106,7 +106,7 @@ export class VanillaLauncher extends LauncherCore {
   const logFile=await open(logPath,'wx');
   if(launchAttempt?.controller.signal.aborted){await logFile.close();try{const lock=JSON.parse(await readFile(lockPath,'utf8'));if(lock.id===sessionId)await rm(lockPath,{force:true});}catch{}launchAttempt.controller.signal.throwIfAborted();}
   if(launchAttempt)launchAttempt.phase='launched';
-  const child=spawn(java.path,args,{cwd:runtime.gameDirectory||dir,shell:false,windowsHide:true,detached:true,stdio:['ignore',logFile.fd,logFile.fd],env:{...process.env,JAVA_TOOL_OPTIONS:'',_JAVA_OPTIONS:'',JDK_JAVA_OPTIONS:''}});
+  const child=spawn(java.path,args,{cwd:runtime.gameDirectory||dir,shell:false,windowsHide:false,detached:true,stdio:['ignore',logFile.fd,logFile.fd],env:{...process.env,JAVA_TOOL_OPTIONS:'',_JAVA_OPTIONS:'',JDK_JAVA_OPTIONS:''}});
   const record={id:sessionId,accountId:identity.accountId||null,instanceId:id,child,pid:child.pid,gameDirectory,gameDirectoryIdentity,state:'running',startedAt:new Date().toISOString(),logPath,tail:'',username,javaPath:java.path,javaVersion:java.version,memory,graphics,renderer:null};this.processes.set(record.id,record);
   const logTimer=setInterval(async()=>{record.tail=await logTail(logPath);record.renderer=rendererFromLog(record.tail)||record.renderer;},1200);logTimer.unref();
   child.on('error',error=>{record.state='failed';record.error=error.message;});

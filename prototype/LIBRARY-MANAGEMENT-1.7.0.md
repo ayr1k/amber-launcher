@@ -91,3 +91,11 @@ Missing assets/log_configs in an HMCL library is supported. AMBER validates exis
 Official pinned sources: [client-1.12.xml](https://piston-data.mojang.com/v1/objects/bd65e7d2e3c237be76cfbef4c2405033d7f91521/client-1.12.xml), 888 bytes; [client-1.7.xml](https://piston-data.mojang.com/v1/objects/50c9cc4af6d853d9fc137c84bcd153e2bd3a9a82/client-1.7.xml), 966 bytes. Exact test-only payloads exercise checksum enforcement; production downloads through the existing trusted-source/checksum mechanism.
 
 中文：HMCL 库缺少 assets/log_configs 不再直接导致 ENOENT。AMBER 将官方固定哈希的安全日志配置存入自身私有缓存，首次准备需要联网，已校验缓存可离线使用；不采用任意 HMCL XML，也不创建或覆盖原库文件。链接、损坏及不受支持的描述仍会被拒绝，启动前再次校验；完整备份会收集该配置。
+
+## Windows game-window visibility
+
+The actual game process no longer receives windowsHide:true. In the private Minecraft 1.12.2 Forge+OptiFine comparison, both java.exe and javaw.exe created hidden LWJGL windows with that flag and visible, non-minimized windows without it. Bounds were normal and arguments/game content were unchanged. Switching executables alone did not solve the issue. Java inspection and background installers retain their existing hidden behavior; launch validation, detached lifetime, file logging and session tracking remain unchanged.
+
+Windows documents that STARTUPINFO can override the first ShowWindow request: https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow . The desktop game QA now supports AMBER_QA_REQUIRE_VISIBLE=1 to check the owned process ID/start time, LWJGL/GLFW visibility, minimized state and positive bounds; audio or initialization logs alone are insufficient. This flag does not assert that rendered menu/world pixels were visually accepted.
+
+中文：修复实际游戏进程被 Windows 启动隐藏标记隐藏的问题。私有副本对照中，java.exe 与 javaw.exe 都受该标记影响；移除后窗口可见、未最小化且位置正常。仅更换 Java 可执行文件或补装 OptiFine 不能解决。新增窗口属性回归，不再把音乐或初始化日志当作可见画面验收。
