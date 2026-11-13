@@ -105,6 +105,8 @@ function libraryApi170(scope){const invoke=(channel,...args)=>ipcRenderer.invoke
   previewDiagnostics:()=>invoke('amber:diagnostics-preview'),
   cleanupPrivateCopies:kind=>invoke('amber:privacy-cleanup',kind),
   privacyInfo:()=>invoke('amber:privacy-info'),
+  copyServerAddress:text=>invoke('amber:server-address-copy',text),
+  themeStoreOpen:()=>invoke('amber:theme-store-open'),
   copyErrorDetail:text=>invoke('amber:copy-error',text),
   libraryState:()=>invoke('amber:library-state'),
   setFavorite:(id,value)=>invoke('amber:library-favorite',id,value),

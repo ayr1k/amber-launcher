@@ -1,3 +1,4 @@
+import {copyServerAddress172} from './server-address172.mjs';
 import {importExternalBackup170} from './library-backup-import170.mjs';
 import {directoryKey170} from './library-mod-index170.mjs';
 import {LibraryScope170,libraryChannel170} from './library-scope170.mjs';
@@ -341,6 +342,7 @@ handle('amber:server-management',async(action,id,input)=>{if(services160.pending
   const bulkContent = scopes170.wrap('bulkContent',new BulkContent(core, content, modUpdates)),launchPreferences = scopes170.wrap('launchPreferences',new LaunchPreferences(core));
   content.updates = modUpdates;
   const libraryState = scopes170.wrap('libraryState',new LibraryState(core)),modImport = scopes170.wrap('modImport',new ModImport(core, content, modUpdates)),health = scopes170.wrap('health',new InstanceHealth(core, content, workflows, accounts, launchPreferences, settings));
+  handle('amber:server-address-copy',text=>copyServerAddress172(text,clipboard));
   handle('amber:copy-error', (text) => {if (typeof text !== 'string' || text.length > 100000) throw Error('错误详情过长，请手动选择文字复制。');clipboard.writeText(redact(text, accounts.secrets()));return true;});
   const journal=scopes170.wrap('journal',new PlayJournal(core.root)),news=new NewsFeed(core.root),homePrefs=new HomePreferences(core.root),screenshots=scopes170.wrap('screenshots',new Screenshots(core)),survey=new StorageSurvey(core,app.getPath('userData'),{current:app.getVersion(),product:PRODUCT_NAME});
   try{await journal.migrate((await libraryState.get()).history);await journal.recover();}catch{/* Preserve an unreadable journal; it must never prevent launching the application. */}
@@ -424,6 +426,7 @@ handle('amber:server-management',async(action,id,input)=>{if(services160.pending
   handle('amber:trash-details', (id) => management.trashDetails(id));
   handle('amber:trash-purge', (id, confirmation) => management.purge(id, confirmation));
   handle('amber:feedback-prepare',fields=>feedbackDraft(fields,feedbackDiagnosticPreview,text=>redact(text,accounts.secrets())));
+  handle('amber:theme-store-open',()=>shell.openExternal('https://ayr1k.github.io/#/themes'));
   handle('amber:feedback-open',()=>shell.openExternal(feedbackUrl));
   let diagnosticPreview=null,feedbackDiagnosticPreview=null;
   handle('amber:feedback-diagnostics',async()=>{feedbackDiagnosticPreview=localizeFields(await summary());return feedbackDiagnosticPreview;});
