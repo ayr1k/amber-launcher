@@ -13063,5 +13063,22 @@
   "m8eccf6d06240": {
     "zh": "完整备份保存当前平台已校验的启动依赖和游戏内容，可脱离原版本离线恢复；不包含 Java、启动器账号和日志。模组配置可能自行保存凭据，备份与分享前请检查。仅配置/存档备份仍依赖原启动配置。",
     "en": "Full backup captures verified launch dependencies for this platform and game content for independent offline restore. Java, launcher accounts and logs are excluded. Mod configuration may contain credentials: inspect before backup or sharing. Settings/world-only backups still depend on the original launch profile."
+  },
+  "theme.store172": {"zh": "主题商城", "en": "Theme store"},
+  "address.copy172": {
+    "zh": "复制",
+    "en": "Copy"
+  },
+  "address.failure172": {
+    "zh": "复制失败，请选中地址手动复制",
+    "en": "Copy failed; select the address and copy manually"
+  },
+  "address.local172": {
+    "zh": "本机地址：",
+    "en": "Local address: "
+  },
+  "address.lan172": {
+    "zh": "局域网地址：",
+    "en": "LAN addresses: "
   }
 }

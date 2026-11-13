@@ -1,0 +1,8 @@
+/* SPDX-License-Identifier: MPL-2.0 */
+.launch-address145 .server-address-group172{display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px;min-width:0;max-width:100%}
+.server-address-group172>span:first-child{flex-shrink:0}
+.server-address172{display:inline-flex;align-items:center;flex-wrap:wrap;gap:4px 8px;min-width:0;max-width:100%}
+.server-address-value172{overflow-wrap:anywhere;min-width:0;user-select:text}
+.server-address-copy172{flex-shrink:0}
+.server-address-result172:empty{display:none}
+.server-address-result172{overflow-wrap:anywhere}
