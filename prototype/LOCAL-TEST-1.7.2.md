@@ -1,3 +1,11 @@
+# 1.7.2 formal release / 正式发布
+
+PR #17 merged as `4d17809f54d0b55142ab0c9da8e15ff562a65fb4`; accepted task head: `3ff64d95bf11c7382ec02cab67f7675e32401b42`. The user authorized complete formal publication on 2026-11-13 (America/New_York). Official packages use **1.7.2/public**. AriaXiaoLan independently reviewed this exact head, reran 21 focused tests, inspected representative native-window captures and verified CI installer hashes/provenance. CI runs 43502280039 / 43502279865 passed; Windows covered the full suite, Linux only a subset. This main chat relies on the existing review and approved merge without repeating content review.
+
+Original p1/p2 images were not locally pixel-reviewed on Windows; prior cloud source-image analysis is separate evidence. Default-browser navigation was not exercised end to end: native URL handoff and failure recovery used stubs. Theme-import independence used cancelled dialogs. Full installation/upgrade, gameplay/server networking, real multi-NIC connectivity, every Windows DPI setting and native non-Windows runtime remain unverified for this change.
+
+用户已批准合并 PR #17 并明确授权 1.7.2 正式发布。独立复核覆盖同一最终提交，核验了定向测试、代表性原生窗口截图、CI 测试包与来源；Windows 为全量回归，Linux 仅为子集。下方本地测试／不得发布描述保留原阶段语境。本会话不重复内容审核；默认浏览器导航、真实安装升级、游戏／服务端联网、多网卡连接和全部 DPI 等仍保留原验收限制。正式验证见 RELEASE-ACCEPTANCE.md。
+
 # AMBER / AmberE 1.7.2 test installers / 测试安装包
 
 Local test channel, not a formal release. Adds individual server-address copy buttons and a Theme store shortcut beside theme import. The shortcut opens https://ayr1k.github.io/#/themes in the system browser. Server behavior and theme import are unchanged.

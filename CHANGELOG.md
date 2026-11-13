@@ -1,3 +1,9 @@
+## 1.7.2
+
+- Add a separate copy button after the local server endpoint and every LAN endpoint. Each button copies only its own address, supports keyboard activation, prevents repeated pending requests and reports success or failure.
+- Add **Theme store** immediately after **Import .ambtheme**, opening the fixed official `https://ayr1k.github.io/#/themes` route through the system browser. Theme import remains independent, with failure feedback and retry for the store shortcut.
+- Keep long addresses readable in narrow windows and across light, dark and custom themes. AMBER and AmberE share these changes while retaining independent account policies, data and update channels. Copying an address does not establish remote reachability or change server/network configuration.
+
 ## 1.7.1
 
 - Fix native AMBER libraries resolving client instances under `servers/<client ID>`, restoring content browsing, search and installation in the selected client library. Preserve inherited server-adapter behavior without replacing client methods. No library migration, clearing or rebuilding is required; external libraries were not the affected path for this regression.

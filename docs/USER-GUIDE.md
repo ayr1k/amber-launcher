@@ -360,3 +360,9 @@ The broader .minecraft game-library management support and related 1.7.0 feature
 ## 1.7.1: native-library content recovery
 
 If native-library content or search in 1.7.0 reports a missing `servers/<client ID>` path, update to 1.7.1 to correct client/server scope routing. Keep the existing data path; do not clear, rebuild or migrate the library to work around this regression. This was not a loss of content in external `.minecraft` libraries. Component fields, checkboxes and dialog backdrops are also corrected.
+
+## 1.7.2: copy server addresses and visit the theme store
+
+Use the copy button after a specific local or LAN endpoint to copy only that address. Focus it and press Enter or Space for keyboard activation. Pending requests are not duplicated; a failed attempt can be retried. Long addresses wrap in narrow windows. Copying does not open ports, configure a firewall or guarantee another device can connect.
+
+In theme settings, **Theme store** follows **Import .ambtheme** and opens the official store in the system browser. Retry if opening fails. Theme files are still selected through the independent import action.
