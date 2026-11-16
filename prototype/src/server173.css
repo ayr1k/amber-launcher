@@ -1,0 +1,13 @@
+/* SPDX-License-Identifier: MPL-2.0 */
+.server-command173{min-width:0}
+.server-command-tools173{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px 12px;margin-top:4px}
+.server-command-tools173 small{color:var(--muted);overflow-wrap:anywhere}
+.server-command-tools173 button{flex-shrink:0}
+.server-command-result173{overflow-wrap:anywhere;font-size:14px;line-height:20px}
+.server-command-result173:empty{display:none}
+.server-addresses173{display:grid;gap:4px;width:100%;min-width:0}
+.server-address-toolbar173{display:flex;align-items:center;flex-wrap:wrap;gap:4px 12px}
+.server-address-note173{color:var(--muted);margin:0;font-size:12px;line-height:16px;overflow-wrap:anywhere}
+.server-address-status173{overflow-wrap:anywhere}
+.launch145[data-wide=true] .server-addresses173>.server-address-group172{max-height:64px;overflow-y:auto}
+.desktop-app .launch145[data-wide=true] .launch-console145{grid-template-rows:auto auto minmax(96px,1fr) auto}

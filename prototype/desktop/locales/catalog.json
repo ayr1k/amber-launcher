@@ -12666,8 +12666,7 @@
   "md681702f9778": {
     "zh": "本次启动已在创建游戏进程前取消。已完成的内存整理无法撤销；此操作不会终止已经运行的游戏。需要时可重新启动。",
     "en": "This launch was cancelled before creating the game process. Any completed memory trim cannot be undone; this action does not stop an already running game. Launch again when ready."
-  }
-,
+  },
   "library170.1346f2bd3cf7": {
     "zh": "版本隔离",
     "en": "Isolated"
@@ -13080,5 +13079,26 @@
   "address.lan172": {
     "zh": "局域网地址：",
     "en": "LAN addresses: "
-  }
+  },
+  "command.sending173": {"zh":"发送中…","en":"Sending…"},
+  "command.hint173": {"zh":"↑ / ↓ 浏览本次会话最近 100 条已发送指令；仅存于内存。","en":"↑ / ↓ browse the last 100 commands sent in this session; kept in memory only."},
+  "command.clear173": {"zh":"清空指令历史","en":"Clear command history"},
+  "command.sent173": {"zh":"指令已发送，请在控制台确认执行结果。","en":"Command sent; check the console for its result."},
+  "command.failed173": {"zh":"发送失败，输入已保留。","en":"Send failed; input has been kept."},
+  "command.cleared173": {"zh":"指令历史已清空。","en":"Command history cleared."},
+  "address.copying173": {"zh":"复制中…","en":"Copying…"},
+  "address.title173": {"zh":"服务端地址","en":"Server addresses"},
+  "address.loading173": {"zh":"正在刷新地址…","en":"Refreshing addresses…"},
+  "address.refresh173": {"zh":"刷新地址","en":"Refresh addresses"},
+  "address.failed173": {"zh":"地址获取失败，请重试刷新。","en":"Could not get addresses; try refreshing again."},
+  "address.ready173": {"zh":"地址已刷新；可达性需实际连接确认。","en":"Addresses refreshed; test a connection to confirm reachability."},
+  "address.empty173": {"zh":"无可用局域网地址，请检查网络后刷新。","en":"No LAN address available; check the network and refresh."},
+  "address.hint173": {"zh":"本机地址供这台电脑连接；局域网地址供同一网络的其他设备尝试连接。Wi-Fi、VPN 或网卡变化后请刷新；防火墙与服务端监听设置会影响连接。","en":"Use the local address on this computer. Other devices on the same network can try a LAN address. Refresh after Wi-Fi, VPN or adapter changes. Firewalls and server binding settings affect connections."},
+  "command.label173": {"zh":"服务端指令","en":"Server command"},
+  "command.placeholder173": {"zh":"输入指令，例如 list / whitelist add 玩家名","en":"Command, e.g. list / whitelist add name"},
+  "command.send173": {"zh":"发送","en":"Send"},
+  "command.short173": {"zh":"↑ / ↓ 历史 · 仅存本次会话","en":"↑ / ↓ history · this session only"},
+  "address.short173": {"zh":"本机：这台电脑；局域网：同网其他设备。Wi-Fi、VPN 或网卡变化后刷新；防火墙和监听设置会影响连接。","en":"Local: this computer. LAN: other devices on the same network. Refresh after Wi-Fi, VPN or adapter changes. Firewalls and server binding affect connections."},
+  "command.failureDetails173": {"zh":"发送失败，输入已保留。查看详情","en":"Send failed; input kept. View details"},
+  "command.errorTitle173": {"zh":"指令发送失败","en":"Command send failed"}
 }

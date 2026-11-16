@@ -1,3 +1,10 @@
+## 1.7.3
+
+- Browse the last 100 commands sent to each server with Up/Down, restore an unsent draft and clear history. History stays in renderer memory for this launcher session and is never saved to disk. Selecting a command does not send it. Keep log filtering and follow output.
+- Refresh local and LAN addresses after network changes, including IPv6 candidates. Distinguish loading, failure and no LAN addresses; remove previous results during refresh or failure. Explain local versus LAN use without promising reachability.
+- Clear successful copy feedback after a short delay, show command and refresh outcomes, and retain themed layouts at narrow widths and zoom levels.
+- Remove the duplicate offline-name/skin editor from account rows and align row widths. Editing remains in account details; account policies, data and login are unchanged. AMBER and AmberE retain separate identities and update channels.
+
 ## 1.7.2
 
 - Add a separate copy button after the local server endpoint and every LAN endpoint. Each button copies only its own address, supports keyboard activation, prevents repeated pending requests and reports success or failure.
