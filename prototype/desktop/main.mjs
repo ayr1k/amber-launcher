@@ -208,6 +208,7 @@ app.whenReady().then(async () => {
    if(action==='openLogs'){const dir=await servers.dir(args[0]);const logs=join(dir,'logs');await ensureParents(dir,join(logs,'.check'));return shell.openPath(logs);}
    if(action==='status')return {instances:await servers.list(),network:await rooms.state()};
    if(action==='addresses'){const p=await servers.properties(args[0]);return servers.addresses(Number(p.values['server-port']||25565));}
+   if(action==='addressInfo173')return servers.addressInfo173(args[0]);
    if(action==='open'){const dir=await servers.dir(args[0]);return shell.openPath(dir);}
    if(action==='pickJava'){const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Java',extensions:['exe']}]});return r.canceled?null:(await core.addJava(r.filePaths[0]));}
    if(action==='importJar'||action==='importContent'){const r=await dialog.showOpenDialog(window,{properties:action==='importContent'?['openFile','multiSelections']:['openFile'],filters:[{name:'Java archive',extensions:['jar']}]});if(r.canceled)return null;return action==='importJar'?servers.importJar(args[0],r.filePaths[0]):servers.importContent(args[0],r.filePaths);}

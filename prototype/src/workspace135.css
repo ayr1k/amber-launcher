@@ -7,6 +7,11 @@
 .offline135-editor form>.field,.offline135-editor form>.button{margin:0}
 
 .account-panel .account-entry{display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;column-gap:24px}
-.account-entry>.offline135{grid-column:2 / -1;margin-top:0}
-@media(max-width:700px){.account-panel .account-entry{grid-template-columns:48px minmax(0,1fr)}.account-entry>.account-actions{grid-column:2}.account-entry>.offline135{grid-column:2}}
+@media(max-width:700px){.account-panel .account-entry{grid-template-columns:48px minmax(0,1fr)}.account-entry>.account-actions{grid-column:2}}
 .crash136 article{padding:14px 0;border-bottom:1px solid var(--line)}
+
+.account-panel .account-entry{width:100%;box-sizing:border-box}
+.account-panel .account-actions{max-width:100%;min-width:0}
+.account-panel .account-actions button{white-space:normal;overflow-wrap:anywhere}
+@media(max-width:1000px){.account-panel .account-entry{grid-template-columns:48px minmax(0,1fr)}.account-entry>.account-actions{grid-column:2;justify-content:flex-start}}
+@media(max-width:480px){.account-entry>.account-actions{grid-column:1/-1}}
