@@ -366,3 +366,9 @@ If native-library content or search in 1.7.0 reports a missing `servers/<client 
 Use the copy button after a specific local or LAN endpoint to copy only that address. Focus it and press Enter or Space for keyboard activation. Pending requests are not duplicated; a failed attempt can be retried. Long addresses wrap in narrow windows. Copying does not open ports, configure a firewall or guarantee another device can connect.
 
 In theme settings, **Theme store** follows **Import .ambtheme** and opens the official store in the system browser. Retry if opening fails. Theme files are still selected through the independent import action.
+
+## 1.7.3: console history, address refresh and account editing
+
+Each server console keeps its last 100 sent commands for this launcher session. Use Up/Down to browse without sending. Returning past the newest entry, sending a recalled command or clearing history restores the prior draft; failures preserve input. History stays in renderer memory and clears on reload/restart, without adding disk records. The server itself may still log commands. Successful sending means submission, not verified execution.
+
+After network changes, manually refresh local and all LAN IPv4/IPv6 candidates using the running port. Previous addresses disappear while loading or after failure; no LAN result still offers the loopback address. Candidates do not guarantee reachability or configure firewall/port access. Successful copy feedback resets after about 2.5 seconds. Duplicate offline-edit controls are removed from account rows; name and skin editing remain in account details.
