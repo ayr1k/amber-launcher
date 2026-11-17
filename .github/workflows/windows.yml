@@ -58,6 +58,23 @@ jobs:
       - run: pnpm test:sites
       - run: pnpm release:check
       - run: pnpm desktop:smoke
+      - name: Build local acceptance installers for both products
+        if: github.event_name == 'pull_request'
+        run: pnpm package:editions
+        env:
+          AMBER_TASK_HEAD: ${{ github.event.pull_request.head.sha }}
+          AMBER_EVENT_SHA: ${{ github.sha }}
+      - name: Upload local acceptance installers and provenance
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: amber-acceptance-${{ github.event.pull_request.head.sha }}
+          path: |
+            prototype/releases/*/*-Setup-x64.exe
+            prototype/releases/*/*-Setup-x64.exe.sha256
+            prototype/releases/*/*-Setup-x64.exe.provenance.json
+          retention-days: 30
+          if-no-files-found: error
       - name: Build existing main platform artifacts
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         run: pnpm package:all --public
