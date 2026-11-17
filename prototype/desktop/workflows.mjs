@@ -1,3 +1,4 @@
+import {filesStamp174} from './migration-plan174.mjs';
 import {recoverModUpdate} from './mod-updates.mjs';
 import {instanceState170,contentState170} from './content-state170.mjs';
 import {conflicts153} from './room-sync-recovery153.mjs';
@@ -96,7 +97,7 @@ export class Workflows{
    if(input.liteVersion)await step('lite',()=>configureLiteOverlay(this.core,id,input.liteVersion));
    await step('game',()=>this.core.install(id,{threads:this.core.downloadThreads||input.threads}));
    if(input.addOptifine)await step('optifine',()=>importOptifine(this.core,id,optifinePath));
-   if(record.manifest)await step('migration',()=>this.migrateInner(id,record.manifest));
+   if(record.manifest)await step('migration',async()=>{const report=await this.migrateInner(id,record.manifest,record.migration174);record.migrationSummary174={installed:report.results.filter(r=>r.state==='installed').length,skipped:report.results.filter(r=>r.state==='skipped').length,failed:report.results.filter(r=>r.state==='failed').length,cancelled:!!report.cancelled};});
    if(record.localPack)await step('content',()=>this.localPacks.install(id,record.localPack));
    else if(record.packVersion)await step('content',()=>this.installPack(id,record.packVersion));
    else if(record.guided){
@@ -110,11 +111,11 @@ export class Workflows{
    this.checkCancelled();record.state='done';record.step='done';this.resumes.delete(id);
   }catch(e){record.state=this.cancelled?'cancelled':'failed';record.error=e.message;throw Error(`实例“${item.name}”已保留，可在任务中心继续安装。${e.message}`);}
   finally{record.finishedAt=new Date().toISOString();await save();}
-  return (await this.core.metadata(id)).item;
+  return {...(await this.core.metadata(id)).item,...(record.migrationSummary174?{migrationSummary174:record.migrationSummary174}:{})};
  }
  async wait(result){if(!result?.id||!result.state)return result;while(true){const job=this.core.jobs.find(j=>j.id===result.id);if(!job)throw Error('任务记录丢失。');if(job.state==='done')return job;if(job.state!=='running')throw Error(job.error||'任务已取消。');await new Promise(r=>setTimeout(r,150));}}
  async choices(game,type){if(!this.core.catalog)await this.core.versions();if(!this.core.catalog.some(v=>v.id===game))throw Error('未知 Minecraft 版本。');return type==='vanilla'||type==='optifine'?[]:type==='quilt'?quiltVersions(game,this.core.fetcher):type==='fabric'?fabricVersions(game,this.core.fetcher):type==='liteloader'?liteVersions(game,this.core.fetcher):loaderVersions(game,type,this.core.fetcher);}
- async create(input,optifinePath,manifest,afterSetup,guided,localPack,onCreated){return this.exclusive(async()=>{this.lastSetup=null;
+ async create(input,optifinePath,manifest,afterSetup,guided,localPack,onCreated,migration174){return this.exclusive(async()=>{this.lastSetup=null;
   if(!this.core.catalog)await this.core.versions();
   if(!Number.isInteger(input.threads)||input.threads<1||input.threads>128)throw Error('并发数应为 1–128');
   if(!['vanilla','quilt','fabric','forge','neoforge','liteloader','optifine'].includes(input.loader))throw Error('不支持的加载器组合。');
@@ -127,6 +128,7 @@ export class Workflows{
   if(guided)await this.guided.recheck(guided);
   this.checkCancelled();this.lastSetup=null;const item=await this.core.createInstance(input,{roomSyncRequired:!!onCreated}),dir=await this.core.instancePath(item.id);this.lastSetup=item.id;
   const record={schema:2,state:'running',roomSync:!!onCreated,input:Object.fromEntries(['game','loader','version','liteVersion','addOptifine','threads'].map(k=>[k,input[k]])),manifest:manifest?validateManifest(manifest):null,packVersion:input.packVersion||null,startedAt:new Date().toISOString(),completed:[]};
+  if(migration174)record.migration174=migration174;
   if(guided){record.guided=guided;record.kind='guided';await atomicJson(join(dir,'guided-plan.json'),guided);await atomicJson(join(dir,'launch-preferences.json'),{accountId:null,memory:guided.memory});}
   if(optifinePath){await mkdir(join(dir,'.amber-setup'),{recursive:true});const cached=join(dir,'.amber-setup','optifine.jar');await copyFile(optifinePath,cached);record.optifine=await digest(cached);}
   if(localPack){record.localPack={schema:1,hash:localPack.plan.sourceHash,kind:localPack.plan.kind,selected:localPack.selected,title:localPack.plan.title,packVersion:localPack.plan.packVersion};await atomicJson(join(dir,'setup-report.json'),record);try{await this.localPacks.retain(dir,localPack);if(localPack.upgrade){record.upgrade=true;await retainUpgrade140(this.core,dir,localPack.upgrade);}}catch(e){record.state='failed';record.error=e.message;await atomicJson(join(dir,'setup-report.json'),record);throw e;}}
@@ -134,18 +136,21 @@ export class Workflows{
   await onCreated?.(item);
   const run=()=>this.runPlan(item.id,record,afterSetup);this.resumes.set(item.id,run);return run();
  },'new:'+(typeof input.requestKey==='string'&&/^[a-f0-9-]{36}$/.test(input.requestKey)?input.requestKey:crypto.randomUUID()));}
- async export(id){const {dir,item}=await this.core.metadata(id);await this.core.requireStopped(dir);const files=await this.content.list(id),manifest=await this.content.manifest(dir),mods=[];
-  for(const row of files.filter(f=>f.type==='mod')){const saved=manifest.files.find(f=>f.relative===row.relative.replace(/\.disabled$/,''));let projectId=null,reason='';try{if(row.missing)throw Error('源文件缺失');const hash=await digest(safePath(dir,row.relative));if(saved?.hash===hash)projectId=saved.projectId;else projectId=(await this.content.api(`version_file/${hash}?algorithm=sha1`)).project_id;if(!projectId)throw Error('Modrinth 未识别此文件');}catch(e){reason=e.message;}mods.push({provider:'modrinth',projectId,versionId:saved?.versionId,version:row.version,title:row.title,enabled:row.enabled,reason});}
-  return validateManifest({format:'amber-mod-list',schema:1,source:`${item.name} · ${item.game}`,mods});
+ async export(id,{signal}={}){const {dir,item}=await this.core.metadata(id);await this.core.requireStopped(dir);const files=await this.content.list(id),manifest=await this.content.manifest(dir),mods=[];
+  for(const row of files.filter(f=>f.type==='mod')){signal?.throwIfAborted();const saved=manifest.files.find(f=>f.relative===row.relative.replace(/\.disabled$/,''));let projectId=null,reason='';try{if(row.missing)throw Error('源文件缺失');const hash=await digest(safePath(dir,row.relative));if(saved?.hash===hash)projectId=saved.projectId;else projectId=(await this.content.api(`version_file/${hash}?algorithm=sha1`,{signal})).project_id;if(!projectId)throw Error('Modrinth 未识别此文件');}catch(e){reason=e.message;}mods.push({provider:'modrinth',projectId,versionId:saved?.versionId,version:row.version,title:row.title,enabled:row.enabled,reason});}
+  signal?.throwIfAborted();return validateManifest({format:'amber-mod-list',schema:1,source:`${item.name} · ${item.game}`,mods});
  }
- async migrate(id,manifest){return this.exclusive(()=>this.migrateInner(id,manifest));}
- async migrateInner(id,input){const manifest=validateManifest(input),{dir,item}=await this.core.metadata(id);await this.core.requireStopped(dir);const report={schema:1,source:manifest.source,target:`${item.name} · ${item.game} / ${item.loader}`,startedAt:new Date().toISOString(),results:[]},disabled=[];
-  try{for(const mod of manifest.mods){this.checkCancelled();const row={title:mod.title,projectId:mod.projectId,previousVersion:mod.version,state:'skipped'};report.results.push(row);if(!mod.projectId){row.reason=mod.reason||'无法识别 Modrinth 项目';continue;}
-   try{const versions=await this.content.versions(id,mod.projectId);if(!versions.length){row.reason='目标 Minecraft / 加载器没有兼容版本';continue;}const selected=versions.find(v=>v.id===mod.versionId)||(!manifest.strict?versions[0]:null);if(!selected)throw Error('Required shared version unavailable / 指定共享版本不可用');const plan=await this.content.preview(id,selected.id);const job=await this.wait(await this.content.install(id,plan.id));row.state='installed';row.version=selected.version_number;if(!mod.enabled)disabled.push(mod.projectId);}
-   catch(e){row.reason=e.message;if(/取消/.test(e.message)){row.state='cancelled';report.cancelled=true;break;}}
+ async migrate(id,manifest,prepared){return this.exclusive(()=>this.migrateInner(id,manifest,prepared),id);}
+ async migrateInner(id,input,prepared){const manifest=validateManifest(input),{dir,item}=await this.core.metadata(id);await this.core.requireStopped(dir);if(prepared&&(prepared.target.game!==item.game||prepared.target.loader!==item.loader||prepared.target.loaderVersion&&prepared.target.loaderVersion!==item.loaderVersion))throw Error('来源、目标或内容已变化，请重新预览。');const report={schema:1,source:manifest.source,target:`${item.name} · ${item.game} / ${item.loader}`,startedAt:new Date().toISOString(),results:[]},disabled=[];
+  try{for(const [index,mod] of manifest.mods.entries()){if(this.cancelled){report.cancelled=true;break;}const approved=prepared?.rows[index],row={title:mod.title,projectId:mod.projectId,previousVersion:mod.version,state:'skipped',category:approved?.status};report.results.push(row);if(approved&&approved.status!=='matched'){row.reason=approved.reason;continue;}if(!mod.projectId){row.reason=mod.reason||'无法识别 Modrinth 项目';continue;}
+   try{const versions=await this.content.versions(id,mod.projectId);this.checkCancelled();if(!versions.length){row.reason='目标 Minecraft / 加载器没有兼容版本';continue;}const selected=versions.find(v=>v.id===(approved?.versionId||mod.versionId))||(!prepared&&!manifest.strict?versions[0]:null);if(!selected)throw Error('Required shared version unavailable / 指定共享版本不可用');const plan=await this.content.preview(id,selected.id);this.checkCancelled();if(approved&&filesStamp174(plan.files)!==filesStamp174(approved.files))throw Error('依赖或版本信息已变化，请重新预览。');const job=await this.wait(await this.content.install(id,plan.id));row.state='installed';row.version=selected.version_number;if(!mod.enabled)disabled.push(mod.projectId);}
+   catch(e){row.reason=e.message;row.state=prepared?'failed':'skipped';if(this.cancelled||/取消|cancelled|canceled|abort/i.test(e.message)){row.state='cancelled';report.cancelled=true;break;}}
    await atomicJson(join(await instanceState170(this.core,id),'migration-report.json'),report);
   }
-  if(report.cancelled)for(const mod of manifest.mods.slice(report.results.length))report.results.push({title:mod.title,projectId:mod.projectId,state:'skipped',reason:'任务已取消，未执行'});
+  if(this.cancelled)report.cancelled=true;
+  if(report.cancelled)for(const mod of manifest.mods.slice(report.results.length))report.results.push({title:mod.title,projectId:mod.projectId,state:'cancelled',reason:'任务已取消，未执行'});
+  if(report.cancelled){for(const row of report.results)if(row.state==='installed'&&disabled.includes(row.projectId))row.note='迁移已取消，停用状态尚未应用，请检查已安装内容。';}
+  else {
   // Preserve disabled roots only when no enabled installed project requires them.
   const installed=await this.content.manifest(dir),required=new Set();
   for(const f of installed.files.filter(f=>!disabled.includes(f.projectId)))for(const d of f.dependencies||[])if(d.dependency_type==='required'){if(d.project_id)required.add(d.project_id);if(d.version_id){const dep=installed.files.find(x=>x.versionId===d.version_id);if(dep)required.add(dep.projectId);}}
@@ -154,6 +159,7 @@ export class Workflows{
   // Disable consumers before their dependencies, independent of manifest order.
   let progressed=true;while(progressed&&pending.size){progressed=false;for(const project of pending){const f=installed.files.find(f=>f.projectId===project);if(!f||f.enabled===false){pending.delete(project);progressed=true;continue;}const consumers=installed.files.filter(c=>c!==f&&c.enabled!==false&&(c.dependencies||[]).some(d=>d.dependency_type==='required'&&(d.version_id?d.version_id===f.versionId:d.project_id===project)));if(consumers.length)continue;await this.content.toggle(id,f.relative);f.enabled=false;pending.delete(project);progressed=true;}}
   for(const project of new Set(disabled))if(required.has(project)||pending.has(project)){const row=report.results.find(r=>r.projectId===project);if(row)row.note=required.has(project)?'被其他已启用模组依赖，保持启用':'循环依赖无法逐项停用，保持启用';}
+  }
   }finally{report.finishedAt=new Date().toISOString();await atomicJson(join(await instanceState170(this.core,id),'migration-report.json'),report);}if(manifest.strict&&report.results.some(r=>r.state!=='installed'))throw Error('Shared environment incomplete; see migration report / 共享环境未完成，请查看迁移报告并重试');return report;
  }
  async report(id){try{return JSON.parse(await readFile(join(await instanceState170(this.core,id),'migration-report.json'),'utf8'));}catch(e){if(e.code==='ENOENT')return null;throw e;}}

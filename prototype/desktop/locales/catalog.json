@@ -13100,5 +13100,245 @@
   "command.short173": {"zh":"↑ / ↓ 历史 · 仅存本次会话","en":"↑ / ↓ history · this session only"},
   "address.short173": {"zh":"本机：这台电脑；局域网：同网其他设备。Wi-Fi、VPN 或网卡变化后刷新；防火墙和监听设置会影响连接。","en":"Local: this computer. LAN: other devices on the same network. Refresh after Wi-Fi, VPN or adapter changes. Firewalls and server binding affect connections."},
   "command.failureDetails173": {"zh":"发送失败，输入已保留。查看详情","en":"Send failed; input kept. View details"},
-  "command.errorTitle173": {"zh":"指令发送失败","en":"Command send failed"}
+  "command.errorTitle173": {"zh":"指令发送失败","en":"Command send failed"},
+  "mfebc4b3e851b": {
+    "zh": "可匹配",
+    "en": "Matched"
+  },
+  "m31278c269088": {
+    "zh": "无法识别",
+    "en": "Unrecognized"
+  },
+  "me1043c3eba82": {
+    "zh": "无兼容版本",
+    "en": "No compatible version"
+  },
+  "m28ab5d5b6570": {
+    "zh": "冲突或依赖问题",
+    "en": "Conflict or dependency issue"
+  },
+  "m3f2b04f7cd21": {
+    "zh": "来源没有可迁移的模组。",
+    "en": "The source has no mods to migrate."
+  },
+  "mffda52a292f0": {
+    "zh": "保留停用状态",
+    "en": "Keep disabled state"
+  },
+  "ma61cee63a144": {
+    "zh": "可选依赖不自动安装。",
+    "en": "Optional dependencies are not installed automatically."
+  },
+  "m90cd975fae7d": {
+    "zh": "兼容性来自作者声明，不能保证所有模组组合均可运行。",
+    "en": "Compatibility is based on author declarations; some mod combinations may not run."
+  },
+  "m68be7700a03b": {
+    "zh": "从已有实例迁入",
+    "en": "Import from an existing instance"
+  },
+  "mdd8f957ba41b": {
+    "zh": "从清单文件导入…",
+    "en": "Import from a manifest file…"
+  },
+  "m2068140031f4": {
+    "zh": "来源游戏库",
+    "en": "Source game library"
+  },
+  "m5f37cfd61209": {
+    "zh": "选择来源实例",
+    "en": "Choose a source instance"
+  },
+  "mb40f19020cd5": {
+    "zh": "不可用或与目标相同",
+    "en": "Unavailable or same as target"
+  },
+  "mbf835219dbe8": {
+    "zh": "只下载目标版本和加载器兼容的模组，不复制旧 JAR、存档或账号。请先停止来源及目标实例。",
+    "en": "Download mods compatible with the target game and loader. Old JARs, worlds and accounts are not copied. Stop the source and target instances first."
+  },
+  "m71494bcb99d4": {
+    "zh": "来源使用共享游戏目录；清单可能包含该目录内其他版本的模组，请逐项核对。",
+    "en": "The source uses a shared game directory. Its list may include mods used by other versions; review every item."
+  },
+  "ma55cb93f86e9": {
+    "zh": "预览迁移结果",
+    "en": "Preview migration"
+  },
+  "ma034a8f93725": {
+    "zh": "取消预览",
+    "en": "Cancel preview"
+  },
+  "m35889d050ed8": {
+    "zh": "预览已取消。",
+    "en": "Preview cancelled."
+  },
+  "mc4891029b48a": {
+    "zh": "先选择来源并预览，确认后下载兼容模组和必需依赖。源实例保持完整。",
+    "en": "Choose a source and review the preview, then confirm to download compatible mods and required dependencies. The source is preserved."
+  },
+  "m1acf99aa6d29": {
+    "zh": "正在迁移…",
+    "en": "Migrating…"
+  },
+  "mfefa9d2ec448": {
+    "zh": "确认迁入当前实例",
+    "en": "Confirm migration into this instance"
+  },
+  "m3922f9daade4": {
+    "zh": "取消整个迁移",
+    "en": "Cancel migration"
+  },
+  "m27ca88420591": {
+    "zh": "导出清单，用于跨设备、分享或备份",
+    "en": "Export a manifest for another device, sharing or backup"
+  },
+  "m67e1b0e37849": {
+    "zh": "保留文件交换入口；清单不包含模组文件和存档。",
+    "en": "Manifests remain available for file exchange. They contain neither mod files nor worlds."
+  },
+  "meff9f9d0a6a2": {
+    "zh": "从本机服务器创建客户端",
+    "en": "Create a client from a local server"
+  },
+  "mfe49aa2c47ba": {
+    "zh": "创建独立客户端；为已有客户端补齐内容请使用服务端的“关联并检查环境”，房间玩家请使用房间同步。",
+    "en": "Create an independent client. To fill missing content in an existing client, use Link and compare in server management. Room players can use room synchronization."
+  },
+  "m0121f29f5fcf": {
+    "zh": "只包含游戏版本、加载器及已识别的客户端必需模组，不包含插件、世界、账号、地址或房间密钥。",
+    "en": "Includes the game version, loader and recognized client-required mods. Plugins, worlds, accounts, addresses and room secrets are excluded."
+  },
+  "m2308e0805495": {
+    "zh": "来源本机服务器",
+    "en": "Source local server"
+  },
+  "mb5df1e33bf40": {
+    "zh": "选择本机服务器",
+    "en": "Choose a local server"
+  },
+  "md3fddf8466ab": {
+    "zh": "直接提取前请先停止来源服务器。",
+    "en": "Stop the source server before extracting its environment."
+  },
+  "m0a1ba1971b97": {
+    "zh": "预览并创建新客户端",
+    "en": "Preview a new client"
+  },
+  "mbca3ff729acd": {
+    "zh": "从环境清单文件导入…",
+    "en": "Import from an environment file…"
+  },
+  "mf9532ef74476": {
+    "zh": "正在提取和校验环境…",
+    "en": "Extracting and validating the environment…"
+  },
+  "mc802ed474ee2": {
+    "zh": "服务端插件不安装到客户端；此处按原版客户端创建。",
+    "en": "Server plugins are not installed in the client. A vanilla client will be created."
+  },
+  "m3209670c6223": {
+    "zh": "无法识别或缺失",
+    "en": "Unrecognized or missing"
+  },
+  "md3d517a1ced0": {
+    "zh": "可选或仅服务端内容未包含",
+    "en": "Optional or server-only items excluded"
+  },
+  "mbf9c6c98fc33": {
+    "zh": "查看未包含的内容",
+    "en": "View excluded content"
+  },
+  "mb15dc786ed76": {
+    "zh": "未知项需要人工核对；创建完成不代表已保证可玩。文件清单只能说明其记录的内容。",
+    "en": "Unknown items need manual review. Creation does not guarantee playability. A manifest can describe only the items it records."
+  },
+  "maba599d9c464": {
+    "zh": "确认创建独立客户端",
+    "en": "Confirm independent client creation"
+  },
+  "m2b84b23d192d": {
+    "zh": "正在创建独立客户端…",
+    "en": "Creating an independent client…"
+  },
+  "m41701ba3296f": {
+    "zh": "查看保留的实例与任务",
+    "en": "View the retained instance and task"
+  },
+  "mb4f0f90db4c2": {
+    "zh": "此处检查并补齐已有客户端。创建新客户端请到本地模式的实例页选择“从本机服务器创建客户端”。",
+    "en": "Check and fill missing content in an existing client here. To create a new one, open Instances in local mode and choose Create a client from a local server."
+  },
+  "mabbbc4a344fd": {
+    "zh": "来源、目标或内容已变化，请重新预览。",
+    "en": "The source, target or content changed. Preview again."
+  },
+  "mc75f234b4fb6": {
+    "zh": "预览过多，请关闭旧操作后重试。",
+    "en": "Too many previews. Close older actions and try again."
+  },
+  "m8845ad4074a6": {
+    "zh": "请选择来源游戏库和实例。",
+    "en": "Choose a source game library and instance."
+  },
+  "mba91986980b4": {
+    "zh": "请切换到 AMBER 管理的游戏库创建独立实例。",
+    "en": "Switch to an AMBER-managed game library to create an independent instance."
+  },
+  "m9dd66e0e9f95": {
+    "zh": "源实例和目标实例指向同一游戏目录，不能迁移。",
+    "en": "The source and target point to the same game directory. Migration is blocked."
+  },
+  "m33ab5e484f24": {
+    "zh": "目标文件冲突或已被修改，请先整理实例。",
+    "en": "A target file conflicts or has changed. Resolve it before migrating."
+  },
+  "m0c890ac89997": {
+    "zh": "目标文件缺失，请先整理实例。",
+    "en": "A target file is missing. Resolve it before migrating."
+  },
+  "me82722dea409": {
+    "zh": "所选模组之间存在版本、文件名或声明依赖冲突。",
+    "en": "The selected mods conflict in version, filename or declared dependencies."
+  },
+  "m2f9b071c1902": {
+    "zh": "依赖或版本信息已变化，请重新预览。",
+    "en": "Dependency or version information changed. Preview again."
+  },
+  "mbffa488eb8b6": {
+    "zh": "依赖检查尚未通过，请重新预览。",
+    "en": "Dependency checks did not pass. Preview again."
+  },
+  "m80e2d537befd": {
+    "zh": "请先预览迁移结果。",
+    "en": "Preview the migration results first."
+  },
+  "m471bac7ef8a9": {
+    "zh": "模组迁移：成功 {0} 项，跳过 {1} 项，失败 {2} 项。",
+    "en": "Mod migration: {0} installed, {1} skipped, {2} failed."
+  },
+  "mbc9e799fc45e": {
+    "zh": "查看完整迁移报告",
+    "en": "View the full migration report"
+  },
+  "m7a8027c338c2": {
+    "zh": "清除迁移来源",
+    "en": "Clear migration source"
+  },
+  "m83f4727f2b46": {
+    "zh": "操作已取消。",
+    "en": "Operation cancelled."
+  },
+  "m45081acd8e8b": {
+    "zh": "迁移已取消，停用状态尚未应用，请检查已安装内容。",
+    "en": "Migration was cancelled before applying the disabled state. Check installed content."
+  },
+  "ma451991842a8": {
+    "zh": "目标使用共享游戏目录；我确认迁移会影响使用此目录的其他版本。",
+    "en": "The target uses a shared game directory. I acknowledge that migration affects other versions using it."
+  },
+  "mdd214a43e9ca": {
+    "zh": "请确认共享目标目录会影响其他版本。",
+    "en": "Acknowledge that the shared target directory affects other versions."
+  }
 }
