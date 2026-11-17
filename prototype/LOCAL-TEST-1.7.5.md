@@ -1,3 +1,9 @@
+# 1.7.5 formal release / 正式发布
+
+The user approved merged PR #20 and authorized full formal publication on 2026-11-17 (America/New_York). Merge: `407069c56755d31787b5d1d8c98f40f15ce6ceb2`; final task head: `08f55cce12077e04e5b1d3147971a76ca7519741`. Both final-head PR workflows passed (44173254520, 44173254578). The PR description and original candidate document below retain earlier pending/local-only status; they do not override the later approved merge and formal-release request. No additional content review is performed here. Formal packages use 1.7.5/public with fresh build provenance, source manifests and checksums. Existing native UI, real upgrade/rollback, live-network/gameplay and non-Windows acceptance limits remain; synthetic updater tests are not real installed upgrades.
+
+用户已批准合并并授权完整正式发布；下方验收候选阶段的禁止发布／待完成文字保留为历史记录。本次生成 1.7.5/public 正式包并独立记录发布验证，不把测试夹具或 CI 构建视为真实安装升级验收，也不重复内容审核。
+
 # AMBER / AmberE 1.7.5 acceptance candidate / 验收候选
 
 Not a formal release. No merge, publication or deployment is authorized. Packages, when built, must use the local build channel and record the exact source commit and SHA-256. This document does not claim installers already exist.

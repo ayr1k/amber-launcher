@@ -1,3 +1,10 @@
+## 1.7.5
+
+- Add separate launcher update-source selection: GitHub global (default) or the official Hong Kong, China mirror. Keep the update channel unchanged; the mirror supports stable releases only and never switches sources silently.
+- Use product-specific GitHub release metadata as the version, size and SHA-256 authority for both sources. The mirror transports installer bytes only; GitHub must remain reachable for checks, download refresh and installation. Report missing or delayed mirror assets explicitly.
+- Revalidate release identity before downloads/retries and installation, reject replaced, revoked or expired candidates, verify local bytes again, and preserve product/platform binding.
+- Propagate cancellation through pending requests and retries, serialize update operations, and allow source switching only after cancellation settles. Preserve separate AMBER/AmberE identities, account policies, data and update repositories.
+
 ## 1.7.4
 
 - Choose an existing instance from any registered game library when migrating into the current instance or creating a new one. Direct selection and JSON files share the content version/dependency resolver, reviewable preview, guarded confirmation and migration report.

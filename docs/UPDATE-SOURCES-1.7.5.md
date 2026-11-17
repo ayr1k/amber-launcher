@@ -1,4 +1,4 @@
-# Update sources 1.7.5 (implementation candidate)
+# Update sources 1.7.5
 
 GitHub global is the existing/default choice, generally suitable overseas; mainland China connectivity may be limited. The official Hong Kong, China mirror provides another route for mainland China and nearby regions. Speed depends on the network and synchronization can lag. There is no IP routing, automatic source switch or speed promise.
 
@@ -19,6 +19,6 @@ This trusts the product GitHub repository/release permissions, GitHub API integr
 
 ## Validation and delivery
 
-`prototype/tests/update-sources175.test.mjs` uses synthetic bytes and mocked GitHub/mirror responses, not real releases. It checks identity/platform binding, settings upgrade, unsupported combinations, unavailable authority/mirror, tampering, replacement, expiration, cancellation and switching races. Live endpoint probes, when recorded separately, prove connectivity/metadata only, not an installed upgrade. Native UI, actual installer runs, and real 1.7.4→1.7.5 upgrade require subsequent acceptance/authorization. Existing GitHub repository, Release and feedback links remain meaningful and are preserved.
+`prototype/tests/update-sources175.test.mjs` uses synthetic bytes and mocked GitHub/mirror responses, not real releases. It checks identity/platform binding, settings upgrade, unsupported combinations, unavailable authority/mirror, tampering, replacement, expiration, cancellation and switching races. Live endpoint probes, when recorded separately, prove connectivity/metadata only, not an installed upgrade. Native UI, actual installer runs, and real 1.7.4→1.7.5 upgrade remain separate acceptance limits; formal publication is authorized. Existing GitHub repository, Release and feedback links remain meaningful and are preserved.
 
 See [中文](zh-CN/UPDATE-SOURCES-1.7.5.md).
