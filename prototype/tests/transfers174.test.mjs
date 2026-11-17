@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MPL-2.0
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtemp,mkdir,readFile,writeFile,rm,symlink} from 'node:fs/promises';
+import {mkdtemp,mkdir,readFile,writeFile,rm,symlink,readdir} from 'node:fs/promises';
 import {join,basename} from 'node:path';
 import {tmpdir} from 'node:os';
 import {randomUUID,createHash} from 'node:crypto';
@@ -111,4 +111,54 @@ test('disabled sources remain disabled and cancellation reports unapplied disabl
 
 test('shared target directories require explicit acknowledgement before migration',async t=>{
  const f=await fixture(t),original=f.a.core.metadata.bind(f.a.core);f.a.core.metadata=async id=>{const m=await original(id);return id===f.target.id?{...m,profile:{isolation:'shared'}}:m;};const p=await f.service.preview('default',f.input);assert.equal(p.sharedTarget,true);await assert.rejects(f.service.run('default',p.token),/共享目标/);const report=await f.service.run('default',p.token,true);assert.equal(report.results[0].state,'installed');
+});
+
+// main.mjs's withLibrary adapter awaits registry.entry before invoking the
+// callback. Arm this lookup only after take() finishes all preview rechecks.
+function pauseFinalLibraryAcquisition(f,t){
+ let armed=false,entered,release;
+ const ready=new Promise(resolve=>entered=resolve),gate=new Promise(resolve=>release=resolve);
+ const take=f.service.take.bind(f.service),entry=f.registry.entry.bind(f.registry);
+ f.service.take=async(...args)=>{const result=await take(...args);armed=true;return result;};
+ f.registry.entry=async id=>{const result=await entry(id);if(armed){armed=false;entered();await gate;}return result;};
+ t.after(()=>release());return {ready,release};
+}
+async function instanceDataTree(dir){
+ const files={};async function scan(path,relative=''){
+  for(const entry of (await readdir(path,{withFileTypes:true})).sort((a,b)=>a.name.localeCompare(b.name))){
+   const name=relative+entry.name;if(entry.isDirectory()){files[name+'/']='directory';await scan(join(path,entry.name),name+'/');}
+   else{assert.ok(entry.isFile(),'Only ordinary synthetic files belong in the fixture');files[name]=hash(await readFile(join(path,entry.name)));}
+  }
+ }await scan(dir);return files;
+}
+async function checkFinalAcquisitionCancellation(t,kind,secondLibrary){
+ const f=await fixture(t),libraryId=secondLibrary?f.entry.id:'default',g=secondLibrary?f.b:f.a;
+ await f.registry.select(libraryId);
+ const sourceDir=await f.a.core.instancePath(f.source.id);
+ await mkdir(join(sourceDir,'config'));await writeFile(join(sourceDir,'config','keep.txt'),'synthetic source configuration');await writeFile(join(sourceDir,'saves','world.dat'),'synthetic source world');
+ const target=kind==='run'?(secondLibrary?await g.core.createInstance({name:'Second-library target',game:'1.21.1',loader:'fabric',version:'0.16'}):f.target):{game:'1.21.1',loader:'fabric',version:'0.16'};
+ const p=await f.service.preview(libraryId,{...f.input,target:kind==='run'?{id:target.id}:target}),input={...target,name:'Must not be created',threads:2,requestKey:randomUUID()},key=kind==='run'?target.id:'new:'+input.requestKey;
+ const before=await Promise.all([f.a.core.listInstances(),f.b.core.listInstances()]),sourceBefore=await instanceDataTree(sourceDir),targetDir=kind==='run'?await g.core.instancePath(target.id):null,targetBefore=targetDir?await instanceDataTree(targetDir):null;
+ let workflowCalls=0,createCalls=0,installCalls=0;
+ const workflow=g.workflows[kind==='run'?'migrate':'create'].bind(g.workflows),create=g.core.createInstance.bind(g.core),install=g.content.install.bind(g.content);
+ g.workflows[kind==='run'?'migrate':'create']=(...args)=>{workflowCalls++;return workflow(...args);};
+ g.core.createInstance=(...args)=>{createCalls++;return create(...args);};g.content.install=(...args)=>{installCalls++;return install(...args);};
+ const pause=pauseFinalLibraryAcquisition(f,t);
+ const result=(kind==='run'?f.service.run(libraryId,p.token):f.service.create(libraryId,p.token,input)).then(value=>({value}),error=>({error}));
+ await pause.ready;assert.equal(g.workflows.active,false,'The final library lookup must precede workflow scope creation');
+ // Match the real setup-cancel IPC handler order while no workflow scope exists.
+ g.workflows.cancel(key);f.service.cancel(key);assert.equal(f.service.requests.get(key).signal.aborted,true);
+ pause.release();const outcome=await result,after=await Promise.all([f.a.core.listInstances(),f.b.core.listInstances()]),report=outcome.value?.migrationSummary174||outcome.value;
+ t.diagnostic(JSON.stringify({path:kind,library:secondLibrary?'second-managed':'default',before:before.map(rows=>rows.length),after:after.map(rows=>rows.length),installed:report?.installed??report?.results?.filter(r=>r.state==='installed').length??0,cancelled:!!outcome.error||!!report?.cancelled}));
+ assert.match(outcome.error?.message||'',/取消|aborted/i,'Cancellation during final library acquisition must reject the operation');
+ assert.deepEqual(after,before,'Neither library may gain or change an instance');assert.equal(workflowCalls,0);assert.equal(createCalls,0);assert.equal(installCalls,0);assert.equal(g.core.jobs.length,0);
+ assert.deepEqual(await instanceDataTree(sourceDir),sourceBefore,'Source mods, configuration and world must be byte-identical');
+ if(targetDir){assert.deepEqual(await instanceDataTree(targetDir),targetBefore,'Existing target content and reports must remain untouched');assert.deepEqual(await g.content.list(target.id),[]);}
+ assert.equal(g.workflows.active,false);assert.equal(f.service.requests.has(key),false);
+}
+test('migration cancelled during final library acquisition never enters a workflow or installs content',{timeout:30000},async t=>{
+ for(const second of [false,true])await t.test(second?'second managed library':'default library',child=>checkFinalAcquisitionCancellation(child,'run',second));
+});
+test('creation cancelled during final library acquisition never creates an instance or installs content',{timeout:30000},async t=>{
+ for(const second of [false,true])await t.test(second?'second managed library':'default library',child=>checkFinalAcquisitionCancellation(child,'create',second));
 });

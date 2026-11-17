@@ -55,6 +55,18 @@ export class Transfers174 {
   await this.selected(libraryId);return p;
  }
  async guarded(key,fn){if(this.cancelledKeys.delete(key))throw Error('操作已取消。');if(this.requests.has(key))throw Error('请等待此操作结束');const c=new AbortController();this.requests.set(key,c);try{return await fn(c.signal);}finally{if(this.requests.get(key)===c)this.requests.delete(key);}}
- async run(libraryId,token,acknowledged=false){const entry=this.plans.get(token),id=entry?.target.id;if(!id)throw expired();if(entry.snapshot?.shared&&!acknowledged)throw Error('请确认共享目标目录会影响其他版本。');return this.guarded(id,async signal=>{const p=await this.take(libraryId,token);signal.throwIfAborted();return this.withLibrary(libraryId,g=>g.workflows.migrate(p.target.id,p.manifest,p.prepared));});}
- async create(libraryId,token,input,optifine){requestKey174(input.requestKey);return this.guarded('new:'+input.requestKey,async signal=>{const p=await this.take(libraryId,token,input);if(p.target.id)throw expired();signal.throwIfAborted();return this.withLibrary(libraryId,g=>g.workflows.create(input,optifine,p.manifest,null,null,null,null,p.prepared));});}
+ async run(libraryId,token,acknowledged=false){const entry=this.plans.get(token),id=entry?.target.id;if(!id)throw expired();if(entry.snapshot?.shared&&!acknowledged)throw Error('请确认共享目标目录会影响其他版本。');return this.guarded(id,async signal=>{
+  const p=await this.take(libraryId,token);signal.throwIfAborted();
+  return this.withLibrary(libraryId,g=>{
+   // Library acquisition can yield before a cancellable workflow scope exists.
+   signal.throwIfAborted();return g.workflows.migrate(p.target.id,p.manifest,p.prepared);
+  });
+ });}
+ async create(libraryId,token,input,optifine){requestKey174(input.requestKey);return this.guarded('new:'+input.requestKey,async signal=>{
+  const p=await this.take(libraryId,token,input);if(p.target.id)throw expired();signal.throwIfAborted();
+  return this.withLibrary(libraryId,g=>{
+   // Check after acquisition, with no await before create establishes its scope.
+   signal.throwIfAborted();return g.workflows.create(input,optifine,p.manifest,null,null,null,null,p.prepared);
+  });
+ });}
 }

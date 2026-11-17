@@ -38,6 +38,10 @@ These Windows x64 NSIS test installers retain the normal product identities: `io
 
 ## Verification and remaining acceptance / 验证与待验收
 
+The updated PR head fixes cancellation arriving during the final asynchronous library lookup, before a migration/creation workflow has a scope. Both callbacks recheck cancellation immediately before dispatch. New gated regressions cover migration and creation in the default and a second managed library: no new instance, installed content or source/target data change after cancellation. Use the updated head's installers, provenance and hashes; `14df49a` and its earlier test packages are superseded for this review.
+
+本次复审修复最终异步查询游戏库期间的取消竞态。迁移和创建均在实际调用工作流前重新检查信号；新增确定性回归覆盖默认库及第二个管理库，断言取消后不新建实例、不安装内容、不改动源／目标数据。复审请使用 PR 最新提交对应的安装包、来源及校验值；旧 `14df49a` 安装包不代表本次修复。
+
 See [validation and screenshots](review/1.7.4-validation.md). Unit/regression tests use synthetic directories and mocked remote metadata; native UI checks use the real renderer, preload, IPC, migration planning and content transactions with synthetic JAR bytes and substituted Java/game setup primitives. They do not establish live-mod compatibility, real gameplay, login, cross-device room behavior, installer upgrade/rollback, custom themes, hardware DPI or native macOS/Linux acceptance. No signing/installer SmartScreen acceptance is claimed. Real external modpacks, local-mod imports, skins, logs, backups, themes, templates and map-marker migration are outside this change.
 
 详见验证记录和截图。自动测试不等于真实游戏、登录、跨设备联机、安装升级、回滚、第三方主题、物理 DPI 或非 Windows 平台验收；也不代表所有模组组合均可运行。外部整合包、本地模组、皮肤、日志等文件入口不受本次调整影响；未重复建设备份、主题库、模板库或地图标记迁移。
