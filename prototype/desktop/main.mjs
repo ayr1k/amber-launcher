@@ -405,6 +405,7 @@ handle('amber:server-management',async(action,id,input)=>{if(services160.pending
   handle('amber:mod-update-restore', async (id, record) => {await readyForModUpdate(id);return modUpdates.restore(id, record);});
   handle('amber:app-update-state', () => appUpdates.snapshot());
   handle('amber:app-update-channel',channel=>appUpdates.setChannel(channel));
+  handle('amber:app-update-source',source=>appUpdates.setSource(source));
   handle('amber:app-update-check', () => appUpdates.check());
   handle('amber:app-update-download', () => appUpdates.download());
   handle('amber:app-update-cancel', () => appUpdates.cancel());
@@ -415,6 +416,7 @@ handle('amber:server-management',async(action,id,input)=>{if(services160.pending
       if (servers.active || (services160.pending.size||rooms.active||sakura.active||mysql150.active) || launching || storageBusy || workflows.active || core.jobs.some((j) => j.state === 'running')) throw Error('有新任务开始，请等待结束后再升级。');
       const file = await appUpdates.installer();const answer = await dialog.showMessageBox(window, { type: 'question', title: translateMessage('安装 AMBER 更新'), message: translateMessage('安装包已校验，是否退出 AMBER 并打开安装程序？'), detail: translateMessage('将保留游戏数据，并先备份账号和设置。请在安装向导中确认安装位置。'), buttons: [translateMessage('取消'), translateMessage('退出并安装')], defaultId: 0, cancelId: 0, noLink: true });if (answer.response !== 1) return false;
       await backupUpgradeConfig(app.getPath('userData'), core.root, app.getVersion());
+      await appUpdates.installer(); // Revalidate after confirmation and backup.
       if(process.platform!=='win32'){const error=await shell.openPath(file);if(error)throw Error(error);}else await new Promise((resolve, reject) => {const child = spawn(file, [], { detached: true, stdio: 'ignore', windowsHide: false });child.once('error', reject);child.once('spawn', () => {child.unref();resolve();});});
       return true;});if(installed)app.quit();return installed;
     } finally {upgradeBusy = false;}
@@ -438,7 +440,8 @@ handle('amber:server-management',async(action,id,input)=>{if(services160.pending
   handle('amber:trash-details', (id) => management.trashDetails(id));
   handle('amber:trash-purge', (id, confirmation) => management.purge(id, confirmation));
   handle('amber:feedback-prepare',fields=>feedbackDraft(fields,feedbackDiagnosticPreview,text=>redact(text,accounts.secrets())));
-  handle('amber:theme-store-open',()=>shell.openExternal('https://ayr1k.github.io/#/themes'));
+  handle('amber:official-site-open',page=>{const paths={home:'/',download:'/#/download',help:'/#/themes/help'};if(!Object.hasOwn(paths,page))throw Error('Invalid website page');return shell.openExternal('https://amber.ayuki-ayr1k.com'+paths[page]);});
+  handle('amber:theme-store-open',()=>shell.openExternal('https://amber.ayuki-ayr1k.com/#/themes'));
   handle('amber:feedback-open',()=>shell.openExternal(feedbackUrl));
   let diagnosticPreview=null,feedbackDiagnosticPreview=null;
   handle('amber:feedback-diagnostics',async()=>{feedbackDiagnosticPreview=localizeFields(await summary());return feedbackDiagnosticPreview;});

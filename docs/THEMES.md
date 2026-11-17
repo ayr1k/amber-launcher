@@ -62,7 +62,7 @@ The updated Alloy home uses fixed left/right sections: launch and utility tabs o
 
 ## Official themes and the editor (1.2.1)
 
-Preview and download Alloy or Nocturne in the [official theme store](https://ayr1k.github.io/#/themes). Both work with AMBER and AmberE 1.2.1 and are separate downloads, not preinstalled. Alloy retains its triangular artwork and narrow icon rail. Nocturne offers a moonlit lakeside background, top navigation and independent news/calendar panels.
+Preview and download Alloy or Nocturne in the [official theme store](https://amber.ayuki-ayr1k.com/#/themes). Both work with AMBER and AmberE 1.2.1 and are separate downloads, not preinstalled. Alloy retains its triangular artwork and narrow icon rail. Nocturne offers a moonlit lakeside background, top navigation and independent news/calendar panels.
 
 The calendar shows its month and date grid. Select a date for records; its more button opens filters, totals, recording controls, export and clear. Explanations no longer occupy home space; the counting method is unchanged.
 

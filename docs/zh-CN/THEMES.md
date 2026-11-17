@@ -58,7 +58,7 @@ Alloy 1.2.1 使用向下 1.5 px 的补偿，保留原有图片。现有 Alloy �
 
 ## 官方主题与新版编辑器（1.2.1）
 
-在[官方主题商城](https://ayr1k.github.io/#/themes)预览并下载 Alloy 或 Nocturne。两款主题通用于 AMBER 与 AmberE 1.2.1，独立提供，不预置。Alloy 保留三角纹理背景与窄侧栏；Nocturne 使用夜色湖畔背景、顶部导航与独立新闻/日历面板。
+在[官方主题商城](https://amber.ayuki-ayr1k.com/#/themes)预览并下载 Alloy 或 Nocturne。两款主题通用于 AMBER 与 AmberE 1.2.1，独立提供，不预置。Alloy 保留三角纹理背景与窄侧栏；Nocturne 使用夜色湖畔背景、顶部导航与独立新闻/日历面板。
 
 日历统一只显示月份和日期网格。点击日期查看记录，右上角更多按钮打开筛选、总计、记录开关、导出与清除。说明不再常驻首页，记录的统计口径没有改变。
 

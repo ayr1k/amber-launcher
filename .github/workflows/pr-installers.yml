@@ -53,7 +53,7 @@ jobs:
             prototype/releases/*/*-Setup-x64.exe.sha256
             prototype/releases/*/TEST-REVISION.txt
             prototype/releases/*/*.provenance.json
-            prototype/LOCAL-TEST-1.7.4.md
+            prototype/LOCAL-TEST-1.7.5.md
             prototype/review174/packaged/result.json
           retention-days: 30
           if-no-files-found: error
