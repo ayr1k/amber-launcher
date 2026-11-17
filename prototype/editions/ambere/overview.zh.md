@@ -6,10 +6,10 @@
   <a href="https://github.com/ayr1k/AmberE/releases/tag/v1.7.5"><img src="https://img.shields.io/badge/release-1.7.5-e9b53d?style=flat-square" alt="Release" /></a>
   <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MPL--2.0-527b68?style=flat-square" alt="License" /></a>
   <a href="https://github.com/ayr1k/AmberE/actions/workflows/windows.yml"><img src="https://github.com/ayr1k/AmberE/actions/workflows/windows.yml/badge.svg" alt="Build" /></a>
-  <a href="https://ayr1k.github.io/"><img src="https://img.shields.io/badge/website-AMBER-527b68?style=flat-square" alt="Website" /></a>
+  <a href="https://amber.ayuki-ayr1k.com/"><img src="https://img.shields.io/badge/website-AMBER-527b68?style=flat-square" alt="Website" /></a>
 </p>
 
-<p align="center"><a href="https://ayr1k.github.io/">官网</a> · <a href="https://ayr1k.github.io/#/download?product=ambere">下载</a> · <a href="USER-GUIDE.md">使用指南</a> · <a href="https://ayr1k.github.io/#/themes">主题商城</a> · <a href="../../README.md">English</a></p>
+<p align="center"><a href="https://amber.ayuki-ayr1k.com/">官网</a> · <a href="https://amber.ayuki-ayr1k.com/#/download?product=ambere">下载</a> · <a href="USER-GUIDE.md">使用指南</a> · <a href="https://amber.ayuki-ayr1k.com/#/themes">主题商城</a> · <a href="../../README.md">English</a></p>
 
 独立的 Minecraft Java 版启动器，将实例、内容、主题和服务端管理集中在同一工作区。
 
@@ -51,7 +51,7 @@ Windows/macOS/Linux/FreeBSD 均提供 1.7.5；macOS/Linux 待对应真机验收�
 
 ## 平台下载与验证范围
 
-Windows x64：EXE；macOS Intel / Apple Silicon：独立 ZIP；Linux x64：DEB。macOS 尚未实机测试，Linux 尚需完整桌面/密钥库及游戏测试。FreeBSD amd64 仅为服务端与工具实验包。全部包未签名，macOS 未公证。查看[安装步骤与已知限制](../../prototype/PLATFORMS-1.3.5.md)及 [多平台下载页](https://ayr1k.github.io/#/download?product=ambere)。
+Windows x64：EXE；macOS Intel / Apple Silicon：独立 ZIP；Linux x64：DEB。macOS 尚未实机测试，Linux 尚需完整桌面/密钥库及游戏测试。FreeBSD amd64 仅为服务端与工具实验包。全部包未签名，macOS 未公证。查看[安装步骤与已知限制](../../prototype/PLATFORMS-1.3.5.md)及 [多平台下载页](https://amber.ayuki-ayr1k.com/#/download?product=ambere)。
 
 ## 文档
 
@@ -59,7 +59,7 @@ Windows x64：EXE；macOS Intel / Apple Silicon：独立 ZIP；Linux x64：DEB�
 
 [回滚说明](ROLLBACK.md) / [Rollback guide](../ROLLBACK.md)
 
-[官方主题商城](https://ayr1k.github.io/#/themes) · [主题使用帮助](THEMES.md) · [主题格式规范](AMBTHEME-FORMAT.md)
+[官方主题商城](https://amber.ayuki-ayr1k.com/#/themes) · [主题使用帮助](THEMES.md) · [主题格式规范](AMBTHEME-FORMAT.md)
 
 Alloy、Nocturne、Harvest 与 Verdant 均为独立下载的免费官方主题，适用于 AMBER 和 AmberE 1.2.1 及以上版本，不预置在软件内。
 
