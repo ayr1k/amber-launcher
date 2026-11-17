@@ -2649,13 +2649,13 @@
     },
     {
       "path": "prototype/editions/ambere/overview.en.md",
-      "bytes": 5842,
-      "sha256": "0f95ffa37f0ce39a02e1e852091aaf41f49c6375c23560072b227cc01628f70f"
+      "bytes": 5952,
+      "sha256": "533cb24aac4855dc07b11287dd5183b4defd33a97afdedd56b9d2a1824c9dc22"
     },
     {
       "path": "prototype/editions/ambere/overview.zh.md",
-      "bytes": 5299,
-      "sha256": "036d8e6401dfe2dbf568cdee731148e9a78508d600531b926dc3da6ced7155c1"
+      "bytes": 5409,
+      "sha256": "74780051fc40ab3b65d883a090b7d999513003186215ff400b0b72c83432e346"
     },
     {
       "path": "prototype/editions/ambere/testing.md",
