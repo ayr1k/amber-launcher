@@ -39,7 +39,7 @@ test('downloaded app updates require matching hash and can be retried after canc
  const root=await temporary(t),bytes=Buffer.from('installer'),r=release();r.assets[0].size=bytes.length;r.assets[0].digest='sha256:'+createHash('sha256').update(bytes).digest('hex');
  const updates=new AppUpdates(root,'1.0.0-beta.2',{fetcher:async url=>{if(String(url).includes('api.github.com'))assert.equal(url,`https://api.github.com/repos/${REPOSITORY_NAME}/releases?per_page=30`);return new Response(String(url).includes('api.github.com')?JSON.stringify([r]):bytes);}});
  await updates.check();await updates.download();const path=await updates.installer();assert.deepEqual(await readFile(path),bytes);await writeFile(path,'corrupt');await assert.rejects(updates.installer(),/校验/);
- updates.fetcher=async()=>{updates.cancel();return new Response(bytes);};await assert.rejects(updates.download());assert.equal(updates.state.phase,'cancelled');updates.fetcher=async()=>new Response(bytes);await updates.download();assert.equal(updates.state.phase,'ready');
+ updates.fetcher=async()=>{updates.cancel();return new Response(bytes);};await assert.rejects(updates.download());assert.equal(updates.state.phase,'cancelled');updates.fetcher=async url=>new Response(String(url).includes('api.github.com')?JSON.stringify([r]):bytes);await updates.download();assert.equal(updates.state.phase,'ready');
 });
 test('pre-upgrade config backups preserve encrypted bytes and data location without changing source',async t=>{
  const root=await temporary(t),library=join(root,'library');await mkdir(library);await writeFile(join(root,'storage.json'),JSON.stringify({path:library}));await writeFile(join(library,'accounts.json'),'encrypted-fixture');

@@ -54,6 +54,8 @@ function libraryApi170(scope){const invoke=(channel,...args)=>ipcRenderer.invoke
   screenshotFolder:(token)=>invoke('amber:screenshot-folder',token),
   themeApply:(v)=>invoke('amber:theme-apply',v),
   themeApplyEntry:(id)=>invoke('amber:theme-apply-entry',id),
+  openOfficialSite:page=>invoke('amber:official-site-open',page),
+  setUpdateSource:source=>invoke('amber:app-update-source',source),
   setUpdateChannel:channel=>invoke('amber:app-update-channel',channel),
   storageUsage:()=>invoke('amber:storage-usage'),
   openUpgradeBackups:()=>invoke('amber:upgrade-backups-open'),

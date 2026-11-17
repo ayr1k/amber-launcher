@@ -11,10 +11,10 @@
   <a href="https://github.com/ayr1k/amber-launcher/releases/tag/v1.7.4"><img src="https://img.shields.io/badge/release-1.7.4-e9b53d?style=flat-square" alt="Release" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MPL--2.0-527b68?style=flat-square" alt="License" /></a>
   <a href="https://github.com/ayr1k/amber-launcher/actions/workflows/windows.yml"><img src="https://github.com/ayr1k/amber-launcher/actions/workflows/windows.yml/badge.svg" alt="Build" /></a>
-  <a href="https://ayr1k.github.io/"><img src="https://img.shields.io/badge/website-AMBER-527b68?style=flat-square" alt="Website" /></a>
+  <a href="https://amber.ayuki-ayr1k.com/"><img src="https://img.shields.io/badge/website-AMBER-527b68?style=flat-square" alt="Website" /></a>
 </p>
 
-<p align="center"><a href="https://ayr1k.github.io/">Website</a> · <a href="https://ayr1k.github.io/#/download">Downloads</a> · <a href="docs/USER-GUIDE.md">User guide</a> · <a href="https://ayr1k.github.io/#/themes">Themes</a> · <a href="docs/zh-CN/README.md">简体中文</a></p>
+<p align="center"><a href="https://amber.ayuki-ayr1k.com/">Website</a> · <a href="https://amber.ayuki-ayr1k.com/#/download">Downloads</a> · <a href="docs/USER-GUIDE.md">User guide</a> · <a href="https://amber.ayuki-ayr1k.com/#/themes">Themes</a> · <a href="docs/zh-CN/README.md">简体中文</a></p>
 
 An independent Minecraft: Java Edition launcher bringing instances, content, themes and server management into one workspace.
 
@@ -63,7 +63,7 @@ Third-party services require separate live validation. Offline mode does not gra
 
 ## Platforms and verification
 
-Windows x64: EXE; macOS Intel / Apple Silicon: separate ZIPs; Linux x64: DEB. macOS needs device testing; Linux needs full desktop/keyring and gameplay testing. FreeBSD amd64 is an experimental server/tools bundle only. Packages are unsigned and macOS is not notarized. See [setup and limitations](prototype/PLATFORMS-1.3.5.md) and the [platform downloads](https://ayr1k.github.io/#/download).
+Windows x64: EXE; macOS Intel / Apple Silicon: separate ZIPs; Linux x64: DEB. macOS needs device testing; Linux needs full desktop/keyring and gameplay testing. FreeBSD amd64 is an experimental server/tools bundle only. Packages are unsigned and macOS is not notarized. See [setup and limitations](prototype/PLATFORMS-1.3.5.md) and the [platform downloads](https://amber.ayuki-ayr1k.com/#/download).
 
 ## Documentation
 
@@ -90,7 +90,7 @@ AMBER is not an official Mojang or Microsoft product. Minecraft, downloaded comp
 
 Each project uses separate data and update channels.
 
-[Official theme store](https://ayr1k.github.io/#/themes) · [Theme help](docs/THEMES.md) · [Theme format](docs/AMBTHEME-FORMAT.md)
+[Official theme store](https://amber.ayuki-ayr1k.com/#/themes) · [Theme help](docs/THEMES.md) · [Theme format](docs/AMBTHEME-FORMAT.md)
 
 Alloy, Nocturne, Harvest and Verdant are free official themes for AMBER and AmberE 1.2.1 or newer, available separately and not preinstalled.
 

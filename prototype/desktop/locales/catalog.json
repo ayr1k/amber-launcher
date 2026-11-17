@@ -13340,5 +13340,85 @@
   "mdd214a43e9ca": {
     "zh": "请确认共享目标目录会影响其他版本。",
     "en": "Acknowledge that the shared target directory affects other versions."
+  },
+  "update175.73299101abb7": {
+    "zh": "更新源",
+    "en": "Update source"
+  },
+  "update175.1b6fb31ff9af": {
+    "zh": "GitHub 全球源",
+    "en": "GitHub global"
+  },
+  "update175.9abb1ab8aa00": {
+    "zh": "官方镜像 · 中国香港",
+    "en": "Official mirror · Hong Kong, China"
+  },
+  "update175.aa921bcebbad": {
+    "zh": "更新源与通道分别保存，不会自动降级或换源。两种源均须从 GitHub 获取版本和可信摘要；GitHub 不可达时无法检查或安装更新。",
+    "en": "Source and channel are saved independently. No automatic downgrade or source switching. Both sources require GitHub for versions and trusted digests; checking and installing updates requires GitHub access."
+  },
+  "update175.7d51c168b862": {
+    "zh": "GitHub：一般适合海外，国内连接可能受限。香港镜像：为大陆及周边提供另一线路，速度视网络，可能同步延迟；仅支持稳定版。",
+    "en": "GitHub generally suits users overseas; connections in mainland China may be limited. The Hong Kong mirror offers another route for mainland China and nearby regions. Speed depends on your network; synchronization may lag. Stable releases only."
+  },
+  "update175.0825305e53a5": {
+    "zh": "GitHub 当前未列出此通道的更新版本。",
+    "en": "GitHub currently lists no newer version in this channel."
+  },
+  "update175.650738feecf7": {
+    "zh": "官网",
+    "en": "Official website"
+  },
+  "update175.c53f70f728f2": {
+    "zh": "官网下载",
+    "en": "Website downloads"
+  },
+  "update175.8022134a64b5": {
+    "zh": "主题帮助",
+    "en": "Theme help"
+  },
+  "update175.9aff17d258a0": {
+    "zh": "镜像不支持此产品、版本或平台。",
+    "en": "The mirror does not support this product, version or platform."
+  },
+  "update175.108d30c747bc": {
+    "zh": "更新设置无效。",
+    "en": "Invalid update settings."
+  },
+  "update175.ed21e9d1beec": {
+    "zh": "更新源无效。",
+    "en": "Invalid update source."
+  },
+  "update175.58cceaae900a": {
+    "zh": "无法从 GitHub 获取可信更新信息，请重试；镜像不能替代版本与摘要验证。",
+    "en": "Cannot obtain trusted update metadata from GitHub. Retry; the mirror cannot replace version and digest verification."
+  },
+  "update175.9db22430a750": {
+    "zh": "新版本缺少兼容安装包或可信摘要，请重试或查看 Release。",
+    "en": "The newer release lacks a compatible package or trusted digest. Retry or view the Release."
+  },
+  "update175.86ddd22b6dfd": {
+    "zh": "镜像尚未同步或暂不可用，请重试或手动切换 GitHub 源。",
+    "en": "The mirror has not synchronized or is unavailable. Retry or manually switch to GitHub."
+  },
+  "update175.78a55cfb6705": {
+    "zh": "此平台或架构暂不支持软件内更新，请使用官网下载。",
+    "en": "In-app updates are unavailable for this platform or architecture. Use website downloads."
+  },
+  "update175.1f064ea9956e": {
+    "zh": "香港镜像仅支持稳定版；请切换通道或更新源。",
+    "en": "The Hong Kong mirror supports stable releases only. Change the channel or source."
+  },
+  "update175.3c431139f6e0": {
+    "zh": "更新信息已变化，请重新检查更新。",
+    "en": "Update metadata changed. Check for updates again."
+  },
+  "update175.a42f5a635df3": {
+    "zh": "镜像更新不允许重定向或切换地址。",
+    "en": "Mirror updates cannot redirect or change the download address."
+  },
+  "update175.243e854acc7a": {
+    "zh": "更新信息已过期，请重新检查并下载。",
+    "en": "Update metadata expired. Check and download again."
   }
 }
