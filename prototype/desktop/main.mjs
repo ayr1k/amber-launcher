@@ -1,3 +1,4 @@
+import {Transfers174} from './transfers174.mjs';
 import {copyServerAddress172} from './server-address172.mjs';
 import {importExternalBackup170} from './library-backup-import170.mjs';
 import {directoryKey170} from './library-mod-index170.mjs';
@@ -131,7 +132,8 @@ app.whenReady().then(async () => {
 
   const scopes170=new LibraryScope170();
   const libraryGraphs170=new Map(),libraryRequests170=new Map();
-  const core = scopes170.wrap('core',new VanillaLauncher(storageConfig.path));
+  const baseCore174=new VanillaLauncher(storageConfig.path);
+  const core = scopes170.wrap('core',baseCore174);
   await core.init();
   const seedMap=new SeedMap();
   app.on('before-quit',()=>seedMap.cancel());
@@ -251,9 +253,11 @@ app.whenReady().then(async () => {
    if(action==='buildtools')return shell.openExternal('https://www.spigotmc.org/wiki/buildtools/');
    throw Error('Unknown server action');
   });
-  const content = scopes170.wrap('content',new Modrinth(core));
+  const baseContent174=new Modrinth(core);
+  const content = scopes170.wrap('content',baseContent174);
   const packs = scopes170.wrap('packs',new Modpacks(core, content));
-  const workflows = scopes170.wrap('workflows',new Workflows(core, content)),settings = new Settings(core.root),selections = scopes170.wrap('selections',new Map());
+  const baseWorkflows174=new Workflows(core,content);
+  const workflows = scopes170.wrap('workflows',baseWorkflows174),settings = new Settings(core.root),selections = scopes170.wrap('selections',new Map());
   rooms.sync=new RoomSync152(core,rooms,workflows,content);
   const localPacks=scopes170.wrap('localPacks',new LocalPacks(core,packs,workflows));workflows.localPacks=localPacks;
   const packUpgrade140=scopes170.wrap('packUpgrade140',new PackUpgrade140(core,packs,localPacks,workflows));
@@ -335,7 +339,14 @@ app.whenReady().then(async () => {
   const performance144=new Performance144(servers);const performanceTimer=setInterval(()=>performance144.sample().catch(()=>{}),3000);performanceTimer.unref();
   handle('amber:performance144',async(action,id)=>{if(action==='state')return performance144.state(id);if(action==='collect')return performance144.collect(id);if(action==='export'){const state=await performance144.state(id);if(!state.report)throw Error('Collect a report first / 请先采集报告');const out=await dialog.showSaveDialog(window,{defaultPath:'server-performance.json',filters:[{name:'JSON',extensions:['json']}]});if(out.canceled)return null;await writeFile(out.filePath,JSON.stringify(state.report,null,2));return true;}throw Error('Invalid action');});
       handle('amber:external-maintenance',async(action,id,input)=>{const service=scopes170.context.getStore()?.maintenance170;if(!service)throw Error('Select an external instance library');if(action==='preview'){if(input?.action==='components'&&input.loader==='optifine'){const picked=await dialog.showOpenDialog(window,{title:'Select the matching official OptiFine installer JAR / 选择版本匹配的官方 OptiFine 安装 JAR',properties:['openFile'],filters:[{name:'OptiFine',extensions:['jar']}]});if(picked.canceled)return null;input={...input,localJar:picked.filePaths[0]};}return service.prepare(id,input);}if(action==='apply')return service.apply(id,input.token,input);if(action==='history')return service.history(id);if(action==='recover')return service.recover(id,input.token);throw Error('Invalid maintenance action');});
-  handle('amber:environment-import',async(action,token,name)=>{if(action==='import'){const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Environment',extensions:['json']}]});if(r.canceled)return null;const st=await lstat(r.filePaths[0]);if(!st.isFile()||st.isSymbolicLink()||st.size>2000000)throw Error('Invalid environment file');return environment140.previewImport(JSON.parse(await readFile(r.filePaths[0],'utf8')));}if(action==='create')return environment140.create(token,name);throw Error('Invalid environment import action');});
+  handle('amber:environment-import',async(action,token,name)=>{
+   if(action==='servers')return scopes170.run(null,async()=>{const rows=await servers.list();return rows.map(r=>({id:r.id,name:r.name,game:r.game,type:r.type,state:r.run?.state||'stopped'}));});
+   if(action==='server'){const r=await scopes170.run(null,()=>environment140.serverPreview174(token));return environment140.previewImport(r.manifest,r);}
+   if(action==='forget')return environment140.forget174(token);
+   if(action==='import'){const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Environment',extensions:['json']}]});if(r.canceled)return null;const st=await lstat(r.filePaths[0]);if(!st.isFile()||st.isSymbolicLink()||st.size>2000000)throw Error('Invalid environment file');return environment140.previewImport(JSON.parse(await readFile(r.filePaths[0],'utf8')));}
+   if(action==='create')return environment140.create(token,typeof name==='object'?name.name:name,id=>scopes170.run(null,()=>environment140.snapshot174(id)),name?.requestKey);
+   throw Error('Invalid environment import action');
+  });
 handle('amber:server-management',async(action,id,input)=>{if(services160.pending.has(id))throw Error('Launch plan running / 启动规划正在执行');if(['roster','skin','installBridge','players','player','commands','backups','backup','restore','policy','savePolicy','pinBackup'].includes(action))return serverManagement140[action](id,input);if(action==='command')return serverManagement140.consoleResult(id,input);if(action==='link')return environment140.links(id,input);if(action==='compare')return environment140.compare(id,input);if(action==='previewInstall')return environment140.previewInstall(id,input.localId,input.versionId);if(action==='install')return environment140.install(id);if(action==='export'){const r=await environment140.requirements(id);const out=await dialog.showSaveDialog(window,{defaultPath:'server-environment.json',filters:[{name:'Environment',extensions:['json']}]});if(out.canceled)return null;await writeFile(out.filePath,JSON.stringify(r.manifest,null,2));return {unknown:r.unknown,optional:r.optional};}if(action==='import'){const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Environment',extensions:['json']}]});if(r.canceled)return null;const st=await lstat(r.filePaths[0]);if(!st.isFile()||st.size>2000000)throw Error('Invalid environment file');return environment140.previewImport(JSON.parse(await readFile(r.filePaths[0],'utf8')));}if(action==='create')return environment140.create(id,input);throw Error('Invalid action');});
   const protection140=scopes170.wrap('protection140',new Protection140(core,backups));
   handle('amber:protection', (action,id,value)=>{if(action==='state')return protection140.state(id);if(action==='save')return protection140.save(id,value);if(action==='pin')return backups.pin(id,value);throw Error('Invalid action');});
@@ -475,15 +486,15 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   handle('amber:memory160',async(action,value)=>{await memory160.action(action,value);return memory160.state();});
   handle('amber:settings-save', async (v) => {if(themes.state())throw Error('Confirm or revert theme preview first / 请先保留或恢复当前主题试用');v=validateSettings(v);if(launching&&v.graphicsMode!==(await settings.get()).graphicsMode)throw Error('正在准备启动。');if(v.graphicsMode==='system'&&(await settings.get()).graphicsMode!=='system')await graphics.restoreAll();const saved = await settings.save(v);core.downloadThreads = saved.threads;configureTransferBudget(saved.threads);network.configure(saved.network);await refreshLocale();applyAppearance(saved);return saved;});
   handle('amber:setup-state', (key) => workflows.state(key));
-  handle('amber:setup-cancel', (id) => workflows.cancel(id));
+  handle('amber:setup-cancel', (id) => {workflows.cancel(id);transfers174.cancel(id);environment140.cancel174(id);});
   handle('amber:setup-repair', (id) => workflows.repairSetup(id));
   handle('amber:setup-retry', (id) => workflows.retry(id));
   handle('amber:setup-choices', (game, type) => workflows.choices(game, type));
   handle('amber:setup-file', async (kind) => {if (!['manifest', 'optifine'].includes(kind)) throw Error('无效文件类型');const result = await dialog.showOpenDialog(window, { title: kind === 'manifest' ? '选择 AMBER 模组迁移清单' : '选择 OptiFine 官方 JAR', properties: ['openFile'], filters: [{ name: kind, extensions: [kind === 'manifest' ? 'json' : 'jar'] }] });if (result.canceled) return null;const path = result.filePaths[0];if ((await stat(path)).size > (kind === 'manifest' ? 2000000 : 100000000)) throw Error('文件过大');const value = kind === 'manifest' ? validateManifest(JSON.parse(await readFile(path, 'utf8'))) : path;const token = randomUUID();selections.set(token, { kind, value });return { token, name: path.split(/[\\/]/).at(-1) };});
   function selection(token, kind) {if (!token) return null;const entry = selections.get(token);if (!entry || entry.kind !== kind) throw Error('请选择文件');return entry.value;}
-  handle('amber:setup', (input) => workflows.create(input, selection(input.optifineToken, 'optifine'), selection(input.manifestToken, 'manifest')));
+  handle('amber:setup', async(input) => {if(input.migrationPreview174)return transfers174.create((await libraries170.list()).selected,input.migrationPreview174,input,selection(input.optifineToken,'optifine'));if(input.manifestToken)throw Error('请先预览迁移结果。');return workflows.create(input, selection(input.optifineToken, 'optifine'));});
   handle('amber:migration-export', async (id) => {const manifest = await workflows.export(id);const result = await dialog.showSaveDialog(window, { title: translateMessage('导出模组清单'), defaultPath: 'amber-mods.json', filters: [{ name: 'AMBER 模组清单', extensions: ['json'] }] });if (result.canceled) return null;await writeFile(result.filePath, JSON.stringify(manifest, null, 2), 'utf8');return { count: manifest.mods.length, identified: manifest.mods.filter((m) => m.projectId).length };});
-  handle('amber:migration-run', (id, token) => workflows.migrate(id, selection(token, 'manifest')));
+  handle('amber:migration-run', async(id, token) => {if(transfers174.plans.get(token)?.target.id!==id)throw Error('请先预览迁移结果。');return transfers174.run((await libraries170.list()).selected,token);});
   handle('amber:migration-report', (id) => workflows.report(id));
   handle('amber:project-open', async (id) => {if (typeof id !== 'string' || !/^[-\w]{1,100}$/.test(id)) throw Error('无效项目');const p = await content.api('project/' + id);if (!['mod', 'modpack', 'shader', 'resourcepack', 'plugin'].includes(p.project_type)) throw Error('未知项目类型');if(id.startsWith('cf-')){const url=new URL(p.website);if(url.protocol!=='https:'||!['www.curseforge.com','curseforge.com'].includes(url.hostname))throw Error('Invalid project URL');return shell.openExternal(url.href);}return shell.openExternal('https://modrinth.com/' + p.project_type + '/' + encodeURIComponent(id));});
 
@@ -538,6 +549,17 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   const libraryRunners170=new Map();
   const libraryPending170=new Set();
   const libraries170=new Libraries170(core.root,{edition:EDITION,active:id=>{const c=libraryRunners170.get(id),g=libraryGraphs170.get(id)?.graph,own=g&&scopes170.context.getStore()===g;return libraryPending170.has(id)||!own&&libraryRequests170.has(id)||!!g&&[...g.gameDirectories].some(key=>g.index.running.has(key))||!own&&!!g?.workflows.active||!!c&&(c.jobs.some(j=>j.state==='running')||[...c.processes.values()].some(p=>p.state==='running'));}});
+  const transfers174=new Transfers174(libraries170,async(id,fn)=>{await libraries170.entry(id);return id==='default'?scopes170.run(null,()=>fn({core:baseCore174,content:baseContent174,workflows:baseWorkflows174})):invokeLibrary170(id,await libraryGraph170(id),()=>fn(scopes170.context.getStore()));});
+  handle('amber:migration174',async(action,input={})=>{
+   const libraryId=(await libraries170.list()).selected;
+   if(action==='libraries')return libraries170.list();
+   if(action==='sources')return transfers174.sources(input.libraryId,libraryId,input.targetId);
+   if(action==='preview')return transfers174.preview(libraryId,{...input,manifest:input.manifestToken?selection(input.manifestToken,'manifest'):undefined});
+   if(action==='run')return transfers174.run(libraryId,input.token,input.acknowledged===true);
+   if(action==='forget')return transfers174.forget(input.token);
+   if(action==='cancel')return transfers174.cancel(input.requestKey);
+   throw Error('Invalid migration action');
+  });
   if(storageConfig.initialExternal170&&!(await libraries170.list()).libraries.some(l=>l.path===storageConfig.initialExternal170)){
    try{const preview=await libraries170.preview(storageConfig.initialExternal170);const warning=preview.isolation==='shared'||preview.isolation==='mixed'?'此库未开启版本隔离，请自行核对模组冲突风险':'无法可靠确定此库的版本隔离模式，请逐版本核对游戏目录和模组冲突风险。 / Isolation is undetermined; confirm each game directory and mod conflicts.';
    const answer=await dialog.showMessageBox({type:'warning',message:warning,buttons:['添加库 / Add library','暂不添加 / Later'],defaultId:1,cancelId:1});if(answer.response===0)await libraries170.add(preview.token,'Minecraft',true);

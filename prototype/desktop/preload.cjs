@@ -176,6 +176,7 @@ function libraryApi170(scope){const invoke=(channel,...args)=>ipcRenderer.invoke
   migrationExport: id => invoke('amber:migration-export',id),
   migrationRun: (id,token) => invoke('amber:migration-run',id,token),
   migrationReport: id => invoke('amber:migration-report',id),
+  migration174:(action,input)=>invoke('amber:migration174',action,input),
   openProject: id => invoke('amber:project-open',id),
   copyDetectedJava:path=>invoke('amber:java-copy-detected',path),
   analyzeLogs: input=>invoke('amber:analyze-logs',{id:input?.id,server:input?.server===true,importFile:input?.importFile===true}),

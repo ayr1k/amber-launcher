@@ -32,14 +32,13 @@ jobs:
         env:
           AMBER_TASK_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
           AMBER_EVENT_SHA: ${{ github.sha }}
-          AMBER_CURSEFORGE_API_KEY: ${{ secrets.AMBER_CURSEFORGE_API_KEY }}
       - name: Installer checksums
         shell: pwsh
         run: Get-Content releases/*/*-Setup-x64.exe.sha256
       - name: Verify packaged startup and provenance
-        run: node scripts/qa-smoke173.cjs
+        run: node scripts/qa-smoke174.cjs
         env:
-          AMBER_QA_OUTPUT: ${{ github.workspace }}/prototype/review173/packaged
+          AMBER_QA_OUTPUT: ${{ github.workspace }}/prototype/review174/packaged
       - name: Record tested revision
         shell: pwsh
         run: |
@@ -54,7 +53,7 @@ jobs:
             prototype/releases/*/*-Setup-x64.exe.sha256
             prototype/releases/*/TEST-REVISION.txt
             prototype/releases/*/*.provenance.json
-            prototype/LOCAL-TEST-1.7.3.md
-            prototype/review173/packaged/result.json
+            prototype/LOCAL-TEST-1.7.4.md
+            prototype/review174/packaged/result.json
           retention-days: 30
           if-no-files-found: error
