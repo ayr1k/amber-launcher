@@ -3,7 +3,7 @@
 <p align="center"><strong>Offline and third-party identities. Your own adventure.</strong></p>
 
 <p align="center">
-  <a href="https://github.com/ayr1k/AmberE/releases/tag/v1.7.3"><img src="https://img.shields.io/badge/release-1.7.3-e9b53d?style=flat-square" alt="Release" /></a>
+  <a href="https://github.com/ayr1k/AmberE/releases/tag/v1.7.4"><img src="https://img.shields.io/badge/release-1.7.4-e9b53d?style=flat-square" alt="Release" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MPL--2.0-527b68?style=flat-square" alt="License" /></a>
   <a href="https://github.com/ayr1k/AmberE/actions/workflows/windows.yml"><img src="https://github.com/ayr1k/AmberE/actions/workflows/windows.yml/badge.svg" alt="Build" /></a>
   <a href="https://ayr1k.github.io/"><img src="https://img.shields.io/badge/website-AMBER-527b68?style=flat-square" alt="Website" /></a>
@@ -23,19 +23,19 @@ An independent Minecraft: Java Edition launcher bringing instances, content, the
   </tr>
 </table>
 
-Public AMBER 1.2.1 theme previews using demonstration data; these themes also work with AmberE. Click to enlarge. See the 1.7.3 notes below for current features and platform availability.
+Public AMBER 1.2.1 theme previews using demonstration data; these themes also work with AmberE. Click to enlarge. See the 1.7.4 notes below for current features and platform availability.
 
 ## Overview
 
 AmberE is an independent distribution for Minecraft: Java Edition, providing offline and third-party accounts. It is maintained from the shared AMBER codebase under MPL-2.0, with its own application identity, data directory and update repository. It does not offer Microsoft sign-in or include a Microsoft application Client ID.
 
-## 1.7.3
+## 1.7.4
 
-Recall recent server commands with Up/Down, refresh local and LAN addresses, and see clearer send/copy feedback. Improve console layouts and simplify account rows while keeping editing in account details.
+Select an existing instance directly for migration, or create an independent client from a managed local server. Preview compatible content and dependencies before installation, with source protection and cancellation handling.
 
-Windows/macOS/Linux/FreeBSD packages share version 1.7.3. Native macOS/Linux acceptance is pending; FreeBSD is experimental server/tools-only.
+Windows/macOS/Linux/FreeBSD packages share version 1.7.4. Native macOS/Linux acceptance is pending; FreeBSD is experimental server/tools-only.
 
-Windows x64 release with additional platform downloads. [Download the installer, source and checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.7.3). Includes instance management, content recommendations, mod updates, backups and recovery.
+Windows x64 release with additional platform downloads. [Download the installer, source and checksums](https://github.com/ayr1k/AmberE/releases/tag/v1.7.4). Includes instance management, content recommendations, mod updates, backups and recovery.
 
 - Offline identities and HTTPS third-party authentication, with system credential protection for saved credentials.
 - Isolated game instances; Java and loader installation; mod search, dependencies, updates and bulk management.

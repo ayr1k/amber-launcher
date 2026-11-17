@@ -1,9 +1,10 @@
-## 1.7.4 (unreleased test build)
+## 1.7.4
 
 - Choose an existing instance from any registered game library when migrating into the current instance or creating a new one. Direct selection and JSON files share the content version/dependency resolver, reviewable preview, guarded confirmation and migration report.
 - Create an independent client directly from a managed local server. Preserve environment-file exchange, display unknown/missing and excluded server-only content, and keep existing-client comparison and room synchronization separate.
 - Reject identical physical source/target directories, invalidate stale previews, disclose shared-directory effects, and retain accurate cancellation, partial-failure and setup-recovery results. No old JAR, world, account, address or room secret is copied.
-- Both products retain their account policies, identities, data roots and update channels. This is a Draft PR/test-installer delivery, not a stable release.
+- Both products retain their account policies, identities, data roots and update channels.
+- Fix cancellation during final library acquisition: migration and creation recheck cancellation immediately before entering the workflow, preventing an already-cancelled request from starting writes.
 
 ## 1.7.3
 
