@@ -6,6 +6,7 @@ import {randomBytes,randomUUID,generateKeyPairSync,sign,verify,createPublicKey,t
 import {readFile,copyFile} from 'node:fs/promises';
 import {join} from 'node:path';
 import {safePath,ensureParents,digest,download,verified} from './download.mjs';
+import {carryCurseForgeApproval} from './curseforge-delivery176.mjs';
 import {instanceLoaders} from './compatibility.mjs';
 import {atomicJson} from './core.mjs';
 import {roomModDisplay152} from './room-sync-display152.mjs';
@@ -28,7 +29,7 @@ export async function platformFile152(content,f,m,signal,version,project){
  if(p.client_side==='unsupported')throw Error('Server-only mod / 服务端专用模组');
  const file=v.files?.find(x=>x.hashes?.sha1===f.sha1&&x.size===f.size);
  if(!file?.url||f.source==='curseforge'&&p.distribution===false)throw Error('Original platform download unavailable or restricted; no host fallback / 原平台下载不可用或受限制，不会改由房主传输');
- return file;
+ return {...file,...carryCurseForgeApproval(file,p)};
 }
 export const syncPath=syncPath153;
 export function validateSnapshot(m){
@@ -89,8 +90,11 @@ export class RoomSync152{
  get active(){return !!this.abort;}
  async install(token,choice='resume'){if(this.active||!this.previewed||this.previewed.token!==token)throw Error('Review this environment first / 请先预览并确认环境');if(!['resume','new'].includes(choice))throw Error('Invalid recovery choice');const plan=this.previewed;if(choice==='resume'&&plan.recovery&&!plan.recovery.canResume)throw Error('Local conflict; explicitly choose a new independent instance / 本地冲突，请明确选择新建独立实例');const controller=new AbortController(),requestKey=randomUUID();let heartbeat;const watch=async()=>{try{const m=await this.remote(controller.signal);if(m.revision!==plan.manifest.revision)throw Error('Sharing changed; preview again / 分享已更新，请重新预览');}catch(e){controller.abort(e);this.workflows.cancel('new:'+requestKey);if(this.resumeId)this.workflows.cancel(this.resumeId);}};this.abort=controller;const signal=controller.signal;this.requestKey=requestKey;this.resumeId=choice==='resume'&&plan.recovery?.canResume?plan.recovery.instanceId:null;this.state={phase:'downloading',instanceId:this.resumeId||undefined};
   try{const current=await this.remote(signal);if(JSON.stringify(current)!==JSON.stringify(plan.manifest))throw Error('Environment changed; preview and confirm again / 环境已更新，请重新预览并确认');const m=plan.manifest;if(this.resumeId){const target=await conflicts153(this.core,this.resumeId,m);if(target.conflicts.length)throw Error('Local file conflict; preview again');}await ensureParents(this.root,join(this.root,'.check'));await space153(this.root,m.files.reduce((n,f)=>n+f.size,0)*2);let checking=false;heartbeat=setInterval(()=>{if(!checking){checking=true;watch().finally(()=>checking=false);}},2000);heartbeat.unref();
-   for(const f of m.files){signal.throwIfAborted();const path=join(this.root,'cache',f.sha256);await ensureParents(this.root,path);try{await regular153(this.root,path);}catch(e){if(e.code!=='ENOENT')throw e;}const original=f.source!=='host'?await platformFile152(this.content,f,m,signal):null;if(await verified({path,hash:f.sha256,algorithm:'sha256',size:f.size}))continue;
-    if(original){await download({path,url:original.url,hash:f.sha256,algorithm:'sha256',size:f.size},{root:this.root,signal,fetcher:this.core.fetcher});}
+   for(const f of m.files){signal.throwIfAborted();const path=join(this.root,'cache',f.sha256);await ensureParents(this.root,path);try{await regular153(this.root,path);}catch(e){if(e.code!=='ENOENT')throw e;}const original=f.source!=='host'?await platformFile152(this.content,f,m,signal):null;
+    const target={path,hash:f.sha256,algorithm:'sha256',size:f.size};
+    if(original){await download({...carryCurseForgeApproval(original),...target,url:original.url,versionId:f.versionId,
+      ...(f.source==='curseforge'?{curseForgeSha1:f.sha1}:{})},{root:this.root,signal,fetcher:this.core.fetcher});}
+    else if(await verified(target))continue;
     else{const room=this.current('guest');await receiveFile153(this.root,path,f,offset=>fetch(`http://127.0.0.1:${room.syncLocalPort}/file/${m.revision}/${f.sha256}`,{headers:{Authorization:'Bearer '+room.invite.sync.token,...(offset?{Range:`bytes=${offset}-`}:{})},redirect:'error',signal:AbortSignal.any([signal,AbortSignal.timeout(120000)])}),signal);if(this.current('guest')!==room)throw Error('Room changed');}
    }
    signal.throwIfAborted();this.state.phase='installing';

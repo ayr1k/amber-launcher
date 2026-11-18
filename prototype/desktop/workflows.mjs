@@ -16,7 +16,7 @@ import {validateLayout,defaultLayout} from './layout-schema.mjs';
 import {configureLiteOverlay} from './legacy-combinations.mjs';
 import {canCombine} from './compatibility.mjs';
 import { AsyncLocalStorage } from 'node:async_hooks';
-import { readFile, mkdir, copyFile } from 'node:fs/promises';
+import { readFile, mkdir, copyFile, lstat } from 'node:fs/promises';
 import { join } from 'node:path';
 import { atomicJson } from './core.mjs';
 import { digest, safePath } from './download.mjs';
@@ -54,13 +54,14 @@ export function validateManifest(value){
 }
 export class Workflows{
  constructor(core,content){this.core=core;this.content=content;this.context=new AsyncLocalStorage();this.scopes=new Set();this.recentScopes=new Map();this.resumes=new Map();core.workflowGuard=(id)=>{const own=this.context.getStore();if([...this.scopes].some(s=>s!==own&&(s.key==='*'||!id||s.instanceId===id)))throw Error('This instance has an active task / 请等待此实例的任务结束');if(own?.cancelled)throw Error('Installation cancelled / 安装已取消');};}
+ get setupSignal(){return this.context.getStore()?.controller.signal;}
  get active(){return this.scopes.size>0;}
  get cancelled(){return this.context.getStore()?.cancelled||false;}
  set cancelled(v){const scope=this.context.getStore();if(scope)scope.cancelled=v;}
  get lastSetup(){return this.context.getStore()?.instanceId||this._lastSetup||null;}
  set lastSetup(id){const scope=this.context.getStore();if(scope)scope.instanceId=id;this._lastSetup=id;}
- async exclusive(fn,key='*'){if([...this.scopes].some(s=>key==='*'||s.key==='*'||s.key===key||s.instanceId===key)||this.core.jobs.some(j=>j.state==='running'&&(key==='*'||j.instanceId===key)))throw Error('This operation is already active / 请等待此操作结束');const scope={key,instanceId:key.startsWith('new:')?null:key,cancelled:false};this.scopes.add(scope);this.recentScopes.set(key,scope);if(this.recentScopes.size>100)this.recentScopes.delete(this.recentScopes.keys().next().value);try{return await this.context.run(scope,fn);}finally{this.scopes.delete(scope);if(key==='*')this.core.operation=null;}}
- cancel(id){for(const scope of this.scopes)if(!id||scope.instanceId===id||scope.key===id){scope.cancelled=true;for(const j of this.core.jobs.filter(j=>j.state==='running'&&j.instanceId===scope.instanceId))this.core.cancel(j.id);}}
+ async exclusive(fn,key='*'){if([...this.scopes].some(s=>key==='*'||s.key==='*'||s.key===key||s.instanceId===key)||this.core.jobs.some(j=>j.state==='running'&&(key==='*'||j.instanceId===key)))throw Error('This operation is already active / 请等待此操作结束');const scope={key,instanceId:key.startsWith('new:')?null:key,cancelled:false,controller:new AbortController()};this.scopes.add(scope);this.recentScopes.set(key,scope);if(this.recentScopes.size>100)this.recentScopes.delete(this.recentScopes.keys().next().value);try{return await this.context.run(scope,fn);}finally{this.scopes.delete(scope);if(key==='*')this.core.operation=null;}}
+ cancel(id){for(const scope of this.scopes)if(!id||scope.instanceId===id||scope.key===id){scope.cancelled=true;scope.controller.abort(Error('Installation cancelled / 安装已取消'));for(const j of this.core.jobs.filter(j=>j.state==='running'&&j.instanceId===scope.instanceId))this.core.cancel(j.id);}}
  checkCancelled(){if(this.cancelled)throw Error('Installation cancelled / 安装已取消');}
  state(key){const s=key?this.recentScopes.get(key):null;return key?{active:this.scopes.has(s),cancelled:s?.cancelled||false,instanceId:s?.instanceId||null}:{active:this.active,cancelled:this.cancelled,instanceId:this.lastSetup};}
  async resumeRoom153(id,manifest,afterSetup,signal){return this.exclusive(async()=>{
@@ -90,6 +91,9 @@ export class Workflows{
   const step=async(key,fn)=>{this.checkCancelled();if(completed.has(key))return;record.step=key;await save();await this.wait(await fn());this.checkCancelled();completed.add(key);record.completed=[...completed];await save();};
   record.state='running';delete record.error;await save();
   try{
+   if(record.upgrade&&!await lstat(join(dir,'.amber-setup','upgrade.json')).then(stat=>stat.isFile(),error=>{if(error.code==='ENOENT')return false;throw error;})){
+    throw Error('Upgrade snapshot missing; preview again and create a new instance / 升级快照缺失，请重新预览并创建实例');
+   }
    if(record.guided){if(completed.has('loader')&&(item.loader!==input.loader||item.loaderVersion!==input.version))throw Error(g('changedTarget'));await this.guided.recheck(record.guided);if(record.guided.target.game!==input.game||record.guided.target.loader!==input.loader||record.guided.target.version!==input.version)throw Error(g('changedTarget'));}
    await step('java',()=>this.core.prepareJava(id));
    if(input.loader==='optifine')await step('loader',()=>installOptifine(this.core,id,optifinePath));
@@ -98,7 +102,7 @@ export class Workflows{
    await step('game',()=>this.core.install(id,{threads:this.core.downloadThreads||input.threads}));
    if(input.addOptifine)await step('optifine',()=>importOptifine(this.core,id,optifinePath));
    if(record.manifest)await step('migration',async()=>{const report=await this.migrateInner(id,record.manifest,record.migration174);record.migrationSummary174={installed:report.results.filter(r=>r.state==='installed').length,skipped:report.results.filter(r=>r.state==='skipped').length,failed:report.results.filter(r=>r.state==='failed').length,cancelled:!!report.cancelled};});
-   if(record.localPack)await step('content',()=>this.localPacks.install(id,record.localPack));
+   if(record.localPack)await step('content',()=>this.localPacks.install(id,record.localPack,this.setupSignal));
    else if(record.packVersion)await step('content',()=>this.installPack(id,record.packVersion));
    else if(record.guided){
     await step('mods',()=>this.guided.installGroup(id,record.guided,'mod'));
@@ -131,7 +135,7 @@ export class Workflows{
   if(migration174)record.migration174=migration174;
   if(guided){record.guided=guided;record.kind='guided';await atomicJson(join(dir,'guided-plan.json'),guided);await atomicJson(join(dir,'launch-preferences.json'),{accountId:null,memory:guided.memory});}
   if(optifinePath){await mkdir(join(dir,'.amber-setup'),{recursive:true});const cached=join(dir,'.amber-setup','optifine.jar');await copyFile(optifinePath,cached);record.optifine=await digest(cached);}
-  if(localPack){record.localPack={schema:1,hash:localPack.plan.sourceHash,kind:localPack.plan.kind,selected:localPack.selected,title:localPack.plan.title,packVersion:localPack.plan.packVersion};await atomicJson(join(dir,'setup-report.json'),record);try{await this.localPacks.retain(dir,localPack);if(localPack.upgrade){record.upgrade=true;await retainUpgrade140(this.core,dir,localPack.upgrade);}}catch(e){record.state='failed';record.error=e.message;await atomicJson(join(dir,'setup-report.json'),record);throw e;}}
+  if(localPack){record.localPack=this.localPacks.describe(localPack);if(localPack.upgrade)record.upgrade=true;await atomicJson(join(dir,'setup-report.json'),record);try{await this.localPacks.retain(dir,localPack);if(localPack.upgrade){await retainUpgrade140(this.core,dir,localPack.upgrade);}}catch(e){record.state='failed';record.error=e.message;await atomicJson(join(dir,'setup-report.json'),record);throw e;}}
   await atomicJson(join(dir,'setup-report.json'),record);
   await onCreated?.(item);
   const run=()=>this.runPlan(item.id,record,afterSetup);this.resumes.set(item.id,run);return run();

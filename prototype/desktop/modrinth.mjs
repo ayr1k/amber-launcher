@@ -1,4 +1,6 @@
 import {contentTarget170,assertContentTarget170} from './content-target170.mjs';
+import {ContentApiSources} from './content-sources176.mjs';
+import {carryCurseForgeApproval} from './curseforge-delivery176.mjs';
 import {CurseForge141,cfProject} from './curseforge141.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import {instanceLoaders,compareContentVersions} from './compatibility.mjs';
@@ -14,18 +16,32 @@ const ignored=(file,d,index)=>d.dependency_type==='required'&&(file.ignoredRequi
 const folders={mod:'mods',resourcepack:'resourcepacks',shader:'shaderpacks'};
 const id=v=>{if(typeof v!=='string'||!/^[-\w]{1,100}$/.test(v))throw Error('无效项目或版本 ID。');return v;};
 export class Modrinth {
- constructor(core){this.core=core;this.curseforge=new CurseForge141(core);this.plans=new Map();}
- async api(path,{signal}={}){const cf=await this.curseforge.route(path);if(cf!==undefined)return cf;const r=await officialFetch('https://api.modrinth.com/v2/'+path,{fetcher:this.core.fetcher,signal:signal?AbortSignal.any([signal,AbortSignal.timeout(30000)]):AbortSignal.timeout(30000)});const text=await r.text();if(text.length>12_000_000)throw Error('Modrinth 响应过大。');return JSON.parse(text);}
+ constructor(core,sources=new ContentApiSources(core,officialFetch)){this.core=core;this.sources=sources;this.curseforge=new CurseForge141(core,sources);this.plans=new Map();}
+ async api(path,options={}){
+  const cf=await this.curseforge.route(path,options);
+  if(cf!==undefined)return cf;
+  const validate=path.startsWith('search?')?value=>Array.isArray(value?.hits)&&Number.isFinite(value.total_hits)
+   :path.startsWith('tag/')||/^project\/[^/]+\/version(?:\?|$)/.test(path)?Array.isArray:undefined;
+  return this.sources.json('modrinth',path,{...options,validate});
+ }
  async categories(provider){if(provider==='curseforge')return this.curseforge.categories();if(!this.categoryCache){const rows=await this.api('tag/category');if(!Array.isArray(rows))throw Error('分类目录暂时不可用，请重试。');this.categoryCache=rows.filter(c=>typeof c.name==='string'&&/^[a-z0-9-]+$/.test(c.name)&&['mod','modpack','resourcepack','shader'].includes(c.project_type)).map(({name,project_type,header})=>({name,project_type,header}));}return this.categoryCache;}
- async search(instanceId,{query='',type='mod',offset=0,category='',sort='relevance',provider='modrinth'}={}){if(provider==='curseforge'){const {item}=await this.core.metadata(instanceId);return this.curseforge.search(item,{query,type,offset,category,sort});}
+ async search(instanceId,{query='',type='mod',offset=0,category='',sort='relevance',provider='modrinth'}={}){let source;
+  const options={status:row=>{source=row;}};
+  if(provider==='curseforge'){
+   const {item}=await this.core.metadata(instanceId);
+   return {...await this.curseforge.search(item,{query,type,offset,category,sort},options),...(source?{source}:{})};
+  }
   if(!['relevance','downloads','follows','newest','updated'].includes(sort))throw Error('不支持的排序方式。');
-  if(category&&!(await this.categories()).some(c=>c.name===category&&c.project_type===type))throw Error('此分类不适用于当前内容类型，请重新选择。');
+  if(category){
+   const categories=await this.categories().catch(()=>null);
+   if(!/^[a-z0-9-]{1,80}$/.test(category)||categories&&!categories.some(c=>c.name===category&&c.project_type===type))throw Error('此分类不适用于当前内容类型，请重新选择。');
+  }
   if(type!=='modpack'&&!Object.hasOwn(folders,type))throw Error('不支持的内容类型。');
   const {item}=await this.core.metadata(instanceId);const facets=[[`versions:${item.game}`],[`project_type:${type}`]];
   if(category)facets.push([`categories:${category}`]);
   if(type==='mod')facets.push(instanceLoaders(item).map(t=>`categories:${t}`));
   const params=new URLSearchParams({query:String(query).slice(0,200),facets:JSON.stringify(facets),limit:'20',offset:String(Math.max(0,Math.min(Number(offset)||0,10000))),index:sort});
-  const data=await this.api('search?'+params);return {hits:data.hits.map(p=>({id:p.project_id,icon:validIcon(p.icon_url),type:p.project_type,title:p.title,description:p.description,author:p.author,downloads:p.downloads})),total:data.total_hits};
+  const data=await this.api('search?'+params,options);return {...(source?{source}:{}),hits:data.hits.map(p=>({id:p.project_id,icon:validIcon(p.icon_url),type:p.project_type,title:p.title,description:p.description,author:p.author,downloads:p.downloads})),total:data.total_hits};
  }
  compatible(v,item,type){return v.game_versions?.includes(item.game)&&(type!=='mod'||instanceLoaders(item).some(t=>v.loaders?.includes(t)))&&v.environment!=='dedicated_server_only'&&v.environment!=='server_only';}
  async versions(instanceId,project){const {item}=await this.core.metadata(instanceId);if(cfProject(project))return this.curseforge.versions(project,{game:item.game,loader:item.loader});const p=await this.api('project/'+id(project));if(p.project_type!=='modpack'&&!Object.hasOwn(folders,p.project_type))throw Error('此内容类型暂不支持直接安装。');const query=new URLSearchParams({game_versions:JSON.stringify([item.game]),include_changelog:'false',...(p.project_type==='mod'?{loaders:JSON.stringify(instanceLoaders(item))}:{})});return (await this.api(`project/${id(project)}/version?${query}`)).filter(v=>this.compatible(v,item,p.project_type)).sort((a,b)=>compareContentVersions(a,b,item.loader));}
@@ -41,10 +57,10 @@ export class Modrinth {
    if(!Object.hasOwn(folders,type)||!this.compatible(v,item,type))throw Error(`${p.title} 没有适配 ${item.game} / ${item.loader} 的客户端版本。`);
    const f=v.files?.find(f=>f.primary)||v.files?.[0];if(!f||! /^[a-f0-9]{40}$/.test(f.hashes?.sha1)||!Number.isSafeInteger(f.size)||f.size<=0)throw Error('内容缺少有效的文件校验信息。');
    if(f.filename.includes('/')||f.filename.includes('\\')||!(type==='mod'?/\.(jar|litemod)$/i:/\.zip$/i).test(f.filename))throw Error('不支持的内容文件名。');
-   const relative=folders[type]+'/'+f.filename;safePath(dir,relative);if(!f.url)throw Error('CurseForge: author restricted third-party downloads; open the project page / 作者限制第三方下载，请打开项目页手动下载');safeURL(f.url);
+   const relative=folders[type]+'/'+f.filename;safePath(dir,relative);if(!f.url||p.distribution===false)throw Error(`Third-party download unavailable (${v.project_id} / ${v.id}); use the project page. / 未提供第三方下载，请查看项目页。`);safeURL(f.url);
    const old=installed.files.find(x=>x.projectId===v.project_id);
    if(old&&(old.versionId!==v.id||old.hash!==f.hashes.sha1))throw Error(`${p.title} 已安装其他版本；请在“已安装内容”中将旧版本移至回收目录，再安装新版本。`);
-   chosen.set(v.project_id,{projectId:v.project_id,versionId:v.id,title:p.title,version:v.version_number,type,relative,hash:f.hashes.sha1,size:f.size,url:f.url,dependencies:v.dependencies||[],ignoredRequired:(v.dependencies||[]).flatMap((d,i)=>d.dependency_type==='required'&&excluded.has(depKey(v,i))?[depKey(v,i)]:[])});
+   chosen.set(v.project_id,{...carryCurseForgeApproval(f,p),projectId:v.project_id,versionId:v.id,title:p.title,version:v.version_number,type,relative,hash:f.hashes.sha1,size:f.size,url:f.url,dependencies:v.dependencies||[],ignoredRequired:(v.dependencies||[]).flatMap((d,i)=>d.dependency_type==='required'&&excluded.has(depKey(v,i))?[depKey(v,i)]:[])});
    for(const d of v.dependencies||[]){
     if(d.dependency_type==='incompatible'){incompatible.push({...d,owner:p.title});continue;}
     if(d.dependency_type==='optional'){

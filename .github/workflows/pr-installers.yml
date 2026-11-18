@@ -6,6 +6,8 @@ permissions:
   contents: read
 jobs:
   installers:
+    # The 1.7.6 task explicitly excludes installer uploads.
+    if: (github.head_ref || github.ref_name) != 'codex/1.7.6-content-import'
     runs-on: windows-latest
     timeout-minutes: 30
     defaults:

@@ -1,0 +1,60 @@
+# AMBER / AmberE 1.7.6 本地验收 / Local acceptance
+
+## 整合包导入 / Pack import
+
+本地 ZIP、MRPACK 和 CurseForge 整合包可读取单卷 ZIP64。压缩包上限是 5,000,000,000 字节（含边界）。整个压缩包声明的展开量最多 20 GB，单文件最多 5 GB，ZIP 条目最多 20,000 个，中央目录最多 32 MB，清单最多 8 MB。实际安装的覆盖文件与客户端下载也合计检查 20 GB、单文件和文件数。CurseForge 清单最多引用 5,000 个精确文件 ID。
+
+Single-volume ZIP64 is supported for local ZIP, MRPACK and CurseForge packs. Compressed size is capped at exactly 5,000,000,000 bytes, inclusive. The archive is limited to 20 GB expanded, 5 GB per file, 20,000 ZIP entries, a 32 MB central directory and an 8 MB manifest. Installed overrides and client downloads are also checked against the expanded byte, file-size and file-count limits. A CurseForge manifest can reference up to 5,000 exact file IDs.
+
+预览会流式创建并校验本地副本。安装需要为保留包、暂存内容、下载缓存和新实例预留空间，游戏、加载器和 Java 另计。预览取消会清理部分副本。创建实例时先完成原包保留，再进入可继续的安装阶段。正常退出和取消会清理本次暂存文件，重启后再次运行导入会清理上次中断的暂存。支持硬链接的卷可原子、排他地写入已校验文件。其他文件系统使用排他复制，中途强制结束时，校验不一致的残留需人工检查。
+
+Preview streams and verifies a local snapshot. Installation needs disk space for the retained archive, staging, download cache and the new instance. Game, loader and Java files are additional. Cancelling preview removes the partial snapshot. Setup finishes retaining the archive before honoring cancellation, so the instance can resume. Staging is cleared on normal exit or cancellation. Restarting the pack task also clears staging left by an interrupted run. Volumes with hard-link support publish verified files atomically without replacing existing files. Other file systems use exclusive copy. An unexpected process termination there may leave files requiring manual inspection.
+
+## 内容来源 / Content sources
+
+默认自动模式按实际请求的可用性、成功率和响应延迟为合格候选排序，每次最多尝试两个候选。元数据与文件单独记录。受信任的 MRPACK 备用地址仍需通过同一哈希校验。手动选择官方 API 和文件主地址时，遇到失败会保留该选择。带 Range 的续传返回 404 时，两种模式都允许在同一地址重新开始一次。自动模式还可从官方 API 刷新相同文件 ID 的地址。
+
+Automatic mode ranks eligible candidates by real request outcomes and response latency and tries up to two candidates per request. Metadata and file routes are tracked independently. An allowed MRPACK alternate must match the same hash. Manual official/primary mode keeps the selected route on failure. Either mode can restart a Range request once at the same address after a 404. Automatic mode can also ask the upstream API for a new address for the same file ID.
+
+CurseForge 下载先核验官方项目、文件 ID 和分发状态，再检查 SHA-1 和大小。项目页仍是受限文件的获取入口。配置通过正式构建注入。本地及 PR 安装包无该配置，缺配置时引导使用正式包。按 CurseForge 的文件协议，授权下载的首个 `edge.forgecdn.net/files/…` 请求也使用 `x-api-key` 请求头。跨域重定向会去掉凭据，跳转后的文件须通过哈希校验。分类请求与搜索独立，切换平台会丢弃之前的请求结果。 [CurseForge 下载鉴权](https://blog.curseforge.com/introducing-api-key-authentication-for-curseforge-file-downloads/) · [作者分发控制](https://support.curseforge.com/support/solutions/articles/9000207877-project-distribution-toggle)
+
+CurseForge downloads check the official project, exact file ID, distribution permission, SHA-1 and size. Restricted files direct users to the project page. The formal build injects the configuration. Local and PR packages report missing configuration and direct users to the official installer. The official protocol also uses `x-api-key` on the initial authorized `edge.forgecdn.net/files/…` request. Cross-origin redirects strip credentials and downloaded bytes must match the expected hash. Category requests are independent of search. Switching providers discards obsolete responses. [CurseForge file authentication](https://blog.curseforge.com/introducing-api-key-authentication-for-curseforge-file-downloads/) · [Author distribution settings](https://support.curseforge.com/support/solutions/articles/9000207877-project-distribution-toggle)
+
+## 大陆连通性与候选源 / Mainland connectivity and candidates
+
+2026-11-18 使用 Globalping 的上海、北京、深圳节点进行 HTTP 复测。节点覆盖上海联通、北京移动及华为云、深圳移动及阿里云等网络。搜索请求实际读取响应，文件请求检查 HTTP 状态、实际地址、重定向和声明长度。探测无平台凭据、未运行启动器，也未下载完整文件。 [Globalping API](https://globalping.io/docs/api.globalping.io)
+
+HTTP checks used Globalping probes in Shanghai, Beijing and Shenzhen on November 18, 2026. Networks included Shanghai Unicom, Beijing Mobile and Huawei Cloud, and Shenzhen Mobile and Alibaba Cloud. Search checks read responses. File checks inspected HTTP status, host, redirects and declared length. Probes used no platform credentials and did not run AMBER or download complete files. [Globalping API](https://globalping.io/docs/api.globalping.io)
+
+| 来源 / Source | 覆盖及结果 / Coverage and results |
+| --- | --- |
+| Modrinth 官方 / Official | 三地 `api.modrinth.com` 搜索 200，`cdn.modrinth.com` 的 FerriteCore `DG5Fn9Sz` 文件 HEAD 200，123,034 字节。官方 Maven 307 回同一 CDN。 / Search and the FerriteCore file HEAD returned 200 in all three cities. Official Maven redirects to the same CDN. [Modrinth API](https://docs.modrinth.com/api/) · [Maven](https://support.modrinth.com/en/articles/8801191-modrinth-maven) |
+| CurseForge 官方 / Official | 三地连通 `api.curseforge.com`，匿名文件详情 HEAD 返回 404。Superb Warfare `8689629` 的 Edge HEAD 为 302，最终 `mediafilez.forgecdn.net` 为 200，42,162,514 字节。 / All three cities reached the API and received 404 for an anonymous file-details HEAD. The sample Edge HEAD redirected to Media, which returned 200 and the declared size. [CurseForge API](https://docs.curseforge.com/rest-api/) |
+| MCIM | 运营方为 Minecraft Mod Info Mirror。两平台样本搜索及版本响应在三地均为 200。搜索样本没有缓存日期。FerriteCore 版本的 JSON 顶层和 Superb Warfare 文件详情的 `data` 对象均有 `sync_at`，在探测时分别约为 2 小时 48 分钟和 5 小时 20 分钟前。两条详情均未返回 `checked_at`。本机到 API 和文件域的 TLS 握手失败。参测文件均跳回官方 CDN，旧 Pysio 文件域名解析失败。运营方说明文件服务暂停，AMBER 暂未接入。 / Both sample searches and version requests returned 200 in all three cities. Search responses lacked cache dates. The FerriteCore version root and the Superb Warfare file `data` object supplied `sync_at` about 2 hours 48 minutes and 5 hours 20 minutes before the probes. Those detail responses lacked `checked_at`. TLS failed from the local Windows host. Both file samples redirected to their official CDNs, the former Pysio file host failed DNS, and the operator reports file service suspended. [登记 / Registry](https://github.com/mcmod-info-mirror/mcim-rust-api/issues/12) · [缓存 / Freshness](https://www.mcimirror.top/guide/semantics/freshness) · [服务仓库 / Repository](https://github.com/mcmod-info-mirror/mcim-rust-api) |
+| CurseMaven | Wyn Price 运营。Superb Warfare 测试文件在本机及三地 HEAD 200，声明长度一致。运营方文档面向构建依赖，未确认允许启动器作为文件镜像使用。 / The author's Gradle endpoint reported the expected file length locally and in all three cities. Permission for launcher-scale file delivery is unconfirmed. [CurseMaven](https://cursemaven.com/) |
+| BBSMC / BMCLAPI | 青岛柒兮运营的 BBSMC 提供经许可搬运的部分文件，条款要求自动抓取、下载取得许可。bangbang93 的 BMCLAPI 文档覆盖游戏和加载器。两者均未核验为 Modrinth 与 CurseForge 的通用替代。 / BBSMC hosts selected licensed files and its terms address permission for automated access. BMCLAPI documents game and loader resources. Neither was verified as a general alternate for these catalogs. [BBSMC 运营条款 / Terms](https://bbsmc.net/legal/terms) · [FerriteCore](https://bbsmc.net/mod/ferrite-core/version/6.0.1) · [BMCLAPI](https://github.com/bangbang93/openbmclapi) |
+
+镜像元数据看每条记录的缓存时间。`sync_at` 是重新同步，`checked_at` 是与上游核对。取每条记录可用的较新时间，整批记录都要满足 AMBER 自动择源的 15 分钟时效上限。缺日期、超过时效和镜像 404 分别提示。刚发布的版本等时效敏感场景应直接向官方核对。 [MCIM 缓存日期](https://www.mcimirror.top/guide/semantics/freshness)
+
+Mirror metadata uses the latest usable `sync_at` or `checked_at` for each entry. Every entry must meet AMBER's 15-minute freshness policy for automatic routing. Unverified dates, stale entries and mirror 404s have separate diagnostics. Check the official API when freshness matters, such as newly published versions. [MCIM cache dates](https://www.mcimirror.top/guide/semantics/freshness)
+
+## 自建线路前提 / Requirements for operated delivery
+
+若实机发现官方域不可达，可请运营方为启动器开通获准的中国大陆出口，或只为获得许可的确切版本开设自管 CDN。文件按平台 ID、文件 ID、大小和官方哈希校验入库，维护撤回与过期、流量预算、日志保留和健康检查。CurseForge API 公开条款限制代理隐藏位置、API 数据缓存和密钥转交。建设元数据中继前需 Overwolf 书面批准。文件再分发需平台和作者许可。阿里云中国内地公开首档 ¥0.24/GB，500 GB 下行约 ¥120、2 TB 约 ¥492，源站、存储、回源、安全和运维另计。使用内地 CDN 时需符合供应商的备案条件。 [CurseForge API 条款](https://support.curseforge.com/support/solutions/articles/9000207405-curseforge-3rd-party-api-terms-and-conditions) · [Modrinth 条款](https://modrinth.com/legal/terms/) · [CDN 定价](https://help.aliyun.com/zh/cdn/product-overview/billing-rules-of-basic-services/) · [备案要求](https://help.aliyun.com/zh/icp-filing/basic-icp-service/product-overview/use-alibaba-cloud-cdn)
+
+Possible follow-up if an official route fails on a real client is platform-approved mainland access or an operated CDN for specific files that are cleared for redistribution. Match platform and file IDs, length and official hashes. Plan for revocation, cache expiration, traffic budgets, log retention and health monitoring. An API relay needs Overwolf's written approval for the applicable API terms. File redistribution needs the relevant platform and author permissions. The published Alibaba mainland CDN starting rate is CNY 0.24 per GB, about CNY 120 for 500 GB or CNY 492 for 2 TB of outbound traffic. Origin, storage, origin transfer, security and maintenance are additional. A mainland CDN requires the applicable provider filing. [CurseForge API terms](https://support.curseforge.com/support/solutions/articles/9000207405-curseforge-3rd-party-api-terms-and-conditions) · [Modrinth terms](https://modrinth.com/legal/terms/) · [CDN prices](https://help.aliyun.com/zh/cdn/product-overview/billing-rules-of-basic-services/) · [Filing requirements](https://help.aliyun.com/zh/icp-filing/basic-icp-service/product-overview/use-alibaba-cloud-cdn)
+
+## Superb Warfare 404
+
+CurseForge 项目 `1218165`。正式 1.7.5 构建配置查询了 Forge 1.20.1 样本文件 `8689629`、`6940728`。官方文件详情与下载地址接口均返回 200，为每个样本提供同一地址与文件详情的 SHA-1。从当前环境发出 `Range: bytes=0-0` 得到 404，普通 GET 从 `edge.forgecdn.net` 重定向到 `mediafilez.forgecdn.net` 后返回 200。反馈所用文件 ID 和实际请求未知。若再次遇到，请提供启动器版本、文件 ID 或版本名、时间、任务详情中的来源和 HTTP 状态，并去除 URL 查询参数。
+
+CurseForge project `1218165`. Using the released 1.7.5 build configuration, the exact-file and download-URL APIs returned 200 for Forge 1.20.1 samples `8689629` and `6940728`. The two API routes agreed on each URL and file metadata supplied SHA-1. From this host, a `Range: bytes=0-0` request returned 404, and regular GET redirected from `edge.forgecdn.net` to `mediafilez.forgecdn.net` with 200. The original report's file ID and request are unknown. For a recurrence, include the launcher version, file ID or version name, time, host and HTTP status from the task details, with any URL query removed.
+
+[Sample 8689629](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/8689629) · [Sample 6940728](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/6940728)
+
+## 验证范围 / Verification scope
+
+- Windows 真实导入使用 5,000,000,000 字节 ZIP64，包含 4,400,000,000 字节单文件。导入、原包保留和完成记录通过。Node 堆上限 64 MiB，进程峰值约 116 MiB。游戏和 Java 下载使用隔离夹具。Windows Electron 另通过文件选择 IPC 预览同一大包，并用受控请求验证快速切源。正式游戏启动、安装包覆盖升级及非 Windows 原生验收待测。
+- Windows backend QA imported a real 5,000,000,000-byte ZIP64 with a 4,400,000,000-byte entry, checked the retained archive and verified the completion record. A 64 MiB Node heap cap was used, with peak process memory of about 116 MiB. Game and Java downloads used isolated fixtures. Windows Electron also previewed the ZIP via file-picker IPC and exercised rapid provider switching with controlled responses. Game launch, in-place installer upgrades and native non-Windows acceptance remain untested.
+- Windows 本机（美国出口）真实搜索、列版本、下载安装并校验两次。1.7.6 开发后端安装 Modrinth FerriteCore 6.0.1，版本 `DG5Fn9Sz`，文件来自 `cdn.modrinth.com`。已分发的 1.7.5 正式包后端安装 CurseForge Superb Warfare 0.8.9.1 Hotfix（Forge 1.20.1，文件 `8689629`）及一项依赖，主文件来自 `mediafilez.forgecdn.net`。1.7.6 的正式构建鉴权与大陆 Windows 端到端安装待验收。
+- A Windows host with US egress completed live search, version listing, download, installation and checksum verification for both catalogs. The 1.7.6 development backend used Modrinth FerriteCore 6.0.1, `DG5Fn9Sz`, from `cdn.modrinth.com`. The released 1.7.5 package backend used CurseForge Superb Warfare 0.8.9.1 Hotfix for Forge 1.20.1, file `8689629`, from `mediafilez.forgecdn.net`, plus one dependency. Live configured 1.7.6 authentication and a full install from mainland Windows remain unverified.

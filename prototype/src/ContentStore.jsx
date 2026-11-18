@@ -2,7 +2,7 @@ import {IndexedModStatus170} from './LibraryStatus170';
 import {useLibraryApi170} from './LibraryContext170';
 import {ListDensity,useListDensity} from './ListDensity154';
 import {useCatalogHeight} from './useCatalogHeight133.mjs';
-import {CatalogFilters,CatalogResults,CatalogVersionPicker} from './ContentCatalog';
+import {CatalogFilters,CatalogResults,CatalogSource,CatalogVersionPicker} from './ContentCatalog';
 import {DependencyGraph} from './DependencyGraph';
 import {ControlButton} from './ControlButton.mjs';
 import {InstalledDetail} from './InstalledDetail';
@@ -37,9 +37,26 @@ export function ContentStore({ instance, onCreated, onCreate, onLaunch, onTasks,
   const [busy, setBusy] = useState(false),[error, setError] = useState(''),[job, setJob] = useState(null),[globalJob, setGlobalJob] = useState(null),[playing, setPlaying] = useState(false),[installedJob, setInstalledJob] = useState(null);
   const [searching, setSearching] = useState(false),[checking, setChecking] = useState(false),[previewRetry, setPreviewRetry] = useState(0);
   const [categories, setCategories] = useState([]),[category, setCategory] = useState(cached.category ?? ''),[sort, setSort] = useState(cached.sort ?? 'relevance'),[categoryError, setCategoryError] = useState('');
-  const loadCategories = () => {setCategoriesLoading(true);return api.contentCategories(provider).then((v) => {setCategories(v);setCategoryError('');}).catch(() => setCategoryError(translateText("分类目录暂时无法读取，仍可搜索全部分类。"))).finally(() => setCategoriesLoading(false));};
-  useEffect(() => {loadCategories();}, [provider]);
-  const generation = useRef(0),searchGeneration = useRef(0);
+  const generation = useRef(0), searchGeneration = useRef(0), categoryGeneration = useRef(0);
+  async function loadCategories() {
+    const request = ++categoryGeneration.current;
+    setCategoriesLoading(true);
+    setCategoryError('');
+    try {
+      const rows = await api.contentCategories(provider);
+      if (request === categoryGeneration.current) setCategories(rows);
+    } catch (error) {
+      if (request === categoryGeneration.current) setCategoryError(
+        translateText("分类目录暂时无法读取，仍可搜索全部分类。") + ' ' + errorText(error));
+    } finally {
+      if (request === categoryGeneration.current) setCategoriesLoading(false);
+    }
+  }
+  useEffect(() => {
+    setCategories([]);
+    loadCategories();
+    return () => {categoryGeneration.current++;};
+  }, [provider]);
   const lastCriteria = useRef(cached.criteria);
   const criteria = JSON.stringify([cacheKey, provider, query, type, category, sort]);
   snapshot.current = { tab, localView, query, type, category, sort, offset, results, localQuery, localType, localState, criteria };
@@ -80,9 +97,9 @@ export function ContentStore({ instance, onCreated, onCreate, onLaunch, onTasks,
  {playing ? <p className="content-feedback" role="status">{translateText("此实例的游戏正在运行。可浏览内容；退出游戏后可安装、启停或移除。")}</p> : globalJob && <p className="content-feedback" role="status">{translateText("正在执行「")}{translateMessage(globalJob.phase)}{translateText("」，完成后可更改内容。")}</p>}
  {pending && !globalJob && <p className="content-feedback" role="status">{translateText("此实例有尚未完成的安装。")}{onTasks && <ControlButton className="text-button" onClick={onTasks}>{translateText("前往任务中心继续或处理 →")}</ControlButton>}</p>}
  <ProblemNotice error={error} actions={{ retry: () => project ? setPreviewRetry((n) => n + 1) : search(), mods: () => {back();setTab('local');setLocalState('all');}, folder: () => act(() => api.openInstance(instance.id)) }} />
- {tab==='browse'&&<div className="provider141"><Select aria-label="Content platform / 内容平台" value={provider} onChange={e=>{back();setCategory('');setProvider(e.target.value);}}><option value="modrinth">Modrinth</option><option value="curseforge">CurseForge</option></Select></div>}
+ {tab==='browse'&&<div className="provider141"><Select aria-label="Content platform / 内容平台" value={provider} onChange={e=>{categoryGeneration.current++;searchGeneration.current++;back();setCategories([]);setCategoryError('');setResults(null);setCategory('');setProvider(e.target.value);}}><option value="modrinth">Modrinth</option><option value="curseforge">CurseForge</option></Select></div>}
  {tab === 'browse' ? <div className={'store-split '+(project?'has-project':'')}><div className="browse-list">
- {<><CatalogFilters types={typeLabels} type={type} onType={v=>{back();setCategory('');setType(v);}} categories={categories} category={category} onCategory={setCategory} sort={sort} onSort={setSort} query={query} onQuery={setQuery} busy={busy} searching={searching} onSearch={search} categoriesLoading={categoriesLoading} categoryError={categoryError} onRetry={loadCategories} categoryLabels={categoryLabels}/>
+ {<><CatalogFilters types={typeLabels} type={type} onType={v=>{back();setCategory('');setType(v);}} categories={categories} category={category} onCategory={setCategory} sort={sort} onSort={setSort} query={query} onQuery={setQuery} busy={busy} searching={searching} onSearch={search} categoriesLoading={categoriesLoading} categoryError={categoryError} onRetry={loadCategories} categoryLabels={categoryLabels}/><CatalogSource source={results?.source}/>
  {categoryError && <p role="status">{translateMessage(categoryError)}<ControlButton className="text-button" onClick={loadCategories}>{translateText("重新读取分类")}</ControlButton></p>}<p className="native-note">{type === 'modpack' ? translateText("按 Minecraft 版本查找整合包。加载器不同也可以创建独立实例安装。") : translateText("已按 Minecraft 版本筛选；模组同时匹配加载器，优先推荐正式发布。")}</p>
  {type === 'mod' && instance.loader === 'vanilla' && <p className="content-feedback">{translateText("原版实例无法直接加载模组。请先在实例设置中安装 Fabric、Forge 等加载器；资源包可直接使用。")}</p>}
  </>}{results && <><div className="content-context"><p>{pluralText(results.total,"{0} 个项目（单数）","{0} 个项目")} · {translateText("第 {0} 页",{0:Math.floor(offset/20)+1})}</p><ControlButton className="text-button" disabled={blocked} onClick={() => act(async () => {const j = await api.importWorld(instance.id);if (j) setJob(j);})}>{translateText("导入本地地图 ZIP")}</ControlButton></div>

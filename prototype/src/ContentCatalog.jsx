@@ -11,6 +11,15 @@ export function CatalogFilters({types,type,onType,categories=[],category,onCateg
  <label>{translateText('搜索')}<input value={query} onChange={e=>onQuery(e.target.value)} placeholder={translateText('输入即查找兼容内容')}/></label><Button className="button secondary" disabled={busy||searching}>{searching?translateText('自动查找中…'):translateText('刷新结果')}</Button>
  </form>;
 }
+export function CatalogSource({source}){
+ if(!source?.host)return null;
+ const english=getLocale()==='en-US';
+ const cacheReasons={stale:english?'stale cache':'缓存过期','cache-miss':english?'cache miss':'缓存未命中',
+  'cache-unverified':english?'cache date unverified':'无法确认缓存时间'};
+ return <p className="muted">{english?'Metadata source':'元数据来源'} · {source.host}{source.failures?.map((attempt,i)=>
+  <small key={i}> · {english?'Fallback after':'回退前'} {attempt.host} ({cacheReasons[attempt.reason]||
+    (attempt.status?'HTTP '+attempt.status:attempt.reason)})</small>)}</p>;
+}
 export function CatalogResults({results,local=[],busy,onProject,onVersions}){
  return <div className="store-results">{results.hits.map(p=><article key={p.id}><Button className="project-icon" title={p.id.startsWith('cf-')?'CurseForge':translateText('在 Modrinth 打开项目')} aria-label={(p.id.startsWith('cf-')?'CurseForge ':translateText('在 Modrinth 打开 '))+p.title} onClick={()=>onProject(p.id)}>{p.icon?<img src={p.icon} alt="" loading="lazy" referrerPolicy="no-referrer" onError={e=>{e.currentTarget.hidden=true;}}/>:<span>{p.title.slice(0,1)}</span>}<small>↗</small></Button><div><h3>{p.title}</h3><p>{p.description}</p><small>{p.author} · {(p.downloads||0).toLocaleString(getLocale())}{translateText('次下载')}{local.some(f=>f.projectId===p.id&&!f.missing)?translateText(' · 已安装'):''}</small></div><Button className="button secondary" disabled={busy} onClick={()=>onVersions(p)}>{translateText('查看兼容版本')}</Button></article>)}</div>;
 }
