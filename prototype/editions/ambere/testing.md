@@ -1,3 +1,9 @@
+# 1.7.6 release verification
+
+Formal publication was authorized on November 18, 2026 (America/New_York) after PR #21 merged as `1fc4efaa5de9f868cf75d4a3e2f471a8e927f9ef`. The final task revision `33c124445713cad386cbb9f57973dec8beb59af6` passed the all-platform packages and Windows tests PR workflow (44328475600). The separate PR test-installer workflow was skipped for that event. The evidence below retains its original scope. The formal build uses 1.7.6 and the public channel, with fresh source manifests and package provenance.
+
+The approved task verified a real 5,000,000,000-byte ZIP64 archive in an isolated Windows backend, including a 4,400,000,000-byte entry and retained archive verification. Electron preview of the same archive and rapid provider switching were also checked. The Modrinth live sample used the 1.7.6 development backend. The recorded CurseForge live install used the released 1.7.5 backend. Refer to LOCAL-TEST-1.7.6.md for details. Windows install/upgrade, mainland Windows end-to-end installation, game launch and native non-Windows acceptance remain separate checks. FreeBSD is experimental and limited to servers/tools. Packages are unsigned, and macOS packages are not notarized.
+
 # 1.7.5 release verification
 
 The user authorized formal publication on 2026-11-17 (America/New_York), after merging PR #20 as `407069c56755d31787b5d1d8c98f40f15ce6ceb2`. Final task head `08f55cce12077e04e5b1d3147971a76ca7519741` passed both PR workflows (44173254520 / 44173254578). Earlier candidate-only/pending statements are historical. This main chat relies on the approved merge and existing task/Dot acceptance, without an additional content review.

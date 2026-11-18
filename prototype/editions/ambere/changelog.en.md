@@ -1,3 +1,10 @@
+## 1.7.6
+
+- Import single-volume ZIP, MRPACK and CurseForge packs up to 5,000,000,000 bytes with streaming ZIP64. Keep file integrity checks, path safeguards and cancellation and recovery support.
+- Track Modrinth and CurseForge metadata and file sources separately. Automatic selection is the default. Settings can lock requests to the official API and primary file host. Category requests are independent of search, and provider changes discard obsolete results.
+- Verify the official CurseForge project, exact file ID, author distribution permissions and file integrity. A 404 during resume can restart once at the original address. Automatic mode can refresh the address for the same file from the official API.
+- Distinguish a mirror cache miss, an outdated record and an unknown cache date. The official provider determines whether content exists.
+
 ## 1.7.5
 
 - Add separate launcher update-source selection: GitHub global (default) or the official Hong Kong, China mirror. Keep the update channel unchanged; the mirror supports stable releases only and never switches sources silently.
