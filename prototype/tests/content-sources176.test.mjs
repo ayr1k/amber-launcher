@@ -34,7 +34,6 @@ for (const platform of ['modrinth', 'curseforge']) {
       const testAlternate = url.includes('cache.example');
       attempts.push(testAlternate ? 'cache' : 'official');
       if (!testAlternate && phase === 'official-timeout') throw new DOMException('timed out', 'TimeoutError');
-      if (testAlternate && phase === 'cache-miss') throw Object.assign(Error(), {status: 404});
       if (testAlternate) return Response.json({origin: 'cache'}, {headers: {sync_at: new Date(now - (phase === 'old' ? 3_600_000 : 1000)).toISOString()}});
       return Response.json({origin: 'official'});
     }, {clock: () => now, alternates: {[platform]: [{id: 'cache', base: 'https://cache.example/', supports: path => path !== 'authoritative'}]}});
@@ -51,7 +50,40 @@ for (const platform of ['modrinth', 'curseforge']) {
     await assert.rejects(sources.json(platform, 'project'), {code: 'CONTENT_TIMEOUT'});
     assert.deepEqual(attempts, ['official']);
   });
+
+  test(`${platform} reads per-record cache timestamps from JSON and honors an upstream check`, async () => {
+    const now = Date.parse('2026-11-18T13:20:00Z');
+    const stamp = age => new Date(now - age).toISOString();
+    const recent = {sync_at: stamp(2_000)};
+    const confirmed = {sync_at: stamp(3_600_000), checked_at: stamp(2_000)};
+    const detail = item => platform === 'curseforge' ? {data: item} : item;
+    const request = payload => new ContentApiSources({}, async url => {
+      if (new URL(url).hostname !== 'cache.example') throw new DOMException('timed out', 'TimeoutError');
+      return Response.json(payload);
+    }, {clock: () => now, alternates: {[platform]: [{id: 'cache', base: 'https://cache.example/', supports: () => true}]}});
+    const read = payload => request(payload).json(platform, 'version');
+
+    assert.deepEqual(await read(detail(confirmed)), detail(confirmed));
+    assert.deepEqual(await read(detail([recent, confirmed])), detail([recent, confirmed]));
+    await assert.rejects(read(detail([confirmed, {sync_at: stamp(3_600_000)}])), {code: 'CONTENT_STALE'});
+    await assert.rejects(read(detail([recent, {}])), {code: 'CONTENT_CACHE-UNVERIFIED'});
+    await assert.rejects(read(detail({sync_at: 'unknown', checked_at: stamp(-3_600_000)})), {code: 'CONTENT_CACHE-UNVERIFIED'});
+  });
 }
+
+test('a mirror API 404 is reported as a cache miss and preserves the upstream failure', async () => {
+  const request = failure => new ContentApiSources({}, async url => {
+    if (new URL(url).hostname === 'cache.example') throw Object.assign(Error(), {status: 404});
+    throw failure;
+  }, {clock: () => 0, alternates: {modrinth: [{id: 'cache', base: 'https://cache.example/', supports: () => true}]}});
+  await assert.rejects(request(Object.assign(Error(), {status: 503})).json('modrinth', 'version'), error =>
+    error.code === 'CONTENT_CACHE-MISS' && error.status === 503 &&
+    error.message.includes('api.modrinth.com (HTTP 503)') && error.message.includes('cache.example (HTTP 404 · cache miss'));
+  await assert.rejects(request(new DOMException('timed out', 'TimeoutError')).json('modrinth', 'version'),
+    error => error.code === 'CONTENT_CACHE-MISS' && error.status === undefined);
+  await assert.rejects(request(Object.assign(Error(), {status: 404})).json('modrinth', 'version'),
+    {code: 'CONTENT_MISSING', status: 404});
+});
 
 test('CurseForge without configuration does not contact the API, while category failure leaves search independent', async t => {
   const previous = process.env.AMBER_CURSEFORGE_API_KEY;
