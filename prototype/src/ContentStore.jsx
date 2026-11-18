@@ -2,7 +2,7 @@ import {IndexedModStatus170} from './LibraryStatus170';
 import {useLibraryApi170} from './LibraryContext170';
 import {ListDensity,useListDensity} from './ListDensity154';
 import {useCatalogHeight} from './useCatalogHeight133.mjs';
-import {CatalogFilters,CatalogResults,CatalogVersionPicker} from './ContentCatalog';
+import {CatalogFilters,CatalogResults,CatalogSource,CatalogVersionPicker} from './ContentCatalog';
 import {DependencyGraph} from './DependencyGraph';
 import {ControlButton} from './ControlButton.mjs';
 import {InstalledDetail} from './InstalledDetail';
@@ -99,7 +99,7 @@ export function ContentStore({ instance, onCreated, onCreate, onLaunch, onTasks,
  <ProblemNotice error={error} actions={{ retry: () => project ? setPreviewRetry((n) => n + 1) : search(), mods: () => {back();setTab('local');setLocalState('all');}, folder: () => act(() => api.openInstance(instance.id)) }} />
  {tab==='browse'&&<div className="provider141"><Select aria-label="Content platform / 内容平台" value={provider} onChange={e=>{categoryGeneration.current++;searchGeneration.current++;back();setCategories([]);setCategoryError('');setResults(null);setCategory('');setProvider(e.target.value);}}><option value="modrinth">Modrinth</option><option value="curseforge">CurseForge</option></Select></div>}
  {tab === 'browse' ? <div className={'store-split '+(project?'has-project':'')}><div className="browse-list">
- {<><CatalogFilters types={typeLabels} type={type} onType={v=>{back();setCategory('');setType(v);}} categories={categories} category={category} onCategory={setCategory} sort={sort} onSort={setSort} query={query} onQuery={setQuery} busy={busy} searching={searching} onSearch={search} categoriesLoading={categoriesLoading} categoryError={categoryError} onRetry={loadCategories} categoryLabels={categoryLabels}/>{results?.source?.host&&<p className="muted">{getLocale()==='en-US'?'Metadata source':'元数据来源'} · {results.source.host}{results.source.failures?.map((attempt,i)=><small key={i}> · {getLocale()==='en-US'?'Fallback after':'回退前'} {attempt.host} ({attempt.status||attempt.reason})</small>)}</p>}
+ {<><CatalogFilters types={typeLabels} type={type} onType={v=>{back();setCategory('');setType(v);}} categories={categories} category={category} onCategory={setCategory} sort={sort} onSort={setSort} query={query} onQuery={setQuery} busy={busy} searching={searching} onSearch={search} categoriesLoading={categoriesLoading} categoryError={categoryError} onRetry={loadCategories} categoryLabels={categoryLabels}/><CatalogSource source={results?.source}/>
  {categoryError && <p role="status">{translateMessage(categoryError)}<ControlButton className="text-button" onClick={loadCategories}>{translateText("重新读取分类")}</ControlButton></p>}<p className="native-note">{type === 'modpack' ? translateText("按 Minecraft 版本查找整合包。加载器不同也可以创建独立实例安装。") : translateText("已按 Minecraft 版本筛选；模组同时匹配加载器，优先推荐正式发布。")}</p>
  {type === 'mod' && instance.loader === 'vanilla' && <p className="content-feedback">{translateText("原版实例无法直接加载模组。请先在实例设置中安装 Fabric、Forge 等加载器；资源包可直接使用。")}</p>}
  </>}{results && <><div className="content-context"><p>{pluralText(results.total,"{0} 个项目（单数）","{0} 个项目")} · {translateText("第 {0} 页",{0:Math.floor(offset/20)+1})}</p><ControlButton className="text-button" disabled={blocked} onClick={() => act(async () => {const j = await api.importWorld(instance.id);if (j) setJob(j);})}>{translateText("导入本地地图 ZIP")}</ControlButton></div>

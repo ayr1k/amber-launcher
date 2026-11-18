@@ -4,6 +4,7 @@ import {randomUUID} from 'node:crypto';
 import {lstat, rm} from 'node:fs/promises';
 import {packPath} from './modpacks.mjs';
 import {resolveCursePack} from './curseforge-pack141.mjs';
+import {carryCurseForgeApproval} from './curseforge-delivery176.mjs';
 import {metadataNames, parseModMetadata} from './mod-import.mjs';
 import {requireSpace} from './safe-copy.mjs';
 import {ensureParents, safeURL} from './download.mjs';
@@ -53,7 +54,7 @@ function downloads(index, includeOptional, warnings) {
       try { return [safeURL(url)]; } catch { return []; }
     }))];
     if (!urls.length) throw problem('No trusted download URL for ' + relative, '没有可用的受信任下载地址：' + relative);
-    files.set(key, {relative, hash: f.hashes.sha1, size: f.fileSize, url: urls[0], urls,
+    files.set(key, {...carryCurseForgeApproval(f),relative, hash: f.hashes.sha1, size: f.fileSize, url: urls[0], urls,
       title: relative, optional, ...(f.versionId ? {versionId: f.versionId} : {})});
   }
   checkPackFiles([...files.values()]);

@@ -9,6 +9,7 @@ import {beginTransaction,finishTransaction,recoverInstance} from './recovery.mjs
 import {atomicJson} from './core.mjs';
 import {extractPackEntries,readPackPlan} from './pack-plan176.mjs';
 import {requireSpace} from './safe-copy.mjs';
+import {carryCurseForgeApproval} from './curseforge-delivery176.mjs';
 const allowed=new Set(['mods','config','resourcepacks','shaderpacks','saves','defaultconfigs','kubejs','scripts']);
 export function packPath(root,path){safePath(root,path);const reserved=new Set(['accounts.json','preferences.json','storage.json','last-run.json','backup-policy.json','upgrade-result.json','instance.json','loader-base.json','trash-record.json','version.json','loader.json','installation.json','content.json','modpack.json','setup-report.json','download-task.json','guided-plan.json','guided-addon.json','launch-preferences.json','content-task.json','migration-report.json','content-transaction.json','recovery-report.json','.amber-session.json']);const rootData=/^[^/]+\.(json|txt|dat|cfg|properties|png)$/i.test(path)&&!reserved.has(path.toLowerCase());if(!rootData&&(!allowed.has(path.split('/')[0])||path.split('/').length<2))throw Error('整合包包含暂不支持的安装路径：'+path);return path;}
 
@@ -17,7 +18,7 @@ export class Modpacks{
  async preview(id,version){
   const v=await this.store.api('version/'+encodeURIComponent(version)),p=await this.store.api('project/'+encodeURIComponent(v.project_id));if(p.project_type!=='modpack')throw Error('请选择整合包 / Select a modpack');
   const f=v.files.find(f=>f.primary)||v.files[0];if(!f?.url||p.distribution===false)throw Error('未提供第三方下载，请打开项目页面 / Third-party download unavailable');if(!f?.filename.endsWith('.mrpack')&&!String(version).startsWith('cf-'))throw Error('此版本没有 MRPACK 文件。');
-  const path=safePath(this.core.root,'content-cache/'+f.hashes.sha1);await download({path,url:f.url,hash:f.hashes.sha1,size:f.size,versionId:v.id},{root:this.core.root,fetcher:this.core.fetcher});
+  const path=safePath(this.core.root,'content-cache/'+f.hashes.sha1);await download({...carryCurseForgeApproval(f,p),path,url:f.url,hash:f.hashes.sha1,size:f.size,versionId:v.id},{root:this.core.root,fetcher:this.core.fetcher});
   const {item}=id?await this.core.metadata(id):{item:{}};
   const parsed=await readPackPlan(path,{includeOptional:false,provider:this.store.curseforge,inspectMods:false});
   if(!['mrpack','curseforge'].includes(parsed.kind))throw Error('请选择整合包 / Select a modpack');

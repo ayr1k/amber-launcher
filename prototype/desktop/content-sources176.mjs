@@ -8,6 +8,7 @@ const official = {
 const healthLifetime = 5 * 60_000;
 const cacheLifetime = 15 * 60_000;
 const maxJson = 12_000_000;
+const apiHealth = new WeakMap();
 
 export function contentFailure(error) {
   if (error.code === 'CURSEFORGE_CONFIG') return 'configuration';
@@ -73,16 +74,21 @@ export class SourceHealth {
 export class ContentApiSources {
   constructor(core, request, {alternates = {}, clock = Date.now} = {}) {
     Object.assign(this, {core, request, alternates, clock});
-    this.health = new SourceHealth(clock);
+    // Exact authorization and browsing share the platform's API rate limit.
+    const fetcher = core.fetcher || fetch;
+    if (clock === Date.now) {
+      if (!apiHealth.has(fetcher)) apiHealth.set(fetcher, new SourceHealth());
+      this.health = apiHealth.get(fetcher);
+    } else this.health = new SourceHealth(clock);
   }
-  async json(platform, path, {signal, validate = value => value && typeof value === 'object', status} = {}) {
+  async json(platform, path, {signal, validate = value => value && typeof value === 'object', status, officialOnly = false} = {}) {
     const mode = this.core.fetcher?.amberNetwork?.settings.contentMode || 'auto';
     const primary = official[platform];
     // Each alternate describes supported read routes and an operator-provided
     // freshness header. Production registers only sources cleared for use.
     const possible = [primary, ...(this.alternates[platform] || []).filter(source => source.supports(path))];
     const key = source => `${platform}:api:${source.id}`;
-    const candidates = mode === 'official' ? [primary] : this.health.ordered(possible, key).slice(0, 2);
+    const candidates = officialOnly || mode === 'official' ? [primary] : this.health.ordered(possible, key).slice(0, 2);
     const failures = [];
     for (const source of candidates) {
       signal?.throwIfAborted();

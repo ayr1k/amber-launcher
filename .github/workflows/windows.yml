@@ -59,11 +59,16 @@ jobs:
       - run: pnpm release:check
       - run: pnpm desktop:smoke
       - name: Build local acceptance installers for both products
-        if: github.event_name == 'pull_request' && github.head_ref != 'codex/1.7.6-content-import'
+        if: github.event_name == 'pull_request'
         run: pnpm package:editions
         env:
           AMBER_TASK_HEAD: ${{ github.event.pull_request.head.sha }}
           AMBER_EVENT_SHA: ${{ github.sha }}
+      - name: Check Windows acceptance installers without publishing
+        if: github.event_name == 'pull_request' && github.head_ref == 'codex/1.7.6-content-import'
+        run: node scripts/qa-smoke174.cjs
+        env:
+          AMBER_QA_OUTPUT: ${{ runner.temp }}/amber-packaged-smoke
       - name: Upload local acceptance installers and provenance
         if: github.event_name == 'pull_request' && github.head_ref != 'codex/1.7.6-content-import'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

@@ -1,5 +1,6 @@
 import {contentTarget170,assertContentTarget170} from './content-target170.mjs';
 import {ContentApiSources} from './content-sources176.mjs';
+import {carryCurseForgeApproval} from './curseforge-delivery176.mjs';
 import {CurseForge141,cfProject} from './curseforge141.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import {instanceLoaders,compareContentVersions} from './compatibility.mjs';
@@ -59,7 +60,7 @@ export class Modrinth {
    const relative=folders[type]+'/'+f.filename;safePath(dir,relative);if(!f.url||p.distribution===false)throw Error(`Third-party download unavailable (${v.project_id} / ${v.id}); use the project page. / 未提供第三方下载，请查看项目页。`);safeURL(f.url);
    const old=installed.files.find(x=>x.projectId===v.project_id);
    if(old&&(old.versionId!==v.id||old.hash!==f.hashes.sha1))throw Error(`${p.title} 已安装其他版本；请在“已安装内容”中将旧版本移至回收目录，再安装新版本。`);
-   chosen.set(v.project_id,{projectId:v.project_id,versionId:v.id,title:p.title,version:v.version_number,type,relative,hash:f.hashes.sha1,size:f.size,url:f.url,dependencies:v.dependencies||[],ignoredRequired:(v.dependencies||[]).flatMap((d,i)=>d.dependency_type==='required'&&excluded.has(depKey(v,i))?[depKey(v,i)]:[])});
+   chosen.set(v.project_id,{...carryCurseForgeApproval(f,p),projectId:v.project_id,versionId:v.id,title:p.title,version:v.version_number,type,relative,hash:f.hashes.sha1,size:f.size,url:f.url,dependencies:v.dependencies||[],ignoredRequired:(v.dependencies||[]).flatMap((d,i)=>d.dependency_type==='required'&&excluded.has(depKey(v,i))?[depKey(v,i)]:[])});
    for(const d of v.dependencies||[]){
     if(d.dependency_type==='incompatible'){incompatible.push({...d,owner:p.title});continue;}
     if(d.dependency_type==='optional'){

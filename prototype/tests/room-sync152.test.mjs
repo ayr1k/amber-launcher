@@ -152,8 +152,24 @@ for(const failedStep of ['java','loader','game'])test('real Workflows: '+failedS
 for(const provider of ['modrinth','curseforge'])test(provider+' official source: Quilt accepts Fabric on publish and receive; restricted files never become host transfers',async t=>{
  const f=await fixture(t),bytes=Buffer.from('synthetic platform mod'),sha1=createHash('sha1').update(bytes).digest('hex');await writeFile(join(f.dir,'mods/example.jar'),bytes);(await f.core.metadata()).item.loader='quilt';f.rooms.servers.list=async()=>[{id:'server',game:'1.21.1',type:'quilt'}];
  const versionId=provider==='curseforge'?'cf-123-456':'Version1',projectId=provider==='curseforge'?'cf-123':'Project1';let restricted=false,downloaded=0;
- const version=()=>({id:versionId,project_id:projectId,game_versions:['1.21.1'],loaders:['fabric'],files:[{hashes:{sha1},size:bytes.length,url:restricted?null:'https://cdn.modrinth.com/fixture.jar'}]});
- f.content.manifest=async()=>({files:provider==='curseforge'?[{relative:'mods/example.jar',projectId,versionId,hash:sha1}]:[]});f.content.api=async path=>path.startsWith('project/')?{client_side:'required',distribution:!restricted}:version();f.core.fetcher=async()=>{downloaded++;return new Response(bytes,{headers:{'Content-Length':String(bytes.length)}});};
+ const url=provider==='curseforge'?'https://edge.forgecdn.net/files/0/456/fixture.jar':'https://cdn.modrinth.com/fixture.jar';
+ const version=()=>({id:versionId,project_id:projectId,game_versions:['1.21.1'],loaders:['fabric'],files:[{hashes:{sha1},size:bytes.length,url:restricted?null:url}]});
+ if(provider==='curseforge'){
+  const old=process.env.AMBER_CURSEFORGE_API_KEY;
+  t.after(()=>{if(old===undefined)delete process.env.AMBER_CURSEFORGE_API_KEY;else process.env.AMBER_CURSEFORGE_API_KEY=old;});
+  process.env.AMBER_CURSEFORGE_API_KEY='test-only-room-key';
+ }
+ f.content.manifest=async()=>({files:provider==='curseforge'?[{relative:'mods/example.jar',projectId,versionId,hash:sha1}]:[]});
+ f.content.api=async path=>path.startsWith('project/')?{client_side:'required',distribution:!restricted}:version();
+ f.core.fetcher=async (address,options)=>{
+  if(provider==='curseforge')assert.equal(new Headers(options.headers).get('x-api-key'),'test-only-room-key');
+  if(address==='https://api.curseforge.com/v1/mods/123')return Response.json({data:{id:123,allowModDistribution:!restricted}});
+  if(address==='https://api.curseforge.com/v1/mods/123/files/456')return Response.json({data:{
+    id:456,modId:123,downloadUrl:url,fileLength:bytes.length,hashes:[{algo:1,value:sha1}]
+  }});
+  assert.equal(address,url);
+  downloaded++;return new Response(bytes,{headers:{'Content-Length':String(bytes.length)}});
+ };
  await publish(f,{paths:['mods/example.jar'],redistribution:false});const p=await f.guest.preview();assert.equal(p.manifest.files[0].source,provider);await f.guest.install(p.token);assert.ok(downloaded>0);restricted=true;await assert.rejects(publish(f,{paths:['mods/example.jar']}),/restricted|限制/);await assert.rejects(f.guest.install(p.token),/restricted|限制/);assert.equal(f.host.shared.manifest.files[0].source,provider);
 });
 
