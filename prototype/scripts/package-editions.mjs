@@ -11,6 +11,10 @@ import {verify as verifySeedEngine} from './verify-seed-engine.mjs';
 await verifySeedEngine();
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const pkg=JSON.parse(await readFile(join(root,'package.json'),'utf8'));
+const publicBuild=process.argv.includes('--public');
+const curseForgeKey=publicBuild?process.env.AMBER_CURSEFORGE_API_KEY?.trim():null;
+if(publicBuild&&!curseForgeKey)throw Error('Public package is missing the CurseForge build configuration.');
+const testNotes='LOCAL-TEST-'+pkg.version+'.md';
 const provenance={schema:1,version:pkg.version,commit:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),taskHead:process.env.AMBER_TASK_HEAD||null,eventSha:process.env.AMBER_EVENT_SHA||null,dirty:!!execFileSync('git',['status','--porcelain'],{cwd:root,encoding:'utf8'}).trim(),channel:process.argv.includes('--public')?'public':'local',workflow:process.env.GITHUB_RUN_ID?`https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`:null,builtAt:new Date().toISOString()};
 const base=join(root,'releases',pkg.version);
 const requested=process.argv.slice(2).filter(x=>!x.startsWith('--'));
@@ -27,7 +31,7 @@ for(const edition of editions){
   await rm(stage,{recursive:true});
  }catch(e){if(e.code!=='ENOENT')throw e;}
  await mkdir(stage,{recursive:true});
- for(const entry of ['src','desktop','public','build','index.html','vite.config.mjs','LICENSE','THIRD_PARTY_NOTICES.md','RELEASE-ACCEPTANCE.md','LOCAL-TEST-1.7.5.md'])await cp(join(root,entry),join(stage,entry),{recursive:true});
+ for(const entry of ['src','desktop','public','build','index.html','vite.config.mjs','LICENSE','THIRD_PARTY_NOTICES.md','RELEASE-ACCEPTANCE.md',testNotes])await cp(join(root,entry),join(stage,entry),{recursive:true});
  await copyFile(join(root,'..','CHANGELOG.md'),join(stage,'CHANGELOG.md'));
  const metadata={...pkg,name:edition==='ambere'?'ambere-launcher':pkg.name,description:name+' Minecraft Java launcher',dependencies:{},devDependencies:{}};
  await writeFile(join(stage,'package.json'),JSON.stringify(metadata,null,2));
@@ -45,8 +49,9 @@ for(const edition of editions){
   await copyFile(join(root,'build/ambere.png'),join(stage,'public/brand/app-icon.png'));
   for(const file of ['build/installer.nsh','build/installer-preflight.ps1','index.html']){const text=await readFile(join(stage,file),'utf8');await writeFile(join(stage,file),text.replaceAll('AMBER','AmberE').replaceAll('amber-launcher','ambere-launcher'));}
  }
- if(!process.argv.includes('--public'))await copyFile(join(root,'LOCAL-TEST-1.7.5.md'),join(stage,'RELEASE-ACCEPTANCE.md'));
- try{const key=process.env.AMBER_CURSEFORGE_API_KEY||JSON.parse(await readFile(join(root,'../.qa/curseforge-key.json'),'utf8')).key;await writeFile(join(stage,'desktop/curseforge-build-key.json'),JSON.stringify({key}));}catch(e){if(e.code!=='ENOENT')throw e;}
+ if(!process.argv.includes('--public'))await copyFile(join(root,testNotes),join(stage,'RELEASE-ACCEPTANCE.md'));
+ await rm(join(stage,'desktop/curseforge-build-key.json'),{force:true});
+ if(publicBuild)await writeFile(join(stage,'desktop/curseforge-build-key.json'),JSON.stringify({key:curseForgeKey}),{flag:'wx'});
  await run(process.execPath,[join(root,'node_modules/vite/bin/vite.js'),'build','--config',join(stage,'vite.config.mjs')],stage);
  const config={appId:'io.github.ayr1k.'+edition,productName:name,asar:false,npmRebuild:false,electronVersion:pkg.devDependencies.electron,electronDist:join(root,'node_modules/electron/dist'),directories:{output:out,buildResources:join(stage,'build')},files:['desktop/**/*','dist/client/**/*','package.json','LICENSE','THIRD_PARTY_NOTICES.md','!node_modules/**','!desktop/bin/seed-engine-linux-*','!desktop/bin/seed-engine-darwin-*','!desktop/bin/seed-engine-freebsd-*','!**/*.ttf','!dist/client/assets/sodium.png','!dist/client/assets/lithium.png','!dist/client/assets/iris.png','!dist/client/assets/modmenu.png','!dist/client/assets/fabric-api.png'],extraFiles:[{from:join(root,'PLATFORMS-1.3.5.md'),to:'PLATFORMS-1.3.5.md'},{from:join(stage,'CHANGELOG.md'),to:'CHANGELOG.md'},{from:join(stage,'RELEASE-ACCEPTANCE.md'),to:'RELEASE-ACCEPTANCE.md'}],win:{target:[{target:'nsis',arch:['x64']}],executableName:name,icon:join(stage,'build/icon.ico'),signAndEditExecutable:true},nsis:{oneClick:false,perMachine:false,allowElevation:false,allowToChangeInstallationDirectory:true,createDesktopShortcut:true,createStartMenuShortcut:true,shortcutName:name,deleteAppDataOnUninstall:false,runAfterFinish:false,installerLanguages:['zh_CN','en_US'],displayLanguageSelector:true,include:join(stage,'build/installer.nsh'),installerIcon:join(stage,'build/icon.ico'),uninstallerIcon:join(stage,'build/icon.ico'),artifactName:name+'-${version}-Setup-${arch}.exe'}};
  if(process.argv.includes('--stage-only'))continue;

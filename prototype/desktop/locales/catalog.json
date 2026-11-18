@@ -9396,8 +9396,8 @@
     "en": "Choose another…"
   },
   "pack123.formats": {
-    "zh": "支持 .mrpack 与内容 ZIP；模组清单和备份会提示对应入口。",
-    "en": "MRPACK and content ZIP supported. Mod lists and backups are identified separately."
+    "zh": "ZIP、MRPACK、CurseForge 整合包 · 压缩包最大 5 GB",
+    "en": "ZIP, MRPACK and CurseForge packs · up to 5 GB compressed"
   },
   "pack123.done": {
     "zh": "整合包已安装",
@@ -9476,8 +9476,8 @@
     "en": "I checked the author’s instructions and selected the required game and loader. A content ZIP has no standard version manifest; compatibility cannot be guaranteed."
   },
   "pack123.spaceNote": {
-    "zh": "大小仅统计整合包内容；游戏、Java 和加载器另需下载。开始前检查所需内容空间并额外预留 1 GB，实际总占用仍可能更高。",
-    "en": "Sizes cover pack content only. Game, Java and loader files are additional. Import checks content space plus a 1 GB allowance; actual total usage may be higher."
+    "zh": "预览会创建本地临时副本。安装时还需要为保留的压缩包、展开文件和新实例预留磁盘空间。",
+    "en": "Preview creates a temporary local copy. Installation also needs space for the retained archive, extracted files and new instance."
   },
   "pack123.optional": {
     "zh": "可选客户端文件（默认不选）",

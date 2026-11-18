@@ -59,13 +59,13 @@ jobs:
       - run: pnpm release:check
       - run: pnpm desktop:smoke
       - name: Build local acceptance installers for both products
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && github.head_ref != 'codex/1.7.6-content-import'
         run: pnpm package:editions
         env:
           AMBER_TASK_HEAD: ${{ github.event.pull_request.head.sha }}
           AMBER_EVENT_SHA: ${{ github.sha }}
       - name: Upload local acceptance installers and provenance
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && github.head_ref != 'codex/1.7.6-content-import'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: amber-acceptance-${{ github.event.pull_request.head.sha }}

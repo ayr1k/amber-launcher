@@ -10,10 +10,14 @@ import {instanceLoaders} from './compatibility.mjs';
 import {contentStamp,validateUpdateGraph,recoverModUpdate} from './mod-updates.mjs';
 import {requireSpace} from './safe-copy.mjs';
 const {unzipSync}=createRequire(import.meta.url)('./vendor/fflate.cjs');
-const metadataNames=new Set(['fabric.mod.json','quilt.mod.json','META-INF/mods.toml','META-INF/neoforge.mods.toml','mcmod.info','litemod.json']);
+export const metadataNames=new Set(['fabric.mod.json','quilt.mod.json','META-INF/mods.toml','META-INF/neoforge.mods.toml','mcmod.info','litemod.json']);
 const text=v=>typeof v==='string'?v.slice(0,200):'';
 export function readModMetadata(bytes){
- let size=0;const entries=unzipSync(bytes,{filter:f=>{if(!metadataNames.has(f.name))return false;size+=f.originalSize;if(f.originalSize>1_000_000||size>3_000_000)throw Error('模组元数据过大，未导入。');return true;}}),found=[];
+ let size=0;const entries=unzipSync(bytes,{filter:f=>{if(!metadataNames.has(f.name))return false;size+=f.originalSize;if(f.originalSize>1_000_000||size>3_000_000)throw Error('模组元数据过大，未导入。');return true;}});
+ return parseModMetadata(entries);
+}
+export function parseModMetadata(entries){
+ const found=[];
  for(const [name,raw] of Object.entries(entries)){const value=Buffer.from(raw).toString('utf8');
   if(name.endsWith('.toml')){const blocks=value.split(/^\s*\[\[mods\]\]\s*$/m);for(const block of blocks.length>1?blocks.slice(1):blocks){const field=k=>block.match(new RegExp('^\\s*'+k+'\\s*=\\s*["\u0027]([^"\u0027]*)["\u0027]','m'))?.[1]||'';found.push({title:field('displayName'),version:field('version'),modId:field('modId'),loader:name.includes('neoforge')?'neoforge':'forge'});}}
   else{let v;try{v=JSON.parse(value);}catch{throw Error('模组元数据损坏，未导入。');}if(name==='quilt.mod.json'){v=v.quilt_loader||{};found.push({title:text(v.metadata?.name),version:text(v.version),modId:text(v.id),loader:'quilt'});}else{for(const record of Array.isArray(v)?v:Array.isArray(v.modList)?v.modList:[v]){if(!record||typeof record!=='object')continue;found.push({title:text(record.name),version:text(record.version),modId:text(record.id||record.modid||record.name),loader:name==='fabric.mod.json'?'fabric':name==='litemod.json'?'liteloader':'forge',game:typeof record.depends?.minecraft==='string'?record.depends.minecraft:text(record.mcversion)});}}}

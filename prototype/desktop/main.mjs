@@ -261,7 +261,7 @@ app.whenReady().then(async () => {
   rooms.sync=new RoomSync152(core,rooms,workflows,content);
   const localPacks=scopes170.wrap('localPacks',new LocalPacks(core,packs,workflows));workflows.localPacks=localPacks;
   const packUpgrade140=scopes170.wrap('packUpgrade140',new PackUpgrade140(core,packs,localPacks,workflows));
-  handle('amber:pack-upgrade',async(action,id,input)=>{if(action==='versions')return packUpgrade140.versions(id);if(action==='diff')return packUpgrade140.diff(id,input);if(action==='apply')return packUpgrade140.apply(id,input);if(action==='preview'){if(input)return packUpgrade140.preview(id,{version:input});const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Modrinth pack',extensions:['mrpack']}]});return r.canceled?null:packUpgrade140.preview(id,{path:r.filePaths[0]});}throw Error('Invalid action');});
+  handle('amber:pack-upgrade',async(action,id,input)=>{if(action==='versions')return packUpgrade140.versions(id);if(action==='diff')return packUpgrade140.diff(id,input);if(action==='apply')return packUpgrade140.apply(id,input);if(action==='preview'){if(input)return packUpgrade140.preview(id,{version:input});const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Modrinth or CurseForge modpack',extensions:['mrpack','zip']}]});return r.canceled?null:packUpgrade140.preview(id,{path:r.filePaths[0]});}throw Error('Invalid action');});
   const minecraftImport=new MinecraftImport(core);
   handle('amber:minecraft-import',async(action,...args)=>{
    if(action==='pick'){const r=await dialog.showOpenDialog(window,{title:'选择原版 .minecraft / Select original .minecraft',properties:['openDirectory']});return r.canceled?null:minecraftImport.scan(r.filePaths[0]);}
