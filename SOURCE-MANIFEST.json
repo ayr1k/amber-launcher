@@ -1,5 +1,5 @@
 {
-  "version": "1.7.6",
+  "version": "1.7.7",
   "repository": "https://github.com/ayr1k/amber-launcher",
   "files": [
     {
@@ -20,7 +20,7 @@
     {
       "path": ".github/workflows/pr-installers.yml",
       "bytes": 2522,
-      "sha256": "232359f3387dccee93396c274f52d13723c9426d4c79f77e5e458fbaf511c032"
+      "sha256": "079bc1df27f298f5ef33eb3d718ef0c8e2e2db45aa6b157b27547b5e7cf873a8"
     },
     {
       "path": ".github/workflows/windows.yml",
@@ -34,8 +34,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 63764,
-      "sha256": "5e8706f013dedfad80cfd1353e3248afb76531218b66d27ab7d9eaadebf09bdf"
+      "bytes": 64323,
+      "sha256": "8c72db9c2d3a436d0b3d239651d8c8fe87f9950202dafae09d217ca159920a04"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -54,8 +54,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 8011,
-      "sha256": "1a613f13666352bf15d3b6802c3645b7dcef6c670459dbb06a235ded371334d3"
+      "bytes": 8046,
+      "sha256": "547d32bdfd16d99ee9942f1497fdb14462d67f054eabaea2cf864cd2bbdf1179"
     },
     {
       "path": "SECURITY.md",
@@ -144,8 +144,8 @@
     },
     {
       "path": "docs/TESTING.md",
-      "bytes": 56743,
-      "sha256": "d75ec68fe60a06ba27e445778b64574df24ab2fc94f68f8b3db19aa762f27523"
+      "bytes": 57813,
+      "sha256": "f50a433491c2d0f57985c460be31df76c62aa676f4fb8af5885613a0d081a385"
     },
     {
       "path": "docs/THEMES.md",
@@ -159,8 +159,8 @@
     },
     {
       "path": "docs/USER-GUIDE.md",
-      "bytes": 70810,
-      "sha256": "145a134bb79f65d8e5d9f34a6b6209cd562f45ead80a24ffe7674a3c6d58274d"
+      "bytes": 73146,
+      "sha256": "fb52f7592c15ec38196ca262f9b41a5f6ce3faa84f5ba9306d37fc84a11035d0"
     },
     {
       "path": "docs/evidence/amber-custom-small-downloads.png",
@@ -394,8 +394,8 @@
     },
     {
       "path": "docs/zh-CN/CHANGELOG.md",
-      "bytes": 66387,
-      "sha256": "a3bbd8cc69f550a0d3d07dc8f4cd1fd28e4986db81bbe70628f58c20d99c505f"
+      "bytes": 66868,
+      "sha256": "3feabf31c663a6fafd7a0e3187856e725f28c2b13115d3018fdc93f433b05ae2"
     },
     {
       "path": "docs/zh-CN/CONTRIBUTING.md",
@@ -414,8 +414,8 @@
     },
     {
       "path": "docs/zh-CN/README.md",
-      "bytes": 6755,
-      "sha256": "f3f996285fd533f29dc183bd236954ad9255eab6a59c744a667c6e742f25085e"
+      "bytes": 6777,
+      "sha256": "dcbc06bed42b4df4b7f2f9b779925bd4d7e2f384e34c335bcf5ff29501722999"
     },
     {
       "path": "docs/zh-CN/ROLLBACK.md",
@@ -439,8 +439,8 @@
     },
     {
       "path": "docs/zh-CN/TESTING.md",
-      "bytes": 40858,
-      "sha256": "20f187fa6ea63193dbf22d20d55e7821c5dfb83351b102de59424d0283dfd87b"
+      "bytes": 41807,
+      "sha256": "bcd699c6df8020a6e1d5314fa1c309cf8f6fc4f2400e3ff6be7dd3ffa4db5913"
     },
     {
       "path": "docs/zh-CN/THEMES.md",
@@ -459,8 +459,8 @@
     },
     {
       "path": "docs/zh-CN/USER-GUIDE.md",
-      "bytes": 59843,
-      "sha256": "29dd42f82e89da74b133c190f5cb1f2e469560aa798551e7cb9f74ed4f0a3c81"
+      "bytes": 61900,
+      "sha256": "6ef28ff648b899eea28decf07a70525f199cec5df46f964431bf7854e266f312"
     },
     {
       "path": "prototype/.npmrc",
@@ -583,6 +583,11 @@
       "sha256": "69078ed84bf249d8298bb54f5e1f885acbf8c78d2ab03fae50c0894412d7538c"
     },
     {
+      "path": "prototype/LOCAL-TEST-1.7.7.md",
+      "bytes": 5079,
+      "sha256": "366071abaab94b77fc852386fd7629f7d38768eb755915556445c0588a8386b5"
+    },
+    {
       "path": "prototype/PLATFORMS-1.3.5.md",
       "bytes": 5102,
       "sha256": "7f2a697f4909abf27c0d8f47055d765e6892484e812446d114cc82d94c39f04a"
@@ -590,12 +595,12 @@
     {
       "path": "prototype/README.md",
       "bytes": 1620,
-      "sha256": "ed036f460f8c89d6534e837c8cd44af95ae28303dda038d851c67129e8d5b055"
+      "sha256": "bad15287631221487939ee91c640ba89489fd1d865ab84fc0ca419c66d8e2f8e"
     },
     {
       "path": "prototype/RELEASE-ACCEPTANCE.md",
-      "bytes": 57448,
-      "sha256": "05bacba259cd05fdf9d8747af79dc61f61a4549eeae905b64d973a3e03e87e83"
+      "bytes": 58518,
+      "sha256": "e71e4316aeda418b3dfe21f3077530ed669b2f7e92d6c573bd37690746525776"
     },
     {
       "path": "prototype/THIRD_PARTY_NOTICES.md",
@@ -1154,8 +1159,8 @@
     },
     {
       "path": "prototype/desktop/locales/catalog.json",
-      "bytes": 439270,
-      "sha256": "0b22e968be90c9c0548cfd452832ef9650cf5c3ce61f467c204296f20e4feb3e"
+      "bytes": 447933,
+      "sha256": "1be2deb79fbf0dbcabc7e0350a32bf7bc50de8089431ff646903427c855315e4"
     },
     {
       "path": "prototype/desktop/localization.mjs",
@@ -1169,8 +1174,8 @@
     },
     {
       "path": "prototype/desktop/main.mjs",
-      "bytes": 102759,
-      "sha256": "286ef0b5d0d5f04d7162e28b4503cccb432f55530804e8232dc4ae09a8bac2f5"
+      "bytes": 102958,
+      "sha256": "8c3e4b7a29659fc75009718d5d23cbbb07e1a8391440ab085e1d3f7d2239129f"
     },
     {
       "path": "prototype/desktop/maintenance.mjs",
@@ -1358,6 +1363,11 @@
       "sha256": "3e6d932bec423aef897a388e24e2d2d9ad4c15f71222355c00de07eb5cbd864f"
     },
     {
+      "path": "prototype/desktop/room-readiness177.mjs",
+      "bytes": 2326,
+      "sha256": "a4cbfbf44dfeb1ce8637c370c9d9e07cfb428561c287290c87f386caaa8f9f38"
+    },
+    {
       "path": "prototype/desktop/room-sync-display152.mjs",
       "bytes": 1372,
       "sha256": "4adb572029ec910a9ae1500429a42081d07e43dee036ae5b7a0b4438bb5ecb2a"
@@ -1379,13 +1389,13 @@
     },
     {
       "path": "prototype/desktop/room-sync152.mjs",
-      "bytes": 19666,
-      "sha256": "771e9cbadc1b584463d0055f956d7569a999bba0b62b55030d78f20b6637d9e9"
+      "bytes": 20305,
+      "sha256": "5468201e8109e945e8ea7e25d12b601a97b3cbc2bd2b783d0f493ff05df21411"
     },
     {
       "path": "prototype/desktop/rooms132.mjs",
-      "bytes": 8370,
-      "sha256": "d2986a2fa7a6f088f79071fae69d19f19dc50051ea92516e86628580b8853afb"
+      "bytes": 9331,
+      "sha256": "4bea4080cad2bcc6bd7fb1dd9c14e89f8e5a4cc3f96dd9eb4987e7ed073d6984"
     },
     {
       "path": "prototype/desktop/runtime-archive135.mjs",
@@ -1404,8 +1414,8 @@
     },
     {
       "path": "prototype/desktop/sakura-remote150.mjs",
-      "bytes": 7646,
-      "sha256": "8f404b476d470f7f7b13ddc0d9f6e55f4c637b0b8e09d6ddde57024a8871d447"
+      "bytes": 7679,
+      "sha256": "07a855f5cc0c263c84117549af2127f6d790bc9eb422ab5e9b0cd783e7ee6252"
     },
     {
       "path": "prototype/desktop/sakura-rules150.mjs",
@@ -1424,8 +1434,8 @@
     },
     {
       "path": "prototype/desktop/sakura150.mjs",
-      "bytes": 8315,
-      "sha256": "93b1740b671a515b520431f55fb693ff2a134a3501f13de9d59db8b438ffc67a"
+      "bytes": 9951,
+      "sha256": "53272dc830205768ef6c7c4f1f5af3475e65535532922f4192dc97ea046a64b2"
     },
     {
       "path": "prototype/desktop/seed-coordinates162.mjs",
@@ -2694,28 +2704,28 @@
     },
     {
       "path": "prototype/editions/ambere/changelog.en.md",
-      "bytes": 57094,
-      "sha256": "c99ea61091ec77255a10d5352e3826dea573c843bbb9a7111d8b183e83a84c87"
+      "bytes": 57653,
+      "sha256": "7a6242c0a636123ef5d6b6977f665dcba65b32660e8bdad25b331ad6e35ab898"
     },
     {
       "path": "prototype/editions/ambere/changelog.zh.md",
-      "bytes": 49159,
-      "sha256": "616f02bf6924d2083293af60f48a074b8a15595b69148578b8c26abe886510b1"
+      "bytes": 49640,
+      "sha256": "6cef383d37cf4a07a0ca77cede4cb635ef3aaecbc2b4eaa482c05659f4628c3e"
     },
     {
       "path": "prototype/editions/ambere/overview.en.md",
-      "bytes": 5870,
-      "sha256": "b12865b9a1360ca650fc00fa31cf0f024fdde352087059de056fc99be68b73d4"
+      "bytes": 5905,
+      "sha256": "d1da591fb93d08b76c7763b0f29c4162e959eb7669c6e3a37e51b4a06cab8081"
     },
     {
       "path": "prototype/editions/ambere/overview.zh.md",
-      "bytes": 5355,
-      "sha256": "b045a17388d11f0e8a50d345fbbf3a5e83bc070bb14193bd2e12afe4c4d0a738"
+      "bytes": 5377,
+      "sha256": "4b87536a4b2689c528b04885eda8f2ff6bb84d2b485a03ff833e39bc443e61b1"
     },
     {
       "path": "prototype/editions/ambere/testing.md",
-      "bytes": 57448,
-      "sha256": "05bacba259cd05fdf9d8747af79dc61f61a4549eeae905b64d973a3e03e87e83"
+      "bytes": 58518,
+      "sha256": "e71e4316aeda418b3dfe21f3077530ed669b2f7e92d6c573bd37690746525776"
     },
     {
       "path": "prototype/electron-builder.yml",
@@ -2729,8 +2739,8 @@
     },
     {
       "path": "prototype/package.json",
-      "bytes": 4002,
-      "sha256": "15fc5ae3df5b68466c4255bba52c02f1cc534f95626bd292351e552cd5c0cbc1"
+      "bytes": 4098,
+      "sha256": "e476e899a75f814086036010ade7ef5ba10d53ef237f8870c7a31e58b449b518"
     },
     {
       "path": "prototype/pnpm-lock.yaml",
@@ -3129,8 +3139,8 @@
     },
     {
       "path": "prototype/scripts/package-editions.mjs",
-      "bytes": 7942,
-      "sha256": "10ab2c4cb21bbd0b46364c5dfaba683f8cde81c3dac720160d79435e7d9da61f"
+      "bytes": 8404,
+      "sha256": "2f652b91791c6c2edea06f7a18bf7f3b3e75ca7adaa89aa20a751d095ad5b475"
     },
     {
       "path": "prototype/scripts/package-platforms135.py",
@@ -3144,8 +3154,8 @@
     },
     {
       "path": "prototype/scripts/prepare-github.mjs",
-      "bytes": 5298,
-      "sha256": "6847bd70a1ac60a488a5223f2ade69f9e5edf896818fcc5bc5d558672f36e3c2"
+      "bytes": 5344,
+      "sha256": "d4a8363476875a9ba2ff3c4e293c0e817b5633a5ab5ae250dcdc622a1d7b9b0a"
     },
     {
       "path": "prototype/scripts/prepare-sites-build.mjs",
@@ -3174,8 +3184,8 @@
     },
     {
       "path": "prototype/scripts/qa-easytier152.mjs",
-      "bytes": 3986,
-      "sha256": "e81298451aa3bc5827d92689ee4f6aed79c5119d5cc5132eefafafc83e9f833f"
+      "bytes": 4172,
+      "sha256": "d7aab13462e98b6ebeaeaf8ce800fec7bd467cb8af210ab77c663e5265851259"
     },
     {
       "path": "prototype/scripts/qa-editor-layout163.cjs",
@@ -3296,6 +3306,11 @@
       "path": "prototype/scripts/qa-missing154.cjs",
       "bytes": 6248,
       "sha256": "33525167919aa237c32dde83bef68e4ad065ff9513b211af80ea767296987676"
+    },
+    {
+      "path": "prototype/scripts/qa-multiplayer177.mjs",
+      "bytes": 5616,
+      "sha256": "25f39aa58f37e6f0a1f3ab361e91e732858d09d0b1b36f0fb0a46c7a143b0731"
     },
     {
       "path": "prototype/scripts/qa-mysql-backups150.mjs",
@@ -3584,8 +3599,8 @@
     },
     {
       "path": "prototype/src/Connections142.jsx",
-      "bytes": 6048,
-      "sha256": "c33e277995fc089278edc8dcfa9d89666c52f8bf04d3670530309d2a200a78e0"
+      "bytes": 6896,
+      "sha256": "3ab8c294e2ab01ec8120e0e4e8ba99cff8552fac847762b26172f6836938577b"
     },
     {
       "path": "prototype/src/ContentCatalog.jsx",
@@ -3898,19 +3913,29 @@
       "sha256": "9c1077e689280a8b95e8c6d14049af487485eef9fe5a771998dd6393598d9490"
     },
     {
+      "path": "prototype/src/RoomGuide177.jsx",
+      "bytes": 8187,
+      "sha256": "d7ed98bf354199d7ccb14598929df22342c59d4ab4ba4b40b6d15f4b8495e91d"
+    },
+    {
       "path": "prototype/src/RoomSync152.jsx",
       "bytes": 14033,
       "sha256": "38f80f2773d3f6e30ace5d535b7f68567e58bd78bdce30576b7ef693a6880608"
     },
     {
       "path": "prototype/src/Sakura150.jsx",
-      "bytes": 7645,
-      "sha256": "d5737f83c027b1fe2bf8f673f941109a06bfb114c48d1e71bd22420ef99c09d6"
+      "bytes": 6263,
+      "sha256": "d8e5b97082694119d7c2240258db4e0c0a6965e2629c78013a97495557439182"
+    },
+    {
+      "path": "prototype/src/SakuraNodes177.jsx",
+      "bytes": 6526,
+      "sha256": "e9c218c59b41cd1c7b8775e59683b23b2f0f34aa463c7ce21bc2140a23cf2d67"
     },
     {
       "path": "prototype/src/SakuraRemote150.jsx",
-      "bytes": 3494,
-      "sha256": "39996d21240cee8a5d2abf718832afe9667ef037f72ee9c64afc6ca45c9aea07"
+      "bytes": 5921,
+      "sha256": "c446ad9842bd8e2b9002c5a87a6ef7bb80a86e33750c03b085bf4954e4622c41"
     },
     {
       "path": "prototype/src/ScreenshotGallery145.jsx",
@@ -3969,8 +3994,8 @@
     },
     {
       "path": "prototype/src/Servers132.jsx",
-      "bytes": 30254,
-      "sha256": "9a69bb6b49bcc705fcdc0320f8787c48c8a895736dab5c7b314b6fe1facdbd73"
+      "bytes": 26157,
+      "sha256": "87c0e9893ed9f9a7b333f7e65896bf3e240aa5bf49e08514e31fcecd7f4ac5cd"
     },
     {
       "path": "prototype/src/SettingRow.jsx",
@@ -4133,6 +4158,11 @@
       "sha256": "ab1e4462079c039e6df4bc00832095e21bda34af7f94eba662a90760d041b549"
     },
     {
+      "path": "prototype/src/connections177.css",
+      "bytes": 1600,
+      "sha256": "00c1a3352d4ccd01be6c4c378a1fe7f1bbe228c494eb16cd6bd6afd43420cf04"
+    },
+    {
       "path": "prototype/src/console-history173.mjs",
       "bytes": 959,
       "sha256": "336ae86aa972f9822e43dee65c11da9236f3b48b92907fd1a9f765fcca732f4b"
@@ -4238,6 +4268,11 @@
       "sha256": "9e2e7d7197402f9e26d4228d3611e52c6563fc6df7d734d244783ded88ac0003"
     },
     {
+      "path": "prototype/src/room-guide-view177.mjs",
+      "bytes": 348,
+      "sha256": "07a819a89e688c1b686bd964bee4e3301a90d4c4e84911cd4e78e1ace42b1319"
+    },
+    {
       "path": "prototype/src/room-sync-selection152.mjs",
       "bytes": 1165,
       "sha256": "0d9257fa290f3378a6b59a67c8baca2171090aeff1bb6e0f4f0bae7ba4f11c08"
@@ -4246,6 +4281,11 @@
       "path": "prototype/src/room-sync152.css",
       "bytes": 2499,
       "sha256": "72ea899d6d24867de1f0986c269c6b629ef23532e432561c73fc3416413d70a3"
+    },
+    {
+      "path": "prototype/src/sakura-create177.mjs",
+      "bytes": 3390,
+      "sha256": "cb36dda60ddbf66e7e2b95faa7548811008068f4f25f619110ab5f8446992058"
     },
     {
       "path": "prototype/src/scene-adapter.js",
@@ -4643,6 +4683,11 @@
       "sha256": "36ec283212e38547f7966a6164d0d010db088531958d1061a8f7c45791b5f146"
     },
     {
+      "path": "prototype/tests/multiplayer177.test.mjs",
+      "bytes": 2985,
+      "sha256": "3acd24164e534e394b7f08ba82df4299712f7b1989b47992aadda5efb75eea38"
+    },
+    {
       "path": "prototype/tests/network122.test.mjs",
       "bytes": 11202,
       "sha256": "bb76c59f42fd5fa800dfadadb5ed932bd3331ef394fbf7f54102afac99b7d1f0"
@@ -4713,6 +4758,11 @@
       "sha256": "ec4d1db1ad4aac14750832bbed6801b06bdaeefc081921116cc4eb2e0818770c"
     },
     {
+      "path": "prototype/tests/room-guide-view177.test.mjs",
+      "bytes": 799,
+      "sha256": "268e7e0e1e18528b69c905180e48d3f02f9ad95e6ff0ae7997e9aaa5b5fecb41"
+    },
+    {
       "path": "prototype/tests/room-sync-list152.test.mjs",
       "bytes": 6298,
       "sha256": "e931192d80aec1b42cc1b5fc528f4266836faee678ac8e14f7679a77f2a03d45"
@@ -4723,9 +4773,14 @@
       "sha256": "4d3ece8325aa9264a58d5343a458099f4da692f3cd50a549d0053e9dbe62d888"
     },
     {
+      "path": "prototype/tests/sakura-create177.test.mjs",
+      "bytes": 4554,
+      "sha256": "bee8678b7091bcb332a3e27bb658ae75d44f817a2f2180645b9c62a4cbbfa226"
+    },
+    {
       "path": "prototype/tests/sakura-remote150.test.mjs",
-      "bytes": 11411,
-      "sha256": "114824790e14f965bd67c3b4215c4cb3b4ee54d3a2aff2d65f20381552adf7be"
+      "bytes": 12462,
+      "sha256": "d78987903d9a0457ca1f4f35f3960d960e8528ff7cc60c8eccf1f49f2cbb407a"
     },
     {
       "path": "prototype/tests/sakura142.test.mjs",
