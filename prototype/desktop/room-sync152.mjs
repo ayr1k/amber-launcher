@@ -50,7 +50,15 @@ export class RoomSync152{
  async prepareHost(invite){const keys=generateKeyPairSync('ed25519');this.privateKey=keys.privateKey;invite.sync={port:await this.listen(),key:keys.publicKey.export({type:'spki',format:'der'}).toString('base64'),token:randomBytes(32).toString('base64url')};}
  async listen(){this.server=createServer((req,res)=>this.serve(req,res).catch(()=>{if(!res.headersSent)res.writeHead(403);res.end();}));this.server.maxConnections=8;this.server.requestTimeout=15000;this.server.headersTimeout=10000;await new Promise((ok,no)=>{this.server.once('error',no);this.server.listen(0,'127.0.0.1',ok);});return this.server.address().port;}
  current(role){const r=this.rooms.current;if(r?.role!==role||r.state!=='running'||r.invite.expires<=Date.now())throw Error('Room unavailable / 房间不可用');return r;}
- async serve(req,res){const r=this.current('host'),expected=Buffer.from('Bearer '+r.invite.sync.token),actual=Buffer.from(req.headers.authorization||'');if(req.method!=='GET'||actual.length!==expected.length||!timingSafeEqual(actual,expected)||!this.shared)throw Error('Sharing disabled');const s=this.shared;
+ async serve(req,res){const r=this.current('host'),expected=Buffer.from('Bearer '+r.invite.sync.token),actual=Buffer.from(req.headers.authorization||'');if(req.method!=='GET'||actual.length!==expected.length||!timingSafeEqual(actual,expected))throw Error('Sharing disabled');
+  const health = /^\/health\/([0-9a-f]{32})$/.exec(req.url || '');
+  if (health) {
+    r.lastGuest = Date.now();
+    res.end(sign(null, Buffer.from(r.invite.name + health[1]), this.privateKey));
+    return;
+  }
+  if (!this.shared) throw Error('Sharing disabled');
+  const s=this.shared;
   if(req.url==='/manifest'){const envelope=s.envelope||snapshotEnvelope153(s.manifest,this.privateKey);res.setHeader('Content-Type','application/json');res.setHeader('Content-Length',envelope.length);res.end(envelope);return;}
   const match=/^\/file\/([a-f0-9-]{36})\/([a-f0-9]{64})$/.exec(req.url||'');const f=match&&match[1]===s.manifest.revision&&s.manifest.files.find(f=>f.sha256===match[2]&&f.source==='host');if(!f)throw Error('Unknown file');const path=join(s.dir,f.sha256);await serveFile153(this.root,path,f,req,res,()=>this.shared===s);
  }
@@ -73,6 +81,13 @@ export class RoomSync152{
   const manifest=validateSnapshot({schema:1,room:r.invite.name,revision,name:candidate.name,game:candidate.game,loader:candidate.loader,version:candidate.version,files});if(epoch!==this.epoch||this.current('host')!==r)throw Error('Sharing cancelled / 分享已取消');const envelope=snapshotEnvelope153(manifest,this.privateKey);this.shared={manifest,envelope,dir:snapshotDir};return {enabled:true,manifest};
  }
  async request(path,limit,signal){const r=this.current('guest');if(!r.invite.sync||!r.syncLocalPort)throw Error('Host does not support synchronization / 房主未提供同步通道');const response=await fetch(`http://127.0.0.1:${r.syncLocalPort}${path}`,{headers:{Authorization:'Bearer '+r.invite.sync.token},redirect:'error',signal:AbortSignal.any([AbortSignal.timeout(30000),...(signal?[signal]:[])])});if(!response.ok)throw Error('Sharing unavailable or snapshot expired; refresh / 分享关闭、房主离线或快照过期，请刷新');let total=0;const chunks=[];for await(const chunk of response.body){total+=chunk.length;if(total>limit){await response.body.cancel().catch(()=>{});fail();}chunks.push(chunk);}if(this.current('guest')!==r)throw Error('Room changed');return Buffer.concat(chunks);}
+ async checkHost() {
+  const room = this.current('guest');
+  const nonce = randomBytes(16).toString('hex');
+  const signature = await this.request('/health/' + nonce, 64, AbortSignal.timeout(3500));
+  const key = createPublicKey({key:Buffer.from(room.invite.sync.key,'base64'),type:'spki',format:'der'});
+  return verify(null, Buffer.from(room.invite.name + nonce), key, signature);
+ }
  async remote(signal){const r=this.current('guest'),envelope=JSON.parse((await this.request('/manifest',ROOM_SYNC_MAX_MANIFEST153,signal)).toString()),body=Buffer.from(envelope.body,'base64');const key=createPublicKey({key:Buffer.from(r.invite.sync.key,'base64'),type:'spki',format:'der'});if(!verify(null,body,key,Buffer.from(envelope.signature,'base64')))throw Error('Host identity check failed / 房主身份校验失败');const m=validateSnapshot(JSON.parse(body));if(m.room!==r.invite.name)fail();return m;}
  async preview(){
   if(this.active)throw Error('Cancel current synchronization first / 请先取消当前同步');

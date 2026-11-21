@@ -51,3 +51,26 @@ test('local configuration replacement retries never repeat a remote creation POS
  t.mock.method(fs,'rename',async(source,dest)=>{if(process.platform==='win32'&&dest===join(m.base.root,'settings.json')&&calls.some(c=>c.method==='POST')&&denied<2){denied++;throw Object.assign(Error('synthetic Windows replacement lock'),{code:'EPERM',syscall:'rename'});}return original(source,dest);});syncBuiltinESMExports();
  try{await m.remote.create('server',createInput);assert.equal(denied,process.platform==='win32'?2:0);assert.equal(calls.filter(c=>c.method==='POST').length,1);const config=await m.config();assert.equal(config.tunnels.length,1);assert.equal(config.remoteOperation,undefined);}finally{t.mock.restoreAll();syncBuiltinESMExports();}
 });
+
+test('node selection is read-only until confirmed; duplicate saves and cross-node associations are safe',async t=>{
+ const {m,rows}=await fixture(t);
+ const original=await m.config();
+ await m.remote.catalog();
+ assert.deepEqual(await m.config(),original);
+ rows.push({id:42,node:1,name:'Existing'});
+ await m.save('server',{name:'Existing',portId:'voice',tunnel:'42'});
+ await Promise.all([m.addNode(1),m.addNode(1)]);
+ let data=await m.config();
+ assert.deepEqual(data.nodes,[{id:1,name:'Dedicated'}]);
+ assert.equal(data.tunnels[0].node,1);
+ assert.equal(data.secret,original.secret);
+ await assert.rejects(m.removeNode(1));
+ rows.push({id:43,node:2,name:'Other'});
+ const input={name:'Other',portId:'voice',tunnel:'43',node:1};
+ await assert.rejects(m.save('server',input));
+ assert.deepEqual(await m.config(),data);
+ rows[1].node=1;
+ const results=await Promise.allSettled([m.save('server',input),m.save('server',input)]);
+ assert.equal(results.filter(r=>r.status==='fulfilled').length,1);
+ assert.equal((await m.state()).tunnels.length,2);
+});

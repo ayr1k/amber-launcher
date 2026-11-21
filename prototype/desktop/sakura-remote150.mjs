@@ -32,7 +32,7 @@ export class SakuraRemote150 {
   try{
    const result=await this.request('tunnels',{method:'POST',expected:201,body:{name:operation.name,type:port.protocol,node:input.node,local_ip:'127.0.0.1',local_port:port.port,note:'AMBER operation '+operation.id,...(input.remote!==''?{remote:String(input.remote)}:{})}});
    if(!Number.isSafeInteger(result.id)||result.id<=0)throw Object.assign(Error('远端结果未确认，请核对远端列表，勿重复提交。'),{uncertain:true});
-   await this.configChange(c=>{appendTunnel150(c,{id:randomUUID(),serverId,portId:port.id,name:operation.name,tunnel:String(result.id)});delete c.remoteOperation;});
+   await this.configChange(c=>{appendTunnel150(c,{id:randomUUID(),serverId,portId:port.id,name:operation.name,node:operation.node,tunnel:String(result.id)});delete c.remoteOperation;});
    return {feedback:'远端隧道已创建并关联；尚未启动，不代表公网已连通。'};
   }catch(e){if(e.uncertain===false)await this.configChange(c=>{delete c.remoteOperation;});throw e;}
  }));}
@@ -44,6 +44,6 @@ export class SakuraRemote150 {
    const disconnectFailed=result.failed.some(x=>String(x)===binding.tunnel);await this.configChange(c=>{const b=c.tunnels.find(t=>t?.id===id);if(b)b.remoteDeleted=true;delete c.remoteOperation;});return {feedback:disconnectFailed?'远端记录已删除，但服务商未能踢下线；请在控制台核对。本机关联仍保留。':'远端隧道已删除，本机关联仍保留，可单独移除。'};
   }catch(e){if(e.uncertain===false)await this.configChange(c=>{delete c.remoteOperation;});throw e;}
  });}
- reconcile(){return this.run(async()=>{const c=await this.manager.config(),op=c.remoteOperation;if(!op)return {feedback:'没有待确认的远端操作。'};const rows=(await this.catalog()).tunnels;if(op.kind==='create'){const matches=rows.filter(t=>t.note==='AMBER operation '+op.id);if(matches.length!==1)throw Error('未能唯一确认远端结果，请在 Sakura 控制台核对后再解除待确认状态。');await this.configChange(c=>{if(!c.tunnels.some(t=>t?.tunnel===String(matches[0].id)))appendTunnel150(c,{id:randomUUID(),serverId:op.serverId,portId:op.portId,name:op.name,tunnel:String(matches[0].id)});delete c.remoteOperation;});}else{if(rows.some(t=>String(t.id)===op.tunnel))throw Error('远端记录仍存在，请在 Sakura 控制台核对后再解除待确认状态。');await this.configChange(c=>{const b=c.tunnels.find(t=>t?.id===op.bindingId);if(b)b.remoteDeleted=true;delete c.remoteOperation;});}return {feedback:'已核对远端结果，本地记录已更新。'};});}
+ reconcile(){return this.run(async()=>{const c=await this.manager.config(),op=c.remoteOperation;if(!op)return {feedback:'没有待确认的远端操作。'};const rows=(await this.catalog()).tunnels;if(op.kind==='create'){const matches=rows.filter(t=>t.note==='AMBER operation '+op.id);if(matches.length!==1)throw Error('未能唯一确认远端结果，请在 Sakura 控制台核对后再解除待确认状态。');await this.configChange(c=>{if(!c.tunnels.some(t=>t?.tunnel===String(matches[0].id)))appendTunnel150(c,{id:randomUUID(),serverId:op.serverId,portId:op.portId,name:op.name,node:op.node,tunnel:String(matches[0].id)});delete c.remoteOperation;});}else{if(rows.some(t=>String(t.id)===op.tunnel))throw Error('远端记录仍存在，请在 Sakura 控制台核对后再解除待确认状态。');await this.configChange(c=>{const b=c.tunnels.find(t=>t?.id===op.bindingId);if(b)b.remoteDeleted=true;delete c.remoteOperation;});}return {feedback:'已核对远端结果，本地记录已更新。'};});}
  clearUncertain(){return this.run(()=>this.configChange(c=>{delete c.remoteOperation;}));}
 }

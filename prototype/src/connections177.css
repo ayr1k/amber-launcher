@@ -1,0 +1,48 @@
+/* SPDX-License-Identifier: MPL-2.0 */
+.connections177 > .connection-panel177:not([hidden]) {
+  display: flow-root;
+  padding-block-start: 1lh;
+  min-width: 0;
+  container-type: inline-size;
+}
+
+.connections177 > .connection-panel177[hidden] { display: none; }
+
+/* The tabs already name the provider; both panel bodies share the same inset. */
+.connections177 .connection-panel177 > .sakura150 { padding-block-start: 0; }
+.connections177 .connection-panel177 > .sakura150 > h2 { display: none; }
+.connections177 .connection-panel177 > .sakura150 > h2 + p,
+.connections177 .room-guide177 > .room-intro177 { margin-block: 0 12px; }
+
+.room-task-cards177 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 16px;
+  margin-block: 20px;
+}
+.room-guide177 .room-task-card177 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--theme-radius,0px);
+  background: var(--theme-panel,var(--surface));
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.room-guide177 .room-task-card177 > :is(h3,p) { margin: 0; }
+.room-guide177 .room-task-card177 > .button {
+  margin-block-start: auto;
+  max-width: 100%;
+  white-space: normal;
+}
+.room-guide177 details > summary { cursor: pointer; }
+.room-guide177 .room-form177 { display: grid; gap: 12px; justify-items: start; }
+.room-guide177 .room-form177 > :is(label,details) { width: 100%; }
+.room-guide177 .room-form177 > label { margin: 0; }
+
+@container (max-width: 620px) {
+  .room-task-cards177 { grid-template-columns: minmax(0,1fr); }
+}

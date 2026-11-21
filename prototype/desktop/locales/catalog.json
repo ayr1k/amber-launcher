@@ -1,4 +1,24 @@
 {
+  "m0d1964e8e9f9": {
+    "zh": "选择开房或加入房间，与朋友一起游玩。",
+    "en": "Host or join a room to play with friends."
+  },
+  "mc928230e75d3": {
+    "zh": "为已启动的服务端创建房间，然后把邀请码发给朋友。",
+    "en": "Create a room for a running server, then share the invitation with your friends."
+  },
+  "m94d62a170ebc": {
+    "zh": "使用房主的邀请码连接，不需要创建服务端。",
+    "en": "Use the host’s invitation to connect. You don’t need to create a server."
+  },
+  "m57828237a08f": {
+    "zh": "最近检测到朋友",
+    "en": "Friend detected recently"
+  },
+  "m46f06c546d82": {
+    "zh": "近期未检测到朋友",
+    "en": "No friend detected recently"
+  },
   "m311bb313fdec": {
     "zh": "账号",
     "en": "Accounts"
@@ -13420,5 +13440,245 @@
   "update175.243e854acc7a": {
     "zh": "更新信息已过期，请重新检查并下载。",
     "en": "Update metadata expired. Check and download again."
+  },
+  "m909bde83addd": {
+    "zh": "可进服",
+    "en": "Ready to join"
+  },
+  "m10fd50552dc8": {
+    "zh": "已组网",
+    "en": "Room network connected"
+  },
+  "m694186911ae3": {
+    "zh": "正在连接",
+    "en": "Connecting"
+  },
+  "m8c21faa8554f": {
+    "zh": "尚未确认连接",
+    "en": "Connection unconfirmed"
+  },
+  "mb450ad4ff11f": {
+    "zh": "Minecraft 服务端已响应。打开多人游戏，选择直接连接，输入下方地址。",
+    "en": "Minecraft responded. Open Multiplayer, choose Direct Connection and enter the address below."
+  },
+  "mbc19f5cd6d95": {
+    "zh": "已联系到房主。请房主确认游戏服务端已就绪，并检查服务器列表状态查询设置。",
+    "en": "The host answered. Ask them to check that Minecraft is ready and that server list status is enabled."
+  },
+  "m09f8997e310f": {
+    "zh": "请房主保持房间和服务端运行，确认双方使用同一份有效邀请后重试。",
+    "en": "Keep the host room and server running. Check that both players are using the same valid invitation and retry."
+  },
+  "m201b42e16fc7": {
+    "zh": "Minecraft 直接连接地址",
+    "en": "Minecraft direct connection address"
+  },
+  "m2d5a0ab44c19": {
+    "zh": "重新检查连接",
+    "en": "Check connection again"
+  },
+  "mfecf9143912f": {
+    "zh": "连接失败。请查看连接日志，返回设置后核对节点、邀请和本地端口，再试一次。",
+    "en": "Connection failed. Open the connection log, then return to settings and check the relay, invitation and local port before retrying."
+  },
+  "mb8d23e667305": {
+    "zh": "正在断开",
+    "en": "Disconnecting"
+  },
+  "m5f712dbabda6": {
+    "zh": "房间已创建，等待朋友加入",
+    "en": "Room created. Waiting for a friend"
+  },
+  "m3847a9c8e76b": {
+    "zh": "把邀请码私发给朋友。邀请码含房间密钥，请保持服务端和房间运行。",
+    "en": "Send the invitation privately. It includes a room secret. Keep the server and room running."
+  },
+  "m4f4bb7368ef5": {
+    "zh": "房间邀请码",
+    "en": "Room invitation"
+  },
+  "mc5f605204608": {
+    "zh": "复制邀请码",
+    "en": "Copy invitation"
+  },
+  "m7d9f51408c51": {
+    "zh": "连接详情",
+    "en": "Connection details"
+  },
+  "mbf8e2ae02aef": {
+    "zh": "返回设置并重试",
+    "en": "Return to settings and retry"
+  },
+  "m732982c52a33": {
+    "zh": "离开房间",
+    "en": "Leave room"
+  },
+  "mf55a92352399": {
+    "zh": "我要开房",
+    "en": "Host a room"
+  },
+  "m4bdf2d29c835": {
+    "zh": "我要加入",
+    "en": "Join a friend's room"
+  },
+  "mcb7b8880e972": {
+    "zh": "在同一局域网内游玩",
+    "en": "Play on the same LAN"
+  },
+  "m836dd6b23b80": {
+    "zh": "启动服务端后，将启动页的局域网地址分享给同一网络内的玩家。",
+    "en": "Start the server and share the LAN address on the launch page with players on your network."
+  },
+  "m5f929d0ac415": {
+    "zh": "先安装 EasyTier 组件，安装完成后继续。",
+    "en": "Install EasyTier to continue."
+  },
+  "mc0e17fb54c0e": {
+    "zh": "选择服务端实例",
+    "en": "Choose a server instance"
+  },
+  "mde7bc4543afd": {
+    "zh": "创建服务端实例",
+    "en": "Create server instance"
+  },
+  "mec4011050c46": {
+    "zh": "前往启动服务端",
+    "en": "Go to server launch"
+  },
+  "mca7ee4150737": {
+    "zh": "粘贴房主的邀请码",
+    "en": "Paste the host's invitation"
+  },
+  "m44455611b910": {
+    "zh": "高级设置",
+    "en": "Advanced settings"
+  },
+  "m0f67ea838502": {
+    "zh": "发现／中继节点",
+    "en": "Discovery / relay peer"
+  },
+  "mcdfb78faedc3": {
+    "zh": "本机接入端口",
+    "en": "Local forwarding port"
+  },
+  "m69ccd475cb4c": {
+    "zh": "创建房间并获取邀请",
+    "en": "Create room and get invitation"
+  },
+  "m9b8b1168fb32": {
+    "zh": "加入房间",
+    "en": "Join room"
+  },
+  "m4d93946e8a69": {
+    "zh": "EasyTier 组件版本",
+    "en": "EasyTier component version"
+  },
+  "m5704917bb20b": {
+    "zh": "新建节点",
+    "en": "New node"
+  },
+  "me37076350d49": {
+    "zh": "选择已有隧道",
+    "en": "Choose an existing tunnel"
+  },
+  "m42a50fe91eb8": {
+    "zh": "没有可供选择的记录。",
+    "en": "No entries available."
+  },
+  "m01b58a65cf24": {
+    "zh": "手动关联",
+    "en": "Link by ID"
+  },
+  "m8ec99b134e54": {
+    "zh": "保存 Sakura 访问密钥后即可选择服务商节点。",
+    "en": "Save a Sakura access token to select a provider node."
+  },
+  "m387d3c62f74f": {
+    "zh": "选择服务端实例后即可关联隧道。",
+    "en": "Select a server instance to link a tunnel."
+  },
+  "m185705a7f1f1": {
+    "zh": "节点待确认",
+    "en": "Unconfirmed node"
+  },
+  "m2125ffd7184a": {
+    "zh": "已关联隧道",
+    "en": "Linked tunnels"
+  },
+  "m5be0323e8adc": {
+    "zh": "已连接",
+    "en": "Connected"
+  },
+  "m09ae28400885": {
+    "zh": "移除本地节点",
+    "en": "Remove local node"
+  },
+  "m81123c56d5d8": {
+    "zh": "访问密钥",
+    "en": "Access token"
+  },
+  "m1706e542606f": {
+    "zh": "组件信息",
+    "en": "Component information"
+  },
+  "ma5b2956b9506": {
+    "zh": "关联隧道…",
+    "en": "Link tunnel…"
+  },
+  "md31c3c9eca43": {
+    "zh": "请核对邀请是否过期，并在高级设置检查本机端口后重试。",
+    "en": "Check the invitation expiry and local port in Advanced settings, then retry."
+  },
+  "me276e617a258": {
+    "zh": "请检查服务端状态与高级设置中的节点，再次创建房间。",
+    "en": "Check the server and the discovery peer in Advanced settings, then create the room again."
+  },
+  "m211bf30f121a": {
+    "zh": "关闭此窗口，先在 Sakura FRP 保存访问密钥。",
+    "en": "Close this dialog and save an access token in Sakura FRP first."
+  },
+  "m16be7542d016": {
+    "zh": "关闭此窗口，在 Sakura FRP 核对远端结果后再试。",
+    "en": "Close this dialog and check the remote result in Sakura FRP before trying again."
+  },
+  "m8cbe1f925f40": {
+    "zh": "先读取或重新读取节点与账号额度。",
+    "en": "Load or refresh the nodes and account quota first."
+  },
+  "me91e5756d240": {
+    "zh": "请选择有效的实例端口。",
+    "en": "Select a valid instance port."
+  },
+  "mbca59af241a8": {
+    "zh": "请选择实际的服务器使用范围。",
+    "en": "Select the actual audience for this server."
+  },
+  "m165cb018c6eb": {
+    "zh": "请选择符合当前端口协议和使用范围的节点。",
+    "en": "Choose a node that supports the current port protocol and server audience."
+  },
+  "m1a070413bb8a": {
+    "zh": "请在 Sakura 控制台检查或释放隧道额度，再重新读取。",
+    "en": "Check or free tunnel quota in the Sakura dashboard, then reload it."
+  },
+  "m6664933ac28e": {
+    "zh": "请输入有效的远端隧道名称。",
+    "en": "Enter a valid remote tunnel name."
+  },
+  "m6091420ac75f": {
+    "zh": "请输入 1–65535 的整数，或留空自动分配。",
+    "en": "Enter a whole number from 1 to 65535, or leave it blank for automatic assignment."
+  },
+  "m6d4235780cb7": {
+    "zh": "尚未读取节点与账号额度。",
+    "en": "Nodes and account quota have not been loaded."
+  },
+  "m7ca6cd5b63ff": {
+    "zh": "尚未选择可验证的 Sakura 节点。",
+    "en": "No verifiable Sakura node is selected."
+  },
+  "mc3f370571f46": {
+    "zh": "节点已更换，远端端口已重置为自动分配。可根据新节点的规则重新填写。",
+    "en": "The node changed and the remote port was reset to automatic. You can enter a port that the new node permits."
   }
 }

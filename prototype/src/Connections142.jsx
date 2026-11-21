@@ -1,10 +1,28 @@
 import {Sakura150} from './Sakura150';
-import {useEffect,useState} from 'react';
+import {cloneElement,useEffect,useId,useRef,useState} from 'react';
+import './connections177.css';
 import {getLocale} from '../desktop/localization.mjs';
 import {ControlButton as Button} from './ControlButton.mjs';
 const sx=(z,e)=>getLocale()==='en-US'?e:z,call=(...args)=>window.amberDesktop.server(...args);
 const message=value=>{const parts=String(value||'').split(' / ');return parts.length===2?sx(parts[0],parts[1]):String(value||'');};
-export function Connections142({current,children}){const [tab,setTab]=useState('easytier');return <section><div className="tabs"><Button className={tab==='easytier'?'active':''} aria-selected={tab==='easytier'} onClick={()=>setTab('easytier')}>EasyTier</Button><Button className={tab==='sakura'?'active':''} aria-selected={tab==='sakura'} onClick={()=>setTab('sakura')}>Sakura Frp</Button></div><div hidden={tab!=='easytier'}>{children}</div><div hidden={tab!=='sakura'}><Sakura150 current={current} active={tab==='sakura'}/></div></section>;}
+const providers=[['easytier','EasyTier'],['sakura','Sakura Frp']];
+export function Connections142({current,children,visible}){
+ const [tab,setTab]=useState('easytier'),id=useId(),buttons=useRef({});
+ function onTabKey(event){
+   const keys={ArrowLeft:tab==='easytier'?'sakura':'easytier',ArrowRight:tab==='easytier'?'sakura':'easytier',Home:'easytier',End:'sakura'};
+   const next=Object.hasOwn(keys,event.key)?keys[event.key]:null;
+   if(!next)return;
+   event.preventDefault();setTab(next);buttons.current[next]?.focus();
+ }
+ return <section className="connections177">
+   <div className="tabs" role="tablist" aria-label={sx('联机方式','Connection methods')} onKeyDown={onTabKey}>
+     {providers.map(([key,label])=><Button key={key} ref={node=>{buttons.current[key]=node;}} role="tab" id={id+'-tab-'+key} aria-controls={id+'-panel-'+key} className={tab===key?'active':''} aria-selected={tab===key} tabIndex={tab===key?0:-1} onClick={()=>setTab(key)}>{label}</Button>)}
+   </div>
+   {providers.map(([key])=><div className="connection-panel177" key={key} role="tabpanel" id={id+'-panel-'+key} aria-labelledby={id+'-tab-'+key} hidden={tab!==key}>
+     {key==='easytier'?cloneElement(children,{visible:visible && tab===key}):<Sakura150 current={current} active={visible && tab===key}/>}
+   </div>)}
+ </section>;
+}
 function Sakura({current,active}){
  const [state,setState]=useState(null),[token,setToken]=useState(''),[tunnel,setTunnel]=useState(''),[busy,setBusy]=useState(''),[error,setError]=useState(''),[diagnosis,setDiagnosis]=useState(null);const id=current?.id;
  useEffect(()=>{let live=true;async function load(){try{const s=await call('sakuraState',id);if(live)setState(s);}catch(e){if(live)setError(e.message);}}if(active)load();const timer=setInterval(()=>{if(active&&!document.hidden)load();},2500);return()=>{live=false;clearInterval(timer);};},[id,active]);
