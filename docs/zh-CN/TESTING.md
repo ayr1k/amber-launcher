@@ -1,3 +1,9 @@
+# 1.7.7 发布验证
+
+用户于 2026-11-21（America/New_York）在 [PR #22](https://github.com/ayr1k/amber-launcher/pull/22) 合并后授权正式发布。合并提交为 `6d1417427e56127e64af1982aa2b7e88173f8184`，最终任务提交 `7d067b737a710e993b01224bbe56228e5fda7ab8` 的两项 PR 工作流通过。[Windows 与 Linux 检查](https://github.com/ayr1k/amber-launcher/actions/runs/44937855577) · [测试安装包](https://github.com/ayr1k/amber-launcher/actions/runs/44937855669)
+
+正式包使用 public 渠道，并记录新的构建来源与源码校验值。任务阶段 Linux 回归通过 972 项，另有 9 项平台基线失败和 1 项跳过。联机与 Sakura 专项 34 项通过。实际安装与升级、跨网 Minecraft 进服、真实 Sakura 隧道创建和非 Windows 原生运行仍需验收。验收范围见 `LOCAL-TEST-1.7.7.md`。FreeBSD 仅实验性支持服务端与工具。安装包未签名，macOS 包未公证。
+
 # 1.7.6 发布验证
 
 用户于 2026-11-18（America/New_York）在 PR #21 合并后授权正式发布。合并提交为 `1fc4efaa5de9f868cf75d4a3e2f471a8e927f9ef`，最终任务提交 `33c124445713cad386cbb9f57973dec8beb59af6` 的全平台包及 Windows PR 工作流（44328475600）通过，独立 PR 安装包工作流在该事件中跳过。本次正式包版本为 1.7.6，使用 public 渠道并生成新的构建来源记录及源码清单。

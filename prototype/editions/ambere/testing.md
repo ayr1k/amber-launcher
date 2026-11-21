@@ -1,3 +1,9 @@
+# 1.7.7 release verification
+
+The user authorized formal publication on November 21, 2026 (America/New_York) after [PR #22](https://github.com/ayr1k/amber-launcher/pull/22) merged as `6d1417427e56127e64af1982aa2b7e88173f8184`. Both task workflows passed at `7d067b737a710e993b01224bbe56228e5fda7ab8`. [Windows and Linux checks](https://github.com/ayr1k/amber-launcher/actions/runs/44937855577) · [PR installers](https://github.com/ayr1k/amber-launcher/actions/runs/44937855669)
+
+Formal packages use the public channel with new provenance and source checksums. The task's Linux regression run covered 972 passing tests, nine known platform baseline failures and one skip. Its 34 focused multiplayer and Sakura checks passed. Native installation and upgrade, cross-network Minecraft gameplay, live Sakura tunnel creation and native non-Windows runtime acceptance remain pending. See `LOCAL-TEST-1.7.7.md` for the original scope and current boundaries. FreeBSD is experimental and supports servers and tools only. Packages are unsigned. macOS packages are not notarized.
+
 # 1.7.6 release verification
 
 Formal publication was authorized on November 18, 2026 (America/New_York) after PR #21 merged as `1fc4efaa5de9f868cf75d4a3e2f471a8e927f9ef`. The final task revision `33c124445713cad386cbb9f57973dec8beb59af6` passed the all-platform packages and Windows tests PR workflow (44328475600). The separate PR test-installer workflow was skipped for that event. The evidence below retains its original scope. The formal build uses 1.7.6 and the public channel, with fresh source manifests and package provenance.

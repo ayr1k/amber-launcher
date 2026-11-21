@@ -1,3 +1,9 @@
+## 1.7.7
+
+- Make EasyTier room hosting and joining easier to find, align the EasyTier and Sakura Frp panels, and offer a return to settings after a failed connection.
+- Separate room-network checks from Minecraft server readiness. A recent guest check reflects launcher activity. A Minecraft status reply indicates that a join can be attempted.
+- Show the exact reason Sakura tunnel creation is blocked. Switch to an eligible node in the same dialog and keep the tunnel name, instance port and audience. The remote port is checked against the selected node.
+
 ## 1.7.6
 
 - Import single-volume ZIP, MRPACK and CurseForge packs up to 5,000,000,000 bytes with streaming ZIP64. Keep file integrity checks, path safeguards and cancellation and recovery support.
