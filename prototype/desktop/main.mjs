@@ -223,6 +223,8 @@ app.whenReady().then(async () => {
    if(action==='portsRemove')return ports150.remove(...args);
    if(['sakuraStart','sakuraStop','sakuraRemove','sakuraRemoteDelete'].includes(action)){const binding=(await sakura.state()).tunnels.find(b=>b.id===args[0]);if(binding?services160.pending.has(binding.serverId):services160.pending.size>0)throw Error('Cancel the launch plan before changing its tunnel / 请先取消启动规划再操作其隧道');}
    if(action==='sakuraToken')return sakura.saveToken(...args);
+   if(action==='sakuraAddNode')return sakura.addNode(args[0]);
+   if(action==='sakuraRemoveNode')return sakura.removeNode(args[0]);
    if(action==='sakuraCatalog')return sakura.remote.catalog();
    if(action==='sakuraReconcile')return sakura.remote.reconcile();
    if(action==='sakuraClearUncertain'){const answer=await dialog.showMessageBox(window,{type:'warning',message:translateMessage('已在 Sakura 控制台核对远端结果？'),detail:translateMessage('解除待确认状态不会撤销远端操作。再次创建可能产生重复隧道。'),buttons:[translateMessage('取消'),translateMessage('已核对，解除待确认状态')],defaultId:0,cancelId:0});if(answer.response!==1)return null;await sakura.remote.clearUncertain();return {feedback:'已解除待确认状态，请以服务商记录为准。'};}
@@ -246,6 +248,7 @@ app.whenReady().then(async () => {
    if(action==='networkChoices160')return rooms.versions160.choices();
    if(action==='networkInstall')return rooms.install(args[0]);
    if(action==='host')return servers.locks.run(args[0],()=>rooms.host(...args));
+   if(action==='roomCheck177')return rooms.checkGuest(args[0]);
    if(action==='join')return rooms.join(...args);
    if(action==='leave')return rooms.leave();
    if(action==='copyInvite'){const code=(await rooms.state()).room?.code;if(!code)throw Error('No hosted room');clipboard.writeText(code);return true;}

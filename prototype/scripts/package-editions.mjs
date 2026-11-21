@@ -5,13 +5,19 @@ import {resolve,dirname,join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {execFileSync,spawn} from 'node:child_process';
 import {createHash} from 'node:crypto';
-import {build} from 'electron-builder';
+import {build,Platform,Arch} from 'electron-builder';
 import {EDITION} from '../desktop/edition.mjs';
 import {verify as verifySeedEngine} from './verify-seed-engine.mjs';
 await verifySeedEngine();
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const pkg=JSON.parse(await readFile(join(root,'package.json'),'utf8'));
 const publicBuild=process.argv.includes('--public');
+const crossWindowsDist=process.platform!=='win32' && !publicBuild ? process.env.AMBER_WINDOWS_ELECTRON_DIST : undefined;
+if(crossWindowsDist){
+ await access(join(crossWindowsDist,'electron.exe'));
+ if((await readFile(join(crossWindowsDist,'version'),'utf8')).trim()!==pkg.devDependencies.electron)throw Error('Windows Electron version does not match the lockfile');
+}
+
 const curseForgeKey=publicBuild?process.env.AMBER_CURSEFORGE_API_KEY?.trim():null;
 if(publicBuild&&!curseForgeKey)throw Error('Public package is missing the CurseForge build configuration.');
 const testNotes='LOCAL-TEST-'+pkg.version+'.md';
@@ -53,9 +59,9 @@ for(const edition of editions){
  await rm(join(stage,'desktop/curseforge-build-key.json'),{force:true});
  if(publicBuild)await writeFile(join(stage,'desktop/curseforge-build-key.json'),JSON.stringify({key:curseForgeKey}),{flag:'wx'});
  await run(process.execPath,[join(root,'node_modules/vite/bin/vite.js'),'build','--config',join(stage,'vite.config.mjs')],stage);
- const config={appId:'io.github.ayr1k.'+edition,productName:name,asar:false,npmRebuild:false,electronVersion:pkg.devDependencies.electron,electronDist:join(root,'node_modules/electron/dist'),directories:{output:out,buildResources:join(stage,'build')},files:['desktop/**/*','dist/client/**/*','package.json','LICENSE','THIRD_PARTY_NOTICES.md','!node_modules/**','!desktop/bin/seed-engine-linux-*','!desktop/bin/seed-engine-darwin-*','!desktop/bin/seed-engine-freebsd-*','!**/*.ttf','!dist/client/assets/sodium.png','!dist/client/assets/lithium.png','!dist/client/assets/iris.png','!dist/client/assets/modmenu.png','!dist/client/assets/fabric-api.png'],extraFiles:[{from:join(root,'PLATFORMS-1.3.5.md'),to:'PLATFORMS-1.3.5.md'},{from:join(stage,'CHANGELOG.md'),to:'CHANGELOG.md'},{from:join(stage,'RELEASE-ACCEPTANCE.md'),to:'RELEASE-ACCEPTANCE.md'}],win:{target:[{target:'nsis',arch:['x64']}],executableName:name,icon:join(stage,'build/icon.ico'),signAndEditExecutable:true},nsis:{oneClick:false,perMachine:false,allowElevation:false,allowToChangeInstallationDirectory:true,createDesktopShortcut:true,createStartMenuShortcut:true,shortcutName:name,deleteAppDataOnUninstall:false,runAfterFinish:false,installerLanguages:['zh_CN','en_US'],displayLanguageSelector:true,include:join(stage,'build/installer.nsh'),installerIcon:join(stage,'build/icon.ico'),uninstallerIcon:join(stage,'build/icon.ico'),artifactName:name+'-${version}-Setup-${arch}.exe'}};
+ const config={appId:'io.github.ayr1k.'+edition,productName:name,asar:false,npmRebuild:false,electronVersion:pkg.devDependencies.electron,electronDist:crossWindowsDist||join(root,'node_modules/electron/dist'),directories:{output:out,buildResources:join(stage,'build')},files:['desktop/**/*','dist/client/**/*','package.json','LICENSE','THIRD_PARTY_NOTICES.md','!node_modules/**','!desktop/bin/seed-engine-linux-*','!desktop/bin/seed-engine-darwin-*','!desktop/bin/seed-engine-freebsd-*','!**/*.ttf','!dist/client/assets/sodium.png','!dist/client/assets/lithium.png','!dist/client/assets/iris.png','!dist/client/assets/modmenu.png','!dist/client/assets/fabric-api.png'],extraFiles:[{from:join(root,'PLATFORMS-1.3.5.md'),to:'PLATFORMS-1.3.5.md'},{from:join(stage,'CHANGELOG.md'),to:'CHANGELOG.md'},{from:join(stage,'RELEASE-ACCEPTANCE.md'),to:'RELEASE-ACCEPTANCE.md'}],win:{target:[{target:'nsis',arch:['x64']}],executableName:name,icon:join(stage,'build/icon.ico'),signAndEditExecutable:true},nsis:{oneClick:false,perMachine:false,allowElevation:false,allowToChangeInstallationDirectory:true,createDesktopShortcut:true,createStartMenuShortcut:true,shortcutName:name,deleteAppDataOnUninstall:false,runAfterFinish:false,installerLanguages:['zh_CN','en_US'],displayLanguageSelector:true,include:join(stage,'build/installer.nsh'),installerIcon:join(stage,'build/icon.ico'),uninstallerIcon:join(stage,'build/icon.ico'),artifactName:name+'-${version}-Setup-${arch}.exe'}};
  if(process.argv.includes('--stage-only'))continue;
- await build({projectDir:stage,config,publish:'never'});
+ await build({projectDir:stage,config,targets:Platform.WINDOWS.createTarget('nsis',Arch.x64),publish:'never'});
  const filename=`${name}-${pkg.version}-Setup-x64.exe`;await access(join(out,filename));await copyFile(join(out,filename),join(base,filename));
  await writeFile(join(base,filename+'.provenance.json'),JSON.stringify({...provenance,product:name},null,2));
  const bytes=await readFile(join(base,filename));await writeFile(join(base,filename+'.sha256'),createHash('sha256').update(bytes).digest('hex')+'  '+filename+'\n');
