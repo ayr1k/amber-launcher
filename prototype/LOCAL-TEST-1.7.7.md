@@ -14,7 +14,16 @@ Development channel. Use only disposable server instances and test accounts. See
 
 1.7.6 source inspection identified a stale default and a failed-room retry dead end. The new UI offers an explicit return to settings. A listening TCP port alone must never mark a guest ready. A successful Minecraft status reply indicates availability for a join attempt. Gameplay acceptance requires a client entering the world.
 
-## Recorded results on Linux x64
+## Follow-up acceptance for the four corrections
+
+1. Open Online → Connections on the same server instance at the same display scale. Compare the first content row of EasyTier and Sakura Frp in a wide window and after resizing to a narrow window. On EasyTier, the two task cards should wrap without hiding host, join, LAN or advanced settings.
+2. Start a disposable EasyTier room. Compare the host label before a guest check, just after a check, and after the guest leaves the launcher page or uses an older launcher. The label is about recent detection, not entering or leaving the Minecraft server.
+3. In the Sakura node card's remote creation dialog, try an ineligible node. Confirm the exact reason is visible beside Create with no hover. Switch to an eligible node in the same dialog; name, instance port and audience should stay selected, and a manually entered remote port should be checked against the new node. Leave the remote port blank to request automatic assignment.
+4. With an authorized provider test account, verify separate tunnel associations for Minecraft and an appropriate extra plugin port. Cancel before submission, then retry after a known error; ensure duplicate clicks do not create duplicate tunnels. Reconcile uncertain provider results before any retry.
+
+Native Windows clean installation and in-place upgrade, two-network Minecraft gameplay, and live Sakura changes require a suitable test system and account. Check the current handoff for the exact tested commit and results; the original baseline evidence below does not certify these follow-up changes.
+
+## Original 1.7.7 baseline results on Linux x64
 
 - The Chromium renderer fixture exercised host creation and copying, guest failure and returning with the invitation retained, a ready guest address, node dialog cancellation, creation, association, failure/retry, and rapid repeat submission. Sakura used synthetic service data.
 - The repository suite reported 967 passed, 9 failed and 1 skipped. All nine failures also reproduced on the unchanged 1.7.6 base on this Linux runner. Seven Windows-installer update cases expect Windows assets, one vanilla rule case expects Windows platform matching, and one room-sync fixture creates a filename longer than the host filesystem's byte limit. No new suite failures were observed.

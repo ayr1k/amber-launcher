@@ -38,7 +38,7 @@ function NodeDialog({dialog,current,ports,state,onClose,onSaved}) {
   }
   return <Modal145 title={title} onClose={()=>{if(!lock.current)onClose();}}><div className="modal-body145">
     {kind==='remote' ? <SakuraRemoteCreate150 current={current} ports={ports} nodeId={node.id}
-      disabled={!state.hasToken||!!state.remoteOperation} onBusy={v=>{lock.current=v;setBusy(v);}} onChanged={onSaved}/> :
+      hasToken={state.hasToken} pending={!!state.remoteOperation} onBusy={v=>{lock.current=v;setBusy(v);}} onChanged={onSaved} onCancel={onClose}/> :
       <form onSubmit={submit}>
         {needsCatalog ? <label>{kind==='node'?translateText("Sakura 节点"):translateText("选择已有隧道")}
           <Select required disabled={busy||!catalog} value={choice} onChange={e=>{

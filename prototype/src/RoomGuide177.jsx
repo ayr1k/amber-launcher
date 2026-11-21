@@ -5,6 +5,7 @@ import {ControlButton as Button} from './ControlButton.mjs';
 import {EasyTierChoices160} from './ComponentChoices160';
 import {RoomSync152} from './RoomSync152';
 import {Select} from './Select';
+import {hostRecentActivity177} from './room-guide-view177.mjs';
 
 const call = (...args) => window.amberDesktop.server(...args);
 
@@ -55,7 +56,8 @@ export function RoomGuide177({network,current,instances,onSelect,onPage,onRefres
   }
   function reset() { setTask(null); setPeer(null); setCode(''); setPort('25567'); setError(''); }
   const component = <EasyTierChoices160 network={network} busy={busy} act={act}/>;
-  return <section className="connections132"><h2>EasyTier</h2>
+  return <section className="room-guide177 workspace150">
+    <p className="room-intro177">{translateText("选择开房或加入房间，与朋友一起游玩。")}</p>
     {error && <p role="alert" className="error">{error} {!existing && (task==='guest' ?
       translateText("请核对邀请是否过期，并在高级设置检查本机端口后重试。") :
       translateText("请检查服务端状态与高级设置中的节点，再次创建房间。"))}</p>}
@@ -63,7 +65,7 @@ export function RoomGuide177({network,current,instances,onSelect,onPage,onRefres
       {room.state === 'failed' ? <p role="alert">{translateText("连接失败。请查看连接日志，返回设置后核对节点、邀请和本地端口，再试一次。")}</p> :
         room.state !== 'running' ? <p role="status">{room.state==='stopping'?translateText("正在断开"):translateText("正在连接")}</p> :
         room.role === 'host' ? <>
-          <strong>{room.guestSeen ? translateText("已组网") : translateText("房间已创建，等待朋友加入")}</strong>
+          <strong role="status">{hostRecentActivity177(room.guestSeen)}</strong>
           <p>{translateText("把邀请码私发给朋友。邀请码含房间密钥，请保持服务端和房间运行。")}</p>
           <textarea className="server-invite132" readOnly aria-label={translateText("房间邀请码")} value={room.code}/>
           <Button className="button" disabled={busy} onClick={()=>act(()=>call('copyInvite'))}>{translateText("复制邀请码")}</Button>
@@ -76,13 +78,23 @@ export function RoomGuide177({network,current,instances,onSelect,onPage,onRefres
         await call('leave'); if(room.state==='failed')setTask(room.role); else reset();
       })}>{room.state==='failed'?translateText("返回设置并重试"):translateText("离开房间")}</Button>
     </section> : !task ? <>
-      <div className="inline-actions"><Button className="button" onClick={()=>setTask('host')}>{translateText("我要开房")}</Button>
-        <Button className="button secondary" onClick={()=>setTask('guest')}>{translateText("我要加入")}</Button></div>
+      <div className="room-task-cards177">
+        <section className="room-task-card177">
+          <h3>{translateText("我要开房")}</h3>
+          <p>{translateText("为已启动的服务端创建房间，然后把邀请码发给朋友。")}</p>
+          <Button className="button" onClick={()=>setTask('host')}>{translateText("我要开房")}</Button>
+        </section>
+        <section className="room-task-card177">
+          <h3>{translateText("我要加入")}</h3>
+          <p>{translateText("使用房主的邀请码连接，不需要创建服务端。")}</p>
+          <Button className="button secondary" onClick={()=>setTask('guest')}>{translateText("我要加入")}</Button>
+        </section>
+      </div>
       <details><summary>{translateText("在同一局域网内游玩")}</summary><p>{translateText("启动服务端后，将启动页的局域网地址分享给同一网络内的玩家。")}</p></details>
     </> : <>
       <h3>{task==='host'?translateText("我要开房"):translateText("我要加入")}</h3>
       {!network?.installed ? <><p>{translateText("先安装 EasyTier 组件，安装完成后继续。")}</p>{component}</> :
-        <form onSubmit={e=>{e.preventDefault();act(()=>task==='host'?call('host',current.id,peer??network.defaultPeer):call('join',code.trim(),Number(port)));}}>
+        <form className="room-form177" onSubmit={e=>{e.preventDefault();act(()=>task==='host'?call('host',current.id,peer??network.defaultPeer):call('join',code.trim(),Number(port)));}}>
           {task==='host' ? <>
             {instances.length>0 && <label>{translateText("选择服务端实例")}<Select value={current?.id||''} onChange={e=>onSelect(e.target.value)}>{instances.map(i=><option key={i.id} value={i.id}>{i.name}</option>)}</Select></label>}
             {!current ? <Button type="button" className="button secondary" onClick={()=>onPage('create')}>{translateText("创建服务端实例")}</Button> :

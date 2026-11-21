@@ -1,4 +1,24 @@
 {
+  "m0d1964e8e9f9": {
+    "zh": "选择开房或加入房间，与朋友一起游玩。",
+    "en": "Host or join a room to play with friends."
+  },
+  "mc928230e75d3": {
+    "zh": "为已启动的服务端创建房间，然后把邀请码发给朋友。",
+    "en": "Create a room for a running server, then share the invitation with your friends."
+  },
+  "m94d62a170ebc": {
+    "zh": "使用房主的邀请码连接，不需要创建服务端。",
+    "en": "Use the host’s invitation to connect. You don’t need to create a server."
+  },
+  "m57828237a08f": {
+    "zh": "最近检测到朋友",
+    "en": "Friend detected recently"
+  },
+  "m46f06c546d82": {
+    "zh": "近期未检测到朋友",
+    "en": "No friend detected recently"
+  },
   "m311bb313fdec": {
     "zh": "账号",
     "en": "Accounts"
@@ -13612,5 +13632,53 @@
   "me276e617a258": {
     "zh": "请检查服务端状态与高级设置中的节点，再次创建房间。",
     "en": "Check the server and the discovery peer in Advanced settings, then create the room again."
+  },
+  "m211bf30f121a": {
+    "zh": "关闭此窗口，先在 Sakura FRP 保存访问密钥。",
+    "en": "Close this dialog and save an access token in Sakura FRP first."
+  },
+  "m16be7542d016": {
+    "zh": "关闭此窗口，在 Sakura FRP 核对远端结果后再试。",
+    "en": "Close this dialog and check the remote result in Sakura FRP before trying again."
+  },
+  "m8cbe1f925f40": {
+    "zh": "先读取或重新读取节点与账号额度。",
+    "en": "Load or refresh the nodes and account quota first."
+  },
+  "me91e5756d240": {
+    "zh": "请选择有效的实例端口。",
+    "en": "Select a valid instance port."
+  },
+  "mbca59af241a8": {
+    "zh": "请选择实际的服务器使用范围。",
+    "en": "Select the actual audience for this server."
+  },
+  "m165cb018c6eb": {
+    "zh": "请选择符合当前端口协议和使用范围的节点。",
+    "en": "Choose a node that supports the current port protocol and server audience."
+  },
+  "m1a070413bb8a": {
+    "zh": "请在 Sakura 控制台检查或释放隧道额度，再重新读取。",
+    "en": "Check or free tunnel quota in the Sakura dashboard, then reload it."
+  },
+  "m6664933ac28e": {
+    "zh": "请输入有效的远端隧道名称。",
+    "en": "Enter a valid remote tunnel name."
+  },
+  "m6091420ac75f": {
+    "zh": "请输入 1–65535 的整数，或留空自动分配。",
+    "en": "Enter a whole number from 1 to 65535, or leave it blank for automatic assignment."
+  },
+  "m6d4235780cb7": {
+    "zh": "尚未读取节点与账号额度。",
+    "en": "Nodes and account quota have not been loaded."
+  },
+  "m7ca6cd5b63ff": {
+    "zh": "尚未选择可验证的 Sakura 节点。",
+    "en": "No verifiable Sakura node is selected."
+  },
+  "mc3f370571f46": {
+    "zh": "节点已更换，远端端口已重置为自动分配。可根据新节点的规则重新填写。",
+    "en": "The node changed and the remote port was reset to automatic. You can enter a port that the new node permits."
   }
 }
