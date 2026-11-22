@@ -25,9 +25,34 @@ jobs:
           package_json_file: prototype/package.json
       - run: pnpm install --frozen-lockfile
       - run: sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends openjdk-21-jre-headless
-      - run: node --test tests/java-discovery179.test.mjs
-        env:
-          AMBER_TEST_SYSTEM_JAVA: '21'
+      - name: Verify the runner's system JVM boundary
+        run: |
+          stat -c '%n owner=%u:%g mode=%a' /usr/lib/jvm
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {stat} from 'node:fs/promises';
+          import {systemJavaCandidates} from './desktop/system-java.mjs';
+          const parent=await stat('/usr/lib/jvm');
+          if(parent.uid!==0||(parent.mode&0o022)){
+            const candidates=await systemJavaCandidates('linux');
+            assert.ok(candidates.every(path=>!path.startsWith('/usr/lib/jvm/')));
+            console.log('Unprotected system JVM root excluded');
+          }
+          JS
+      - name: Test the distro JRE under an administrator-owned JVM root
+        run: |
+          # Preserve the runner's real permissions. Mount this same apt-installed
+          # JRE below a fresh protected parent, visible only in this namespace.
+          sudo unshare --mount --propagation private /bin/bash -eu -s -- "$(command -v node)" "$(id -u)" "$(id -g)" <<'SH'
+          jdk=java-21-openjdk-amd64
+          saved=$(mktemp -d)
+          trap 'umount "$saved"; rmdir "$saved"' EXIT
+          mount --bind "/usr/lib/jvm/$jdk" "$saved"
+          mount -t tmpfs -o mode=0755 tmpfs /usr/lib/jvm
+          mkdir "/usr/lib/jvm/$jdk"
+          mount --bind "$saved" "/usr/lib/jvm/$jdk"
+          AMBER_TEST_SYSTEM_JAVA=21 setpriv --reuid="$2" --regid="$3" --clear-groups "$1" --test tests/java-discovery179.test.mjs
+          SH
   installers:
     # The 1.7.6 task explicitly excludes installer uploads.
     if: (github.head_ref || github.ref_name) != 'codex/1.7.6-content-import'
