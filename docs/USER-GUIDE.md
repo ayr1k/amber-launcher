@@ -406,3 +406,7 @@ The host’s recent guest detection indicates that the launcher received a room 
 In **Sakura Frp**, save a test or personal access token in the credentials panel. **New node** adds a provider node to this launcher's cards. On a card, **Link tunnel** connects an existing tunnel to the selected instance port. **Create remote Sakura tunnel** uses the provider API and consumes tunnel quota after confirmation. **Link by ID** remains available. Older associations with unconfirmed nodes remain manageable. Selecting their actual provider node can identify them by tunnel ID. Close a dialog to discard unsubmitted changes. For an uncertain remote result, reconcile before submitting again.
 
 If creation is unavailable, read the reason beside the button. You can choose a different eligible node in the same dialog without re-entering the tunnel name, instance port or audience. A blank remote port still lets Sakura assign one.
+
+## 1.7.8 Download diagnostics
+
+In Tasks, expand **Download diagnostics** for a download. Its chart shows up to 60 seconds of actual response-body bytes, including retransmissions. Existing cached or partial content and local assembly do not count. The panel distinguishes the latest file settings from observations for this task. Pause or end a download to see its current speed reset to zero. Diagnostics are held in memory for the current session.

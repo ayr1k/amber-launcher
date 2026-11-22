@@ -1,3 +1,9 @@
+# 1.7.8 release verification
+
+The user authorized formal publication on November 22, 2026 (America/New_York) after [PR #23](https://github.com/ayr1k/amber-launcher/pull/23) merged as `b759b04e93cfba56799297c3e2e4f62430c4f764`. Both task workflows passed at `132f704b9522b6033b3069fdb0c16510c861adf8`. [Windows regression and Linux checks](https://github.com/ayr1k/amber-launcher/actions/runs/44995556796) · [PR installers and installation comparison](https://github.com/ayr1k/amber-launcher/actions/runs/44995556788)
+
+Formal packages use the public channel with fresh provenance and checksums. The task verified the native Windows diagnostics with controlled downloads and installed two overlapping Modrinth downloads in separate disposable instances. The task CI compared clean installation and upgrade from 1.7.7 for the default and experimental NSIS compression settings. The formal release uses the existing default. Everyday Windows installation and upgrade, Minecraft gameplay, and native non-Windows runtime acceptance remain pending. See `LOCAL-TEST-1.7.8.md` and PR #23 for measured results and test boundaries. FreeBSD is experimental and supports servers and tools only. Packages are unsigned. macOS packages are not notarized.
+
 # 1.7.7 release verification
 
 The user authorized formal publication on November 21, 2026 (America/New_York) after [PR #22](https://github.com/ayr1k/amber-launcher/pull/22) merged as `6d1417427e56127e64af1982aa2b7e88173f8184`. Both task workflows passed at `7d067b737a710e993b01224bbe56228e5fda7ab8`. [Windows and Linux checks](https://github.com/ayr1k/amber-launcher/actions/runs/44937855577) · [PR installers](https://github.com/ayr1k/amber-launcher/actions/runs/44937855669)

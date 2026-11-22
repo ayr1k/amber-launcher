@@ -1,3 +1,8 @@
+## 1.7.8
+
+- Expand Download diagnostics on a task to view its transfer speed history, requested settings and observed download details. Each task retains up to 60 one-second samples in memory for the current launcher session.
+- Count response-body bytes when received, including bytes received again during a retry or resume. Cached bytes, previous partial data, progress resets and segment assembly do not add speed. Paused and ended downloads show zero current speed. Missing observations are shown as unknown.
+
 ## 1.7.7
 
 - Make EasyTier room hosting and joining easier to find, align the EasyTier and Sakura Frp panels, and offer a return to settings after a failed connection.

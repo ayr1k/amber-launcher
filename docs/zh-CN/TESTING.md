@@ -1,3 +1,9 @@
+# 1.7.8 发布验证
+
+用户于 2026-11-22（America/New_York）在 [PR #23](https://github.com/ayr1k/amber-launcher/pull/23) 合并后授权正式发布。合并提交为 `b759b04e93cfba56799297c3e2e4f62430c4f764`，任务最终提交 `132f704b9522b6033b3069fdb0c16510c861adf8` 的两项工作流均通过。[Windows 回归及 Linux 检查](https://github.com/ayr1k/amber-launcher/actions/runs/44995556796) · [测试安装包及安装对照](https://github.com/ayr1k/amber-launcher/actions/runs/44995556788)
+
+正式包使用 public 渠道并生成新的构建来源和校验值。任务阶段已在 Windows 验证受控下载诊断，并在两个隔离实例中并行下载和安装 Modrinth 内容。任务 CI 对照了默认和实验 NSIS 压缩设置的新装与从 1.7.7 升级。正式版沿用默认配置。日常 Windows 环境安装升级、Minecraft 实际游玩及非 Windows 原生运行仍待验收。测试范围和测量结果见 `LOCAL-TEST-1.7.8.md` 及 PR #23。FreeBSD 仅实验性支持服务端与工具。安装包未签名，macOS 包未公证。
+
 # 1.7.7 发布验证
 
 用户于 2026-11-21（America/New_York）在 [PR #22](https://github.com/ayr1k/amber-launcher/pull/22) 合并后授权正式发布。合并提交为 `6d1417427e56127e64af1982aa2b7e88173f8184`，最终任务提交 `7d067b737a710e993b01224bbe56228e5fda7ab8` 的两项 PR 工作流通过。[Windows 与 Linux 检查](https://github.com/ayr1k/amber-launcher/actions/runs/44937855577) · [测试安装包](https://github.com/ayr1k/amber-launcher/actions/runs/44937855669)
