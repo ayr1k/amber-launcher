@@ -1,4 +1,8 @@
 {
+  "mb4c3668f738a": {
+    "zh": "最近传输生效限速",
+    "en": "Shared limit at last transfer"
+  },
   "m0d1964e8e9f9": {
     "zh": "选择开房或加入房间，与朋友一起游玩。",
     "en": "Host or join a room to play with friends."
@@ -13680,5 +13684,113 @@
   "mc3f370571f46": {
     "zh": "节点已更换，远端端口已重置为自动分配。可根据新节点的规则重新填写。",
     "en": "The node changed and the remote port was reset to automatic. You can enter a port that the new node permits."
+  },
+  "mb5bc73dadd13": {
+    "zh": "尚无传输采样",
+    "en": "No transfer samples yet"
+  },
+  "m4db1db66e74b": {
+    "zh": "最近 60 秒 · 每秒采样 · 峰值 {0}",
+    "en": "Last 60 seconds · 1-second samples · peak {0}"
+  },
+  "mdd883ecf729c": {
+    "zh": "下载诊断",
+    "en": "Download diagnostics"
+  },
+  "m68af1ac4b8a0": {
+    "zh": "当前速度",
+    "en": "Current speed"
+  },
+  "m0e05d84d93f4": {
+    "zh": "配置（最近开始的文件）",
+    "en": "Configuration at last file start"
+  },
+  "m7cc3bfae2023": {
+    "zh": "多文件并发上限",
+    "en": "File concurrency limit"
+  },
+  "m6bacf347ab5d": {
+    "zh": "共享连接上限",
+    "en": "Shared connection limit"
+  },
+  "m80ca4acceaa5": {
+    "zh": "单文件策略",
+    "en": "Per-file strategy"
+  },
+  "ma7520ee82909": {
+    "zh": "符合条件时最多 4 段",
+    "en": "Up to 4 segments when eligible"
+  },
+  "m9e42a055b92c": {
+    "zh": "单流",
+    "en": "Single stream"
+  },
+  "mf26d768df1af": {
+    "zh": "共享限速",
+    "en": "Shared bandwidth limit"
+  },
+  "me264d2c9faaf": {
+    "zh": "不限速",
+    "en": "Unlimited"
+  },
+  "m091dc3d59552": {
+    "zh": "来源策略",
+    "en": "Source policy"
+  },
+  "md8ebcb6f55b7": {
+    "zh": "实际传输（本任务）",
+    "en": "Observed transfers for this task"
+  },
+  "mc21cb6205bbf": {
+    "zh": "并发文件（当前 / 峰值）",
+    "en": "Concurrent files (now / peak)"
+  },
+  "mc90ca535565b": {
+    "zh": "已观察到的单文件模式",
+    "en": "Observed per-file modes"
+  },
+  "m654f8b81a834": {
+    "zh": "单文件同时传输流峰值",
+    "en": "Peak concurrent streams per file"
+  },
+  "m0324761ddaa8": {
+    "zh": "最近响应来源",
+    "en": "Recent response sources"
+  },
+  "md883f74f88d5": {
+    "zh": "最近回退",
+    "en": "Latest fallback"
+  },
+  "m4f3310a3eede": {
+    "zh": "传输重试 / 回退次数",
+    "en": "Transfer retries / fallbacks"
+  },
+  "m81e797f6d7ed": {
+    "zh": "已复用部分文件",
+    "en": "Reused a partial file"
+  },
+  "m196eb0af3d66": {
+    "zh": "未观察到",
+    "en": "None observed"
+  },
+  "mb5141d3d19e9": {
+    "zh": "是",
+    "en": "Yes"
+  },
+  "m0a9c249a45a8": {
+    "zh": "{0} 段",
+    "en": "{0} segments"
+  },
+  "m01818eb451f6": {
+    "zh": "分段",
+    "en": "Segmented"
+  },
+  "mcffa30cde52c": {
+    "zh": "续传",
+    "en": "Resume"
+  },
+  "m08b98d1c3137": {
+    "zh": "完整请求",
+    "en": "Full request"
   }
 }

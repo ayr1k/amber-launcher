@@ -167,7 +167,7 @@ app.whenReady().then(async () => {
   handle('amber:instances', async () => {const pending = await workflows.pending();return (await core.listInstances()).map((i) => ({ ...i, setup: pending.find((p) => p.instanceId === i.id) || null }));});
   handle('amber:versions', () => core.versions());
   handle('amber:create', (input) => {core.workflowGuard?.();return core.createInstance(input);});
-  handle('amber:status', async () => ({ ...(await core.runtimeStatus()), setups: await workflows.pending(), operation: core.operation || null, workflowActive: workflows.active, cancelling: workflows.active && workflows.cancelled }));
+  handle('amber:status', async detailId => ({ ...(await core.runtimeStatus(detailId)), setups: await workflows.pending(), operation: core.operation || null, workflowActive: workflows.active, cancelling: workflows.active && workflows.cancelled }));
   handle('amber:install', (id, options) => core.install(id, options));
   handle('amber:cancel', (id) => {const job=core.jobs.find(j=>j.id===id);if(job&&[...workflows.scopes].some(s=>s.instanceId===job.instanceId))return workflows.cancel(job.instanceId);return core.cancel(id);});
   handle('amber:java-scan', () => core.scanJava());

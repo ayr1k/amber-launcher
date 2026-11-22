@@ -22,7 +22,7 @@ function validRange(response,start,end,size,etag){
     (!encoding||encoding==='identity')&&(!etag||response.headers.get('etag')===etag);
 }
 
-export async function segmentedDownload(file,{temporary,signal,network,group,limit,fetchRange,ensurePath,onBytes,verify}){
+export async function segmentedDownload(file,{temporary,signal,network,group,limit,fetchRange,ensurePath,onBytes,verify,meter,sourceOf}){
   const ranges=segmentRanges(file.size),paths=segmentPaths(temporary),sizes=[];
   for(let i=0;i<paths.length;i++){
     await ensurePath(paths[i]);let size=0;
@@ -53,15 +53,19 @@ export async function segmentedDownload(file,{temporary,signal,network,group,lim
     try{await admitted(async(active,reset,stopIdle)=>{
       const start=range.start+sizes[i],response=await fetchRange(start,range.end,active,etag);
       if(!validRange(response,start,range.end,file.size,etag)){await response.body?.cancel();throw unsupported();}
+      const closeStream=meter?.stream(file.path,ranges.length,sourceOf(response),sizes.some(n=>n>0));
+      try{
       let received=0;const expected=range.end-start+1;
       const monitor=new Transform({transform(chunk,_encoding,done){
         received+=chunk.length;if(received>expected)return done(unsupported());
+        meter?.bytes(chunk.length,network?.bandwidth.rate);
         stopIdle();Promise.resolve(network?.bandwidth.take(chunk.length,active)).then(()=>{
           reset();total+=chunk.length;onBytes(chunk.length);network?.event(file,{bytes:total,phase:'downloading'});done(null,chunk);
         },done);
       }});
       await pipeline(Readable.fromWeb(response.body),monitor,createWriteStream(paths[i],{flags:sizes[i]?'a':'w'}),{signal:active});
       if(received!==expected)throw unsupported();
+      }finally{closeStream?.();}
     });}catch(e){failure ||= e;peers.abort(e);}
   }));
   if(failure)throw failure;

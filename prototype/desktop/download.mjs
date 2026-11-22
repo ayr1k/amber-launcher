@@ -92,10 +92,16 @@ async function refreshModrinthAddress(file, fetcher, signal){
  return null;
 }
 export function download(file,options={}){return withFileLock(file.path,()=>downloadUnlocked(file,options),options.signal);}
-async function downloadUnlocked(file,{root,signal,onBytes=()=>{},fetcher=fetch,threads=128,transferGroup,segments=true}={}){
+async function downloadUnlocked(file,{root,signal,onBytes=()=>{},fetcher=fetch,threads=128,transferGroup,segments=true,poolLimit=1}={}){
   if(!/^[0-9a-f]{40}$|^[0-9a-f]{64}$|^[0-9a-f]{128}$/.test(file.hash))throw new Error('下载缺少完整性校验值。');
   signal?.throwIfAborted();await ensureParents(root,file.path);
   const network=fetcher.amberNetwork,scope=network?.context.getStore(),group=scope||transferGroup||signal||Symbol('transfer');
+  const platform=URL.canParse(file.url)?filePlatform(file.url):undefined;
+  const isContent=!!platform||Array.isArray(file.urls);
+  const meter=scope?.diagnostics;
+  meter?.configure({fileLimit:poolLimit, sharedLimit:transferStatus144().limit, segments:!isContent&&segments&&threads>1,
+    bandwidthKib:network.settings.bandwidthKib, sourceMode:isContent ? network.settings.contentMode : network.settings.mode});
+  const sourceOf=response=>network?.responseRoutes?.get(response)||responseOrigins.get(response);
   // Stable, hash-specific partials survive cancellation and process restart.
   const temporary=file.path+'.amber-'+(file.hash.length>64?file.hash.slice(0,40):file.hash)+'.part';
   async function complete(result,event,publish=false){
@@ -110,8 +116,6 @@ async function downloadUnlocked(file,{root,signal,onBytes=()=>{},fetcher=fetch,t
     }catch(cause){throw Object.assign(Error('Download verified; temporary-file cleanup failed / 下载已校验，临时文件清理失败',{cause}),{code:'SIDECAR_CLEANUP'});}
     network?.event(file,event);return result;
   }
-  const platform=URL.canParse(file.url)?filePlatform(file.url):undefined;
-  const isContent=!!platform||Array.isArray(file.urls);
   const auto=isContent&&(network?.settings.contentMode||'auto')==='auto';
   const allowFallback=auto&&network?.settings.fallback!==false;
   const original=file.url, curseForgeAsset=platform==='curseforge'||hasCurseForgeIdentity(file);
@@ -124,7 +128,7 @@ async function downloadUnlocked(file,{root,signal,onBytes=()=>{},fetcher=fetch,t
    authorizedEdgeURL=await authorizedCurseForgeURL(file,{fetcher,request:officialFetch,signal:authorizationSignal});
    if(authorizedEdgeURL!==selected){
     if(!allowFallback)throw Error('CurseForge changed the selected file address. Preview the file again. / CurseForge 已更新文件地址，请重新预览。');
-    replacePartial=true;
+    replacePartial=true;meter?.fallback(new URL(original).hostname,new URL(authorizedEdgeURL).hostname);
    }
    first=authorizedEdgeURL;
   }
@@ -150,26 +154,29 @@ async function downloadUnlocked(file,{root,signal,onBytes=()=>{},fetcher=fetch,t
   let useSegments=!isContent&&segments&&segmentRanges(file.size).length>0&&threads>1&&transferStatus144().limit>1;
   try{if((await lstat(temporary)).size>0)useSegments=false;}catch(e){if(e.code!=='ENOENT')throw e;}
   if(useSegments){try{const disk=await statfs(dirname(file.path));if(disk.bavail*disk.bsize<file.size*2)useSegments=false;}catch{useSegments=false;}}
+  let retryPending=false;
   for(let attempt=0;attempt<3;attempt++){
     signal?.throwIfAborted();await network?.gate(signal);let offset=0;
     try{const st=await lstat(temporary);if(!st.isFile()||st.isSymbolicLink())throw Error('不安全的下载片段。');offset=st.size;}catch(e){if(e.code!=='ENOENT')throw e;}
-    if(offset&&(await verified({...file,path:temporary})))return complete({cached:false,resumed:true},{bytes:offset,phase:'complete',resumed:true},true);
+    if(offset&&(await verified({...file,path:temporary}))){if(meter)meter.resumed=true;return complete({cached:false,resumed:true},{bytes:offset,phase:'complete',resumed:true},true);}
     if(offset>=(file.size||600_000_000)){await rm(temporary,{force:true});offset=0;}
     const controller=new AbortController();let idle,untrack,connectTimer,headMs,started=Date.now();
     const resetIdle=()=>{clearTimeout(idle);idle=setTimeout(()=>controller.abort(Object.assign(Error('Download stalled / 下载长时间没有数据'),{code:'IDLE'})),45000);};
     const combined=AbortSignal.any([controller.signal,...(signal?[signal]:[])]);
     try{
+      if(retryPending && meter)meter.retries++;
+      retryPending=false;
       network?.event(file,{phase:'queued'});
       if(useSegments){
         untrack=network?.track(controller);
         const result=await segmentedDownload(file,{temporary,signal:combined,network,group,
-          limit:()=>network?.concurrency(threads,scope)||threads,
+          meter,sourceOf,limit:()=>network?.concurrency(threads,scope)||threads,
           ensurePath:path=>ensureParents(root,path),verify:verified,
           onBytes:bytes=>{credited+=bytes;onBytes(bytes);},
           fetchRange:(start,end,active,etag)=>officialFetch(file.url,{signal:active,fetcher,headers:{'Accept-Encoding':'identity',Range:`bytes=${start}-${end}`,...(etag?{'If-Range':etag}:{})}})});
         return await complete(result,{bytes:file.size,phase:'complete'},true);
       }
-      const completed=await withTransferBudget(async()=>{try{
+      const completed=await withTransferBudget(async()=>{let closeStream;try{
       if(network?.isPaused())throw Error('Download paused / 下载已暂停');
       untrack=network?.track(controller);
       started=Date.now();
@@ -186,21 +193,24 @@ async function downloadUnlocked(file,{root,signal,onBytes=()=>{},fetcher=fetch,t
       headMs=Date.now()-started;
       if(isContent)network?.event(file,{source:responseOrigins.get(r),phase:'downloading'});
       if(r.status===206){const range=/^bytes (\d+)-(\d+)\/(\d+)$/.exec(r.headers.get('content-range')||'');if(!range||+range[1]!==offset||+range[2]<offset||+range[2]>=+range[3]||file.size&&+range[3]!==file.size){await r.body?.cancel();throw Object.assign(Error('Invalid resume response / 续传响应无效'),{code:'CHECKSUM'});}}
-      else if(offset){offset=0;await rm(temporary,{force:true});onBytes(-credited);credited=0;network?.event(file,{bytes:0,resumed:false,phase:'restarting'});}
+      else if(offset){meter?.fallback('续传','完整请求');offset=0;await rm(temporary,{force:true});onBytes(-credited);credited=0;network?.event(file,{bytes:0,resumed:false,phase:'restarting'});}
+      closeStream=meter?.stream(file.path,1,sourceOf(r),offset>0);
       const h=fileChecksum(file);if(offset)for await(const chunk of createReadStream(temporary))h.update(chunk);let count=offset;
-      const monitor=new Transform({transform(chunk,_encoding,callback){resetIdle();count+=chunk.length;if(count>(file.size||600_000_000))return callback(Object.assign(Error('文件大小超过声明值。'),{code:'CHECKSUM'}));h.update(chunk);credited+=chunk.length;onBytes(chunk.length);network?.event(file,{bytes:count,phase:'downloading'});clearTimeout(idle);Promise.resolve(network?.bandwidth.take(chunk.length,combined)).then(()=>{resetIdle();callback(null,chunk);},callback);}});
+      const monitor=new Transform({transform(chunk,_encoding,callback){resetIdle();count+=chunk.length;if(count>(file.size||600_000_000))return callback(Object.assign(Error('文件大小超过声明值。'),{code:'CHECKSUM'}));h.update(chunk);meter?.bytes(chunk.length,network?.bandwidth.rate);credited+=chunk.length;onBytes(chunk.length);network?.event(file,{bytes:count,phase:'downloading'});clearTimeout(idle);Promise.resolve(network?.bandwidth.take(chunk.length,combined)).then(()=>{resetIdle();callback(null,chunk);},callback);}});
       resetIdle();await pipeline(Readable.fromWeb(r.body),monitor,createWriteStream(temporary,{flags:offset?'a':'w'}),{signal:combined});
       network?.event(file,{phase:'verifying'});
       if((file.size&&count!==file.size)||!h.matches())throw Object.assign(Error('下载文件校验失败。'),{code:'CHECKSUM'});
       return {result:{cached:false,resumed:offset>0},bytes:count};
-      }catch(e){if(!signal?.aborted&&!network?.isPaused())network?.event(file,{error:networkReason(controller.signal.reason||e),phase:'retrying'});throw e;}
+      }catch(e){if(!signal?.aborted&&!network?.isPaused())network?.event(file,{error:networkReason(controller.signal.reason||e),phase:'retrying'});throw e;}finally{closeStream?.();}
       },signal,{group,limit:()=>network?.concurrency(threads,scope)||threads});
       // A pause at final verification must not retain the shared network slot.
       clearTimeout(idle);untrack?.();untrack=null;
       if(isContent)health.record(fileSource(current),null,headMs);
       return await complete(completed.result,{bytes:completed.bytes,phase:'complete'},true);
     }catch(e){untrack?.();untrack=null;last=controller.signal.reason||e;if(signal?.aborted||e.code==='SIDECAR_CLEANUP')throw e;if(network?.isPaused()){attempt--;continue;}
+      retryPending=true;
       if(useSegments){
+        meter?.fallback('分段','单流');
         useSegments=false;onBytes(-credited);credited=0;
         network?.event(file,{bytes:0,error:networkReason(last),phase:'retrying'});
         // Keep only the contiguous prefix for serial resume and release shard
@@ -220,7 +230,7 @@ async function downloadUnlocked(file,{root,signal,onBytes=()=>{},fetcher=fetch,t
         // Some official CDN routes return 404 for Range while a normal GET
         // succeeds at the exact same address. Discard the partial first.
         if(offset&&e.status===404&&!retriedWithoutRange&&attempt<2){
-         retriedWithoutRange=true;
+         retriedWithoutRange=true;meter?.fallback('续传','完整请求');
          await rm(temporary,{force:true});
          onBytes(-credited);credited=0;
          network?.event(file,{bytes:0,source:host,phase:'restarting',error:reason,fallback:failures.at(-1)+' Range'});
@@ -247,6 +257,7 @@ async function downloadUnlocked(file,{root,signal,onBytes=()=>{},fetcher=fetch,t
         }
         if(next&&attempt<2){
          choices.splice(0);
+         meter?.fallback(new URL(current).hostname,new URL(next).hostname);
          current=next;
          // Never combine bytes from different routes. The original hash remains authoritative.
          await rm(temporary,{force:true});
@@ -273,4 +284,4 @@ async function downloadUnlocked(file,{root,signal,onBytes=()=>{},fetcher=fetch,t
   const reason=networkReason(last),help={restricted:'来源拒绝访问，请查看文件页面或检查来源设置。',missing:'来源暂时没有此文件，请切换来源或稍后重试。','rate-limited':'来源请求过多，请稍后继续下载。',timeout:'连接或传输超时，请检查网络后继续下载。',checksum:'文件校验未通过，未安装此文件，请切换来源后重试。',connection:'下载连接中断，已保留可续传片段，请检查网络后继续。'};
   throw Object.assign(new Error(`${file.label||'文件'}：${help[reason]} (${isContent?[file.versionId,...failures].filter(Boolean).join(' → '):last.message})`),{code:'DOWNLOAD_'+reason.toUpperCase(),status:last.status});
 }
-export async function downloadPool(files,options){let next=0,failure=null;const unique=[...new Map(files.map(f=>[hasCurseForgeIdentity(f)?f.path+'\0'+f.versionId:f.path,f])).values()],network=options.fetcher?.amberNetwork,max=Math.min(options.threads||8,unique.length),abort=new AbortController(),signal=AbortSignal.any([abort.signal,...(options.signal?[options.signal]:[])]);for(const f of unique)network?.event(f,{bytes:0});const transferGroup={};await Promise.allSettled(Array.from({length:max},async(_,worker)=>{try{while(next<unique.length&&!failure){signal.throwIfAborted();await network?.gate(signal);signal.throwIfAborted();if(next>=unique.length||failure)return;const f=unique[next++];await download(f,{...options,signal,transferGroup});options.onFile?.(f);}}catch(e){failure ||= e;abort.abort(e);}}));if(failure)throw failure;}
+export async function downloadPool(files,options){let next=0,failure=null;const unique=[...new Map(files.map(f=>[hasCurseForgeIdentity(f)?f.path+'\0'+f.versionId:f.path,f])).values()],network=options.fetcher?.amberNetwork,max=Math.min(options.threads||8,unique.length),abort=new AbortController(),signal=AbortSignal.any([abort.signal,...(options.signal?[options.signal]:[])]);for(const f of unique)network?.event(f,{bytes:0});const transferGroup={};await Promise.allSettled(Array.from({length:max},async(_,worker)=>{try{while(next<unique.length&&!failure){signal.throwIfAborted();await network?.gate(signal);signal.throwIfAborted();if(next>=unique.length||failure)return;const f=unique[next++];await download(f,{...options,signal,transferGroup,poolLimit:options.threads||8});options.onFile?.(f);}}catch(e){failure ||= e;abort.abort(e);}}));if(failure)throw failure;}

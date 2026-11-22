@@ -55,7 +55,13 @@ jobs:
             prototype/releases/*/*-Setup-x64.exe.sha256
             prototype/releases/*/TEST-REVISION.txt
             prototype/releases/*/*.provenance.json
-            prototype/LOCAL-TEST-1.7.7.md
+            prototype/LOCAL-TEST-1.7.8.md
             prototype/review174/packaged/result.json
           retention-days: 30
           if-no-files-found: error
+      - name: Compare NSIS payloads and upgrade v1.7.7 on disposable Windows
+        if: github.head_ref == 'task/1.7.8-download-diagnostics'
+        shell: pwsh
+        env:
+          AMBER_TEST_RUNNER: ${{ runner.environment }}
+        run: ./scripts/qa-nsis178.ps1
