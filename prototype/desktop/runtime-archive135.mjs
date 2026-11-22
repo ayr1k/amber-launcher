@@ -4,7 +4,7 @@ import {readFile,writeFile,mkdir,symlink,lstat} from 'node:fs/promises';
 import {dirname,resolve,relative,isAbsolute} from 'node:path';
 import {safePath,ensureParents} from './download.mjs';
 export async function extractRuntimeTar(path,target){
- const b=gunzipSync(await readFile(path),{maxOutputLength:1_200_000_000});let at=0,pax={},longName=null;const links=[];
+ const b=gunzipSync(Buffer.isBuffer(path)?path:await readFile(path),{maxOutputLength:1_200_000_000});let at=0,pax={},longName=null;const links=[];
  const str=(h,a,n)=>h.subarray(a,a+n).toString().replace(/\0.*$/s,'');
  while(at+512<=b.length){const h=b.subarray(at,at+512);at+=512;if(h.every(x=>!x))break;
   const size=parseInt(str(h,124,12).trim()||'0',8),mode=parseInt(str(h,100,8).trim()||'644',8)&0o777;

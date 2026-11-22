@@ -24,7 +24,15 @@ On the 1.7.8 baseline, ordinary sibling and cross-volume paths already passed bo
 - Constructed cases cover FPScraft X, Chinese IDs, display names independent of local IDs, vanilla and parent chains, empty/null inheritance, Windows filename restrictions, conflicting/missing base evidence, offline retry, and explicit stale choices. A submitted non-catalog choice reproduces the catalogue rejection branch. The baseline UI initially sent an empty choice. The original reporter's selected value and catalogue response remain unknown.
 - Failure and cancellation during Java preparation were injected twice. No user file was copied, the source remained byte-identical and an earlier destination retained its data. Incorrect Java major versions were skipped. The launcher may retain a metadata-only instance after failed preparation.
 
-The local Windows full suite passed 996 tests with both physical volumes enabled. The build and source/locale checks passed.
+## Java provenance follow-up on Windows x64
+
+The preflight retains discovery under the official launcher's runtime directory. Supported Windows runtime fingerprints come from the Mojang file manifests. AMBER checks the complete file set, copies a matching installation into launcher storage and checks the copied bytes before the first probe. On subsequent scans it verifies that copy. An unknown or updated build falls back to automatic preparation, or the user can explicitly pick a Java executable in the Java picker. The fallback authenticates the Adoptium archive by SHA-256 and extracts those bytes into a fresh directory. It compares an existing installation with that extraction before reuse.
+
+On this revision the official Forge 40.2.9 / Minecraft 1.18.2 profile completed a new copy import using the isolated Mojang Java 17.0.15 x64 runtime. At the first content copy the selected path was inside the verified launcher copy. Java download requests were zero. The Java, copy, loader, cache and install jobs all finished. The test used synthetic options data and stopped before gameplay.
+
+Substituted probes recorded zero calls for a modified JVM library, a missing installation and a modified managed runtime. Independent fixture fingerprints admitted a matching runtime. The returned executable stayed bound to the verified path. Wrong Java majors and architectures entered automatic preparation. Concurrent scans admitted at most two probes. Cancellation reached running probes and the fallback request. Repeated preparation failures and cancellations copied zero selected files and preserved both the source and a previous destination.
+
+The local Windows full suite passed 1002 tests with both physical volumes enabled. The focused import, library, Java and loader run passed 128 tests. The build and source/locale checks passed. The earlier profile and renderer observations above were collected on the previous PR revision. Native Windows arm64 and non-Windows runtime reuse were not exercised in this follow-up.
 
 ## Repeating the checks
 

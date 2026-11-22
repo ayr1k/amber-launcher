@@ -4,6 +4,9 @@ import assert from 'node:assert/strict';
 import {mkdtemp,mkdir,writeFile,readFile,readdir,lstat,rm,symlink,utimes} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join,relative,parse} from 'node:path';
+import {discoverJava,installJava} from '../desktop/java.mjs';
+import {hostPlatform} from '../desktop/platform135.mjs';
+import {createRequire} from 'node:module';
 import {createHash} from 'node:crypto';
 import {MinecraftImport,scanMinecraft,resolveProfile,collectImportFiles} from '../desktop/minecraft134.mjs';
 import {validateImportVersion,directoryChoices,identifier,localVersionId} from '../desktop/import-identify151.mjs';
@@ -137,38 +140,114 @@ test('both entry services reject equality, nested roots and linked aliases',asyn
  }
 });
 
-for(const mode of ['download fails','cancel while preparing','reuse compatible'])test('Forge Java preflight: '+mode,async t=>{
+// Trust is supplied independently of the files put in the fixture.
+const runtimeFiles={'bin/java.exe':'fixture binary','bin/server/jvm.dll':'fixture library'};
+const fixturePin=createHash('sha256').update(JSON.stringify(Object.entries(runtimeFiles)
+ .map(([name,bytes])=>[name,Buffer.byteLength(bytes),sha(bytes)]))).digest('hex');
+async function putRuntime(appData,files=runtimeFiles){
+ const home=join(appData,'.minecraft','runtime','java-runtime-beta','windows-x64','java-runtime-beta');
+ for(const [name,bytes] of Object.entries(files)){
+  const path=join(home,name);await mkdir(join(path,'..'),{recursive:true});await writeFile(path,bytes);
+ }
+ return home;
+}
+function discoveryFixture(appData,probe){
+ return {host:hostPlatform('win32','x64'),appData,probe,candidates(runtimeRoot,arch,major){
+  assert.equal(arch,'x64');assert.equal(major,17);
+  return [{home:join(runtimeRoot,'java-runtime-beta','windows-x64','java-runtime-beta'),hash:fixturePin,major:17}];
+ }};
+}
+
+for(const mode of ['unverified','missing','cancel during preparation','wrong major','wrong architecture','cancel during probe','reuse compatible'])test('Forge Java preflight: '+mode,async t=>{
  const meta={...vanilla('Forge 中文'),inheritsFrom:null,mainClass:'cpw.mods.bootstraplauncher.BootstrapLauncher',
-  libraries:[{name:'net.minecraftforge:fmlloader:1.18.2-40.2.9'}],arguments:{game:['--fml.mcVersion','1.18.2']}};
+  javaPath:'profile-supplied-path',libraries:[{name:'net.minecraftforge:fmlloader:1.18.2-40.2.9'}],arguments:{game:['--fml.mcVersion','1.18.2']}};
  const f=await fixture(t,meta);
  await f.put('options.txt','keep');const before=await snapshot(f.source);
  const body=JSON.stringify({...vanilla('1.18.2'),javaVersion:{majorVersion:17}});
  const previous=join(f.library,'instances','previous-copy');await mkdir(previous);const previousFile=join(previous,'options.txt');await writeFile(previousFile,'previous copy marker');
  let runtimeRequests=0,copies=0;
  f.core.versions=async()=>{f.core.catalog=[{id:'1.18.2',url:'https://piston-meta.mojang.com/base.json',sha1:sha(body)}]};
- f.core.fetcher=async(url)=>{
+ f.core.fetcher=async(url,{signal}={})=>{
   if(url.endsWith('/base.json'))return new Response(body);
   if(url.endsWith('maven-metadata.xml'))return new Response('<version>1.18.2-40.2.9</version>');
-  if(url.startsWith('https://api.adoptium.net/')){runtimeRequests++;throw Error('test runtime download failed');}
+  if(url.startsWith('https://api.adoptium.net/')){
+   runtimeRequests++;
+   if(mode==='cancel during preparation'){
+    const stopped=new Promise((_,reject)=>signal.addEventListener('abort',()=>reject(signal.reason),{once:true}));
+    f.importer.cancel();return stopped;
+   }
+   throw Error('test runtime download failed');
+  }
   throw Error('Unexpected URL');
  };
- f.core.scanJava=async options=>{
-  assert.deepEqual(options,{scanRootsOnly:true});
-  if(mode==='cancel while preparing')f.importer.cancel();
-  return [{major:21,path:'wrong' },...(mode==='reuse compatible'?[{major:17,path:'compatible',version:'17'}]:[])];
- };
+ const appData=join(f.root,'appdata');
+ if(!['missing','cancel during preparation'].includes(mode))await putRuntime(appData);
+ if(mode==='unverified')await putRuntime(appData,{'bin/server/jvm.dll':'changed library'});
+ let probeCalls=0,abortedProbes=0,checkedPath;
+ const discovery=discoveryFixture(appData,async(path,signal)=>{
+  probeCalls++;checkedPath=path;
+  assert.equal(path,join(f.library,'runtimes','mojang-'+fixturePin,'bin','java.exe'));
+  if(mode==='cancel during probe'){
+   const stopped=new Promise((_,reject)=>signal.addEventListener('abort',()=>{abortedProbes++;reject(signal.reason);},{once:true}));
+   f.importer.cancel();return stopped;
+  }
+  return {major:mode==='wrong major'?21:17,architecture:mode==='wrong architecture'?'aarch64':'amd64',version:'17',path:'self-reported-path'};
+ });
+ f.core.scanJava=options=>discoverJava(f.library,options,discovery);
  const copy=f.importer.copyContent.bind(f.importer);
  f.importer.copyContent=async(...args)=>{
-  const {item}=await f.core.metadata(f.importer.instanceId);assert.equal(item.javaPath,'compatible');copies++;
+  const {item}=await f.core.metadata(f.importer.instanceId);assert.equal(item.javaPath,checkedPath);copies++;
   return copy(...args);
  };
  f.core.configureLoader=async()=>{throw Error('test ended at loader handoff')};
  const {scan,input}=await ready(f);
  for(let attempt=0;attempt<(mode==='reuse compatible'?1:2);attempt++){
-  await assert.rejects(f.importer.create(scan.id,f.key,input),mode==='reuse compatible'?/loader handoff/:mode==='download fails'?/Check Java/:/cancelled/);
+  await assert.rejects(f.importer.create(scan.id,f.key,input),mode==='reuse compatible'?/loader handoff/:mode.startsWith('cancel')?/cancelled/:/Check Java/);
  }
  assert.equal(copies,mode==='reuse compatible'?1:0);
- assert.equal(runtimeRequests,mode==='download fails'?2:0);
+ assert.equal(runtimeRequests,['reuse compatible','cancel during probe'].includes(mode)?0:2);
+ assert.equal(probeCalls,['unverified','missing','cancel during preparation'].includes(mode)?0:mode==='reuse compatible'?1:2);
+ assert.equal(abortedProbes,mode==='cancel during probe'?2:0);
  assert.equal(await readFile(previousFile,'utf8'),'previous copy marker');
  assert.deepEqual(await snapshot(f.source),before);
+});
+
+test('automatic scans bound simultaneous probes and cancel queued and running work',{timeout:10000},async t=>{
+ const f=await fixture(t),appData=join(f.root,'appdata');
+ await putRuntime(appData);
+ let started=0,active=0,peak=0;
+ const admitted=Promise.withResolvers(),controller=new AbortController();
+ const deps=discoveryFixture(appData,async(path,signal)=>{
+  started++;active++;peak=Math.max(active,peak);
+  if(active===2)admitted.resolve();
+  try{await new Promise((_,reject)=>signal.addEventListener('abort',()=>reject(signal.reason),{once:true}));}
+  finally{active--;}
+ });
+ const scans=Promise.allSettled([1,2,3,4].map(n=>discoverJava(join(f.root,'data'+n),{major:17,signal:controller.signal},deps)));
+ await admitted.promise;controller.abort(Error('cancel scans'));
+ assert.ok((await scans).every(result=>result.status==='rejected'&&result.reason===controller.signal.reason));
+ assert.deepEqual([started,peak,active],[2,2,0]);
+});
+
+test('automatic preparation probes only the checked archive even with an existing checksum directory',{skip:process.platform!=='win32'},async t=>{
+ const f=await fixture(t),{zipSync}=createRequire(import.meta.url)('../desktop/vendor/fflate.cjs');
+ const bytes=Buffer.from(zipSync({'jre/bin/java.exe':Buffer.from('fixture java')}));
+ const checksum=createHash('sha256').update(bytes).digest('hex'),parent=join(f.library,'runtimes');
+ const cache=join(parent,checksum,'jre','bin'),downloads=join(parent,'downloads');
+ await mkdir(cache,{recursive:true});await writeFile(join(cache,'java.exe'),'unverified bytes');
+ await mkdir(downloads,{recursive:true});await writeFile(join(downloads,checksum+'.zip'),bytes);
+ let probes=0;
+ const info=await installJava(f.library,17,{transferred:0},new AbortController().signal,
+  async url=>{
+   assert.ok(url.startsWith('https://api.adoptium.net/'));
+   return Response.json([{binary:{package:{checksum,size:bytes.length,name:'test.zip',link:'https://github.com/test.zip'}}}]);
+  },async(path,signal)=>{
+   signal.throwIfAborted();probes++;assert.equal(await readFile(path,'utf8'),'fixture java');
+   return {major:17,architecture:process.arch==='arm64'?'aarch64':'amd64',path:'ignored'};
+  });
+ assert.equal(probes,1);assert.equal(await readFile(info.path,'utf8'),'fixture java');
+ assert.equal(await readFile(join(cache,'java.exe'),'utf8'),'unverified bytes');
+ await writeFile(info.path,'changed after preparation');
+ const rows=await discoverJava(f.library,{major:17},{appData:null,probe:async()=>{probes++;}});
+ assert.deepEqual(rows,[]);assert.equal(probes,1);
 });
