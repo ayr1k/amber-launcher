@@ -36,7 +36,7 @@ export async function trustedSystemJava(home,signal,fs={lstat,readlink,readdir})
   if(!stat){
    if(++entries>24000)throw Error('System Java tree exceeds limit');
    stat=await fs.lstat(path);
-   if(stat.uid!==0||(!stat.isSymbolicLink()&&(stat.mode&0o022)))throw Error('Writable or unowned system Java');
+   if(stat.uid!==0||(!stat.isSymbolicLink()&&(stat.mode&0o022)))throw Error('Writable or unowned system Java: '+path+' (uid '+stat.uid+', gid '+stat.gid+', mode '+(stat.mode&0o7777).toString(8)+')');
    checked.set(path,stat);
   }
   return stat;

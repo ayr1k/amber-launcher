@@ -57,6 +57,10 @@ test('installed system OpenJDK serves ordinary discovery, unconfigured instances
  const root=await rootFor(t),major=Number(process.env.AMBER_TEST_SYSTEM_JAVA);
  const rows=await discoverJava(root);
  const java=rows.find(row=>row.major===major&&(process.platform==='win32'?row.path.startsWith(process.env.ProgramFiles):row.path.startsWith('/usr/lib/jvm/')));
+ if(!java&&process.platform==='linux'){
+  const home='/usr/lib/jvm/java-'+major+'-openjdk-'+(process.arch==='x64'?'amd64':'arm64');
+  t.diagnostic('Expected distribution executable: '+await trustedSystemJava(home));
+ }
  assert.ok(java,'expected an administrator-installed distribution JRE');
  t.diagnostic('System OpenJDK '+java.version+' '+java.architecture);
  const core=new VanillaLauncher(root);
