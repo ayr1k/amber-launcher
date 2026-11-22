@@ -52,7 +52,7 @@ test('parallel jobs keep response sources, reused bytes, retries and histories i
     assert.equal(rows[1-i].downloadDiagnostics,undefined);
     assert.equal(d.history.reduce((a,b)=>a+b),i===0?1000:7000);
     assert.deepEqual(d.sources,[i===0?hostA:hostB]);
-    assert.equal(d.config.bandwidthKib,1000);assert.equal(d.resumed,i===0);
+    assert.equal(d.config.bandwidthKib,1000);assert.equal(d.appliedKib,1000);assert.equal(d.resumed,i===0);
     assert.equal(d.retries,i);assert.equal(d.files,0);assert.equal(d.peakFiles,1);
     assert.doesNotMatch(JSON.stringify(d),/private|secret|sig=|amber-transfer-/);
   }

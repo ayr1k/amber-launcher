@@ -20,13 +20,16 @@ export class DownloadDiagnostics {
     this.start ??= this.clock();
   }
   second() { return Math.floor(((this.end ?? this.clock()) - this.start) / 1000); }
-  bytes(count) {
+  bytes(count, appliedBytesPerSecond) {
     if (!Number.isSafeInteger(count) || count <= 0 || this.paused || this.end != null) return;
     const second = this.second();
     this.firstByte ??= second;
+    this.lastByte = second;
+    this.appliedKib = Number.isFinite(appliedBytesPerSecond) ? appliedBytesPerSecond / 1024 : null;
     const index = second % (seconds + 1);
     const old = this.buckets.get(index);
-    this.buckets.set(index, {second, bytes: count + (old?.second === second ? old.bytes : 0)});
+    if (old?.second === second) old.bytes += count;
+    else this.buckets.set(index, {second, bytes:count});
   }
   sample(second) {
     if (this.firstByte == null || second < this.firstByte) return null;
@@ -69,10 +72,10 @@ export class DownloadDiagnostics {
     if (!this.config) return null;
     // Completed buckets use a full one-second denominator. Include a final
     // partial bucket on termination, also normalized to one second.
-    const last = this.second() - (this.end == null ? 1 : 0);
+    const last = this.end == null ? this.second() - 1 : (this.lastByte ?? this.second());
     const first = Math.max(0, last - seconds + 1);
     const history = Array.from({length: Math.max(0, last - first + 1)}, (_, i) => this.sample(first + i));
-    return {config: this.config, history, speed: this.speed(), files: this.active.size,
+    return {config: this.config, appliedKib:this.appliedKib, history, speed: this.speed(), files: this.active.size,
       peakFiles: this.peakFiles, peakStreams: this.peakStreams, modes: [...this.modes],
       sources: [...this.sources], lastFallback:this.lastFallback, resumed: this.resumed, retries: this.retries, fallbacks: this.fallbacks};
   }

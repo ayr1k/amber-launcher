@@ -58,7 +58,7 @@ export async function segmentedDownload(file,{temporary,signal,network,group,lim
       let received=0;const expected=range.end-start+1;
       const monitor=new Transform({transform(chunk,_encoding,done){
         received+=chunk.length;if(received>expected)return done(unsupported());
-        meter?.bytes(chunk.length);
+        meter?.bytes(chunk.length,network?.bandwidth.rate);
         stopIdle();Promise.resolve(network?.bandwidth.take(chunk.length,active)).then(()=>{
           reset();total+=chunk.length;onBytes(chunk.length);network?.event(file,{bytes:total,phase:'downloading'});done(null,chunk);
         },done);

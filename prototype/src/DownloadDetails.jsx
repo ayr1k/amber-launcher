@@ -52,6 +52,7 @@ export function DownloadDetails({job, selected, onSelect}) {
         ['并发文件（当前 / 峰值）', data && data.files+' / '+data.peakFiles],
         ['已观察到的单文件模式', modes || unknown],
         ['单文件同时传输流峰值', data?.peakStreams || unknown],
+        ['最近传输生效限速', data?.appliedKib == null ? unknown : data.appliedKib ? data.appliedKib+' KiB/s' : label('不限速')],
         ['最近响应来源', data?.sources.join(' · ') || unknown],
         ['最近回退', data?.lastFallback?.map(route).join(' → ') || unknown],
         ['传输重试 / 回退次数', data && data.retries+' / '+data.fallbacks],
