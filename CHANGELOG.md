@@ -1,3 +1,9 @@
+## 1.7.9
+
+- Register an external game library in place from Instances, or copy an existing .minecraft instance into the default managed library. Recognize supported PCL profiles and keep local version IDs, display names and official Minecraft versions separate.
+- Prepare Java before Forge or NeoForge copy imports. Verify supported Mojang runtimes or prepare a verified Adoptium runtime. Respect explicit Java selection and stop before copying if preparation fails or is cancelled.
+- Improve ordinary Java discovery and reuse after restart. On Windows, a bundled verifier checks system Java installations before probing. Failed verification or a missing verifier offers manual selection or automatic preparation.
+
 ## 1.7.8
 
 - Expand Download diagnostics on a task to view its transfer speed history, requested settings and observed download details. Each task retains up to 60 one-second samples in memory for the current launcher session.

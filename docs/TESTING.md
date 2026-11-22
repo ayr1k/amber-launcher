@@ -1,3 +1,9 @@
+# 1.7.9 release verification
+
+The user authorized formal publication on November 22, 2026 (America/New_York) after [PR #24](https://github.com/ayr1k/amber-launcher/pull/24) merged as `48719d21d116be46998c93fbfea200c7d50208ec`. Both task workflows passed at `7ea3ff0cf9b57a2955d107398561a71948001b21`. [Windows regression and Linux checks](https://github.com/ayr1k/amber-launcher/actions/runs/45039092621) · [PR installers and Java runtime checks](https://github.com/ayr1k/amber-launcher/actions/runs/45039092639)
+
+The task passed 1,008 Windows regressions and exercised in-place library registration and copy import on the same and different volumes. Java restart testing used isolated data, synthetic JARs and disabled application fetches. An unprivileged Linux container also verified reuse of its distribution JDK. These checks cover the recorded fixtures and environments. The original reporter's directory remains unavailable. Real gameplay, OptiFine reconstruction, in-place upgrades, Windows arm64 and native non-Windows desktop operation remain pending. See `LOCAL-TEST-1.7.9.md` for results and scope. Official packages use the public channel. FreeBSD is experimental and supports servers and tools only. Packages are unsigned. macOS packages are not notarized.
+
 # 1.7.8 release verification
 
 The user authorized formal publication on November 22, 2026 (America/New_York) after [PR #23](https://github.com/ayr1k/amber-launcher/pull/23) merged as `b759b04e93cfba56799297c3e2e4f62430c4f764`. Both task workflows passed at `132f704b9522b6033b3069fdb0c16510c861adf8`. [Windows regression and Linux checks](https://github.com/ayr1k/amber-launcher/actions/runs/44995556796) · [PR installers and installation comparison](https://github.com/ayr1k/amber-launcher/actions/runs/44995556788)

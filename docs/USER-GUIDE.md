@@ -410,3 +410,7 @@ If creation is unavailable, read the reason beside the button. You can choose a 
 ## 1.7.8 Download diagnostics
 
 In Tasks, expand **Download diagnostics** for a download. Its chart shows up to 60 seconds of actual response-body bytes, including retransmissions. Existing cached or partial content and local assembly do not count. The panel distinguishes the latest file settings from observations for this task. Pause or end a download to see its current speed reset to zero. Diagnostics are held in memory for the current session.
+
+## 1.7.9 Importing an existing .minecraft library
+
+In Instances, register an external library to use its current directory. To make a separate managed copy, open **Import existing .minecraft** in the default library. Choose the source version and check the recognized base version and loader. Forge and NeoForge prepare and verify Java before copying. You can also choose Java in the dedicated selector. A failed or cancelled Java preflight leaves the source and any previous destination in place.

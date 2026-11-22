@@ -1,3 +1,9 @@
+# 1.7.9 发布验证
+
+用户于 2026-11-22（America/New_York）在 [PR #24](https://github.com/ayr1k/amber-launcher/pull/24) 合并后授权正式发布。合并提交为 `48719d21d116be46998c93fbfea200c7d50208ec`，任务提交 `7ea3ff0cf9b57a2955d107398561a71948001b21` 的两项工作流均通过。[Windows 回归及 Linux 检查](https://github.com/ayr1k/amber-launcher/actions/runs/45039092621) · [测试安装包及 Java 验证](https://github.com/ayr1k/amber-launcher/actions/runs/45039092639)
+
+任务阶段通过 1008 项 Windows 回归，并在同盘、跨盘验证就地注册和复制导入。Java 重启复用使用隔离数据、合成 JAR 和禁用应用网络请求。另在非特权 Linux 容器中验证发行版 JDK 复用。用户原报告目录尚未取得。实际游戏、OptiFine 重建、覆盖升级、Windows arm64 架构及非 Windows 原生桌面运行仍待验收。详见 `LOCAL-TEST-1.7.9.md`。正式包使用 public 渠道。FreeBSD 仅实验性支持服务端与工具。安装包未签名，macOS 包未公证。
+
 # 1.7.8 发布验证
 
 用户于 2026-11-22（America/New_York）在 [PR #23](https://github.com/ayr1k/amber-launcher/pull/23) 合并后授权正式发布。合并提交为 `b759b04e93cfba56799297c3e2e4f62430c4f764`，任务最终提交 `132f704b9522b6033b3069fdb0c16510c861adf8` 的两项工作流均通过。[Windows 回归及 Linux 检查](https://github.com/ayr1k/amber-launcher/actions/runs/44995556796) · [测试安装包及安装对照](https://github.com/ayr1k/amber-launcher/actions/runs/44995556788)
