@@ -47,6 +47,27 @@ test('large files use four bounded ranges and publish only verified output',asyn
  assert.equal(result.segmented,true);assert.equal(source.requests.length,5);assert.ok(source.peak>1&&source.peak<=4);assert.equal(credited,file.size);assert.ok(await verified(file));
  for(const path of segmentPaths(part))await assert.rejects(stat(path),{code:'ENOENT'});
 });
+test('diagnostics count real segments and exclude old shard bytes on fallback',async t=>{
+ for(const ignore of [false,true]){
+  const {root,file,part}=await fixture(t);
+  const prefix=1024;
+  await writeFile(segmentPaths(part)[0],bytes.subarray(0,prefix));
+  const source=server({ignore,slow:true});
+  const network=new DownloadNetwork(root,{fetcher:source.fetcher});
+  network.configure({mode:'official',fallback:false});
+  const job={id:'segments'};
+  await network.run(job,()=>download(file,{root,fetcher:network.request}));
+  const row=network.diagnostics.get(job).snapshot();
+  assert.deepEqual(row.modes,ignore?[1]:[4]);
+  assert.equal(row.peakFiles,1);
+  assert.ok(ignore?row.peakStreams===1:row.peakStreams>1 && row.peakStreams<=4);
+  assert.equal(row.history.reduce((sum,n)=>sum+n,0),file.size-(ignore?0:prefix));
+  assert.equal(row.resumed,!ignore);
+  assert.equal(row.retries,ignore?1:0);
+  assert.equal(row.fallbacks,ignore?2:0); // segmented -> serial, then Range ignored
+  assert.ok(await verified(file));
+ }
+});
 test('unknown/small sizes and explicit single-connection budgets stay serial',async t=>{
  assert.deepEqual(segmentRanges(undefined),[]);assert.deepEqual(segmentRanges(SEGMENT_THRESHOLD-1),[]);
  const {root,file}=await fixture(t),source=server();configureTransferBudget(1);

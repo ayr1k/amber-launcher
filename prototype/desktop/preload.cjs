@@ -227,7 +227,7 @@ function libraryApi170(scope){const invoke=(channel,...args)=>ipcRenderer.invoke
   versions: () => invoke('amber:versions'),
   createInstance: input => invoke('amber:create', { name: input?.name, game: input?.game, icon: input?.icon }),
   openInstance: id => invoke('amber:open-instance', id),
-  status: () => invoke('amber:status'),
+  status: detailId => invoke('amber:status',detailId),
   install: (id,options) => invoke('amber:install',id,{threads:options?.threads}),
   cancel: id => invoke('amber:cancel',id),
   scanJava: () => invoke('amber:java-scan'),
