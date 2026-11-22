@@ -41,6 +41,9 @@ importers:
       codemirror:
         specifier: ^6.0.2
         version: 6.0.2
+      openpgp:
+        specifier: 6.3.3
+        version: 6.3.3
       react:
         specifier: 19.2.0
         version: 19.2.0
@@ -916,6 +919,9 @@ packages:
   duplexer2@0.1.4:
     resolution: {integrity: sha512-asLFVfWWtJ90ZyOUHMqk7/S2w2guQKxUI2itj3d92ADHhxUSbCMGi1f1cBcJ7xM1To+pE/Khbwo1yuNbMEPKeA==}
 
+  eckey-utils@0.7.14:
+    resolution: {integrity: sha512-s/mENS+mMnJjDSydy0muBQQHMTWJ1nPe8EiphANZrf+lv/1u35aP9WvWHTWqCBJ21blNIurGF7UoLjtaOpoCFw==}
+
   ejs@3.1.10:
     resolution: {integrity: sha512-UeJmFfOrAQS8OJWPZ4qtgHyWExa088/MtK5UEyoJGFH67cDEXkZSviOiKRCZ4Xij0zxI3JECgYs3oKx+AizQBA==}
     engines: {node: '>=0.10.0'}
@@ -1338,6 +1344,15 @@ packages:
 
   once@1.4.0:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}
+
+  openpgp@6.3.3:
+    resolution: {integrity: sha512-W0foQI+Zb7/TCy7Z50gqZejYe3oJkiZJ9OSV4ImuRT8MmoKOJhtAMvRm6w9STlyYluLiuezG7+0Qdqbcmmx7ig==}
+    engines: {node: '>= 18.0.0', typescript: '>= 5.0.0'}
+    peerDependencies:
+      '@openpgp/web-stream-tools': ~0.3.0
+    peerDependenciesMeta:
+      '@openpgp/web-stream-tools':
+        optional: true
 
   p-cancelable@2.1.1:
     resolution: {integrity: sha512-BZOr3nRQHOntUjTrH8+Lh54smKHoHyur8We1V8DSMVrl5A2malOOwuJRnKRDjSnkoeBh4at6BwEnb5I7Jl31wg==}
@@ -2645,6 +2660,8 @@ snapshots:
     dependencies:
       readable-stream: 2.3.8
 
+  eckey-utils@0.7.14: {}
+
   ejs@3.1.10:
     dependencies:
       jake: 10.9.4
@@ -3119,6 +3136,10 @@ snapshots:
   once@1.4.0:
     dependencies:
       wrappy: 1.0.2
+
+  openpgp@6.3.3:
+    dependencies:
+      eckey-utils: 0.7.14
 
   p-cancelable@2.1.1: {}
 

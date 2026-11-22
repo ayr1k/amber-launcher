@@ -34,8 +34,18 @@ Substituted probes recorded zero calls for a modified JVM library, a missing ins
 
 The local Windows full suite passed 1002 tests with both physical volumes enabled. The focused import, library, Java and loader run passed 128 tests. The build and source/locale checks passed. The earlier profile and renderer observations above were collected on the previous PR revision. Native Windows arm64 and non-Windows runtime reuse were not exercised in this follow-up.
 
+## General Java discovery and offline restart
+
+The 9ef5350 comparison used one WSL2 Ubuntu mount namespace. The Ubuntu OpenJDK 21.0.13.1 amd64 package was extracted at its distribution paths. Both revisions ran as the same unprivileged user. Default discovery returned an empty list at 9ef5350. With the fix, default discovery, implicit instance Java resolution and vanilla server installation selected that system runtime. The server JAR and metadata were test fixtures. The import preflight excluded the system candidate. Neither a game nor a server process was launched.
+
+General discovery checks administrator ownership and write permissions on Unix JVM trees, ancestors and resolved link targets. On Windows it checks the installation ACLs and Authenticode publisher under the system Program Files Java vendor locations. The Windows workstation found Microsoft OpenJDK 25.0.4 x64 in general discovery. Import preflight uses only launcher-verified candidates, including pinned Mojang runtimes. PATH, JAVA_HOME and imported profile paths do not supply executables.
+
+Offline Temurin discovery authenticates the retained archive, derives its expected executable and complete file tree, and checks the installed bytes before probing. A receipt supplies only a constrained sibling location and a detached signature. The Adoptium signing key ships with both editions. For caches predating signature retention, the bundled SHA-256 list covers the JRE builds returned by the official Adoptium API for the supported OS/architecture combinations at this revision. Other older unsigned builds need online preparation or explicit Java selection. New builds outside the list require a publisher signature. [Adoptium signature verification](https://adoptium.net/installation/gpg-verification)
+
+A Windows online preparation verified a real Temurin 17.0.21.1 signature. A separate process with network fetch disabled then selected the identical installed executable. Synthetic cold-process checks cover altered runtime libraries, damaged archives, invalid signatures and a receipt pointing outside the runtime directory. These cases recorded zero candidate probes. The Windows two-volume suite retained its cancellation and pre-copy assertions. Local Windows regression results were 1007/1007 in the full suite and 152/152 in the focused import, library, Java, loader and server tests. The C/C, C/E and E/C renderer checks ran in disposable directories with the readiness wait described in the PR. Linux CI also runs the distribution OpenJDK test as a separate acceptance check for this task. macOS, FreeBSD and arm64 were not run on native hardware.
+
 ## Repeating the checks
 
 Run `pnpm test` from prototype. For the volume matrix, set `AMBER_TEST_SECOND_VOLUME` to an existing writable directory on a different Windows volume. For the renderer checks, build the application, set `AMBER_PLAYWRIGHT` to the local Playwright installation and run `node scripts/qa-minecraft-import179.cjs`. The script uses only newly allocated fixture directories.
 
-The Windows local-channel packages are for acceptance. Gameplay, upgrades over an existing installation, the reporter's original directory layout and native non-Windows testing remain outside the measured results.
+The Windows local-channel packages are for acceptance. Gameplay, upgrades over an existing installation, the reporter's original directory layout and native non-Windows installer testing remain outside the measured results.

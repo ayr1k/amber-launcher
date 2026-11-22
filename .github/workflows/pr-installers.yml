@@ -5,6 +5,29 @@ on:
 permissions:
   contents: read
 jobs:
+  linux-java:
+    if: (github.head_ref || github.ref_name) == 'task/1.7.9-minecraft-import'
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: prototype
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
+        with:
+          version: 11.25.0
+          package_json_file: prototype/package.json
+      - run: pnpm install --frozen-lockfile
+      - run: sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends openjdk-21-jre-headless
+      - run: node --test tests/java-discovery179.test.mjs
+        env:
+          AMBER_TEST_SYSTEM_JAVA: '21'
   installers:
     # The 1.7.6 task explicitly excludes installer uploads.
     if: (github.head_ref || github.ref_name) != 'codex/1.7.6-content-import'
@@ -42,7 +65,7 @@ jobs:
           $other = if ($primary -eq 'D:\') { 'C:\' } else { 'D:\' }
           if (Test-Path $other) { $env:AMBER_TEST_SECOND_VOLUME = $other }
           New-Item -ItemType Directory -Force review174 | Out-Null
-          node --test tests/import151.test.mjs tests/libraries170.test.mjs tests/platform135.test.mjs tests/accounts-fabric.test.mjs | Tee-Object review174/import-179.txt
+          node --test tests/java-discovery179.test.mjs tests/import151.test.mjs tests/libraries170.test.mjs tests/platform135.test.mjs tests/accounts-fabric.test.mjs tests/servers132.test.mjs tests/server173.test.mjs | Tee-Object review174/import-179.txt
           exit $LASTEXITCODE
       - run: pnpm release:check
       - run: pnpm package:editions

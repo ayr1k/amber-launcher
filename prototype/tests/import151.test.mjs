@@ -152,7 +152,7 @@ async function putRuntime(appData,files=runtimeFiles){
  return home;
 }
 function discoveryFixture(appData,probe){
- return {host:hostPlatform('win32','x64'),appData,probe,candidates(runtimeRoot,arch,major){
+ return {host:hostPlatform('win32','x64'),system:async()=>[],appData,probe,candidates(runtimeRoot,arch,major){
   assert.equal(arch,'x64');assert.equal(major,17);
   return [{home:join(runtimeRoot,'java-runtime-beta','windows-x64','java-runtime-beta'),hash:fixturePin,major:17}];
  }};
@@ -193,7 +193,7 @@ for(const mode of ['unverified','missing','cancel during preparation','wrong maj
   }
   return {major:mode==='wrong major'?21:17,architecture:mode==='wrong architecture'?'aarch64':'amd64',version:'17',path:'self-reported-path'};
  });
- f.core.scanJava=options=>discoverJava(f.library,options,discovery);
+ f.core.scanJava=options=>{assert.equal(options.purpose,'import');return discoverJava(f.library,options,discovery);};
  const copy=f.importer.copyContent.bind(f.importer);
  f.importer.copyContent=async(...args)=>{
   const {item}=await f.core.metadata(f.importer.instanceId);assert.equal(item.javaPath,checkedPath);copies++;
@@ -244,10 +244,10 @@ test('automatic preparation probes only the checked archive even with an existin
   },async(path,signal)=>{
    signal.throwIfAborted();probes++;assert.equal(await readFile(path,'utf8'),'fixture java');
    return {major:17,architecture:process.arch==='arm64'?'aarch64':'amd64',path:'ignored'};
-  });
+  },{pins:{17:checksum}});
  assert.equal(probes,1);assert.equal(await readFile(info.path,'utf8'),'fixture java');
  assert.equal(await readFile(join(cache,'java.exe'),'utf8'),'unverified bytes');
  await writeFile(info.path,'changed after preparation');
- const rows=await discoverJava(f.library,{major:17},{appData:null,probe:async()=>{probes++;}});
+ const rows=await discoverJava(f.library,{major:17,purpose:'import'},{appData:null,probe:async()=>{probes++;}});
  assert.deepEqual(rows,[]);assert.equal(probes,1);
 });

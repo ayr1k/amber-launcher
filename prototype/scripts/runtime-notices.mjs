@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import {stageJavaVerifier} from './stage-java-verifier.mjs';
 import {createRequire} from 'node:module';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {dirname,join,resolve} from 'node:path';
@@ -16,3 +17,5 @@ for(const name of ['skinview3d','codemirror','@codemirror/lang-json','@codemirro
 for(const name of ['cubiomes-MIT','cJSON-MIT','gradient-generator-MIT','enchant-order-MIT'])output+='\n\n===== '+name+' =====\n'+await readFile(join(root,'public/licenses',name+'.txt'),'utf8');
 await mkdir(join(root,'public/licenses'),{recursive:true});await writeFile(join(root,'public/licenses/RUNTIME-LICENSES.txt'),output.replace(/\r?\n/g,'\r\n'));
 console.log('Frontend runtime license texts collected.');
+
+await stageJavaVerifier(join(root,'desktop'));

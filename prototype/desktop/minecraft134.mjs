@@ -79,7 +79,7 @@ export class MinecraftImport {
   const selectedProfile={...profile,game:validation.game};
   item=await this.core.createInstance({name:input.name,game:selectedProfile.game,icon:'grass'});this.instanceId=item.id;this.check();const dir=await this.core.instancePath(item.id),space=await this.availableSpace(dir);if(space.bavail*space.bsize<data.bytes+2000000000)throw Error('可用空间不足，请保留至少 2 GB 余量 / Not enough free space (2 GB reserve required)');
   if(['forge','neoforge'].includes(profile.loader)){
-   try{this.check();await this.wait(await this.core.prepareJava(item.id));this.check();}
+   try{this.check();await this.wait(await this.core.prepareJava(item.id,{purpose:'import'}));this.check();}
    catch(error){this.check();throw Error('请检查 Java 和网络后重新预览并导入 / Check Java and network access, then preview and retry. '+error.message);}
   }
   const provenance={schema:1,source:scan.root,gameDirectory:gameDir,game:selectedProfile.game,loader:profile.loader,loaderVersion:profile.version,profile:profile.versionId,mode:'copy',groups,createdAt:new Date().toISOString(),status:'copying'};await atomicJson(join(dir,'minecraft-import.json'),provenance);

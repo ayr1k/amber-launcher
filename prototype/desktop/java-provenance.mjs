@@ -60,7 +60,7 @@ export async function treeFingerprint(home,{signal,mojang=false,copyTo}={}){
    const hash=createHash(mojang?'sha1':'sha256');
    for await(const chunk of createReadStream(verifiedPath,{signal}))hash.update(chunk);
    const row=[name,st.size,hash.digest('hex')];
-   if(!mojang)row.push(st.mode&0o777);
+   if(!mojang)row.push(st.mode&0o7777);
    rows.push(row);
   }
  }

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import {stageJavaVerifier} from './stage-java-verifier.mjs';
 import { cp, mkdir, rename, readFile, access } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -17,6 +18,7 @@ await mkdir(app,{recursive:true});
 for(const file of ['package.json','LICENSE','THIRD_PARTY_NOTICES.md']) await cp(join(root,file),join(app,file));
 await cp(join(root,'desktop'),join(app,'desktop'),{recursive:true});
 await cp(join(root,'dist/client'),join(app,'dist/client'),{recursive:true,filter:source=>!source.endsWith('.ttf')&&!['sodium.png','lithium.png','iris.png','fabric-api.png','modmenu.png'].includes(source.split(/[\\/]/).at(-1))});
+await stageJavaVerifier(join(app,'desktop'));
 await cp(join(root,'LICENSE'),join(target,'LICENSE-MPL-2.0.txt'));
 for(const file of ['README.md','VALIDATION.md','RELEASE-PLAN.md'])await cp(join(root,file),join(target,file));
 await cp(join(root,'..','CHANGELOG.md'),join(target,'CHANGELOG.md'));
