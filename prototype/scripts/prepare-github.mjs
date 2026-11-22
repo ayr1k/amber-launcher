@@ -10,7 +10,7 @@ const {zipSync}=require('../desktop/vendor/fflate.cjs');
 const pkg=JSON.parse(await readFile(join(root,'package.json'),'utf8'));
 const name=PRODUCT_NAME+'-'+pkg.version+'-github-source',target=join(root,'releases',name);
 try{await access(target);throw Error('Source export already exists; preserve it and choose a new version.');}catch(e){if(e.code!=='ENOENT')throw e;}
-const excluded=new Set(['system-java-verifier.exe','sodium.png','lithium.png','iris.png','fabric-api.png','modmenu.png']);
+const excluded=new Set(['system-java-verifier.exe','openpgp.mjs','LICENSE-openpgp','sodium.png','lithium.png','iris.png','fabric-api.png','modmenu.png']);
 const files=[];
 async function collect(path){const st=await lstat(path);if(st.isSymbolicLink())throw Error('Source symlink rejected');if(st.isDirectory()){for(const name of await readdir(path))await collect(join(path,name));}else{if(path.endsWith('curseforge-build-key.json'))return;if(path.endsWith('.ttf')||excluded.has(path.split(/[\\/]/).at(-1)))return;files.push(path);}}
 for(const file of ['README.md','CHANGELOG.md','LICENSE','.gitignore','.gitattributes','CONTRIBUTING.md','SECURITY.md','PRIVACY.md','docs','.github'])await collect(join(repo,file));
