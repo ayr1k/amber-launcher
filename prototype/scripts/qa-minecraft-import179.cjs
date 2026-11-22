@@ -30,9 +30,11 @@ async function check(sourceParent, dataParent) {
  try {
   assert.equal(await app.evaluate(({app})=>app.getPath('userData')),userData);
   let page;
-  for(let attempt=0;attempt<200&&!page;attempt++){page=app.windows().find(p=>p.url().startsWith('amber://app/'));if(!page)await new Promise(r=>setTimeout(r,100));}
+  for(let attempt=0;attempt<200&&!page;attempt++){page=app.windows().find(p=>p.url()==='amber://app/');if(!page)await new Promise(r=>setTimeout(r,100));}
   assert.ok(page,'main window');await page.waitForFunction(()=>!!window.amberDesktop);
   page.setDefaultTimeout(20000);
+  await page.waitForLoadState('load');
+  await page.locator('#root button').first().waitFor({state:'visible'});
   await page.evaluate(async()=>{const api=window.amberDesktop;await api.saveSettings({...await api.settings(),language:'en-US'})});
   await page.reload();
   await app.evaluate(async({dialog},f)=>{

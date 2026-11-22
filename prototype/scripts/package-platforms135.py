@@ -15,6 +15,7 @@ def stage_files(name,platform):
   for p in (stage/folder).rglob('*'):
    if not p.is_file():continue
    rel=p.relative_to(stage).as_posix()
+   if rel=='desktop/bin/system-java-verifier.exe':continue
    if '/bin/seed-engine' in rel and p.name!='seed-engine-'+platform:continue
    yield rel,p.read_bytes(),0o755 if p.name=='seed-engine-'+platform else 0o644
  for file in ['package.json','LICENSE','THIRD_PARTY_NOTICES.md','CHANGELOG.md','RELEASE-ACCEPTANCE.md']:yield file,(stage/file).read_bytes(),0o644

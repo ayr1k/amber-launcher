@@ -12,7 +12,7 @@ import {generateKey,createMessage,readPrivateKey,sign} from 'openpgp';
 import {createHash} from 'node:crypto';
 import {Servers} from '../desktop/servers132.mjs';
 import {discoverJava,installJava,inspectConfiguredJava} from '../desktop/java.mjs';
-import {trustedSystemJava} from '../desktop/system-java.mjs';
+import {trustedSystemJava,SystemJavaUnavailable} from '../desktop/system-java.mjs';
 import {hostPlatform} from '../desktop/platform135.mjs';
 import {checksumOf,verifyTemurinSignature} from '../desktop/temurin-provenance.mjs';
 import {VanillaLauncher} from '../desktop/launcher.mjs';
@@ -29,6 +29,26 @@ test('general discovery uses the OS verifier; import never consults it',async t=
  calls.length=0;
  assert.deepEqual(await discoverJava(root,{purpose:'import',major:21},deps),[]);
  assert.deepEqual(calls,[]);
+});
+
+test('ordinary scan distinguishes missing Java, incomplete verification, preparation and cancellation',async t=>{
+ const root=await rootFor(t),host=hostPlatform('win32','x64'),calls=[];
+ const path=join(root,'trusted','bin','java.exe');
+ const deps={host,appData:null,probe:async p=>{calls.push(p);return {major:21,architecture:'amd64'};}};
+ const scan=(options,system)=>discoverJava(root,options,{...deps,system});
+ const unavailable=async()=>{throw new SystemJavaUnavailable();};
+ assert.deepEqual(await scan({},async()=>[]),[]);
+ await assert.rejects(scan({},unavailable),{code:'SYSTEM_JAVA_UNAVAILABLE'});
+ assert.deepEqual(await scan({preparing:true},unavailable),[]);
+ const partial=async()=>{throw new SystemJavaUnavailable([path]);};
+ await assert.rejects(scan({selectedPath:path+'-other'},partial),{code:'SYSTEM_JAVA_UNAVAILABLE'});
+ assert.deepEqual(calls,[]);
+ assert.equal((await scan({selectedPath:path},partial))[0].path,path);
+ assert.deepEqual(calls,[path]);
+ const controller=new AbortController();
+ await assert.rejects(scan({preparing:true,signal:controller.signal},async()=>{
+  controller.abort(Error('cancel scan'));return unavailable();
+ }),/cancel scan/);
 });
 
 test('system trust covers JVM files, symlinks and writable ancestors',async()=>{

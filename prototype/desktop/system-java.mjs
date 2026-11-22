@@ -7,21 +7,32 @@ import {fileURLToPath} from 'node:url';
 import {TaskQueue} from './task-queue132.mjs';
 const exec=promisify(execFile),windowsScans=new TaskQueue(1);
 
+export class SystemJavaUnavailable extends Error {
+ constructor(paths=[],cause){
+  super('Windows 无法完成系统 Java 来源校验。请在启动设置中手动选择 Java，或使用自动准备。 / Windows system Java verification is unavailable. Select Java manually or use automatic preparation.',{cause});
+  this.code='SYSTEM_JAVA_UNAVAILABLE';
+  this.paths=paths;
+ }
+}
+
 async function windowsSystemJava(signal){
- // Locate the OS shell from the loaded Windows KnownDLL, independently of PATH,
- // SystemRoot, JAVA_HOME and user-supplied registry or game configuration.
- const dll=process.report?.getReport().sharedObjects?.find(p=>win32.isAbsolute(p)&&/[/\\]System32[/\\]ntdll\.dll$/i.test(p));
- if(!dll)return [];
- const system32=win32.dirname(dll),shellDir=win32.join(system32,'WindowsPowerShell','v1.0');
- const script=fileURLToPath(new URL('./system-java-windows.ps1',import.meta.url));
  return windowsScans.run('system',async()=>{
   try{
-   const {stdout}=await exec(win32.join(shellDir,'powershell.exe'),['-NoLogo','-NoProfile','-NonInteractive','-File',script],{
-    signal,windowsHide:true,cwd:system32,timeout:30000,maxBuffer:64000,
-    env:{SystemRoot:win32.dirname(system32),windir:win32.dirname(system32),PATH:system32,PSModulePath:win32.join(shellDir,'Modules')}
-   });
-   return JSON.parse(stdout);
-  }catch{signal?.throwIfAborted();return [];}
+   const dll=process.report?.getReport().sharedObjects?.find(p=>win32.isAbsolute(p)&&/[/\\]System32[/\\]ntdll\.dll$/i.test(p));
+   if(!dll)throw Error('Windows system directory unavailable');
+   const system32=win32.dirname(dll),windows=win32.dirname(system32);
+   const helper=fileURLToPath(new URL('./bin/system-java-verifier.exe',import.meta.url));
+   const {stdout}=await exec(helper,[],{signal,windowsHide:true,cwd:system32,timeout:30000,maxBuffer:64000,
+    env:{SystemRoot:windows,windir:windows,PATH:system32}});
+   const {paths,incomplete}=JSON.parse(stdout);
+   if(typeof incomplete!=='boolean'||!Array.isArray(paths)||paths.some(p=>typeof p!=='string'||!win32.isAbsolute(p)||win32.basename(p).toLowerCase()!=='java.exe'))throw Error('Invalid verifier response');
+   if(incomplete)throw new SystemJavaUnavailable(paths);
+   return paths;
+  }catch(error){
+   signal?.throwIfAborted();
+   if(error instanceof SystemJavaUnavailable)throw error;
+   throw new SystemJavaUnavailable([],error);
+  }
  },{signal});
 }
 

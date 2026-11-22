@@ -2,7 +2,7 @@
 import {execFile} from 'node:child_process';
 import {atomicJson} from './core.mjs';
 import {offlineTemurin,legacyChecksums,verifyTemurinSignature,checksumOf,unpackTemurin,rememberTemurin} from './temurin-provenance.mjs';
-import {systemJavaCandidates} from './system-java.mjs';
+import {systemJavaCandidates,SystemJavaUnavailable} from './system-java.mjs';
 import {promisify} from 'node:util';
 import {mkdir, mkdtemp, readFile, rename, rm} from 'node:fs/promises';
 import {basename, dirname, join, isAbsolute} from 'node:path';
@@ -32,26 +32,33 @@ export function inspectJava(path,signal,probe=readJavaProperties){
 // when the instance or server is used in a later session.
 export async function inspectConfiguredJava(root,item,manualProbe=inspectJava){
  if(!item.javaAuto&&!inside170(join(root,'runtimes'),item.javaPath))return manualProbe(item.javaPath);
- const rows=await discoverJava(root,{major:item.javaMajor,purpose:item.javaAuto==='general'?'general':'import'});
+ const rows=await discoverJava(root,{selectedPath:item.javaPath,major:item.javaMajor,purpose:item.javaAuto==='general'?'general':'import'});
  const java=rows.find(row=>row.path===item.javaPath);
  if(!java)throw Error('Java verification failed; prepare Java again / Java 来源校验失败，请重新准备');
  return java;
 }
 
 // The renderer cannot supply candidates, trust records or a probe.
-export async function discoverJava(root,{signal,major,purpose='general'}={},{
+export async function discoverJava(root,{signal,major,purpose='general',preparing=false,selectedPath}={},{
  host=hostPlatform(),appData=process.env.APPDATA,probe=readJavaProperties,candidates=mojangCandidates,system=systemJavaCandidates,temurin
 }={}){
  const found=new Map();
  async function inspect(path,expected){
-  if(found.has(path))return;
+  if(found.has(path)||(selectedPath&&selectedPath!==path))return;
   signal?.throwIfAborted();
   const info=await inspectJava(path,signal,probe);
   signal?.throwIfAborted();
   if((!expected||info.major===expected)&&(!major||info.major===major)&&javaArchitectureMatches(info.architecture,host.arch))found.set(path,{...info,path});
  }
+ let unavailable;
  if(purpose==='general'){
-  for(const path of await system(host.platform,signal)){
+  let paths;
+  try{paths=await system(host.platform,signal);}catch(error){
+   signal?.throwIfAborted();
+   if(!(error instanceof SystemJavaUnavailable))throw error;
+   unavailable=error;paths=error.paths;
+  }
+  for(const path of paths){
    try{await inspect(path,major);}catch{signal?.throwIfAborted();}
   }
  }
@@ -74,6 +81,7 @@ export async function discoverJava(root,{signal,major,purpose='general'}={},{
   }
  }
  signal?.throwIfAborted();
+ if(unavailable&&!found.size&&!preparing)throw unavailable;
  return [...found.values()];
 }
 
