@@ -59,6 +59,9 @@ foreach ($product in @('AMBER','AmberE')) {
   $staged = "$root/releases/$version/stages/$product"
   $payload = "$root/releases/$version/$product/win-unpacked"
   $expected = Get-Payload $payload
+  $stagedFileCount = $expected.Count
+  # installSection.nsh installs UNINSTALLER_ICON alongside the app payload.
+  $expected['uninstallerIcon.ico'] = (Get-FileHash "$staged/build/icon.ico").Hash
   $logical = (Get-ChildItem $payload -Recurse -File | Measure-Object Length -Sum).Sum
   $template = (Get-Content "$root/electron-builder.yml" -Raw).Replace('AMBER',$product).Replace('io.github.ayr1k.amber',('io.github.ayr1k.' + $product.ToLowerInvariant()))
   $config = "$out/$product.yml"
@@ -89,7 +92,7 @@ foreach ($product in @('AMBER','AmberE')) {
     if ((Get-Content "$backup/resources/app/package.json" -Raw | ConvertFrom-Json).version -ne '1.7.7') {throw 'Previous program backup missing'}
     if ([IO.File]::ReadAllText($marker) -ne 'disposable upgrade fixture') {throw 'Data marker changed'}
     Remove-Trial $upgrade $product
-    $results += [pscustomobject]@{edition=$product;variant=$variant;exeBytes=(Get-Item $installer).Length;logicalBytes=$logical;files=$expected.Count;freshMs=$cleanMs;upgradeMs=$upgradeMs;payload='sha256 matched';upgrade='1.7.7 backup and data marker verified'}
+    $results += [pscustomobject]@{edition=$product;variant=$variant;exeBytes=(Get-Item $installer).Length;logicalBytes=$logical;files=$stagedFileCount;freshMs=$cleanMs;upgradeMs=$upgradeMs;payload='sha256 matched';upgrade='1.7.7 backup and data marker verified'}
     Write-Output ('NSIS178 ' + ($results[-1] | ConvertTo-Json -Compress))
   }
 }
