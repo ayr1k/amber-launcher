@@ -39,20 +39,21 @@ jobs:
             console.log('Unprotected system JVM root excluded');
           }
           JS
-      - name: Test the distro JRE under an administrator-owned JVM root
+      - name: Exercise stock Ubuntu OpenJDK as an unprivileged user
         run: |
-          # Preserve the runner's real permissions. Mount this same apt-installed
-          # JRE below a fresh protected parent, visible only in this namespace.
-          sudo unshare --mount --propagation private /bin/bash -eu -s -- "$(command -v node)" "$(id -u)" "$(id -g)" <<'SH'
-          jdk=java-21-openjdk-amd64
-          saved=$(mktemp -d)
-          trap 'umount "$saved"; rmdir "$saved"' EXIT
-          mount --bind "/usr/lib/jvm/$jdk" "$saved"
-          mount -t tmpfs -o mode=0755 tmpfs /usr/lib/jvm
-          mkdir "/usr/lib/jvm/$jdk"
-          mount --bind "$saved" "/usr/lib/jvm/$jdk"
-          AMBER_TEST_SYSTEM_JAVA=21 setpriv --reuid="$2" --regid="$3" --clear-groups "$1" --test tests/java-discovery179.test.mjs
-          SH
+          # Hosted tool images also grant write access to /usr/share. Keep the
+          # negative case above and use a stock distro filesystem for the positive case.
+          docker run --rm --init \
+            --mount "type=bind,source=$GITHUB_WORKSPACE,target=/work,readonly" \
+            --mount "type=bind,source=$(command -v node),target=/usr/local/bin/node,readonly" \
+            --workdir /work/prototype \
+            ubuntu:24.04@sha256:9c7f200c07e3d4a03e7249d2c16bf66a51120fb876aa2242cf31451412543289 \
+            /bin/bash -eu -c '
+              apt-get update -qq
+              DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends openjdk-21-jre-headless
+              stat -c "%n owner=%u:%g mode=%a" /usr/lib/jvm /usr/share
+              AMBER_TEST_SYSTEM_JAVA=21 setpriv --reuid="$1" --regid="$2" --clear-groups node --test tests/java-discovery179.test.mjs
+            ' qa "$(id -u)" "$(id -g)"
   installers:
     # The 1.7.6 task explicitly excludes installer uploads.
     if: (github.head_ref || github.ref_name) != 'codex/1.7.6-content-import'
