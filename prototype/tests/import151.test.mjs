@@ -3,17 +3,18 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,mkdir,writeFile,readFile,readdir,lstat,rm,symlink,utimes} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
-import {join,relative} from 'node:path';
+import {join,relative,parse} from 'node:path';
 import {createHash} from 'node:crypto';
 import {MinecraftImport,scanMinecraft,resolveProfile,collectImportFiles} from '../desktop/minecraft134.mjs';
-import {validateImportVersion,directoryChoices} from '../desktop/import-identify151.mjs';
+import {validateImportVersion,directoryChoices,identifier,localVersionId} from '../desktop/import-identify151.mjs';
+import {Libraries170} from '../desktop/libraries170.mjs';
 import {VanillaLauncher} from '../desktop/launcher.mjs';
 const sha=b=>createHash('sha1').update(b).digest('hex');
 const vanilla=id=>({id,mainClass:'net.minecraft.client.main.Main',libraries:[]});
 const fabric=(id='1.21.11-Fabric',game='1.21.11')=>({...vanilla(id),mainClass:'net.fabricmc.loader.impl.launch.knot.KnotClient',libraries:[{name:'net.fabricmc:fabric-loader:0.18.0'},{name:'net.fabricmc:intermediary:'+game}]});
 async function snapshot(root){const out={};async function walk(p){for(const e of await readdir(p)){const file=join(p,e),st=await lstat(file);if(st.isSymbolicLink()){out[relative(root,file)]='link';continue}if(st.isDirectory())await walk(file);else out[relative(root,file)]={bytes:(await readFile(file)).toString('base64'),mtime:st.mtimeMs};}}await walk(root);return out;}
-async function fixture(t,meta=vanilla('1.21.11')){
- const root=await mkdtemp(join(tmpdir(),'amber151-')),source=join(root,'source'),library=join(root,'library');await mkdir(source);t.after(()=>rm(root,{recursive:true,force:true}));
+async function fixture(t,meta=vanilla('1.21.11'),sourceParent=tmpdir(),libraryParent){
+ const root=await mkdtemp(join(sourceParent,'amber151-')),source=join(root,'source'),library=libraryParent?await mkdtemp(join(libraryParent,'amber179-data-')):join(root,'library');if(libraryParent)t.after(()=>rm(library,{recursive:true,force:true}));await mkdir(source);t.after(()=>rm(root,{recursive:true,force:true}));
  const put=async(p,value)=>{const path=join(source,p);await mkdir(join(path,'..'),{recursive:true});await writeFile(path,typeof value==='string'?value:JSON.stringify(value));return path};
  const version=async m=>put(`versions/${m.id}/${m.id}.json`,m);await version(meta);
  const client=Buffer.from('synthetic client, never executed'),index=Buffer.from('{"objects":{}}');
@@ -72,4 +73,102 @@ test('inaccessible configured directory requires correction even alongside a val
 });
 test('configured junction remains blocked rather than becoming a recoverable missing-directory warning',async t=>{
  const f=await fixture(t);await f.put('target/options.txt','keep');await symlink(join(f.source,'target'),join(f.source,'linked'),'junction');await f.put('launcher_profiles.json',{profiles:{p:{lastVersionId:'1.21.11',gameDir:'linked'}}});const before=await snapshot(f.source),row=(await scanMinecraft(f.source)).rows[0];assert.equal(row.supported,false);assert.match(row.reason,/link/i);assert.deepEqual(await snapshot(f.source),before);
+});
+
+
+const secondVolume=process.env.AMBER_TEST_SECOND_VOLUME;
+const locations=[['same volume',tmpdir(),tmpdir()]];
+if(secondVolume)assert.notEqual(parse(secondVolume).root.toLowerCase(),parse(tmpdir()).root.toLowerCase(),'Choose a distinct test volume');
+if(secondVolume)locations.push(['primary to secondary',tmpdir(),secondVolume],['secondary to primary',secondVolume,tmpdir()]);
+for(const [label,sourceParent,dataParent] of locations)test('both Minecraft entry services: '+label,async t=>{
+ const f=await fixture(t,undefined,sourceParent,dataParent);
+ await f.put('versions/1.21.11/options.txt','selected');
+ const before=await snapshot(f.source);
+ t.diagnostic('Source '+parse(f.source).root+'<fixture>/source; game versions/1.21.11 inside source; application data '+parse(f.library).root+'<separate fixture>.');
+ const registry=new Libraries170(f.library);
+ const registration=await registry.preview(f.source);
+ const entry=await registry.add(registration.token,'External',true);
+ assert.equal((await registry.scan(entry.id)).rows[0].id,'1.21.11');
+ const {scan,preview,input}=await ready(f);
+ assert.equal(preview.gameDir,join(f.source,'versions','1.21.11'));
+ const result=await f.importer.create(scan.id,f.key,input);
+ assert.equal(await readFile(join(await f.core.instancePath(result.instance.id),'options.txt'),'utf8'),'selected');
+ assert.deepEqual(await snapshot(f.source),before);
+});
+
+
+for(const id of ['FPScraft X','中文 游戏'])test('local version ID remains separate from display and official ID: '+id,async t=>{
+ const m={...fabric(id),inheritsFrom:'',patches:[{id:'game',version:'1.21.11'}]};
+ const f=await fixture(t,m);
+ await f.put('launcher_profiles.json',{profiles:{display:{name:'任意显示名',lastVersionId:id}}});
+ const [row]=(await f.importer.scan(f.source)).rows;
+ assert.equal(row.name,'任意显示名');assert.equal(row.versionId,id);assert.equal(row.supported,true);
+ assert.equal((await validateImportVersion(f.core,row)).game,'1.21.11');
+ const external=(await new Libraries170(f.library).preview(f.source)).rows[0];
+ assert.deepEqual([external.id,external.game,external.loader],[id,'1.21.11','fabric']);
+ assert.equal(identifier(id),false);
+});
+test('local filename restrictions and folder/JSON correspondence',async t=>{
+ for(const id of ['', '.', '..','CON.txt','LPT²','COM1 .txt','a:ads','bad.','bad ','../a','a/b','c:\\\\bad','a*','x\\n','x'.repeat(151)])assert.equal(localVersionId(id),false,id);
+ const f=await fixture(t);
+ await f.put('versions/Alias X/Alias X.json',{...vanilla('other')});
+ assert.match((await f.importer.scan(f.source)).rows.find(p=>p.versionId==='Alias X').reason,/mismatch/);
+});
+test('explicit choice that left the catalog can be replaced, offline selection can retry',async t=>{
+ const f=await fixture(t,fabric()),scan=await f.importer.scan(f.source);
+ const options={game:'old-selection'};
+ const stale=await f.importer.preview(scan.id,f.key,[],options);
+ assert.equal(stale.validation.state,'unsupported');assert.ok(stale.validation.versions.includes('1.21.11'));
+ const online=f.core.versions.bind(f.core);f.core.versions=async()=>{throw Error('offline')};
+ assert.equal((await f.importer.preview(scan.id,f.key,[],options)).validation.state,'unavailable');
+ f.core.versions=online;
+ assert.equal((await f.importer.preview(scan.id,f.key,[],{game:'1.21.11'})).validation.state,'ready');
+});
+test('both entry services reject equality, nested roots and linked aliases',async t=>{
+ const f=await fixture(t);
+ const scan=await f.importer.scan(f.source);
+ const nested=join(f.source,'sub'),alias=join(f.root,'alias');
+ await mkdir(nested);await symlink(f.source,alias,'junction');
+ for(const dataRoot of [f.source,nested,f.root,alias]){
+  const registry=new Libraries170(dataRoot);
+  await assert.rejects(registry.preview(f.source),/overlap|link/i);
+  f.core.root=dataRoot;
+  await assert.rejects(f.importer.preview(scan.id,f.key,[]),/contain|link/i);
+ }
+});
+
+for(const mode of ['download fails','cancel while preparing','reuse compatible'])test('Forge Java preflight: '+mode,async t=>{
+ const meta={...vanilla('Forge 中文'),inheritsFrom:null,mainClass:'cpw.mods.bootstraplauncher.BootstrapLauncher',
+  libraries:[{name:'net.minecraftforge:fmlloader:1.18.2-40.2.9'}],arguments:{game:['--fml.mcVersion','1.18.2']}};
+ const f=await fixture(t,meta);
+ await f.put('options.txt','keep');const before=await snapshot(f.source);
+ const body=JSON.stringify({...vanilla('1.18.2'),javaVersion:{majorVersion:17}});
+ const previous=join(f.library,'instances','previous-copy');await mkdir(previous);const previousFile=join(previous,'options.txt');await writeFile(previousFile,'previous copy marker');
+ let runtimeRequests=0,copies=0;
+ f.core.versions=async()=>{f.core.catalog=[{id:'1.18.2',url:'https://piston-meta.mojang.com/base.json',sha1:sha(body)}]};
+ f.core.fetcher=async(url)=>{
+  if(url.endsWith('/base.json'))return new Response(body);
+  if(url.endsWith('maven-metadata.xml'))return new Response('<version>1.18.2-40.2.9</version>');
+  if(url.startsWith('https://api.adoptium.net/')){runtimeRequests++;throw Error('test runtime download failed');}
+  throw Error('Unexpected URL');
+ };
+ f.core.scanJava=async options=>{
+  assert.deepEqual(options,{scanRootsOnly:true});
+  if(mode==='cancel while preparing')f.importer.cancel();
+  return [{major:21,path:'wrong' },...(mode==='reuse compatible'?[{major:17,path:'compatible',version:'17'}]:[])];
+ };
+ const copy=f.importer.copyContent.bind(f.importer);
+ f.importer.copyContent=async(...args)=>{
+  const {item}=await f.core.metadata(f.importer.instanceId);assert.equal(item.javaPath,'compatible');copies++;
+  return copy(...args);
+ };
+ f.core.configureLoader=async()=>{throw Error('test ended at loader handoff')};
+ const {scan,input}=await ready(f);
+ for(let attempt=0;attempt<(mode==='reuse compatible'?1:2);attempt++){
+  await assert.rejects(f.importer.create(scan.id,f.key,input),mode==='reuse compatible'?/loader handoff/:mode==='download fails'?/Check Java/:/cancelled/);
+ }
+ assert.equal(copies,mode==='reuse compatible'?1:0);
+ assert.equal(runtimeRequests,mode==='download fails'?2:0);
+ assert.equal(await readFile(previousFile,'utf8'),'previous copy marker');
+ assert.deepEqual(await snapshot(f.source),before);
 });

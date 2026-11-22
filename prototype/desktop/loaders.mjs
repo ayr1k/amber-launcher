@@ -32,7 +32,7 @@ export async function installLoader(core,id,type,version){
  if(!repos[type])throw Error('不支持的加载器。');
  const {dir,item,meta}=await core.metadata(id);await core.requireStopped(dir);
  if(!(await loaderVersions(meta.id,type,core.fetcher)).some(v=>v.version===version))throw Error('所选加载器不适配此游戏版本。');
- const java=item.javaPath?await inspectJava(item.javaPath):(await core.scanJava()).find(j=>j.major===requiredJava(meta));if(!java)throw Error('请先自动准备 Java，再安装加载器。');
+ const java=item.javaPath?await inspectJava(item.javaPath):(await core.scanJava()).find(j=>j.major===requiredJava(meta));if(!java||java.major!==requiredJava(meta))throw Error('请先自动准备 Java，再安装加载器。');
  return core.startJob(id,'loader',async(job,signal)=>{
   const work=join(core.root,'loader-work',randomUUID());await mkdir(work,{recursive:true});
   job.phase='下载官方加载器安装器';

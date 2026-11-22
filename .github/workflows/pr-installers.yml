@@ -29,6 +29,16 @@ jobs:
       - run: pnpm exec install-electron
       - run: pnpm build
       - run: node scripts/qa-memory-identity160.cjs
+      - name: Check both Minecraft import services on Windows
+        if: (github.head_ref || github.ref_name) == 'task/1.7.9-minecraft-import'
+        shell: pwsh
+        run: |
+          $primary = [IO.Path]::GetPathRoot([IO.Path]::GetTempPath())
+          $other = if ($primary -eq 'D:\') { 'C:\' } else { 'D:\' }
+          if (Test-Path $other) { $env:AMBER_TEST_SECOND_VOLUME = $other }
+          New-Item -ItemType Directory -Force review174 | Out-Null
+          node --test tests/import151.test.mjs tests/libraries170.test.mjs tests/platform135.test.mjs tests/accounts-fabric.test.mjs | Tee-Object review174/import-179.txt
+          exit $LASTEXITCODE
       - run: pnpm release:check
       - run: pnpm package:editions
         env:
@@ -55,8 +65,9 @@ jobs:
             prototype/releases/*/*-Setup-x64.exe.sha256
             prototype/releases/*/TEST-REVISION.txt
             prototype/releases/*/*.provenance.json
-            prototype/LOCAL-TEST-1.7.8.md
+            prototype/LOCAL-TEST-1.7.9.md
             prototype/review174/packaged/result.json
+            prototype/review174/import-179.txt
           retention-days: 30
           if-no-files-found: error
       - name: Compare NSIS payloads and upgrade v1.7.7 on disposable Windows

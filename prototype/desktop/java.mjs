@@ -1,10 +1,11 @@
 import {hostPlatform,javaArchitectureMatches} from './platform135.mjs';
+import {ordinary170,inside170} from './library-paths170.mjs';
 import {extractRuntimeTar} from './runtime-archive135.mjs';
 // SPDX-License-Identifier: MPL-2.0
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { readdir, mkdir, readFile } from 'node:fs/promises';
-import { join, resolve } from 'node:path';
+import { join, isAbsolute } from 'node:path';
 import { officialFetch, download, safePath } from './download.mjs';
 import { extractZip } from './vanilla.mjs';
 const exec=promisify(execFile);
@@ -14,11 +15,29 @@ export async function inspectJava(path){
  const major=Number(version.startsWith('1.')?version.split('.')[1]:version.split(/[.+_-]/)[0]);if(!javaArchitectureMatches(architecture))throw new Error('Java 架构需要与启动器一致 / Java architecture must match the launcher');return {path:join(home,'bin',hostPlatform().javaName),major,version,architecture};
 }
 async function findExecutables(root,depth=6){const result=[];try{for(const entry of await readdir(root,{withFileTypes:true})){if(entry.isSymbolicLink())continue;const path=join(root,entry.name);if(entry.isFile()&&entry.name===hostPlatform().javaName)result.push(path);else if(entry.isDirectory()&&depth>0)result.push(...await findExecutables(path,depth-1));}}catch{}return result;}
-export async function discoverJava(root){
- const candidates=new Set(['java',...(process.env.JAVA_HOME?[join(process.env.JAVA_HOME,'bin',hostPlatform().javaName)]:[])]);
+export async function discoverJava(root,{scanRootsOnly=false}={}){
+ const windows=process.platform==='win32',candidates=new Map();
+ if(!windows||!scanRootsOnly)candidates.set('java',null);
+ const javaHome=process.env.JAVA_HOME;
+ if(javaHome&&isAbsolute(javaHome))candidates.set(join(javaHome,'bin',hostPlatform().javaName),javaHome);
  const locations=[join(root,'runtimes'),...(process.platform==='win32'?['Java','Eclipse Adoptium','Microsoft'].map(p=>join(process.env.ProgramFiles||'C:/Program Files',p)):process.platform==='darwin'?['/Library/Java/JavaVirtualMachines','/opt/homebrew/opt','/usr/local/opt']:['/usr/lib/jvm','/usr/java','/usr/local/openjdk8','/usr/local/openjdk17','/usr/local/openjdk21','/usr/local/openjdk25'])];
- for(const loc of locations)for(const file of await findExecutables(loc))candidates.add(file);
- const found=await Promise.all([...candidates].map(p=>inspectJava(p).catch(()=>null)));return [...new Map(found.filter(Boolean).map(j=>[j.path.toLowerCase(),j])).values()];
+ if(windows&&process.env.APPDATA&&isAbsolute(process.env.APPDATA))locations.push(join(process.env.APPDATA,'.minecraft','runtime'));
+ for(const loc of locations){
+  if(windows){try{await ordinary170(loc);}catch{continue;}}
+  for(const file of await findExecutables(loc))candidates.set(file,loc);
+ }
+ const found=await Promise.all([...candidates].map(async ([path,scanRoot])=>{
+  try{
+   if(windows&&scanRoot)await ordinary170(path);
+   const java=await inspectJava(path);
+   if(windows&&scanRoot){
+    if(!isAbsolute(java.path)||!inside170(scanRoot,java.path))return null;
+    await ordinary170(java.path);
+   }
+   return java;
+  }catch{return null;}
+ }));
+ return [...new Map(found.filter(Boolean).map(j=>[j.path.toLowerCase(),j])).values()];
 }
 export async function installJava(root,major,job,signal,fetcher=fetch){
  if(![8,16,17,21,25].includes(major))throw new Error(`自动安装暂不支持 Java ${major}，请手动选择兼容的 Java。`);
