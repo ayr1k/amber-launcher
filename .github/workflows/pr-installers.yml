@@ -33,6 +33,11 @@ jobs:
         if: (github.head_ref || github.ref_name) == 'task/1.7.9-minecraft-import'
         shell: pwsh
         run: |
+          # The runner may expose TEMP in Windows short-name form. Use the
+          # ordinary path for the positive cases; the alias cases supply their own links.
+          $env:TEMP = node -p "require('node:fs').realpathSync.native(require('node:os').tmpdir())"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $env:TMP = $env:TEMP
           $primary = [IO.Path]::GetPathRoot([IO.Path]::GetTempPath())
           $other = if ($primary -eq 'D:\') { 'C:\' } else { 'D:\' }
           if (Test-Path $other) { $env:AMBER_TEST_SECOND_VOLUME = $other }
