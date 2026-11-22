@@ -2,7 +2,7 @@
 import {readdir,lstat,readFile} from 'node:fs/promises';
 import {join,resolve} from 'node:path';
 import {safePath,digest} from './download.mjs';
-import {identifier} from './import-identify151.mjs';
+import {localVersionId,hasParent,baseEvidence} from './import-identify151.mjs';
 import {ordinary170,json170,inside170} from './library-paths170.mjs';
 
 const dataNames=['saves','mods','config','resourcepacks','shaderpacks','options.txt'];
@@ -14,16 +14,19 @@ function merge(parent,child){
  delete result.inheritsFrom;return result;
 }
 export async function profile170(root,id,{directoryChoice=null}={}){
- if(!identifier(id))bad();await ordinary170(root);
+ if(!localVersionId(id))bad();await ordinary170(root);
  const chain=[],seen=new Set(),fingerprints=[];let next=id;
- while(next){if(!identifier(next)||seen.has(next)||chain.length===16)bad();seen.add(next);const file=safePath(root,`versions/${next}/${next}.json`),meta=await json170(file);if(meta.id!==next||meta.libraries&&!Array.isArray(meta.libraries))bad();chain.push(meta);fingerprints.push({path:file,sha256:await digest(file,'sha256')});next=meta.inheritsFrom;}
+ while(next){if(!localVersionId(next)||seen.has(next)||chain.length===16)bad();seen.add(next);const file=safePath(root,`versions/${next}/${next}.json`),meta=await json170(file);if(meta.id!==next||hasParent(meta.inheritsFrom)&&!localVersionId(meta.inheritsFrom)||meta.libraries&&!Array.isArray(meta.libraries))bad();chain.push(meta);fingerprints.push({path:file,sha256:await digest(file,'sha256')});next=meta.inheritsFrom;}
  let meta={};for(const entry of [...chain].reverse())meta=merge(meta,entry);
  // HMCL writes a resolved profile as well as patches. Never append patches again.
  const patches=meta.patches||[];if(!Array.isArray(patches)||patches.length>32)bad();
- const base=patches.find(p=>p.id==='game')?.version||chain.at(-1).id;
  const names=(meta.libraries||[]).map(l=>l?.name);if(names.some(n=>typeof n!=='string'))bad();
- const loader=names.some(n=>n.startsWith('net.fabricmc:fabric-loader:'))?'fabric':names.some(n=>n.startsWith('org.quiltmc:quilt-loader:'))?'quilt':names.some(n=>n.startsWith('net.minecraftforge:forge:'))?'forge':names.some(n=>n.startsWith('net.neoforged:neoforge:'))?'neoforge':'vanilla';
- const loaderPrefixes={fabric:'net.fabricmc:fabric-loader:',quilt:'org.quiltmc:quilt-loader:',forge:'net.minecraftforge:forge:',neoforge:'net.neoforged:neoforge:'},loaderVersion=names.find(n=>loaderPrefixes[loader]&&n.startsWith(loaderPrefixes[loader]))?.split(':')[2]||null;
+ const evidenceForBase=baseEvidence(chain,names);
+ const explicitBases=[...new Set(evidenceForBase.filter(e=>e.source!=='id').map(e=>e.game))];
+ if(explicitBases.length>1)throw Error('Conflicting Minecraft base versions / Minecraft 基础版本证据冲突，请在默认库的“导入已有 .minecraft”中手选版本');
+ const base=explicitBases[0]??evidenceForBase.find(e=>e.source==='id')?.game??null;
+ const loader=names.some(n=>n.startsWith('net.fabricmc:fabric-loader:'))?'fabric':names.some(n=>n.startsWith('org.quiltmc:quilt-loader:'))?'quilt':names.some(n=>/^net\.minecraftforge:(?:forge|fmlloader):/.test(n))?'forge':names.some(n=>n.startsWith('net.neoforged:neoforge:'))?'neoforge':'vanilla';
+ const loaderPrefixes={fabric:'net.fabricmc:fabric-loader:',quilt:'org.quiltmc:quilt-loader:',forge:'net.minecraftforge:forge:',neoforge:'net.neoforged:neoforge:'},loaderVersion=(names.find(n=>loaderPrefixes[loader]&&n.startsWith(loaderPrefixes[loader]))??(loader==='forge'?names.find(n=>n.startsWith('net.minecraftforge:fmlloader:')):null))?.split(':')[2]||null;
  const optifine=names.some(n=>/^optifine:|^net\.optifine:/.test(n))||patches.some(p=>p.id==='optifine');
  const versionDir=safePath(root,`versions/${id}`),explicit=chain.flatMap(m=>[...(m.gameDir?[m.gameDir]:[]),...values(m,'--gameDir')]).filter(p=>p!=='${game_directory}');
  const launcher=await json170(join(root,'launcher_profiles.json'),{optional:true});
@@ -45,6 +48,6 @@ export async function profile170(root,id,{directoryChoice=null}={}){
 }
 export async function scan170(root,choices={}){
  await ordinary170(root);await ordinary170(join(root,'versions'));const rows=[];
- for(const entry of await readdir(join(root,'versions'),{withFileTypes:true})){if(/^\.AMBER-restore-[a-f0-9-]{36}$/.test(entry.name))continue;if(!entry.isDirectory()&&!entry.isSymbolicLink())continue;try{const {meta,...row}=await profile170(root,entry.name,{directoryChoice:choices[entry.name]});rows.push(row);}catch(e){rows.push({id:entry.name,name:entry.name,error:e.message,isolation:'unknown'});}}
+ for(const entry of await readdir(join(root,'versions'),{withFileTypes:true})){if(/^\.AMBER-restore-[a-f0-9-]{36}$/.test(entry.name))continue;if(!entry.isDirectory()&&!entry.isSymbolicLink())continue;try{const {meta,...row}=await profile170(root,entry.name,{directoryChoice:Object.hasOwn(choices,entry.name)?choices[entry.name]:null});rows.push(row);}catch(e){rows.push({id:entry.name,name:entry.name,error:e.message,isolation:'unknown'});}}
  const modes=new Set(rows.map(r=>r.isolation));return {root,rows,isolation:modes.size===1?[...modes][0]||'unknown':modes.has('unknown')?'unknown':'mixed'};
 }

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 // Both products are built from this exact source tree. No runtime edition switch.
+import {stageJavaVerifier} from './stage-java-verifier.mjs';
 import {cp,mkdir,readFile,writeFile,copyFile,access,realpath,lstat,rm} from 'node:fs/promises';
 import {resolve,dirname,join} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -38,6 +39,7 @@ for(const edition of editions){
  }catch(e){if(e.code!=='ENOENT')throw e;}
  await mkdir(stage,{recursive:true});
  for(const entry of ['src','desktop','public','build','index.html','vite.config.mjs','LICENSE','THIRD_PARTY_NOTICES.md','RELEASE-ACCEPTANCE.md',testNotes])await cp(join(root,entry),join(stage,entry),{recursive:true});
+ await stageJavaVerifier(join(stage,'desktop'),{windows:true});
  await copyFile(join(root,'..','CHANGELOG.md'),join(stage,'CHANGELOG.md'));
  const metadata={...pkg,name:edition==='ambere'?'ambere-launcher':pkg.name,description:name+' Minecraft Java launcher',dependencies:{},devDependencies:{}};
  await writeFile(join(stage,'package.json'),JSON.stringify(metadata,null,2));

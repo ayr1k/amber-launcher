@@ -1,15 +1,16 @@
 // SPDX-License-Identifier: MPL-2.0
 import {readFile,readdir,lstat,copyFile,statfs} from 'node:fs/promises';
-import {resolve,join,relative,sep,parse} from 'node:path';
+import {resolve,join,relative,sep} from 'node:path';
 import {randomUUID} from 'node:crypto';
-import {identifier,readImportJson,identifyProfile,directoryChoices,validateImportVersion} from './import-identify151.mjs';
+import {localVersionId,readImportJson,identifyProfile,directoryChoices,validateImportVersion} from './import-identify151.mjs';
+import {ordinary170,inside170} from './library-paths170.mjs';
 import {constants} from 'node:fs';
 import {setTimeout as delay} from 'node:timers/promises';
 import {safePath,ensureParents,verified,digest} from './download.mjs';
 import {atomicJson} from './core.mjs';
 import {planFiles,assetFiles} from './vanilla.mjs';
 export const importGroups=['saves','mods','config','defaultconfigs','resourcepacks','shaderpacks','screenshots','kubejs','scripts','options.txt','optionsof.txt','servers.dat'];
-export async function noLinks(path){const full=resolve(path),root=parse(full).root;let p=root;for(const part of full.slice(root.length).split(sep).filter(Boolean)){p=join(p,part);const st=await lstat(p);if(st.isSymbolicLink())throw Error('目录包含链接，未读取 / Linked paths are not supported');}return full;}
+export const noLinks=ordinary170;
 const json=path=>readImportJson(path,noLinks);
 export const resolveProfile=(root,id)=>identifyProfile(root,id,noLinks);
 export async function scanMinecraft(path){
@@ -17,8 +18,8 @@ export async function scanMinecraft(path){
  await noLinks(join(root,'versions'));const entries=await readdir(join(root,'versions'),{withFileTypes:true});if(entries.length>10000)throw Error('Too many versions');let profiles={},profileHash=null;
  try{profiles=(await json(join(root,'launcher_profiles.json'))).profiles||{};profileHash=await digest(join(root,'launcher_profiles.json'),'sha256');}catch(e){if(e.code!=='ENOENT')throw e;}
  if(typeof profiles!=='object'||Array.isArray(profiles))throw Error('版本元数据结构损坏。');
- const candidates=Object.entries(profiles).filter(([,p])=>p&&identifier(p.lastVersionId)).map(([key,p])=>({key,name:String(p.name||p.lastVersionId).slice(0,200),versionId:p.lastVersionId,explicitGameDir:p.gameDir}));
- for(const e of entries)if(e.isDirectory()&&!e.isSymbolicLink()&&identifier(e.name)&&!candidates.some(p=>p.versionId===e.name))candidates.push({key:'version:'+e.name,name:e.name,versionId:e.name});
+ const candidates=Object.entries(profiles).filter(([,p])=>p&&localVersionId(p.lastVersionId)).map(([key,p])=>({key,name:String(p.name||p.lastVersionId).slice(0,200),versionId:p.lastVersionId,explicitGameDir:p.gameDir}));
+ for(const e of entries)if(e.isDirectory()&&!e.isSymbolicLink()&&localVersionId(e.name)&&!candidates.some(p=>p.versionId===e.name))candidates.push({key:'version:'+e.name,name:e.name,versionId:e.name});
  const rows=[];for(const p of candidates.slice(0,500)){try{if(p.explicitGameDir!==undefined&&(typeof p.explicitGameDir!=='string'||!p.explicitGameDir||p.explicitGameDir.includes('${')))throw Error('游戏数据目录配置无效。');const info={...p,...await resolveProfile(root,p.versionId)};rows.push({...info,...await directoryChoices(root,info,importGroups,noLinks),supported:true});}catch(e){rows.push({...p,supported:false,reason:e.message});}}
  return {root,rows,profileHash};
 }
@@ -45,31 +46,44 @@ export class MinecraftImport {
   const validation=await validateImportVersion(this.core,profile,options.game);
   if(!gameDir)return {validation,needsDirectory:true};
   if(!profile.directories.some(d=>d.path===gameDir))throw Error('请重新选择原版目录 / Select the source directory again');
+  await this.checkDirectories(scan.root,gameDir);
   const data=await collectImportFiles(gameDir,groups),id=randomUUID();
   this.previews??=new Map();this.previews.set(id,{token,key,groups:[...groups],gameDir,data,validation,expires:Date.now()+3600000});
   while(this.previews.size>10)this.previews.delete(this.previews.keys().next().value);
   return {id,files:data.files.length,bytes:data.bytes,gameDir,validation,loader:profile.loader,loaderVersion:profile.version,versionId:profile.versionId,groups};
  }
+ async checkDirectories(source,gameDir){
+  const data=await ordinary170(this.core.root,{missing:true});
+  for(const path of [source,gameDir]){
+   await ordinary170(path);
+   if(inside170(path,data)||inside170(data,path))throw Error(
+    '源目录不能包含 AMBER 数据库 / Source and application data must not contain each other.\n.minecraft: '+source+'\nGame: '+gameDir+'\nAMBER data: '+data);
+  }
+ }
  async availableSpace(path){return statfs(path);}
  async copyContent(source,dest){return copyFile(source,dest,constants.COPYFILE_EXCL);}
- async wait(job){while(true){const current=this.core.jobs.find(j=>j.id===job.id);if(current.state==='done')return;if(current.state!=='running')throw Error(current.error||'Import cancelled');await delay(100);}}
+ async wait(job){if(this.cancelled)this.core.controllers.get(job.id)?.abort(Error('Import cancelled'));while(true){const current=this.core.jobs.find(j=>j.id===job.id);if(current.state==='done')return;if(current.state!=='running')throw Error(current.error||'Import cancelled');await delay(100);}}
  async create(token,key,input){
- if(this.busy)throw Error('正在导入，请等待 / Another import is running');const {scan,profile}=this.selection(token,key);this.busy=true;this.cancelled=false;this.instanceId=null;let item;
+ if(this.busy)throw Error('正在导入，请等待 / Another import is running');const {scan,profile}=this.selection(token,key);this.busy=true;this.cancelled=false;this.instanceId=null;let item,copyStarted=false;
  try{this.core.workflowGuard?.();const groups=input?.groups;if(typeof input?.name!=='string'||!input.name.trim()||input.name.length>60)throw Error('请输入实例名称 / Enter an instance name');
   await this.verifySource(scan,profile);this.check();
   const saved=input.previewId?this.previews?.get(input.previewId):null;
   if(!saved||saved.expires<Date.now()||saved.token!==token||saved.key!==key||saved.validation.state!=='ready'||JSON.stringify(saved.groups)!==JSON.stringify(groups))throw Error('预览已失效，请重新预览。');
   const gameDir=saved.gameDir;if(!gameDir)throw Error('请先确认游戏数据目录。');
+  await this.checkDirectories(scan.root,gameDir);
   const data=await collectImportFiles(gameDir,groups,()=>this.check());
   if(JSON.stringify(data)!==JSON.stringify(saved.data))throw Error('源文件已变化，请重新预览。');
   if(!data.files.length&&!input.allowEmpty)throw Error('未找到所选内容，请确认仅创建运行环境。');
-  const inside=(a,b)=>{const r=relative(resolve(a),resolve(b));return !r||(!r.startsWith('..'+sep)&&r!=='..'&&!parse(r).root)};
-  if(inside(gameDir,this.core.root)||inside(this.core.root,gameDir)||inside(scan.root,this.core.root)||inside(this.core.root,scan.root))throw Error('源目录不能包含 AMBER 数据库 / Source must not contain the AMBER library');
   const validation=await validateImportVersion(this.core,profile,saved.validation.confirmed?saved.validation.game:undefined);this.check();
   if(validation.state!=='ready')throw Error(validation.reason);
   const selectedProfile={...profile,game:validation.game};
   item=await this.core.createInstance({name:input.name,game:selectedProfile.game,icon:'grass'});this.instanceId=item.id;this.check();const dir=await this.core.instancePath(item.id),space=await this.availableSpace(dir);if(space.bavail*space.bsize<data.bytes+2000000000)throw Error('可用空间不足，请保留至少 2 GB 余量 / Not enough free space (2 GB reserve required)');
+  if(['forge','neoforge'].includes(profile.loader)){
+   try{this.check();await this.wait(await this.core.prepareJava(item.id,{purpose:'import'}));this.check();}
+   catch(error){this.check();throw Error('请检查 Java 和网络后重新预览并导入 / Check Java and network access, then preview and retry. '+error.message);}
+  }
   const provenance={schema:1,source:scan.root,gameDirectory:gameDir,game:selectedProfile.game,loader:profile.loader,loaderVersion:profile.version,profile:profile.versionId,mode:'copy',groups,createdAt:new Date().toISOString(),status:'copying'};await atomicJson(join(dir,'minecraft-import.json'),provenance);
+  copyStarted=true;
   await this.wait(await this.core.startJob(item.id,'minecraft-copy',async(job,signal)=>{job.phase='复制原版实例 / Copying original game data';job.total=data.files.length;
    for(const f of data.files){this.check();signal.throwIfAborted();const source=safePath(gameDir,f.relative),dest=safePath(dir,f.relative);await noLinks(source);const before=await lstat(source);if(before.size!==f.size||before.mtimeMs!==f.mtime||await digest(source,'sha256')!==f.hash)throw Error('源文件已变化，请关闭游戏后重新导入 / Source changed; close the game and retry');await ensureParents(dir,dest);await this.copyContent(source,dest);if(await digest(source,'sha256')!==f.hash||await digest(dest,'sha256')!==f.hash)throw Error('复制校验失败 / Copy verification failed');const after=await lstat(source);if(after.mtimeMs!==before.mtimeMs||after.size!==before.size)throw Error('源文件已变化 / Source changed during copy');job.completed++;job.transferred+=f.size;}
   }));
@@ -80,6 +94,6 @@ export class MinecraftImport {
    await reuse(plan.index);const files=[...plan.files];if(await verified(plan.index))files.push(...assetFiles(JSON.parse(await readFile(plan.index.path,'utf8')),this.core.root));job.total=files.length;for(const f of files)await reuse(f);provenance.reusedFiles=reused;
   }));
   this.check();await this.wait(await this.core.install(item.id));provenance.status='complete';await atomicJson(join(dir,'minecraft-import.json'),provenance);return {instance:(await this.core.listInstances()).find(i=>i.id===item.id),reusedFiles:provenance.reusedFiles,copiedFiles:data.files.length};
- }catch(e){if(item)e.message+=' · '+item.name+'：已复制内容保留在新实例中，原目录未改动 / Copied content retained in the new instance; source unchanged';throw e;}finally{this.busy=false;}
+ }catch(e){if(item&&!copyStarted)e.message+=' · '+item.name+'：尚未复制所选文件 / Selected files have not been copied';else if(item)e.message+=' · '+item.name+'：已复制内容保留在新实例中，原目录未改动 / Copied content retained in the new instance; source unchanged';throw e;}finally{this.busy=false;}
  }
 }

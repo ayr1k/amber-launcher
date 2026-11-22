@@ -7,7 +7,7 @@ import {safePath,digest,verified} from './download.mjs';
 import {rulesAllow,requiredJava,effectiveArguments} from './vanilla.mjs';
 import {gameEnvironment} from './platform135.mjs';
 import {ordinary170,json170} from './library-paths170.mjs';
-import {identifier} from './import-identify151.mjs';
+import {identifier,localVersionId} from './import-identify151.mjs';
 import {loggingFile170} from './library-logging170.mjs';
 import {sessionAlive} from './process-session.mjs';
 
@@ -63,7 +63,7 @@ export async function localPlan170(root,profile,env=gameEnvironment(),options={}
   if(!emptyNativeStub&&(artifact||!library.natives))await unique('libraries/'+(artifact?.path||maven(library.name)),artifact,'class');
   const classifier=library.natives?.[env.os]?.replace('${arch}','64');if(classifier){if(process.arch!=='x64')throw Error('Legacy external natives require x64 / 旧版外部原生库仅支持 x64');const record=library.downloads?.classifiers?.[classifier];await unique('libraries/'+(record?.path||maven(library.name,classifier)),record,'native');}
  }
- const jar=meta.jar||profile.chain.at(-1);if(!identifier(jar))throw Error('Invalid client jar path / 客户端 JAR 路径无效');await add(`versions/${jar}/${jar}.jar`,meta.downloads?.client,'class');
+ const jar=meta.jar||profile.chain.at(-1);if(!localVersionId(jar))throw Error('Invalid client jar path / 客户端 JAR 路径无效');await add(`versions/${jar}/${jar}.jar`,meta.downloads?.client,'class');
  // Forge binary patches require the original client before OptiFine patched classes.
  if(meta.mainClass==='net.minecraft.launchwrapper.Launch'){classpath.unshift(classpath.pop());const optifine=classpath.filter(p=>/[\\/]optifine[\\/]OptiFine[\\/]/i.test(p));for(const p of optifine){classpath.splice(classpath.indexOf(p),1);classpath.push(p);}}
  if(!identifier(meta.assetIndex?.id))throw Error('Missing asset index / 缺少资源索引');const index=await add(`assets/indexes/${meta.assetIndex.id}.json`,meta.assetIndex);
@@ -81,12 +81,12 @@ export class LibraryRuntime170 extends VanillaLauncher {
  constructor(registry,entry,stateRoot){super(entry.path);this.registry=registry;this.libraryId=entry.id;this.stateRoot=stateRoot;}
  async init(){await ordinary170(this.root);await ordinary170(this.stateRoot,{missing:true});await mkdir(this.stateRoot,{recursive:true});}
  async listInstances(){const rows=(await this.registry.scan(this.libraryId)).rows.filter(r=>!r.error);return Promise.all(rows.map(async r=>{const stored=await json170(join(this.stateRoot,r.id,'instance.json'),{optional:true});return {...r,...stored,id:r.id,game:r.game,loader:r.loader,loaderVersion:r.loaderVersion,name:stored?.name||r.id,icon:stored?.icon||'grass',status:'installed',external:true,createdAt:'',javaMajor:r.game?.startsWith('1.16')?8:null};}));}
- async instancePath(id){if(!identifier(id))throw Error('Invalid version');await this.registry.profile(this.libraryId,id);await this.init();const path=safePath(this.stateRoot,id);await ordinary170(path,{missing:true});await mkdir(path,{recursive:true});return path;}
+ async instancePath(id){if(!localVersionId(id))throw Error('Invalid version');await this.registry.profile(this.libraryId,id);await this.init();const path=safePath(this.stateRoot,id);await ordinary170(path,{missing:true});await mkdir(path,{recursive:true});return path;}
  async metadata(id){const profile=await this.registry.profile(this.libraryId,id),dir=await this.instancePath(id);const stored=await json170(join(dir,'instance.json'),{optional:true});const item={...stored,id,name:stored?.name||id,icon:stored?.icon||'grass',game:profile.game,status:'installed',loader:profile.loader,loaderVersion:profile.loaderVersion};return {profile,dir,item,meta:{...profile.meta,id:profile.game}};}
  async runtimeMetadata(id){const result=await this.metadata(id);if(!result.profile.gameDir)throw Error('Confirm this version’s game directory first / 请先确认此版本的游戏目录');const runtime=await localPlan170(this.root,result.profile,undefined,{loggingRoot:join(this.stateRoot,'logging170'),fetcher:this.fetcher});return {...result,...runtime,gameDirectory:result.profile.gameDir,external:true};}
  async validateExternalBeforeSpawn(id,runtime){const current=await this.registry.profile(this.libraryId,id);if(current.gameDir!==runtime.gameDirectory||JSON.stringify(current.fingerprints)!==JSON.stringify(runtime.profile.fingerprints))throw Error('Library changed during launch preparation / 启动准备期间实例库发生变化');for(const f of runtime.plan.files){await ordinary170(f.path);if(!await verified(f))throw Error('Game files changed during launch preparation / 启动准备期间游戏文件发生变化');}}
  async install(){throw Error('Open Launch settings → External components and repair → Preview missing-file repair to review and confirm the exact file plan / 请在启动设置 → 外部版本组件与修复 → 预览缺失文件修复中审阅并确认文件计划');}
  async prepareJava(){throw Error('Select an existing Java runtime for external versions / 请为外部版本选择已有 Java');}
- async selectJava(id,path){if(!this.javaCandidates.has(path))throw Error('Select Java with the file picker');const result=await this.metadata(id);result.item.javaPath=path;await atomicJson(join(result.dir,'instance.json'),result.item);return this.javaCandidates.get(path);}
- async resolveGameJava(id){const {item,meta}=await this.metadata(id);const {inspectJava}=await import('./java.mjs');const java=item.javaPath?await inspectJava(item.javaPath):(await this.scanJava()).find(j=>j.major===requiredJava(meta));if(!java||java.major!==requiredJava(meta))throw Error(`Select Java ${requiredJava(meta)} / 请选择 Java ${requiredJava(meta)}`);return java;}
+ async selectJava(id,path){if(!this.javaCandidates.has(path))throw Error('Select Java with the file picker');const result=await this.metadata(id);result.item.javaPath=path;delete result.item.javaAuto;await atomicJson(join(result.dir,'instance.json'),result.item);return this.javaCandidates.get(path);}
+ async resolveGameJava(id){const {item,meta}=await this.metadata(id);const {inspectConfiguredJava}=await import('./java.mjs');const java=item.javaPath?await inspectConfiguredJava(this.stateRoot,item):(await this.scanJava()).find(j=>j.major===requiredJava(meta));if(!java||java.major!==requiredJava(meta))throw Error(`Select Java ${requiredJava(meta)} / 请选择 Java ${requiredJava(meta)}`);return java;}
 }

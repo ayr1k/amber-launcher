@@ -37,3 +37,5 @@ EasyTier 2.6.4 (Apache-2.0) is downloaded on demand from its official release, n
 - The map does not embed or redistribute Chunkbase. Terrain shading is approximate. The gradient preview uses existing AMBER concept artwork, not an in-game screenshot.
 
 - ZIP64 reader: yauzl 3.4.0 (Josh Wolfe) and pend 1.2.0 (Andrew Kelley), MIT. The vendored source uses explicit CommonJS extensions and a relative pend import. Licenses are in `desktop/vendor/yauzl176`. Upstream: https://github.com/thejoshwolfe/yauzl and https://github.com/andrewrk/node-pend.
+
+- OpenPGP.js 6.3.3 (LGPL-3.0-or-later) verifies Eclipse Temurin detached signatures. The unmodified standalone module and its license ship in `desktop/vendor`. [Versioned source](https://github.com/openpgpjs/openpgpjs/tree/v6.3.3).

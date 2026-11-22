@@ -6,7 +6,7 @@ import { randomUUID } from 'node:crypto';
 import { spawn } from 'node:child_process';
 import { officialFetch, download, downloadPool, safePath, ensureParents, digest } from './download.mjs';
 import { planFiles, requiredJava } from './vanilla.mjs';
-import { inspectJava } from './java.mjs';
+import { inspectConfiguredJava } from './java.mjs';
 const repos={forge:'https://maven.minecraftforge.net/net/minecraftforge/forge/',neoforge:'https://maven.neoforged.net/releases/net/neoforged/neoforge/'};
 // NeoForge >= 26 includes the full MC major/minor/patch and a build component.
 export function neoGame(version){const m=/^(\d+)\.(\d+)\.(\d+)(?:\.(\d+))?/.exec(version);if(!m)return null;if(+m[1]<26)return `1.${+m[1]}${+m[2]?'.'+(+m[2]):''}`;if(!m[4])return null;const suffix=/\+(snapshot|pre|rc)-(\d+)$/.exec(version);return `${+m[1]}.${+m[2]}${+m[3]?'.'+(+m[3]):''}${suffix?'-'+suffix[1]+'-'+suffix[2]:''}`;}
@@ -32,7 +32,7 @@ export async function installLoader(core,id,type,version){
  if(!repos[type])throw Error('不支持的加载器。');
  const {dir,item,meta}=await core.metadata(id);await core.requireStopped(dir);
  if(!(await loaderVersions(meta.id,type,core.fetcher)).some(v=>v.version===version))throw Error('所选加载器不适配此游戏版本。');
- const java=item.javaPath?await inspectJava(item.javaPath):(await core.scanJava()).find(j=>j.major===requiredJava(meta));if(!java)throw Error('请先自动准备 Java，再安装加载器。');
+ const java=item.javaPath?await inspectConfiguredJava(core.root,item):(await core.scanJava()).find(j=>j.major===requiredJava(meta));if(!java||java.major!==requiredJava(meta))throw Error('请先自动准备 Java，再安装加载器。');
  return core.startJob(id,'loader',async(job,signal)=>{
   const work=join(core.root,'loader-work',randomUUID());await mkdir(work,{recursive:true});
   job.phase='下载官方加载器安装器';

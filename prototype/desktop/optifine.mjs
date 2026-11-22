@@ -7,7 +7,7 @@ import {randomUUID} from 'node:crypto';
 import {createRequire} from 'node:module';
 import {safePath,ensureParents,download} from './download.mjs';
 import {requiredJava} from './vanilla.mjs';
-import {inspectJava} from './java.mjs';
+import {inspectConfiguredJava} from './java.mjs';
 import {runInstaller,adoptInstalledProfile} from './loaders.mjs';
 const {unzipSync}=createRequire(import.meta.url)('./vendor/fflate.cjs');
 export async function installOptifine(core,id,path){
@@ -15,7 +15,7 @@ export async function installOptifine(core,id,path){
  if((await stat(path)).size>100_000_000)throw Error('OptiFine JAR 超过大小限制。');
  const bytes=await readFile(path);if(optifineGame(bytes)!==meta.id)throw Error('OptiFine 与当前 Minecraft 版本不匹配。');
  let valid=false;unzipSync(bytes,{filter:f=>{if(f.name==='optifine/Installer.class')valid=true;return false;}});if(!valid)throw Error('请选择从 OptiFine 官网下载的安装器 JAR。');
- const java=item.javaPath?await inspectJava(item.javaPath):(await core.scanJava()).find(j=>j.major===requiredJava(meta));if(!java)throw Error('请先准备 Java。');
+ const java=item.javaPath?await inspectConfiguredJava(core.root,item):(await core.scanJava()).find(j=>j.major===requiredJava(meta));if(!java)throw Error('请先准备 Java。');
  return core.startJob(id,'loader',async(job,signal)=>{
   job.phase='准备 OptiFine 独立安装';const work=safePath(core.root,'loader-work/'+randomUUID());await mkdir(work,{recursive:true});const installer=join(work,'optifine-installer.jar');await copyFile(path,installer);
   const baseDir=safePath(work,'versions/'+meta.id);await mkdir(baseDir,{recursive:true});const client=meta.downloads.client;

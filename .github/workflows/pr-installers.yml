@@ -5,6 +5,55 @@ on:
 permissions:
   contents: read
 jobs:
+  linux-java:
+    if: (github.head_ref || github.ref_name) == 'task/1.7.9-minecraft-import'
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: prototype
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
+        with:
+          version: 11.25.0
+          package_json_file: prototype/package.json
+      - run: pnpm install --frozen-lockfile
+      - run: sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends openjdk-21-jre-headless
+      - name: Verify the runner's system JVM boundary
+        run: |
+          stat -c '%n owner=%u:%g mode=%a' /usr/lib/jvm
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {stat} from 'node:fs/promises';
+          import {systemJavaCandidates} from './desktop/system-java.mjs';
+          const parent=await stat('/usr/lib/jvm');
+          if(parent.uid!==0||(parent.mode&0o022)){
+            const candidates=await systemJavaCandidates('linux');
+            assert.ok(candidates.every(path=>!path.startsWith('/usr/lib/jvm/')));
+            console.log('Unprotected system JVM root excluded');
+          }
+          JS
+      - name: Exercise stock Ubuntu OpenJDK as an unprivileged user
+        run: |
+          # Hosted tool images also grant write access to /usr/share. Keep the
+          # negative case above and use a stock distro filesystem for the positive case.
+          docker run --rm --init \
+            --mount "type=bind,source=$GITHUB_WORKSPACE,target=/work,readonly" \
+            --mount "type=bind,source=$(command -v node),target=/usr/local/bin/node,readonly" \
+            --workdir /work/prototype \
+            ubuntu:24.04@sha256:9c7f200c07e3d4a03e7249d2c16bf66a51120fb876aa2242cf31451412543289 \
+            /bin/bash -eu -c '
+              apt-get update -qq
+              DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends openjdk-21-jre-headless
+              stat -c "%n owner=%u:%g mode=%a" /usr/lib/jvm /usr/share
+              AMBER_TEST_SYSTEM_JAVA=21 setpriv --reuid="$1" --regid="$2" --clear-groups node --test tests/java-discovery179.test.mjs
+            ' qa "$(id -u)" "$(id -g)"
   installers:
     # The 1.7.6 task explicitly excludes installer uploads.
     if: (github.head_ref || github.ref_name) != 'codex/1.7.6-content-import'
@@ -29,6 +78,21 @@ jobs:
       - run: pnpm exec install-electron
       - run: pnpm build
       - run: node scripts/qa-memory-identity160.cjs
+      - name: Check both Minecraft import services on Windows
+        if: (github.head_ref || github.ref_name) == 'task/1.7.9-minecraft-import'
+        shell: pwsh
+        run: |
+          # The runner may expose TEMP in Windows short-name form. Use the
+          # ordinary path for the positive cases; the alias cases supply their own links.
+          $env:TEMP = node -p "require('node:fs').realpathSync.native(require('node:os').tmpdir())"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $env:TMP = $env:TEMP
+          $primary = [IO.Path]::GetPathRoot([IO.Path]::GetTempPath())
+          $other = if ($primary -eq 'D:\') { 'C:\' } else { 'D:\' }
+          if (Test-Path $other) { $env:AMBER_TEST_SECOND_VOLUME = $other }
+          New-Item -ItemType Directory -Force review174 | Out-Null
+          node --test tests/java-discovery179.test.mjs tests/import151.test.mjs tests/libraries170.test.mjs tests/platform135.test.mjs tests/accounts-fabric.test.mjs tests/servers132.test.mjs tests/server173.test.mjs | Tee-Object review174/import-179.txt
+          exit $LASTEXITCODE
       - run: pnpm release:check
       - run: pnpm package:editions
         env:
@@ -55,8 +119,9 @@ jobs:
             prototype/releases/*/*-Setup-x64.exe.sha256
             prototype/releases/*/TEST-REVISION.txt
             prototype/releases/*/*.provenance.json
-            prototype/LOCAL-TEST-1.7.8.md
+            prototype/LOCAL-TEST-1.7.9.md
             prototype/review174/packaged/result.json
+            prototype/review174/import-179.txt
           retention-days: 30
           if-no-files-found: error
       - name: Compare NSIS payloads and upgrade v1.7.7 on disposable Windows

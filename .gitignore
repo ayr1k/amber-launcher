@@ -35,3 +35,8 @@ prototype/review164/
 prototype/review173/
 
 prototype/review174/
+
+prototype/desktop/vendor/openpgp.mjs
+prototype/desktop/vendor/LICENSE-openpgp
+
+prototype/desktop/bin/system-java-verifier.exe

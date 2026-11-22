@@ -21,7 +21,7 @@ export function LocalLibrary({ selected, onSelect, onCreate, settings, managemen
   useEffect(() => {if (!api) return;let disposed = false;
     const refresh = async () => {try {const [list, s] = await Promise.all([api.listInstances(), api.status()]);if (!disposed) {setInstances(list);setStatus(s);}} catch (e) {if (!disposed) setError(e.message);}};
     api.accounts?.().then((d) => !disposed && setAccounts(d.accounts)).catch(() => {});
-    api.info().then((i) => !disposed && setInfo(i)).catch((e) => !disposed && setError(e.message));api.scanJava().then((j) => !disposed && setJavas(j)).catch(() => {});
+    api.info().then((i) => !disposed && setInfo(i)).catch((e) => !disposed && setError(e.message));api.scanJava().then((j) => !disposed && setJavas(j)).catch((e) => !disposed && setError(e.message));
     refresh();const timer = setInterval(refresh, 1200);return () => {disposed = true;clearInterval(timer);};
   }, [api]);
   useEffect(() => {if (settings) {setMemory(settings.memory);setThreads(settings.threads);}}, [settings?.memory, settings?.threads]);

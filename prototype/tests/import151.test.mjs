@@ -3,17 +3,21 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,mkdir,writeFile,readFile,readdir,lstat,rm,symlink,utimes} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
-import {join,relative} from 'node:path';
+import {join,relative,parse} from 'node:path';
+import {discoverJava,installJava} from '../desktop/java.mjs';
+import {hostPlatform} from '../desktop/platform135.mjs';
+import {createRequire} from 'node:module';
 import {createHash} from 'node:crypto';
 import {MinecraftImport,scanMinecraft,resolveProfile,collectImportFiles} from '../desktop/minecraft134.mjs';
-import {validateImportVersion,directoryChoices} from '../desktop/import-identify151.mjs';
+import {validateImportVersion,directoryChoices,identifier,localVersionId} from '../desktop/import-identify151.mjs';
+import {Libraries170} from '../desktop/libraries170.mjs';
 import {VanillaLauncher} from '../desktop/launcher.mjs';
 const sha=b=>createHash('sha1').update(b).digest('hex');
 const vanilla=id=>({id,mainClass:'net.minecraft.client.main.Main',libraries:[]});
 const fabric=(id='1.21.11-Fabric',game='1.21.11')=>({...vanilla(id),mainClass:'net.fabricmc.loader.impl.launch.knot.KnotClient',libraries:[{name:'net.fabricmc:fabric-loader:0.18.0'},{name:'net.fabricmc:intermediary:'+game}]});
 async function snapshot(root){const out={};async function walk(p){for(const e of await readdir(p)){const file=join(p,e),st=await lstat(file);if(st.isSymbolicLink()){out[relative(root,file)]='link';continue}if(st.isDirectory())await walk(file);else out[relative(root,file)]={bytes:(await readFile(file)).toString('base64'),mtime:st.mtimeMs};}}await walk(root);return out;}
-async function fixture(t,meta=vanilla('1.21.11')){
- const root=await mkdtemp(join(tmpdir(),'amber151-')),source=join(root,'source'),library=join(root,'library');await mkdir(source);t.after(()=>rm(root,{recursive:true,force:true}));
+async function fixture(t,meta=vanilla('1.21.11'),sourceParent=tmpdir(),libraryParent){
+ const root=await mkdtemp(join(sourceParent,'amber151-')),source=join(root,'source'),library=libraryParent?await mkdtemp(join(libraryParent,'amber179-data-')):join(root,'library');if(libraryParent)t.after(()=>rm(library,{recursive:true,force:true}));await mkdir(source);t.after(()=>rm(root,{recursive:true,force:true}));
  const put=async(p,value)=>{const path=join(source,p);await mkdir(join(path,'..'),{recursive:true});await writeFile(path,typeof value==='string'?value:JSON.stringify(value));return path};
  const version=async m=>put(`versions/${m.id}/${m.id}.json`,m);await version(meta);
  const client=Buffer.from('synthetic client, never executed'),index=Buffer.from('{"objects":{}}');
@@ -72,4 +76,178 @@ test('inaccessible configured directory requires correction even alongside a val
 });
 test('configured junction remains blocked rather than becoming a recoverable missing-directory warning',async t=>{
  const f=await fixture(t);await f.put('target/options.txt','keep');await symlink(join(f.source,'target'),join(f.source,'linked'),'junction');await f.put('launcher_profiles.json',{profiles:{p:{lastVersionId:'1.21.11',gameDir:'linked'}}});const before=await snapshot(f.source),row=(await scanMinecraft(f.source)).rows[0];assert.equal(row.supported,false);assert.match(row.reason,/link/i);assert.deepEqual(await snapshot(f.source),before);
+});
+
+
+const secondVolume=process.env.AMBER_TEST_SECOND_VOLUME;
+const locations=[['same volume',tmpdir(),tmpdir()]];
+if(secondVolume)assert.notEqual(parse(secondVolume).root.toLowerCase(),parse(tmpdir()).root.toLowerCase(),'Choose a distinct test volume');
+if(secondVolume)locations.push(['primary to secondary',tmpdir(),secondVolume],['secondary to primary',secondVolume,tmpdir()]);
+for(const [label,sourceParent,dataParent] of locations)test('both Minecraft entry services: '+label,async t=>{
+ const f=await fixture(t,undefined,sourceParent,dataParent);
+ await f.put('versions/1.21.11/options.txt','selected');
+ const before=await snapshot(f.source);
+ t.diagnostic('Source '+parse(f.source).root+'<fixture>/source; game versions/1.21.11 inside source; application data '+parse(f.library).root+'<separate fixture>.');
+ const registry=new Libraries170(f.library);
+ const registration=await registry.preview(f.source);
+ const entry=await registry.add(registration.token,'External',true);
+ assert.equal((await registry.scan(entry.id)).rows[0].id,'1.21.11');
+ const {scan,preview,input}=await ready(f);
+ assert.equal(preview.gameDir,join(f.source,'versions','1.21.11'));
+ const result=await f.importer.create(scan.id,f.key,input);
+ assert.equal(await readFile(join(await f.core.instancePath(result.instance.id),'options.txt'),'utf8'),'selected');
+ assert.deepEqual(await snapshot(f.source),before);
+});
+
+
+for(const id of ['FPScraft X','中文 游戏'])test('local version ID remains separate from display and official ID: '+id,async t=>{
+ const m={...fabric(id),inheritsFrom:'',patches:[{id:'game',version:'1.21.11'}]};
+ const f=await fixture(t,m);
+ await f.put('launcher_profiles.json',{profiles:{display:{name:'任意显示名',lastVersionId:id}}});
+ const [row]=(await f.importer.scan(f.source)).rows;
+ assert.equal(row.name,'任意显示名');assert.equal(row.versionId,id);assert.equal(row.supported,true);
+ assert.equal((await validateImportVersion(f.core,row)).game,'1.21.11');
+ const external=(await new Libraries170(f.library).preview(f.source)).rows[0];
+ assert.deepEqual([external.id,external.game,external.loader],[id,'1.21.11','fabric']);
+ assert.equal(identifier(id),false);
+});
+test('local filename restrictions and folder/JSON correspondence',async t=>{
+ for(const id of ['', '.', '..','CON.txt','LPT²','COM1 .txt','a:ads','bad.','bad ','../a','a/b','c:\\\\bad','a*','x\\n','x'.repeat(151)])assert.equal(localVersionId(id),false,id);
+ const f=await fixture(t);
+ await f.put('versions/Alias X/Alias X.json',{...vanilla('other')});
+ assert.match((await f.importer.scan(f.source)).rows.find(p=>p.versionId==='Alias X').reason,/mismatch/);
+});
+test('explicit choice that left the catalog can be replaced, offline selection can retry',async t=>{
+ const f=await fixture(t,fabric()),scan=await f.importer.scan(f.source);
+ const options={game:'old-selection'};
+ const stale=await f.importer.preview(scan.id,f.key,[],options);
+ assert.equal(stale.validation.state,'unsupported');assert.ok(stale.validation.versions.includes('1.21.11'));
+ const online=f.core.versions.bind(f.core);f.core.versions=async()=>{throw Error('offline')};
+ assert.equal((await f.importer.preview(scan.id,f.key,[],options)).validation.state,'unavailable');
+ f.core.versions=online;
+ assert.equal((await f.importer.preview(scan.id,f.key,[],{game:'1.21.11'})).validation.state,'ready');
+});
+test('both entry services reject equality, nested roots and linked aliases',async t=>{
+ const f=await fixture(t);
+ const scan=await f.importer.scan(f.source);
+ const nested=join(f.source,'sub'),alias=join(f.root,'alias');
+ await mkdir(nested);await symlink(f.source,alias,'junction');
+ for(const dataRoot of [f.source,nested,f.root,alias]){
+  const registry=new Libraries170(dataRoot);
+  await assert.rejects(registry.preview(f.source),/overlap|link/i);
+  f.core.root=dataRoot;
+  await assert.rejects(f.importer.preview(scan.id,f.key,[]),/contain|link/i);
+ }
+});
+
+// Trust is supplied independently of the files put in the fixture.
+const runtimeFiles={'bin/java.exe':'fixture binary','bin/server/jvm.dll':'fixture library'};
+const fixturePin=createHash('sha256').update(JSON.stringify(Object.entries(runtimeFiles)
+ .map(([name,bytes])=>[name,Buffer.byteLength(bytes),sha(bytes)]))).digest('hex');
+async function putRuntime(appData,files=runtimeFiles){
+ const home=join(appData,'.minecraft','runtime','java-runtime-beta','windows-x64','java-runtime-beta');
+ for(const [name,bytes] of Object.entries(files)){
+  const path=join(home,name);await mkdir(join(path,'..'),{recursive:true});await writeFile(path,bytes);
+ }
+ return home;
+}
+function discoveryFixture(appData,probe){
+ return {host:hostPlatform('win32','x64'),system:async()=>[],appData,probe,candidates(runtimeRoot,arch,major){
+  assert.equal(arch,'x64');assert.equal(major,17);
+  return [{home:join(runtimeRoot,'java-runtime-beta','windows-x64','java-runtime-beta'),hash:fixturePin,major:17}];
+ }};
+}
+
+for(const mode of ['unverified','missing','cancel during preparation','wrong major','wrong architecture','cancel during probe','reuse compatible'])test('Forge Java preflight: '+mode,async t=>{
+ const meta={...vanilla('Forge 中文'),inheritsFrom:null,mainClass:'cpw.mods.bootstraplauncher.BootstrapLauncher',
+  javaPath:'profile-supplied-path',libraries:[{name:'net.minecraftforge:fmlloader:1.18.2-40.2.9'}],arguments:{game:['--fml.mcVersion','1.18.2']}};
+ const f=await fixture(t,meta);
+ await f.put('options.txt','keep');const before=await snapshot(f.source);
+ const body=JSON.stringify({...vanilla('1.18.2'),javaVersion:{majorVersion:17}});
+ const previous=join(f.library,'instances','previous-copy');await mkdir(previous);const previousFile=join(previous,'options.txt');await writeFile(previousFile,'previous copy marker');
+ let runtimeRequests=0,copies=0;
+ f.core.versions=async()=>{f.core.catalog=[{id:'1.18.2',url:'https://piston-meta.mojang.com/base.json',sha1:sha(body)}]};
+ f.core.fetcher=async(url,{signal}={})=>{
+  if(url.endsWith('/base.json'))return new Response(body);
+  if(url.endsWith('maven-metadata.xml'))return new Response('<version>1.18.2-40.2.9</version>');
+  if(url.startsWith('https://api.adoptium.net/')){
+   runtimeRequests++;
+   if(mode==='cancel during preparation'){
+    const stopped=new Promise((_,reject)=>signal.addEventListener('abort',()=>reject(signal.reason),{once:true}));
+    f.importer.cancel();return stopped;
+   }
+   throw Error('test runtime download failed');
+  }
+  throw Error('Unexpected URL');
+ };
+ const appData=join(f.root,'appdata');
+ if(!['missing','cancel during preparation'].includes(mode))await putRuntime(appData);
+ if(mode==='unverified')await putRuntime(appData,{'bin/server/jvm.dll':'changed library'});
+ let probeCalls=0,abortedProbes=0,checkedPath;
+ const discovery=discoveryFixture(appData,async(path,signal)=>{
+  probeCalls++;checkedPath=path;
+  assert.equal(path,join(f.library,'runtimes','mojang-'+fixturePin,'bin','java.exe'));
+  if(mode==='cancel during probe'){
+   const stopped=new Promise((_,reject)=>signal.addEventListener('abort',()=>{abortedProbes++;reject(signal.reason);},{once:true}));
+   f.importer.cancel();return stopped;
+  }
+  return {major:mode==='wrong major'?21:17,architecture:mode==='wrong architecture'?'aarch64':'amd64',version:'17',path:'self-reported-path'};
+ });
+ f.core.scanJava=options=>{assert.equal(options.purpose,'import');return discoverJava(f.library,options,discovery);};
+ const copy=f.importer.copyContent.bind(f.importer);
+ f.importer.copyContent=async(...args)=>{
+  const {item}=await f.core.metadata(f.importer.instanceId);assert.equal(item.javaPath,checkedPath);copies++;
+  return copy(...args);
+ };
+ f.core.configureLoader=async()=>{throw Error('test ended at loader handoff')};
+ const {scan,input}=await ready(f);
+ for(let attempt=0;attempt<(mode==='reuse compatible'?1:2);attempt++){
+  await assert.rejects(f.importer.create(scan.id,f.key,input),mode==='reuse compatible'?/loader handoff/:mode.startsWith('cancel')?/cancelled/:/Check Java/);
+ }
+ assert.equal(copies,mode==='reuse compatible'?1:0);
+ assert.equal(runtimeRequests,['reuse compatible','cancel during probe'].includes(mode)?0:2);
+ assert.equal(probeCalls,['unverified','missing','cancel during preparation'].includes(mode)?0:mode==='reuse compatible'?1:2);
+ assert.equal(abortedProbes,mode==='cancel during probe'?2:0);
+ assert.equal(await readFile(previousFile,'utf8'),'previous copy marker');
+ assert.deepEqual(await snapshot(f.source),before);
+});
+
+test('automatic scans bound simultaneous probes and cancel queued and running work',{timeout:10000},async t=>{
+ const f=await fixture(t),appData=join(f.root,'appdata');
+ await putRuntime(appData);
+ let started=0,active=0,peak=0;
+ const admitted=Promise.withResolvers(),controller=new AbortController();
+ const deps=discoveryFixture(appData,async(path,signal)=>{
+  started++;active++;peak=Math.max(active,peak);
+  if(active===2)admitted.resolve();
+  try{await new Promise((_,reject)=>signal.addEventListener('abort',()=>reject(signal.reason),{once:true}));}
+  finally{active--;}
+ });
+ const scans=Promise.allSettled([1,2,3,4].map(n=>discoverJava(join(f.root,'data'+n),{major:17,signal:controller.signal},deps)));
+ await admitted.promise;controller.abort(Error('cancel scans'));
+ assert.ok((await scans).every(result=>result.status==='rejected'&&result.reason===controller.signal.reason));
+ assert.deepEqual([started,peak,active],[2,2,0]);
+});
+
+test('automatic preparation probes only the checked archive even with an existing checksum directory',{skip:process.platform!=='win32'},async t=>{
+ const f=await fixture(t),{zipSync}=createRequire(import.meta.url)('../desktop/vendor/fflate.cjs');
+ const bytes=Buffer.from(zipSync({'jre/bin/java.exe':Buffer.from('fixture java')}));
+ const checksum=createHash('sha256').update(bytes).digest('hex'),parent=join(f.library,'runtimes');
+ const cache=join(parent,checksum,'jre','bin'),downloads=join(parent,'downloads');
+ await mkdir(cache,{recursive:true});await writeFile(join(cache,'java.exe'),'unverified bytes');
+ await mkdir(downloads,{recursive:true});await writeFile(join(downloads,checksum+'.zip'),bytes);
+ let probes=0;
+ const info=await installJava(f.library,17,{transferred:0},new AbortController().signal,
+  async url=>{
+   assert.ok(url.startsWith('https://api.adoptium.net/'));
+   return Response.json([{binary:{package:{checksum,size:bytes.length,name:'test.zip',link:'https://github.com/test.zip'}}}]);
+  },async(path,signal)=>{
+   signal.throwIfAborted();probes++;assert.equal(await readFile(path,'utf8'),'fixture java');
+   return {major:17,architecture:process.arch==='arm64'?'aarch64':'amd64',path:'ignored'};
+  },{pins:{17:checksum}});
+ assert.equal(probes,1);assert.equal(await readFile(info.path,'utf8'),'fixture java');
+ assert.equal(await readFile(join(cache,'java.exe'),'utf8'),'unverified bytes');
+ await writeFile(info.path,'changed after preparation');
+ const rows=await discoverJava(f.library,{major:17,purpose:'import'},{appData:null,probe:async()=>{probes++;}});
+ assert.deepEqual(rows,[]);assert.equal(probes,1);
 });

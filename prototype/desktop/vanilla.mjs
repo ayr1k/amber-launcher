@@ -36,7 +36,7 @@ export function planFiles(meta,root,env=gameEnvironment()){
 export function assetFiles(index,root){return Object.entries(index.objects||{}).map(([name,v])=>{if(!/^[0-9a-f]{40}$/.test(v.hash)||!Number.isSafeInteger(v.size)||v.size<0)throw new Error('资源索引无效。');return {path:safePath(root,`assets/objects/${v.hash.slice(0,2)}/${v.hash}`),hash:v.hash,size:v.size,url:`https://resources.download.minecraft.net/${v.hash.slice(0,2)}/${v.hash}`,label:name};});}
 export async function extractZip(path,target,{exclude=[],onlyNative=false}={}){
  let total=0;
- const entries=unzipSync(new Uint8Array(await readFile(path)),{filter:file=>{
+ const entries=unzipSync(Buffer.isBuffer(path)?path:new Uint8Array(await readFile(path)),{filter:file=>{
    safePath(target,file.name.replace(/\/$/,''));
    if(file.name.endsWith('/')||exclude.some(prefix=>file.name.startsWith(prefix))||(onlyNative&&!/\.(dll|so|dylib|jnilib)$/i.test(file.name)))return false;
    total+=file.originalSize;if(total>600_000_000||file.originalSize>300_000_000)throw new Error('压缩包展开大小超过限制。');return true;
