@@ -52,9 +52,15 @@ export async function observe({app,window,core,counts,network}){
   const initial=await js('window.amberDesktop.install('+JSON.stringify(id)+')');
   const job=core.jobs.find(j=>j.id===initial.id);
   assert.ok(job);
-  await until(()=>js("!!document.querySelector('.task-download-details summary')"),'download diagnostics');
-  await js("document.querySelector('.task-download-details summary').click()");
-  await until(()=>js("!!document.querySelector('.task-speed-history svg')"),'plotted samples');
+  await until(async()=>{
+   if(job.state!=='running')throw Error('Unexpected install state '+job.state+' '+(job.error||''));
+   return js(`(() => {
+     const target=Array.from(document.querySelectorAll('.task-entry')).find(e=>e.textContent.includes('Controlled download'));
+     const details=target?.querySelector('.task-download-details');
+     if(details && !details.open)details.querySelector('summary').click();
+     return !!details?.querySelector('.task-speed-history svg');
+   })()`);
+  },'plotted samples');
   await sample('download');
   assert.equal(job.state,'running','fixed window must contain only active transfer');
   await until(()=>job.state!=='running','verified install',70000);
@@ -62,6 +68,9 @@ export async function observe({app,window,core,counts,network}){
   report.downloadMs=Date.parse(job.finishedAt)-start;
   report.payloadBytes=Number(process.env.AMBER_BENCH_BYTES);
   report.diagnostics=network.diagnostics.get(job).snapshot();
+  assert.equal(report.diagnostics.config.sourceMode,'official');
+  assert.deepEqual(report.diagnostics.sources,['piston-data.mojang.com']);
+  assert.deepEqual(report.diagnostics.modes,[1]);
   report.installed=JSON.parse(await readFile(join(core.root,'instances',id,'instance.json'))).status;
   assert.equal(report.installed,'installed');
   await until(()=>js("Array.from(document.querySelectorAll('.task-entry')).some(e=>e.textContent.includes('Controlled download') && /已完成|completed/i.test(e.textContent))"),'completion displayed',4000);

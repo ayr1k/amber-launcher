@@ -7,14 +7,14 @@ import {createServer} from 'node:http';
 import {availableParallelism,cpus,tmpdir,release} from 'node:os';
 import {join,resolve,dirname} from 'node:path';
 import {mkdtemp,cp,mkdir,readFile,readdir,writeFile,rm} from 'node:fs/promises';
-import {fileURLToPath} from 'node:url';
+import {fileURLToPath,pathToFileURL} from 'node:url';
 const [pack,libraryA,libraryB,out]=process.argv.slice(2,6).map(p=>resolve(p));
 const links=process.argv[6]==='--links';
 const tools=dirname(fileURLToPath(import.meta.url)), temp=await mkdtemp(join(tmpdir(),'amber1710-perf-'));
 const unpacked=join(temp,'app'),library=join(temp,'library');
 const appDir=join(unpacked,'resources/app'),desktop=join(appDir,'desktop');
 const product=JSON.parse(await readFile(join(pack,'resources/app/desktop/build-provenance.json')));
-assert.equal(product.channel,'local');assert.equal(product.product,'AMBER');
+assert.equal(product.channel,'local');assert.ok(['AMBER','AmberE'].includes(product.product));
 const payload=Buffer.alloc(24*1024*1024,97),index=Buffer.from('{"objects":{}}'),id='a0000000-0000-4000-8000-000000000007';
 const sha=b=>createHash('sha1').update(b).digest('hex');
 const descriptor=(name,b)=>({size:b.length,sha1:sha(b),url:'https://piston-data.mojang.com/amber-qa/'+name});
@@ -74,6 +74,9 @@ function summarize(sample,tree){
 try{
  await cp(pack,unpacked,{recursive:true});
  const inputs=await fixture();
+ const {Settings}=await import(pathToFileURL(join(desktop,'workflows.mjs')).href);
+ const settings=new Settings(library),defaults=await settings.get();
+ await settings.save({...defaults,network:{...defaults.network,mode:'official',fallback:false}});
  let main=await readFile(join(desktop,'main.mjs'),'utf8');
  const handle='ipcMain.handle(channel, async (event, ...args) => {';
  main=patch(main,handle,handle+'\n      counts[channel]=(counts[channel]||0)+1;');
@@ -85,7 +88,7 @@ try{
  await writeFile(coreFile,patch(await readFile(coreFile,'utf8'),list,list+"\n    globalThis.benchCounts.listScans=(globalThis.benchCounts.listScans||0)+1;"));
  await cp(join(tools,links?'links.mjs':'observe.mjs'),join(desktop,'qa-observe.mjs'));
  await new Promise(ok=>server.listen(0,'127.0.0.1',ok));
- const result={commit:product.commit,version:product.version,windows:release(),cpu:cpus()[0].model,logical:availableParallelism(),inputs,sha1:sha(payload),trials:[]};
+ const result={product:product.product,commit:product.commit,dirty:product.dirty,version:product.version,windows:release(),cpu:cpus()[0].model,logical:availableParallelism(),inputs,sha1:sha(payload),trials:[]};
  for(let n=1;n<=(links?1:3);n++){
   const profile=join(temp,'user'+n),resultPath=join(profile,'observed.json'),trace=join(profile,'tree.jsonl');
   await mkdir(profile);await writeFile(join(profile,'storage.json'),JSON.stringify({schema:1,path:library,onboarded:true}));
@@ -93,7 +96,7 @@ try{
   for(const file of [join(library,'versions',game),join(library,'assets/indexes',game+'.json'),join(library,'instances',id,'download-task.json'),join(library,'instances',id,'installation.json')])await rm(file,{recursive:true,force:true});
   const recordPath=join(library,'instances',id,'instance.json'),record=JSON.parse(await readFile(recordPath));record.status='metadata-ready';await writeFile(recordPath,JSON.stringify(record));
   const env={...process.env,AMBER_SMOKE_ROOT:profile,AMBER_BENCH_REPORT:resultPath,AMBER_BENCH_STARTED:String(Date.now()),AMBER_BENCH_BYTES:String(payload.length),AMBER_BENCH_ID:id,AMBER_BENCH_ORIGIN:'http://127.0.0.1:'+server.address().port};delete env.ELECTRON_RUN_AS_NODE;
-  const app=started(join(unpacked,'AMBER.exe'),['--qa-ui'],{env});
+  const app=started(join(unpacked,product.product+'.exe'),['--qa-ui'],{env});
   const tree=started('powershell.exe',['-NoProfile','-File',join(tools,'tree.ps1'),'-RootId',String(app.child.pid),'-OutputFile',trace]);
   const timeout=setTimeout(()=>app.child.kill(),140000);
   let code;try{code=await app.done;}finally{clearTimeout(timeout);}

@@ -9,17 +9,17 @@ Base `1fc895d47541400bbb8f79e9c084b87430e963ad` includes merged import PR #24. T
 
 ## Windows benchmark
 
-Run `node scripts/qa-runtime1710/run.mjs <AMBER-win-unpacked> <installed-QA-library-A> <installed-QA-library-B> <output.json>` from `prototype`. Supply a local-channel packaged build and disposable QA installs only. The driver validates the product and seeds a fresh temporary profile for each run. Private instrumentation is applied to a temporary copy of the packaged files and removed afterwards. The distributed installers contain standard production assets.
+Run `node scripts/qa-runtime1710/run.mjs <edition-win-unpacked> <installed-QA-library-A> <installed-QA-library-B> <output.json>` from `prototype`. Supply a local-channel packaged build and disposable QA installs only. The driver validates the product and seeds a fresh temporary profile for each run. Private instrumentation is applied to a temporary copy of the packaged files and removed afterwards. The distributed installers contain standard production assets.
 
 Both input libraries used here are independently prepared Minecraft 1.18.2 / Forge 40.2.9 QA installations. Official version metadata SHA-1 is `1a561f13f2d007d968f01636e726bbb5aabbf01f`. To recreate the layout, supply two isolated library roots each containing one installed Forge instance. The driver copies their real caches, manifests, loader files, installed content and natives. It assigns three fixed instance identities per input, plus one vanilla instance for the controlled download. Account records, save directories, Java path overrides and original app profiles are excluded.
 
-Measurements used Windows 11 build 26200, Ryzen 9 9950X3D, 32 logical processors, Electron 45 and default launcher settings. For each build, three fresh AMBER processes exercised the home page, an OS-minimized home window, and an active Task Center install with speed history expanded. Each scenario used 3 seconds of warm-up and an 8-second measurement window. The same 24 MiB payload was served over loopback in 32 KiB writes on a 32 ms timer. Actual transfer pacing depends on the Windows timer. The regular task queue, downloader, file verification, diagnostics and UI handled the transfer. The source declines ranges. The expected route is piston-data.mojang.com and the observed mode is single-stream.
+Measurements used Windows 11 build 26200, Ryzen 9 9950X3D, 32 logical processors, Electron 45 and default launcher settings except for the controlled source selection (official, fallback off in both fixtures). For each build, three fresh launcher processes exercised the home page, an OS-minimized home window, and an active Task Center install with speed history expanded. Each scenario used 3 seconds of warm-up and an 8-second measurement window. The same 24 MiB payload was served over loopback in 32 KiB writes on a 32 ms timer. Actual transfer pacing depends on the Windows timer. The regular task queue, downloader, file verification, diagnostics and UI handled the transfer. The source declines ranges. The expected route is piston-data.mojang.com and the observed mode is single-stream.
 
 The external Windows sampler follows the process tree by parent PID roughly every 500 ms. CPU is total CPU-time delta divided by elapsed time (100% = one logical CPU). Private memory is the sum of private committed bytes. Working set is summed RSS and can count shared pages multiple times. Both memory measures are averaged over each window. IPC counts are incoming launcher handler calls by channel. UI frequency counts DOM mutation batches under the React root, which can exclude React commits with no DOM changes. Cold startup means process creation to a visible navigation control and the app's startup-committed mark on a new Chromium profile. OS disk caches were left intact. Throughput uses payload bytes divided by the time from install invocation to the launcher's verified terminal job timestamp.
 
-### Three-run 1.7.9 baseline
+### Initial three-run AMBER hotspot baseline
 
-Each cell lists runs 1, 2 and 3.
+Each cell lists runs 1, 2 and 3. These initial runs used automatic source selection. The Draft PR contains the final paired measurements for both editions with the source pinned.
 
 | Scene | CPU % | Private MiB | Working set MiB | IPC/s | DOM batches/s |
 |---|---|---|---|---|---|
