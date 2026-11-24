@@ -486,7 +486,10 @@ handle('amber:privacy-info', () => ({ accounts: join(core.root, 'accounts.json')
   handle('amber:theme-image',async()=>{const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Image',extensions:['png','jpg','jpeg','webp']}]});if(r.canceled)return null;const name=await importBackground(core.root,r.filePaths[0],b=>nativeImage.createFromBuffer(b));return themes.storeAsset(await readFile(join(core.root,'backgrounds',name)));});
   handle('amber:settings', () => settings.get());
   const memory160=new Memory160({metrics:()=>app.getAppMetrics(),confirm:async()=>{const en=getLocale()==='en-US';const answer=await dialog.showMessageBox(window,{type:'warning',title:en?'Aggressive memory optimization':'激进内存整理',message:en?'Trim all processes belonging to this launcher?':'整理当前启动器的所有自身进程？',detail:en?'Includes the launcher main process and its Electron renderer, GPU and utility processes. Excludes games, servers, databases and other apps. Pages may be faulted back immediately, causing UI stutters and extra disk I/O or paging pressure. This does not repair JVM leaks or guarantee more FPS. Uses current permissions only; inaccessible processes are reported. No elevation, termination, system cache purge or security changes. Continue?':'范围包括当前启动器主进程及 Electron 渲染、GPU 和辅助进程，不包括游戏、服务端、数据库或其他应用。页面可能立即重新调入，造成界面卡顿、缺页、额外磁盘读写或分页压力；不修复 JVM 泄漏、不保证帧率提升。仅使用当前权限，不可访问的进程会报告失败。不提权、不结束进程、不清系统缓存、不修改安全设置。是否继续？',buttons:en?['Cancel','I understand, continue']:['取消','已了解风险，继续'],defaultId:0,cancelId:0});return answer.response===1;}});
-  const prelaunch164=new PrelaunchMemory164({memory:memory160,settings});
+  const prelaunch164=new PrelaunchMemory164({memory:memory160,settings,onActivity(){
+    if(window && !window.isDestroyed() && !window.webContents.isDestroyed())
+      window.webContents.send('amber:prelaunch-activity');
+  }});
   core.prelaunchMemory=attempt=>prelaunch164.run(attempt);
   handle('amber:prelaunch164',(action,id,kind)=>{if(action==='state')return prelaunch164.state();if(action==='cancel')return prelaunch164.cancel(id,kind);throw Error('Invalid prelaunch action');});
   handle('amber:memory160',async(action,value)=>{await memory160.action(action,value);return memory160.state();});

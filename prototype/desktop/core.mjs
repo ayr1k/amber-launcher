@@ -75,10 +75,19 @@ export class LauncherCore {
   }
   async instancePath(id) {
     if (typeof id !== 'string' || !uuid.test(id)) throw new Error('无效的实例标识。');
-    if (!(await this.listInstances()).some(i=>i.id===id)) throw new Error('实例不存在。');
-    const dir = join(this.root, 'instances', id);
+    await this.init();
+    const parent = join(this.root, 'instances');
+    // Match the same case-sensitive directory name and commit marker as listInstances.
+    // Polling one instance must not parse every sibling's metadata.
+    const entries = await readdir(parent, { withFileTypes: true });
+    if (!entries.some(entry => entry.name === id && entry.isDirectory())) throw new Error('实例不存在。');
+    const dir = join(parent, id);
     const stat = await lstat(dir);
     if (stat.isSymbolicLink() || !stat.isDirectory()) throw new Error('实例目录不可使用链接。');
+    let marker;
+    try { marker = JSON.parse(await readFile(join(dir, 'instance.json'), 'utf8')); }
+    catch { throw new Error('实例不存在。'); }
+    if (marker?.schema !== 1 || marker.id !== id) throw new Error('实例不存在。');
     return dir;
   }
 }
