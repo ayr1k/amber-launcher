@@ -1,3 +1,9 @@
+# 1.7.10 发布验证
+
+用户于 2026-11-24（America/New_York）在 [PR #25](https://github.com/ayr1k/amber-launcher/pull/25) 合并后授权正式发布。合并提交为 `bbb1d6cf3faa58cb0152ff8ef6eb2f7108ed3756`，最终任务提交 `a4d7184c978e028b7557990130fe4c863df2997e` 的两项工作流均通过。[Windows 回归及 Linux 检查](https://github.com/ayr1k/amber-launcher/actions/runs/45390552816) · [测试安装包及打包启动](https://github.com/ayr1k/amber-launcher/actions/runs/45390552829)
+
+任务阶段按其配置通过全部 1011 项 Windows 回归。性能对照使用同一台 Windows 11 设备和同一隔离 Forge 游戏库，两款各版本均运行三次，每轮预热 3 秒、采样 8 秒。受测首页、最小化与下载场景的 CPU 占用均下降。定时回环主对照的小幅下载延迟没有在累计期限供数的回环复测中重现。进程树工作集可能重复计算共享页。任务阶段还使用夹具验证了恢复、跨盘导入与原生隧道连续性。完整条件及逐轮结果见 `LOCAL-TEST-1.7.10.md` 和 PR #25。真实账号与存档、Sakura 公网开通、跨公网游玩、非 Windows 性能及交互式升级尚未验收。正式包使用 public 渠道。FreeBSD 仅实验性支持服务端与工具。安装包未签名，macOS 包未公证。
+
 # 1.7.9 发布验证
 
 用户于 2026-11-22（America/New_York）在 [PR #24](https://github.com/ayr1k/amber-launcher/pull/24) 合并后授权正式发布。合并提交为 `48719d21d116be46998c93fbfea200c7d50208ec`，任务提交 `7ea3ff0cf9b57a2955d107398561a71948001b21` 的两项工作流均通过。[Windows 回归及 Linux 检查](https://github.com/ayr1k/amber-launcher/actions/runs/45039092621) · [测试安装包及 Java 验证](https://github.com/ayr1k/amber-launcher/actions/runs/45039092639)

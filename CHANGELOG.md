@@ -1,3 +1,9 @@
+## 1.7.10
+
+- Resolve a managed instance by its ID and validate the directory and commit marker directly. Status and recovery checks avoid repeatedly reading every neighboring instance's metadata.
+- Refresh launch preparation on start, finish and window restore. The 150 ms polling interval applies only while preparation is active and the window is visible. Task Center and floating task feedback refresh when the window becomes visible again.
+- The paired Windows benchmark measured lower CPU usage at idle and during a controlled download. With a deadline-paced loopback source, median transfer throughput stayed around 0.996 MiB/s for both versions and editions. See the task PR for the fixture, raw runs and limits.
+
 ## 1.7.9
 
 - Register an external game library in place from Instances, or copy an existing .minecraft instance into the default managed library. Recognize supported PCL profiles and keep local version IDs, display names and official Minecraft versions separate.
