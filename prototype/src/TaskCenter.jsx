@@ -19,7 +19,26 @@ function TaskActivity({ instances, settings, onOpen }) {const libraryApi170=useL
   const api = libraryApi170,[transfers,setTransfers]=useState(null),[status, setStatus] = useState({ jobs: [], processes: [] }),[filter, setFilter] = useState('all'),[error, setError] = useState(''),[busy, setBusy] = useState(false),[dismiss, setDismiss] = useState(null);
   const [detailId,setDetailId]=useState(null);
   const details=j=>(j.network || ['install','java','content','modpack','content-update','server-install','server-content','server-content-update'].includes(j.kind))&&<DownloadDetails job={j} selected={detailId} onSelect={setDetailId}/>;
-  useEffect(() => {let live = true;const refresh = () => {api.transferStatus144().then(v=>live&&setTransfers(v)).catch(()=>{});return api.status(detailId).then((s) => live && setStatus(s)).catch((e) => live && setError(e.message));};refresh();const timer = setInterval(refresh, 1000);return () => {live = false;clearInterval(timer);};}, [api,detailId]);
+  useEffect(() => {
+    let live = true, generation = 0;
+    function refresh() {
+      const request = generation;
+      const current = () => live && request === generation;
+      api.transferStatus144().then(v => current() && setTransfers(v)).catch(() => {});
+      api.status(detailId).then(s => current() && setStatus(s)).catch(e => current() && setError(e.message));
+    }
+    function onVisibility() {
+      if (!document.hidden) { generation++; refresh(); }
+    }
+    refresh();
+    const timer = setInterval(refresh, 1000);
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      live = false;
+      clearInterval(timer);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, [api,detailId]);
   async function act(fn) {if (busy) return;setBusy(true);setError('');try {await fn();setStatus(await api.status());} catch (e) {setError(e.message);} finally {setBusy(false);}}
   async function cancel(fn) {try {await fn();setStatus(await api.status());} catch (e) {setError(e.message);}}
   async function alternate(id){const s=await api.settings();await api.saveSettings({...s,network:{...s.network,mode:s.network?.mode==='mainland'?'official':'mainland'}});return api.retrySetup(id);}

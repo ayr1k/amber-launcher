@@ -1,6 +1,7 @@
 import {memoryResultLabel160} from './Preferences160';
 // SPDX-License-Identifier: MPL-2.0
 import {useEffect,useState} from 'react';
+import {watchPrelaunch} from './watch-prelaunch.mjs';
 import {th} from './ThemeCanvas';
 import {useLocale} from './Locale';
 import {CheckSetting} from './SettingRow';
@@ -14,7 +15,7 @@ export function prelaunchLabel164(status){
 }
 export function PrelaunchStatus164(){
  useLocale();const [state,setState]=useState(null),[dismissed,setDismissed]=useState(null),[error,setError]=useState('');
- useEffect(()=>{if(!window.amberDesktop?.prelaunch164)return;let live=true,timer;const poll=async()=>{try{const next=await window.amberDesktop.prelaunch164('state');if(live)setState(next);}catch{}finally{if(live)timer=setTimeout(poll,150);}};poll();return()=>{live=false;clearTimeout(timer);};},[]);
+ useEffect(()=>{if(window.amberDesktop?.prelaunch164)return watchPrelaunch(window.amberDesktop,document,setState);},[]);
  const active=state?.active?.phase==='launched'?null:state?.active,last=state?.last;
  if(!active&&(!last||last.status==='disabled'||last.id===dismissed))return null;
  async function cancel(kind){try{await window.amberDesktop.prelaunch164('cancel',active.id,kind);setError('');}catch(e){setError(e.message);}}

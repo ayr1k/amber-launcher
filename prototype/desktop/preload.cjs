@@ -2,6 +2,11 @@
 const { contextBridge, ipcRenderer } = require('electron');
 function libraryApi170(scope){const invoke=(channel,...args)=>ipcRenderer.invoke(channel,...(scope?[{__libraryScope170:scope}]:[]),...args);return Object.freeze({
   libraries170:(action,id,input)=>invoke('amber:libraries170',action,id,input),
+  onPrelaunchActivity: callback => {
+    const notify = () => callback();
+    ipcRenderer.on('amber:prelaunch-activity', notify);
+    return () => ipcRenderer.removeListener('amber:prelaunch-activity', notify);
+  },
   prelaunch164:(action,id,kind)=>invoke('amber:prelaunch164',action,id,kind),
   memory160:(action,value)=>invoke('amber:memory160',action,value),
   startupReady:()=>invoke('amber:startup-ready'),

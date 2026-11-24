@@ -79,7 +79,7 @@ jobs:
       - run: pnpm build
       - run: node scripts/qa-memory-identity160.cjs
       - name: Check both Minecraft import services on Windows
-        if: (github.head_ref || github.ref_name) == 'task/1.7.9-minecraft-import'
+        if: contains(fromJSON('["task/1.7.9-minecraft-import","task/1.7.10-runtime-lightweight"]'), github.head_ref || github.ref_name)
         shell: pwsh
         run: |
           # The runner may expose TEMP in Windows short-name form. Use the
@@ -119,7 +119,7 @@ jobs:
             prototype/releases/*/*-Setup-x64.exe.sha256
             prototype/releases/*/TEST-REVISION.txt
             prototype/releases/*/*.provenance.json
-            prototype/LOCAL-TEST-1.7.9.md
+            prototype/LOCAL-TEST-1.7.10.md
             prototype/review174/packaged/result.json
             prototype/review174/import-179.txt
           retention-days: 30
