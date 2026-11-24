@@ -19,15 +19,22 @@ export async function observe({app,window,core,counts,network}){
     js("!!document.querySelector('nav button') && performance.getEntriesByName('amber:startup-committed').length>0");
   await until(ready,'interactive launcher');
   report.startupMs=Date.now()-Number(process.env.AMBER_BENCH_STARTED);
+  window.setAlwaysOnTop(true);window.show();window.focus();
   report.instances=(await core.listInstances()).length;
   assert.ok(report.instances>=7);
   await js("window.benchMutations=0;new MutationObserver(()=>window.benchMutations++).observe(document.querySelector('#root'),{subtree:true,childList:true,attributes:true,characterData:true})");
+  await js("window.benchVisibility=0;document.addEventListener('visibilitychange',()=>window.benchVisibility++)");
   const readDom=()=>js('window.benchMutations');
   async function sample(scene){
    await delay(3000);
+   const hidden=scene==='minimized';
+   assert.equal(await js('document.hidden'),hidden,scene+' visibility before sampling');
+   const visibilityChanges=await js('window.benchVisibility');
    const domBefore=await readDom(), before={...counts}, start=Date.now();
    await delay(8000);
    const end=Date.now(),after={...counts},domAfter=await readDom();
+   assert.equal(await js('document.hidden'),hidden,scene+' visibility after sampling');
+   assert.equal(await js('window.benchVisibility'),visibilityChanges,scene+' visibility changed during sampling');
    const calls=Object.fromEntries(Object.keys(after).map(k=>[k,after[k]-(before[k]||0)]).filter(([,v])=>v));
    report.samples.push({scene,start,end,calls,dom:domAfter-domBefore,hidden:await js('document.hidden')});
   }
@@ -35,12 +42,13 @@ export async function observe({app,window,core,counts,network}){
   window.minimize();
   await until(()=>window.isMinimized()&&js('document.hidden'),'minimized');
   await sample('minimized');
-  window.restore();window.show();
-  await until(()=>js('!document.hidden'),'restored');
+  window.restore();window.show();window.focus();window.moveTop();
+  await until(()=>!window.isMinimized() && window.isVisible() && js('!document.hidden'),'restored');
   const tasks="Array.from(document.querySelectorAll('nav button')).find(b=>/^(任务|Tasks)$/.test(b.innerText.trim()))";
   assert.ok(await js('!!('+tasks+')'),await js("document.querySelector('nav')?.innerText"));
   await js(tasks+'.click()');
   await until(()=>js("!!document.querySelector('.task-activity160')"),'task center');
+  await delay(700); // Let the first task-center snapshot finish before starting the install.
   // Only this QA instance uses fixture metadata. Both the real scheduler and
   // network diagnostics see the same official URL and HTTP response stream.
   const raw=network.raw;
